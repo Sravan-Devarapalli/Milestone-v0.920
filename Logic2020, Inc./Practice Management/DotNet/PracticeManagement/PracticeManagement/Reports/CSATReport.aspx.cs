@@ -25,7 +25,11 @@ namespace PraticeManagement.Reports
                     else
                     {
                         var now = Utils.Generic.GetNowWithTimeZone();
-                        if (selectedVal == 1)
+                        if (selectedVal == -1)
+                        {
+                            return now;
+                        }
+                        else if (selectedVal == 1)
                         {
                             return Utils.Calendar.MonthStartDate(now);
                         }
@@ -222,6 +226,10 @@ namespace PraticeManagement.Reports
         {
             if (ddlPeriod.SelectedValue != "0")
             {
+                if (ddlPeriod.SelectedValue == "-1")
+                {
+                    hdnPeriod.Value = ddlPeriod.SelectedValue;
+                }
                 trCustomDates.Visible = false;
                 SelectView();
             }
@@ -236,7 +244,6 @@ namespace PraticeManagement.Reports
         {
             if (cblAccount.SelectedItems == "" || cblPractices.SelectedItems == "")
             {
-                ddlPeriod.SelectedValue = "-1";
                 divReport.Visible = false;
             }
             else
@@ -278,16 +285,16 @@ namespace PraticeManagement.Reports
             List<int> cSATVaraibles = ServiceCallers.Custom.Project(p => p.CSATReportHeader(StartDate.Value, EndDate.Value, SelectedPractices, SelectedAccounts)).ToList();
             int noOfCompletedCSATsWithoutFilters = cSATVaraibles[0] + cSATVaraibles[1] + cSATVaraibles[2];
             int noOfCompletedCSATsWithFilters = cSATVaraibles[3] + cSATVaraibles[4] + cSATVaraibles[5];
-            int netPromoterScoreWithoutFilters = (cSATVaraibles[0] * 100 / noOfCompletedCSATsWithoutFilters) - (cSATVaraibles[2] * 100 / noOfCompletedCSATsWithoutFilters);
-            int netPromoterScoreWithFilters = (cSATVaraibles[3] * 100 / noOfCompletedCSATsWithFilters) - (cSATVaraibles[5] * 100 / noOfCompletedCSATsWithFilters);
-            ltrlNetPromoterScoreAllCompany.Text = netPromoterScoreWithoutFilters.ToString();
-            ltrlNetPromoterScoreBasedOnFilters.Text = netPromoterScoreWithFilters.ToString();
+            int netPromoterScoreWithoutFilters = noOfCompletedCSATsWithoutFilters != 0 ?(cSATVaraibles[0] * 100 / noOfCompletedCSATsWithoutFilters) - (cSATVaraibles[2] * 100 / noOfCompletedCSATsWithoutFilters):0;
+            int netPromoterScoreWithFilters = noOfCompletedCSATsWithFilters!=0?(cSATVaraibles[3] * 100 / noOfCompletedCSATsWithFilters) - (cSATVaraibles[5] * 100 / noOfCompletedCSATsWithFilters):0;
+            lblNetPromoterScoreAllCompany.Text = netPromoterScoreWithoutFilters.ToString();
+            lblNetPromoterScoreBasedOnFilters.Text = netPromoterScoreWithFilters.ToString();
             ltrlCompletedCSATs.Text = noOfCompletedCSATsWithFilters.ToString();
 
-            lblNetPromoterScoreHeader.Attributes["onmouseover"] = "ShowCalculationPanel(\"" + lblNetPromoterScoreHeader.ClientID + "\",\"" + pnlNetPromoterScoreVariables.ClientID + "\",\"" + cSATVaraibles[0].ToString() + "\",\"" + cSATVaraibles[1] + "\",\"" + cSATVaraibles[2] + "\",\"" + noOfCompletedCSATsWithoutFilters + "\",\"" + (cSATVaraibles[0] * 100 / noOfCompletedCSATsWithoutFilters) + "\",\"" + (cSATVaraibles[2] * 100 / noOfCompletedCSATsWithoutFilters) + "\",\"" + netPromoterScoreWithoutFilters + "\");";
-            lblNetPromoterScoreWithFiltersHeader.Attributes["onmouseover"] = "ShowCalculationPanel(\"" + lblNetPromoterScoreWithFiltersHeader.ClientID + "\",\"" + pnlNetPromoterScoreVariables.ClientID + "\",\"" + cSATVaraibles[3].ToString() + "\",\"" + cSATVaraibles[4] + "\",\"" + cSATVaraibles[5] + "\",\"" + noOfCompletedCSATsWithFilters + "\",\"" + (cSATVaraibles[3] * 100 / noOfCompletedCSATsWithFilters) + "\",\"" + (cSATVaraibles[5] * 100 / noOfCompletedCSATsWithFilters) + "\",\"" + netPromoterScoreWithFilters + "\");";
+            lblNetPromoterScoreAllCompany.Attributes["onmouseover"] = "ShowCalculationPanel(\"" + lblNetPromoterScoreAllCompany.ClientID + "\",\"" + pnlNetPromoterScoreVariables.ClientID + "\",\"" + cSATVaraibles[0].ToString() + "\",\"" + cSATVaraibles[1] + "\",\"" + cSATVaraibles[2] + "\",\"" + noOfCompletedCSATsWithoutFilters + "\",\"" + (noOfCompletedCSATsWithoutFilters != 0 ? (cSATVaraibles[0] * 100 / noOfCompletedCSATsWithoutFilters) : 0) + "\",\"" + (noOfCompletedCSATsWithoutFilters !=0 ?(cSATVaraibles[2] * 100 / noOfCompletedCSATsWithoutFilters):0) + "\",\"" + netPromoterScoreWithoutFilters + "\");";
+            lblNetPromoterScoreBasedOnFilters.Attributes["onmouseover"] = "ShowCalculationPanel(\"" + lblNetPromoterScoreBasedOnFilters.ClientID + "\",\"" + pnlNetPromoterScoreVariables.ClientID + "\",\"" + cSATVaraibles[3].ToString() + "\",\"" + cSATVaraibles[4] + "\",\"" + cSATVaraibles[5] + "\",\"" + noOfCompletedCSATsWithFilters + "\",\"" + (noOfCompletedCSATsWithFilters != 0 ? (cSATVaraibles[3] * 100 / noOfCompletedCSATsWithFilters) : 0) + "\",\"" + (noOfCompletedCSATsWithFilters !=0 ?(cSATVaraibles[5] * 100 / noOfCompletedCSATsWithFilters):0) + "\",\"" + netPromoterScoreWithFilters + "\");";
 
-            lblNetPromoterScoreHeader.Attributes["onmouseout"] = lblNetPromoterScoreWithFiltersHeader.Attributes["onmouseout"] = "HidePanel(\"" + pnlNetPromoterScoreVariables.ClientID + "\");";
+            lblNetPromoterScoreAllCompany.Attributes["onmouseout"] = lblNetPromoterScoreBasedOnFilters.Attributes["onmouseout"] = "HidePanel(\"" + pnlNetPromoterScoreVariables.ClientID + "\");";
 
             imgNetPromoterScoreWithoutFilters.Attributes["onmouseover"] = "ShowPanel(\"" + imgNetPromoterScoreWithoutFilters.ClientID + "\",\"" + pnlCSATCalculation.ClientID + "\");";
             imgNetPromoterScoreWithFilters.Attributes["onmouseover"] = "ShowPanel(\"" + imgNetPromoterScoreWithFilters.ClientID + "\",\"" + pnlCSATCalculation.ClientID + "\");";
