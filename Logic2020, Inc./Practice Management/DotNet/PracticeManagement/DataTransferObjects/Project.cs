@@ -286,6 +286,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string PONumber
+        {
+            get;
+            set;
+        }
+
 
         [DataMember]
         public List<Person> ProjectManagers
