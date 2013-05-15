@@ -152,7 +152,7 @@
                         Text='<%# Eval("ReviewerName")%>'></asp:Label>
                 </ItemTemplate>
                 <EditItemTemplate>
-                    <asp:DropDownList ID="ddlReviewer" runat="server" OnSelectedIndexChanged="ddlReviewer_SelectedIndexChanged" AutoPostBack="true" Width="250px">
+                    <asp:DropDownList ID="ddlReviewer" runat="server" Width="250px">
                     </asp:DropDownList>
                     <asp:RequiredFieldValidator ID="reqReviewer" runat="server" ControlToValidate="ddlReviewer"
                         ValidationGroup="CSATUpdate" ErrorMessage="The Reviewer is required." ToolTip="The Reviewer is required."
