@@ -187,6 +187,8 @@ namespace DataAccess
                 int completionDateIndex = reader.GetOrdinal(Constants.ColumnNames.CompletionDate);
                 int cSATReviewerIndex = reader.GetOrdinal(Constants.ColumnNames.CSATReviewer);
                 int commentsIndex = reader.GetOrdinal(Constants.ColumnNames.Comments);
+                int reviewStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewStartDate);
+                int reviewEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewEndDate);
                 while (reader.Read())
                 {
                     Project project;
@@ -226,6 +228,8 @@ namespace DataAccess
                             ReferralScore = !reader.IsDBNull(referralScoreIndex) ? reader.GetInt32(referralScoreIndex) : -1,
                             Id = !reader.IsDBNull(cSATIdIndex) ? reader.GetInt32(cSATIdIndex) : -1,
                             CompletionDate = !reader.IsDBNull(completionDateIndex) ? reader.GetDateTime(completionDateIndex) : DateTime.MinValue,
+                            ReviewStartDate = !reader.IsDBNull(reviewStartDateIndex) ? reader.GetDateTime(reviewStartDateIndex) : DateTime.MinValue,
+                            ReviewEndDate = !reader.IsDBNull(reviewEndDateIndex) ? reader.GetDateTime(reviewEndDateIndex) : DateTime.MinValue,
                             ReviewerName = !reader.IsDBNull(cSATReviewerIndex) ? reader.GetString(cSATReviewerIndex) : null,
                             Comments = !reader.IsDBNull(commentsIndex) ? reader.GetString(commentsIndex) : null
                         };
