@@ -118,7 +118,8 @@ AS
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN -1 ELSE  sm.PersonId  END AS 'SeniorManagerId',
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE  sm.LastName+', ' +sm.FirstName END AS 'SeniorManagerName',
 			re.PersonId AS 'ReviewerId',
-			re.LastName+', ' +re.FirstName AS 'ReviewerName'
+			re.LastName+', ' +re.FirstName AS 'ReviewerName',
+			P.PONumber
 	FROM	dbo.Project AS P
 	INNER JOIN dbo.Practice pr ON pr.PracticeId = P.PracticeId
 	INNER JOIN dbo.Client AS Clnt ON P.ClientId = Clnt.ClientId
