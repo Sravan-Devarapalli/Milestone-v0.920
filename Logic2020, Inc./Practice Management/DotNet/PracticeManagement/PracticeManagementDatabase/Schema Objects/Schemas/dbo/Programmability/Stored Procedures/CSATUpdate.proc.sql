@@ -27,7 +27,15 @@ BEGIN
 		ReviewerId = @ReviewerId,
 		ModifiedDate = @InsertingTime,
 		ModifiedBy =@ModifiedBy
-	WHERE [CSATId] = @ProjectCSATId
+	WHERE [CSATId] = @ProjectCSATId AND 
+		  (
+			ReviewStartDate != @ReviewStartDate OR 
+			ReviewEndDate != @ReviewEndDate OR
+			CompletionDate != @CompletionDate OR
+			Comments != @Comments OR
+			ReferralScore != @ReferralScore OR
+			ReviewerId != @ReviewerId
+		  )
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
