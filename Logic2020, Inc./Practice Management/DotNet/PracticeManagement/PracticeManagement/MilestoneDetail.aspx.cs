@@ -721,6 +721,23 @@ namespace PraticeManagement
 
         protected void btnDelete_Click(object sender, EventArgs e)
         {
+            Page.Validate("MilestoneDelete");
+            if (Page.IsValid)
+            {
+                try
+                {
+                    DeleteRecord();
+                    ReturnToPreviousPage();
+                }
+                catch (Exception exception)
+                {
+                    lblError.ShowErrorMessage("{0}", exception.Message);
+                }
+            }
+        }
+
+        protected void custExpenseValidate_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
             if (Milestone.Project.StartDate.Value == Milestone.StartDate ||
                 Milestone.Project.EndDate.Value == Milestone.EndDate)
             {
@@ -728,19 +745,50 @@ namespace PraticeManagement
                 {
                     if (service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, null, null))
                     {
-                        lblError.ShowErrorMessage("This milestone cannot be deleted, because project has expenses during the milestone period.");
-                        return;
+                        e.IsValid = false;
+                    }
+                    else
+                    {
+                        e.IsValid = true;
                     }
                 }
             }
-            try
+            else
             {
-                DeleteRecord();
-                ReturnToPreviousPage();
+                e.IsValid = true;
             }
-            catch (Exception exception)
+        }
+
+        protected void custProjectStatus_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+
+            using (var service = new MilestoneServiceClient())
             {
-                lblError.ShowErrorMessage("{0}", exception.Message);
+                List<int> list = service.GetMilestoneAndCSATCountsByProject(Milestone.Project.Id.Value).ToList();
+                if (Project.Status.StatusType == ProjectStatusType.Active && list[0] == 1)
+                {
+                    e.IsValid = false;
+                }
+                else
+                {
+                    e.IsValid = true;
+                }
+            }
+        }
+        protected void custCSATValidate_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            using (var service = new MilestoneServiceClient())
+            {
+                List<int> list = service.GetMilestoneAndCSATCountsByProject(Milestone.Project.Id.Value).ToList();
+
+                if (list[0] == 1 && list[1] > 0)
+                {
+                    e.IsValid = false;
+                }
+                else
+                {
+                    e.IsValid = true;
+                }
             }
         }
 
