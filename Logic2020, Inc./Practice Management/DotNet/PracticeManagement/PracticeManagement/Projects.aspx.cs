@@ -1623,7 +1623,7 @@ namespace PraticeManagement
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                     PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                    // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
+                                    //PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
 
 
@@ -1649,7 +1649,7 @@ namespace PraticeManagement
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                               PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                              // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
+                                              //PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                           }).ToList();
 
             projectsData.AddRange(projectsDataWithMargin);
@@ -1731,7 +1731,7 @@ namespace PraticeManagement
             data.Columns.Add("Senior Manager");
             data.Columns.Add("Director");
             data.Columns.Add("Pricing List");
-            //	  data.Columns.Add("CSAT OWNER");
+            //	  data.Columns.Add("PO Number");
             foreach (var propertyBag in propertyBags)
             {
                 var objects = new object[data.Columns.Count];
@@ -1839,7 +1839,7 @@ namespace PraticeManagement
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                     PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                    // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
+                                    // PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                 }).ToList();//Note:- Change insertPosition Of Total cell in RowDataBound if any modifications in projectsData.
 
             var projectsDataWithMargin = (from pro in projectsList
@@ -1864,7 +1864,7 @@ namespace PraticeManagement
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                               PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                              // CSATOwner = (pro.CSATOwnerName != null) ? pro.CSATOwnerName : string.Empty
+                                              // PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                           }).ToList();
 
             projectsData.AddRange(projectsDataWithMargin);
