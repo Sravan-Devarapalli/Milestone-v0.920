@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 11-25-2008
--- Updated By:	Srinivas.M
--- Updated Date: 2012-06-05
--- Description:	Logs the inserting into the dbo.Project table.
--- =============================================
-CREATE TRIGGER [dbo].[tr_Project_LogInsert]
+﻿CREATE TRIGGER [dbo].[tr_Project_LogInsert]
 ON [dbo].[Project]
 AFTER INSERT
 AS
@@ -49,6 +42,7 @@ BEGIN
 				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
 				,i.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
+				,i.PONumber
 		FROM inserted AS i
 		INNER JOIN dbo.Client AS C ON C.ClientId = i.ClientId
 		INNER JOIN dbo.Practice AS prac ON prac.PracticeId = i.PracticeId
