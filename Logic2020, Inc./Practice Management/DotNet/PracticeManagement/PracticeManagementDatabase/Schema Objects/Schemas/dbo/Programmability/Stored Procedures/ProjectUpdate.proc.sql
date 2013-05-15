@@ -26,7 +26,8 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@BusinessTypeId     INT= NULL,
 	@SeniorManagerId			INT = NULL,
 	@IsSeniorManagerUnassigned  BIT = 0,
-	@CSATOwnerId			INT = NULL
+	@CSATOwnerId			INT = NULL,
+	@PONumber			NVARCHAR(100) = NULL
 )
 AS
 BEGIN
@@ -117,7 +118,8 @@ BEGIN
 				BusinessTypeId   =@BusinessTypeId,
 				SeniorManagerId = @SeniorManagerId,
 				IsSeniorManagerUnassigned  = @IsSeniorManagerUnassigned,
-				ReviewerId = @CSATOwnerId
+				ReviewerId = @CSATOwnerId,
+				PONumber		= @PONumber
 		FROM dbo.Project P
 		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
 		WHERE ProjectId = @ProjectId
