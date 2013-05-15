@@ -450,6 +450,7 @@
     <Content Include="Images\close_inactive16.png" />
     <Content Include="Images\copy.png" />
     <Content Include="Images\CSATCalculation.png" />
+    <Content Include="Images\CSATCalculationPanel.png" />
     <Content Include="Images\desc.gif" />
     <Content Include="Images\divisions_16x16.png" />
     <Content Include="Images\email_envelope.png" />
@@ -1578,6 +1579,7 @@
     </Compile>
     <Compile Include="Controls\Reports\CSAT\CSATSummaryReport.ascx.cs">
       <DependentUpon>CSATSummaryReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\Reports\CSAT\CSATSummaryReport.ascx.designer.cs">
       <DependentUpon>CSATSummaryReport.ascx</DependentUpon>
@@ -2064,6 +2066,7 @@
     </Compile>
     <Compile Include="Reports\CSATReport.aspx.cs">
       <DependentUpon>CSATReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\CSATReport.aspx.designer.cs">
       <DependentUpon>CSATReport.aspx</DependentUpon>
