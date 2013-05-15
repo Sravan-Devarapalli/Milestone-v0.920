@@ -60,7 +60,7 @@ namespace PraticeManagement.Controls.Projects
         {
             ProjectCSATList = projectCSATList;
             gvCSAT.DataSource = ProjectCSATList;
-            HostingPage.PopulateDirectorsList(ProjectCSATList);
+            HostingPage.PopulateDirectorsList();
             gvCSAT.DataBind();
         }
 
@@ -112,12 +112,7 @@ namespace PraticeManagement.Controls.Projects
                     dpCompletionDate.DateValue = dataItem.CompletionDate;
                     BindScoreDropDown(ddlScore);
                     ddlScore.SelectedValue = dataItem.ReferralScore.ToString();
-                    List<int> excludedPerson = new List<int>();
-                    if (HostingPage.Project.Director != null && dataItem.ReviewerId != HostingPage.Project.Director.Id.Value)
-                    {
-                        excludedPerson.Add(HostingPage.Project.Director.Id.Value);
-                    }
-                    DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select CSAT Reviewer --", excludedPerson);
+                    DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select CSAT Reviewer --", new List<int>());
                     ddlReviewer.SelectedValue = dataItem.ReviewerId.ToString();
                 }
                 else
@@ -133,38 +128,6 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        //When client director is changed reviewer drop down repopulates.
-        public void RePopulateReviewerDropdown()
-        {
-            if (gvCSAT.EditIndex > -1)
-            {
-                DropDownList ddlReviewer = (DropDownList)gvCSAT.Rows[gvCSAT.EditIndex].FindControl("ddlReviewer");
-                string selectedReviewer = ddlReviewer.SelectedValue;
-                DataTransferObjects.ProjectCSAT dataItem = ProjectCSATList[gvCSAT.Rows[gvCSAT.EditIndex].DataItemIndex] as DataTransferObjects.ProjectCSAT;
-                List<int> excludedPerson = new List<int>();
-                if (HostingPage.SelectedDirector != -1 && dataItem.ReviewerId != HostingPage.SelectedDirector)
-                {
-                    excludedPerson.Add(HostingPage.SelectedDirector);
-                }
-                DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Reviewer --", excludedPerson);
-                ddlReviewer.SelectedValue = selectedReviewer;
-
-            }
-
-        }
-
-        protected void ddlReviewer_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var ddlReviewer = sender as DropDownList;
-            var gvCSATItem = ddlReviewer.NamingContainer as GridViewRow;
-            HiddenField hdCSATId = (HiddenField)gvCSATItem.FindControl("hdCSATId");
-            int csatId = int.Parse(hdCSATId.Value);
-            var temp = ProjectCSATList;
-            var selectedCSAT = temp.Any(p => p.Id == csatId) ? temp.First(p => p.Id == csatId) : null;
-            if (selectedCSAT != null)
-                selectedCSAT.ReviewerId = !string.IsNullOrEmpty(ddlReviewer.SelectedValue) ? int.Parse(ddlReviewer.SelectedValue) : -1;
-            HostingPage.PopulateDirectorsList(temp);
-        }
 
         protected void btnReviewStartDate_Command(object sender, CommandEventArgs e)
         {
@@ -196,7 +159,7 @@ namespace PraticeManagement.Controls.Projects
             gvCSAT.EditIndex = -1;
             ProjectCSATList = null;
             PopulateData(ProjectCSATList);
-            HostingPage.PopulateDirectorsList(ProjectCSATList);
+            HostingPage.PopulateDirectorsList();
         }
 
         protected void imgUpdateCSAT_OnClick(object sender, EventArgs e)
@@ -216,13 +179,13 @@ namespace PraticeManagement.Controls.Projects
                 DropDownList ddlScore = (DropDownList)row.FindControl("ddlScore");
 
                 DataTransferObjects.ProjectCSAT pCSAT = tmp.First(g => g.Id == cSATId);
-                pCSAT.ReferralScore = int.Parse(ddlScore.SelectedValue);
-                pCSAT.ReviewStartDate = dpReviewStartDate.DateValue;
-                pCSAT.ReviewEndDate = dpReviewEndDate.DateValue;
-                pCSAT.CompletionDate = dpCompletionDate.DateValue;
-                pCSAT.ReviewerId = int.Parse(ddlReviewer.SelectedValue);
+                    pCSAT.ReferralScore = int.Parse(ddlScore.SelectedValue);
+                    pCSAT.ReviewStartDate = dpReviewStartDate.DateValue;
+                    pCSAT.ReviewEndDate = dpReviewEndDate.DateValue;
+                    pCSAT.CompletionDate = dpCompletionDate.DateValue;
+                    pCSAT.ReviewerId = int.Parse(ddlReviewer.SelectedValue);
 
-                ServiceCallers.Custom.Project(p => p.CSATUpdate(pCSAT, DataHelper.CurrentPerson.Alias));
+                    ServiceCallers.Custom.Project(p => p.CSATUpdate(pCSAT, DataHelper.CurrentPerson.Alias));
                 HostingPage.mlConfirmationControl.ShowInfoMessage("CSAT successfully updated.");
                 ProjectCSATList = null;
                 tmp = ProjectCSATList;
@@ -250,7 +213,7 @@ namespace PraticeManagement.Controls.Projects
             PopulateData(tmp);
             HostingPage.mlConfirmationControl.ShowInfoMessage("CSAT successfully deleted.");
             HostingPage.IsErrorPanelDisplay = true;
-            HostingPage.PopulateDirectorsList(ProjectCSATList);
+            HostingPage.PopulateDirectorsList();
         }
 
         private void BindScoreDropDown(DropDownList ddlScore)
