@@ -446,7 +446,7 @@ namespace PraticeManagement
             {
                 TableCellHistoryg.Visible = true;
                 cellProjectTools.Visible = true;
-               // cellProjectCSAT.Visible = true;
+                cellProjectCSAT.Visible = true;
             }
         }
 
@@ -466,10 +466,16 @@ namespace PraticeManagement
             PopulateOpportunityLink();
             txtProjectNameFirstTime.Visible = !(ProjectId.HasValue && Project != null);
             imgEditProjectName.Visible =
+            imgMailToCSATOwner.Visible =
             imgMailToSeniorManager.Visible =
             imgMailToProjectOwner.Visible =
             imgMailToClientDirector.Visible =
             imgMailToSalesperson.Visible = !txtProjectNameFirstTime.Visible;
+
+            if (!IsPostBack && !string.IsNullOrEmpty(CSAT) && CSAT == "true" && cellProjectCSAT.Visible)
+            {
+                btnView_Command(btnProjectCSAT, new CommandEventArgs("", "8"));
+            }
         }
 
         /// <summary>
@@ -810,6 +816,10 @@ namespace PraticeManagement
             }
 
         }
+        protected void ddlDirector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateCSATOwnerList();
+        }
 
         private void SetDefaultsToClientDependancyControls()
         {
@@ -973,13 +983,72 @@ namespace PraticeManagement
             SetBusinessGroupLabel();
         }
 
-	  public void PopulateDirectorsList(List<ProjectCSAT> cSATList = null)
-        {}
+        protected void ddlCSATOwner_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateDirectorsList();
+        }
+
+        public void PopulateCSATOwnerList()
+        {
+            List<int> excludingPersons = new List<int>();
+            if (ddlDirector.SelectedValue != "")
+            {
+                excludingPersons.Add(Convert.ToInt32(ddlDirector.SelectedValue));
+            }
+            int selectedValue = -1;
+            string selectedText = "";
+            if (ddlCSATOwner.SelectedValue != "")
+            {
+                if (!excludingPersons.Any(id => id == Convert.ToInt32(ddlCSATOwner.SelectedValue)))
+                {
+                    selectedValue = Convert.ToInt32(ddlCSATOwner.SelectedValue);
+                    selectedText = ddlCSATOwner.SelectedItem.Text;
+                }
+            }
+            DataHelper.FillCSATReviewerList(ddlCSATOwner, "-- Select CSAT Owner --", excludingPersons);
+            if (selectedValue != -1)
+            {
+                ListItem selectedOwner = ddlCSATOwner.Items.FindByValue(selectedValue.ToString());
+                if (selectedOwner == null)
+                {
+                    selectedOwner = new ListItem(selectedText, selectedValue.ToString());
+                    ddlCSATOwner.Items.Add(selectedOwner);
+                    ddlCSATOwner.SortByText();
+                }
+                ddlCSATOwner.SelectedValue = selectedValue.ToString();
+            }
+        }
+
+        public void PopulateDirectorsList()
+        {
+            List<int> excludingPersons = new List<int>();
+            if (ddlCSATOwner.SelectedValue != "")
+            {
+                excludingPersons.Add(Convert.ToInt32(ddlCSATOwner.SelectedValue));
+            }
+            int selectedItem = -1;
+            if (ddlDirector.SelectedValue != "")
+            {
+                if (!excludingPersons.Any(id => id == Convert.ToInt32(ddlDirector.SelectedValue)))
+                {
+                    selectedItem = Convert.ToInt32(ddlDirector.SelectedValue);
+                }
+            }
+            DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --", excludingPersons);
+            if (selectedItem != -1)
+            {
+                ddlDirector.SelectedValue = selectedItem.ToString();
+            }
+        }
 
         protected void DropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Only set an input focus
             ((Control)sender).Focus();
+            if (ProjectId.HasValue)
+            {
+                ucCSAT.PopulateData(null);
+            }
         }
 
         private void AddStatusIcon()
@@ -1159,6 +1228,15 @@ namespace PraticeManagement
 
         }
 
+        protected void custActiveStatus_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            if (!string.IsNullOrEmpty(ddlProjectStatus.SelectedValue) && (int)ProjectStatusType.Active == Convert.ToInt32(ddlProjectStatus.SelectedValue))
+            {
+                e.IsValid = !noMileStones;
+            }
+        }
+
         protected void cvAttachmentCategory_OnServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
@@ -1231,9 +1309,13 @@ namespace PraticeManagement
             bool result = false;
 
             Page.Validate(vsumProject.ValidationGroup);
-            if (Page.IsValid && ValidateProjectTimeTypesTab())
+            if (Page.IsValid && ValidateProjectTimeTypesTab() && 
+                    (CompletedStatus || ValidateCompleStatusPopup())
+                 )
             {
+                cvCompletedStatus.IsValid = true;
                 int? id = SaveData();
+                CompletedStatus = false;
                 if (id.HasValue)
                 {
                     this.ProjectId = id;
@@ -1245,12 +1327,35 @@ namespace PraticeManagement
                 {
                     IsErrorPanelDisplay = true;
                 }
+                int viewIndex = mvProjectDetailTab.ActiveViewIndex;
+                if (viewIndex == 8 && ProjectId.HasValue)
+                {
+                    ucCSAT.PopulateData(null);
+                }
             }
             else
             {
                 IsErrorPanelDisplay = true;
             }
             return result;
+        }
+
+        public bool ValidateCompleStatusPopup()
+        {
+            int currentStatus = int.Parse(ddlProjectStatus.SelectedValue);
+            if (ProjectId.HasValue && currentStatus != Project.Status.Id && currentStatus == (int)ProjectStatusType.Completed)
+            {
+                var projectCSATList = ucCSAT.ProjectCSATList;
+                if (projectCSATList.Any(p => p.ReviewEndDate > DateTime.Now))
+                {
+                    IsOtherPanelDisplay = true;
+                    cvCompletedStatus.IsValid = false;
+                    lblCompletedStatus.Text = "Project status cannot be set to 'Completed' with CSAT Review dates beyond the current date. Click 'OK' to set the Review dates to current date or click 'Cancel' to make no changes.";
+                    mpeCompletedStatusPopUp.Show();
+                    return false;
+                }
+            }
+            return true;
         }
 
         public bool ValidateAndSaveFromOtherChildControls()
@@ -1308,7 +1413,14 @@ namespace PraticeManagement
                 try
                 {
                     result = serviceClient.SaveProjectDetail(project, User.Identity.Name);
-
+                    if (ProjectId.HasValue)
+                    {
+                        Project = GetCurrentProject(ProjectId.Value);
+                    }
+                    hdnProjectId.Value = result.ToString();
+                    DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty, new List<int>());
+                    SelectProjectStatus(project);
+                    ShowTabs();
                 }
                 catch (CommunicationException ex)
                 {
@@ -1358,7 +1470,8 @@ namespace PraticeManagement
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillBusinessTypes(ddlBusinessOptions);
-            DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --");
+            PopulateDirectorsList();
+            PopulateCSATOwnerList();
             DataHelper.FillSeniorManagerList(ddlSeniorManager, "-- Select Senior Manager --");
             string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
@@ -1371,12 +1484,21 @@ namespace PraticeManagement
             {
                 Project = GetCurrentProject(id);
                 PopulateControls(Project);
-
+                DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty, new List<int>());
                 FillUnlinkedOpportunityList(Project.Client.Id);
             }
             else
             {
                 int clientId = -1;
+                List<int> excludeStatuses = new List<int>();
+                excludeStatuses.Add((int)(ProjectStatusType.Active));
+                excludeStatuses.Add((int)(ProjectStatusType.Completed));
+                DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty, excludeStatuses);
+                ddlProjectStatus.SelectedIndex =
+                    ddlProjectStatus.Items.IndexOf(
+                    ddlProjectStatus.Items.FindByValue(((int)ProjectStatusType.Projected).ToString()));
+
+
                 if (int.TryParse(Page.Request.QueryString["clientId"], out clientId))
                 {
                     ddlClientName.SelectedValue = clientId.ToString();
@@ -1385,11 +1507,6 @@ namespace PraticeManagement
                 // Default values for new projects.
                 bool userIsAdministrator =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-
-                ddlProjectStatus.SelectedIndex =
-                       ddlProjectStatus.Items.IndexOf(
-                       ddlProjectStatus.Items.FindByValue(((int)ProjectStatusType.Projected).ToString()));
-
                 if (!userIsAdministrator)
                 {
                     ddlProjectStatus.Enabled = false;
@@ -1404,6 +1521,15 @@ namespace PraticeManagement
 
             UpdateSalesCommissionState();
             UpdateManagementCommissionState();
+        }
+
+        protected void custCSATOwner_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if (!string.IsNullOrEmpty(txtSowBudget.Text) && ddlCSATOwner.SelectedValue == "" && txtSowBudget.Text.Length > 4)
+            {
+                args.IsValid = Convert.ToDecimal(txtSowBudget.Text) >= 50000 ? false : true;
+            }
         }
 
         private Project GetCurrentProject(int? id)
@@ -1440,6 +1566,7 @@ namespace PraticeManagement
                 txtProjectNameFirstTime.Text = txtProjectName.Text = project.Name;
                 lblProjectRange.Text = string.IsNullOrEmpty(project.ProjectRange) ? string.Empty : string.Format("({0})", project.ProjectRange);
                 txtDescription.Text = project.Description;
+                txtPONumber.Text = project.PONumber;
                 ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
                 if (project.Client.IsNoteRequired)
                 {
@@ -1473,6 +1600,20 @@ namespace PraticeManagement
 
                     ddlDirector.SelectedValue = selectedDirector.Value;
                 }
+
+                if (project.CSATOwnerId != 0)
+                {
+                    ListItem selectedOwner = ddlCSATOwner.Items.FindByValue(project.CSATOwnerId.ToString());
+                    if (selectedOwner == null)
+                    {
+                        selectedOwner = new ListItem(project.CSATOwnerName, project.CSATOwnerId.ToString());
+                        ddlCSATOwner.Items.Add(selectedOwner);
+                        ddlCSATOwner.SortByText();
+                    }
+                    ddlCSATOwner.SelectedValue = project.CSATOwnerId.ToString();
+                }
+                PopulateDirectorsList();
+                PopulateCSATOwnerList();
 
                 if (project.SeniorManagerId != 0)
                 {
@@ -1624,10 +1765,8 @@ namespace PraticeManagement
 
         private void SelectProjectStatus(Project project)
         {
-            ddlProjectStatus.SelectedIndex =
-                ddlProjectStatus.Items.IndexOf(
-                ddlProjectStatus.Items.FindByValue(
-                project.Status != null ? project.Status.Id.ToString() : string.Empty));
+            ddlProjectStatus.SelectedValue = project.Status != null ? project.Status.Id.ToString() : string.Empty;
+
         }
 
         private void PopulatePracticeDropDown(Project project)
@@ -1742,6 +1881,7 @@ namespace PraticeManagement
             project.Name = ProjectId.HasValue ? HttpUtility.HtmlDecode(lblProjectName.Text) : txtProjectNameFirstTime.Text;
             //project.Discount = !string.IsNullOrEmpty(txtClientDiscount.Text.Trim()) ? decimal.Parse(txtClientDiscount.Text) : 0;
             project.BuyerName = txtBuyerName.Text;
+            project.PONumber = txtPONumber.Text;
             project.Client = new Client { Id = int.Parse(ddlClientName.SelectedValue) };
             project.Practice = new Practice { Id = int.Parse(ddlPractice.SelectedValue) };
             project.ProjectCapabilityIds = cblPracticeCapabilities.SelectedItems;
@@ -1774,7 +1914,10 @@ namespace PraticeManagement
             project.IsSeniorManagerUnassigned = selectedSeniorManagerId == -1;
 
             project.ProjectWorkTypesList = ucProjectTimeTypes.HdnTimeTypesAssignedToProjectValue;
-
+            if (ddlCSATOwner.SelectedValue != "")
+            {
+                project.CSATOwnerId = int.Parse(ddlCSATOwner.SelectedValue);
+            }
         }
 
         private void PopulatePricingList(Project project)
@@ -1851,6 +1994,10 @@ namespace PraticeManagement
             else if (viewIndex == 2 && ProjectId.HasValue)
             {
                 financials.Project = GetCurrentProject(ProjectId.Value);
+            }
+            else if (viewIndex == 8 && ProjectId.HasValue)
+            {
+                ucCSAT.PopulateData(null);
             }
         }
 
@@ -1973,6 +2120,13 @@ namespace PraticeManagement
             MailTo(managerId, (ImageButton)sender);
         }
 
+        protected void imgMailToCSATOwner_OnClick(object sender, EventArgs e)
+        {
+            int ownerId = 0;
+            int.TryParse(ddlCSATOwner.SelectedValue, out ownerId);
+            MailTo(ownerId, (ImageButton)sender);
+        }
+
         protected void imgMailToClientDirector_OnClick(object sender, EventArgs e)
         {
             int directorId = 0;
@@ -1995,6 +2149,23 @@ namespace PraticeManagement
             string peronEmailId = person.Alias;
             string function = string.Format("mailTo('{0}');", string.Format(MailToSubjectFormat, peronEmailId, subject));
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Mailto", function, true);
+        }
+
+        protected void btnOkCompletedStatusPopup_Click(object sender, EventArgs e)
+        {
+            CompletedStatus = true;
+            btnSave_Click(btnSave, new EventArgs());
+        }
+
+        protected void btnCancelCompletedStatusPopup_Click(object sender, EventArgs e)
+        {
+            ResetToPreviousData();
+        }
+
+        private void ResetToPreviousData()
+        {
+            Project = GetCurrentProject(ProjectId);
+            PopulateControls(Project);
         }
 
         #endregion
@@ -2020,7 +2191,10 @@ namespace PraticeManagement
                 case PraticeManagement.Controls.Projects.ProjectPersons.PERSON_TARGET:
                     SaveAndRedirectToMilestone(args[1]);
                     break;
-
+                case PraticeManagement.Controls.Projects.ProjectCSAT.ProjectCSAT_TARGET:
+                    if (!SaveDirty || ValidateAndSave())
+                        Redirect(eventArgument);
+                    break;
                 default:
                     if (!SaveDirty || ValidateAndSave())
                         Redirect(eventArgument);
