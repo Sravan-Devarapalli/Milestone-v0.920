@@ -18,6 +18,7 @@ span.highlighted{background-color:#1A9E00;color:#FFF;font-weight:700}
 .fl-left{float:left!important}
 .fl-right{float:right!important}
 .mrg0{margin:0!important}
+.Height115px{height:115px}
 html,body{width:100%;height:100%}
 html{background:#bacdf5 url(../images/body-bg2.png) repeat-y 50% 0}
 body{font-family:Arial;font-weight:400;font-size:12px;color:#333;min-height:100%}
@@ -358,6 +359,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width6PercentImp{width:6%!important}
 .Width7Percent{width:7%}
 .Width7point5Percent{width:7.5%}
+.Width6point5Percent{width:6.5%}
 .Width8Percent,.Width8Per{width:8%}
 .Width9Percent,.Width9Per{width:9%}
 .Width10Percent,.Width10Per{width:10%}
@@ -419,6 +421,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width85Percent{width:85%}
 .Width90Percent{width:90%}
 .Width92Per{width:92%}
+.Width91Per{width:91%}
 .Width925Per{width:92.5%}
 .Width93Per{width:93%}
 .Width94Per{width:94%}
@@ -572,7 +575,7 @@ Width99PercentImp{width:99%!important}
 .WidthWithHeightAndBorders th{font-size:12px}
 .ReportItemTemplate td,.ReportAlternateItemTemplate td{padding-top:4px;padding-bottom:4px}
 .ReportItemTemplateCSAT{background-color:White;border-left:1px solid #000;border-right:1px solid #000}
-.ReportItemTemplateCSAT td{white-space:normal;text-align:center;padding-top:4px;padding-bottom:4px;border-bottom:1px solid #000}
+.ReportItemTemplateCSAT td{white-space:normal;text-align:center;vertical-align:middle;padding:2px;height:24px;border-bottom:1px solid #000}
 TABLE.PaddingTenPx td{padding:0 5px}
 .PersonDetailReportHeader{width:100%;height:90px}
 .PersonDetailReportHeader TD.PersonDetails{font-size:18px;font-weight:bold;padding-bottom:10px}
@@ -1115,6 +1118,8 @@ HyplinkConsultantDetailReport{color:Black!important;text-decoration:none!importa
 .LableProjectManager{width:30%;vertical-align:top;line-height:20px}
 .TdProjectNotes{width:55%;height:120px}
 .Height102px{height:102px}
+.Height10P{height:10%}
+.Height50P{height:50%}
 .Height100Percent{height:100%}
 .Height100PerImp{height:100%!important}
 .InnerTdProjectNotes{height:20px;font-size:15px;font-style:italic;vertical-align:bottom;padding-bottom:5px}
@@ -1450,22 +1455,27 @@ table#ctl00_body_login tr td label{float:left}
 .ConsultingDemandDetails,.ConsultingDemandDetailsByMonth{width:100%}
 .ConsultingDemandDetails td,.ConsultingDemandDetailsByMonth td{height:30px}
 .ConsultingDemandDetails th,.ConsultingDemandDetailsByMonth th{height:19px;padding:2px}
-.ConsultingDemandDetails .FirstTD{padding-left:70px;text-align:left!important;width:25%}
+.ConsultingDemandDetails .FirstTD{padding-left:70px;text-align:left!important;width:20%}
+.ConsultingDemandDetails .FirstTDSalesStage{padding-left:70px;text-align:left!important;width:10%}
 .ConsultingDemandDetails .SecondTD{width:10%;text-align:center}
+.ConsultingDemandDetails .Width20{width:20%;text-align:center}
 .ConsultingDemandDetails .ThirdTD{width:15%;text-align:center}
+.ConsultingDemandDetails .ForthTD{width:5%;text-align:center}
+.ConsultingDemandDetails .FifthTD{width:7.5%;text-align:center}
 .ConsultingDemandDetails .SecondTDTotals{width:15%;text-align:left;padding-left:45px}
 .ConsultingDemandDetailsTotal{font-weight:bolder;font-size:15px;width:10%;text-align:center}
 .ConsultingDemandDetails .headerRow,.ConsultingDemandDetailsByMonth .headerRow{background-color:White;background-image:none;background-repeat:no-repeat;cursor:pointer;height:auto;position:static;border-bottom:1px solid #000;font-size:14px;padding:2px;text-align:center;vertical-align:middle}
 .ConsultingDemandDetailsByMonth .FirstTD{width:10%;text-align:center}
 .ConsultingDemandDetailsByMonth .SecondTD{width:20%;text-align:center}
 .ConsultingDemandDetailsByMonth .ThirdTD{width:10%;text-align:center}
-.ConsultingDemandDetailsByMonth .ThirdTDTotals{width:10%;text-align:left;padding-left:50px}
+.ConsultingDemandDetailsByMonth .ThirdTDTotals{width:5%;text-align:left;padding-left:25px}
 .ConsultingDemandDetailsByMonth .ForthTD{width:15%;text-align:center}
+.ConsultingDemandDetailsByMonth .FifthTD{width:7.5%;text-align:center}
 .trConsultngDetailPanelInnerItem{background-color:white;height:30px;white-space:nowrap;width:100%}
-.trConsultngDetailPanel th{background-color:white;font-size:14px;text-align:center;white-space:nowrap;width:13.33%;height:19px;padding:2px}
-.trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:13.33%}
+.trConsultngDetailPanel th{background-color:white;font-size:14px;text-align:center;white-space:nowrap;width:10%;height:19px;padding:2px}
+.trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:10%}
 .trConsultngDetailPanelItem{background-color:#D4D0C9;height:30px;white-space:nowrap}
-.trConsultngDetailPanelItem th{font-size:14px;width:13.33%}
+.trConsultngDetailPanelItem th{font-size:14px;width:10%}
 .consultingReportTd{font-weight:bolder;width:14%;text-align:right}
 .trCSATSummaryHeader{white-space:nowrap;width:100%;border-left:1px solid #000;border-right:1px solid #000}
 .trCSATSummaryHeader th{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
