@@ -139,7 +139,7 @@
                     </td>
                     <td class="textLeft PaddingLeft3Px">
                         <pmc:ScrollingDropDown ID="cblPractices" runat="server" AllSelectedReturnType="Null"
-                            CssClass="ProjectDetailScrollingDropDown1 Width15point3PercentImp vMiddleImp"
+                            CssClass="ProjectDetailScrollingDropDown1 Width16point8PercentImp vMiddleImp"
                             OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPractices','Practice Area')"
                             CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area" />
                         <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
@@ -154,7 +154,7 @@
                     </td>
                     <td class="textLeft PaddingLeft3Px">
                         <pmc:ScrollingDropDown ID="cblAccount" runat="server" AllSelectedReturnType="Null"
-                            CssClass="ProjectDetailScrollingDropDown1 Width15point3PercentImp vMiddleImp"
+                            CssClass="ProjectDetailScrollingDropDown1 Width16point8PercentImp vMiddleImp"
                             OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblAccount','Account')"
                             CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Account" />
                         <ext:ScrollableDropdownExtender ID="sdeAccount" runat="server" TargetControlID="cblAccount"
