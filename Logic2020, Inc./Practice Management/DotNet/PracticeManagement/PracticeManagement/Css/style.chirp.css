@@ -97,7 +97,7 @@ span.highlighted
 }
 .Height115px
 {
-    height : 115px;
+    height: 115px;
 }
 html, body
 {
@@ -2860,8 +2860,8 @@ Width99PercentImp
     white-space: normal;
     text-align: center;
     vertical-align: middle;
-    padding:2px;
-    height:24px;
+    padding: 2px;
+    height: 24px;
     border-bottom: 1px solid #000;
 }
 TABLE.PaddingTenPx td
