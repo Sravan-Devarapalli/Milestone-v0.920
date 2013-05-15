@@ -62,7 +62,8 @@ AS
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN -1 ELSE  sm.PersonId  END AS 'SeniorManagerId',
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE  sm.LastName+', ' +sm.FirstName END AS 'SeniorManagerName',
 			re.PersonId AS 'ReviewerId',
-			re.LastName+', ' +re.FirstName AS 'ReviewerName'
+			re.LastName+', ' +re.FirstName AS 'ReviewerName',
+			p.PONumber
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
