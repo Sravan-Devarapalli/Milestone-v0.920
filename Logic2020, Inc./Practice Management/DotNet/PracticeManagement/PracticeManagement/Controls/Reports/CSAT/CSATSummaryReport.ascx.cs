@@ -98,17 +98,17 @@ namespace PraticeManagement.Controls.Reports.CSAT
                         int i; 
                         sb.Append(reportItem.ProjectNumber);
                         sb.Append("\t");
-                        sb.Append(reportItem.Client.Name);
+                        sb.Append(reportItem.Client.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append(reportItem.Status.Name);
                         sb.Append("\t");
-                        sb.Append(reportItem.Group.Name);
+                        sb.Append(reportItem.Group.HtmlEncodedName);
                         sb.Append("\t");
-                        sb.Append(reportItem.BusinessGroup.Name);
+                        sb.Append(reportItem.BusinessGroup.HtmlEncodedName);
                         sb.Append("\t");
-                        sb.Append(reportItem.Name);
+                        sb.Append(reportItem.HtmlEncodedName);
                         sb.Append("\t");
-                        sb.Append(reportItem.ProjectOwner);
+                        sb.Append(reportItem.ProjectOwner.HtmlEncodedName);
                         sb.Append("\t");
                         sb.Append("$" + reportItem.SowBudget);
                         sb.Append("\t");
@@ -122,13 +122,13 @@ namespace PraticeManagement.Controls.Reports.CSAT
                         sb.Append("\t");
                         sb.Append(reportItem.Practice.HtmlEncodedName);
                         sb.Append("\t");
-                        sb.Append(reportItem.SalesPersonName);
+                        sb.Append(HttpUtility.HtmlEncode(reportItem.SalesPersonName));
                         sb.Append("\t");
-                        sb.Append(reportItem.Director.Name);
+                        sb.Append(reportItem.Director.HtmlEncodedName);
                         sb.Append("\t");
-                        sb.Append(reportItem.ProjectManagerNames);
+                        sb.Append(HttpUtility.HtmlEncode(reportItem.ProjectManagerNames));
                         sb.Append("\t");
-                        sb.Append(reportItem.CSATOwnerName);
+                        sb.Append(HttpUtility.HtmlEncode(reportItem.CSATOwnerName));
                         sb.Append("\t");
                         for (i = 0; i < reportItem.CSATList.Count; i++)
                         {
@@ -138,28 +138,28 @@ namespace PraticeManagement.Controls.Reports.CSAT
                             sb.Append("\t");
                             sb.Append(reportItem.CSATList[i].CompletionDate.ToString(Constants.Formatting.EntryDateFormat));
                             sb.Append("\t");
-                            sb.Append(reportItem.CSATList[i].ReviewerName);
+                            sb.Append(HttpUtility.HtmlEncode(reportItem.CSATList[i].ReviewerName));
                             sb.Append("\t");
                             sb.Append(reportItem.CSATList[i].ReferralScore);
                             sb.Append("\t");
-                            sb.Append(reportItem.CSATList[i].Comments);
+                            sb.Append(HttpUtility.HtmlEncode(reportItem.CSATList[i].Comments));
                             sb.Append("\t");
                             sb.AppendLine();
                             if (i != reportItem.CSATList.Count - 1)
                             {
                                 sb.Append(reportItem.ProjectNumber);
                                 sb.Append("\t");
-                                sb.Append(reportItem.Client.Name);
+                                sb.Append(reportItem.Client.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append(reportItem.Status.Name);
                                 sb.Append("\t");
-                                sb.Append(reportItem.Group.Name);
+                                sb.Append(reportItem.Group.HtmlEncodedName);
                                 sb.Append("\t");
-                                sb.Append(reportItem.BusinessGroup.Name);
+                                sb.Append(reportItem.BusinessGroup.HtmlEncodedName);
                                 sb.Append("\t");
-                                sb.Append(reportItem.Name);
+                                sb.Append(reportItem.HtmlEncodedName);
                                 sb.Append("\t");
-                                sb.Append(reportItem.ProjectOwner);
+                                sb.Append(reportItem.ProjectOwner.HtmlEncodedName);
                                 sb.Append("\t");
                                 sb.Append("$"+reportItem.SowBudget);
                                 sb.Append("\t");
@@ -173,13 +173,13 @@ namespace PraticeManagement.Controls.Reports.CSAT
                                 sb.Append("\t");
                                 sb.Append(reportItem.Practice.HtmlEncodedName);
                                 sb.Append("\t");
-                                sb.Append(reportItem.SalesPersonName);
+                                sb.Append(HttpUtility.HtmlEncode(reportItem.SalesPersonName));
                                 sb.Append("\t");
-                                sb.Append(reportItem.Director.Name);
+                                sb.Append(reportItem.Director.HtmlEncodedName);
                                 sb.Append("\t");
-                                sb.Append(reportItem.ProjectManagerNames);
+                                sb.Append(HttpUtility.HtmlEncode(reportItem.ProjectManagerNames));
                                 sb.Append("\t");
-                                sb.Append(reportItem.CSATOwnerName);
+                                sb.Append(HttpUtility.HtmlEncode(reportItem.CSATOwnerName));
                                 sb.Append("\t");
                             }
                         }
