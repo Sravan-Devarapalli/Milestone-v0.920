@@ -177,12 +177,7 @@ namespace PraticeManagement
         public void PopulateData()
         {
             BindScoreDropDown(ddlScore);
-            List<int> excludedPerson = new List<int>();
-            if (Project.Director != null)
-            {
-                excludedPerson.Add(Project.Director.Id.Value);
-            }
-            DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Reviewer --", excludedPerson);
+            DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Reviewer --",new List<int>());
             if (CSATId.HasValue)
             {
                 ddlScore.SelectedValue = CSAT.ReferralScore.ToString();
@@ -222,3 +217,4 @@ namespace PraticeManagement
         #endregion
     }
 }
+
