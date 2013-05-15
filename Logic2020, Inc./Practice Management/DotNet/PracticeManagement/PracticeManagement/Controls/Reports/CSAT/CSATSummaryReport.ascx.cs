@@ -39,6 +39,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 sb.Append(" to ");
                 sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
                 sb.AppendLine();
+                sb.AppendLine();
 
                 if (report.Count > 0)
                 {
@@ -76,6 +77,10 @@ namespace PraticeManagement.Controls.Reports.CSAT
                     sb.Append("Project Manager(s)");
                     sb.Append("\t");
                     sb.Append("CSAT Owner");
+                    sb.Append("\t");
+                    sb.Append("CSAT Start Date");
+                    sb.Append("\t");
+                    sb.Append("CSAT End Date");
                     sb.Append("\t");
                     sb.Append("CSAT Completion Date");
                     sb.Append("\t");
@@ -127,6 +132,10 @@ namespace PraticeManagement.Controls.Reports.CSAT
                         sb.Append("\t");
                         for (i = 0; i < reportItem.CSATList.Count; i++)
                         {
+                            sb.Append(reportItem.CSATList[i].ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat));
+                            sb.Append("\t");
+                            sb.Append(reportItem.CSATList[i].ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat));
+                            sb.Append("\t");
                             sb.Append(reportItem.CSATList[i].CompletionDate.ToString(Constants.Formatting.EntryDateFormat));
                             sb.Append("\t");
                             sb.Append(reportItem.CSATList[i].ReviewerName);
@@ -181,7 +190,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 {
                     sb.Append("There are no CSAT Entries towards this range selected.");
                 }
-                var filename = string.Format("CSAT_Report_{0}_{1}.xlsx", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                var filename = string.Format("CSAT_Report_{0}_{1}.xls", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
                 GridViewExportUtil.Export(filename, sb);
             }
         }
