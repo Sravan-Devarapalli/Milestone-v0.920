@@ -181,14 +181,9 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 {
                     sb.Append("There are no CSAT Entries towards this range selected.");
                 }
-                var filename = string.Format("CSAT_Report_{0}-{1}.xls", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                var filename = string.Format("CSAT_Report_{0}_{1}.xlsx", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
                 GridViewExportUtil.Export(filename, sb);
             }
-        }
-
-        protected void btnExportToPDF_OnClick(object sender, EventArgs e)
-        {
-         
         }
 
         protected string GetProjectDetailsLink(int? projectId,bool flag)
@@ -222,15 +217,15 @@ namespace PraticeManagement.Controls.Reports.CSAT
                divEmptyMessage.Style["display"] = "none";
                repSummary.DataSource = projects;
                repSummary.DataBind();
-               HostingPage.PopulateHeaderSection();
            }
            else
            {
                repSummary.Visible = false;
                btnExportToExcel.Enabled = false;
-               HostingPage.HeaderTable.Visible = false;
                divEmptyMessage.Style["display"] = "";
            }
+           HostingPage.PopulateHeaderSection();
         }
     }
 }
+
