@@ -55,7 +55,7 @@ namespace PraticeManagement.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trCustomDates;
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell trCustomDates;
         
         /// <summary>
         /// hdnStartDate control.
@@ -319,13 +319,13 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Image imgNetPromoterScoreWithoutFilters;
         
         /// <summary>
-        /// ltrlNetPromoterScoreAllCompany control.
+        /// lblNetPromoterScoreAllCompany  control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlNetPromoterScoreAllCompany;
+        protected global::System.Web.UI.WebControls.Label lblNetPromoterScoreAllCompany ;
         
         /// <summary>
         /// lblNetPromoterScoreWithFiltersHeader control.
@@ -346,13 +346,13 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Image imgNetPromoterScoreWithFilters;
         
         /// <summary>
-        /// ltrlNetPromoterScoreBasedOnFilters control.
+        /// lblNetPromoterScoreBasedOnFilters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlNetPromoterScoreBasedOnFilters;
+        protected global::System.Web.UI.WebControls.Label lblNetPromoterScoreBasedOnFilters;
         
         /// <summary>
         /// ltrlCompletedCSATs control.
