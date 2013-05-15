@@ -67,6 +67,8 @@ BEGIN
 				dbo.GetProjectManagerNames(P.ProjectId) AS ProjectManagers,
 				CSATOwner.LastName+', '+CSATOwner.FirstName AS CSATOwnerName,
 				PCSAT.CompletionDate,
+				PCSAT.ReviewStartDate,
+				PCSAT.ReviewEndDate,
 			    CSATReviewer.LastName+', '+CSATReviewer.FirstName AS CSATReviewer,
 				PCSAT.Comments
 		FROM Project P
