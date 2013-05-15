@@ -18,8 +18,6 @@
       <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
         <siteMapNode url="~/Reports/BenchCosts.aspx" VirtualPath="~/Reports/BenchCosts.aspx" QuickLinkTitle="Bench Costs"  title="Bench Costs" roles="Administrator" description="Bench Costs" ShowURL="true" />
         <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="Administrator" />
-        <siteMapNode url="~/Reports/Expenses.aspx" title="Expenses"  VirtualPath="~/Reports/Expenses.aspx" QuickLinkTitle="Expense Report"  description="Expenses"/>
-        <siteMapNode url="~/Reports/PersonStats.aspx?from=Financial"  VirtualPath="~/Reports/PersonStats.aspx" QuickLinkTitle="Person Stats"  title="Person Stats" roles="Administrator"  />
         <siteMapNode url="~/Reports/AttainmentReport.aspx" title="Attainment"  VirtualPath="~/Reports/AttainmentReport.aspx" QuickLinkTitle="Attainment"  description="Attainment"/>
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
@@ -30,12 +28,10 @@
       <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
         <siteMapNode url="~/Reports/TimeEntryReport_new.aspx" title="Reports"  VirtualPath="~/Reports/TimeEntryReport_new.aspx" QuickLinkTitle="Reports"  description="Reports" ShowURL="true"/>
         <siteMapNode url="~/Reports/Audit.aspx" title="Audit"  VirtualPath="~/Reports/Audit.aspx" QuickLinkTitle="Audit"  description="Audit" ShowURL="true"/>
-        <siteMapNode url="~/Reports/TimeEntriesByProject.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByProject.aspx?from=reports" QuickLinkTitle="Time Entry by Project"  title="Time Entry by Project" roles="Administrator" description="Time Entry by Project" ShowURL="true" />
-        <siteMapNode url="~/Reports/TimeEntriesByPerson.aspx?from=reports"  VirtualPath="~/Reports/TimeEntriesByPerson.aspx?from=reports" QuickLinkTitle="Time Entry by Person"  title="Time Entry by Person"  description="Time Entry by Person" ShowURL="true" />
       </siteMapNode>
       <siteMapNode url="~/Reports/AccountSummaryReport.aspx" title="Account"  VirtualPath="~/Reports/AccountSummaryReport.aspx" QuickLinkTitle="Account"  description="Account" ShowURL="true"/>
       <siteMapNode url="~/Reports/HumanCapital.aspx" title="Human Capital"  VirtualPath="~/Reports/HumanCapital.aspx" QuickLinkTitle="Human Capital"  description="Human Capital" ShowURL="true"/>
-      <!--<siteMapNode url="~/Reports/CSATReport.aspx" title="CSAT"  VirtualPath="~/Reports/CSATReport.aspx" QuickLinkTitle="CSAT"  description="CSAT Report" ShowURL="true"/>-->
+      <siteMapNode url="~/Reports/CSATReport.aspx" title="CSAT"  VirtualPath="~/Reports/CSATReport.aspx" QuickLinkTitle="CSAT"  description="CSAT Report" ShowURL="true"/>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
@@ -63,9 +59,6 @@
         <siteMapNode url="~/EmailTemplates.aspx" title="E-Mail Templates"  VirtualPath="~/EmailTemplates.aspx" QuickLinkTitle="E-Mail Templates" description="E-Mail Templates"  />
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Financials" title="Financials"   description="Financials" >
-        <siteMapNode url="~/Config/Commissions.aspx" title="Commissions"  VirtualPath="~/Config/Commissions.aspx" QuickLinkTitle="Commissions"  description="Commissions"  />
-        <siteMapNode url="~/Config/Expenses.aspx" title="Expenses"  VirtualPath="~/Config/Expenses.aspx" QuickLinkTitle="Expenses"  description="Expenses"  />
-        <siteMapNode url="~/Config/ExpenseCategories.aspx" title="Expense Categories"  VirtualPath="~/Config/ExpenseCategories.aspx" QuickLinkTitle="Expense Categories"  description="Expense Categories"  />
         <siteMapNode url="~/Config/Overheads.aspx" title="Overheads"  VirtualPath="~/Config/Overheads.aspx" QuickLinkTitle="Overheads"  description="Overhead List"  />
         <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals"  VirtualPath="~/Config/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals"  description="Revenue Goals"  />
         <siteMapNode url="~/Config/MarginGoals.aspx" title="Contribution Margin Goals"  VirtualPath="~/Config/MarginGoals.aspx" QuickLinkTitle="Contribution Margin Goals"  description="Contribution Margin Goals"  />
