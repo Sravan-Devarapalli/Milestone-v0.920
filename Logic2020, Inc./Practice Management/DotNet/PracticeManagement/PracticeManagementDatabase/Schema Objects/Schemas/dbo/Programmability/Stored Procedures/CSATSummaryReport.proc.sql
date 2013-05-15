@@ -23,8 +23,8 @@ BEGIN
 	 (
 		  SELECT PC.ProjectId, MAX(ModifiedDate) AS ModifiedDate,COUNT(*) AS NumberOfCSATs
 		  FROM dbo.ProjectCSAT PC
-		  INNER JOIN dbo.Project P ON pc.ProjectId=p.ProjectId 
-		  WHERE P.EndDate BETWEEN @StartDate AND @EndDate
+		  INNER JOIN dbo.Project P ON pc.ProjectId=p.ProjectId AND P.ProjectStatusId IN (3,4)
+		  WHERE PC.ReviewEndDate BETWEEN @StartDate AND @EndDate
 		        AND PC.CompletionDate BETWEEN @StartDate AND @EndDate
 		        AND	(
 						@PracticeIds IS NULL
@@ -86,3 +86,4 @@ BEGIN
 		LEFT JOIN dbo.Person CSATOwner ON CSATOwner.PersonId = P.ReviewerId
 		
 END
+
