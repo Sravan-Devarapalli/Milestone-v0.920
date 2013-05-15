@@ -25,10 +25,10 @@ BEGIN
 				MAX(ModifiedDate) AS ModifiedDateWithoutFilter,
 				MAX( CASE WHEN (@PracticeIds IS null OR  pra.Id IS NOT NULL ) AND ( @AccountIds IS NULL OR acc.Id IS NOT NULL) THEN  ModifiedDate END) AS ModifiedDateWithFilter
 		  FROM dbo.ProjectCSAT PC
-		  INNER JOIN dbo.Project P ON pc.ProjectId=p.ProjectId 
+		  INNER JOIN dbo.Project P ON pc.ProjectId=p.ProjectId AND P.ProjectStatusId IN (3,4)
 		  LEFT JOIN @PracticeIdsTable pra ON pra.Id = P.PracticeId
 		  LEFT JOIN @AccountIdsTable acc ON acc.Id = P.ClientId
-		  WHERE P.EndDate BETWEEN @StartDate AND @EndDate
+		  WHERE PC.ReviewEndDate BETWEEN @StartDate AND @EndDate
 		        AND PC.CompletionDate BETWEEN @StartDate AND @EndDate
 		  GROUP BY PC.ProjectId
 	 )
@@ -45,3 +45,4 @@ BEGIN
 	 LEFT JOIN dbo.ProjectCSAT PCS ON PCS.ProjectId = PRC.ProjectId AND PCS.ModifiedDate = PRC.ModifiedDateWithFilter
 
 END
+
