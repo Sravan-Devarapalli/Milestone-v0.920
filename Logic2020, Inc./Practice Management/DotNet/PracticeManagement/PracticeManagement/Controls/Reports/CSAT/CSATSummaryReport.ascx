@@ -3,9 +3,9 @@
 <div class="tab-pane">
     <table class="WholeWidthWithHeight">
         <tr>
-            <td colspan="4" class="Width90Percent">
+            <td colspan="4" class="Width95Per">
             </td>
-            <td class="textRight Width10Percent padRight5">
+            <td class="textRight Width5PercentImp padRight5">
                 <table class="textRight WholeWidth">
                     <tr>
                         <td class="PaddingBottom5Imp">
@@ -14,10 +14,6 @@
                         <td class="PaddingBottom5Imp">
                             <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
                                 UseSubmitBehavior="false" ToolTip="Export To Excel"/>
-                        </td>
-                        <td class="PaddingBottom5Imp">
-                            <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
-                                Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
                         </td>
                     </tr>
                 </table>
@@ -38,19 +34,19 @@
                         <th class="Width15Percent">
                             Business Unit
                         </th>
-                        <th class="Width7point5Percent">
+                        <th class="Width7Percent">
                             Project Number
                         </th>
                         <th class="Width15Percent"> 
                             Project Name
                         </th>
-                        <th class="Width7point5Percent">
+                        <th class="Width6point5Percent">
                             Project Status
                         </th>
                         <th class="Width15Percent">
                             Practice Area
                         </th>
-                        <th class="Width5Percent">
+                        <th class="Width7point5Percent">
                             Est. Revenue
                         </th>
                         <th class="Width5Percent">
@@ -63,13 +59,13 @@
         <ItemTemplate>
             <tr class="ReportItemTemplateCSAT">
                 <td class="padLeft5 textLeft">
-                    <%# Eval("Client.Name")%>
+                    <%# Eval("Client.HtmlEncodedName")%>
                 </td>
                 <td>
-                    <%# Eval("BusinessGroup.Name")%>
+                    <%# Eval("BusinessGroup.HtmlEncodedName")%>
                 </td>
                 <td>
-                    <%# Eval("Group.Name")%>
+                    <%# Eval("Group.HtmlEncodedName")%>
                 </td>
                 <td>
                     <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("ProjectNumber")%> '
@@ -77,13 +73,13 @@
                     </asp:HyperLink>
                 </td>
                 <td>
-                    <%# Eval("Name")%>
+                    <%# Eval("HtmlEncodedName")%>
                 </td>
                 <td>
                     <%# Eval("Status.Name")%>
                 </td>
                 <td>
-                    <%# Eval("Practice.Name")%>
+                    <%# Eval("Practice.HtmlEncodedName")%>
                 </td>
                 <td>
                     $<%# Eval("SowBudget")%>
