@@ -102,7 +102,7 @@
                     </td>
                     <td>
                     </td>
-                    <td style="width: 74%">
+                    <td class="Width72Percent">
                     </td>
                 </tr>
                 <tr class="height30P">
@@ -124,11 +124,13 @@
                         </asp:DropDownList>
                         <asp:HiddenField ID="hdnPeriod" runat="server" Value="7" />
                     </td>
-                    <td id="trCustomDates" runat="server" visible="false">
-                        <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
-                        <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
-                        <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
-                        <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                    <td>
+                        <div id="divCustomDates" runat="server" visible="false">
+                            <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
+                            <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
+                            <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
+                            <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
+                        </div>
                     </td>
                 </tr>
                 <tr class="height30P">
@@ -144,6 +146,7 @@
                             Width="90.5%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
+                    <td></td>
                 </tr>
                 <tr class="height30P">
                     <td class="ReportFilterLabels">
@@ -158,6 +161,7 @@
                             Width="90.5%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
+                    <td></td>
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
