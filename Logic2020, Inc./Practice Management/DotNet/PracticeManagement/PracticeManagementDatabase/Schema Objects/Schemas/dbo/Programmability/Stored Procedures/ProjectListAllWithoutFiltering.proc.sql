@@ -40,7 +40,8 @@ AS
 		   	CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN -1 ELSE  sm.PersonId  END AS 'SeniorManagerId',
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE  sm.LastName+', ' +sm.FirstName END AS 'SeniorManagerName',
 		   re.PersonId AS 'ReviewerId',
-		   re.LastName+', ' +re.FirstName AS 'ReviewerName'
+		   re.LastName+', ' +re.FirstName AS 'ReviewerName',
+		   p.PONumber
 	FROM v_Project p
 	LEFT JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	LEFT JOIN dbo.Commission c ON c.ProjectId = p.ProjectId AND c.CommissionType = 1
