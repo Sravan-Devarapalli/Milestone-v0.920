@@ -2712,8 +2712,12 @@ namespace PraticeManagement
             var locationsSorted = new List<ConfigurationLocation>(config.Locations.Count);
             locationsSorted.AddRange(config.Locations.Cast<ConfigurationLocation>());
 
+            IPrincipal userAdmin =
+               new GenericPrincipal(new GenericIdentity(Email), new string[] { DataTransferObjects.Constants.RoleNames.AdministratorRoleName });
+            locationsSorted = locationsSorted.Where(location => UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userAdmin, "GET")).OrderBy(location => ((LocationDescriptionConfigurationSection)location.OpenConfiguration().GetSection("locationDescription")).Title).ToList();
+
             // Evaluate and display permissions for secure pages
-            foreach (var location in locationsSorted.OrderBy(location => location.Path))
+            foreach (var location in locationsSorted)
             {
                 var description =
                     location.OpenConfiguration().GetSection("locationDescription") as
