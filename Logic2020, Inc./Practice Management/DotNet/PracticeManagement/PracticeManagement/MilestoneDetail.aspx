@@ -708,7 +708,8 @@
                             <ContentTemplate>
                                 <% if (IsShowResources)
                                    { %>
-                                <uc:MilestonePersonList runat="server" ID="MilestonePersonEntryListControl"></uc:MilestonePersonList>
+                                <uc:MilestonePersonList runat="server" ID="MilestonePersonEntryListControl">
+                                </uc:MilestonePersonList>
                                 <% } %>
                             </ContentTemplate>
                         </asp:UpdatePanel>
@@ -806,7 +807,7 @@
                 </asp:View>
                 <asp:View ID="vwHistory" runat="server">
                     <asp:Panel ID="pnlHistory" runat="server" CssClass="tab-pane">
-                        <uc:Notes ID="nMilestone" runat="server" Target="Milestone" OnNoteAdded="nMilestone_OnNoteAdded"/>
+                        <uc:Notes ID="nMilestone" runat="server" Target="Milestone" OnNoteAdded="nMilestone_OnNoteAdded" />
                         <uc:ActivityLogControl runat="server" ID="activityLog" DisplayDropDownValue="Milestone"
                             DateFilterValue="Year" ShowDisplayDropDown="false" ShowProjectDropDown="false" />
                     </asp:Panel>
@@ -915,13 +916,22 @@
                         <asp:ValidationSummary ID="vsumMilestone" runat="server" EnableClientScript="false"
                             ValidationGroup="Milestone" />
                         <asp:ValidationSummary ID="vsumPopup" runat="server" EnableClientScript="false" ValidationGroup="MilestonePopup" />
+                        <asp:CustomValidator ID="custExpenseValidate" ValidationGroup="MilestoneDelete" runat="server"
+                            ErrorMessage="This milestone cannot be deleted, because project has expenses during the milestone period."
+                            OnServerValidate="custExpenseValidate_OnServerValidate" Display="Dynamic"></asp:CustomValidator><br />
+                        <asp:CustomValidator ID="custProjectStatus" ValidationGroup="MilestoneDelete" runat="server"
+                            ErrorMessage="Projects with Active status should have atleast one milestone added to it."
+                            OnServerValidate="custProjectStatus_OnServerValidate" Display="Dynamic"></asp:CustomValidator><br />
+                        <asp:CustomValidator ID="custCSATValidate" ValidationGroup="MilestoneDelete" runat="server"
+                            ErrorMessage="Milestone cannot be deleted as project has CSAT data added to it."
+                            OnServerValidate="custCSATValidate_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
                         <asp:ValidationSummary ID="vsumShiftDays" runat="server" EnableClientScript="false"
                             ValidationGroup="ShiftDays" />
                         <asp:ValidationSummary ID="vsumClone" runat="server" EnableClientScript="false" ValidationGroup="Clone" />
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" colspan="2">
+                    <td align="left" colspan="2">
                         <asp:HiddenField ID="hdnMilestoneId" runat="server" />
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Milestone" ToolTip="Delete Milestone"
                             CausesValidation="False" OnClick="btnDelete_Click" OnClientClick="if (!confirm('Do you really want to delete the milestone?')) return false;" />&nbsp;
@@ -934,11 +944,11 @@
                             }
                         </script>
                         <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
-                            <Animations>
+                            <animations>
 					            <OnClick>
 					                <ScriptAction Script="disableSaveButton();" />
 					            </OnClick>
-                            </Animations>
+                            </animations>
                         </AjaxControlToolkit:AnimationExtender>
                     </td>
                 </tr>
