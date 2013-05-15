@@ -81,6 +81,7 @@
             if (axisLength > 1) {
                 ipleft = ipleft - (axisLength + 30);
             }
+            ipleft = ipleft - 40;
             displayPanel.offset({ top: iptop, left: ipleft });
             displayPanel.show();
             displayPanel.offset({ top: iptop, left: ipleft });
@@ -101,7 +102,7 @@
                     </td>
                     <td>
                     </td>
-                    <td class="width60P">
+                    <td style="width: 74%">
                     </td>
                 </tr>
                 <tr class="height30P">
@@ -109,7 +110,7 @@
                         Show Report For:
                     </td>
                     <td class="textLeft PaddingLeft3Px">
-                        <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" CssClass="Width50Percent"
+                        <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" CssClass="Width91Per"
                             OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                             <asp:ListItem Text="Please Select" Value="-1"></asp:ListItem>
                             <asp:ListItem Text="This Month" Value="1"></asp:ListItem>
@@ -121,19 +122,13 @@
                             <asp:ListItem Text="Year To Date" Value="7" Selected="True"></asp:ListItem>
                             <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                         </asp:DropDownList>
-                        <asp:HiddenField ID="hdnPeriod" runat="server" Value="7"/>
+                        <asp:HiddenField ID="hdnPeriod" runat="server" Value="7" />
                     </td>
-                </tr>
-                <tr id="trCustomDates" runat="server" visible="false">
-                    <td>
-                    </td>
-                    <td class="textLeft height30P">
+                    <td id="trCustomDates" runat="server" visible="false">
                         <asp:HiddenField ID="hdnStartDate" runat="server" Value="" />
                         <asp:HiddenField ID="hdnEndDate" runat="server" Value="" />
                         <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                         <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
-                    </td>
-                    <td>
                     </td>
                 </tr>
                 <tr class="height30P">
@@ -146,7 +141,7 @@
                             OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblPractices','Practice Area')"
                             CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Practice Area" />
                         <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
-                            Width="50%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            Width="90.5%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                 </tr>
@@ -160,7 +155,7 @@
                             OnSelectedIndexChanged="Filters_Changed" AutoPostBack="true" onclick="scrollingDropdown_onclick('cblAccount','Account')"
                             CellPadding="3" NoItemsType="All" SetDirty="False" DropDownListType="Account" />
                         <ext:ScrollableDropdownExtender ID="sdeAccount" runat="server" TargetControlID="cblAccount"
-                            Width="50%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            Width="90.5%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                 </tr>
@@ -206,8 +201,13 @@
                         <td class="Width40P">
                             <table class="tableNetPromoterScorePanel">
                                 <tr>
-                                    <td colspan="2" align="center">
+                                    <td colspan="2" align="center" style="padding-top: 0px;">
                                         <b>Variables</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center" style="padding-top: 0px;">
+                                        &nbsp;&nbsp;
                                     </td>
                                 </tr>
                                 <tr>
@@ -246,12 +246,12 @@
                         </td>
                         <td class="Width60P Height100PerImp">
                             <table class="WholeWidth Height100PerImp">
-                                <tr class="PaddingTop5Imp">
+                                <tr class="vTop Height10P">
                                     <td align="center">
                                         <b>Calculation</b>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="vTop Height50P">
                                     <td class="fontBold">
                                         <table class="tblPanelNetCSATScore">
                                             <tr class="WholeWidth">
@@ -259,7 +259,7 @@
                                                     % of Promoters
                                                 </td>
                                                 <td class="Width5PercentImp">
-                                                    -
+                                                    <span style="font-size: 16px;">-</span>
                                                 </td>
                                                 <td>
                                                     % of Detractors
@@ -274,21 +274,21 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="fontBold">
+                                <tr class="vTop">
+                                    <td class="font14PxImp">
                                         <table class="tblPanelNetCSATScore WholeWidth">
                                             <tr>
-                                                <td class="font14PxImp">
+                                                <td>
                                                     <asp:Label ID="lblPromotersPercentage" runat="server"></asp:Label>
                                                 </td>
                                                 <td class="Width5PercentImp">
                                                 </td>
-                                                <td class="font14PxImp">
+                                                <td>
                                                     <asp:Label ID="lblDetractersPercentage" runat="server"></asp:Label>
                                                 </td>
                                                 <td class="Width5PercentImp">
                                                 </td>
-                                                <td class="font14PxImp">
+                                                <td class="fontBold">
                                                     <asp:Label ID="lblNetPromoterScore" runat="server"></asp:Label>
                                                 </td>
                                             </tr>
@@ -300,10 +300,10 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:Panel ID="pnlCSATCalculation" runat="server" Style="display: none;" CssClass="pnlNewHireHelp height120px Width400PxImp">
-                <asp:Image ID="imgCSATCalculation" runat="server" Width="100%" ImageUrl="~/Images/CSATCalculation.png" />
+            <asp:Panel ID="pnlCSATCalculation" runat="server" Style="display: none;" CssClass="Width550PxImp Height160PxIMP pnlNewHireHelp">
+                <asp:Image ID="imgCSATCalculation" runat="server" Width="100%" ImageUrl="~/Images/CSATCalculationPanel.png" />
             </asp:Panel>
-            <div id="divReport" style="padding-top:10px;" runat="server">
+            <div id="divReport" class="PaddingTop10Px" runat="server">
                 <table id="tblHeader" runat="server">
                     <tr>
                         <td class="Width50Percent vTopImp font16Px fontBold">
@@ -330,7 +330,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="SecondTd">
-                                                    <asp:Literal ID="ltrlNetPromoterScoreAllCompany" runat="server"></asp:Literal>
+                                                    <asp:Label ID="lblNetPromoterScoreAllCompany" runat="server"></asp:Label>
                                                 </td>
                                             </tr>
                                         </table>
@@ -351,7 +351,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="SecondTd">
-                                                    <asp:Literal ID="ltrlNetPromoterScoreBasedOnFilters" runat="server"></asp:Literal>
+                                                    <asp:Label ID="lblNetPromoterScoreBasedOnFilters" runat="server"></asp:Label>
                                                 </td>
                                             </tr>
                                         </table>
