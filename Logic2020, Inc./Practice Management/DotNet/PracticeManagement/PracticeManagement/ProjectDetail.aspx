@@ -16,6 +16,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectFinancials.ascx" TagName="ProjectFinancials" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectPersons.ascx" TagName="ProjectPersons" %>
+<%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectCSAT.ascx" TagName="ProjectCSAT" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
@@ -32,12 +33,12 @@
         type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+    <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.uploadify.min.js?Id=20" type="text/javascript"></script>
     <uc:LoadingProgress ID="loadingProgress" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
-            <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
-            <script src="Scripts/jquery.uploadify.min.js?Id=20" type="text/javascript"></script>
             <script type="text/javascript">
 
                 var fileError = 0;
@@ -474,6 +475,10 @@
                                                 <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
                                                     ErrorMessage="Can not change project status as some work types are already in use."
                                                     ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
+                                                <asp:CustomValidator ID="custActiveStatus" runat="server" ControlToValidate="ddlProjectStatus"
+                                                    ErrorMessage="Project should have milestone added to set status to Active." ToolTip="Project should have milestone added to set status to Active."
+                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="custActiveStatus_ServerValidate"></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -633,7 +638,8 @@
                                                 Client Director
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width95Per" onchange="setDirty();">
+                                                <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width95Per" onchange="setDirty();"
+                                                    OnSelectedIndexChanged="ddlDirector_SelectedIndexChanged" AutoPostBack="true">
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width2Percent">
@@ -809,6 +815,20 @@
                                 <td class="Width2Percent">
                                 </td>
                                 <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth" style="display: none">
+                                        <tr>
+                                            <td class="width30P">
+                                                PO Number
+                                            </td>
+                                            <td class="width60P WhiteSpaceNoWrap">
+                                                &nbsp;&nbsp;
+                                                <asp:TextBox ID="txtPONumber" runat="server" CssClass="Width925Per" onchange="setDirty();">
+                                                </asp:TextBox>
+                                            </td>
+                                            <td class="TdValidators">
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                                 <td class="Width2Percent">
                                 </td>
@@ -836,6 +856,40 @@
                                                     ValidationGroup="Project" ErrorMessage="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectManagerStatus_OnServerValidate"
                                                     SetFocusOnError="true" Text="*" ToolTip="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."></asp:CustomValidator>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="TdProjectDetailFeild">
+                                </td>
+                                <td class="Width2Percent">
+                                </td>
+                                <td class="TdProjectDetailFeild">
+                                </td>
+                                <td class="Width2Percent">
+                                </td>
+                                <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                CSAT Owner
+                                            </td>
+                                            <td class="width60P WhiteSpaceNoWrap">
+                                                <asp:DropDownList ID="ddlCSATOwner" runat="server" onchange="setDirty();" CssClass="Width945Per"
+                                                    OnSelectedIndexChanged="ddlCSATOwner_SelectedIndexChanged" AutoPostBack="true">
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td class="Width2Percent WhiteSpaceNoWrap">
+                                                <asp:CustomValidator ID="custCSATOwner" runat="server" EnableClientScript="false"
+                                                    ValidationGroup="Project" ErrorMessage="The CSAT Owner is required." ValidateEmptyText="true"
+                                                    OnServerValidate="custCSATOwner_ServerValidate" SetFocusOnError="true" Text="*"
+                                                    ToolTip="The CSAT Owner is required."></asp:CustomValidator>
+                                            </td>
+                                            <td class="Width8Percent">
+                                                <asp:ImageButton ID="imgMailToCSATOwner" runat="server" OnClick="imgMailToCSATOwner_OnClick"
+                                                    ToolTip="Mail To" ImageUrl="Images/email_envelope.png" />
                                             </td>
                                         </tr>
                                     </table>
@@ -973,6 +1027,12 @@
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTools" runat="server" Text="Tools" CausesValidation="false"
                                             OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
+                                <asp:TableCell ID="cellProjectCSAT" runat="server" Visible="false">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="btnProjectCSAT" runat="server" Text="CSAT" CausesValidation="false"
+                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -1189,6 +1249,9 @@
                                     </asp:ObjectDataSource>
                                 </asp:Panel>
                             </asp:View>
+                            <asp:View ID="vwCSAT" runat="server">
+                                <uc:ProjectCSAT ID="ucCSAT" runat="server" />
+                            </asp:View>
                         </asp:MultiView>
                     </td>
                 </tr>
@@ -1230,6 +1293,7 @@
             <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
             <asp:HiddenField ID="hdnLinkPopup" runat="server" Value="" />
             <asp:HiddenField ID="hdnCanShowPopup" runat="server" />
+            <asp:HiddenField ID="hdnCompletedStatusPopup" runat="server" />
             <asp:Panel ID="pnlProjectName" runat="server" Style="display: none" CssClass="PanelPerson Width480Px">
                 <table class="WholeWidth">
                     <tr>
@@ -1346,6 +1410,9 @@
                             <asp:ValidationSummary ID="vsumProjectAttachment" runat="server" EnableClientScript="false"
                                 DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false"
                                 ShowSummary="true" ValidationGroup="ProjectAttachment" />
+                            <asp:ValidationSummary ID="vsumCSAT" runat="server" DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists"
+                                ShowMessageBox="false" ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a project."
+                                ValidationGroup="CSATUpdate" />
                         </td>
                     </tr>
                     <tr>
@@ -1432,6 +1499,43 @@
                                 <tr>
                                     <td class="TextAlignCenter">
                                         <asp:Button ID="btnOk" runat="server" Text="OK" ToolTip="OK" OnClientClick="return false;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeCompletedStatusPopUp" runat="server"
+                TargetControlID="hdnCompletedStatusPopup" BehaviorID="mpeCompletedStatusPopUp"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlCompletedStatusPopUp"
+                DropShadow="false" />
+            <asp:Panel ID="pnlCompletedStatusPopUp" runat="server" CssClass="PanelPerson ConfirmBoxClassError"
+                Style="display: none">
+                <table class="WholeWidth">
+                    <tr>
+                        <th align="center" class="TextAlignCenter BackGroundColorGray vBottom" colspan="2">
+                            <b class="BtnClose">Attention!</b>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="Padding10Px" colspan="2">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <p>
+                                            <asp:CustomValidator ID="cvCompletedStatus" runat="server" ErrorMessage="" ValidationGroup="cvCompletedStatus"></asp:CustomValidator>
+                                            <asp:Label ID="lblCompletedStatus" runat="server"></asp:Label>
+                                        </p>
+                                        <br />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="TextAlignCenter">
+                                        <asp:Button ID="btnOkCompletedStatusPopup" runat="server" Text="OK" ToolTip="OK"
+                                            OnClick="btnOkCompletedStatusPopup_Click" />
+                                        <asp:Button ID="btnCancelCompletedStatusPopup" runat="server" Text="Cancel" ToolTip="Cancel"
+                                            OnClick="btnCancelCompletedStatusPopup_Click" />
                                     </td>
                                 </tr>
                             </table>
