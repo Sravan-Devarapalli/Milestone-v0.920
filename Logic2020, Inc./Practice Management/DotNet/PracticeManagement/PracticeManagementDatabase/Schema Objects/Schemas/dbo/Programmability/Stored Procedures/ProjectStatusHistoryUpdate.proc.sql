@@ -6,7 +6,7 @@
 AS
 BEGIN
  DECLARE @Today DATETIME
-	 SET @Today  = CONVERT(DATE,[dbo].[GettingPMTime](GETDATE()))
+	 SET @Today  = CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE()))
 	 
 	 -- Set the end date of the previous project status record to yester day
 	 IF NOT EXISTS (SELECT 1 FROM dbo.ProjectStatusHistory 
