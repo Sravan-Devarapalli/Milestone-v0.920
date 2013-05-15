@@ -230,12 +230,12 @@ namespace PraticeManagement.Reports
                 {
                     hdnPeriod.Value = ddlPeriod.SelectedValue;
                 }
-                trCustomDates.Visible = false;
+                divCustomDates.Visible = false;
                 SelectView();
             }
             else
             {
-                trCustomDates.Visible = true;
+                divCustomDates.Visible = true;
                 mpeCustomDates.Show();
             }
         }
@@ -345,7 +345,7 @@ namespace PraticeManagement.Reports
             if (hdnPeriod.Value != "0")
             {
                 ddlPeriod.SelectedValue = hdnPeriod.Value;
-                trCustomDates.Visible = false;
+                divCustomDates.Visible = false;
             }
         }
 
