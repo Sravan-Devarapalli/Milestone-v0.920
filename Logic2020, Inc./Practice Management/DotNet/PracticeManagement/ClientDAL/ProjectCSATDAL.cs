@@ -306,12 +306,12 @@ namespace DataAccess
                 int detractorsWithFilterIndex = reader.GetOrdinal(Constants.ColumnNames.DetractorsWithFilter);
                 while (reader.Read())
                 {
-                    result.Add(!reader.IsDBNull(promotersWithoutFilterIndex) ? reader.GetInt32(promotersWithoutFilterIndex) : -1);
-                    result.Add(!reader.IsDBNull(passivesWithoutFilterIndex) ? reader.GetInt32(passivesWithoutFilterIndex) : -1);
-                    result.Add(!reader.IsDBNull(detractorsWithoutFilterIndex) ? reader.GetInt32(detractorsWithoutFilterIndex) : -1);
-                    result.Add(!reader.IsDBNull(promotersWithFilterIndex) ? reader.GetInt32(promotersWithFilterIndex) : -1);
-                    result.Add(!reader.IsDBNull(passivesWithFilterIndex) ? reader.GetInt32(passivesWithFilterIndex) : -1);
-                    result.Add(!reader.IsDBNull(detractorsWithFilterIndex) ? reader.GetInt32(detractorsWithFilterIndex) : -1);
+                    result.Add(!reader.IsDBNull(promotersWithoutFilterIndex) ? reader.GetInt32(promotersWithoutFilterIndex) : 0);
+                    result.Add(!reader.IsDBNull(passivesWithoutFilterIndex) ? reader.GetInt32(passivesWithoutFilterIndex) : 0);
+                    result.Add(!reader.IsDBNull(detractorsWithoutFilterIndex) ? reader.GetInt32(detractorsWithoutFilterIndex) : 0);
+                    result.Add(!reader.IsDBNull(promotersWithFilterIndex) ? reader.GetInt32(promotersWithFilterIndex) : 0);
+                    result.Add(!reader.IsDBNull(passivesWithFilterIndex) ? reader.GetInt32(passivesWithFilterIndex) : 0);
+                    result.Add(!reader.IsDBNull(detractorsWithFilterIndex) ? reader.GetInt32(detractorsWithFilterIndex) : 0);
                 }
             }
         }
