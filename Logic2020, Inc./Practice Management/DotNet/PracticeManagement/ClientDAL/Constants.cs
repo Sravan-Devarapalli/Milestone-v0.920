@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string SalesStage = "SalesStage";
             public const string CSATReviewer = "CSATReviewer";
             public const string CSATOwnerName = "CSATOwnerName";
             public const string ProjectManagers = "ProjectManagers";
@@ -440,6 +441,7 @@
             public static string SeniorManagerId = "SeniorManagerId";
             public static string SeniorManagerName = "SeniorManagerName";
             public static string IsSeniorManagerUnassigned = "IsSeniorManagerUnassigned";
+            public static string PONumber = "PONumber";
         }
 
         #endregion
@@ -459,6 +461,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string SalesStages = "@SalesStages";
+            public static string PONumber = "PONumber";
             public const string IsExport = "@IsExport";
             public const string DescendingOrder = "Desc";
             public const string GroupIdColumn = "GroupId";
