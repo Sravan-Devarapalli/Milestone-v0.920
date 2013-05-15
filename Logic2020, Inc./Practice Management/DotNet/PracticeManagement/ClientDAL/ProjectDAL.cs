@@ -913,6 +913,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PONumber, !string.IsNullOrEmpty(project.PONumber) ? (Object)project.PONumber : DBNull.Value);
                 if (project.SeniorManagerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSeniorManagerUnassigned, project.IsSeniorManagerUnassigned);
@@ -984,6 +985,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PONumber, !string.IsNullOrEmpty(project.PONumber) ? (Object)project.PONumber : DBNull.Value);
                 if (project.SeniorManagerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSeniorManagerUnassigned, project.IsSeniorManagerUnassigned);
@@ -1107,6 +1109,13 @@ namespace DataAccess
                     int opportunityNumberIndex = -1;
                     int sowBudgetIndex = -1;
                     int clientIsNoteRequiredIndex = -1;
+                    int poNumberIndex = -1;
+                    try
+                    {
+                        poNumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
+                    }
+                    catch
+                    { }
 
                     int seniorManagerIdIndex = -1;
                     try
@@ -1341,6 +1350,10 @@ namespace DataAccess
                             },
                             ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
                         };
+                        if (poNumberIndex > -1)
+                        {
+                            project.PONumber = !reader.IsDBNull(poNumberIndex) ? reader.GetString(poNumberIndex) : string.Empty;
+                        }
 
                         if (projectCapabilityIdsIndex > -1)
                         {
@@ -1610,6 +1623,7 @@ namespace DataAccess
                     int projectOwnerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerId);
                     int projectOwnerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerLastName);
                     int projectOwnerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerFirstName);
+                    int pONumberIndex = -1;
 
                     int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
                     int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
@@ -1628,6 +1642,13 @@ namespace DataAccess
                     int hasAttachments = -1;
                     int seniorManagerNameIndex = -1;
                     int seniorManagerIdIndex = -1;
+
+                    try
+                    {
+                        pONumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
+                    }
+                    catch
+                    { }
 
                     try
                     {
@@ -1823,6 +1844,16 @@ namespace DataAccess
                                 try
                                 {
                                     project.SeniorManagerName = reader.GetString(seniorManagerNameIndex);
+                                }
+                                catch
+                                {
+                                }
+                            }
+                            if (pONumberIndex > -1)
+                            {
+                                try
+                                {
+                                    project.PONumber = !reader.IsDBNull(pONumberIndex) ? reader.GetString(pONumberIndex) : string.Empty;
                                 }
                                 catch
                                 {
