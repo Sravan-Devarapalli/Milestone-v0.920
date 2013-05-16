@@ -449,8 +449,7 @@
     <Content Include="Images\close_24.png" />
     <Content Include="Images\close_inactive16.png" />
     <Content Include="Images\copy.png" />
-    <Content Include="Images\CSATCalculation.png" />
-    <Content Include="Images\CSATCalculationPanel.png" />
+    <Content Include="Images\CSATCalculationPanel.jpg" />
     <Content Include="Images\desc.gif" />
     <Content Include="Images\divisions_16x16.png" />
     <Content Include="Images\email_envelope.png" />
@@ -3681,3 +3680,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
