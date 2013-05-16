@@ -265,6 +265,8 @@ namespace DataAccess
                             ReferralScore = !reader.IsDBNull(referralScoreIndex) ? reader.GetInt32(referralScoreIndex) : -1,
                             Id = !reader.IsDBNull(cSATIdIndex) ? reader.GetInt32(cSATIdIndex) : -1,
                             CompletionDate = !reader.IsDBNull(completionDateIndex) ? reader.GetDateTime(completionDateIndex) : DateTime.MinValue,
+                            ReviewStartDate = !reader.IsDBNull(reviewStartDateIndex) ? reader.GetDateTime(reviewStartDateIndex) : DateTime.MinValue,
+                            ReviewEndDate = !reader.IsDBNull(reviewEndDateIndex) ? reader.GetDateTime(reviewEndDateIndex) : DateTime.MinValue,
                             ReviewerName = !reader.IsDBNull(cSATReviewerIndex) ? reader.GetString(cSATReviewerIndex) : null,
                             Comments = !reader.IsDBNull(commentsIndex) ? reader.GetString(commentsIndex) : null
                         };
