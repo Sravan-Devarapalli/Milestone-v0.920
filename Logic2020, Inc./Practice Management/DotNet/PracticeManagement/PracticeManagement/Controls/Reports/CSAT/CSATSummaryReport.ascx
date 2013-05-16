@@ -25,31 +25,31 @@
             <table id="tblCSATSummary" class="tablesorter WholeWidth">
                 <thead>
                     <tr class="trCSATSummaryHeader">
-                        <th class="Width13Point5Percent TextAlignLeftImp">
+                        <th class="Width13Percent TextAlignLeftImp">
                             Account
                         </th>
-                        <th class="Width14Percent">
+                        <th class="Width13Percent">
                             Business Group
                         </th>
-                        <th class="Width14Percent">
+                        <th class="Width13Percent">
                             Business Unit
                         </th>
-                        <th class="Width7Percent">
+                        <th class="Width10Per">
                             Project Number
                         </th>
-                        <th class="Width14Percent"> 
+                        <th class="Width15Per"> 
                             Project Name
                         </th>
-                        <th class="Width6point5Percent">
+                        <th class="Width8Per">
                             Project Status
                         </th>
                         <th class="Width15Percent">
                             Practice Area
                         </th>
-                        <th class="Width9Per">
+                        <th class="Width10Per">
                             Est. Revenue
                         </th>
-                        <th class="Width7Percent">
+                        <th class="Width2Percent">
                             CSAT Score
                         </th>
                     </tr>
