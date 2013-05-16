@@ -319,15 +319,6 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Image imgNetPromoterScoreWithoutFilters;
         
         /// <summary>
-        /// lblNetPromoterScoreAllCompany control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNetPromoterScoreAllCompany;
-        
-        /// <summary>
         /// lblNetPromoterScoreWithFiltersHeader control.
         /// </summary>
         /// <remarks>
@@ -346,6 +337,15 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Image imgNetPromoterScoreWithFilters;
         
         /// <summary>
+        /// lblNetPromoterScoreAllCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNetPromoterScoreAllCompany;
+        
+        /// <summary>
         /// lblNetPromoterScoreBasedOnFilters control.
         /// </summary>
         /// <remarks>
@@ -355,13 +355,13 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Label lblNetPromoterScoreBasedOnFilters;
         
         /// <summary>
-        /// ltrlCompletedCSATs control.
+        /// lblCompletedCSATs  control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlCompletedCSATs;
+        protected global::System.Web.UI.WebControls.Label lblCompletedCSATs ;
         
         /// <summary>
         /// tblCSATViewSwitch control.
