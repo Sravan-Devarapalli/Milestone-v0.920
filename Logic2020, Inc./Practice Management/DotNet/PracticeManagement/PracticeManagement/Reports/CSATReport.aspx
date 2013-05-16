@@ -146,7 +146,8 @@
                             Width="90.5%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
-                    <td></td>
+                    <td>
+                    </td>
                 </tr>
                 <tr class="height30P">
                     <td class="ReportFilterLabels">
@@ -161,7 +162,8 @@
                             Width="90.5%" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
-                    <td></td>
+                    <td>
+                    </td>
                 </tr>
             </table>
             <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
@@ -200,9 +202,9 @@
             </table>
             <asp:Panel ID="pnlNetPromoterScoreVariables" runat="server" Style="display: none;"
                 CssClass="pnlNewHireHelp height120px Width400PxImp">
-                <table>
+                <table class="Height100PerImp">
                     <tr class="trNetPromoterScorePanel">
-                        <td class="Width40P">
+                        <td class="Width40P vTop">
                             <table class="tableNetPromoterScorePanel">
                                 <tr>
                                     <td colspan="2" align="center" style="padding-top: 0px;">
@@ -248,24 +250,24 @@
                                 </tr>
                             </table>
                         </td>
-                        <td class="Width60P Height100PerImp">
+                        <td class="Width60P vTop Height100PerImp">
                             <table class="WholeWidth Height100PerImp">
                                 <tr class="vTop Height10P">
                                     <td align="center">
                                         <b>Calculation</b>
                                     </td>
                                 </tr>
-                                <tr class="vTop Height50P">
+                                <tr class="Height50P">
                                     <td class="fontBold">
                                         <table class="tblPanelNetCSATScore">
                                             <tr class="WholeWidth">
-                                                <td>
+                                                <td class="Width20PerImp">
                                                     % of Promoters
                                                 </td>
                                                 <td class="Width5PercentImp">
                                                     <span style="font-size: 16px;">-</span>
                                                 </td>
-                                                <td>
+                                                <td class="Width20PerImp">
                                                     % of Detractors
                                                 </td>
                                                 <td class="Width5PercentImp">
@@ -304,8 +306,8 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:Panel ID="pnlCSATCalculation" runat="server" Style="display: none;" CssClass="Width550PxImp Height160PxIMP pnlNewHireHelp">
-                <asp:Image ID="imgCSATCalculation" runat="server" Width="100%" ImageUrl="~/Images/CSATCalculationPanel.png" />
+            <asp:Panel ID="pnlCSATCalculation" runat="server" Style="display: none;" CssClass="Width660PxImp Height160PxIMP pnlNewHireHelp">
+                <asp:Image ID="imgCSATCalculation" runat="server" Width="100%" ImageUrl="~/Images/CSATCalculationPanel.jpg" />
             </asp:Panel>
             <div id="divReport" class="PaddingTop10Px" runat="server">
                 <table id="tblHeader" runat="server">
@@ -314,70 +316,37 @@
                             <asp:Literal ID="lbRange" runat="server"></asp:Literal>
                         </td>
                         <td class="CSATHeader NewHireReportTotals">
-                            <table class="tableFixed WholeWidthTable">
+                            <table class="tblCSATHeader tableFixed">
                                 <tr>
-                                    <td class="Width25Percent">
+                                    <td>
                                     </td>
-                                    <td class="Width25Percent">
-                                        <table class="ReportHeaderTotalsTable">
-                                            <tr>
-                                                <td class="FirstTd fontBold">
-                                                    <asp:Label Text="Net Promoter Score" ID="lblNetPromoterScoreHeader" runat="server"></asp:Label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="FirstTd fontBold">
-                                                    (All Company)
-                                                    <asp:Image alt="Net Promoter Score Hint" ImageUrl="~/Images/hint1.png" runat="server"
-                                                        ID="imgNetPromoterScoreWithoutFilters" />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="SecondTd">
-                                                    <asp:Label ID="lblNetPromoterScoreAllCompany" runat="server"></asp:Label>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                    <td>
+                                        <asp:Label Text="Score" ID="lblNetPromoterScoreHeader" runat="server"></asp:Label><span
+                                            style="font-size: 12px;"> (All Company)</span>
+                                        <asp:Image alt="Net Promoter Score Hint" ImageUrl="~/Images/hint1.png" runat="server"
+                                            ID="imgNetPromoterScoreWithoutFilters" />
                                     </td>
-                                    <td class="Width25Percent">
-                                        <table class="ReportHeaderTotalsTable">
-                                            <tr>
-                                                <td class="FirstTd fontBold">
-                                                    <asp:Label Text="Net Promoter Score" runat="server" ID="lblNetPromoterScoreWithFiltersHeader"></asp:Label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="FirstTd fontBold">
-                                                    (Based on Selected Filters)
-                                                    <asp:Image alt="Net Promoter Score Hint" ImageUrl="~/Images/hint1.png" runat="server"
-                                                        ID="imgNetPromoterScoreWithFilters" />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="SecondTd">
-                                                    <asp:Label ID="lblNetPromoterScoreBasedOnFilters" runat="server"></asp:Label>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                    <td>
+                                        <asp:Label Text="Score" runat="server" ID="lblNetPromoterScoreWithFiltersHeader"></asp:Label><span
+                                            style="font-size: 12px;"> (Based on Selected Filters)</span>
+                                        <asp:Image alt="Net Promoter Score Hint" ImageUrl="~/Images/hint1.png" runat="server"
+                                            ID="imgNetPromoterScoreWithFilters" />
                                     </td>
-                                    <td class="Width25Percent">
-                                        <table class="ReportHeaderTotalsTable">
-                                            <tr>
-                                                <td class="FirstTd fontBold">
-                                                    Number of Completed
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="FirstTd fontBold">
-                                                    CSATs
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="SecondTd">
-                                                    <asp:Literal ID="ltrlCompletedCSATs" runat="server"></asp:Literal>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                    <td>
+                                        # of Completed CSATs
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblNetPromoterScoreAllCompany" CssClass="FontSize20PXImp" runat="server"></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblNetPromoterScoreBasedOnFilters" CssClass="FontSize20PXImp" runat="server"></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblCompletedCSATs" CssClass="FontSize20PXImp" runat="server"></asp:Label>
                                     </td>
                                 </tr>
                             </table>
