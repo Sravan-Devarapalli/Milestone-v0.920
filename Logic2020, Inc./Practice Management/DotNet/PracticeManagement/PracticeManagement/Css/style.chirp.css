@@ -1982,6 +1982,10 @@ TABLE.Section td
 {
     width: 13%;
 }
+.Width13Point5Percent
+{
+    width: 13.5%;
+}
 .Width14Percent
 {
     width: 14%;
@@ -2575,6 +2579,10 @@ Width99PercentImp
 {
     width: 550px !important;
 }
+.Width660PxImp
+{
+    width: 660px !important;
+}
 .Width670Px
 {
     width: 670px;
@@ -2812,6 +2820,11 @@ Width99PercentImp
 .font25Px, .FontSize25PX
 {
     font-size: 25px;
+}
+
+.FontSize20PXImp
+{
+    font-size: 20px !important;
 }
 .fontsize100P
 {
@@ -5944,6 +5957,10 @@ HyplinkConsultantDetailReport
 {
     height: 50%;
 }
+.Height80P
+{
+    height: 80%;
+}
 
 .Height100Percent
 {
@@ -8016,6 +8033,20 @@ table#ctl00_body_login tr td label
 {
     width: 30%;
     white-space: normal;
+    text-align: center;
+}
+.tblCSATHeader
+{
+    width: 100%;
+    table-layout: fixed;
+    font-weight: bold;
+}
+
+.tblCSATHeader td
+{
+    width: 25%;
+    vertical-align: top;
+    font-size: 14px;
     text-align: center;
 }
 
