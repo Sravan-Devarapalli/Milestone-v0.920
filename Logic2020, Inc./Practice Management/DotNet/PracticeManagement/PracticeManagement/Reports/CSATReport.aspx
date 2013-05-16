@@ -271,7 +271,7 @@
                                                     % of Detractors
                                                 </td>
                                                 <td class="Width5PercentImp">
-                                                    =
+                                                    =&nbsp;
                                                 </td>
                                                 <td>
                                                     Net Promoter Score
