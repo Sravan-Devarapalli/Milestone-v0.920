@@ -22,22 +22,22 @@
     </table>
     <asp:Repeater ID="repSummary" runat="server" OnItemDataBound="repSummary_ItemDataBound">
         <HeaderTemplate>
-            <table id="tblCSATSummary" class="tablesorter">
+            <table id="tblCSATSummary" class="tablesorter WholeWidth">
                 <thead>
                     <tr class="trCSATSummaryHeader">
-                        <th class="Width15Percent TextAlignLeftImp">
+                        <th class="Width13Point5Percent TextAlignLeftImp">
                             Account
                         </th>
-                        <th class="Width15Percent">
+                        <th class="Width14Percent">
                             Business Group
                         </th>
-                        <th class="Width15Percent">
+                        <th class="Width14Percent">
                             Business Unit
                         </th>
                         <th class="Width7Percent">
                             Project Number
                         </th>
-                        <th class="Width15Percent"> 
+                        <th class="Width14Percent"> 
                             Project Name
                         </th>
                         <th class="Width6point5Percent">
@@ -46,10 +46,10 @@
                         <th class="Width15Percent">
                             Practice Area
                         </th>
-                        <th class="Width7point5Percent">
+                        <th class="Width9Per">
                             Est. Revenue
                         </th>
-                        <th class="Width5Percent">
+                        <th class="Width7Percent">
                             CSAT Score
                         </th>
                     </tr>
@@ -68,7 +68,7 @@
                     <%# Eval("Group.HtmlEncodedName")%>
                 </td>
                 <td>
-                    <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("ProjectNumber")%> '
+                    <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("ProjectNumber")%> ' Target="_blank"
                         NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Id")),false) %>'>
                     </asp:HyperLink>
                 </td>
@@ -88,7 +88,7 @@
                     <table class="WholeWidth">
                         <tr>
                             <td class="width60P textRightImp BorderNoneImp">
-                                <asp:HyperLink ID="hlCSATScore" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Id")),true) %>'
+                                <asp:HyperLink ID="hlCSATScore" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Id")),true) %>' Target="_blank"
                                     runat="server"></asp:HyperLink>
                             </td>
                             <td class="textLeft BorderNoneImp">
