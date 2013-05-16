@@ -367,6 +367,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width11Percent{width:11%}
 .Width12Percent,.Width12Per{width:12%}
 .Width13Percent{width:13%}
+.Width13Point5Percent{width:13.5%}
 .Width14Percent{width:14%}
 .Width14PercentImp{width:14%!important}
 .Width15Percent,.Width15Per{width:15%}
@@ -514,6 +515,7 @@ Width99PercentImp{width:99%!important}
 .Width430Px,.ProjectSearch{width:430px}
 .Width460Px{width:460px}
 .Width550PxImp{width:550px!important}
+.Width660PxImp{width:660px!important}
 .Width670Px{width:670px}
 .Width700Px{width:700px}
 .Width920Px{width:920px}
@@ -567,6 +569,7 @@ Width99PercentImp{width:99%!important}
 .font15PxImp{font-size:15px!important}
 .font16Px{font-size:16px}
 .font25Px,.FontSize25PX{font-size:25px}
+.FontSize20PXImp{font-size:20px!important}
 .fontsize100P{font-size:100%}
 .ApprovedManagerDropdown{width:68%}
 .TimeEntry_New_Legend .buttons-block{background-color:#FFF!important}
@@ -1121,6 +1124,7 @@ HyplinkConsultantDetailReport{color:Black!important;text-decoration:none!importa
 .Height102px{height:102px}
 .Height10P{height:10%}
 .Height50P{height:50%}
+.Height80P{height:80%}
 .Height100Percent{height:100%}
 .Height100PerImp{height:100%!important}
 .InnerTdProjectNotes{height:20px;font-size:15px;font-style:italic;vertical-align:bottom;padding-bottom:5px}
@@ -1484,3 +1488,5 @@ table#ctl00_body_login tr td label{float:left}
 .tableNetPromoterScorePanel{width:100%}
 .tableNetPromoterScorePanel td{padding-top:5px;width:90%}
 .tblPanelNetCSATScore td{width:30%;white-space:normal;text-align:center}
+.tblCSATHeader{width:100%;table-layout:fixed;font-weight:bold}
+.tblCSATHeader td{width:25%;vertical-align:top;font-size:14px;text-align:center}
