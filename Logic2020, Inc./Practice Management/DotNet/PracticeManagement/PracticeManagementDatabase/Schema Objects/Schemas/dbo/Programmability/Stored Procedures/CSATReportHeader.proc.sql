@@ -28,8 +28,7 @@ BEGIN
 		  INNER JOIN dbo.Project P ON pc.ProjectId=p.ProjectId AND P.ProjectStatusId IN (3,4)
 		  LEFT JOIN @PracticeIdsTable pra ON pra.Id = P.PracticeId
 		  LEFT JOIN @AccountIdsTable acc ON acc.Id = P.ClientId
-		  WHERE PC.ReviewEndDate BETWEEN @StartDate AND @EndDate
-		        AND PC.CompletionDate BETWEEN @StartDate AND @EndDate
+		  WHERE PC.CompletionDate BETWEEN @StartDate AND @EndDate
 		  GROUP BY PC.ProjectId
 	 )
  
