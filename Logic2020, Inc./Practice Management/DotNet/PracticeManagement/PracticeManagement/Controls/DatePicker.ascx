@@ -3,7 +3,7 @@
 <table cellpadding="0" cellspacing="0" class="DatePickerTable">
 	<tr>
 		<td>
-			<asp:TextBox ID="txtDate" runat="server" OnTextChanged="txtDate_TextChanged" onchange="setDirty();"></asp:TextBox>
+			<asp:TextBox ID="txtDate" runat="server" OnTextChanged="txtDate_TextChanged" ></asp:TextBox>
             <AjaxControlToolkit:FilteredTextBoxExtender ID="fte" runat="server" FilterMode="ValidChars" FilterType="Custom, Numbers"   TargetControlID="txtDate" ValidChars="/" ></AjaxControlToolkit:FilteredTextBoxExtender>
 		</td>
         <td class="no-wrap">&nbsp;</td>
