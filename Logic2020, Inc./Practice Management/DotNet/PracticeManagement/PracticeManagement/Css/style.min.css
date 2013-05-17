@@ -273,6 +273,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Padding10PxImp{padding:10px!important}
 .Padding15Px{padding:15px}
 .PaddingTop2Px{padding-top:2px}
+.PaddingTop0PxImp{padding-top:0!important}
 .PaddingTop2PxImp{padding-top:2px!important}
 .PaddingTop3{padding-top:3px}
 .PaddingTop4,.PaddingTop4Px{padding-top:4px}
@@ -512,6 +513,7 @@ Width99PercentImp{width:99%!important}
 .Width395Px{width:395px}
 .Width400Px{width:400px}
 .Width400PxImp{width:400px!important}
+.Width415PxImp{width:415px!important}
 .Width430Px,.ProjectSearch{width:430px}
 .Width460Px{width:460px}
 .Width550PxImp{width:550px!important}
@@ -554,6 +556,7 @@ Width99PercentImp{width:99%!important}
 .vMiddle{vertical-align:middle}
 .vMiddleImp{vertical-align:middle!important}
 .vBottom{vertical-align:bottom}
+.vBottomImp{vertical-align:bottom!important}
 .textLeft{text-align:left!important}
 .White{background-color:#FFF;border-bottom:1px solid Gray}
 .TextBlack{color:#000!important}
@@ -568,6 +571,7 @@ Width99PercentImp{width:99%!important}
 .FontSize15PX{font-size:15px}
 .font15PxImp{font-size:15px!important}
 .font16Px{font-size:16px}
+.font16PxImp{font-size:16px!important}
 .font25Px,.FontSize25PX{font-size:25px}
 .FontSize20PXImp{font-size:20px!important}
 .fontsize100P{font-size:100%}
