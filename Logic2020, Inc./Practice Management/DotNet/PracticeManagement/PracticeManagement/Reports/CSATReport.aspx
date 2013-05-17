@@ -309,7 +309,7 @@
                     </tr>
                 </table>
             </asp:Panel>
-            <asp:Panel ID="pnlCSATCalculation" runat="server" Style="display: none;" CssClass="Width660PxImp Height160PxIMP pnlNewHireHelp">
+            <asp:Panel ID="pnlCSATCalculation" runat="server" Style="display: none;" CssClass="Width660PxImp Height160PxIMP pnlCSATCalculation">
                 <asp:Image ID="imgCSATCalculation" runat="server" Width="100%" ImageUrl="~/Images/CSATCalculationPanel.jpg" />
             </asp:Panel>
             <div id="divReport" class="PaddingTop10Px" runat="server">
