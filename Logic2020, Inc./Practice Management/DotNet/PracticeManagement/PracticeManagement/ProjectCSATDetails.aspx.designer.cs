@@ -40,13 +40,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hdCSATId;
         
         /// <summary>
-        /// lblProjectName  control.
+        /// lblProjectName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblProjectName ;
+        protected global::System.Web.UI.WebControls.Label lblProjectName;
         
         /// <summary>
         /// dpReviewStartDate control.
@@ -110,6 +110,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compEndDateGreater;
+        
+        /// <summary>
+        /// compEnddateLesser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compEnddateLesser;
         
         /// <summary>
         /// custCSATEndDate control.
