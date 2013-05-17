@@ -50,7 +50,7 @@
                 </ItemTemplate>
                 <EditItemTemplate>
                     <span class="Width85Percent">
-                        <uc2:DatePicker ID="dpReviewStartDate" ValidationGroup="CSATUpdate" runat="server"
+                        <uc2:DatePicker ID="dpReviewStartDate" ValidationGroup="CSATUpdate" runat="server" SetDirty="false"
                             TextBoxWidth="90%" AutoPostBack="false" />
                     </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpReviewStartDate"
@@ -77,7 +77,7 @@
                 </ItemTemplate>
                 <EditItemTemplate>
                     <span class="Width85Percent">
-                        <uc2:DatePicker ID="dpReviewEndDate" ValidationGroup="CSATUpdate" runat="server"
+                        <uc2:DatePicker ID="dpReviewEndDate" ValidationGroup="CSATUpdate" runat="server" SetDirty="false"
                             TextBoxWidth="90%" AutoPostBack="false" />
                     </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpReviewEndDate"
@@ -119,7 +119,7 @@
                 <ItemStyle CssClass="textCenter" />
                 <EditItemTemplate>
                     <span class="Width85Percent">
-                        <uc2:DatePicker ID="dpCompletionDate" ValidationGroup="CSATUpdate" runat="server"
+                        <uc2:DatePicker ID="dpCompletionDate" ValidationGroup="CSATUpdate" runat="server"  SetDirty="false"
                             TextBoxWidth="90%" AutoPostBack="false" />
                     </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqCompletionDate" runat="server" ControlToValidate="dpCompletionDate"
