@@ -190,9 +190,10 @@ namespace PraticeManagement
             else
             {
                 ddlScore.SelectedValue = string.Empty;
-                dpReviewStartDate.DateValue = Project.StartDate.HasValue ? Project.StartDate.Value : DateTime.Now.Date;
-                dpReviewEndDate.DateValue = Project.EndDate.HasValue ? Project.EndDate.Value : DateTime.Now.Date;
-                dpCompletionDate.DateValue = DateTime.Now.Date;
+                DateTime currentdate = PraticeManagement.Utils.SettingsHelper.GetCurrentPMTime().Date;
+                dpReviewStartDate.DateValue =
+                dpReviewEndDate.DateValue = currentdate.AddDays(-1);
+                dpCompletionDate.DateValue = currentdate;
                 ddlReviewer.SelectedIndex = 0;
                 taComments.Value = "";
             }
