@@ -41,21 +41,18 @@
                 <HeaderStyle CssClass="Width15Percent" />
                 <ItemStyle CssClass="textCenter" />
                 <ItemTemplate>
-<%--                    <asp:LinkButton ID="btnReviewStartDate" runat="server" Text='<%# ((DateTime)Eval("ReviewStartDate")).ToString("MM/dd/yyyy") %>'
+                    <%--                    <asp:LinkButton ID="btnReviewStartDate" runat="server" Text='<%# ((DateTime)Eval("ReviewStartDate")).ToString("MM/dd/yyyy") %>'
                         OnClientClick="if(!ConfirmSaveOrExit()) return false;" CommandArgument='<%# Eval("Id") %>'
                         OnCommand="btnReviewStartDate_Command"></asp:LinkButton>--%>
-
-                           <asp:HyperLink ID="hlReviewStartDate" runat="server" NavigateUrl='<%# GetProjectCSATDetailRedirectUrl(((int)Eval("Id"))) %>'
-                    Text='<%# ((DateTime)Eval("ReviewStartDate")).ToString("MM/dd/yyyy") %>'
-                    onclick='<%# "return checkDirty(\"" + ProjectCSAT_TARGET + "\", " + Eval("Id") + ")" %>' />
-
+                    <asp:HyperLink ID="hlReviewStartDate" runat="server" NavigateUrl='<%# GetProjectCSATDetailRedirectUrl(((int)Eval("Id"))) %>'
+                        Text='<%# ((DateTime)Eval("ReviewStartDate")).ToString("MM/dd/yyyy") %>' onclick='<%# "return checkDirty(\"" + ProjectCSAT_TARGET + "\", " + Eval("Id") + ")" %>' />
                     <asp:Label ID="lblReviewStartDate" runat="server" Text='<%# ((DateTime)Eval("ReviewStartDate")).ToString("MM/dd/yyyy") %>'></asp:Label>
                 </ItemTemplate>
                 <EditItemTemplate>
-                    <span class="fl-left Width85Percent">
+                    <span class="Width85Percent">
                         <uc2:DatePicker ID="dpReviewStartDate" ValidationGroup="CSATUpdate" runat="server"
                             TextBoxWidth="90%" AutoPostBack="false" />
-                    </span><span class="Width15Percent vMiddle">
+                    </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpReviewStartDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Review Start Date is required."
                             ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -79,10 +76,10 @@
                     <%# ((DateTime)Eval("ReviewEndDate")).ToString("MM/dd/yyyy") %>
                 </ItemTemplate>
                 <EditItemTemplate>
-                    <span class="fl-left Width85Percent">
+                    <span class="Width85Percent">
                         <uc2:DatePicker ID="dpReviewEndDate" ValidationGroup="CSATUpdate" runat="server"
                             TextBoxWidth="90%" AutoPostBack="false" />
-                    </span><span class="Width15Percent vMiddle">
+                    </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpReviewEndDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Review End Date is required."
                             ToolTip="The End Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -97,6 +94,11 @@
                             ToolTip="The Review Period End Date must be greater than or equal to Review Period Start Date."
                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                             Operator="GreaterThanEqual" Type="Date" ValidationGroup="CSATUpdate"></asp:CompareValidator>
+                        <asp:CompareValidator ID="compEnddateLesser" runat="server" ControlToValidate="dpReviewEndDate"
+                            ControlToCompare="dpCompletionDate" ErrorMessage="The Review Period End Date must be less than Completion Date."
+                            ToolTip="The Review Period End Date must be less than Completion Date."
+                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                            Operator="LessThan" Type="Date" ValidationGroup="CSATUpdate"></asp:CompareValidator>
                         <asp:CustomValidator ID="custCSATEndDateInGridView" runat="server" ControlToValidate="dpReviewEndDate"
                             ErrorMessage="The Review End Date can not be greater than the date on which project status was set to 'Completed'."
                             ToolTip="The Review End Date can not be greater than the date on which project status was set to 'Completed'."
@@ -116,10 +118,10 @@
                 </ItemTemplate>
                 <ItemStyle CssClass="textCenter" />
                 <EditItemTemplate>
-                    <span class="fl-left Width85Percent">
+                    <span class="Width85Percent">
                         <uc2:DatePicker ID="dpCompletionDate" ValidationGroup="CSATUpdate" runat="server"
                             TextBoxWidth="90%" AutoPostBack="false" />
-                    </span><span class="Width15Percent vMiddle">
+                    </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqCompletionDate" runat="server" ControlToValidate="dpCompletionDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Completion Date is required."
                             ToolTip="The Completion Date is required." Text="*" EnableClientScript="false"
