@@ -86,7 +86,9 @@ BEGIN
 		LEFT JOIN ProjectsRecentlyUpdatedCSATS PRC ON P.ProjectId = PRC.ProjectId 
 		LEFT JOIN dbo.ProjectCSAT PCSAT ON PCSAT.ProjectId = P.ProjectId  
 		LEFT JOIN dbo.Person CSATReviewer ON CSATReviewer.PersonId = PCSAT.ReviewerId
-		WHERE (P.ProjectId = PRC.ProjectId OR @IsExport = 1) AND ( @IsExport = 1 OR PCSAT.ModifiedDate = PRC.ModifiedDate)  
+		WHERE (P.ProjectId = PRC.ProjectId OR @IsExport = 1) 
+			AND ( @IsExport = 1 OR PCSAT.ModifiedDate = PRC.ModifiedDate)  
+			AND (@IsExport = 0 OR ((P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL)))
 		ORDER BY p.ProjectNumber ASC,PCSAT.CompletionDate DESC
 END
 
