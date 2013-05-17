@@ -1606,6 +1606,10 @@ TABLE.Section td
 {
     padding-top: 2px;
 }
+.PaddingTop0PxImp
+{
+    padding-top: 0px !important;
+}
 .PaddingTop2PxImp
 {
     padding-top: 2px !important;
@@ -2567,6 +2571,10 @@ Width99PercentImp
 {
     width: 400px !important;
 }
+.Width415PxImp
+{
+    width: 415px !important;
+}
 .Width430Px, .ProjectSearch
 {
     width: 430px;
@@ -2758,6 +2766,10 @@ Width99PercentImp
 {
     vertical-align: bottom;
 }
+.vBottomImp
+{
+    vertical-align: bottom !important;
+}
 .textLeft
 {
     text-align: left !important;
@@ -2816,6 +2828,10 @@ Width99PercentImp
 .font16Px
 {
     font-size: 16px;
+}
+.font16PxImp
+{
+    font-size: 16px !important;
 }
 .font25Px, .FontSize25PX
 {
