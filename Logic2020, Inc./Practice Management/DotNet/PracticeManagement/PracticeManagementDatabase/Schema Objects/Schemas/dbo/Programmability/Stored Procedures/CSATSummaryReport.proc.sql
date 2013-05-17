@@ -10,6 +10,7 @@ AS
 BEGIN
      DECLARE @PracticeIdsTable TABLE ( Ids INT )
 	 DECLARE @AccountIdsTable TABLE ( Ids INT )
+	 SELECT @StartDate = CONVERT(DATE,@StartDate),@EndDate = CONVERT(DATE,@EndDate)
 
 	 INSERT INTO @PracticeIdsTable(Ids)
 	 SELECT ResultId
@@ -83,9 +84,9 @@ BEGIN
 		LEFT JOIN dbo.Person CSATOwner ON CSATOwner.PersonId = P.ReviewerId
 		LEFT JOIN RecentProjectCompletedStatus RPCS ON RPCS.ProjectId = P.ProjectId 
 		LEFT JOIN ProjectsRecentlyUpdatedCSATS PRC ON P.ProjectId = PRC.ProjectId 
-		LEFT JOIN dbo.ProjectCSAT PCSAT ON PCSAT.ProjectId = P.ProjectId  AND ( @IsExport = 1 OR PCSAT.ModifiedDate = PRC.ModifiedDate) 
+		LEFT JOIN dbo.ProjectCSAT PCSAT ON PCSAT.ProjectId = P.ProjectId  
 		LEFT JOIN dbo.Person CSATReviewer ON CSATReviewer.PersonId = PCSAT.ReviewerId
-		WHERE (P.ProjectId = PRC.ProjectId OR @IsExport = 1)
+		WHERE (P.ProjectId = PRC.ProjectId OR @IsExport = 1) AND ( @IsExport = 1 OR PCSAT.ModifiedDate = PRC.ModifiedDate)  
 		ORDER BY PCSAT.CompletionDate DESC,p.ProjectNumber ASC
 END
 
