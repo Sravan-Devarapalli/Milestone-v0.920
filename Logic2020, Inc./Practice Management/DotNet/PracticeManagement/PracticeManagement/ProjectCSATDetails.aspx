@@ -47,10 +47,10 @@
                                         Start Date
                                     </td>
                                     <td>
-                                        <span class="fl-left Width85Percent">
-                                            <uc2:DatePicker ID="dpReviewStartDate" ValidationGroup="CSATPopup" runat="server" 
+                                        <span class="Width85Percent">
+                                            <uc2:DatePicker ID="dpReviewStartDate" ValidationGroup="CSATPopup" runat="server"
                                                 TextBoxWidth="90%" AutoPostBack="false" />
-                                        </span><span class="Width15Percent vMiddle">
+                                        </span><span class="Width15Percent vTop">
                                             <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpReviewStartDate"
                                                 ValidationGroup="CSATPopup" ErrorMessage="The Review Start Date is required."
                                                 ToolTip="The Start Date is required." Text="*" EnableClientScript="false" SetFocusOnError="true"
@@ -66,12 +66,12 @@
                                         End Date
                                     </td>
                                     <td>
-                                        <span class="fl-left Width85Percent">
+                                        <span class="Width85Percent">
                                             <uc2:DatePicker ID="dpReviewEndDate" ValidationGroup="CSATPopup" runat="server" TextBoxWidth="90%"
                                                 AutoPostBack="false" />
-                                        </span><span class="Width15Percent vMiddle">
+                                        </span><span class="Width15Percent vTop">
                                             <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpReviewEndDate"
-                                                ValidationGroup="CSATPopup" ErrorMessage="The Review End Date is required." ToolTip="The End Date is required."
+                                                ValidationGroup="CSATPopup" ErrorMessage="The Review End Date is required." ToolTip="The Review End Date is required."
                                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Static"></asp:RequiredFieldValidator>
                                             <asp:CompareValidator ID="compEndDate" runat="server" ControlToValidate="dpReviewEndDate"
                                                 ValidationGroup="CSATPopup" ErrorMessage="The Review End Date has an incorrect format. It must be 'MM/dd/yyyy'."
@@ -83,6 +83,11 @@
                                                 ToolTip="The Review Period End Date must be greater or equal to Review Period Start Date."
                                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                 Operator="GreaterThanEqual" Type="Date" ValidationGroup="CSATPopup"></asp:CompareValidator>
+                                            <asp:CompareValidator ID="compEnddateLesser" runat="server" ControlToValidate="dpReviewEndDate"
+                                                ControlToCompare="dpCompletionDate" ErrorMessage="The Review Period End Date must be less than Completion Date."
+                                                ToolTip="The Review Period End Date must be less than Completion Date." Text="*"
+                                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="LessThan"
+                                                Type="Date" ValidationGroup="CSATPopup"></asp:CompareValidator>
                                             <asp:CustomValidator ID="custCSATEndDate" runat="server" ControlToValidate="dpReviewEndDate"
                                                 ErrorMessage="The Review End Date can not be greater than the date on which project status was set to 'Completed'."
                                                 ToolTip="The Review End Date can not be greater than the date on which project status was set to 'Completed'."
@@ -99,9 +104,10 @@
                             CSAT Completion Date
                         </td>
                         <td class="PaddingTop5">
-                            <span class="fl-left Width85Percent">
+                            <span class="Width85Percent">
                                 <uc2:DatePicker ID="dpCompletionDate" ValidationGroup="CSATPopup" runat="server"
                                     TextBoxWidth="90%" AutoPostBack="false" />
+                                       </span><span class="Width15Percent vTop">
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="dpCompletionDate"
                                     ValidationGroup="CSATPopup" ErrorMessage="The Completion Date is required." ToolTip="The Completion Date is required."
                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
@@ -123,7 +129,7 @@
                             CSAT Reviewer
                         </td>
                         <td class="PaddingTop5">
-                            <asp:DropDownList ID="ddlReviewer" runat="server" Style="width: 32.5%" onchange="setDirty();" >
+                            <asp:DropDownList ID="ddlReviewer" runat="server" Style="width: 32.5%" onchange="setDirty();">
                             </asp:DropDownList>
                             <asp:RequiredFieldValidator ID="reqReviewer" runat="server" ControlToValidate="ddlReviewer"
                                 ValidationGroup="CSATPopup" ErrorMessage="The Reviewer is required." ToolTip="The Reviewer is required."
@@ -136,7 +142,7 @@
                             Logic20/20 to a friend or colleague?
                         </td>
                         <td class="PaddingTop5">
-                            <asp:DropDownList ID="ddlScore" runat="server" Style="width: 32.5%"  onchange="setDirty();" >
+                            <asp:DropDownList ID="ddlScore" runat="server" Style="width: 32.5%" onchange="setDirty();">
                             </asp:DropDownList>
                             <asp:RequiredFieldValidator ID="reqScore" runat="server" ControlToValidate="ddlScore"
                                 ValidationGroup="CSATPopup" ErrorMessage="The Referral Score is required." ToolTip="The Referral Score is required."
@@ -148,7 +154,8 @@
                             Comments
                         </td>
                         <td class="PaddingTop5">
-                            <textarea class="ResizeNone" id="taComments" runat="server" rows="5" style="width: 93%" onchange="setDirty();" ></textarea>
+                            <textarea class="ResizeNone" id="taComments" runat="server" rows="5" style="width: 93%"
+                                onchange="setDirty();"></textarea>
                             <asp:RequiredFieldValidator ID="reqComments" runat="server" ControlToValidate="taComments"
                                 ValidationGroup="CSATPopup" ErrorMessage="The Comments is required." ToolTip="The Comments is required."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Static"></asp:RequiredFieldValidator>
