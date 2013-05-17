@@ -125,7 +125,7 @@ namespace PraticeManagement.Controls
                 txtDate_CalendarExtender.Enabled = !value;
             }
         }
-        
+
         [Category("Appearance")]
         [DefaultValue(true)]
         [Localizable(false)]
@@ -209,10 +209,10 @@ namespace PraticeManagement.Controls
             get;
         }
 
-        public string ErrorMessage 
-        { 
+        public string ErrorMessage
+        {
             get { return dateRangeVal.ErrorMessage; }
-            set { dateRangeVal.ErrorMessage = value; } 
+            set { dateRangeVal.ErrorMessage = value; }
         }
 
         [Category("Behaviour")]
@@ -227,6 +227,12 @@ namespace PraticeManagement.Controls
                 txtDate_CalendarExtender.BehaviorID = value;
             }
         }
+
+        [Category("Behaviour")]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        public bool SetDirty
+        { get; set; }
 
         #endregion
 
@@ -271,6 +277,10 @@ namespace PraticeManagement.Controls
             if (!string.IsNullOrEmpty(OnClientChange))
             {
                 txtDate.Attributes.Add("onchange", OnClientChange);
+            }
+            else if (SetDirty)
+            {
+                txtDate.Attributes.Add("onchange", "setDirty();");
             }
         }
 
