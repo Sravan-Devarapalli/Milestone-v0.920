@@ -6,6 +6,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using System.Text;
+using System.Data;
+using PraticeManagement.Utils;
+using PraticeManagement.Utils.Excel;
 
 namespace PraticeManagement.Controls.Reports.CSAT
 {
@@ -13,192 +16,226 @@ namespace PraticeManagement.Controls.Reports.CSAT
     {
         private const string CSATReportExport = "CSAT Report Export";
 
+        private int coloumnsCount = 1;
+
+        private int headerRowsCount = 1;
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles wrapdataCellStyle = new CellStyles();
+                wrapdataCellStyle.WrapText = true;
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles dataNumberDateCellStyle = new CellStyles();
+                dataNumberDateCellStyle.DataFormat = "$#,##0";
+
+                CellStyles dataNumberDateCellStyle1 = new CellStyles();
+                dataNumberDateCellStyle1.DataFormat = "#,##0";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataNumberDateCellStyle,
+                                                    dataCellStyle, 
+                                                    dataDateCellStyle, 
+                                                    dataDateCellStyle, 
+                                                    dataDateCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle ,
+                                                    dataCellStyle,
+                                                    wrapdataCellStyle,
+                                                    dataCellStyle,
+                                                    dataDateCellStyle, 
+                                                    dataDateCellStyle, 
+                                                    dataDateCellStyle,
+                                                    dataCellStyle,
+                                                    dataNumberDateCellStyle1,
+                                                    wrapdataCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+                return sheetStyle;
+            }
+        }
+
         private PraticeManagement.Reports.CSATReport HostingPage
         {
             get { return ((PraticeManagement.Reports.CSATReport)Page); }
         }
-
 
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
 
+        private DataTable PrepareDataTable(Project[] projectsList)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
 
+            data.Columns.Add("Project Number");
+            data.Columns.Add("Account");
+            data.Columns.Add("Project Status");
+            data.Columns.Add("Business Unit");
+            data.Columns.Add("Business Group");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Project Owner");
+            data.Columns.Add("Estimated Revenue");
+            data.Columns.Add("CSAT Eligible?");
+            data.Columns.Add("Start Date");
+            data.Columns.Add("End Date");
+            data.Columns.Add("Date of Project Completion");
+            data.Columns.Add("Practice Area");
+            data.Columns.Add("SalesPerson");
+            data.Columns.Add("ClientDirector");
+            data.Columns.Add("Project Manager(s)");
+            data.Columns.Add("CSAT Owner");
+            data.Columns.Add("CSAT Start Date");
+            data.Columns.Add("CSAT End Date");
+            data.Columns.Add("CSAT Completion Date");
+            data.Columns.Add("CSAT Reviewer");
+            data.Columns.Add("CSAT Score");
+            data.Columns.Add("CSAT Comments");
+
+            foreach (var pro in projectsList)
+            {
+                row = new List<object>();
+                int i;
+                row.Add(pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : "");
+                row.Add((pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : "");
+                row.Add((pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : "");
+                row.Add((pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.HtmlEncodedName : "");
+                row.Add((pro.Group != null && pro.Group.Name != null) ? pro.Group.HtmlEncodedName : "");
+                row.Add(pro.Name != null ? pro.HtmlEncodedName : "");
+                row.Add((pro.ProjectOwner != null && pro.ProjectOwner.Name != null) ? pro.ProjectOwner.HtmlEncodedName : "");
+                row.Add(pro.SowBudget.HasValue ? pro.SowBudget.Value.ToString() : "");
+                row.Add(pro.IsCSATEligible ? "Yes" : "No");
+                row.Add(pro.StartDate.HasValue && pro.StartDate.Value != DateTime.MinValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "");
+                row.Add(pro.EndDate.HasValue && pro.EndDate.Value != DateTime.MinValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "");
+                row.Add((pro.RecentCompletedStatusDate == null || pro.RecentCompletedStatusDate.Value == DateTime.MinValue) ? "" : pro.RecentCompletedStatusDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                row.Add((pro.Practice != null && pro.Practice.Name != null) ? HttpUtility.HtmlEncode(pro.Practice.Name) : "");
+                row.Add((pro.SalesPersonName != null) ? HttpUtility.HtmlEncode(pro.SalesPersonName) : "");
+                row.Add((pro.Director != null && pro.Director.Name != null) ? HttpUtility.HtmlEncode(pro.Director.Name.ToString()) : "");
+                row.Add(HttpUtility.HtmlEncode(pro.ProjectManagerNames.Replace(";","\n")));
+                row.Add(!string.IsNullOrEmpty(pro.CSATOwnerName) ? HttpUtility.HtmlEncode(pro.CSATOwnerName) : "");
+
+                for (i = 0; i < pro.CSATList.Count; i++)
+                {
+                    row.Add(pro.CSATList[i].ReviewStartDate != DateTime.MinValue ? pro.CSATList[i].ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat) : "");
+                    row.Add(pro.CSATList[i].ReviewEndDate != DateTime.MinValue ? pro.CSATList[i].ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat) : "");
+                    row.Add(pro.CSATList[i].CompletionDate != DateTime.MinValue ? pro.CSATList[i].CompletionDate.ToString(Constants.Formatting.EntryDateFormat) : "");
+                    row.Add(HttpUtility.HtmlEncode(pro.CSATList[i].ReviewerName));
+                    row.Add(pro.CSATList[i].ReferralScore > -1 ? pro.CSATList[i].ReferralScore.ToString() : "");
+                    row.Add(HttpUtility.HtmlEncode(pro.CSATList[i].Comments));
+                    data.Rows.Add(row.ToArray());
+
+                    if (i != pro.CSATList.Count - 1)
+                    {
+                        rownew = new List<object>();
+                        rownew.AddRange(row);
+                        rownew.RemoveRange(17, 6);
+                        row = rownew;
+                    }
+                }
+            }
+            return data;
+        }
+        
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(CSATReportExport);
-
+            var filename = string.Format("CSAT_Report_{0}_{1}.xls", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
+            var dataSetList = new List<DataSet>();
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var report = ServiceCallers.Custom.Project(r => r.CSATSummaryReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.SelectedPractices, HostingPage.SelectedAccounts,true)).ToList();
-                StringBuilder sb = new StringBuilder();
-                sb.Append("CSAT Report For the Period:");
-                sb.Append("\t");
-                sb.Append(HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                sb.Append(" to ");
-                sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                sb.AppendLine();
-                sb.AppendLine();
-
-                if (report.Count > 0)
+                var report = ServiceCallers.Custom.Project(r => r.CSATSummaryReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.SelectedPractices, HostingPage.SelectedAccounts, true)).ToArray();
+                if (report.Length > 0)
                 {
-                    //Header
-                    sb.Append("Project Number");
-                    sb.Append("\t");
-                    sb.Append("Account");
-                    sb.Append("\t");
-                    sb.Append("Project Status");
-                    sb.Append("\t");
-                    sb.Append("Business Unit");
-                    sb.Append("\t");
-                    sb.Append("Business Group");
-                    sb.Append("\t");
-                    sb.Append("Project Name");
-                    sb.Append("\t");
-                    sb.Append("Project Owner");
-                    sb.Append("\t");
-                    sb.Append("Estimated Revenue");
-                    sb.Append("\t");
-                    sb.Append("CSAT Eligible?");
-                    sb.Append("\t");
-                    sb.Append("Start Date");
-                    sb.Append("\t");
-                    sb.Append("End Date");
-                    sb.Append("\t");
-                    sb.Append("Date of Project Completion");
-                    sb.Append("\t");
-                    sb.Append("Practice Area");
-                    sb.Append("\t");
-                    sb.Append("SalesPerson");
-                    sb.Append("\t");
-                    sb.Append("ClientDirector");
-                    sb.Append("\t");
-                    sb.Append("Project Manager(s)");
-                    sb.Append("\t");
-                    sb.Append("CSAT Owner");
-                    sb.Append("\t");
-                    sb.Append("CSAT Start Date");
-                    sb.Append("\t");
-                    sb.Append("CSAT End Date");
-                    sb.Append("\t");
-                    sb.Append("CSAT Completion Date");
-                    sb.Append("\t");
-                    sb.Append("CSAT Reviewer");
-                    sb.Append("\t");
-                    sb.Append("CSAT Score");
-                    sb.Append("\t");
-                    sb.Append("CSAT Comments");
-                    sb.Append("\t");
-                    sb.AppendLine();
-
-                    //Data
-                    foreach (var reportItem in report)
-                    {
-                        int i; 
-                        sb.Append(reportItem.ProjectNumber);
-                        sb.Append("\t");
-                        sb.Append(reportItem.Client.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(reportItem.Status.Name);
-                        sb.Append("\t");
-                        sb.Append(reportItem.Group.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(reportItem.BusinessGroup.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(reportItem.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(reportItem.ProjectOwner.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append("$" + reportItem.SowBudget);
-                        sb.Append("\t");
-                        sb.Append(reportItem.IsCSATEligible?"Yes":"No");
-                        sb.Append("\t");
-                        sb.Append(reportItem.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                        sb.Append("\t");
-                        sb.Append(reportItem.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                        sb.Append("\t");
-                        sb.Append((reportItem.RecentCompletedStatusDate == null || reportItem.RecentCompletedStatusDate.Value == DateTime.MinValue) ? "" : reportItem.RecentCompletedStatusDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                        sb.Append("\t");
-                        sb.Append(reportItem.Practice.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(HttpUtility.HtmlEncode(reportItem.SalesPersonName));
-                        sb.Append("\t");
-                        sb.Append(reportItem.Director.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(HttpUtility.HtmlEncode(reportItem.ProjectManagerNames));
-                        sb.Append("\t");
-                        sb.Append(HttpUtility.HtmlEncode(reportItem.CSATOwnerName));
-                        sb.Append("\t");
-                        for (i = 0; i < reportItem.CSATList.Count; i++)
-                        {
-                            sb.Append(reportItem.CSATList[i].ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat));
-                            sb.Append("\t");
-                            sb.Append(reportItem.CSATList[i].ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat));
-                            sb.Append("\t");
-                            sb.Append(reportItem.CSATList[i].CompletionDate.ToString(Constants.Formatting.EntryDateFormat));
-                            sb.Append("\t");
-                            sb.Append(HttpUtility.HtmlEncode(reportItem.CSATList[i].ReviewerName));
-                            sb.Append("\t");
-                            sb.Append(reportItem.CSATList[i].ReferralScore);
-                            sb.Append("\t");
-                            sb.Append(HttpUtility.HtmlEncode(reportItem.CSATList[i].Comments));
-                            sb.Append("\t");
-                            sb.AppendLine();
-                            if (i != reportItem.CSATList.Count - 1)
-                            {
-                                sb.Append(reportItem.ProjectNumber);
-                                sb.Append("\t");
-                                sb.Append(reportItem.Client.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(reportItem.Status.Name);
-                                sb.Append("\t");
-                                sb.Append(reportItem.Group.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(reportItem.BusinessGroup.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(reportItem.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(reportItem.ProjectOwner.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append("$"+reportItem.SowBudget);
-                                sb.Append("\t");
-                                sb.Append(reportItem.IsCSATEligible ? "Yes" : "No");
-                                sb.Append("\t");
-                                sb.Append(reportItem.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                                sb.Append("\t");
-                                sb.Append(reportItem.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                                sb.Append("\t");
-                                sb.Append((reportItem.RecentCompletedStatusDate == null || reportItem.RecentCompletedStatusDate.Value == DateTime.MinValue) ? "" : reportItem.RecentCompletedStatusDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                                sb.Append("\t");
-                                sb.Append(reportItem.Practice.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(HttpUtility.HtmlEncode(reportItem.SalesPersonName));
-                                sb.Append("\t");
-                                sb.Append(reportItem.Director.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(HttpUtility.HtmlEncode(reportItem.ProjectManagerNames));
-                                sb.Append("\t");
-                                sb.Append(HttpUtility.HtmlEncode(reportItem.CSATOwnerName));
-                                sb.Append("\t");
-                            }
-                        }
-                    }
-
+                    string dateRangeTitle = string.Format("CSAT Report For the Period:{0} to {1}", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    headerRowsCount = header.Rows.Count + 3;
+                    var data = PrepareDataTable(report);
+                    coloumnsCount = data.Columns.Count;
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(DataSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "CSAT";
+                    dataset.Tables.Add(header);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
                 }
                 else
                 {
-                    sb.Append("There are no CSAT Entries towards this range selected.");
+                    string dateRangeTitle = "There are no CSAT Entries towards this range selected.";
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "CSAT";
+                    dataset.Tables.Add(header);
+                    dataSetList.Add(dataset);
                 }
-                var filename = string.Format("CSAT_Report_{0}_{1}.xls", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
-                GridViewExportUtil.Export(filename, sb);
+                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
         }
 
-        protected string GetProjectDetailsLink(int? projectId,bool flag)
+        protected string GetProjectDetailsLink(int? projectId, bool flag)
         {
             if (projectId.HasValue)
-                return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.ProjectDetail, projectId.Value) + (flag ? "&CSAT=true":string.Empty),
+                return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.ProjectDetail, projectId.Value) + (flag ? "&CSAT=true" : string.Empty),
                                                             Constants.ApplicationPages.CSATReport);
             else
                 return string.Empty;
@@ -215,25 +252,26 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 lblSymblvsble.Text = project.HasMultipleCSATs ? "!" : "";
             }
         }
+
         public void PopulateData()
         {
-           Project[] projects = ServiceCallers.Custom.Project(p=>p.CSATSummaryReport(HostingPage.StartDate.Value,HostingPage.EndDate.Value,HostingPage.SelectedPractices,HostingPage.SelectedAccounts,false));
-           if (projects.Length > 0)
-           {
-               repSummary.Visible = true;
-               HostingPage.HeaderTable.Visible = true;
-               btnExportToExcel.Enabled = true;
-               divEmptyMessage.Style["display"] = "none";
-               repSummary.DataSource = projects;
-               repSummary.DataBind();
-           }
-           else
-           {
-               repSummary.Visible = false;
-               btnExportToExcel.Enabled = false;
-               divEmptyMessage.Style["display"] = "";
-           }
-           HostingPage.PopulateHeaderSection();
+            Project[] projects = ServiceCallers.Custom.Project(p => p.CSATSummaryReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.SelectedPractices, HostingPage.SelectedAccounts, false));
+            if (projects.Length > 0)
+            {
+                repSummary.Visible = true;
+                HostingPage.HeaderTable.Visible = true;
+                btnExportToExcel.Enabled = true;
+                divEmptyMessage.Style["display"] = "none";
+                repSummary.DataSource = projects;
+                repSummary.DataBind();
+            }
+            else
+            {
+                repSummary.Visible = false;
+                btnExportToExcel.Enabled = false;
+                divEmptyMessage.Style["display"] = "";
+            }
+            HostingPage.PopulateHeaderSection();
         }
     }
 }
