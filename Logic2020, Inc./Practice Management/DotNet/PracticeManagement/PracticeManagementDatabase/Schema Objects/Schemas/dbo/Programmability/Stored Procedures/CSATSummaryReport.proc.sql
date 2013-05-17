@@ -87,6 +87,6 @@ BEGIN
 		LEFT JOIN dbo.ProjectCSAT PCSAT ON PCSAT.ProjectId = P.ProjectId  
 		LEFT JOIN dbo.Person CSATReviewer ON CSATReviewer.PersonId = PCSAT.ReviewerId
 		WHERE (P.ProjectId = PRC.ProjectId OR @IsExport = 1) AND ( @IsExport = 1 OR PCSAT.ModifiedDate = PRC.ModifiedDate)  
-		ORDER BY PCSAT.CompletionDate DESC,p.ProjectNumber ASC
+		ORDER BY p.ProjectNumber ASC,PCSAT.CompletionDate DESC
 END
 
