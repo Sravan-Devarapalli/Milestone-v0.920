@@ -9,6 +9,7 @@ AS
 BEGIN
 	 DECLARE @PracticeIdsTable TABLE ( Id INT )
 	 DECLARE @AccountIdsTable TABLE ( Id INT )
+	 SELECT @StartDate = CONVERT(DATE,@StartDate),@EndDate = CONVERT(DATE,@EndDate)
 
 	 INSERT INTO @PracticeIdsTable(Id)
 	 SELECT ResultId
