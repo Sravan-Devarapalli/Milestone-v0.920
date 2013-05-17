@@ -200,19 +200,18 @@
                     </td>
                 </tr>
             </table>
-            <asp:Panel ID="pnlNetPromoterScoreVariables" runat="server" Style="display: none;"
-                CssClass="pnlNewHireHelp height120px Width400PxImp">
+            <asp:Panel ID="pnlNetPromoterScoreVariables" runat="server" CssClass="pnlNewHireHelp height120px Width415PxImp" Style="display: none;">
                 <table class="Height100PerImp">
                     <tr class="trNetPromoterScorePanel">
                         <td class="Width40P vTop">
                             <table class="tableNetPromoterScorePanel">
                                 <tr>
-                                    <td colspan="2" align="center" style="padding-top: 0px;">
+                                    <td colspan="2" align="center" class="PaddingTop0PxImp">
                                         <b>Variables</b>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" align="center" style="padding-top: 0px;">
+                                    <td colspan="2" align="center" class="PaddingTop0PxImp">
                                         &nbsp;&nbsp;
                                     </td>
                                 </tr>
@@ -250,7 +249,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td class="Width60P vTop Height100PerImp">
+                        <td class="Width60P vTop Height100PerImp padLeft15">
                             <table class="WholeWidth Height100PerImp">
                                 <tr class="vTop Height10P">
                                     <td align="center">
@@ -261,20 +260,23 @@
                                     <td class="fontBold">
                                         <table class="tblPanelNetCSATScore">
                                             <tr class="WholeWidth">
-                                                <td class="Width20PerImp">
-                                                    % of Promoters
+                                                <td class="Width20PerImp padRight10">
+                                                    <span class="textCenter">% of</span><br />
+                                                    <span class="textCenter">Promoters</span>
                                                 </td>
                                                 <td class="Width5PercentImp">
-                                                    <span style="font-size: 16px;">-</span>
+                                                    <span class="font16PxImp">-</span>
                                                 </td>
-                                                <td class="Width20PerImp">
-                                                    % of Detractors
+                                                <td class="Width20PerImp padRight10 padLeft10">
+                                                    <span class="textCenter">% of</span><br />
+                                                    <span class="textCenter">Detractors</span>
                                                 </td>
                                                 <td class="Width5PercentImp">
                                                     =&nbsp;
                                                 </td>
-                                                <td>
-                                                    Net Promoter Score
+                                                <td class="padLeft10 padRight5">
+                                                    <span class="textCenter no-wrap">Net Promoter</span><br />
+                                                    <span class="textCenter">Score</span>
                                                 </td>
                                             </tr>
                                         </table>
@@ -284,17 +286,18 @@
                                     <td class="font14PxImp">
                                         <table class="tblPanelNetCSATScore WholeWidth">
                                             <tr>
-                                                <td>
+                                                <td class="Width20PerImp padRight10 textCenter">
                                                     <asp:Label ID="lblPromotersPercentage" runat="server"></asp:Label>
                                                 </td>
                                                 <td class="Width5PercentImp">
                                                 </td>
-                                                <td>
+                                                <td class="Width20PerImp padRight10 padLeft10 textCenter">
                                                     <asp:Label ID="lblDetractersPercentage" runat="server"></asp:Label>
                                                 </td>
                                                 <td class="Width5PercentImp">
+                                                    &nbsp;
                                                 </td>
-                                                <td class="fontBold">
+                                                <td class="padLeft10 padRight5 fontBold textCenter">
                                                     <asp:Label ID="lblNetPromoterScore" runat="server"></asp:Label>
                                                 </td>
                                             </tr>
@@ -321,19 +324,22 @@
                                     <td>
                                     </td>
                                     <td>
-                                        <asp:Label Text="Score" ID="lblNetPromoterScoreHeader" runat="server"></asp:Label><span
-                                            style="font-size: 12px;"> (All Company)</span>
+                                        <asp:Label Text="Score" ID="lblNetPromoterScoreHeader" runat="server" CssClass="font16Px"></asp:Label><br />
+                                        <span class="fontSize11px">(All Company)</span>
                                         <asp:Image alt="Net Promoter Score Hint" ImageUrl="~/Images/hint1.png" runat="server"
                                             ID="imgNetPromoterScoreWithoutFilters" />
                                     </td>
                                     <td>
-                                        <asp:Label Text="Score" runat="server" ID="lblNetPromoterScoreWithFiltersHeader"></asp:Label><span
-                                            style="font-size: 12px;"> (Based on Selected Filters)</span>
+                                        <asp:Label Text="Score" runat="server" ID="lblNetPromoterScoreWithFiltersHeader"
+                                            CssClass="font16Px"></asp:Label><br />
+                                        <span class="fontSize11px">(Based on Selected Filters)</span>
                                         <asp:Image alt="Net Promoter Score Hint" ImageUrl="~/Images/hint1.png" runat="server"
                                             ID="imgNetPromoterScoreWithFilters" />
                                     </td>
-                                    <td>
-                                        # of Completed CSATs
+                                    <td class="font15PxImp vBottomImp">
+                                        # of Completed
+                                        <br />
+                                        CSATs
                                     </td>
                                 </tr>
                                 <tr>
