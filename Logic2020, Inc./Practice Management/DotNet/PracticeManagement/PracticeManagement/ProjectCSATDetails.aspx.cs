@@ -9,7 +9,7 @@ using DataTransferObjects;
 
 namespace PraticeManagement
 {
-    public partial class ProjectCSATDetails : PracticeManagementPageBase ,IPostBackEventHandler
+    public partial class ProjectCSATDetails : PracticeManagementPageBase, IPostBackEventHandler
     {
 
         private bool IsErrorPanelDisplay;
@@ -148,7 +148,7 @@ namespace PraticeManagement
                 pCSAT.Comments = taComments.Value;
                 if (!CSATId.HasValue)
                 {
-                  CSATId=  ServiceCallers.Custom.Project(p => p.CSATInsert(pCSAT, DataHelper.CurrentPerson.Alias));
+                    CSATId = ServiceCallers.Custom.Project(p => p.CSATInsert(pCSAT, DataHelper.CurrentPerson.Alias));
                     mlConfirmation.ShowInfoMessage("CSAT successfully added.");
                 }
                 else
@@ -157,7 +157,7 @@ namespace PraticeManagement
                     ServiceCallers.Custom.Project(p => p.CSATUpdate(pCSAT, DataHelper.CurrentPerson.Alias));
                     mlConfirmation.ShowInfoMessage("CSAT successfully updated.");
                 }
-                if(!IsFromRaisePostEventHandler)
+                if (!IsFromRaisePostEventHandler)
                     ReturnToPreviousPage();
                 ClearDirty();
             }
@@ -177,7 +177,7 @@ namespace PraticeManagement
         public void PopulateData()
         {
             BindScoreDropDown(ddlScore);
-            DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Reviewer --",new List<int>());
+            DataHelper.FillCSATReviewerList(ddlReviewer, "-- Select Reviewer --", new List<int>());
             if (CSATId.HasValue)
             {
                 ddlScore.SelectedValue = CSAT.ReferralScore.ToString();
@@ -191,8 +191,9 @@ namespace PraticeManagement
             {
                 ddlScore.SelectedValue = string.Empty;
                 DateTime currentdate = PraticeManagement.Utils.SettingsHelper.GetCurrentPMTime().Date;
-                dpReviewStartDate.DateValue =
-                dpReviewEndDate.DateValue = currentdate.AddDays(-1);
+                DateTime prevDate = currentdate.AddDays(-1);
+                dpReviewStartDate.DateValue = Project.StartDate.HasValue && Project.StartDate.Value < prevDate ? Project.StartDate.Value : prevDate;
+                dpReviewEndDate.DateValue = Project.EndDate.HasValue && Project.EndDate.Value < prevDate ? Project.EndDate.Value : prevDate;
                 dpCompletionDate.DateValue = currentdate;
                 ddlReviewer.SelectedIndex = 0;
                 taComments.Value = "";
