@@ -92,7 +92,7 @@
                                     runat="server"></asp:HyperLink>
                             </td>
                             <td class="textLeft BorderNoneImp">
-                                <asp:Label ID="lblSymblvsble" ForeColor="Red" CssClass="error-message fontSizeLarge" ToolTip="This project has more than single CSAT entries."
+                                <asp:Label ID="lblSymblvsble" ForeColor="Red" CssClass="error-message fontSizeLarge" ToolTip="This project has multiple CSAT entries."
                                     runat="server"></asp:Label>
                             </td>
                         </tr>
