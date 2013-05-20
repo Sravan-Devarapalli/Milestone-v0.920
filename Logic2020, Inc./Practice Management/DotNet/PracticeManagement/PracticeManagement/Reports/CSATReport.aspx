@@ -321,7 +321,7 @@
                         <td class="CSATHeader NewHireReportTotals">
                             <table class="tblCSATHeader tableFixed">
                                 <tr>
-                                    <td>
+                                    <td style="width:23%;">
                                     </td>
                                     <td>
                                         <asp:Label Text="Score" ID="lblNetPromoterScoreHeader" runat="server" CssClass="font16Px"></asp:Label><br />
@@ -329,7 +329,7 @@
                                         <asp:Image alt="Net Promoter Score Hint" ImageUrl="~/Images/hint1.png" runat="server"
                                             ID="imgNetPromoterScoreWithoutFilters" />
                                     </td>
-                                    <td>
+                                    <td style="width:27%;">
                                         <asp:Label Text="Score" runat="server" ID="lblNetPromoterScoreWithFiltersHeader"
                                             CssClass="font16Px"></asp:Label><br />
                                         <span class="fontSize11px">(Based on Selected Filters)</span>
