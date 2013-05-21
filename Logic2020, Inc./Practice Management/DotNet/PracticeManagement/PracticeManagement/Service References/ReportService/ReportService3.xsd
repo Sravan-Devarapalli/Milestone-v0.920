@@ -422,6 +422,24 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ConsultingDemandDetailsBySalesStage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandDetailsBySalesStageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsBySalesStageResult" nillable="true" type="q25:ArrayOfConsultantGroupBySalesStage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ConsultingDemandDetailsByMonth">
     <xs:complexType>
       <xs:sequence>
@@ -429,6 +447,7 @@
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="isFromPipeLinePopUp" type="xs:boolean" />
       </xs:sequence>
@@ -437,7 +456,7 @@
   <xs:element name="ConsultingDemandDetailsByMonthResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByMonthResult" nillable="true" type="q25:ArrayOfConsultantGroupByMonth" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByMonthResult" nillable="true" type="q26:ArrayOfConsultantGroupByMonth" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -447,13 +466,14 @@
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConsultingDemandGraphsByTitleResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q26="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsByTitleResult" nillable="true" type="q26:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsByTitleResult" nillable="true" type="q27:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -463,13 +483,14 @@
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConsultingDemandGraphsBySkillsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsBySkillsResult" nillable="true" type="q27:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsBySkillsResult" nillable="true" type="q28:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -480,13 +501,14 @@
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConsultingDemandTransactionReportByTitleResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportByTitleResult" nillable="true" type="q28:ArrayOfConsultantGroupbyTitle" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportByTitleResult" nillable="true" type="q29:ArrayOfConsultantGroupbyTitle" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -497,13 +519,14 @@
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConsultingDemandTransactionReportBySkillResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportBySkillResult" nillable="true" type="q29:ArrayOfConsultantGroupbySkill" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportBySkillResult" nillable="true" type="q30:ArrayOfConsultantGroupbySkill" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -512,13 +535,14 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConsultingDemandGrphsGroupsByTitleResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q30="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsByTitleResult" nillable="true" type="q30:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q31="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsByTitleResult" nillable="true" type="q31:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -527,13 +551,14 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConsultingDemandGrphsGroupsBySkillResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsBySkillResult" nillable="true" type="q31:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q32="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsBySkillResult" nillable="true" type="q32:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
