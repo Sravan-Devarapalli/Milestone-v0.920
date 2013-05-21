@@ -83,8 +83,8 @@
                         <td>
                             <asp:LinkButton runat="server" ID="lnkConsultant" Text='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).TitleSkill %>'
                                 ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).TitleSkill %>'
-                                Title='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).Title %>'
-                                Skill='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).Skill %>'
+                                Title='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).HtmlEncodedTitle %>'
+                                Skill='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill)Container.DataItem).HtmlEncodedSkill %>'
                                 OnClick="lnkConsultant_OnClick"></asp:LinkButton>
                         </td>
                         <td>
