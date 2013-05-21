@@ -240,6 +240,7 @@ namespace PraticeManagement
             public const string CurrencyFormat = "$###,###,###,###,###,###,###";
             public const string ReportDateFormat = "MM/dd/yyyy (dddd)";
             public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
+            public const string CurrencyExcelReportFormatWithoutDecimal = "$####,###,###,###,###,##0";
             public const string NumberFormatWithCommas = "###,###,###,###,###,###,###0";
             public const string DoubleValueWithSinglePrecision = "0.0";
         }
@@ -348,6 +349,7 @@ namespace PraticeManagement
             public const string SortDescendingOrder = "Desc";
             public const string MonthStartDate = "MonthStartDate";
             public const string Count = "Count";
+            public const string SalesStage = "SalesStage";
         }
     }
 }
