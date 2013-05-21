@@ -87,7 +87,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultnDemandPipeline.Visible = false;
                 chartConsultngDemand.Visible = true;
                 hlnkGraph.Visible = false;
-                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGraphsByTitle(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllTitles ? null : HostingPage.hdnTitlesProp));
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGraphsByTitle(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllTitles ? null : HostingPage.hdnTitlesProp, HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp));
                 chartConsultngDemand.DataSource = data.Select(p => new { month = p.Key, count = p.Value }).ToList();
                 chartConsultngDemand.DataBind();
                 InitChart(data.Count, data.Max(p => p.Value));
@@ -97,7 +97,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultnDemandPipeline.Visible = false;
                 chartConsultngDemand.Visible = true;
                 hlnkGraph.Visible = false;
-                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGraphsBySkills(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllSkills ? null : HostingPage.hdnSkillsProp));
+                data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGraphsBySkills(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllSkills ? null : HostingPage.hdnSkillsProp, HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp));
                 chartConsultngDemand.DataSource = data.Select(p => new { month = p.Key, count = p.Value }).ToList();
                 chartConsultngDemand.DataBind();
                 InitChart(data.Count, data.Max(p => p.Value));
@@ -110,11 +110,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
                 {
                     hlnkGraph.Text = PipeLineSkill;
-                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGrphsGroupsByTitle(HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGrphsGroupsByTitle(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp));
                 }
                 else if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
                 {
-                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGrphsGroupsBySkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                    data = ServiceCallers.Custom.Report(r => r.ConsultingDemandGrphsGroupsBySkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp));
                 }
                 chartConsultnDemandPipeline.DataSource = data.Select(p => new { title = p.Key, count = p.Value }).ToList();
                 chartConsultnDemandPipeline.DataBind();
