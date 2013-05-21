@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using DataTransferObjects;
 using PraticeManagement.Controls;
+using PraticeManagement.Controls.Opportunities;
+using PraticeManagement.ProjectStatusService;
 
 namespace PraticeManagement.Reports
 {
@@ -110,9 +114,13 @@ namespace PraticeManagement.Reports
 
         public bool isSelectAllSkills { get { return cblSkills.areAllSelected; } }
 
+        public bool isSelectAllSalesStages { get { return cblSalesStages.areAllSelected; } }
+
         public string hdnTitlesProp { get { return hdnTitles.Value; } }
 
         public string hdnSkillsProp { get { return hdnSkills.Value; } }
+
+        public string hdnSalesStagesProp { get { return hdnSalesStages.Value; } }
 
         public int RolesCount { get; set; }
 
@@ -176,11 +184,31 @@ namespace PraticeManagement.Reports
                 hdnCustomOk.Value = "false";
                 hdnPeriodValue.Value = "-1";
                 trGtypes.Visible =
+                trSalesStageType.Visible = 
                 trTitles.Visible =
                 upnlTabCell.Visible = false;
                 lblTitle.Text = "Title";
+                List<string> salesStages;
                 List<string> titles = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).Select(p => p.LastName).Distinct().ToList();
                 DataHelper.FillListDefault(cblTitles, "All Titles", titles.Select(p => new { title = p }).ToArray(), false, "title", "title");
+                using (var serviceClient = new ProjectStatusServiceClient())
+                {
+                    try
+                    {
+                        ProjectStatus[] statuses = serviceClient.GetProjectStatuses();
+                        salesStages = statuses.Select(p => p.Name).ToList();
+                    }
+                    catch (CommunicationException)
+                    {
+                        serviceClient.Abort();
+                        throw;
+                    }
+                }
+                OpportunityPriority[] priorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
+                salesStages.AddRange(priorities.Select(p => p.DisplayName).ToList());
+                salesStages = salesStages.Distinct().OrderBy(p=>p).ToList();
+                DataHelper.FillListDefault(cblTitles, "All Titles", titles.Select(p => new { title = p }).ToArray(), false, "title", "title");
+                DataHelper.FillListDefault(cblSalesStages, "All Sales Stages", salesStages.Select(p => new { salesStage = p }).ToArray(), false, "salesStage", "salesStage");
                 tdSkills.Visible = false;
                 tdTitles.Visible = true;
             }
@@ -377,20 +405,24 @@ namespace PraticeManagement.Reports
             if (mvConsultingDemandReport.ActiveViewIndex == 0)
             {
                 trGtypes.Visible = false;
+                trSalesStageType.Visible = false;
                 trTitles.Visible = false;
                 ucSummary.PopulateData();
             }
             else if (mvConsultingDemandReport.ActiveViewIndex == 1)
             {
                 trGtypes.Visible = false;
+                trSalesStageType.Visible = false;
                 trTitles.Visible = false;
                 ucDetails.PopulateData(true, "");
             }
             else
             {
                 trGtypes.Visible = true;
+                trSalesStageType.Visible = true;
                 trTitles.Visible = ddlGraphsTypes.SelectedIndex != 0 && ddlGraphsTypes.SelectedValue != "PipeLine";
                 string selectedValues = null;
+                hdnSalesStages.Value = cblSalesStages.SelectedItems; 
                 if (ddlGraphsTypes.SelectedValue == TransactionTitle)
                 {
                     selectedValues = cblTitles.SelectedItems;
@@ -422,6 +454,7 @@ namespace PraticeManagement.Reports
                 tdSkills.Visible = false;
                 tdTitles.Visible = true;
                 cblSkills.SelectAll();
+                cblSalesStages.SelectAll();
             }
             enableDisableResetButtons();
             ddlPeriod.SelectedValue = hdnPeriodValue.Value;
