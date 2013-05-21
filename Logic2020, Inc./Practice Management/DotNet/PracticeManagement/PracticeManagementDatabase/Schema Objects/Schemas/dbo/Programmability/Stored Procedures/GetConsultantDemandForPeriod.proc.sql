@@ -18,6 +18,7 @@ CREATE PROCEDURE dbo.GetConsultantDemandForPeriod
 	@EndDate DATETIME,
 	@Titles VARCHAR(MAX) = NULL,
 	@Skills VARCHAR(MAX) = NULL,
+	@SalesStages VARCHAR(MAX) = NULL,
 	--Report Type
 	@IsSummary BIT=0,
 	@IsDetail BIT=0,
@@ -44,8 +45,9 @@ BEGIN
 			@GroupBy NVARCHAR(MAX) = ' GROUP BY ',
 			@Select NVARCHAR(MAX) = 'SELECT ',
 			@Where  NVARCHAR(MAX) = ' WHERE CD.ResourceStartDate BETWEEN @StartDate AND @EndDate'+
-									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(@Titles,',',''',''') + ''')'  ELSE '' END +
-									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(@Skills,',',''',''') + ''')' ELSE '' END ,
+									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(REPLACE(@Titles,'''',''''''),',',''',''') + ''')'  ELSE '' END +
+									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(REPLACE(@Skills,'''',''''''),',',''',''') + ''')' ELSE '' END +
+									CASE WHEN @SalesStages IS NOT NULL THEN ' AND CD.SalesStage IN (''' + REPLACE(REPLACE(@SalesStages,'''',''''''),',',''',''') + ''')' ELSE '' END ,
 			@Columns NVARCHAR(MAX) = ''
 
 	--1.Summary View
@@ -68,15 +70,14 @@ BEGIN
 		SELECT @GroupBy = @GroupBy + 'CD.MonthStartDate,CD.Title,CD.Skill',
 				@Select = @Select+ 'CD.MonthStartDate,CD.Title,CD.Skill,ISNULL(SUM(COUNT),0) AS [COUNT]',
 				@Where  = ' WHERE 1=1 '+
-									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(@Titles,',',''',''') + ''')'  ELSE '' END +
-									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(@Skills,',',''',''') + ''')' ELSE '' END 
-
+									CASE WHEN @Titles IS NOT NULL THEN ' AND CD.Title IN (''' + REPLACE(REPLACE(@Titles,'''',''''''),',',''',''') + ''')'  ELSE '' END +
+									CASE WHEN @Skills IS NOT NULL THEN ' AND CD.Skill IN (''' + REPLACE(REPLACE(@Skills,'''',''''''),',',''',''') + ''')' ELSE '' END 
 	END
 	--2.Details View 
 	ELSE IF @IsDetail=1 
 	BEGIN
 		
-		SELECT @Columns = 'CD.ClientId,CD.AccountName,CD.ProjectId,CD.ProjectNumber,CD.ProjectName,CD.ProjectDescription,CD.OpportunityId,CD.OpportunityNumber,CD.ResourceStartDate' + 
+		SELECT @Columns = 'CD.ClientId,CD.AccountName,CD.ProjectId,CD.ProjectNumber,CD.ProjectName,CD.ProjectDescription,CD.OpportunityId,CD.OpportunityNumber,CD.ResourceStartDate,CD.SalesStage' + 
 			CASE 
 				WHEN @GroupByMonth = 1 THEN ',CD.MonthStartDate'
 				WHEN @GroupByTitleSkill = 1 THEN ',CD.Title,CD.Skill'
