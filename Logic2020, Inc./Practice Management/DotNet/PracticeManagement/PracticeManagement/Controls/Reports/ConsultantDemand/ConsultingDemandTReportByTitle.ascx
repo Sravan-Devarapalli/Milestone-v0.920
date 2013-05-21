@@ -42,6 +42,12 @@
                             <asp:Label ID="lblTitleSkillSc" runat="server"></asp:Label></asp:LinkButton>
                     </th>
                     <th>
+                        <asp:LinkButton ID="btnSalesStage" runat="server" CausesValidation="false"
+                            CommandArgument="Sales Stage" Style="text-decoration: none; color: Black;"
+                            OnCommand="btnSalesStage_Command">
+                        Sales Stage</asp:LinkButton>
+                    </th>
+                    <th>
                         <asp:LinkButton ID="btnOpportunityNumber" runat="server" CausesValidation="false"
                             CommandArgument="OpportunityNumber" Style="text-decoration: none; color: Black;"
                             OnCommand="btnOpportunityNumber_Command">
@@ -52,7 +58,7 @@
                             Style="text-decoration: none; color: Black;" OnCommand="btnProjectNumber_Command">
                         Project Number</asp:LinkButton>
                     </th>
-                    <th>
+                    <th class="Width20PerImp">
                         <asp:LinkButton ID="btnAccountName" runat="server" CausesValidation="false" CommandArgument="AccountName"
                             Style="text-decoration: none; color: Black;" OnCommand="btnAccountName_Command">
                         Account Name</asp:LinkButton>
@@ -99,6 +105,9 @@
                                 <asp:Label ID="lblTitleSkillItem" runat="server"></asp:Label>
                             </td>
                             <td>
+                                <asp:Label ID="lblSalesStage" runat="server"></asp:Label>
+                            </td>
+                            <td>
                                 <asp:HyperLink ID="hlOpportunityNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
                             </td>
@@ -106,7 +115,7 @@
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
                             </td>
-                            <td>
+                            <td class="Width20PerImp WS-Normal">
                                 <asp:Label ID="lblAccountName" runat="server"></asp:Label>
                             </td>
                             <td class="Width20PerImp WS-Normal">
@@ -126,6 +135,9 @@
                             <td>
                                 <asp:Label ID="lblTitleSkillItem" runat="server"></asp:Label>
                             </td>
+                              <td>
+                                <asp:Label ID="lblSalesStage" runat="server"></asp:Label>
+                            </td>
                             <td>
                                 <asp:HyperLink ID="hlOpportunityNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
@@ -134,7 +146,7 @@
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
                             </td>
-                            <td>
+                            <td class="Width20PerImp WS-Normal">
                                 <asp:Label ID="lblAccountName" runat="server"></asp:Label>
                             </td>
                             <td class="Width20PerImp WS-Normal">
@@ -176,6 +188,9 @@
                             <td>
                                 <asp:Label ID="lblTitleSkillItem" runat="server"></asp:Label>
                             </td>
+                              <td>
+                                <asp:Label ID="lblSalesStage" runat="server"></asp:Label>
+                            </td>
                             <td>
                                 <asp:HyperLink ID="hlOpportunityNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
@@ -184,7 +199,7 @@
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
                             </td>
-                            <td>
+                            <td class="Width20PerImp WS-Normal">
                                 <asp:Label ID="lblAccountName" runat="server"></asp:Label>
                             </td>
                             <td class="Width20PerImp WS-Normal">
@@ -204,6 +219,9 @@
                             <td>
                                 <asp:Label ID="lblTitleSkillItem" runat="server"></asp:Label>
                             </td>
+                              <td>
+                                <asp:Label ID="lblSalesStage" runat="server"></asp:Label>
+                            </td>
                             <td>
                                 <asp:HyperLink ID="hlOpportunityNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
@@ -212,7 +230,7 @@
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Target="_blank">
                                 </asp:HyperLink>
                             </td>
-                            <td>
+                            <td class="Width20PerImp WS-Normal">
                                 <asp:Label ID="lblAccountName" runat="server"></asp:Label>
                             </td>
                             <td class="Width20PerImp WS-Normal">
@@ -237,7 +255,7 @@
             <table class="ConsultingDemandDetailsByMonth BorderBottom1px">
                 <thead>
                     <tr class="headerRow">
-                        <th class="ForthTD">
+                        <th class="FirstTD">
                             <asp:LinkButton ID="btnMonth" runat="server" CausesValidation="false" CommandArgument="Month"
                                 Style="text-decoration: none; color: Black;" OnCommand="btnMonth_Command">
                         Month Year
@@ -249,21 +267,28 @@
                                 <asp:Label ID="lblTilteOrSkillHeader" runat="server"></asp:Label>
                             </asp:LinkButton>
                         </th>
-                        <th class="Width13Percent">
+                        <th class="FirstTD">
+                            <asp:LinkButton ID="btnMonthSalesStage" runat="server" CausesValidation="false"
+                                CommandArgument="MonthSalesStage" Style="text-decoration: none; color: Black;"
+                                OnCommand="btnMonthSalesStage_Command">
+                        Sales Stage
+                            </asp:LinkButton>
+                        </th>
+                        <th class="FirstTD">
                             <asp:LinkButton ID="btnMonthOpportunityNumber" runat="server" CausesValidation="false"
                                 CommandArgument="MonthOpportunityNumber" Style="text-decoration: none; color: Black;"
                                 OnCommand="btnMonthOpportunityNumber_Command">
                         Opportunity Number
                             </asp:LinkButton>
                         </th>
-                        <th class="ForthTD">
+                        <th class="FirstTD">
                             <asp:LinkButton ID="btnMonthProjectNumber" runat="server" CausesValidation="false"
                                 CommandArgument="MonthProjectNumber" Style="text-decoration: none; color: Black;"
                                 OnCommand="btnMonthProjectNumber_Command">
                         Project Number
                             </asp:LinkButton>
                         </th>
-                        <th class="FirstTD">
+                        <th class="SecondTD">
                             <asp:LinkButton ID="btnMonthAccountName" runat="server" CausesValidation="false"
                                 CommandArgument="MonthAccountName" Style="text-decoration: none; color: Black;"
                                 OnCommand="btnMonthAccountName_Command">
@@ -277,7 +302,7 @@
                         Project Name
                             </asp:LinkButton>
                         </th>
-                        <th class="ForthTD">
+                        <th class="FirstTD">
                             <asp:LinkButton ID="btnMonthResourceStartDate" runat="server" CausesValidation="false"
                                 CommandArgument="MonthResourceStartDate" Style="text-decoration: none; color: Black;"
                                 OnCommand="btnMonthResourceStartDate_Command">
@@ -309,30 +334,33 @@
                 <ItemTemplate>
                     <table class="ConsultingDemandDetailsByMonth">
                         <tr class="bgcolorwhite">
-                            <td class="ForthTD">
+                            <td class="FirstTD">
                             </td>
                             <td class="FirstTD">
                                 <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
                             </td>
-                            <td class="ForthTD">
+                            <td class="FirstTD">
+                              <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).SalesStage%>
+                            </td>
+                            <td class="FirstTD">
                                 <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
                                     Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'
                                     ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
                                 </asp:HyperLink>
                             </td>
-                            <td class="ForthTD">
+                            <td class="FirstTD">
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
                                     Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'
                                     ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
                                 </asp:HyperLink>
                             </td>
-                            <td class="FirstTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                            <td class="SecondTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedAccountName%>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedProjectName%>
                             </td>
-                            <td class="ForthTD">
+                            <td class="FirstTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
                         </tr>
@@ -341,28 +369,33 @@
                 <AlternatingItemTemplate>
                     <table class="ConsultingDemandDetailsByMonth">
                         <tr class="bgcolorwhite">
-                            <td class="ForthTD">
+                           <td class="FirstTD">
                             </td>
                             <td class="FirstTD">
                                 <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
                             </td>
-                            <td class="ForthTD">
-                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
-                                </asp:HyperLink>
+                            <td class="FirstTD">
+                                   <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).SalesStage%>
                             </td>
-                            <td class="ForthTD">
-                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                            <td class="FirstTD">
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
                                 </asp:HyperLink>
                             </td>
                             <td class="FirstTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
+                                </asp:HyperLink>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedAccountName%>
                             </td>
-                            <td class="ForthTD">
+                            <td class="SecondTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedProjectName%>
+                            </td>
+                            <td class="FirstTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
                         </tr>
@@ -392,28 +425,33 @@
                 <ItemTemplate>
                     <table class="ConsultingDemandDetailsByMonth">
                         <tr class="bgcolorwhite">
-                            <td class="ForthTD">
+                            <td class="FirstTD">
                             </td>
                             <td class="FirstTD">
                                 <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
                             </td>
-                            <td class="ForthTD">
-                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
-                                </asp:HyperLink>
+                            <td class="FirstTD">
+                               <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).SalesStage%>
                             </td>
-                            <td class="ForthTD">
-                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                            <td class="FirstTD">
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
                                 </asp:HyperLink>
                             </td>
                             <td class="FirstTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
+                                </asp:HyperLink>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedAccountName%>
                             </td>
-                            <td class="ForthTD">
+                            <td class="SecondTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedProjectName%>
+                            </td>
+                            <td class="FirstTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
                         </tr>
@@ -422,28 +460,33 @@
                 <AlternatingItemTemplate>
                     <table class="ConsultingDemandDetailsByMonth">
                         <tr class="bgcolorwhite">
-                            <td class="ForthTD">
+                          <td class="FirstTD">
                             </td>
                             <td class="FirstTD">
                                 <asp:Label ID="lblTilteOrSkillItem" runat="server"></asp:Label>
                             </td>
-                            <td class="ForthTD">
-                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'>
-                                </asp:HyperLink>
+                            <td class="FirstTD">
+                               <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).SalesStage%>
                             </td>
-                            <td class="ForthTD">
-                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
-                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'>
+                            <td class="FirstTD">
+                                <asp:HyperLink ID="hlOpportunityNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetOpportunityDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).OpportunityId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
                                 </asp:HyperLink>
                             </td>
                             <td class="FirstTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).AccountName%>
+                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectNumber%>'
+                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectId)) %>'
+                                    ToolTip='<%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectDescription%>' >
+                                </asp:HyperLink>
                             </td>
                             <td class="SecondTD">
-                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ProjectName%>
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedAccountName%>
                             </td>
-                            <td class="ForthTD">
+                            <td class="SecondTD">
+                                <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).HtmlEncodedProjectName%>
+                            </td>
+                            <td class="FirstTD">
                                 <%# ((DataTransferObjects.Reports.ConsultingDemand.ConsultantDemandDetailsByMonth)Container.DataItem).ResourceStartDate.ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>
                             </td>
                         </tr>
