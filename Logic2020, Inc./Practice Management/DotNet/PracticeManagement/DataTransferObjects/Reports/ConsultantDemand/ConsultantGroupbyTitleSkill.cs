@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects.Reports.ConsultingDemand
 {
@@ -13,8 +14,24 @@ namespace DataTransferObjects.Reports.ConsultingDemand
         [DataMember]
         public string Title { get; set; }
 
+        public string HtmlEncodedTitle
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Title);
+            }
+        }
+
         [DataMember]
         public string Skill { get; set; }
+
+        public string HtmlEncodedSkill
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Skill);
+            }
+        }
 
         [DataMember]
         public Dictionary<string, int> MonthCount { get; set; }
@@ -42,7 +59,7 @@ namespace DataTransferObjects.Reports.ConsultingDemand
         {
             get
             {
-                return Title + "," + Skill;
+                return HtmlEncodedTitle + ", " + HtmlEncodedSkill;
             }
         }
 
