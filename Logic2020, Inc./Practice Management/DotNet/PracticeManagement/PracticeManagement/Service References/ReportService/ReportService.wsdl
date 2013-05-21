@@ -158,6 +158,12 @@
   <wsdl:message name="IReportService_ConsultingDemandDetailsByTitleSkill_OutputMessage">
     <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByTitleSkillResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsBySalesStage_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsBySalesStage" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsBySalesStage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsBySalesStageResponse" />
+  </wsdl:message>
   <wsdl:message name="IReportService_ConsultingDemandDetailsByMonth_InputMessage">
     <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByMonth" />
   </wsdl:message>
@@ -296,6 +302,10 @@
     <wsdl:operation name="ConsultingDemandDetailsByTitleSkill">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill" message="tns:IReportService_ConsultingDemandDetailsByTitleSkill_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkillResponse" message="tns:IReportService_ConsultingDemandDetailsByTitleSkill_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsBySalesStage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsBySalesStage" message="tns:IReportService_ConsultingDemandDetailsBySalesStage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsBySalesStageResponse" message="tns:IReportService_ConsultingDemandDetailsBySalesStage_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ConsultingDemandDetailsByMonth">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonth" message="tns:IReportService_ConsultingDemandDetailsByMonth_InputMessage" />
@@ -537,6 +547,15 @@
     </wsdl:operation>
     <wsdl:operation name="ConsultingDemandDetailsByTitleSkill">
       <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsBySalesStage">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandDetailsBySalesStage" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
