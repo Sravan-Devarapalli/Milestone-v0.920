@@ -167,7 +167,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 row.Add((pro.Practice != null && pro.Practice.Name != null) ? HttpUtility.HtmlEncode(pro.Practice.Name) : "");
                 row.Add((pro.SalesPersonName != null) ? HttpUtility.HtmlEncode(pro.SalesPersonName) : "");
                 row.Add((pro.Director != null && pro.Director.Name != null) ? HttpUtility.HtmlEncode(pro.Director.Name.ToString()) : "");
-                row.Add(HttpUtility.HtmlEncode(pro.ProjectManagerNames.Replace(";","\n")));
+                row.Add(HttpUtility.HtmlEncode(pro.ProjectManagerNames.Replace(";", "\n")));
                 row.Add(!string.IsNullOrEmpty(pro.CSATOwnerName) ? HttpUtility.HtmlEncode(pro.CSATOwnerName) : "");
 
                 for (i = 0; i < pro.CSATList.Count; i++)
@@ -191,7 +191,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
             }
             return data;
         }
-        
+
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(CSATReportExport);
@@ -239,6 +239,11 @@ namespace PraticeManagement.Controls.Reports.CSAT
                                                             Constants.ApplicationPages.CSATReport);
             else
                 return string.Empty;
+        }
+
+        protected string GetFormatedSowBudget(decimal? sow)
+        {
+            return sow.HasValue ? sow.Value.ToString(Constants.Formatting.CurrencyExcelReportFormatWithoutDecimal) : "$0";
         }
 
         protected void repSummary_ItemDataBound(object sender, RepeaterItemEventArgs e)
