@@ -422,6 +422,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 sb.Append("\t");
                 sb.Append("SkillSet ");
                 sb.Append("\t");
+                sb.Append("Sales Stage");
+                sb.Append("\t");
                 sb.Append("OpportunityNumber ");
                 sb.Append("\t");
                 sb.Append("ProjectNumber ");
@@ -444,6 +446,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append(gbytitle.HtmlEncodedTitle);
                             sb.Append("\t");
                             sb.Append(detailsbyTitle.HtmlEncodedSkill);
+                            sb.Append("\t");
+                            sb.Append(detailsbyTitle.SalesStage);
                             sb.Append("\t");
                             sb.Append(detailsbyTitle.OpportunityNumber);
                             sb.Append("\t");
@@ -469,6 +473,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append("\t");
                             sb.Append(gbyskill.HtmlEncodedSkill);
                             sb.Append("\t");
+                            sb.Append(detailsbySkill.SalesStage);
+                            sb.Append("\t");
                             sb.Append(detailsbySkill.OpportunityNumber);
                             sb.Append("\t");
                             sb.Append(detailsbySkill.ProjectNumber);
@@ -492,6 +498,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                             sb.Append(pipeLineDet.HtmlEncodedTitle);
                             sb.Append("\t");
                             sb.Append(pipeLineDet.HtmlEncodedSkill);
+                            sb.Append("\t");
+                            sb.Append(pipeLineDet.SalesStage);
                             sb.Append("\t");
                             sb.Append(pipeLineDet.OpportunityNumber);
                             sb.Append("\t");
