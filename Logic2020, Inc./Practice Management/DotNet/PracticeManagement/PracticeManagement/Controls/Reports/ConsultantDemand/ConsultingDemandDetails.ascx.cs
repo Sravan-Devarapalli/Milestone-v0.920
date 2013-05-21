@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -158,6 +159,13 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             sortAscend = !sortAscend;
         }
 
+        protected void btnSalesStage_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            sortAscend = !sortAscend;
+        }
+
         protected void btnProjectNumber_Command(object sender, CommandEventArgs e)
         {
             sortColumn = e.CommandArgument.ToString();
@@ -214,6 +222,13 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             sortAscend = !sortAscend;
         }
 
+        protected void btnMonthSalesStage_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            sortAscend = !sortAscend;
+        }
+
         protected void btnMonthProjectNumber_Command(object sender, CommandEventArgs e)
         {
             sortColumn = e.CommandArgument.ToString();
@@ -246,6 +261,62 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         {
             sortColumn = e.CommandArgument.ToString();
             PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.Count + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Count + "," + Constants.ConsultingDemandSortColumnNames.MonthStartDate + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageGroupBy_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill,true);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageTitleSkill_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill + "," + Constants.ConsultingDemandSortColumnNames.SalesStage,true);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageOpportunityNumber_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.OpportunityNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.OpportunityNumber + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill,true);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageProjectNumber_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectNumber + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectNumber + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill,true);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageAccountName_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.AccountName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.AccountName + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill,true);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageProjectName_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ProjectName + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ProjectName + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill,true);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageResourceStartDate_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.ResourceStartDate + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.ResourceStartDate + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill,true);
+            sortAscend = !sortAscend;
+        }
+
+        protected void btnSalesStageTotal_Command(object sender, CommandEventArgs e)
+        {
+            sortColumn = e.CommandArgument.ToString();
+            PopulateData(false, e.CommandArgument.ToString() == sortColumn && sortAscend ? Constants.ConsultingDemandSortColumnNames.Count + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Title + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder + "," + Constants.ConsultingDemandSortColumnNames.Skill + " " + Constants.ConsultingDemandSortColumnNames.SortDescendingOrder : Constants.ConsultingDemandSortColumnNames.Count + "," + Constants.ConsultingDemandSortColumnNames.SalesStage + "," + Constants.ConsultingDemandSortColumnNames.Title + "," + Constants.ConsultingDemandSortColumnNames.Skill,true);
             sortAscend = !sortAscend;
         }
 
@@ -303,6 +374,41 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             }
         }
 
+        protected void repBySalesStage_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                CollapsiblePanelDateExtenderClientIds = new List<string>();
+                CollapsiblePanelDateExtenderList = new List<CollapsiblePanelExtender>();
+                var lblTotal = (Label)e.Item.FindControl("lblTotal");
+                var pnlTotal = (Panel)e.Item.FindControl("pnlTotal");
+                var lblTotalForecastedDemand = (Label)e.Item.FindControl("lblTotalForecastedDemand");
+                PopulateHeaderHoverLabels(lblTotal, pnlTotal, lblTotalForecastedDemand, GrandTotal, 80);
+            }
+
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                Repeater repDetails = (Repeater)e.Item.FindControl("repSalesStageDetails");
+                ConsultantGroupBySalesStage dataitem = (ConsultantGroupBySalesStage)e.Item.DataItem;
+                var result = dataitem.ConsultantDetailsBySalesStage;
+                repDetails.DataSource = result;
+                var cpeDetails = e.Item.FindControl("cpeDetails") as CollapsiblePanelExtender;
+                cpeDetails.BehaviorID = Guid.NewGuid().ToString();
+                CollapsiblePanelDateExtenderClientIds.Add(cpeDetails.BehaviorID);
+                CollapsiblePanelDateExtenderList.Add(cpeDetails);
+                repDetails.DataBind();
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
+                hdncpeExtendersIds.Value = output;
+                //btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = "Expand All";
+                //hdnCollapsed.Value = "true";
+            }
+        }
+
         protected void repTitlesDetails_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -311,7 +417,19 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 HyperLink hypProject = (HyperLink)e.Item.FindControl("hlProjectNumber");
 
                 ConsultantDemandDetails item = (ConsultantDemandDetails)e.Item.DataItem;
-                hypOpportunity.ToolTip = hypProject.ToolTip = item.ProjectDescription;
+                hypOpportunity.ToolTip = hypProject.ToolTip = item.HtmlEncodedProjectDescription;
+            }
+        }
+
+        protected void repSalesStageDetails_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                HyperLink hypOpportunity = (HyperLink)e.Item.FindControl("hlOpportunityNumber");
+                HyperLink hypProject = (HyperLink)e.Item.FindControl("hlProjectNumber");
+
+                ConsultantDemandDetailsByMonth item = (ConsultantDemandDetailsByMonth)e.Item.DataItem;
+                hypOpportunity.ToolTip = hypProject.ToolTip = item.HtmlEncodedProjectDescription;
             }
         }
 
@@ -337,7 +455,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 Repeater repDetails = (Repeater)e.Item.FindControl("repDetails");
                 ConsultantGroupByMonth dataitem = (ConsultantGroupByMonth)e.Item.DataItem;
                 var result = dataitem.ConsultantDetailsByMonth;
-                var cpeDetails = e.Item.FindControl("cpeDetails") as CollapsiblePanelExtender;
+                var cpeDetails = e.Item.FindControl("cpeDetailsByMonth") as CollapsiblePanelExtender;
                 if (result.Count > 0)
                 {
                     repDetails.DataSource = result;
@@ -385,7 +503,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 HyperLink hypProject = (HyperLink)e.Item.FindControl("hlProjectNumber");
 
                 ConsultantDemandDetailsByMonth item = (ConsultantDemandDetailsByMonth)e.Item.DataItem;
-                hypOpportunity.ToolTip = hypProject.ToolTip = item.ProjectDescription;
+                hypOpportunity.ToolTip = hypProject.ToolTip = item.HtmlEncodedProjectDescription;
             }
 
         }
@@ -408,36 +526,57 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 return string.Empty;
         }
 
-        public void PopulateData(bool isFromHostingPageOrGroupByMonth, string sortColumns = "")
+        protected void btnGroupBySales_OnClick(object sender, EventArgs e)
+        {
+            PopulateData(true,"SalesStage",true);
+        }
+
+        public void PopulateData(bool isFromHostingPageOrGroupByMonth, string sortColumns = "",bool isGroupBySales = false)
         {
             if (!string.IsNullOrEmpty(_hdIsSummaryPage.Value) && _hdIsSummaryPage.Value == true.ToString())
             {
                 btnGroupBy.Visible = false;
+                btnGroupBySales.Visible = false;
             }
-            string title = string.IsNullOrEmpty(hdTitle.Value) ? null : hdTitle.Value;
-            string skill = string.IsNullOrEmpty(hdSkill.Value) ? null : hdSkill.Value;
+            string title = string.IsNullOrEmpty(hdTitle.Value) ? null : HttpUtility.HtmlDecode(hdTitle.Value);
+            string skill = string.IsNullOrEmpty(hdSkill.Value) ? null : HttpUtility.HtmlDecode(hdSkill.Value);
             string groupby = hdnGroupBy.Value;
-            if (groupby == "title")
+            if (isGroupBySales)
             {
                 repByMonth.Visible = false;
-                repByTitleSkill.Visible = true;
-                List<ConsultantGroupbyTitleSkill> data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, title, skill, sortColumns)).ToList();
-                sortColumn = isFromHostingPageOrGroupByMonth ? "TitleSkill" : sortColumn;
-                sortAscend = isFromHostingPageOrGroupByMonth ? true : sortAscend;
-                GrandTotal = data.Sum(p => p.TotalCount);
-                repByTitleSkill.DataSource = data;
-                repByTitleSkill.DataBind();
-            }
-            else if (groupby == "month")
-            {
                 repByTitleSkill.Visible = false;
-                repByMonth.Visible = true;
-                List<ConsultantGroupByMonth> data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(HostingPage.StartDate.Value, HostingPage.EndDate.Value, title, skill, sortColumns, false)).ToList();
-                sortColumn = isFromHostingPageOrGroupByMonth ? "MonthYear" : sortColumn;
-                sortAscend = isFromHostingPageOrGroupByMonth ? true : sortAscend;
+                repBySalesStage.Visible = true;
+                List<ConsultantGroupBySalesStage> data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsBySalesStage(HostingPage.StartDate.Value, HostingPage.EndDate.Value, title, skill, sortColumns)).ToList();
                 GrandTotal = data.Sum(p => p.TotalCount);
-                repByMonth.DataSource = data;
-                repByMonth.DataBind();
+                repBySalesStage.DataSource = data;
+                repBySalesStage.DataBind();
+            }
+            else
+            {
+                if (groupby == "title")
+                {
+                    repByMonth.Visible = false;
+                    repBySalesStage.Visible = false;
+                    repByTitleSkill.Visible = true;
+                    List<ConsultantGroupbyTitleSkill> data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, title, skill, sortColumns)).ToList();
+                    sortColumn = isFromHostingPageOrGroupByMonth ? "TitleSkill" : sortColumn;
+                    sortAscend = isFromHostingPageOrGroupByMonth ? true : sortAscend;
+                    GrandTotal = data.Sum(p => p.TotalCount);
+                    repByTitleSkill.DataSource = data;
+                    repByTitleSkill.DataBind();
+                }
+                else if (groupby == "month")
+                {
+                    repByTitleSkill.Visible = false;
+                    repBySalesStage.Visible = false;
+                    repByMonth.Visible = true;
+                    List<ConsultantGroupByMonth> data = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(HostingPage.StartDate.Value, HostingPage.EndDate.Value, title, skill,null, sortColumns, false)).ToList();
+                    sortColumn = isFromHostingPageOrGroupByMonth ? "MonthYear" : sortColumn;
+                    sortAscend = isFromHostingPageOrGroupByMonth ? true : sortAscend;
+                    GrandTotal = data.Sum(p => p.TotalCount);
+                    repByMonth.DataSource = data;
+                    repByMonth.DataBind();
+                }  
             }
             if (!isFromHostingPageOrGroupByMonth && hdnCollapsed.Value.ToLower() != "true")
             {
