@@ -227,14 +227,14 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
         private void PopulatTitleFilter(List<ConsultantGroupbyTitleSkill> reportData)
         {
-            var titleList = reportData.Select(r => new { Name = r.Title }).Distinct().ToList().OrderBy(s => s.Name);
+            var titleList = reportData.Select(r => new { Name = r.HtmlEncodedTitle }).Distinct().ToList().OrderBy(s => s.Name);
             DataHelper.FillListDefault(cblTitle.CheckBoxListObject, "All Titles ", titleList.ToArray(), false, "Name", "Name");
             cblTitle.SelectAllItems(true);
         }
 
         private void PopulatSkillFilter(List<ConsultantGroupbyTitleSkill> reportData)
         {
-            var skillList = reportData.Select(r => new { Name = r.Skill }).Distinct().ToList().OrderBy(s => s.Name);
+            var skillList = reportData.Select(r => new { Name = r.HtmlEncodedSkill }).Distinct().ToList().OrderBy(s => s.Name);
             DataHelper.FillListDefault(cblSkill.CheckBoxListObject, "All Skills ", skillList.ToArray(), false, "Name", "Name");
             cblSkill.SelectAllItems(true);
         }
