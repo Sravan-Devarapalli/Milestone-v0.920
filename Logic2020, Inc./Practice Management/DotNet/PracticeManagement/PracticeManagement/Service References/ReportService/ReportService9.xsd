@@ -34,22 +34,23 @@
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SalesStage" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConsultantDemandDetails" nillable="true" type="tns:ConsultantDemandDetails" />
-  <xs:complexType name="ArrayOfConsultantGroupByMonth">
+  <xs:complexType name="ArrayOfConsultantGroupBySalesStage">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupByMonth" nillable="true" type="tns:ConsultantGroupByMonth" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupBySalesStage" nillable="true" type="tns:ConsultantGroupBySalesStage" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfConsultantGroupByMonth" nillable="true" type="tns:ArrayOfConsultantGroupByMonth" />
-  <xs:complexType name="ConsultantGroupByMonth">
+  <xs:element name="ArrayOfConsultantGroupBySalesStage" nillable="true" type="tns:ArrayOfConsultantGroupBySalesStage" />
+  <xs:complexType name="ConsultantGroupBySalesStage">
     <xs:sequence>
-      <xs:element minOccurs="0" name="ConsultantDetailsByMonth" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonth" />
-      <xs:element minOccurs="0" name="MonthStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ConsultantDetailsBySalesStage" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonth" />
+      <xs:element minOccurs="0" name="SalesStage" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ConsultantGroupByMonth" nillable="true" type="tns:ConsultantGroupByMonth" />
+  <xs:element name="ConsultantGroupBySalesStage" nillable="true" type="tns:ConsultantGroupBySalesStage" />
   <xs:complexType name="ArrayOfConsultantDemandDetailsByMonth">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantDemandDetailsByMonth" nillable="true" type="tns:ConsultantDemandDetailsByMonth" />
@@ -68,11 +69,25 @@
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SalesStage" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ConsultantDemandDetailsByMonth" nillable="true" type="tns:ConsultantDemandDetailsByMonth" />
+  <xs:complexType name="ArrayOfConsultantGroupByMonth">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupByMonth" nillable="true" type="tns:ConsultantGroupByMonth" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantGroupByMonth" nillable="true" type="tns:ArrayOfConsultantGroupByMonth" />
+  <xs:complexType name="ConsultantGroupByMonth">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConsultantDetailsByMonth" nillable="true" type="tns:ArrayOfConsultantDemandDetailsByMonth" />
+      <xs:element minOccurs="0" name="MonthStartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantGroupByMonth" nillable="true" type="tns:ConsultantGroupByMonth" />
   <xs:complexType name="ArrayOfConsultantGroupbyTitle">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantGroupbyTitle" nillable="true" type="tns:ConsultantGroupbyTitle" />
@@ -104,6 +119,7 @@
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SalesStage" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -139,6 +155,7 @@
       <xs:element minOccurs="0" name="ProjectName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ResourceStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SalesStage" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
