@@ -49,6 +49,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand {
         protected global::System.Web.UI.WebControls.Button btnGroupBy;
         
         /// <summary>
+        /// btnGroupBySales  control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGroupBySales ;
+        
+        /// <summary>
         /// hdnGroupBy control.
         /// </summary>
         /// <remarks>
@@ -101,6 +110,15 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repByMonth;
+        
+        /// <summary>
+        /// repBySalesStage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repBySalesStage;
     }
 }
 
