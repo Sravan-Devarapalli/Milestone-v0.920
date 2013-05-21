@@ -9,6 +9,7 @@
 			P.Description AS ProjectDescription,
 			O.OpportunityId,
 			O.OpportunityNumber,
+			PS.Name AS SalesStage,
 			Per.Personid,
 			Per.FirstName AS Skill,
 			Per.LastName AS Title,
@@ -19,6 +20,7 @@
 									AND Per.IsStrawman=1
 	INNER JOIN dbo.Milestone M ON MP.MilestoneId=M.MilestoneId
 	INNER JOIN Project P ON M.ProjectId = P.ProjectId AND (P.ProjectStatusId=3 OR P.ProjectStatusId=2)
+	INNER JOIN ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
 	INNER JOIN Client C ON P.ClientId=C.ClientId
 	INNER JOIN MilestonePersonEntry MPE ON MPE.MilestonePersonId=MP.MilestonePersonId 
 	INNER JOIN dbo.Calendar CAL ON MPE.StartDate<=cal.MonthEndDate 
@@ -33,6 +35,7 @@
 			 P.ProjectNumber,
 			 O.OpportunityId,
 			 O.OpportunityNumber,
+			 PS.Name,
 			 Per.PersonId,
 			 Per.FirstName,
 			 Per.LastName,
@@ -47,6 +50,7 @@
 		   O.Description As ProjectDescription,
 		   O.OpportunityId,
 		   O.OpportunityNumber,
+		   OPro.DisplayName AS SalesStage,
 		   Per.PersonId,
 		   Per.FirstName,
 		   Per.LastName,
@@ -64,6 +68,7 @@
 			 C.Name,
 			 O.OpportunityId,
 			 O.OpportunityNumber,
+			 OPro.DisplayName,
 			 O.Name,
 			 O.Description,
 			 Per.PersonId,
