@@ -13,7 +13,7 @@
                         </td>
                         <td class="PaddingBottom5Imp">
                             <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
-                                UseSubmitBehavior="false" ToolTip="Export To Excel"/>
+                                UseSubmitBehavior="false" ToolTip="Export To Excel" />
                         </td>
                     </tr>
                 </table>
@@ -37,7 +37,7 @@
                         <th class="Width10Per">
                             Project Number
                         </th>
-                        <th class="Width15Per"> 
+                        <th class="Width15Per">
                             Project Name
                         </th>
                         <th class="Width8Per">
@@ -68,8 +68,8 @@
                     <%# Eval("Group.HtmlEncodedName")%>
                 </td>
                 <td>
-                    <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("ProjectNumber")%> ' Target="_blank"
-                        NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Id")),false) %>'>
+                    <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("ProjectNumber")%> '
+                        Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Id")),false) %>'>
                     </asp:HyperLink>
                 </td>
                 <td>
@@ -81,19 +81,19 @@
                 <td>
                     <%# Eval("Practice.HtmlEncodedName")%>
                 </td>
-                <td>
-                    $<%# Eval("SowBudget")%>
+                <td sorttable_customkey='<%# Eval("SowBudget")%>'>
+                    <%# GetFormatedSowBudget((decimal?)Eval("SowBudget"))%>
                 </td>
                 <td>
                     <table class="WholeWidth">
                         <tr>
                             <td class="width60P textRightImp BorderNoneImp">
-                                <asp:HyperLink ID="hlCSATScore" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Id")),true) %>' Target="_blank"
-                                    runat="server"></asp:HyperLink>
+                                <asp:HyperLink ID="hlCSATScore" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Id")),true) %>'
+                                    Target="_blank" runat="server"></asp:HyperLink>
                             </td>
                             <td class="textLeft BorderNoneImp">
-                                <asp:Label ID="lblSymblvsble" ForeColor="Red" CssClass="error-message fontSizeLarge" ToolTip="This project has multiple CSAT entries."
-                                    runat="server"></asp:Label>
+                                <asp:Label ID="lblSymblvsble" ForeColor="Red" CssClass="error-message fontSizeLarge"
+                                    ToolTip="This project has multiple CSAT entries." runat="server"></asp:Label>
                             </td>
                         </tr>
                     </table>
