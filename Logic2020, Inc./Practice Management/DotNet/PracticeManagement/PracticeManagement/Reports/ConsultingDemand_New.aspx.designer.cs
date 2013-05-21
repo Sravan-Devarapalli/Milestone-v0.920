@@ -85,6 +85,42 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.HiddenField hdnGraphType;
         
         /// <summary>
+        /// trSalesStageType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trSalesStageType;
+        
+        /// <summary>
+        /// cblSalesStages control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblSalesStages;
+        
+        /// <summary>
+        /// sdeSalesStages control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeSalesStages;
+        
+        /// <summary>
+        /// hdnSalesStages control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSalesStages;
+        
+        /// <summary>
         /// trTitles control.
         /// </summary>
         /// <remarks>
