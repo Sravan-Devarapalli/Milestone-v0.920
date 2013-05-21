@@ -66,6 +66,7 @@ namespace PraticeManagement.Controls.Projects
 
         protected void custCSATEndDateInGridView_ServerValidate(object sender, ServerValidateEventArgs e)
         {
+            CustomValidator cv = (CustomValidator)sender;
             e.IsValid = true;
             CustomValidator custCSATCompletionDate = (CustomValidator)sender;
             GridViewRow row = custCSATCompletionDate.NamingContainer as GridViewRow;
@@ -74,6 +75,7 @@ namespace PraticeManagement.Controls.Projects
             {
                 DateTime lastCompletedDate = ServiceCallers.Custom.Project(p => p.GetProjectLastChangeDateFortheGivenStatus(HostingPage.Project.Id.Value, HostingPage.Project.Status.Id));
                 e.IsValid = dpReviewEndDate.DateValue.Date <= lastCompletedDate.Date;
+                cv.ErrorMessage = cv.ToolTip = "The Review End Date cannot be later than the date that the project status was changed to \"Completed\", on '" + lastCompletedDate.Date.ToString(Constants.Formatting.EntryDateFormat) + "' .";
             }
         }
 
