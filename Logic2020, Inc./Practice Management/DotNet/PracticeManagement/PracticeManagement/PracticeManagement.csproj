@@ -561,7 +561,9 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultantDemand.ConsultantGroupBySalesStage.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupBySalesStage.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbySkill.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitle.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill.datasource" />
