@@ -158,6 +158,7 @@
     <Compile Include="Reports\ConsultantDemand\ConsultantDemandDetailsByMonthBySkill.cs" />
     <Compile Include="Reports\ConsultantDemand\ConsultantDemandDetailsByMonthByTitle.cs" />
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupByMonth.cs" />
+    <Compile Include="Reports\ConsultantDemand\ConsultantGroupBySalesStage.cs" />
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupbySkill.cs" />
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupbyTitle.cs" />
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupbyTitleSkill.cs" />
@@ -308,4 +309,3 @@
   </Target>
   -->
 </Project>
-
