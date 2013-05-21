@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects.Reports.ConsultingDemand
 {
@@ -12,6 +13,13 @@ namespace DataTransferObjects.Reports.ConsultingDemand
     {
         [DataMember]
         public string Skill { get; set; }
+        public string HtmlEncodedSkill
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Skill);
+            }
+        }
         [DataMember]
         public List<ConsultantDemandDetailsByMonthBySkill> ConsultantDetails { get; set; }
     }
