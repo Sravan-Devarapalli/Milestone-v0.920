@@ -367,11 +367,13 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width10PerImp{width:10%!important}
 .Width11Percent{width:11%}
 .Width12Percent,.Width12Per{width:12%}
+.Width12PercentImp{width:12%!important}
 .Width13Percent{width:13%}
 .Width13Point5Percent{width:13.5%}
 .Width14Percent{width:14%}
 .Width14PercentImp{width:14%!important}
 .Width15Percent,.Width15Per{width:15%}
+.Width15PercentImp{width:15%!important}
 .Width15point3PercentImp{width:15.3%!important}
 .Width16point5PercentImp{width:16.5%!important}
 .Width16point8PercentImp{width:16.8%!important}
@@ -476,6 +478,7 @@ Width99PercentImp{width:99%!important}
 .Width125Px{width:125px}
 .Width130px{width:130px}
 .Width130pxImp{width:130px!important}
+.Width135px{width:135px}
 .Width140px{width:140px}
 .Width145px{width:145px}
 .Width150px{width:150px}
@@ -940,8 +943,8 @@ div.scrollextLabel Label{padding-left:4px}
 .PersonSearchResult{width:100%}
 .PersonSearchResult td,.PersonSearchResult th{text-align:center}
 .PersonSearchResult .PersonName{text-align:left!important}
-.PersonDetailReportCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
-.PersonDetailReportCustomTabStyle td span.bg{padding-right:10px!important}
+.PersonDetailReportCustomTabStyle .SelectedSwitch a.collapse{padding-right:2px!important}
+.PersonDetailReportCustomTabStyle td span.bg{padding-right:10px!important;padding-bottom:9px!important}
 .tableFixed{table-layout:fixed}
 .FilteredCheckBoxListScrollingDropDown{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:155px;overflow-x:hidden;overflow-y:auto;width:158px;z-index:20000;text-align:center}
 .FilteredCheckBoxListScrollingDropDown Table,.FilteredCheckBoxListScrollingDropDown Td{text-align:left!important}
@@ -1465,25 +1468,28 @@ table#ctl00_body_login tr td label{float:left}
 .ConsultingDemandDetails,.ConsultingDemandDetailsByMonth{width:100%}
 .ConsultingDemandDetails td,.ConsultingDemandDetailsByMonth td{height:30px}
 .ConsultingDemandDetails th,.ConsultingDemandDetailsByMonth th{height:19px;padding:2px}
-.ConsultingDemandDetails .FirstTD{padding-left:70px;text-align:left!important;width:20%}
-.ConsultingDemandDetails .FirstTDSalesStage{padding-left:70px;text-align:left!important;width:10%}
-.ConsultingDemandDetails .SecondTD{width:10%;text-align:center}
-.ConsultingDemandDetails .Width20{width:20%;text-align:center}
-.ConsultingDemandDetails .ThirdTD{width:15%;text-align:center}
-.ConsultingDemandDetails .ForthTD{width:5%;text-align:center}
-.ConsultingDemandDetails .FifthTD{width:7.5%;text-align:center}
+.ConsultingDemandDetails .FirstTD{padding-left:70px;text-align:left!important;width:16%}
+.ConsultingDemandDetails .FirstTDSalesStage{padding-left:40px;text-align:left!important;width:11%}
+.ConsultingDemandDetails .SecondTD{width:11%;text-align:center}
+.ConsultingDemandDetails .SecondTDSalesStage{width:16%;text-align:center}
+.ConsultingDemandDetails .ThirdTD{width:13%;text-align:center}
+.ConsultingDemandDetails .ForthTD{width:14%;text-align:center}
+.ConsultingDemandDetails .ForthTDSalesStage{width:12%;text-align:center}
+.ConsultingDemandDetails .FifthTD{width:17%;text-align:center}
+.ConsultingDemandDetails .SixthTD{width:5%;text-align:center}
 .ConsultingDemandDetails .SecondTDTotals{width:15%;text-align:left;padding-left:45px}
 .ConsultingDemandDetailsTotal{font-weight:bolder;font-size:15px;width:10%;text-align:center}
 .ConsultingDemandDetails .headerRow,.ConsultingDemandDetailsByMonth .headerRow{background-color:White;background-image:none;background-repeat:no-repeat;cursor:pointer;height:auto;position:static;border-bottom:1px solid #000;font-size:14px;padding:2px;text-align:center;vertical-align:middle}
-.ConsultingDemandDetailsByMonth .FirstTD{width:10%;text-align:center}
-.ConsultingDemandDetailsByMonth .SecondTD{width:20%;text-align:center}
-.ConsultingDemandDetailsByMonth .ThirdTD{width:10%;text-align:center}
+.ConsultingDemandDetailsByMonth .FirstTD{width:8%;text-align:center}
+.ConsultingDemandDetailsByMonth .SecondTD{width:16%;text-align:center}
+.ConsultingDemandDetailsByMonth .ThirdTD{width:11%;text-align:center}
 .ConsultingDemandDetailsByMonth .ThirdTDTotals{width:5%;text-align:left;padding-left:25px}
-.ConsultingDemandDetailsByMonth .ForthTD{width:15%;text-align:center}
-.ConsultingDemandDetailsByMonth .FifthTD{width:7.5%;text-align:center}
+.ConsultingDemandDetailsByMonth .ForthTD{width:13%;text-align:center}
+.ConsultingDemandDetailsByMonth .FifthTD{width:10%;text-align:center}
+.ConsultingDemandDetailsByMonth .SixthTD{width:14%;text-align:center}
 .trConsultngDetailPanelInnerItem{background-color:white;height:30px;white-space:nowrap;width:100%}
-.trConsultngDetailPanel th{background-color:white;font-size:14px;text-align:center;white-space:nowrap;width:10%;height:19px;padding:2px}
-.trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:10%}
+.trConsultngDetailPanel th{background-color:white;font-size:14px;text-align:center;white-space:nowrap;width:11%;height:19px;padding:2px}
+.trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:11%}
 .trConsultngDetailPanelItem{background-color:#D4D0C9;height:30px;white-space:nowrap}
 .trConsultngDetailPanelItem th{font-size:14px;width:10%}
 .consultingReportTd{font-weight:bolder;width:14%;text-align:right}
