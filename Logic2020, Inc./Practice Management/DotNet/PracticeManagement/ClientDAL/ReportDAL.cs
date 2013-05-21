@@ -2092,6 +2092,87 @@ namespace DataAccess
             }
         }
 
+        public static List<ConsultantGroupBySalesStage> ConsultingDemandDetailsBySalesStage(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
+         {
+             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
+             {
+                 command.CommandType = CommandType.StoredProcedure;
+                 command.CommandTimeout = connection.ConnectionTimeout;
+
+                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDetail, true);
+                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByTitleSkill, true);
+                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitleSkill, true);
+                 command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
+                 command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
+                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, string.IsNullOrEmpty(sortColumns) ? Constants.ColumnNames.Title + "," + Constants.ColumnNames.Skill : sortColumns);
+                 List<ConsultantGroupBySalesStage> result = new List<ConsultantGroupBySalesStage>();
+                 connection.Open();
+                 using (SqlDataReader reader = command.ExecuteReader())
+                 {
+                     ReadConsultantDemandDetailsBySalesStage(reader, result);
+                     if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count") && !sortColumns.ToLower().Contains("account"))
+                     {
+                         result = sortColumns.ToLower().Contains("count desc") ? result.OrderByDescending(p => p.TotalCount).ToList() : result.OrderBy(p => p.TotalCount).ToList();
+                     }
+                     return result;
+                 }
+             }
+         }
+
+        private static void ReadConsultantDemandDetailsBySalesStage(SqlDataReader reader, List<ConsultantGroupBySalesStage> result)
+        {
+            if (reader.HasRows)
+            {
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.Skill);
+                int opportunityNumberIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityNumberColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int countIndex = reader.GetOrdinal(Constants.ColumnNames.Count);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.AccountName);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectDescrIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectDescription);
+                int resourceStartDate = reader.GetOrdinal(Constants.ColumnNames.ResourceStartDate);
+                int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage); 
+                while (reader.Read())
+                {
+                    ConsultantGroupBySalesStage consultant;
+                    string salesStage = reader.GetString(salesStageIndex);
+                    if (result.Any(c => c.SalesStage == salesStage))
+                    {
+                        consultant = result.First(c => c.SalesStage == salesStage);
+                    }
+                    else
+                    {
+                        consultant = new ConsultantGroupBySalesStage();
+                        consultant.SalesStage = salesStage;
+                        consultant.ConsultantDetailsBySalesStage = new List<ConsultantDemandDetailsByMonth>();
+                        result.Add(consultant);
+                    }
+                    ConsultantDemandDetailsByMonth consultantdetails = new ConsultantDemandDetailsByMonth();
+                    consultantdetails.Title = !reader.IsDBNull(lastNameIndex) ? reader.GetString(lastNameIndex) : string.Empty;
+                    consultantdetails.Skill = !reader.IsDBNull(firstNameIndex) ? reader.GetString(firstNameIndex) : string.Empty;
+                    consultantdetails.OpportunityId = !reader.IsDBNull(opportunityIdIndex) ? reader.GetInt32(opportunityIdIndex) : -1;
+                    consultantdetails.OpportunityNumber = !reader.IsDBNull(opportunityNumberIndex) ? reader.GetString(opportunityNumberIndex) : string.Empty;
+                    consultantdetails.ProjectDescription = !reader.IsDBNull(projectDescrIndex) ? reader.GetString(projectDescrIndex) : string.Empty;
+                    consultantdetails.ProjectId = !reader.IsDBNull(projectIdIndex) ? reader.GetInt32(projectIdIndex) : -1;
+                    consultantdetails.ProjectNumber = !reader.IsDBNull(projectNumberIndex) ? reader.GetString(projectNumberIndex) : string.Empty;
+                    consultantdetails.AccountId = !reader.IsDBNull(clientIdIndex) ? reader.GetInt32(clientIdIndex) : -1;
+                    consultantdetails.Count = !reader.IsDBNull(countIndex) ? reader.GetInt32(countIndex) : -1;
+                    consultantdetails.AccountName = !reader.IsDBNull(clientNameIndex) ? reader.GetString(clientNameIndex) : string.Empty;
+                    consultantdetails.ProjectName = !reader.IsDBNull(projectNameIndex) ? reader.GetString(projectNameIndex) : string.Empty;
+                    consultantdetails.ResourceStartDate = !reader.IsDBNull(resourceStartDate) ? reader.GetDateTime(resourceStartDate) : DateTime.MinValue;
+                    consultant.ConsultantDetailsBySalesStage.Add(consultantdetails);
+
+                }
+            }
+        }
+
         public static List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -2138,6 +2219,7 @@ namespace DataAccess
                 int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage); 
                 while (reader.Read())
                 {
                     ConsultantGroupbyTitleSkill consultant;
@@ -2158,6 +2240,7 @@ namespace DataAccess
                     ConsultantDemandDetails consultantdetails = new ConsultantDemandDetails();
                     consultantdetails.OpportunityId = !reader.IsDBNull(opportunityIdIndex) ? reader.GetInt32(opportunityIdIndex) : -1;
                     consultantdetails.OpportunityNumber = !reader.IsDBNull(opportunityNumberIndex) ? reader.GetString(opportunityNumberIndex) : string.Empty;
+                    consultantdetails.SalesStage = !reader.IsDBNull(salesStageIndex) ? reader.GetString(salesStageIndex) : string.Empty;
                     consultantdetails.ProjectDescription = !reader.IsDBNull(projectDescrIndex) ? reader.GetString(projectDescrIndex) : string.Empty;
                     consultantdetails.ProjectId = !reader.IsDBNull(projectIdIndex) ? reader.GetInt32(projectIdIndex) : -1;
                     consultantdetails.ProjectNumber = !reader.IsDBNull(projectNumberIndex) ? reader.GetString(projectNumberIndex) : string.Empty;
@@ -2172,7 +2255,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns, bool isFromPipelinePopUp)
+        public static List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills,string salesStages, string sortColumns, bool isFromPipelinePopUp)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2187,6 +2270,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitleSkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesStages, salesStages == null ? DBNull.Value : (object)salesStages);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, string.IsNullOrEmpty(sortColumns) ? Constants.ColumnNames.MonthStartDate + "," + Constants.ColumnNames.Title + "," + Constants.ColumnNames.Skill : sortColumns);
                 List<ConsultantGroupByMonth> result = new List<ConsultantGroupByMonth>();
                 List<DateTime> months = Utils.GetMonthYearWithInThePeriod(startDate, endDate);
@@ -2234,6 +2318,7 @@ namespace DataAccess
                 int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage);
 
 
                 while (reader.Read())
@@ -2253,6 +2338,7 @@ namespace DataAccess
                     }
                     ConsultantDemandDetailsByMonth consultantdet = new ConsultantDemandDetailsByMonth();
                     consultantdet.Title = !reader.IsDBNull(lastNameIndex) ? reader.GetString(lastNameIndex) : string.Empty;
+                    consultantdet.SalesStage = !reader.IsDBNull(salesStageIndex) ? reader.GetString(salesStageIndex) : string.Empty;
                     consultantdet.ProjectDescription = !reader.IsDBNull(projectDescIndex) ? reader.GetString(projectDescIndex) : string.Empty;
                     consultantdet.Skill = !reader.IsDBNull(firstNameIndex) ? reader.GetString(firstNameIndex) : string.Empty;
                     consultantdet.OpportunityId = !reader.IsDBNull(opportunityIdIndex) ? reader.GetInt32(opportunityIdIndex) : -1;
@@ -2279,7 +2365,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string titles)
+        public static Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string titles,string salesStages)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2291,6 +2377,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsGraph, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesStages, salesStages == null ? DBNull.Value : (object)salesStages);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByMonth, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitle, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, Constants.ColumnNames.MonthStartDate);
@@ -2331,7 +2418,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<string, int> ConsultingDemandGraphsBySkills(DateTime startDate, DateTime endDate, string skills)
+        public static Dictionary<string, int> ConsultingDemandGraphsBySkills(DateTime startDate, DateTime endDate, string skills, string salesStages)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2343,6 +2430,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsGraph, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesStages, salesStages == null ? DBNull.Value : (object)salesStages);
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByMonth, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewBySkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, Constants.ColumnNames.MonthStartDate);
@@ -2362,7 +2450,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string titles, string sortColumns)
+        public static List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string titles, string sortColumns, string salesStages)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2376,6 +2464,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByTitle, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewBySkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesStages, salesStages == null ? DBNull.Value : (object)salesStages);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, string.IsNullOrEmpty(sortColumns) ? Constants.ColumnNames.Title + "," + Constants.ColumnNames.Skill : sortColumns);
                 List<ConsultantGroupbyTitle> result = new List<ConsultantGroupbyTitle>();
                 connection.Open();
@@ -2403,6 +2492,7 @@ namespace DataAccess
                 int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage);
                 while (reader.Read())
                 {
                     ConsultantGroupbyTitle consultant;
@@ -2419,6 +2509,7 @@ namespace DataAccess
                         result.Add(consultant);
                     }
                     ConsultantDemandDetailsByMonthByTitle consultantdet = new ConsultantDemandDetailsByMonthByTitle();
+                    consultantdet.SalesStage = !reader.IsDBNull(salesStageIndex) ? reader.GetString(salesStageIndex) : string.Empty;
                     consultantdet.Skill = reader.GetString(firstNameIndex);
                     consultantdet.OpportunityId = !reader.IsDBNull(opportunityIdIndex) ? reader.GetInt32(opportunityIdIndex) : -1;
                     consultantdet.ProjectId = !reader.IsDBNull(projectIdIndex) ? reader.GetInt32(projectIdIndex) : -1;
@@ -2438,7 +2529,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string skills, string sortColumns)
+        public static List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string skills, string sortColumns, string salesStages)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2452,6 +2543,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupBySkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitle, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesStages, salesStages == null ? DBNull.Value : (object)salesStages);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, string.IsNullOrEmpty(sortColumns) ? Constants.ColumnNames.Skill + "," + Constants.ColumnNames.Title : sortColumns);
                 List<ConsultantGroupbySkill> result = new List<ConsultantGroupbySkill>();
                 connection.Open();
@@ -2479,6 +2571,7 @@ namespace DataAccess
                 int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage);
 
                 while (reader.Read())
                 {
@@ -2496,6 +2589,7 @@ namespace DataAccess
                         result.Add(consultant);
                     }
                     ConsultantDemandDetailsByMonthBySkill consultantdet = new ConsultantDemandDetailsByMonthBySkill();
+                    consultantdet.SalesStage = !reader.IsDBNull(salesStageIndex) ? reader.GetString(salesStageIndex) : string.Empty;
                     consultantdet.Title = reader.GetString(lastNameIndex);
                     consultantdet.OpportunityId = !reader.IsDBNull(opportunityIdIndex) ? reader.GetInt32(opportunityIdIndex) : -1;
                     consultantdet.ProjectId = !reader.IsDBNull(projectIdIndex) ? reader.GetInt32(projectIdIndex) : -1;
@@ -2516,7 +2610,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<string, int> ConsultingDemandGrphsGroupsByTitle(DateTime startDate, DateTime endDate)
+        public static Dictionary<string, int> ConsultingDemandGrphsGroupsByTitle(DateTime startDate, DateTime endDate, string salesStages)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2530,6 +2624,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByTitle, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitle, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, Constants.ColumnNames.Count);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesStages, salesStages == null ? DBNull.Value : (object)salesStages);
                 Dictionary<string, int> result = new Dictionary<string, int>();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -2559,7 +2654,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(DateTime startDate, DateTime endDate)
+        public static Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(DateTime startDate, DateTime endDate, string salesStages)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2573,6 +2668,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupBySkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewBySkill, true);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, Constants.ColumnNames.Count);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesStages, salesStages == null ? DBNull.Value : (object)salesStages);
                 Dictionary<string, int> result = new Dictionary<string, int>();
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
