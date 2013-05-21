@@ -22,8 +22,8 @@
         type="text/javascript"></script>
     <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
         type="text/css" />
-<script src="../Scripts/FilterTable.min.js" type="text/javascript"></script>
-<script src="../Scripts/FilteredCheckBoxList.min.js" type="text/javascript"></script>
+    <script src="../Scripts/FilterTable.min.js" type="text/javascript"></script>
+    <script src="../Scripts/FilteredCheckBoxList.min.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -105,7 +105,7 @@
     <uc:LoadingProgress ID="PleaseWaitImage" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
-            <div class="filter-section-color Height102px">
+            <div class="filter-section-color Height115px">
                 <asp:UpdatePanel ID="upnlHeader" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <table class="Width100Per">
@@ -139,6 +139,23 @@
                                 <td>
                                 </td>
                             </tr>
+                            <tr id="trSalesStageType" runat="server" class="PaddingBottom5Imp">
+                                <td class="textRight">
+                                    Sales Stage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </td>
+                                <td class="PaddingBottom3Imp">
+                                    <cc2:ScrollingDropDown ID="cblSalesStages" runat="server" SetDirty="false" AllSelectedReturnType="AllItems"
+                                        CssClass="ProjectDetailScrollingDropDown1  Width100Per vMiddleImp" onclick="scrollingDropdown_onclick('cblSalesStages','Sales Stage','s','Sales Stage',28);enableDisableResetButtons('cblSalesStages');"
+                                        DropDownListType="Sales Stage" DropDownListTypePluralForm="Sales Stages" PluralForm="s" />
+                                    <ext:ScrollableDropdownExtender ID="sdeSalesStages" runat="server" TargetControlID="cblSalesStages"
+                                        BehaviorID="sdeSalesStages" MaxNoOfCharacters="28" Width="49.8%" UseAdvanceFeature="true"
+                                        EditImageUrl="~/Images/Dropdown_Arrow.png">
+                                    </ext:ScrollableDropdownExtender>
+                                    <asp:HiddenField ID="hdnSalesStages" runat="server" />
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
                             <tr id="trTitles" runat="server">
                                 <td class="textRight">
                                     <asp:Label ID="lblTitle" runat="server"></asp:Label>
@@ -149,7 +166,7 @@
                                     <table class="Width50Percent" id="tdTitles" runat="server">
                                         <tr>
                                             <td>
-                                                <cc2:ScrollingDropDown ID="cblTitles" runat="server" SetDirty="true" AllSelectedReturnType="AllItems"
+                                                <cc2:ScrollingDropDown ID="cblTitles" runat="server" SetDirty="false" AllSelectedReturnType="AllItems"
                                                     CssClass="ProjectDetailScrollingDropDown1  Width100Per vMiddleImp" onclick="scrollingDropdown_onclick('cblTitles','Title','s','Titles',28);enableDisableResetButtons('cblTitles');"
                                                     DropDownListType="Tilte" DropDownListTypePluralForm="Titles" PluralForm="s" />
                                                 <ext:ScrollableDropdownExtender ID="sdeTitles" runat="server" TargetControlID="cblTitles"
@@ -163,7 +180,7 @@
                                     <table class="Width50Percent" id="tdSkills" runat="server">
                                         <tr>
                                             <td>
-                                                <cc2:ScrollingDropDown ID="cblSkills" runat="server" SetDirty="true" AllSelectedReturnType="AllItems"
+                                                <cc2:ScrollingDropDown ID="cblSkills" runat="server" SetDirty="false" AllSelectedReturnType="AllItems"
                                                     CssClass="ProjectDetailScrollingDropDown1 Width100Per" onclick="scrollingDropdown_onclick('cblSkills','Skill','s','Skills',28);enableDisableResetButtons('cblSkills');"
                                                     DropDownListType="Skill" DropDownListTypePluralForm="Skills" PluralForm="s" />
                                                 <ext:ScrollableDropdownExtender ID="sdeSkills" runat="server" TargetControlID="cblSkills"
