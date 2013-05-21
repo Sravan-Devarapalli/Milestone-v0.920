@@ -124,6 +124,7 @@ namespace PraticeManagement
                 if (dpReviewEndDate.DateValue.Date > lastCompletedDate.Date)
                 {
                     e.IsValid = false;
+                    custCSATEndDate.ErrorMessage = custCSATEndDate.ToolTip = "The Review End Date cannot be later than the date that the project status was changed to \"Completed\", on '" + lastCompletedDate.Date.ToString(Constants.Formatting.EntryDateFormat) + "' .";
                 }
             }
         }
