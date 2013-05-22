@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string RangeType = "RangeType";
             public const string SalesStage = "SalesStage";
             public const string CSATReviewer = "CSATReviewer";
             public const string CSATOwnerName = "CSATOwnerName";
@@ -1081,6 +1082,7 @@
                 public const string GetConsultantDemandForPeriod = "dbo.GetConsultantDemandForPeriod";
                 public const string CSATSummaryReport = "dbo.CSATSummaryReport";
                 public const string CSATReportHeader = "dbo.CSATReportHeader";
+                public const string AttainmentBillableutlizationReport = "dbo.AttainmentBillableUtilizationReport";
             }
             #endregion
 
