@@ -9,6 +9,8 @@
 	[IsRecurring]			BIT NULL,
 	[RecurringHolidayId]	INT NULL,
 	[HolidayDescription]	NVARCHAR(255),
-	[RecurringHolidayDate]  DATETIME NULL
+	[RecurringHolidayDate]  DATETIME NULL,
+	QuarterStartDate		DATETIME NOT NULL,
+	QuarterEndDate			DATETIME NOT NULL
 );
 
