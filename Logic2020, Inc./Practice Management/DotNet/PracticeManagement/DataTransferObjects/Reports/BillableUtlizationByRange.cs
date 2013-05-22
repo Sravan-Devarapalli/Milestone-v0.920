@@ -19,7 +19,7 @@ namespace DataTransferObjects.Reports
 
 
         [DataMember]
-        public decimal BillableUtilization { get; set; }
+        public double BillableUtilization { get; set; }
 
         [DataMember]
         public string RangeType
