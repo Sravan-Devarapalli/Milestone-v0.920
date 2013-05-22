@@ -2093,34 +2093,34 @@ namespace DataAccess
         }
 
         public static List<ConsultantGroupBySalesStage> ConsultingDemandDetailsBySalesStage(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
-         {
-             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
-             {
-                 command.CommandType = CommandType.StoredProcedure;
-                 command.CommandTimeout = connection.ConnectionTimeout;
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
 
-                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
-                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                 command.Parameters.AddWithValue(Constants.ParameterNames.IsDetail, true);
-                 command.Parameters.AddWithValue(Constants.ParameterNames.GroupByTitleSkill, true);
-                 command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitleSkill, true);
-                 command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
-                 command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
-                 command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, string.IsNullOrEmpty(sortColumns) ? Constants.ColumnNames.Title + "," + Constants.ColumnNames.Skill : sortColumns);
-                 List<ConsultantGroupBySalesStage> result = new List<ConsultantGroupBySalesStage>();
-                 connection.Open();
-                 using (SqlDataReader reader = command.ExecuteReader())
-                 {
-                     ReadConsultantDemandDetailsBySalesStage(reader, result);
-                     if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count") && !sortColumns.ToLower().Contains("account"))
-                     {
-                         result = sortColumns.ToLower().Contains("count desc") ? result.OrderByDescending(p => p.TotalCount).ToList() : result.OrderBy(p => p.TotalCount).ToList();
-                     }
-                     return result;
-                 }
-             }
-         }
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsDetail, true);
+                command.Parameters.AddWithValue(Constants.ParameterNames.GroupByTitleSkill, true);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ViewByTitleSkill, true);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Titles, titles == null ? DBNull.Value : (object)titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Skills, skills == null ? DBNull.Value : (object)skills);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrderByCerteriaParam, string.IsNullOrEmpty(sortColumns) ? Constants.ColumnNames.Title + "," + Constants.ColumnNames.Skill : sortColumns);
+                List<ConsultantGroupBySalesStage> result = new List<ConsultantGroupBySalesStage>();
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadConsultantDemandDetailsBySalesStage(reader, result);
+                    if (!string.IsNullOrEmpty(sortColumns) && sortColumns.ToLower().Contains("count") && !sortColumns.ToLower().Contains("account"))
+                    {
+                        result = sortColumns.ToLower().Contains("count desc") ? result.OrderByDescending(p => p.TotalCount).ToList() : result.OrderBy(p => p.TotalCount).ToList();
+                    }
+                    return result;
+                }
+            }
+        }
 
         private static void ReadConsultantDemandDetailsBySalesStage(SqlDataReader reader, List<ConsultantGroupBySalesStage> result)
         {
@@ -2138,7 +2138,7 @@ namespace DataAccess
                 int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
-                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage); 
+                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage);
                 while (reader.Read())
                 {
                     ConsultantGroupBySalesStage consultant;
@@ -2219,7 +2219,7 @@ namespace DataAccess
                 int opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
                 int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
                 int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
-                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage); 
+                int salesStageIndex = reader.GetOrdinal(Constants.ColumnNames.SalesStage);
                 while (reader.Read())
                 {
                     ConsultantGroupbyTitleSkill consultant;
@@ -2255,7 +2255,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills,string salesStages, string sortColumns, bool isFromPipelinePopUp)
+        public static List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills, string salesStages, string sortColumns, bool isFromPipelinePopUp)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2365,7 +2365,7 @@ namespace DataAccess
             }
         }
 
-        public static Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string titles,string salesStages)
+        public static Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string titles, string salesStages)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetConsultantDemandForPeriod, connection))
@@ -2699,6 +2699,78 @@ namespace DataAccess
         }
 
         #endregion
+
+        public static List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate)
+        {
+            List<AttainmentBillableutlizationReport> result = new List<AttainmentBillableutlizationReport>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AttainmentBillableutlizationReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadAttainmentBillableutlizationReport(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static void ReadAttainmentBillableutlizationReport(SqlDataReader reader, List<AttainmentBillableutlizationReport> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int billableUtilizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.BillableUtilizationPercent);
+                int rangeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.RangeType);
+                while (reader.Read())
+                {
+                    AttainmentBillableutlizationReport attainmentBillableutlizationReport;
+                    int personId = reader.GetInt32(personIdIndex);
+                    if (result.Any(p => p.Person.Id == personId))
+                    {
+                        attainmentBillableutlizationReport = result.First(p => p.Person.Id == personId);
+                    }
+                    else
+                    {
+                        attainmentBillableutlizationReport = new AttainmentBillableutlizationReport();
+                        attainmentBillableutlizationReport.Person = new Person()
+                            {
+                                Id = personId,
+                                LastName = reader.GetString(lastNameIndex),
+                                FirstName = reader.GetString(firstNameIndex),
+                                Title = new Title()
+                                {
+                                    TitleName = !reader.IsDBNull(titleIndex) ? reader.GetString(titleIndex) : string.Empty
+                                },
+                                CurrentPay = new Pay()
+                                {
+                                    TimescaleName = !reader.IsDBNull(timescaleNameIndex) ? reader.GetString(timescaleNameIndex) : string.Empty
+                                }
+                            };
+
+                        attainmentBillableutlizationReport.BillableUtilizationList = new List<BillableUtlizationByRange>();
+                        result.Add(attainmentBillableutlizationReport);
+                    }
+                    BillableUtlizationByRange billableUtlizationByRange = new BillableUtlizationByRange();
+                    billableUtlizationByRange.StartDate = reader.GetDateTime(startDateIndex);
+                    billableUtlizationByRange.EndDate = reader.GetDateTime(endDateIndex);
+                    billableUtlizationByRange.BillableUtilization = reader.GetDecimal(billableUtilizationPercentIndex);
+                    billableUtlizationByRange.RangeType = reader.GetString(rangeTypeIndex);
+                    attainmentBillableutlizationReport.BillableUtilizationList.Add(billableUtlizationByRange);
+                }
+            }
+        }
     }
 }
 
