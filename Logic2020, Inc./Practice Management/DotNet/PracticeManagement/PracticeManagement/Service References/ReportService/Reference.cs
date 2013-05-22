@@ -15,6 +15,9 @@ namespace PraticeManagement.ReportService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReport", ReplyAction="http://tempuri.org/IReportService/AttainmentBillableutlizationReportResponse")]
+        DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
         
@@ -122,7 +125,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-      
+   
         
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -138,6 +141,10 @@ namespace PraticeManagement.ReportService {
         
         public ReportServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.AttainmentBillableutlizationReport(startDate, endDate);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
