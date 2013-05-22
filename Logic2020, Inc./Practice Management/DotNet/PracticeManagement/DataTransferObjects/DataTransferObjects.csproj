@@ -147,6 +147,8 @@
     <Compile Include="PracticeCapability.cs" />
     <Compile Include="PricingList.cs" />
     <Compile Include="ProjectCSAT.cs" />
+    <Compile Include="Reports\AttainmentBillableutlizationReport.cs" />
+    <Compile Include="Reports\BillableUtlizationByRange.cs" />
     <Compile Include="Reports\ByPerson\GroupByDateByPerson.cs" />
     <Compile Include="Reports\ByPerson\GroupByPersonByWorktype.cs" />
     <Compile Include="Reports\ByAccount\BusinessUnitLevelGroupedHours.cs" />
