@@ -11,6 +11,7 @@ using PraticeManagement.Security;
 using System.Data;
 using PraticeManagement.Utils;
 using PraticeManagement.Utils.Excel;
+using DataTransferObjects.Reports;
 
 namespace PraticeManagement.Reports
 {
@@ -22,7 +23,9 @@ namespace PraticeManagement.Reports
 
         private bool renderMonthColumns;
         private int headerRowsCount = 1;
+        private int billingheaderRowsCount = 1;
         private int coloumnsCount = 1;
+        private int billingcoloumnsCount = 1;
 
         private Project[] _ExportProjectList = null;
 
@@ -35,6 +38,23 @@ namespace PraticeManagement.Reports
                     _ExportProjectList = ProjectList;
                 }
                 return (Project[])_ExportProjectList;
+            }
+        }
+
+        private AttainmentBillableutlizationReport[] _BillableUtlizationList = null;
+
+        private AttainmentBillableutlizationReport[] BillableUtlizationList
+        {
+            get
+            {
+                if (_BillableUtlizationList == null)
+                {
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    DateTime CurrentYearStartdate = Utils.Calendar.YearStartDate(now).Date;
+                    DateTime CurrentYearEnddate = Utils.Calendar.YearEndDate(now).Date;
+                    _BillableUtlizationList = ServiceCallers.Custom.Report(p => p.AttainmentBillableutlizationReport(CurrentYearStartdate, CurrentYearEnddate));
+                }
+                return (AttainmentBillableutlizationReport[])_BillableUtlizationList;
             }
         }
 
@@ -134,6 +154,63 @@ namespace PraticeManagement.Reports
             }
         }
 
+        private SheetStyles BillingHeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, billingcoloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles BillableUtilSheetDataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles decimaldataCellStyle = new CellStyles();
+                decimaldataCellStyle.DataFormat = "0.0%";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, decimaldataCellStyle };
+                List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
+
+                RowStyles datarowStyle = new RowStyles(dataCellStyleList.ToArray());
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = billingheaderRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = billingheaderRowsCount;
+                return sheetStyle;
+            }
+        }
+
         private static DateTime GetMonthEnd(ref DateTime monthBegin)
         {
             return new DateTime(monthBegin.Year,
@@ -169,7 +246,7 @@ namespace PraticeManagement.Reports
         protected void Page_PreRender(object sender, EventArgs e)
         {
             var now = Utils.Generic.GetNowWithTimeZone();
-      
+
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
@@ -238,7 +315,7 @@ namespace PraticeManagement.Reports
                 ddlPeriod.SelectedValue = hdnPeriod.Value;
             }
         }
-       
+
         private void SetPeriodSelection(int periodSelected)
         {
             DateTime currentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, Constants.Dates.FirstDay);
@@ -287,7 +364,7 @@ namespace PraticeManagement.Reports
                 mpeCustomDates.Show();
             }
 
-           
+
         }
 
         private int GetPeriodLength()
@@ -433,6 +510,47 @@ namespace PraticeManagement.Reports
             return data;
         }
 
+        private DataTable PrepareDataTableForBillableUtilization(AttainmentBillableutlizationReport[] attainmentBillableutlizationList)
+        {
+            DataTable data = new DataTable();
+            if (attainmentBillableutlizationList.Length > 0)
+            {
+                List<string> coloumnsAll = new List<string>();
+
+                foreach (var bu in attainmentBillableutlizationList[0].BillableUtilizationList)
+                {
+                    coloumnsAll.Add(bu.RangeType);
+                }
+                var now = Utils.Generic.GetNowWithTimeZone();
+                var yearStart = Utils.Calendar.YearStartDate(now);
+
+                List<object> row;
+
+                data.Columns.Add("Resource Name");
+                data.Columns.Add("Title");
+                data.Columns.Add("Pay Type");
+                foreach (string s in coloumnsAll)
+                {
+                    data.Columns.Add(s);
+                }
+
+                foreach (var per in attainmentBillableutlizationList)
+                {
+                    row = new List<object>();
+                    int i;
+                    row.Add(per.Person != null ? per.Person.PersonLastFirstName : "");
+                    row.Add(per.Person != null && per.Person.Title != null ? per.Person.Title.HtmlEncodedTitleName : "");
+                    row.Add(per.Person != null && per.Person.CurrentPay != null ? per.Person.CurrentPay.TimescaleName : "");
+                    for (i = 0; i < per.BillableUtilizationList.Count; i++)
+                    {
+                        row.Add(per.BillableUtilizationList[i].BillableUtilization);
+                    }
+                    data.Rows.Add(row.ToArray());
+                }
+            }
+            return data;
+        }
+
         protected void btnExport_Click(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage("Attainment Export");
@@ -493,6 +611,11 @@ namespace PraticeManagement.Reports
             var data = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), false);
             var dataActual = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), true);
 
+            var blliableUtilization = PrepareDataTableForBillableUtilization(BillableUtlizationList);
+            billingcoloumnsCount = blliableUtilization.Columns.Count;
+            DataTable billableUtilheader = new DataTable();
+            billableUtilheader.Columns.Add("Billable Utilization");
+            billingheaderRowsCount = billableUtilheader.Rows.Count + 3;
 
             string dateRangeTitle = string.Format(ExportDateRangeFormat, diRange.FromDate.Value.ToShortDateString(), diRange.ToDate.Value.ToShortDateString());
             DataTable header = new DataTable();
@@ -504,6 +627,8 @@ namespace PraticeManagement.Reports
             sheetStylesList.Add(DataSheetStyle);
             sheetStylesList.Add(HeaderSheetStyle);
             sheetStylesList.Add(DataSheetStyle);
+            sheetStylesList.Add(BillingHeaderSheetStyle);
+            sheetStylesList.Add(BillableUtilSheetDataSheetStyle);
 
             var dataSetList = new List<DataSet>();
             var dataset = new DataSet();
@@ -517,7 +642,15 @@ namespace PraticeManagement.Reports
             datasetActual.Tables.Add(dataActual);
             datasetActual.DataSetName = "Summary - Actuals";
             dataSetList.Add(datasetActual);
-            NPOIExcel.Export("AttainmentReportingDataSource.xls", dataSetList, sheetStylesList);   
+
+            var datasetBillableUtil = new DataSet();
+            datasetBillableUtil.DataSetName = "Billable Utilization";
+            datasetBillableUtil.Tables.Add(billableUtilheader);
+            datasetBillableUtil.Tables.Add(blliableUtilization);
+            dataSetList.Add(datasetBillableUtil);
+
+            NPOIExcel.Export("AttainmentReportingDataSource.xls", dataSetList, sheetStylesList);
         }
     }
 }
+
