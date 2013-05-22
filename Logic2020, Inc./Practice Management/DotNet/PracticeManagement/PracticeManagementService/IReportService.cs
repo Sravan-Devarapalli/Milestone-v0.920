@@ -108,6 +108,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(DateTime startDate, DateTime endDate, string salesStages);
+
+          [OperationContract]
+        List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate);
     }
 }
 
