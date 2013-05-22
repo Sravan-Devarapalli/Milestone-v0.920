@@ -2765,7 +2765,7 @@ namespace DataAccess
                     BillableUtlizationByRange billableUtlizationByRange = new BillableUtlizationByRange();
                     billableUtlizationByRange.StartDate = reader.GetDateTime(startDateIndex);
                     billableUtlizationByRange.EndDate = reader.GetDateTime(endDateIndex);
-                    billableUtlizationByRange.BillableUtilization = reader.GetDecimal(billableUtilizationPercentIndex);
+                    billableUtlizationByRange.BillableUtilization = reader.GetDouble(billableUtilizationPercentIndex);
                     billableUtlizationByRange.RangeType = reader.GetString(rangeTypeIndex);
                     attainmentBillableutlizationReport.BillableUtilizationList.Add(billableUtlizationByRange);
                 }
