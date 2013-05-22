@@ -183,11 +183,14 @@ namespace PracticeManagementService
             return ReportDAL.ConsultingDemandGrphsGroupsBySkill(startDate, endDate, salesStages);
         }
 
-	 public List<ConsultantGroupBySalesStage> ConsultingDemandDetailsBySalesStage(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
-        {
-            return ReportDAL.ConsultingDemandDetailsBySalesStage(startDate, endDate, titles, skills, sortColumns);
-        }
-
+	     public List<ConsultantGroupBySalesStage> ConsultingDemandDetailsBySalesStage(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
+            {
+                return ReportDAL.ConsultingDemandDetailsBySalesStage(startDate, endDate, titles, skills, sortColumns);
+            }
+         public List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate)
+         {
+             return ReportDAL.AttainmentBillableutlizationReport(startDate, endDate);
+         }
         #endregion
 
     }
