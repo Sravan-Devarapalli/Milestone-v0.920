@@ -9,13 +9,15 @@ BEGIN
 				@EndDateLocal DATETIME ,
 				@HolidayTimeType INT ,
 				@FutureDate DATETIME,
-				@CurrtenDate DATETIME 
+				@CurrtenDate DATETIME,
+				@CurrentMonthStartDate DATETIME
 
 			
 		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), 
 				@EndDateLocal = CONVERT(DATE, @EndDate),
-				@CurrtenDate = dbo.GettingPMTime(GETUTCDATE()),
+				@CurrtenDate = CONVERT(DATE,dbo.GettingPMTime(GETUTCDATE())),
 				@FutureDate = dbo.GetFutureDate()
+		SELECT @CurrentMonthStartDate = MonthStartDate FROM dbo.Calendar WHERE date = @CurrtenDate -1
 			 
 		;WITH Ranges
 		AS
@@ -58,7 +60,7 @@ BEGIN
 			INNER JOIN dbo.v_PersonHistory AS P ON PR.PersonId = P.PersonId
 			INNER JOIN dbo.Calendar AS CAL ON CAL.Date BETWEEN PR.StartDate AND PR.EndDate
 												AND CAL.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDate)
-			WHERE DATENAME(weekday,CAL.Date) != 'Saturday' AND DATENAME(weekday,CAL.Date) != 'Sunday'
+			WHERE DATENAME(weekday,CAL.Date) != 'Saturday' AND DATENAME(weekday,CAL.Date) != 'Sunday' AND CAL.Date < @CurrtenDate
 			GROUP BY PR.Personid,PR.StartDate,PR.EndDate,PR.Timescale
 		),
 		PersonListWithBillingHours
@@ -79,14 +81,15 @@ BEGIN
 												AND TE.ChargeCodeDate BETWEEN PR.StartDate AND PR.EndDate
 			INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId
 			INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
-			WHERE     TEH.IsChargeable = 1 
+			WHERE     TEH.IsChargeable = 1 AND TE.ChargeCodeDate < @CurrtenDate
 			GROUP BY  PR.PersonId ,
 						PR.StartDate,
 						PR.EndDate,
 						PR.DefaultHours,PR.Timescale
 		)
 		SELECT PR.PersonId,P.FirstName,P.LastName,T.Title,TS.Name AS TimeScaleName,pr.StartDate,PR.EndDate,PR.RangeType,
-				ROUND( (ISNULL(PLb.BillableHours,0)/ISNULL(NULLIF(Plb.DefaultHours,0),1)),4) AS BillableUtilizationPercent 
+		        CASE WHEN PR.StartDate <= @CurrentMonthStartDate
+				     THEN ROUND( (ISNULL(PLb.BillableHours,0)/ISNULL(NULLIF(Plb.DefaultHours,0),1)),4) ELSE NULL END  AS BillableUtilizationPercent 
 		FROM PersonWithRanges PR
 		LEFT JOIN PersonListWithBillingHours PLB ON PR.PersonId = PLB.PersonId AND PR.StartDate = PLB.StartDate AND PR.EndDate = PLB.EndDate
 		INNER JOIN dbo.Person P ON P.PersonId = PR.PersonId
@@ -94,3 +97,4 @@ BEGIN
 		INNER JOIN dbo.Timescale TS ON TS.TimescaleId = PR.Timescale 
 		ORDER BY PR.PersonId,PR.ColOrder
 END
+
