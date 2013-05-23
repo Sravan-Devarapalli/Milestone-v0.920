@@ -543,7 +543,7 @@ namespace PraticeManagement.Reports
                     row.Add(per.Person != null && per.Person.CurrentPay != null ? per.Person.CurrentPay.TimescaleName : "");
                     for (i = 0; i < per.BillableUtilizationList.Count; i++)
                     {
-                        row.Add(per.BillableUtilizationList[i].BillableUtilization);
+                        row.Add(per.BillableUtilizationList[i].BillableUtilization == -1 ? "" : per.BillableUtilizationList[i].BillableUtilization.ToString());
                     }
                     data.Rows.Add(row.ToArray());
                 }
