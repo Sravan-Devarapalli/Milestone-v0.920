@@ -573,6 +573,7 @@ namespace PraticeManagement.Controls
                 rfvVacationDays.ValidationGroup =
                 rfvTitle.ValidationGroup =
                 cvSLTApprovalValidation.ValidationGroup =
+                cvVacationDays.ValidationGroup = 
                 cvSLTPTOApprovalValidation.ValidationGroup =
                 rfvPractice.ValidationGroup = value;
             }
