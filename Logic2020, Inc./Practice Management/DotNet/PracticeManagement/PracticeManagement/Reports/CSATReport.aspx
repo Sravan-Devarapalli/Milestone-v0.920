@@ -233,7 +233,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        # of Detracters
+                                        # of Detractors
                                     </td>
                                     <td class="Width10PerImp">
                                         <asp:Label ID="lblDetracters" runat="server"></asp:Label>
