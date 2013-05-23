@@ -206,7 +206,7 @@
                         text = arrayOfCheckBoxes[0].parentNode.childNodes[1].innerHTML;
                     }
                     if (temp === 0) {
-                        text = "Please Choose " + type.toString() + "(s)";
+                        text = "Select " + type.toString() + "(s)";
                     }
                 }
                 if (text.length > 32) {
