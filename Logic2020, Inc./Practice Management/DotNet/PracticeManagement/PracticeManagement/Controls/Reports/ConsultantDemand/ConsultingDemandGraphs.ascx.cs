@@ -126,8 +126,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         {
             if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle || HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
-                chartConsultngDemand.Width = ((count < 5) ? 5 : count) * 70;
-                chartConsultngDemand.Height = 500;
+                chartConsultngDemand.Width = ((count < 5) ? 5 : count) * 75;
+                chartConsultngDemand.Height = 570;
                 //chartConsultngDemand.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
                 InitAxis(chartConsultngDemand.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, "Month", false);
                 InitAxis(chartConsultngDemand.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, "Number of Resources", true);
@@ -142,12 +142,12 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultnDemandPipeline.ChartAreas[0].AxisY.Interval = (double)(maxValue / 10);
                 if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
                 {
-                    chartConsultnDemandPipeline.Height = count * 50 >= 500 ? count * 50 : 500;
+                    chartConsultnDemandPipeline.Height = count * 50 >= 520 ? count * 50 : 520;
                     InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisX, "Title", true);
                 }
                 else
                 {
-                    chartConsultnDemandPipeline.Height = count * 50 >= 500 ? count * 50 : 500;
+                    chartConsultnDemandPipeline.Height = count * 50 >= 520 ? count * 50 : 520;
                     InitAxis(chartConsultnDemandPipeline.ChartAreas[0].AxisX, "Skill Set", true);
                 }
             }
@@ -161,6 +161,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         private void UpdateChartTitle()
         {
             int multipleSelected;
+            int multipleSalesStagesSelected = HostingPage.hdnSalesStagesProp.Where(t => t == ',').Count();
+            Title salesStageTitle = new Title();
+            string salesStageToolTip = HostingPage.isSelectAllSalesStages ? "All Sales Stages" : HostingPage.hdnSalesStagesProp.TrimEnd(',');
+            salesStageTitle.Text = HostingPage.isSelectAllSalesStages ? "All Sales Stages" : (multipleSalesStagesSelected > 1 ? "Multiple Sales Stages Selected" : HostingPage.hdnSalesStagesProp.TrimEnd(','));
+            salesStageTitle.ToolTip = GetShrinkToolTip(salesStageToolTip);
             chartConsultngDemand.Titles.Clear();
             chartConsultnDemandPipeline.Titles.Clear();
             if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
@@ -169,21 +174,26 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 chartConsultngDemand.Titles.Add("Resource Demand By Title");
                 Title title = new Title();
                 title.Text = HostingPage.isSelectAllTitles ? "All Titles" : (multipleSelected > 1 ? "Multiple Titles Selected" : HostingPage.hdnTitlesProp.TrimEnd(','));
-                title.ToolTip = HostingPage.isSelectAllTitles ? "All Titles" : HostingPage.hdnTitlesProp.TrimEnd(',');
+                title.ToolTip = GetShrinkToolTip(HostingPage.isSelectAllTitles ? "All Titles" : HostingPage.hdnTitlesProp.TrimEnd(','));
                 chartConsultngDemand.Titles.Add(title);
+                chartConsultngDemand.Titles.Add(salesStageTitle);                
                 chartConsultngDemand.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultngDemand.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
+                chartConsultngDemand.Titles[2].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
             else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
             {
                 multipleSelected = HostingPage.hdnSkillsProp.Where(s => s == ',').Count();
+ 
                 chartConsultngDemand.Titles.Add("Resource Demand By Skill");
                 Title title = new Title();
                 title.Text = HostingPage.isSelectAllSkills ? "All Skills" : (multipleSelected > 1 ? "Multiple Skills Selected" : HostingPage.hdnSkillsProp.TrimEnd(','));
-                title.ToolTip = HostingPage.isSelectAllSkills ? "All Skills" : HostingPage.hdnSkillsProp.TrimEnd(',');
+                title.ToolTip = GetShrinkToolTip(HostingPage.isSelectAllSkills ? "All Skills" : HostingPage.hdnSkillsProp.TrimEnd(','));
                 chartConsultngDemand.Titles.Add(title);
+                chartConsultngDemand.Titles.Add(salesStageTitle);
                 chartConsultngDemand.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultngDemand.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
+                chartConsultngDemand.Titles[2].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
             }
             else
             {
@@ -195,10 +205,26 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 {
                     chartConsultnDemandPipeline.Titles.Add(PipeLineTitle);
                 }
+                
                 chartConsultnDemandPipeline.Titles.Add(HostingPage.StartDate.Value.Month == HostingPage.EndDate.Value.Month ? HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) : HostingPage.StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat) + " - " + HostingPage.EndDate.Value.ToString(Constants.Formatting.FullMonthYearFormat));
+                chartConsultnDemandPipeline.Titles.Add(salesStageTitle);
                 chartConsultnDemandPipeline.Titles[0].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
                 chartConsultnDemandPipeline.Titles[1].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
+                chartConsultnDemandPipeline.Titles[2].Font = new System.Drawing.Font("Arial", 16, FontStyle.Bold);
+               
             }
+        }
+
+        private string GetShrinkToolTip(string toolTip)
+        {
+            int index = 80;
+            while (index < toolTip.Length)
+            {
+                index = toolTip.Substring(0, index).LastIndexOf(',');
+                toolTip = toolTip.Substring(0, index + 1) + " " + toolTip.Substring(index + 1);
+                index = index + 80;
+            }
+            return toolTip;
         }
 
         /// <summary>
