@@ -178,7 +178,7 @@ namespace PraticeManagement.Reports
             {
                 if (this.cblPractices != null && this.cblPractices.Items.Count == 0)
                 {
-                    DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
+                    DataHelper.FillPracticeListOnlyActive(this.cblPractices, Resources.Controls.AllPracticesText);
                 }
 
                 if (this.cblAccount != null && this.cblAccount.Items.Count == 0)
