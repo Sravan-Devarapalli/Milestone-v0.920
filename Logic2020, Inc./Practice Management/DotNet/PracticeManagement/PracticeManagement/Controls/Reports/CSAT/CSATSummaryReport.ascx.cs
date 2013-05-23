@@ -203,7 +203,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 var report = ServiceCallers.Custom.Project(r => r.CSATSummaryReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.SelectedPractices, HostingPage.SelectedAccounts, true)).ToArray();
                 if (report.Length > 0)
                 {
-                    string dateRangeTitle = string.Format("CSAT Report For the Period:{0} to {1}", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                    string dateRangeTitle = string.Format("CSAT Report For the Period: {0} to {1}", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
                     DataTable header = new DataTable();
                     header.Columns.Add(dateRangeTitle);
                     headerRowsCount = header.Rows.Count + 3;
