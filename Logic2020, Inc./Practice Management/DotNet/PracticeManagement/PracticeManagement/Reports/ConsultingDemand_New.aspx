@@ -36,8 +36,7 @@
             var ddlPeriod = document.getElementById('<%= ddlPeriod.ClientID %>');
             var btnUpdateView = document.getElementById('<%= btnUpdateView.ClientID %>');
             var text = scrollingDropdownList.parentNode.children[1].children[0].firstChild.nodeValue;
-
-            if (text.indexOf("Please Choose") != -1 && ddlPeriod.value != "-1") {
+            if (text.indexOf("Select") != -1 && ddlPeriod.value != "-1") {
 
                 btnUpdateView.disabled = 'disabled';
             }
