@@ -22,6 +22,7 @@ namespace PraticeManagement.Utils.Excel
         public List<int[]> MergeRegion = new List<int[]>();
         public List<ICellStyle> AllCellStyles = new List<ICellStyle>();
         public Dictionary<string, short> AllDataFormats = new Dictionary<string, short>();
+        public List<int> ColoumnWidths = new List<int>();
 
         public SheetStyles(RowStyles[] rowStyles)
         {
@@ -67,6 +68,12 @@ namespace PraticeManagement.Utils.Excel
                         sheet.AutoSizeColumn(i, true);
                     }
                 }
+                for (int index = 0; index < ColoumnWidths.Count; index++)
+                {
+                    if (ColoumnWidths[index] > 1)
+                        sheet.SetColumnWidth(index+1, ColoumnWidths[index]);
+                }
+
                 if (IsAutoFilter)
                 {
                     //need to implement this SetAutoFilter
@@ -79,3 +86,4 @@ namespace PraticeManagement.Utils.Excel
         }
     }
 }
+
