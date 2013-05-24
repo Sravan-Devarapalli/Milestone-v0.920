@@ -36,6 +36,19 @@ BEGIN
 					) 
 		  GROUP BY PC.ProjectId
 	 ),
+	 EstimatedRevenueByProject
+	 AS 
+	 (SELECT r.ProjectId,
+	      SUM( CASE
+	           WHEN r.IsHourlyAmount = 1 OR r.HoursPerDay = 0
+	           THEN ISNULL(m.Amount*m.HoursPerDay, 0)
+	           ELSE ISNULL(r.MilestoneDailyAmount * m.HoursPerDay / r.HoursPerDay, r.MilestoneDailyAmount)
+	       END) AS EstimatedRevenue
+	   
+	  FROM   dbo.v_MilestoneRevenueRetrospective AS r 
+	       INNER JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
+	GROUP BY r.ProjectId
+	 ),
 	 RecentProjectCompletedStatus AS
 	 (
 	     SELECT MAX(PSH.StartDate) AS CompletedStatusDate,PSH.ProjectId
@@ -51,13 +64,13 @@ BEGIN
 				P.Name AS ProjectName,
 				PS.Name AS ProjectStatusName,
 				PR.Name AS PracticeAreaName,
-				P.SowBudget,
+				ERP.EstimatedRevenue AS SowBudget,
 				PCSAT.ReferralScore,
 				PCSAT.CSATId,
 				CASE WHEN PRC.NumberOfCSATs > 1 THEN 1 ELSE 0 END AS HasMultipleCSATs,
 				Per1.LastName AS ProjectOwnerLastName,
 				Per1.FirstName AS ProjectOwnerFirstName,
-				CASE WHEN P.SowBudget >= 50000 THEN 1 ELSE 0 END AS CSATEligible,
+				CASE WHEN ERP.EstimatedRevenue >= 50000 THEN 1 ELSE 0 END AS CSATEligible,
 				P.StartDate,
 				P.EndDate,
 				RPCS.CompletedStatusDate,
@@ -80,6 +93,7 @@ BEGIN
 		INNER JOIN dbo.Commission Comm ON Comm.ProjectId = P.ProjectId AND Comm.CommissionType = 1 
 		INNER JOIN dbo.Person Per3 ON Per3.PersonId = Comm.PersonId
 		INNER JOIN dbo.Person Per1 ON Per1.PersonId = P.ProjectOwnerId
+		LEFT JOIN EstimatedRevenueByProject ERP ON ERP.ProjectId = P.ProjectId
 		LEFT JOIN dbo.Person Per2 ON Per2.PersonId = P.DirectorId
 		LEFT JOIN dbo.Person CSATOwner ON CSATOwner.PersonId = P.ReviewerId
 		LEFT JOIN RecentProjectCompletedStatus RPCS ON RPCS.ProjectId = P.ProjectId 
