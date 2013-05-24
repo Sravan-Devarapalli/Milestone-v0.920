@@ -882,10 +882,6 @@
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width2Percent WhiteSpaceNoWrap">
-                                                <asp:CustomValidator ID="custCSATOwner" runat="server" EnableClientScript="false"
-                                                    ValidationGroup="Project" ErrorMessage="The CSAT Owner is required." ValidateEmptyText="true"
-                                                    OnServerValidate="custCSATOwner_ServerValidate" SetFocusOnError="true" Text="*"
-                                                    ToolTip="The CSAT Owner is required."></asp:CustomValidator>
                                             </td>
                                             <td class="Width8Percent">
                                                 <asp:ImageButton ID="imgMailToCSATOwner" runat="server" OnClick="imgMailToCSATOwner_OnClick"
