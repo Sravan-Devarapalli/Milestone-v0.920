@@ -71,7 +71,7 @@ namespace PraticeManagement.Utils.Excel
                 for (int index = 0; index < ColoumnWidths.Count; index++)
                 {
                     if (ColoumnWidths[index] > 1)
-                        sheet.SetColumnWidth(index+1, ColoumnWidths[index]);
+                        sheet.SetColumnWidth(index, ColoumnWidths[index] * 256);
                 }
 
                 if (IsAutoFilter)
