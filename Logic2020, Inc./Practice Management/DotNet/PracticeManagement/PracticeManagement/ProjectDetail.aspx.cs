@@ -438,6 +438,7 @@ namespace PraticeManagement
 
             btnUpload.Attributes["onclick"] = "startUpload(); return false;";
 
+           ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
         }
 
         public void ShowTabs()
@@ -1521,15 +1522,6 @@ namespace PraticeManagement
 
             UpdateSalesCommissionState();
             UpdateManagementCommissionState();
-        }
-
-        protected void custCSATOwner_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            args.IsValid = true;
-            if (!string.IsNullOrEmpty(txtSowBudget.Text) && ddlCSATOwner.SelectedValue == "" && txtSowBudget.Text.Length > 4)
-            {
-                args.IsValid = Convert.ToDecimal(txtSowBudget.Text) >= 50000 ? false : true;
-            }
         }
 
         private Project GetCurrentProject(int? id)
