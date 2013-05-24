@@ -93,8 +93,13 @@ namespace PraticeManagement.Controls.Reports.CSAT
                                                     dataDateCellStyle,
                                                     dataCellStyle,
                                                     dataNumberDateCellStyle1,
-                                                    wrapdataCellStyle
+                                                    dataCellStyle
                                                   };
+                //only comments column need to set the 100 as width
+                List<int> coloumnWidth = new List<int>();
+                for (int i = 1; i < 23; i++)
+                    coloumnWidth.Add(0);
+                coloumnWidth.Add(100);
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
 
@@ -104,6 +109,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 sheetStyle.IsFreezePane = true;
                 sheetStyle.FreezePanColSplit = 0;
                 sheetStyle.FreezePanRowSplit = headerRowsCount;
+                sheetStyle.ColoumnWidths = coloumnWidth;
                 return sheetStyle;
             }
         }
@@ -126,9 +132,9 @@ namespace PraticeManagement.Controls.Reports.CSAT
 
             data.Columns.Add("Project Number");
             data.Columns.Add("Account");
-            data.Columns.Add("Project Status");
             data.Columns.Add("Business Unit");
             data.Columns.Add("Business Group");
+            data.Columns.Add("Project Status");
             data.Columns.Add("Project Name");
             data.Columns.Add("Project Owner");
             data.Columns.Add("Estimated Revenue");
@@ -137,8 +143,8 @@ namespace PraticeManagement.Controls.Reports.CSAT
             data.Columns.Add("End Date");
             data.Columns.Add("Date of Project Completion");
             data.Columns.Add("Practice Area");
-            data.Columns.Add("SalesPerson");
-            data.Columns.Add("ClientDirector");
+            data.Columns.Add("Salesperson");
+            data.Columns.Add("Client Director");
             data.Columns.Add("Project Manager(s)");
             data.Columns.Add("CSAT Owner");
             data.Columns.Add("CSAT Start Date");
@@ -154,9 +160,9 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 int i;
                 row.Add(pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : "");
                 row.Add((pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : "");
-                row.Add((pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : "");
-                row.Add((pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.HtmlEncodedName : "");
                 row.Add((pro.Group != null && pro.Group.Name != null) ? pro.Group.HtmlEncodedName : "");
+                row.Add((pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.HtmlEncodedName : "");
+                row.Add((pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : "");
                 row.Add(pro.Name != null ? pro.HtmlEncodedName : "");
                 row.Add((pro.ProjectOwner != null && pro.ProjectOwner.Name != null) ? pro.ProjectOwner.HtmlEncodedName : "");
                 row.Add(pro.SowBudget.HasValue ? pro.SowBudget.Value.ToString() : "");
