@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Skip Sailors
--- Create date: 4-22-2008
--- Updated by:	ThulasiRam.P
--- Update date: 6-08-2012
--- Description:	Insert a new Client, output and select ID of new client record.
--- =============================================
-CREATE PROCEDURE dbo.ClientInsert
+﻿CREATE PROCEDURE dbo.ClientInsert
 (
 	@Name                 NVARCHAR(50),
 	@DefaultDiscount      DECIMAL(18,2),
@@ -18,6 +11,7 @@ CREATE PROCEDURE dbo.ClientInsert
 	@IsMarginColorInfoEnabled BIT = NULL,
 	@IsInternal BIT,
 	@IsNoteRequired     BIT = 1,
+	@IsHouseAccount BIT,
 	@UserLogin          NVARCHAR(255)
 )
 AS
@@ -79,8 +73,8 @@ AS
 	    EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 		INSERT INTO Client
-					(DefaultDiscount, DefaultTerms, DefaultSalespersonId, DefaultDirectorID, Name, Inactive, IsChargeable,IsMarginColorInfoEnabled,IsInternal,Code,IsNoteRequired)
-			 VALUES (@DefaultDiscount, @DefaultTerms, @DefaultSalespersonId, @DefaultDirectorId, @Name, @Inactive, @IsChargeable,@IsMarginColorInfoEnabled,@IsInternal,@clientCode,@IsNoteRequired)
+					(DefaultDiscount, DefaultTerms, DefaultSalespersonId, DefaultDirectorID, Name, Inactive, IsChargeable,IsMarginColorInfoEnabled,IsInternal,Code,IsNoteRequired,IsHouseAccount)
+			 VALUES (@DefaultDiscount, @DefaultTerms, @DefaultSalespersonId, @DefaultDirectorId, @Name, @Inactive, @IsChargeable,@IsMarginColorInfoEnabled,@IsInternal,@clientCode,@IsNoteRequired,@IsHouseAccount)
 
 		SELECT @ClientId = SCOPE_IDENTITY()
 
