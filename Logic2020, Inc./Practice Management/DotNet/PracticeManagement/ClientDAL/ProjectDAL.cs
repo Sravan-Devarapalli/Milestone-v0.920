@@ -919,8 +919,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSeniorManagerUnassigned, project.IsSeniorManagerUnassigned);
                 if (project.CSATOwnerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.CSATOwnerId, project.CSATOwnerId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId,project.PricingList != null && project.PricingList.PricingListId.HasValue ? (object)project.PricingList.PricingListId.Value : DBNull.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId,((int)project.BusinessType) != 0 ? (object)((int)project.BusinessType) : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PricingListId, project.PricingList != null && project.PricingList.PricingListId.HasValue ? (object)project.PricingList.PricingListId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessTypeId, ((int)project.BusinessType) != 0 ? (object)((int)project.BusinessType) : DBNull.Value);
                 SqlParameter projectIdParam = new SqlParameter(Constants.ParameterNames.ProjectIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(projectIdParam);
 
@@ -1110,9 +1110,17 @@ namespace DataAccess
                     int sowBudgetIndex = -1;
                     int clientIsNoteRequiredIndex = -1;
                     int poNumberIndex = -1;
+                    int isHouseAccountIndex = -1;
                     try
                     {
                         poNumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
+                    }
+                    catch
+                    { }
+
+                    try
+                    {
+                        isHouseAccountIndex = reader.GetOrdinal(Constants.ColumnNames.IsHouseAccount);
                     }
                     catch
                     { }
@@ -1447,6 +1455,11 @@ namespace DataAccess
                             IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
                         };
 
+                        if (isHouseAccountIndex > -1)
+                        {
+                            project.Client.IsHouseAccount = reader.GetBoolean(isHouseAccountIndex);
+                        }
+
                         if (clientIsNoteRequiredIndex != -1)
                         {
                             project.Client.IsNoteRequired = reader.GetBoolean(clientIsNoteRequiredIndex);
@@ -1642,7 +1655,14 @@ namespace DataAccess
                     int hasAttachments = -1;
                     int seniorManagerNameIndex = -1;
                     int seniorManagerIdIndex = -1;
+                    int isHouseAccountIndex = -1;
 
+                    try
+                    {
+                        isHouseAccountIndex = reader.GetOrdinal(Constants.ColumnNames.IsHouseAccount);
+                    }
+                    catch
+                    { }
                     try
                     {
                         pONumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
@@ -1895,6 +1915,16 @@ namespace DataAccess
                                 Name = reader.GetString(clientNameIndex),
                                 IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
                             };
+                            if (isHouseAccountIndex > -1)
+                            {
+                                try
+                                {
+                                    project.Client.IsHouseAccount = !reader.IsDBNull(isHouseAccountIndex) ? reader.GetBoolean(isHouseAccountIndex) : false;
+                                }
+                                catch
+                                {
+                                }
+                            }
 
                             project.Status = new ProjectStatus
                             {
