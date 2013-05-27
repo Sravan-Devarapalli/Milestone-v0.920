@@ -91,6 +91,7 @@ AS
 			P.ProjectNumber,
 			P.BuyerName,
 			P.OpportunityId,
+			Clnt.IsHouseAccount,
 			P.GroupId,
 			p.BusinessTypeId,
 			p.PricingListId,
