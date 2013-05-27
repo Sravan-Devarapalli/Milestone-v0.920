@@ -188,8 +188,18 @@ namespace PraticeManagement.Reports
                 headerCellStyle.IsBold = true;
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
+                CellStyles monthNameHeaderCellStyle = new CellStyles();
+                monthNameHeaderCellStyle.DataFormat = "[$-409]mmmm-yy;@";
+                monthNameHeaderCellStyle.IsBold = true;
+                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                for (int i = 1; i <= 3; i++)
+                    headerCellStyleList.Add(headerCellStyle);
+                for (int i = 1; i <= 12; i++)
+                    headerCellStyleList.Add(monthNameHeaderCellStyle);
                 headerCellStyleList.Add(headerCellStyle);
+
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
                 CellStyles dataCellStyle = new CellStyles();
@@ -611,10 +621,12 @@ namespace PraticeManagement.Reports
             var data = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), false);
             var dataActual = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), true);
 
+            var now = Utils.Generic.GetNowWithTimeZone();
+            DateTime CurrentYearStartdate = Utils.Calendar.YearStartDate(now).Date;
             var blliableUtilization = PrepareDataTableForBillableUtilization(BillableUtlizationList);
             billingcoloumnsCount = blliableUtilization.Columns.Count;
             DataTable billableUtilheader = new DataTable();
-            billableUtilheader.Columns.Add("Billable Utilization");
+            billableUtilheader.Columns.Add("Billable Utilization: " + CurrentYearStartdate.Year);
             billingheaderRowsCount = billableUtilheader.Rows.Count + 3;
 
             string dateRangeTitle = string.Format(ExportDateRangeFormat, diRange.FromDate.Value.ToShortDateString(), diRange.ToDate.Value.ToShortDateString());
