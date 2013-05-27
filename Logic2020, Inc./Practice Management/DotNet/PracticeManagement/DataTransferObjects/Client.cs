@@ -165,6 +165,13 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public bool IsHouseAccount
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public string Code 
         {
             get; 
