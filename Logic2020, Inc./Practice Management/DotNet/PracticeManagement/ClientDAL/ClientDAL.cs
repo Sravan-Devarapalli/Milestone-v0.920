@@ -76,6 +76,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(DefaultDiscountParam, client.DefaultDiscount);
                     command.Parameters.AddWithValue(InactiveParam, client.Inactive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, client.IsChargeable);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsHouseAccount, client.IsHouseAccount);
                     command.Parameters.AddWithValue(DefaultSalespersonIdParam, client.DefaultSalespersonId);
                     command.Parameters.AddWithValue(DefaultDirectorIdParam,
                         client.DefaultDirectorId.HasValue ? (object)client.DefaultDirectorId.Value : DBNull.Value);
@@ -193,6 +194,7 @@ namespace DataAccess
                         client.DefaultDirectorId.HasValue ? (object)client.DefaultDirectorId.Value : DBNull.Value);
                     command.Parameters.AddWithValue(InactiveParam, client.Inactive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, client.IsChargeable);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsHouseAccount, client.IsHouseAccount);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsMarginColorInfoEnabled, client.IsMarginColorInfoEnabled);
                     command.Parameters.AddWithValue(IsInternalParam, client.IsInternal);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsNoteRequiredParam, client.IsNoteRequired);
@@ -494,6 +496,16 @@ namespace DataAccess
                     isInternalIndex = -1;
                 }
 
+                int IsHouseAccountIndex = -1;
+                try
+                {
+                    IsHouseAccountIndex = reader.GetOrdinal(Constants.ColumnNames.IsHouseAccount);
+                }
+                catch
+                {
+                    IsHouseAccountIndex = -1;
+                }
+
                 int isNoteRequiredIndex = -1;
                 try
                 {
@@ -525,6 +537,10 @@ namespace DataAccess
                     if (isInternalIndex > -1)
                     {
                         client.IsInternal = reader.GetBoolean(isInternalIndex);
+                    }
+                    if (IsHouseAccountIndex > -1)
+                    {
+                        client.IsHouseAccount = reader.GetBoolean(IsHouseAccountIndex);
                     }
                     if (isMarginColorInfoEnabledIndex >= 0)
                     {
