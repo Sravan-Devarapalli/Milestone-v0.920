@@ -537,6 +537,7 @@
             public const string IsAdministrative = "@IsAdministrative";
             public const string IsInserted = "@IsInserted";
             public const string IsChargeable = ColumnNames.IsChargeable;
+            public const string IsHouseAccount = "@IsHouseAccount";
             public const string IsStartDateChangeReflectedForMilestoneAndPersons = "@IsStartDateChangeReflectedForMilestoneAndPersons";
             public const string IsEndDateChangeReflectedForMilestoneAndPersons = "@IsEndDateChangeReflectedForMilestoneAndPersons";
             public const string IsMarginColorInfoEnabled = "@IsMarginColorInfoEnabled";
