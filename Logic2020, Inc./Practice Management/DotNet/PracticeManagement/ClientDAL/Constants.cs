@@ -10,6 +10,7 @@
         public class ColumnNames
         {
             public const string RangeType = "RangeType";
+            public const string IsHouseAccount = "IsHouseAccount";
             public const string SalesStage = "SalesStage";
             public const string CSATReviewer = "CSATReviewer";
             public const string CSATOwnerName = "CSATOwnerName";
