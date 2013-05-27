@@ -23,6 +23,8 @@ BEGIN
 						ELSE 'Yes' END AS 'IsActive'
 				,CASE WHEN i.IsInternal = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsInternal'
+				,CASE WHEN i.IsHouseAccount = 1 THEN 'Yes'
+						ELSE 'No' END AS 'IsHouseAccount'
 				,CASE WHEN i.IsNoteRequired = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsNoteRequired'
 				,CASE WHEN i.IsMarginColorInfoEnabled = 1 THEN 'Yes'
@@ -50,6 +52,8 @@ BEGIN
 						ELSE 'Yes' END AS 'IsActive'
 				,CASE WHEN d.IsInternal = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsInternal'
+				,CASE WHEN d.IsHouseAccount = 1 THEN 'Yes'
+						ELSE 'No' END AS 'IsHouseAccount'
 				,CASE WHEN d.IsNoteRequired = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsNoteRequired'
 				,CASE WHEN d.IsMarginColorInfoEnabled = 1 THEN 'Yes'
@@ -120,7 +124,7 @@ BEGIN
 		OR i.IsInternal <> d.IsInternal
 		OR i.IsMarginColorInfoEnabled <> d.IsMarginColorInfoEnabled
 		OR i.IsNoteRequired <> d.IsNoteRequired
-
+		OR i.IsHouseAccount <> d.IsHouseAccount
 
 	-- End logging session
 	 EXEC dbo.SessionLogUnprepare   
