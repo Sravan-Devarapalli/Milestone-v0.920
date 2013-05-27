@@ -200,6 +200,14 @@ namespace PraticeManagement.Reports
                     headerCellStyleList.Add(monthNameHeaderCellStyle);
                 headerCellStyleList.Add(headerCellStyle);
 
+                List<int> coloumnWidth = new List<int>();
+                for (int i = 1; i <= 3; i++)
+                    coloumnWidth.Add(0);
+                for (int i = 1; i <= 12; i++)
+                    coloumnWidth.Add(13);
+                for (int i = 1; i <= 5; i++)
+                    coloumnWidth.Add(8);
+
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
                 CellStyles dataCellStyle = new CellStyles();
@@ -217,6 +225,7 @@ namespace PraticeManagement.Reports
                 sheetStyle.IsFreezePane = true;
                 sheetStyle.FreezePanColSplit = 0;
                 sheetStyle.FreezePanRowSplit = billingheaderRowsCount;
+                sheetStyle.ColoumnWidths = coloumnWidth;
                 return sheetStyle;
             }
         }
