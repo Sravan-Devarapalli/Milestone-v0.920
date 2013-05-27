@@ -22,7 +22,7 @@ BEGIN
 		;WITH Ranges
 		AS
 		(
-			SELECT MonthStartDate AS StartDate,MonthEndDate AS EndDate,DATENAME(MM,MonthStartDate) AS RangeType,DATEPART(MM,MonthStartDate) AS ColOrder FROM dbo.Calendar C
+			SELECT MonthStartDate AS StartDate,MonthEndDate AS EndDate,CONVERT(NVARCHAR(11),CONVERT(DATE,MonthStartDate)) AS RangeType,DATEPART(MM,MonthStartDate) AS ColOrder FROM dbo.Calendar C
 			WHERE C.DATE between @StartDateLocal and @EndDateLocal
 			GROUP BY C.MonthStartDate,C.MonthEndDate 
 			UNION ALL
@@ -95,6 +95,6 @@ BEGIN
 		INNER JOIN dbo.Person P ON P.PersonId = PR.PersonId
 		INNER JOIN dbo.Title T ON T.TitleId = P.TitleId 
 		INNER JOIN dbo.Timescale TS ON TS.TimescaleId = PR.Timescale 
-		ORDER BY PR.PersonId,PR.ColOrder
+		ORDER BY P.LastName,P.FirstName,PR.PersonId,PR.ColOrder
 END
 
