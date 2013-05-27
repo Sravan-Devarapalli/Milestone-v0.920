@@ -19,6 +19,7 @@ AS
 		   p.ProjectStatusId,
 		   p.ProjectStatusName,
 		   p.ProjectNumber,
+		   p.IsHouseAccount,
 	       p.BuyerName,
            p.OpportunityId,
            p.GroupId,
