@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 5-21-2008
--- Updated by:	ThulasiRam.P
--- Update date: 6-08-2012
--- Description:	Gets a client
--- =============================================
-CREATE PROCEDURE dbo.ClientGetById
+﻿CREATE PROCEDURE dbo.ClientGetById
 (
 	@ClientId	INT
 )
@@ -23,7 +16,8 @@ AS
 		   c.IsMarginColorInfoEnabled,
 		   c.IsInternal,
 		   c.Code AS ClientCode,
-		   c.IsNoteRequired
+		   c.IsNoteRequired,
+		   c.IsHouseAccount
 	  FROM dbo.Client AS c
 	 WHERE c.ClientId = @ClientId
 
