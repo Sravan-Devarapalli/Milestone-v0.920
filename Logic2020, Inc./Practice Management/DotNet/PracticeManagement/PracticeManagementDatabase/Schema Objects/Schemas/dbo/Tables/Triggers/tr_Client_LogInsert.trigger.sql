@@ -22,6 +22,8 @@ BEGIN
 						ELSE 'Yes' END AS 'IsActive'
 				,CASE WHEN i.IsInternal = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsInternal'
+				,CASE WHEN i.IsHouseAccount = 1 THEN 'Yes'
+						ELSE 'No' END AS 'IsHouseAccount'
 				,CASE WHEN i.IsNoteRequired = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsNoteRequired'
 				,CASE WHEN i.IsMarginColorInfoEnabled = 1 THEN 'Yes'
