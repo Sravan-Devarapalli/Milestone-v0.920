@@ -52,7 +52,7 @@ BEGIN
 
 	SELECT	P.PayType AS [Pay Type],
 			P.Division AS [Division],
-			P.HireDate AS [Hire Date],
+			CONVERT(DATE,P.HireDate) AS [Hire Date],
 			P.EmployeeNumber AS [Person ID],
 			P.FirstName AS [First Name] ,
 			P.LastName AS [Last Name],
@@ -61,8 +61,8 @@ BEGIN
 			P.BusinessUnit AS [Business Unit],
 			P.ProjectNumber AS Project,
 			P.ProjectOwner AS [Project Owner],
-			MIN(P.Date)[Roll on Date],
-			MAX(P.Date)[Roll off Date],
+			CONVERT(DATE,MIN(P.Date))[Roll on Date],
+			CONVERT(DATE,MAX(P.Date))[Roll off Date],
 			--dbo.GetProjectManagerNames(P.ProjectId) AS ProjectManagers,
 			COUNT(*) AS [Days]
 	FROM CTE AS P
