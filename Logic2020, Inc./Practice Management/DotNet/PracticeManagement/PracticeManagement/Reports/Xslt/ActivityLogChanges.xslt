@@ -456,6 +456,7 @@
       <xsl:when test="$attrName = 'IsActive'">Is Active</xsl:when>
       <xsl:when test="$attrName = 'IsChargeable'">Is Chargeable</xsl:when>
       <xsl:when test="$attrName = 'IsInternal'">Is Internal</xsl:when>
+      <xsl:when test="$attrName = 'IsHouseAccount'">Is House Account</xsl:when>
       <xsl:when test="$attrName = 'IsMarginColorInfoEnabled'">Is Margin Color Information Enabled</xsl:when>
       <xsl:when test="$attrName = 'DefaultDirector'">Default Director</xsl:when>
       <xsl:when test="$attrName = 'DefaultSalesperson'">Default Salesperson</xsl:when>
