@@ -35,6 +35,7 @@ AS
 		   p.ProjectOwnerId,
 		   p.SowBudget,
 		   c.IsNoteRequired AS [ClientIsNoteRequired],
+		   c.IsHouseAccount,
 		   p.IsAdministrative,
 		   [dbo].[GetProjectCapabilities](p.ProjectId) AS ProjectCapabilityIds,
 			p.ReviewerId,
