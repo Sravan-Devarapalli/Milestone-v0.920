@@ -38,16 +38,33 @@ BEGIN
 	 ),
 	 EstimatedRevenueByProject
 	 AS 
-	 (SELECT r.ProjectId,
-	      SUM( CASE
-	           WHEN r.IsHourlyAmount = 1 OR r.HoursPerDay = 0
-	           THEN ISNULL(m.Amount*m.HoursPerDay, 0)
-	           ELSE ISNULL(r.MilestoneDailyAmount * m.HoursPerDay / r.HoursPerDay, r.MilestoneDailyAmount)
-	       END) AS EstimatedRevenue
-	   
-	  FROM   dbo.v_MilestoneRevenueRetrospective AS r 
-	       INNER JOIN dbo.v_MilestonePersonSchedule m ON m.MilestoneId = r.MilestoneId AND m.Date = r.Date
-	GROUP BY r.ProjectId
+	 (SELECT p.ProjectId,
+	      SUM(r.ProjectRevenue) AS EstimatedRevenue
+	  FROM
+	  (
+		  SELECT DISTINCT p.ProjectId
+		  FROM Project P
+		  LEFT JOIN ProjectsRecentlyUpdatedCSATS PCSAT ON P.ProjectId = PCSAT.ProjectId
+		  WHERE (PCSAT.ProjectId IS Not NULL OR ((P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))) AND  P.ProjectId != 174
+	  ) P
+	 INNER JOIN 
+	 (
+		 SELECT -- Milestones with a hourly amount
+			   mp.ProjectId,
+			   ISNULL(SUM(mp.Amount * mp.HoursPerDay), 0) AS ProjectRevenue
+		  FROM dbo.v_MilestonePersonSchedule mp
+			   INNER JOIN dbo.Project AS p ON mp.ProjectId = p.ProjectId AND mp.IsHourlyAmount = 1
+		GROUP BY mp.ProjectId
+		UNION ALL
+		SELECT -- Milestones with a fixed amount
+			m.ProjectId,
+			ISNULL(m.Amount,0) AS ProjectRevenue 
+		FROM dbo.Project AS p 
+		INNER JOIN dbo.Milestone AS m ON m.ProjectId = p.ProjectId AND P.IsAdministrative = 0 AND P.ProjectId != 174 AND  m.IsHourlyAmount = 0
+		INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestoneId = M.MilestoneId
+		INNER JOIN dbo.MilestonePersonEntry AS MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
+	 ) r ON r.ProjectId = P.ProjectId
+	GROUP BY p.ProjectId
 	 ),
 	 RecentProjectCompletedStatus AS
 	 (
@@ -56,6 +73,7 @@ BEGIN
 		 WHERE PSH.ProjectStatusId = 4
 		 GROUP BY PSH.ProjectId 
 	 ) 
+
 		SELECT	P.ProjectId,
 				C.Name AS Account,
 				BG.Name AS BusinessGroupName,
@@ -85,7 +103,7 @@ BEGIN
 			    CSATReviewer.LastName+', '+CSATReviewer.FirstName AS CSATReviewer,
 				PCSAT.Comments
 		FROM Project P
-		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId AND P.ProjectStatusId IN (3,4) AND p.IsAllowedToShow =1
+		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId AND P.ProjectStatusId IN (3,4) AND p.IsAllowedToShow =1 AND P.ProjectId != 174
 		INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = P.GroupId 
 		INNER JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
 		INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
@@ -98,11 +116,33 @@ BEGIN
 		LEFT JOIN dbo.Person CSATOwner ON CSATOwner.PersonId = P.ReviewerId
 		LEFT JOIN RecentProjectCompletedStatus RPCS ON RPCS.ProjectId = P.ProjectId 
 		LEFT JOIN ProjectsRecentlyUpdatedCSATS PRC ON P.ProjectId = PRC.ProjectId 
-		LEFT JOIN dbo.ProjectCSAT PCSAT ON PCSAT.ProjectId = P.ProjectId  
+		LEFT JOIN dbo.ProjectCSAT PCSAT ON PCSAT.ProjectId = PRC.ProjectId  
 		LEFT JOIN dbo.Person CSATReviewer ON CSATReviewer.PersonId = PCSAT.ReviewerId
-		WHERE (P.ProjectId = PRC.ProjectId OR @IsExport = 1) 
-			AND ( @IsExport = 1 OR PCSAT.ModifiedDate = PRC.ModifiedDate)  
-			AND (@IsExport = 0 OR ((P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL)))
+		WHERE
+			( 
+				(
+					@IsExport = 0 
+					AND P.ProjectId = PRC.ProjectId 
+					AND PCSAT.ModifiedDate = PRC.ModifiedDate
+				)
+				OR 
+				(
+					@IsExport = 1 
+					AND (
+							PCSAT.CompletionDate BETWEEN @StartDate AND @Enddate
+							OR 
+							(
+								PCSAT.ProjectId IS NULL 
+								AND 
+								(
+									(P.EndDate >= @StartDate AND P.StartDate <= @EndDate) 
+									OR 
+									(P.StartDate IS NULL AND P.EndDate IS NULL)
+								)
+							)
+						)
+				)
+			)
 		ORDER BY p.ProjectNumber ASC,PCSAT.CompletionDate DESC
 END
 
