@@ -45,7 +45,8 @@ BEGIN
 		INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = P.GroupId
 		INNER JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
 		Left JOIN dbo.Person PO ON PO.PersonId = P.ProjectOwnerId
-		WHERE P.ProjectStatusId = 3 AND PerS.PersonStatusId IN(1,5)  AND P.ProjectId !=174 AND MPE.StartDate <= @Enddate AND @StartDate <= MPE.EndDate
+		WHERE P.ProjectStatusId NOT IN (1,5) -- not in inactive and experimental
+		 AND PerS.PersonStatusId IN(1,5)  AND P.ProjectId !=174 AND MPE.StartDate <= @Enddate AND @StartDate <= MPE.EndDate
 		GROUP BY P.ProjectId,P.ProjectNumber,Pers.LastName ,Pers.FirstName ,C.Date,P.Name,Pers.PersonId,T.Name,PD.DivisionName,Pers.HireDate,Pers.EmployeeNumber,Cli.Name,BG.Name,PG.Name,Po.LastName,Po.FirstName
 	) 
 
