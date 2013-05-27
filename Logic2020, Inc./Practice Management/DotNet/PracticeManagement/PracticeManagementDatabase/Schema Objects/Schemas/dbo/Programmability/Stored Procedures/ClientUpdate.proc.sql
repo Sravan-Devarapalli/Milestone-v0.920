@@ -1,9 +1,4 @@
-﻿-- =============================================
--- Updated by:	ThulasiRam.P
--- Update date: 6-08-2012
--- Description:	Update Client
--- =============================================
-CREATE PROCEDURE dbo.ClientUpdate
+﻿CREATE PROCEDURE dbo.ClientUpdate
 (
 	@ClientId             INT,
 	@Name                 NVARCHAR(50),
@@ -15,6 +10,7 @@ CREATE PROCEDURE dbo.ClientUpdate
 	@DefaultTerms         INT,
 	@IsMarginColorInfoEnabled BIT = NULL,
 	@IsInternal		      BIT,
+	@IsHouseAccount	  BIT,
 	@IsNoteRequired     BIT = 1,
 	@UserLogin          NVARCHAR(255)
 )
@@ -43,7 +39,8 @@ AS
 			   IsChargeable = @IsChargeable,
 			   IsMarginColorInfoEnabled = @IsMarginColorInfoEnabled,
 			   IsInternal = @IsInternal,
-			   IsNoteRequired = @IsNoteRequired
+			   IsNoteRequired = @IsNoteRequired,
+			   IsHouseAccount= @IsHouseAccount
 		 WHERE ClientId = @ClientId
 	END
 
