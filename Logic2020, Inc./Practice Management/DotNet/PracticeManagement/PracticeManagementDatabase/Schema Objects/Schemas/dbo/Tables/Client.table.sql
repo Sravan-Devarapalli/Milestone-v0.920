@@ -10,6 +10,7 @@
 	[DefaultDirectorID]			INT,
 	[IsMarginColorInfoEnabled]	BIT				NULL,
 	[IsInternal]				BIT				NOT NULL,
-	[IsNoteRequired]            BIT				NOT NULL
+	[IsNoteRequired]            BIT				NOT NULL,
+	[IsHouseAccount]             BIT			NOT NULL CONSTRAINT DF_Client_IsHouseAccount DEFAULT 0
 );
 
