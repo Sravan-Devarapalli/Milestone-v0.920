@@ -591,10 +591,10 @@ namespace PraticeManagement.Reports
                                     EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
                                     Type = Revenue,
-                                    Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                    Salesperson = (pro.SalesPersonName != null) ? (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : pro.SalesPersonName) : (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : string.Empty),
                                     ProjectManagers = string.Empty,
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
-                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                    Director = (pro.Director != null && pro.Director.Name != null) ? (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : pro.Director.Name.ToString()) : (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : string.Empty),
                                     PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
 
@@ -616,10 +616,10 @@ namespace PraticeManagement.Reports
                                               EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                               PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
                                               Type = Margin,
-                                              Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                              Salesperson = (pro.SalesPersonName != null) ? (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : pro.SalesPersonName) : (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : string.Empty),
                                               ProjectManagers = string.Empty,
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
-                                              Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                              Director = (pro.Director != null && pro.Director.Name != null) ? (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : pro.Director.Name.ToString()) : (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : string.Empty),
                                               PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
                                           }).ToList();
 
