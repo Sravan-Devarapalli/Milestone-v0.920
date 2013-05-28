@@ -761,6 +761,7 @@ namespace PraticeManagement
             }
             chbIsChar.Checked = client.IsChargeable;
             chbIsInternal.Checked = client.IsInternal;
+            chbHouseAccount.Checked = client.IsHouseAccount;
             ddlDefaultTerms.SelectedIndex =
                 ddlDefaultTerms.Items.IndexOf(ddlDefaultTerms.Items.FindByValue(client.DefaultTerms.ToString()));
 
@@ -798,6 +799,7 @@ namespace PraticeManagement
 
             client.DefaultDiscount = decimal.Parse(txtDefaultDiscount.Text);
             client.Inactive = !chbActive.Checked;
+            client.IsHouseAccount = chbHouseAccount.Checked;
             client.IsChargeable = chbIsChar.Checked;
             client.IsInternal = chbIsInternal.Checked;
             client.IsNoteRequired = chbIsNoteRequired.Checked;
