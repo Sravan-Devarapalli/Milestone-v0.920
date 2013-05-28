@@ -366,7 +366,7 @@ namespace PraticeManagement
                 monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                for (int i = 0; i < 12; i++)//there are 12 columns before month columns.
+                for (int i = 0; i < 13; i++)//there are 13 columns before month columns.
                     headerCellStyleList.Add(headerCellStyle);
 
                 if (renderMonthColumns)
@@ -393,7 +393,7 @@ namespace PraticeManagement
                 dataNumberDateCellStyle.DataFormat = "_($#,##0.00_);[Red]($#,##0.00)";
 
 
-                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
+                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
 
                 if (renderMonthColumns)
@@ -1608,6 +1608,7 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty ,
                                     BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
@@ -1622,8 +1623,8 @@ namespace PraticeManagement
                                     ProjectManagers = string.Empty,
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
-                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                    //PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
+                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                    PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
 
 
@@ -1634,6 +1635,7 @@ namespace PraticeManagement
                                               ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                               ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                               Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                               BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                               Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
@@ -1648,8 +1650,8 @@ namespace PraticeManagement
                                               ProjectManagers = string.Empty,
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
-                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                              //PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                              PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                           }).ToList();
 
             projectsData.AddRange(projectsDataWithMargin);
@@ -1707,6 +1709,7 @@ namespace PraticeManagement
 
             data.Columns.Add("Project Number");
             data.Columns.Add("Account");
+            data.Columns.Add("House Account");
             data.Columns.Add("Business Group");
             data.Columns.Add("Business Unit");
             data.Columns.Add("Buyer");
@@ -1731,7 +1734,7 @@ namespace PraticeManagement
             data.Columns.Add("Senior Manager");
             data.Columns.Add("Director");
             data.Columns.Add("Pricing List");
-            //	  data.Columns.Add("PO Number");
+            data.Columns.Add("PO Number");
             foreach (var propertyBag in propertyBags)
             {
                 var objects = new object[data.Columns.Count];
@@ -1824,6 +1827,7 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                     BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
@@ -1838,8 +1842,8 @@ namespace PraticeManagement
                                     ProjectManagers = string.Empty,
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
-                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                    // PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
+                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                    PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                 }).ToList();//Note:- Change insertPosition Of Total cell in RowDataBound if any modifications in projectsData.
 
             var projectsDataWithMargin = (from pro in projectsList
@@ -1849,6 +1853,7 @@ namespace PraticeManagement
                                               ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                               ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                               Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                               BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                               Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
@@ -1863,8 +1868,8 @@ namespace PraticeManagement
                                               ProjectManagers = string.Empty,
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
-                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
-                                              // PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                              PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                           }).ToList();
 
             projectsData.AddRange(projectsDataWithMargin);
