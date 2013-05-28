@@ -98,6 +98,16 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        House Account?
+                                    </td>
+                                    <td>
+                                        <asp:CheckBox ID="chbHouseAccount" runat="server" Checked="true" onclick="setDirty();setClassForAddProject();" />
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         Are projects billable?
                                     </td>
                                     <td>
