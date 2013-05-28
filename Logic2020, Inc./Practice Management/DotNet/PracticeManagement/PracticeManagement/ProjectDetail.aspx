@@ -815,7 +815,7 @@
                                 <td class="Width2Percent">
                                 </td>
                                 <td class="TdProjectDetailFeild">
-                                    <table class="WholeWidth" style="display: none">
+                                    <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
                                                 PO Number
