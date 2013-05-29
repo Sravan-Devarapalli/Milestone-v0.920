@@ -96,7 +96,7 @@ BEGIN
 			   ,[ProjectStatusId]
 			   ,[StartDate]
 			   )
-     SELECT i.ProjectId,i.ProjectStatusId,@CurrentPMTime
+     SELECT i.ProjectId,i.ProjectStatusId,CONVERT(DATE,@CurrentPMTime)
 	 FROM inserted AS i
 
 	  -- End logging session
