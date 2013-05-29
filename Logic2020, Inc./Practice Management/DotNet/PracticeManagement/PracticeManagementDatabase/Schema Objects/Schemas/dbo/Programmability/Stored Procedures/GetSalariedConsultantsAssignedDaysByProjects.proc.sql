@@ -20,7 +20,7 @@ BEGIN
 	(
 		SELECT	T.Name AS PayType,
 				PD.DivisionName AS Division,
-				Pers.HireDate,
+				PH.HireDate,
 				Pers.EmployeeNumber,
 				Pers.FirstName ,
 				Pers.LastName,
@@ -28,6 +28,7 @@ BEGIN
 				BG.Name AS BusinessGroup,
 				PG.Name AS BusinessUnit,
 				P.ProjectNumber,
+				P.Name AS ProjectName,
 				P.ProjectId,
 				C.Date,
 				Pers.PersonId,
@@ -36,9 +37,10 @@ BEGIN
 		INNER JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestoneId = M.MilestoneId
 		INNER JOIN dbo.Person Pers ON Pers.PersonId = MP.PersonId AND Pers.IsStrawman = 0 AND Pers.DivisionId =  2-- Consulting
+		INNER JOIN dbo.v_PersonHistory Ph ON Ph.PersonId = Pers.PersonId 
 		INNER JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
-		INNER JOIN dbo.Calendar C  ON C.Date Between MPE.StartDate AND MPE.EndDate AND C.Date Between @StartDate AND @Enddate
-		INNER JOIN dbo.Pay pay ON pay.Person = MP.PersonId AND pay.Timescale = 2 AND C.Date Between pay.StartDate AND ISNULL(pay.EndDate-1,@FutureDate)
+		INNER JOIN dbo.Calendar C  ON C.Date Between MPE.StartDate AND MPE.EndDate AND C.Date Between @StartDate AND @Enddate AND C.Date Between PH.HireDate AND ISNULL(ph.TerminationDate,@FutureDate)
+		INNER JOIN dbo.Pay pay ON pay.Person = MP.PersonId AND C.Date Between pay.StartDate AND ISNULL(pay.EndDate-1,@FutureDate)
 		INNER JOIN dbo.Timescale T ON pay.Timescale = T.TimescaleId
 		INNER JOIN dbo.PersonDivision pd ON pd.DivisionId = Pers.DivisionId
 		INNER JOIN dbo.Client Cli ON Cli.ClientId = P.ClientId
@@ -47,7 +49,7 @@ BEGIN
 		Left JOIN dbo.Person PO ON PO.PersonId = P.ProjectOwnerId
 		WHERE P.ProjectStatusId NOT IN (1,5) -- not in inactive and experimental
 		 AND PerS.PersonStatusId IN(1,5)  AND P.ProjectId !=174 AND MPE.StartDate <= @Enddate AND @StartDate <= MPE.EndDate
-		GROUP BY P.ProjectId,P.ProjectNumber,Pers.LastName ,Pers.FirstName ,C.Date,P.Name,Pers.PersonId,T.Name,PD.DivisionName,Pers.HireDate,Pers.EmployeeNumber,Cli.Name,BG.Name,PG.Name,Po.LastName,Po.FirstName
+		GROUP BY P.ProjectId,P.ProjectNumber,P.Name,Pers.LastName ,Pers.FirstName ,C.Date,P.Name,Pers.PersonId,T.Name,PD.DivisionName,PH.HireDate,Pers.EmployeeNumber,Cli.Name,BG.Name,PG.Name,Po.LastName,Po.FirstName
 	) 
 
 	SELECT	P.PayType AS [Pay Type],
@@ -56,11 +58,13 @@ BEGIN
 			P.EmployeeNumber AS [Person ID],
 			P.FirstName AS [First Name] ,
 			P.LastName AS [Last Name],
+			P.FirstName +' '+ P.LastName AS Consultant,
 			P.Account,
 			P.BusinessGroup AS [Business Group],
 			P.BusinessUnit AS [Business Unit],
 			P.ProjectNumber AS Project,
-			P.ProjectOwner AS [Project Owner],
+			P.ProjectName AS [Project Name],
+			ISNULL(P.ProjectOwner,'') AS [Project Owner],
 			CONVERT(DATE,MIN(P.Date))[Roll on Date],
 			CONVERT(DATE,MAX(P.Date))[Roll off Date],
 			--dbo.GetProjectManagerNames(P.ProjectId) AS ProjectManagers,
@@ -76,6 +80,7 @@ BEGIN
 			P.BusinessGroup,
 			P.BusinessUnit,
 			P.ProjectNumber,
+			P.ProjectName,
 			P.ProjectOwner
 	ORDER BY P.LastName, P.FirstName,[Days]
 END
