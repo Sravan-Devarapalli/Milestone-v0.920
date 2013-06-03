@@ -73,10 +73,8 @@
     function dtpStartDateTimeOff_OnClientChange() {
         var dtpStartDateTimeOff = $find('dtpStartDateTimeOffBehaviorID');
         var dtpEndDateTimeOff = $find('dtpEndDateTimeOffBehaviorID');
-        dtpStartDateTimeOff._selectedDate = null;
-        dtpEndDateTimeOff._selectedDate = null;
-        var startDate = new Date(dtpStartDateTimeOff._selectedDate);
-        var endDate = new Date(dtpEndDateTimeOff._selectedDate);
+        var startDate = new Date(dtpStartDateTimeOff._textbox._current);
+        var endDate = new Date(dtpEndDateTimeOff._textbox._current);
         if (startDate > endDate) {
             dtpEndDateTimeOff.set_selectedDate(startDate.format("MM/dd/yyyy"));
         }
@@ -85,10 +83,8 @@
     function dtpEndDateTimeOff_OnClientChange() {
         var dtpStartDateTimeOff = $find('dtpStartDateTimeOffBehaviorID');
         var dtpEndDateTimeOff = $find('dtpEndDateTimeOffBehaviorID');
-        dtpStartDateTimeOff._selectedDate = null;
-        dtpEndDateTimeOff._selectedDate = null;
-        var startDate = new Date(dtpStartDateTimeOff._selectedDate);
-        var endDate = new Date(dtpEndDateTimeOff._selectedDate);
+        var startDate = new Date(dtpStartDateTimeOff._textbox._current);
+        var endDate = new Date(dtpEndDateTimeOff._textbox._current);
         if (startDate > endDate) {
             dtpStartDateTimeOff.set_selectedDate(endDate.format("MM/dd/yyyy"));
         }
@@ -313,7 +309,7 @@
                     <asp:HiddenField ID="hdEditCondtion" runat="server" />
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeSelectEditCondtion" runat="server"
                         TargetControlID="hdEditCondtion" BackgroundCssClass="modalBackground" PopupControlID="pnlSelectEditCondtion"
-                        DropShadow="false" BehaviorID="mpeSelectEditCondtion" CancelControlID="btncancel_EditCondtion" />
+                        DropShadow="false" BehaviorID="mpeSelectEditCondtion"/>
                     <asp:Panel ID="pnlSelectEditCondtion" runat="server" CssClass="ConfirmBoxClassError Height175Width320Px PanelPerson">
                         <table class="calendarPopup">
                             <tr>
@@ -344,7 +340,7 @@
                                 <td colspan="3">
                                     <asp:Button ID="btnOk_EditCondtion" Text="OK" runat="server" ToolTip="Ok" OnClientClick="return  btnOk_EditCondtion();" />&nbsp;
                                     &nbsp;
-                                    <asp:Button ID="btncancel_EditCondtion" Text="Cancel" runat="server" ToolTip="Cancel" />
+                                    <asp:Button ID="btncancel_EditCondtion" Text="Cancel" runat="server" ToolTip="Cancel" OnClick="btncancel_EditCondtion_Click"/>
                                 </td>
                             </tr>
                         </table>
@@ -354,7 +350,7 @@
                             <asp:HiddenField ID="hfAddTimeOff" runat="server" />
                             <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeOff" runat="server" TargetControlID="hfAddTimeOff"
                                 BackgroundCssClass="modalBackground" PopupControlID="pnlAddTimeOff" DropShadow="false"
-                                BehaviorID="mpeAddTimeOff" CancelControlID="btnCancelTimeOff" />
+                                BehaviorID="mpeAddTimeOff"/>
                             <asp:Panel ID="pnlAddTimeOff" runat="server" CssClass="ConfirmBoxClassError PanelPerson">
                                 <table class="calendarPopup">
                                     <tr>
@@ -490,7 +486,7 @@
                                             <asp:HiddenField ID="hdIsTimeOffPopUpDirty" runat="server" />
                                             <asp:Button ID="btnOkTimeOff" Text="OK" runat="server" ToolTip="Ok" OnClick="btnOkTimeOff_Click" />
                                             <asp:Button ID="btnDeleteTimeOff" Text="Delete" runat="server" ToolTip="Delete" OnClick="btnDeleteTimeOff_Click" />
-                                            <asp:Button ID="btnCancelTimeOff" Text="Cancel" runat="server" ToolTip="Cancel" />
+                                            <asp:Button ID="btnCancelTimeOff" Text="Cancel" runat="server" ToolTip="Cancel" OnClick="btnCancelTimeOff_Click" />
                                         </td>
                                     </tr>
                                 </table>
@@ -502,7 +498,7 @@
                             <asp:HiddenField ID="hdEditSingleDay" runat="server" />
                             <AjaxControlToolkit:ModalPopupExtender ID="mpeEditSingleDay" runat="server" TargetControlID="hdEditSingleDay"
                                 BackgroundCssClass="modalBackground" PopupControlID="pnlEditSingleDay" DropShadow="false"
-                                BehaviorID="mpeEditSingleDay" CancelControlID="btnCancelEditSingleDay" />
+                                BehaviorID="mpeEditSingleDay"/>
                             <asp:Panel ID="pnlEditSingleDay" runat="server" CssClass="ConfirmBoxClassError PanelPerson"
                                 Style="display: none;">
                                 <table class="calendarPopup">
@@ -583,7 +579,7 @@
                                                 runat="server" />
                                             <asp:Button ID="btnDeleteSingleDay" OnClick="btnDeleteSingleDay_OnClick" Text="Delete"
                                                 ToolTip="Delete" runat="server" />
-                                            <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server" />
+                                            <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server" OnClick="btnCancelEditSingleDay_OnClick" />
                                         </td>
                                     </tr>
                                     <tr>
