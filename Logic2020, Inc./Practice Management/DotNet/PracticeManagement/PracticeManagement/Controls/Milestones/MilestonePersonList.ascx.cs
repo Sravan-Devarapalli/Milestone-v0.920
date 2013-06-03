@@ -43,8 +43,8 @@ namespace PraticeManagement.Controls.Milestones
         private const string txtAmountInsert = "txtAmountInsert";
         private const string txtHoursPerDayInsert = "txtHoursPerDayInsert";
         private const string txtHoursInPeriodInsert = "txtHoursInPeriodInsert";
-        private const string milestoneHasTimeEntries = "Cannot delete milesone person because this person has already entered time for this milestone.";
-        private const string allMilestoneHasTimeEntries = "Cannot delete all milesone person entries because this person has already entered time for this milestone.";
+        private const string milestoneHasTimeEntries = "Cannot delete milestone person because this person has already entered time for this milestone.";
+        private const string allMilestoneHasTimeEntries = "Cannot delete all milestone person entries because this person has already entered time for this milestone.";
         private const string milestonePersonEntry = "MilestonePersonEntry";
         private string ShowPanel = "ShowPanel('{0}', '{1}','{2}','{3}','{4}','{5}');";
         private string HidePanel = "HidePanel('{0}');";
