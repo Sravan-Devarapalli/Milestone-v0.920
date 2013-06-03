@@ -73,6 +73,8 @@
     function dtpStartDateTimeOff_OnClientChange() {
         var dtpStartDateTimeOff = $find('dtpStartDateTimeOffBehaviorID');
         var dtpEndDateTimeOff = $find('dtpEndDateTimeOffBehaviorID');
+        dtpStartDateTimeOff._selectedDate = null;
+        dtpEndDateTimeOff._selectedDate = null;
         var startDate = new Date(dtpStartDateTimeOff._selectedDate);
         var endDate = new Date(dtpEndDateTimeOff._selectedDate);
         if (startDate > endDate) {
@@ -83,6 +85,8 @@
     function dtpEndDateTimeOff_OnClientChange() {
         var dtpStartDateTimeOff = $find('dtpStartDateTimeOffBehaviorID');
         var dtpEndDateTimeOff = $find('dtpEndDateTimeOffBehaviorID');
+        dtpStartDateTimeOff._selectedDate = null;
+        dtpEndDateTimeOff._selectedDate = null;
         var startDate = new Date(dtpStartDateTimeOff._selectedDate);
         var endDate = new Date(dtpEndDateTimeOff._selectedDate);
         if (startDate > endDate) {
