@@ -777,8 +777,17 @@ namespace PraticeManagement
 
         protected void btnChangeEmployeeStatus_Click(object sender, EventArgs e)
         {
-            LoadChangeEmployeeStatusPopUpData();
-            mpeViewPersonChangeStatus.Show();
+            reqHireDate.Validate();
+            compHireDate.Validate();
+            if (reqHireDate.IsValid && compHireDate.IsValid)
+            {
+                LoadChangeEmployeeStatusPopUpData();
+                mpeViewPersonChangeStatus.Show();
+            }
+            else
+            {
+                IsErrorPanelDisplay = true;
+            }
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -2727,8 +2736,8 @@ namespace PraticeManagement
                     permDiff.Add(new PermissionDiffeneceItem
                     {
                         Title = description.Title,
-                        Old = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userNew, "GET"),
-                        New = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userCurrent, "GET")
+                        New = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userNew, "GET"),
+                        Old = UrlAuthorizationModule.CheckUrlAccessForPrincipal("~/" + location.Path, userCurrent, "GET")
                     });
                 }
             }
