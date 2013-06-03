@@ -28,7 +28,7 @@
         /*
         This script is needed to initialize select all/none behavior for checkbox lists
         This is done because tab content is loaded asynchronously and window.load event is not fired
-        when the user goes to the Permissions tab. So this method is called each time postback
+        when the user goes to the Permissions tab. So this method is called each time post back
         goes to the server in any way.
         */
 
@@ -56,6 +56,17 @@
 
             var lbloppNameTooltipContent = document.getElementById('<%= personOpportunities.ClientID %>_lbloppNameTooltipContent');
             lbloppNameTooltipContent.innerHTML = descriptionText.toString();
+        }
+
+        function txtEmployeeNumber_ClientClick(source)
+        {
+        if ( !source.readOnly && (source.getAttribute('accept') == 0) && !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) source.blur(); 
+        else { if(source.getAttribute('accept') == 0) source.setAttribute('accept',1);}
+        }
+
+        function txtEmployeeNumber_OnBlur(source)
+        {
+        source.setAttribute('accept',0);
         }
 
         function HidePanel() {
@@ -721,8 +732,8 @@
                                 </td>
                                 <td>
                                     <asp:TextBox ID="txtEmployeeNumber" runat="server" MaxLength="12" onchange="setDirty();"
-                                        onfocus="if (!this.readOnly &amp;&amp; !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) this.blur();"
-                                        CssClass="Width250Px"></asp:TextBox>
+                                        accept="0" onclick="txtEmployeeNumber_ClientClick(this)" onkeypress="txtEmployeeNumber_ClientClick(this)"
+                                        onblur="txtEmployeeNumber_OnBlur(this)" CssClass="Width250Px"></asp:TextBox>
                                     <asp:HiddenField ID="hdnPersonId" runat="server" />
                                     <asp:HiddenField ID="hdnIsDefaultManager" runat="server" />
                                 </td>
