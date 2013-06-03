@@ -114,7 +114,8 @@ namespace PraticeManagement.Controls
                 Quadruple<DateTime, DateTime, int?, string> series = ServiceCallers.Custom.Calendar(c => c.GetTimeOffSeriesPeriod(PersonId.Value, date));
 
                 HostingControl.PopulateSingleDayPopupControls(date, timeTypeId, hours, series.Third, series.Fourth);
-
+                HostingControl.SeriesStartDate = series.First;
+                HostingControl.SeriesEndDate = series.Second;
                 if (series.First == series.Second)
                 {
                     HostingControl.mpeEditSingleDayPopUp.Show();
