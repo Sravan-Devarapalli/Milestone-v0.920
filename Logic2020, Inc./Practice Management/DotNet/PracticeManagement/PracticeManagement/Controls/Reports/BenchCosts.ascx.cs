@@ -481,7 +481,7 @@ namespace PraticeManagement.Controls.Reports
                                                             && !string.IsNullOrEmpty(p.ProjectNumber)
                                                             )
                                                      );
-            return benchListTemp.FindAll(p => p.ProjectedFinancialsByMonth.Values.Any(q =>q.GrossMargin.Value != 0M && q.Timescale == TimescaleType.Salary));
+            return benchListTemp.FindAll(p => p.ProjectedFinancialsByMonth.Values.Any(q => ((chbIncludeZeroCostEmps.Checked) ||  q.GrossMargin.Value != 0M) && q.Timescale == TimescaleType.Salary));
         }
 
         protected void gvBenchRollOffDates_RowDataBound(object sender, GridViewRowEventArgs e)
