@@ -441,6 +441,11 @@ namespace PraticeManagement.Controls
             }
         }
 
+
+        protected void btnCancelEditSingleDay_OnClick(object sender, EventArgs e)
+        {
+            SeriesStartDate = SeriesEndDate = DateTime.MinValue;
+        }
         protected void btnDeleteSingleDay_OnClick(object sender, EventArgs e)
         {
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
@@ -542,6 +547,17 @@ namespace PraticeManagement.Controls
             upnlTimeOff.Update();
         }
 
+        protected void btnCancelTimeOff_Click(object sender, EventArgs e)
+        {
+            SeriesStartDate = SeriesEndDate = DateTime.MinValue;
+        }
+
+        protected void btncancel_EditCondtion_Click(object sender, EventArgs e)
+        {
+            mpeSelectEditCondtionPopUp.Hide();
+            SeriesStartDate = SeriesEndDate = DateTime.MinValue;
+        }
+
         protected void btnOkTimeOff_Click(object sender, EventArgs e)
         {
             Page.Validate(valSumTimeOff.ValidationGroup);
@@ -593,6 +609,7 @@ namespace PraticeManagement.Controls
                                                 );
                     }
                     UpdateCalendar();
+                    SeriesStartDate = SeriesEndDate = DateTime.MinValue;
                 }
                 catch (Exception ex)
                 {
