@@ -51,6 +51,38 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Gets or sets a year to be displayed within the calendar.
         /// </summary>
+        /// 
+
+        public DateTime SeriesStartDate
+        {
+            get
+            {
+                if (ViewState["SeriesStartDate_Key"] == null)
+                {
+                    ViewState["SeriesStartDate_Key"] = DateTime.MinValue;
+                }
+                return (DateTime)ViewState["SeriesStartDate_Key"];
+            }
+            set
+            {
+                ViewState["SeriesStartDate_Key"] = value;
+            }
+        }
+        public DateTime SeriesEndDate
+        {
+            get
+            {
+                if (ViewState["SeriesEndDate_Key"] == null)
+                {
+                    ViewState["SeriesEndDate_Key"] = DateTime.MinValue;
+                }
+                return (DateTime)ViewState["SeriesEndDate_Key"];
+            }
+            set
+            {
+                ViewState["SeriesEndDate_Key"] = value;
+            }
+        }
         public int SelectedYear
         {
             get
@@ -545,7 +577,21 @@ namespace PraticeManagement.Controls
                                                                       approvedBy
                                                                       )
                                                    );
-
+                  
+                    if (!(SeriesStartDate <= dtpEndDateTimeOff.DateValue && dtpStartDateTimeOff.DateValue <= SeriesEndDate) && SeriesStartDate != DateTime.MinValue && SeriesEndDate != DateTime.MinValue)
+                    {
+                        ServiceCallers.Custom.Calendar(
+                                c => c.SaveTimeOff(SeriesStartDate,
+                                                                   SeriesEndDate,
+                                                                   false,
+                                                                   SelectedPersonId.Value,
+                                                                   (double?)hours,
+                                                                   Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
+                                                                   Context.User.Identity.Name,
+                                                                   approvedBy
+                                                                   )
+                                                );
+                    }
                     UpdateCalendar();
                 }
                 catch (Exception ex)
