@@ -13,9 +13,9 @@ namespace PraticeManagement.Config
         #region constants
 
         private const int TITLETYPE_CELL_INDEX = 2;
-        private const string UpdateSucess = "Salary Brand and PTO Accrual updated successfully.";
-        private const string InsertSucess = "Salary Brand and PTO Accrual added successfully.";
-        private const string DeleteSucess = "Salary Brand and PTO Accrual deleted successfully.";
+        private const string UpdateSucess = "Salary Band and PTO Accrual updated successfully.";
+        private const string InsertSucess = "Salary Band and PTO Accrual added successfully.";
+        private const string DeleteSucess = "Salary Band and PTO Accrual deleted successfully.";
 
         #endregion constants
 
