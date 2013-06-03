@@ -94,6 +94,13 @@ AS
                             RAISERROR('Selected day(s) are not working day(s). Please select any working day(s).', 16, 1)
                         END
 
+		     --DELETE OLD Time-OFFS (AS PER #3133 DEFECT) 
+					DELETE  P
+					FROM dbo.PersonCalendar P
+                    WHERE P.SeriesId=(
+									 SELECT SeriesId 
+									 FROM PersonCalendar PC
+									 WHERE PC.Date=@StartDate AND PC.PersonId=@PersonId AND PC.DayOff=1)
 		
 
                     DECLARE @DaysExceptHolidays TABLE ( [Date] DATETIME )
