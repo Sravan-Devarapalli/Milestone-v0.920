@@ -17,7 +17,8 @@ CREATE PROCEDURE [dbo].[CalendarUpdate]
 	@ActualHours REAL
 )
 AS
-	SET NOCOUNT ON
+BEGIN	
+	 SET NOCOUNT ON
 		
 	/*
 		From CalendarPage:
@@ -56,7 +57,9 @@ AS
 
 	BEGIN TRY
 	BEGIN TRAN tran_CalendarUpdate
-
+	
+	--step:1.Selecting the holiday dates till 2029 if it is recurring holiday otherwise selecting only the given date
+	 
 	INSERT INTO @Dates
 	SELECT [Date]
 	FROM Calendar
@@ -72,7 +75,8 @@ AS
 		   )
 		)
 	
-	-- Update the company calendar
+	-- 2.Update the company calendar based on the given information
+
 	UPDATE C1
 		SET DayOff = @DayOff,
 			HolidayDescription = CASE WHEN @DayOff = 0 THEN NULL ELSE @HolidayDescription END,
@@ -82,7 +86,7 @@ AS
 	FROM dbo.Calendar C1
 	JOIN @Dates d ON d.[date] = C1.Date
 
-	IF(@DayOff = 0)/* 
+	IF(@DayOff = 0)/*      3. If this is not a holiday then 
 							Remove holiday from Company holiday page then 
 						•	Update Entry For substitute day as PTO time type in time entry & Person calendar. 
 		  
@@ -91,17 +95,22 @@ AS
 
 		DECLARE @SubDates TABLE ([date] DATETIME)
 
+		--4.Selecting substitute days if they are on Holiday list(from @Dates table refer 1) 
+
 		INSERT INTO @SubDates
 		SELECT  PC.SubstituteDate
 		FROM dbo.PersonCalendar AS PC 
 		INNER JOIN @Dates dates ON dates.date = PC.Date AND PC.SubstituteDate IS NOT NULL
-	    
+
+		
+		--5.Putting the Substitute days selected from refer.4 as PTO 
 		UPDATE PC
 		SET PC.TimeTypeId = @PTOTimeTypeId,
 		PC.Description = 'PTO'
 		FROM dbo.PersonCalendar AS PC 
 		INNER JOIN @SubDates AS SUBDATES ON PC.Date = SUBDATES.date
 
+		--6.Setting modified date,by in the timeentryhours table when it is substitute date 
 		UPDATE TEH 
 		SET TEH.ModifiedBy = @ModifiedBy,
 			TEH.ModifiedDate = @CurrentPMTime
@@ -109,18 +118,36 @@ AS
 		INNER JOIN dbo.TimeEntry AS TE ON TE.TimeEntryId = TEH.TimeEntryId
 		INNER JOIN @SubDates AS SUBDATES ON SUBDATES.date = TE.ChargeCodeDate AND TE.ChargeCodeId = @HolidayChargeCodeId 
 
+		--7.Setting PTO for substitute days in time entry table
 		UPDATE TE 
 		SET TE.Note = 'PTO',
 			TE.ChargeCodeId = @PTOChargeCodeId
 		FROM dbo.TimeEntry AS TE 
 		INNER JOIN @SubDates AS SUBDATES ON SUBDATES.date = TE.ChargeCodeDate AND TE.ChargeCodeId = @HolidayChargeCodeId 
 
+		--8.Deleting the date from personcalender
+		UPDATE PC
+		SET PC.DayOff=0
+		FROM dbo.PersonCalendar AS PC
+		INNER JOIN @Dates dates ON dates.date = PC.SubstituteDate AND PC.DayOff=1
+
 		DELETE PC
 		FROM dbo.PersonCalendar AS PC 
 		WHERE PC.Date = @Date AND PC.DayOff = 0
 
+		--Delete Holiday dates from TIMEENTRY and TIMENTRYHOURS when it is used as substitute date
+		DELETE TEH
+		FROM dbo.TimeEntry AS TE
+		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
+		INNER JOIN PersonCalendar PC ON PC.Date=TE.ChargeCodeDate AND PC.DayOff=0 AND PC.SubstituteDate IS NOT NULL
+
+		DELETE TE
+		FROM dbo.TimeEntry AS TE
+		INNER JOIN PersonCalendar PC ON PC.Date=TE.ChargeCodeDate AND PC.DayOff=0 AND PC.SubstituteDate IS NOT NULL
+
+
 	END
-	ELSE 
+	ELSE     --IF it is a Holiday then
 	BEGIN 
 
 		
@@ -128,6 +155,7 @@ AS
 		/* Insert  Company holiday date as Any person substitute day date */
 		DECLARE @SubDatesForPersons TABLE ([SubstituteDate] DATETIME,PersonId INT,[HolidayDate] DATETIME,IsW2Salaried BIT)
 
+		--8.Selecting substitute days if they are on this date  
 		INSERT INTO @SubDatesForPersons
 		SELECT  PC.SubstituteDate,PC.PersonId, PC.Date,
 				(CASE WHEN  pay.Person IS NULL THEN 0
@@ -137,13 +165,19 @@ AS
 		LEFT JOIN  dbo.Pay pay  ON pay.Timescale = 2 /* 'W2-Salary' */ AND pay.Person = Pc.PersonId AND  
 									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
 
-			
-		DELETE pc
+	   --9.UPDATE that substitute date from the personcalender
+		UPDATE pc
+		SET pc.DayOff=0
+		FROM dbo.PersonCalendar pc 
+		INNER JOIN @SubDatesForPersons AS SDP ON  pc.PersonId = SDP.PersonId AND (pc.SubstituteDate = SDP.[SubstituteDate] OR pc.Date =SDP.[SubstituteDate])
+
+		UPDATE pc
+		SET pc.DayOff=1
 		FROM dbo.PersonCalendar pc 
 		INNER JOIN @SubDatesForPersons AS SDP ON (pc.SubstituteDate = SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId) OR
 													(pc.Date =SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId)
 
-		--Delete holiday timetype  Entry from TimeEntry table for substitute date.
+		--10.Delete holiday timetype  Entry from TimeEntry table for substitute date.
 		--Delete From TimeEntryHours.
 		DELETE TEH
 		FROM dbo.TimeEntry TE 
@@ -151,12 +185,13 @@ AS
 		INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
 		WHERE TE.ChargeCodeId = @HolidayChargeCodeId 
 
-		--Delete From TimeEntry.
+		--11.Delete From TimeEntry.
 		DELETE TE
 		FROM dbo.TimeEntry TE
 		INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
 		WHERE  TE.ChargeCodeId = @HolidayChargeCodeId
 
+		--12.Inserting substitute date as Holiday because this is holiday in timeentry table
 		INSERT  INTO [dbo].[TimeEntry]
 							([PersonId],
 							[ChargeCodeId],
@@ -170,6 +205,7 @@ AS
 		FROM dbo.Calendar c 
 		INNER JOIN @SubDatesForPersons AS SDP ON SDP.HolidayDate =  c.Date  AND  SDP.IsW2Salaried = 1
 				
+		--5.Inserting substitute date as Holiday because this is holiday in timeentryhours table
 		INSERT INTO [dbo].[TimeEntryHours] 
 									(   [TimeEntryId],
 										[ActualHours],
@@ -189,7 +225,7 @@ AS
 	END
 	
 	 
-	--Delete All Holiday/PTO timeEntries.
+	--6.Delete All Administrative timetype timeEntries from the dates of step 1
 	--Delete From TimeEntryHours.
 	DELETE TEH
 	FROM dbo.Person P
@@ -215,9 +251,9 @@ AS
 	JOIN dbo.TimeType TT ON TT.IsAdministrative = 1 AND TT.TimeTypeId = CC.TimeTypeId 
 	JOIN dbo.Calendar c ON c.Date = rhd.date AND DATEPART(DW, c.date) NOT IN (1,7)
 
-	IF @DayOff = 0
+	IF @DayOff = 0   --If it not holiday then 
 	BEGIN
-
+	--Insert into timeentry table if any Dayoffs are there 
 		INSERT  INTO [dbo].[TimeEntry]
 					( [PersonId],
 						[ChargeCodeId],
@@ -274,7 +310,7 @@ AS
 	END
 	ELSE
 	BEGIN
-
+	    --Insert into timeentry table as holiday for the dates(refer 1)
 		INSERT  INTO [dbo].[TimeEntry]
 		                ( [PersonId],
 							[ChargeCodeId],
@@ -348,7 +384,7 @@ AS
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
-
+END
 
 GO
 
