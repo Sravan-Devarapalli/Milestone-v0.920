@@ -25,6 +25,7 @@ CREATE PROCEDURE [dbo].[PaySave]
 	@UserLogin			 NVARCHAR(255)
 )
 AS
+BEGIN
 	SET NOCOUNT ON
 	SET XACT_ABORT ON
 	/*
@@ -468,7 +469,7 @@ AS
 			INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
 			WHERE pay.Person = @PersonId AND pay.StartDate >= @FirstCompensationStartDate AND T.IsContractType = 1 AND pay.StartDate < @Today
 				
-			EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1 -- terminating the person
+			EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1,@UserLogin=@UserLogin -- terminating the person
 
 				
 			-- Ensure the temporary table exists
@@ -533,6 +534,6 @@ AS
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 
 	END CATCH
-
+END
 GO
 
