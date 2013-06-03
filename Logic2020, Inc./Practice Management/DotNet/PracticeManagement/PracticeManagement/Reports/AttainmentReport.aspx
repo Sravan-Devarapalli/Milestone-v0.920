@@ -24,7 +24,7 @@
                             <td class="Width8Percent">
                                 &nbsp;Show&nbsp;Projects&nbsp;for&nbsp;
                             </td>
-                            <td class="Width8Percent">
+                            <td class="Width9Percent">
                                 <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" CssClass="WholeWidth"
                                     OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
                                     <asp:ListItem Text="Next 3 months" Selected="True" Value="3"></asp:ListItem>
@@ -41,7 +41,7 @@
                                     PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false" />
                                 <asp:HiddenField ID="hdnPeriod" runat="server" Value="3" />          
                             </td>
-                            <td class="Width48Percent padLeft5">
+                            <td class="Width47Percent padLeft5">
                                 <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                 <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             </td>
