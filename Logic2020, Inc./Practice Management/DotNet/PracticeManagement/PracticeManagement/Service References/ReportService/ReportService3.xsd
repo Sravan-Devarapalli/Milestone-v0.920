@@ -225,7 +225,7 @@
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="includePersonsWithNoTimeEntries" type="xs:boolean" />
         <xs:element minOccurs="0" name="personIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="seniorityIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="timescaleNames" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="personDivisionIds" nillable="true" type="xs:string" />
