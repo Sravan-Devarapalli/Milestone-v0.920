@@ -24,7 +24,7 @@
   <xs:element name="ArrayOfBillableUtlizationByRange" nillable="true" type="tns:ArrayOfBillableUtlizationByRange" />
   <xs:complexType name="BillableUtlizationByRange">
     <xs:sequence>
-      <xs:element minOccurs="0" name="BillableUtilization" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BillableUtilization" type="xs:double" />
       <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="RangeType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
