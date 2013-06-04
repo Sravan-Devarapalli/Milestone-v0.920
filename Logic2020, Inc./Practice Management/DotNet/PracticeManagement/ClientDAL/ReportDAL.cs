@@ -1373,7 +1373,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string seniorityIds, string timescaleNames, string personStatusIds, string personDivisionIds)
+        public static List<PersonLevelPayCheck> TimePeriodSummaryByResourcePayCheck(DateTime startDate, DateTime endDate, bool includePersonsWithNoTimeEntries, string personTypes, string titleIds, string timescaleNames, string personStatusIds, string personDivisionIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.TimePeriodSummaryByResourcePayCheck, connection))
@@ -1391,9 +1391,9 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonTypesParam, personTypes);
                 }
 
-                if (seniorityIds != null)
+                if (titleIds != null)
                 {
-                    command.Parameters.AddWithValue(Constants.ParameterNames.SeniorityIdsParam, seniorityIds);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.TitleIdsParam, titleIds);
                 }
 
                 if (timescaleNames != null)
