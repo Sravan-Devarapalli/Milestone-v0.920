@@ -220,10 +220,7 @@ AS
 								 FROM    dbo.ConvertStringListIntoTable(@PersonStatusIds) )
 							  )
 						  AND ( @TimeScaleNamesList IS NULL
-								OR ( CASE WHEN P.PersonStatusId = 2
-										  THEN 'Terminated'
-										  ELSE ISNULL(PCP.Timescale, '')
-									 END ) IN ( SELECT  Name
+								OR ISNULL(PCP.Timescale, '') IN ( SELECT  Name
 												FROM    @TimeScaleNames )
 							  )
 						  AND ( @PersonDivisionIds IS NULL
