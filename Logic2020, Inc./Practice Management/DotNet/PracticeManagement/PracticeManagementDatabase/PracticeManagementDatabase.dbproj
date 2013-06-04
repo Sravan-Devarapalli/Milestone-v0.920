@@ -4312,6 +4312,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\AttainmentBillableUtilizationReport.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\PayRollDistribution.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
