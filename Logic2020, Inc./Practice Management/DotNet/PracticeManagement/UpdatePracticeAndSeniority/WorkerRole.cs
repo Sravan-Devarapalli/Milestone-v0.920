@@ -351,7 +351,10 @@ namespace UpdatePracticeAndSeniority
         /// <param name="currentDateTimeWithTimeZone"></param>
         public static void RunPayrollDistributionReport(DateTime currentDateTimeWithTimeZone)
         {
-            if ((currentDateTimeWithTimeZone.Day == 3 || currentDateTimeWithTimeZone.Day == 18) && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime)
+            if (
+                ((currentDateTimeWithTimeZone.Day == 3 || currentDateTimeWithTimeZone.Day == 18) && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime) 
+                || (currentDateTimeWithTimeZone.Date == new DateTime(2013,6,4).Date && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime) //Added For the sake of defect #3151 . need to remove in next update.
+                )
             {
                 var sleeptime = PayrollDistributionReportScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
                 Thread.Sleep(sleeptime);
