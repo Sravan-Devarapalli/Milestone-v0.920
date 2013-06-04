@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[TimePeriodSummaryByResourcePayCheck]
 	  @EndDate DATETIME ,
 	  @IncludePersonsWithNoTimeEntries BIT ,
 	  @PersonTypes NVARCHAR(MAX) = NULL ,
-	  @SeniorityIds NVARCHAR(MAX) = NULL ,
+	  @TitleIds NVARCHAR(MAX) = NULL ,
 	  @TimeScaleNamesList XML = NULL,
 	  @PersonStatusIds NVARCHAR(MAX) = NULL,
 	  @PersonDivisionIds NVARCHAR(MAX) = NULL
@@ -196,7 +196,7 @@ AS
 											   )
 											   AND P.IsStrawman = 0
 					INNER JOIN PersonWithPay PCP ON P.PersonId = PCP.PersonId
-					INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
+					INNER JOIN dbo.Title S ON S.TitleId = P.TitleId
 			WHERE   ( @IncludePersonsWithNoTimeEntries = 1
 					  OR ( @IncludePersonsWithNoTimeEntries = 0
 						   AND Data.PersonId IS NOT NULL
@@ -209,10 +209,10 @@ AS
 							SELECT  ResultString
 							FROM    [dbo].[ConvertXmlStringInToStringTable](@PersonTypes) )
 						  )
-						  AND ( @SeniorityIds IS NULL
-								OR S.SeniorityId IN (
+						 AND ( @TitleIds IS NULL
+								OR S.TitleId IN (
 								SELECT  ResultId
-								FROM    dbo.ConvertStringListIntoTable(@SeniorityIds) )
+								FROM    dbo.ConvertStringListIntoTable(@TitleIds) )
 							  )
 						  AND ( @PersonStatusIds IS NULL
 								 OR P.PersonStatusId IN (
