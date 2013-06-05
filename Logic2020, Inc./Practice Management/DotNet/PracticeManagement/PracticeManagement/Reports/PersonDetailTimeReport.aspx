@@ -210,6 +210,10 @@
                                         <asp:ListItem Text="Last Month" Value="-30"></asp:ListItem>
                                         <asp:ListItem Text="Last Year" Value="-365"></asp:ListItem>
                                         <asp:ListItem Text="Total Employment" Value="-1"></asp:ListItem>
+                                        <asp:ListItem Text="Q1" Value="1"></asp:ListItem>
+                                        <asp:ListItem Text="Q2" Value="2"></asp:ListItem>
+                                        <asp:ListItem Text="Q3" Value="3"></asp:ListItem>
+                                        <asp:ListItem Text="Q4" Value="4"></asp:ListItem>
                                         <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
