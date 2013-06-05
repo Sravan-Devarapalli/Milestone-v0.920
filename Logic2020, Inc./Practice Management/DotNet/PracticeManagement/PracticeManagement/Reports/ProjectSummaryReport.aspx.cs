@@ -74,7 +74,23 @@ namespace PraticeManagement.Reporting
                             var now = Utils.Generic.GetNowWithTimeZone();
                             if (selectedVal > 0)
                             {
-                                if (selectedVal == 7)
+                                if (selectedVal == 1)
+                                {
+                                    return Utils.Calendar.QuarterStartDate(now, 1);
+                                }
+                                else if (selectedVal == 2)
+                                {
+                                    return Utils.Calendar.QuarterStartDate(now, 2);
+                                }
+                                else if (selectedVal == 3)
+                                {
+                                    return Utils.Calendar.QuarterStartDate(now, 3);
+                                }
+                                else if (selectedVal == 4)
+                                {
+                                    return Utils.Calendar.QuarterStartDate(now, 4);
+                                }
+                                else if (selectedVal == 7)
                                 {
                                     return Utils.Calendar.WeekStartDate(now);
                                 }
@@ -152,7 +168,23 @@ namespace PraticeManagement.Reporting
                             var now = Utils.Generic.GetNowWithTimeZone();
                             if (selectedVal > 0)
                             {
-                                if (selectedVal == 7)
+                                if (selectedVal == 1)
+                                {
+                                    return Utils.Calendar.QuarterEndDate(now, 1);
+                                }
+                                else if (selectedVal == 2)
+                                {
+                                    return Utils.Calendar.QuarterEndDate(now, 2);
+                                }
+                                else if (selectedVal == 3)
+                                {
+                                    return Utils.Calendar.QuarterEndDate(now, 3);
+                                }
+                                else if (selectedVal == 4)
+                                {
+                                    return Utils.Calendar.QuarterEndDate(now, 4);
+                                }
+                                else if (selectedVal == 7)
                                 {
                                     return Utils.Calendar.WeekEndDate(now);
                                 }
@@ -556,6 +588,10 @@ namespace PraticeManagement.Reporting
             var lastWeek = new System.Web.UI.WebControls.ListItem("Last Week", "-7");
             var lastMonth = new System.Web.UI.WebControls.ListItem("Last Month", "-30");
             var lastYear = new System.Web.UI.WebControls.ListItem("Last Year", "-365");
+            var quarter1 = new System.Web.UI.WebControls.ListItem("Q1", "1");
+            var quarter2 = new System.Web.UI.WebControls.ListItem("Q2", "2");
+            var quarter3 = new System.Web.UI.WebControls.ListItem("Q3", "3");
+            var quarter4 = new System.Web.UI.WebControls.ListItem("Q4", "4");
             ddlPeriod.Items.Add(payrollCurrent);
             ddlPeriod.Items.Add(payrollPrevious);
             ddlPeriod.Items.Add(thisWeek);
@@ -564,6 +600,10 @@ namespace PraticeManagement.Reporting
             ddlPeriod.Items.Add(lastWeek);
             ddlPeriod.Items.Add(lastMonth);
             ddlPeriod.Items.Add(lastYear);
+            ddlPeriod.Items.Add(quarter1);
+            ddlPeriod.Items.Add(quarter2);
+            ddlPeriod.Items.Add(quarter3);
+            ddlPeriod.Items.Add(quarter4);
 
             foreach (var milestone in list)
             {
