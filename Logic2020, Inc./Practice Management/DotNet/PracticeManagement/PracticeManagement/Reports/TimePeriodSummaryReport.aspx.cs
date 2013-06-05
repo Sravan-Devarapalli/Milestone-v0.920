@@ -29,7 +29,23 @@ namespace PraticeManagement.Reporting
                         var now = Utils.Generic.GetNowWithTimeZone();
                         if (selectedVal > 0)
                         {
-                            if (selectedVal == 7)
+                            if (selectedVal == 1)
+                            {
+                                return Utils.Calendar.QuarterStartDate(now,1);
+                            }
+                            else if (selectedVal == 2)
+                            {
+                                return Utils.Calendar.QuarterStartDate(now, 2);
+                            }
+                            else if (selectedVal == 3)
+                            {
+                                return Utils.Calendar.QuarterStartDate(now, 3);
+                            }
+                            else if (selectedVal == 4)
+                            {
+                                return Utils.Calendar.QuarterStartDate(now, 4);
+                            }
+                            else if (selectedVal == 7)
                             {
                                 return Utils.Calendar.WeekStartDate(now);
                             }
@@ -97,7 +113,23 @@ namespace PraticeManagement.Reporting
                             //15
                             //30
                             //365
-                            if (selectedVal == 7)
+                            if (selectedVal == 1)
+                            {
+                                return Utils.Calendar.QuarterEndDate(now, 1);
+                            }
+                            else if (selectedVal == 2)
+                            {
+                                return Utils.Calendar.QuarterEndDate(now, 2);
+                            }
+                            else if (selectedVal == 3)
+                            {
+                                return Utils.Calendar.QuarterEndDate(now, 3);
+                            }
+                            else if (selectedVal == 4)
+                            {
+                                return Utils.Calendar.QuarterEndDate(now, 4);
+                            }
+                            else if (selectedVal == 7)
                             {
                                 return Utils.Calendar.WeekEndDate(now);
                             }
