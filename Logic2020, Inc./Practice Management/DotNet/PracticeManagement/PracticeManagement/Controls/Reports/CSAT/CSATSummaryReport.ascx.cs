@@ -78,6 +78,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                                                     dataCellStyle, 
                                                     dataCellStyle, 
                                                     dataCellStyle, 
+                                                    dataCellStyle, 
                                                     dataNumberDateCellStyle,
                                                     dataCellStyle, 
                                                     dataDateCellStyle, 
@@ -97,7 +98,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                                                   };
                 //only comments column need to set the 100 as width
                 List<int> coloumnWidth = new List<int>();
-                for (int i = 1; i < 23; i++)
+                for (int i = 1; i < 24; i++)
                     coloumnWidth.Add(0);
                 coloumnWidth.Add(100);
 
@@ -135,6 +136,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
             data.Columns.Add("Business Unit");
             data.Columns.Add("Business Group");
             data.Columns.Add("Project Status");
+            data.Columns.Add("Buyer Name");
             data.Columns.Add("Project Name");
             data.Columns.Add("Project Owner");
             data.Columns.Add("Estimated Revenue");
@@ -163,6 +165,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 row.Add((pro.Group != null && pro.Group.Name != null) ? pro.Group.HtmlEncodedName : "");
                 row.Add((pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.HtmlEncodedName : "");
                 row.Add((pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : "");
+                row.Add(pro.BuyerName);
                 row.Add(pro.Name != null ? pro.HtmlEncodedName : "");
                 row.Add((pro.ProjectOwner != null && pro.ProjectOwner.Name != null) ? pro.ProjectOwner.HtmlEncodedName : "");
                 row.Add(pro.SowBudget.HasValue ? pro.SowBudget.Value.ToString() : "");
