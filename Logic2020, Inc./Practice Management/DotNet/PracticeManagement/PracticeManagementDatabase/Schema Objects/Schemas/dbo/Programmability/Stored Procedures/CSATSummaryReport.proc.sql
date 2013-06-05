@@ -79,6 +79,7 @@ BEGIN
 				BG.Name AS BusinessGroupName,
 				PG.Name AS BusinessUnitName,
 				P.ProjectNumber,
+				P.BuyerName,
 				P.Name AS ProjectName,
 				PS.Name AS ProjectStatusName,
 				PR.Name AS PracticeAreaName,
