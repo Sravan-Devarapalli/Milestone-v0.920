@@ -165,6 +165,7 @@ namespace DataAccess
                 int businessGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupName);
                 int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
                 int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int buyerNameIndex = reader.GetOrdinal(Constants.ColumnNames.BuyerNameColumn);
                 int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
                 int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                 int practiceAreaNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeAreaName);
@@ -197,6 +198,7 @@ namespace DataAccess
                     {
                         project = new Project();
                         project.Id = reader.GetInt32(projectIdIndex);
+                        project.BuyerName = !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : string.Empty;
                         project.ProjectNumber = projectNumber;
                         project.HasMultipleCSATs = reader.GetInt32(HasMultipleCSATsIndex) == 1;
                         project.Name = !reader.IsDBNull(projectNameIndex) ? reader.GetString(projectNameIndex) : null;
