@@ -47,7 +47,7 @@ BEGIN TRY
 		
 	IF @PersonStatusId = 2 OR @PersonStatusId = 5 OR ( @PersonStatusId = 3 AND @TerminationDate IS NOT NULL)
 	BEGIN
-		EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = @PersonStatusId
+		EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = @PersonStatusId ,@UserLogin = @UserLogin
 	END
 
 	IF @PersonStatusId <> 1
