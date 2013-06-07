@@ -89,7 +89,9 @@ BEGIN
 		)
 		SELECT PR.PersonId,P.FirstName,P.LastName,T.Title,TS.Name AS TimeScaleName,pr.StartDate,PR.EndDate,PR.RangeType,
 		        CASE WHEN PR.StartDate <= @CurrentMonthStartDate
-				     THEN ROUND( (ISNULL(PLb.BillableHours,0)/ISNULL(NULLIF(Plb.DefaultHours,0),1)),4) ELSE NULL END  AS BillableUtilizationPercent 
+				     THEN ROUND( (ISNULL(PLb.BillableHours,0)/ISNULL(NULLIF(Plb.DefaultHours,0),1)),4) ELSE NULL END  AS BillableUtilizationPercent,
+						ISNULL(PLB.BillableHours,0) AS BillableHours, 
+						ISNULL(NULLIF(PLB.DefaultHours,0),0) AS AvailableHours
 		FROM PersonWithRanges PR
 		LEFT JOIN PersonListWithBillingHours PLB ON PR.PersonId = PLB.PersonId AND PR.StartDate = PLB.StartDate AND PR.EndDate = PLB.EndDate
 		INNER JOIN dbo.Person P ON P.PersonId = PR.PersonId
