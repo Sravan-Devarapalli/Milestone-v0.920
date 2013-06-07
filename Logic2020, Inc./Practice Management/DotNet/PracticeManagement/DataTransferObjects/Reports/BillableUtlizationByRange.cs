@@ -22,12 +22,17 @@ namespace DataTransferObjects.Reports
         public double BillableUtilization { get; set; }
 
         [DataMember]
+        public double BillableHours { get; set; }
+
+        [DataMember]
+        public int AvailableHours { get; set; }
+
+        [DataMember]
         public string RangeType
         {
             get;
             set;
         }
-
     }
 }
 
