@@ -187,6 +187,7 @@ namespace PraticeManagement.Reports
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
 
                 CellStyles monthNameHeaderCellStyle = new CellStyles();
                 monthNameHeaderCellStyle.DataFormat = "[$-409]mmmm-yy;@";
@@ -196,17 +197,12 @@ namespace PraticeManagement.Reports
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 1; i <= 3; i++)
                     headerCellStyleList.Add(headerCellStyle);
-                for (int i = 1; i <= 12; i++)
+                for (int i = 1; i <= 36; i++)
+                {
                     headerCellStyleList.Add(monthNameHeaderCellStyle);
+                }
                 headerCellStyleList.Add(headerCellStyle);
 
-                List<int> coloumnWidth = new List<int>();
-                for (int i = 1; i <= 3; i++)
-                    coloumnWidth.Add(0);
-                for (int i = 1; i <= 12; i++)
-                    coloumnWidth.Add(13);
-                for (int i = 1; i <= 5; i++)
-                    coloumnWidth.Add(8);
 
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
@@ -214,18 +210,39 @@ namespace PraticeManagement.Reports
                 CellStyles decimaldataCellStyle = new CellStyles();
                 decimaldataCellStyle.DataFormat = "0.0%";
 
-                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, decimaldataCellStyle };
+                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, decimaldataCellStyle, dataCellStyle, dataCellStyle, decimaldataCellStyle, dataCellStyle, dataCellStyle, decimaldataCellStyle,
+                                                  dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,
+                                                  dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,
+                                                  dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,
+                                                  dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle,
+                                                  dataCellStyle, dataCellStyle, decimaldataCellStyle,dataCellStyle, dataCellStyle, decimaldataCellStyle
+                                                  };
+                //for (int i = 0; i < 17; i++)
+                //{
+                //    dataCellStylearray.ToList().Add(dataCellStyle);
+                //    dataCellStylearray.ToList().Add(dataCellStyle);
+                //    dataCellStylearray.ToList().Add(decimaldataCellStyle);
+                //    dataCellStylearray.ToArray();
+                //}
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
 
                 RowStyles datarowStyle = new RowStyles(dataCellStyleList.ToArray());
 
-                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                RowStyles[] rowStylearray = { headerrowStyle, headerrowStyle, datarowStyle };
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 2, 3, 0, 0});
+                sheetStyle.MergeRegion.Add(new int[] { 2, 3, 1, 1});
+                sheetStyle.MergeRegion.Add(new int[] { 2, 3, 2, 2});
+                for (int i = 0; i < 17; i++)
+                {
+                    sheetStyle.MergeRegion.Add(new int[] { 2, 2, (i + 1) * 3, (i + 1) * 3 +2});
+                }
                 sheetStyle.TopRowNo = billingheaderRowsCount;
                 sheetStyle.IsFreezePane = true;
                 sheetStyle.FreezePanColSplit = 0;
-                sheetStyle.FreezePanRowSplit = billingheaderRowsCount;
-                sheetStyle.ColoumnWidths = coloumnWidth;
+                sheetStyle.FreezePanRowSplit = billingheaderRowsCount+1;
+                sheetStyle.FreezePanColSplit = 3;
+                //sheetStyle.ColoumnWidths = coloumnWidth;
                 return sheetStyle;
             }
         }
@@ -539,6 +556,8 @@ namespace PraticeManagement.Reports
                 foreach (var bu in attainmentBillableutlizationList[0].BillableUtilizationList)
                 {
                     coloumnsAll.Add(bu.RangeType);
+                    coloumnsAll.Add(bu.RangeType + "Billable Hours");
+                    coloumnsAll.Add(bu.RangeType + "Available Hours");
                 }
                 var now = Utils.Generic.GetNowWithTimeZone();
                 var yearStart = Utils.Calendar.YearStartDate(now);
@@ -552,7 +571,15 @@ namespace PraticeManagement.Reports
                 {
                     data.Columns.Add(s);
                 }
-
+                row = new List<object>();
+                row.Add(string.Empty); row.Add(string.Empty); row.Add(string.Empty);
+                for (int i = 0; i < attainmentBillableutlizationList[0].BillableUtilizationList.Count; i++)
+                {
+                    row.Add("Billable Hours");
+                    row.Add("Available Hours"); 
+                    row.Add("Billable Utilization");
+                }
+                data.Rows.Add(row.ToArray());
                 foreach (var per in attainmentBillableutlizationList)
                 {
                     row = new List<object>();
@@ -562,6 +589,9 @@ namespace PraticeManagement.Reports
                     row.Add(per.Person != null && per.Person.CurrentPay != null ? per.Person.CurrentPay.TimescaleName : "");
                     for (i = 0; i < per.BillableUtilizationList.Count; i++)
                     {
+                        //To reduce the "Case When" Cost in sproc,returning the Available n Billable hours.Showing them in excel is based on the Billable Utilization %
+                        row.Add(per.BillableUtilizationList[i].BillableUtilization == -1 ? "" : per.BillableUtilizationList[i].BillableHours.ToString());
+                        row.Add(per.BillableUtilizationList[i].BillableUtilization == -1 ? "" : per.BillableUtilizationList[i].AvailableHours.ToString());
                         row.Add(per.BillableUtilizationList[i].BillableUtilization == -1 ? "" : per.BillableUtilizationList[i].BillableUtilization.ToString());
                     }
                     data.Rows.Add(row.ToArray());
