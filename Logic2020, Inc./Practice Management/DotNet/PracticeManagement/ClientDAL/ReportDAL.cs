@@ -2733,6 +2733,8 @@ namespace DataAccess
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
                 int billableUtilizationPercentIndex = reader.GetOrdinal(Constants.ColumnNames.BillableUtilizationPercent);
                 int rangeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.RangeType);
+                int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                int availableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.AvailableHours);
                 while (reader.Read())
                 {
                     AttainmentBillableutlizationReport attainmentBillableutlizationReport;
@@ -2764,7 +2766,10 @@ namespace DataAccess
                     }
                     BillableUtlizationByRange billableUtlizationByRange = new BillableUtlizationByRange();
                     billableUtlizationByRange.StartDate = reader.GetDateTime(startDateIndex);
+                    double billableHours = reader.GetDouble(billableHoursIndex);
                     billableUtlizationByRange.EndDate = reader.GetDateTime(endDateIndex);
+                    billableUtlizationByRange.BillableHours = billableHours;
+                    billableUtlizationByRange.AvailableHours = reader.GetInt32(availableHoursIndex); ;
                     billableUtlizationByRange.BillableUtilization = !reader.IsDBNull(billableUtilizationPercentIndex) ? reader.GetDouble(billableUtilizationPercentIndex) : -1;
                     billableUtlizationByRange.RangeType = reader.GetString(rangeTypeIndex);
                     attainmentBillableutlizationReport.BillableUtilizationList.Add(billableUtlizationByRange);
