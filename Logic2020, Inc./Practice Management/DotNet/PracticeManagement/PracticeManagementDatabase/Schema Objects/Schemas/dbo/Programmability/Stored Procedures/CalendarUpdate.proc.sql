@@ -125,26 +125,9 @@ BEGIN
 		FROM dbo.TimeEntry AS TE 
 		INNER JOIN @SubDates AS SUBDATES ON SUBDATES.date = TE.ChargeCodeDate AND TE.ChargeCodeId = @HolidayChargeCodeId 
 
-		--8.Deleting the date from personcalender
-		UPDATE PC
-		SET PC.DayOff=0
-		FROM dbo.PersonCalendar AS PC
-		INNER JOIN @Dates dates ON dates.date = PC.SubstituteDate AND PC.DayOff=1
-
 		DELETE PC
 		FROM dbo.PersonCalendar AS PC 
 		WHERE PC.Date = @Date AND PC.DayOff = 0
-
-		--Delete Holiday dates from TIMEENTRY and TIMENTRYHOURS when it is used as substitute date
-		DELETE TEH
-		FROM dbo.TimeEntry AS TE
-		INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
-		INNER JOIN PersonCalendar PC ON PC.Date=TE.ChargeCodeDate AND PC.DayOff=0 AND PC.SubstituteDate IS NOT NULL
-
-		DELETE TE
-		FROM dbo.TimeEntry AS TE
-		INNER JOIN PersonCalendar PC ON PC.Date=TE.ChargeCodeDate AND PC.DayOff=0 AND PC.SubstituteDate IS NOT NULL
-
 
 	END
 	ELSE     --IF it is a Holiday then
@@ -165,19 +148,13 @@ BEGIN
 		LEFT JOIN  dbo.Pay pay  ON pay.Timescale = 2 /* 'W2-Salary' */ AND pay.Person = Pc.PersonId AND  
 									PC.Date BETWEEN pay.StartDate AND ISNULL(pay.EndDate,@FutureDate)
 
-	   --9.UPDATE that substitute date from the personcalender
-		UPDATE pc
-		SET pc.DayOff=0
-		FROM dbo.PersonCalendar pc 
-		INNER JOIN @SubDatesForPersons AS SDP ON  pc.PersonId = SDP.PersonId AND (pc.SubstituteDate = SDP.[SubstituteDate] OR pc.Date =SDP.[SubstituteDate])
-
-		UPDATE pc
-		SET pc.DayOff=1
+			
+		DELETE pc
 		FROM dbo.PersonCalendar pc 
 		INNER JOIN @SubDatesForPersons AS SDP ON (pc.SubstituteDate = SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId) OR
 													(pc.Date =SDP.[SubstituteDate] AND pc.PersonId = SDP.PersonId)
 
-		--10.Delete holiday timetype  Entry from TimeEntry table for substitute date.
+		--Delete holiday timetype  Entry from TimeEntry table for substitute date.
 		--Delete From TimeEntryHours.
 		DELETE TEH
 		FROM dbo.TimeEntry TE 
@@ -185,7 +162,7 @@ BEGIN
 		INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
 		WHERE TE.ChargeCodeId = @HolidayChargeCodeId 
 
-		--11.Delete From TimeEntry.
+		--Delete From TimeEntry.
 		DELETE TE
 		FROM dbo.TimeEntry TE
 		INNER JOIN @SubDatesForPersons AS SDP ON TE.PersonId = SDP.PersonId AND TE.ChargeCodeDate = SDP.[SubstituteDate]
