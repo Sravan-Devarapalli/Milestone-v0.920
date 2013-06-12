@@ -27,14 +27,14 @@
                             <td class="Width9Percent">
                                 <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" CssClass="WholeWidth"
                                     OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
-                                    <asp:ListItem Text="Next 3 months" Selected="True" Value="3"></asp:ListItem>
+                                    <asp:ListItem Text="Next 3 months"  Value="3"></asp:ListItem>
                                     <asp:ListItem Text="Next 6 months" Value="6"></asp:ListItem>
                                     <asp:ListItem Text="Next 12 months" Value="12"></asp:ListItem>
                                     <asp:ListItem Text="Last 3 months" Value="-3"></asp:ListItem>
                                     <asp:ListItem Text="Last 6 months" Value="-6"></asp:ListItem>
                                     <asp:ListItem Text="Last 12 months" Value="-12"></asp:ListItem>
                                     <asp:ListItem Text="Previous FY" Value="-13"></asp:ListItem>
-                                    <asp:ListItem Text="Current FY" Value="13"></asp:ListItem>
+                                    <asp:ListItem Text="Current FY" Selected="True" Value="13"></asp:ListItem>
                                     <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                 </asp:DropDownList>
                                 <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender" BackgroundCssClass="modalBackground"
