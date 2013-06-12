@@ -84,8 +84,6 @@ namespace DataTransferObjects
             }
         }
 
-       
-
         /// <summary>
         /// Client can be filtered from display if this is true.
         /// </summary>
@@ -117,6 +115,27 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public int? DefaultDirectorId
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string DefaultSalesperson
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string DefaultDirector
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string LoginPerson
         {
             get;
             set;
