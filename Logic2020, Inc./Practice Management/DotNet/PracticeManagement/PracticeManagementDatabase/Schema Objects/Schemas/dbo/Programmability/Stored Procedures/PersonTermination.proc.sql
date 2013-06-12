@@ -44,6 +44,12 @@ BEGIN
 	WHERE  TE.PersonId = @PersonId
 			AND TE.ChargeCodeDate > @TerminationDate
 
+
+	DELETE PC
+	FROM dbo.PersonCalendar PC
+	WHERE PC.PersonId = @PersonId
+		  AND PC.Date > @TerminationDate
+
 	--2.Adjust the person milestone end date with the given termination date.
 	--	if milestone person start date is greater than person termination date deleted the milestone person record		
 	
