@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
@@ -173,6 +174,7 @@
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Expenses" type="xs:decimal" />
       <xs:element minOccurs="0" name="FinancialDate" nillable="true" type="xs:dateTime" />
+      <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" minOccurs="0" name="FinancialRange" nillable="true" type="q12:RangeType" />
       <xs:element minOccurs="0" name="GrossMargin" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
       <xs:element minOccurs="0" name="PracticeManagementCommission" type="tns:PracticeManagementCurrency" />
@@ -328,67 +330,38 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TitleType" nillable="true" type="tns:TitleType" />
-  <xs:complexType name="Client">
+  <xs:simpleType name="ProjectCalculateRangeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ProjectValueInRange">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TotalProjectValue">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CurrentFiscalYear">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ProjectCalculateRangeType" nillable="true" type="tns:ProjectCalculateRangeType" />
+  <xs:complexType name="ArrayOfProject">
     <xs:sequence>
-      <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
-      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="DefaultDirectorId" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DefaultDiscount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="DefaultSalespersonId" type="xs:int" />
-      <xs:element minOccurs="0" name="DefaultTerms" type="xs:int" />
-      <xs:element minOccurs="0" name="Groups" nillable="true" type="tns:ArrayOfProjectGroup" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsHouseAccount" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="Client" nillable="true" type="tns:Client" />
-  <xs:complexType name="ArrayOfClientMarginColorInfo">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfClientMarginColorInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
-  <xs:complexType name="ClientMarginColorInfo">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ColorInfo" nillable="true" type="tns:ColorInformation" />
-      <xs:element minOccurs="0" name="EndRange" type="xs:int" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="StartRange" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
-  <xs:complexType name="ColorInformation">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ColorDescription" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ColorId" type="xs:int" />
-      <xs:element minOccurs="0" name="ColorValue" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ColorInformation" nillable="true" type="tns:ColorInformation" />
-  <xs:complexType name="ArrayOfProjectGroup">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProjectGroup" nillable="true" type="tns:ArrayOfProjectGroup" />
-  <xs:complexType name="ProjectGroup">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="BusinessGroupId" type="xs:int" />
-      <xs:element minOccurs="0" name="ClientId" type="xs:int" />
-      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
+  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
   <xs:complexType name="Project">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
@@ -440,7 +413,8 @@
       <xs:element minOccurs="0" name="ProjectOwner" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="ProjectPersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
       <xs:element minOccurs="0" name="ProjectWorkTypesList" nillable="true" type="xs:string" />
-      <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q12:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q13:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByRange" nillable="true" type="q14:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
       <xs:element minOccurs="0" name="RecentCompletedStatusDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="SalesCommission" nillable="true" type="tns:ArrayOfCommission" />
       <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
@@ -524,6 +498,67 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectCSAT" nillable="true" type="tns:ProjectCSAT" />
+  <xs:complexType name="Client">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DefaultDirectorId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DefaultDiscount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DefaultSalespersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="DefaultTerms" type="xs:int" />
+      <xs:element minOccurs="0" name="Groups" nillable="true" type="tns:ArrayOfProjectGroup" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsHouseAccount" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Client" nillable="true" type="tns:Client" />
+  <xs:complexType name="ArrayOfClientMarginColorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfClientMarginColorInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
+  <xs:complexType name="ClientMarginColorInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ColorInfo" nillable="true" type="tns:ColorInformation" />
+      <xs:element minOccurs="0" name="EndRange" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="StartRange" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ClientMarginColorInfo" nillable="true" type="tns:ClientMarginColorInfo" />
+  <xs:complexType name="ColorInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ColorDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ColorId" type="xs:int" />
+      <xs:element minOccurs="0" name="ColorValue" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ColorInformation" nillable="true" type="tns:ColorInformation" />
+  <xs:complexType name="ArrayOfProjectGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectGroup" nillable="true" type="tns:ArrayOfProjectGroup" />
+  <xs:complexType name="ProjectGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BusinessGroupId" type="xs:int" />
+      <xs:element minOccurs="0" name="ClientId" type="xs:int" />
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
   <xs:complexType name="Commission">
     <xs:sequence>
       <xs:element minOccurs="0" name="FractionOfMargin" type="xs:decimal">
@@ -664,7 +699,7 @@
       <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MilestonePersonId" type="xs:int" />
       <xs:element minOccurs="0" name="ParentMilestone" nillable="true" type="tns:Milestone" />
-      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PersonTimeOffList" nillable="true" type="q13:ArrayOfKeyValueOfdateTimedecimal" />
+      <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PersonTimeOffList" nillable="true" type="q15:ArrayOfKeyValueOfdateTimedecimal" />
       <xs:element minOccurs="0" name="ProjectedWorkloadWithVacation" type="xs:decimal" />
       <xs:element minOccurs="0" name="Role" nillable="true" type="tns:PersonRole" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
@@ -710,12 +745,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
-  <xs:complexType name="ArrayOfProject">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
   <xs:simpleType name="TimeEntrySectionType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Undefined" />
