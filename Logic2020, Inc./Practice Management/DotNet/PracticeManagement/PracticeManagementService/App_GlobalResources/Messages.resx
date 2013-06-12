@@ -177,4 +177,7 @@
   <data name="TestSettingsEmailTemplateName" xml:space="preserve">
     <value>TestSettingsEmailTemplate</value>
   </data>
+  <data name="ClientAddedTemplateName" xml:space="preserve">
+    <value>ClientAddedTemplate</value>
+  </data>
 </root>
