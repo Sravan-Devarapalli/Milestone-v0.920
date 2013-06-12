@@ -819,6 +819,9 @@
     <None Include="Service References\ReportService\ReportService1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ReportService\ReportService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ReportService\ReportService2.xsd">
       <SubType>Designer</SubType>
     </None>
