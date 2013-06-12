@@ -18,6 +18,29 @@ namespace PraticeManagement.ReportService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReport", ReplyAction="http://tempuri.org/IReportService/AttainmentBillableutlizationReportResponse")]
         DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParameters", ReplyAction="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParametersResponse" +
+            "")]
+        DataTransferObjects.Project[] GetAttainmentProjectListMultiParameters(
+                    string clientIds, 
+                    bool showProjected, 
+                    bool showCompleted, 
+                    bool showActive, 
+                    bool showInternal, 
+                    bool showExperimental, 
+                    bool showInactive, 
+                    System.DateTime periodStart, 
+                    System.DateTime periodEnd, 
+                    string salespersonIdsList, 
+                    string practiceManagerIdsList, 
+                    string practiceIdsList, 
+                    string projectGroupIdsList, 
+                    DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
+                    bool excludeInternalPractices, 
+                    string userLogin, 
+                    bool IsQuarterColoumnsShown, 
+                    bool IsYearToDateColoumnsShown, 
+                    bool getFinancialsFromCache);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
         
@@ -125,7 +148,8 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-      
+     
+        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -144,6 +168,29 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.AttainmentBillableutlizationReport(startDate, endDate);
+        }
+        
+        public DataTransferObjects.Project[] GetAttainmentProjectListMultiParameters(
+                    string clientIds, 
+                    bool showProjected, 
+                    bool showCompleted, 
+                    bool showActive, 
+                    bool showInternal, 
+                    bool showExperimental, 
+                    bool showInactive, 
+                    System.DateTime periodStart, 
+                    System.DateTime periodEnd, 
+                    string salespersonIdsList, 
+                    string practiceManagerIdsList, 
+                    string practiceIdsList, 
+                    string projectGroupIdsList, 
+                    DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
+                    bool excludeInternalPractices, 
+                    string userLogin, 
+                    bool IsQuarterColoumnsShown, 
+                    bool IsYearToDateColoumnsShown, 
+                    bool getFinancialsFromCache) {
+            return base.Channel.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
