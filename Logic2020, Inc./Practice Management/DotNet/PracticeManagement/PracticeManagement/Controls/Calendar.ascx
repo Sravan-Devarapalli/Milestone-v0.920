@@ -135,11 +135,11 @@
 
         if (actualHoursText == null && noteText != '') {
             var noteTextStr = noteText.value.toString();
-            if (noteTextStr.length > 0) {
+            if (noteTextStr.length >= 3 && noteTextStr.length =<1000) {
                 SaveDetails(popupExtendar, btnOk);
             }
             else {
-                errorText.innerHTML = '* Please Enter Holiday Description.';
+                errorText.innerHTML = 'Holiday Description should be 3-1000 characters long';
             }
         }
         else {
