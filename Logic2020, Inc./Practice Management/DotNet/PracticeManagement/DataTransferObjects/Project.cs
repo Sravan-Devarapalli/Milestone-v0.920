@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 using DataTransferObjects.TimeEntry;
+using DataTransferObjects.Financials;
 
 namespace DataTransferObjects
 {
@@ -253,6 +254,13 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public Dictionary<DateTime, ComputedFinancials> ProjectedFinancialsByMonth
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public Dictionary<RangeType, ComputedFinancials> ProjectedFinancialsByRange
         {
             get;
             set;
