@@ -43,7 +43,7 @@ namespace PraticeManagement.CalendarService {
         void DeleteSubstituteDay(int personId, System.DateTime substituteDayDate, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/SaveTimeOff", ReplyAction="http://tempuri.org/ICalendarService/SaveTimeOffResponse")]
-        void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin, System.Nullable<int> approvedBy);
+        void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin, System.Nullable<int> approvedBy, System.Nullable<System.DateTime> OldSeriesStartDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriod", ReplyAction="http://tempuri.org/ICalendarService/GetTimeOffSeriesPeriodResponse")]
         DataTransferObjects.Quadruple<System.DateTime, System.DateTime, System.Nullable<int>, string> GetTimeOffSeriesPeriod(int personId, System.DateTime date);
@@ -63,8 +63,7 @@ namespace PraticeManagement.CalendarService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class CalendarServiceClient : System.ServiceModel.ClientBase<PraticeManagement.CalendarService.ICalendarService>, PraticeManagement.CalendarService.ICalendarService {
         
-     
-        
+      
         public CalendarServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -117,8 +116,8 @@ namespace PraticeManagement.CalendarService {
             base.Channel.DeleteSubstituteDay(personId, substituteDayDate, userLogin);
         }
         
-        public void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin, System.Nullable<int> approvedBy) {
-            base.Channel.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin, approvedBy);
+        public void SaveTimeOff(System.DateTime startDate, System.DateTime endDate, bool dayOff, int personId, System.Nullable<double> actualHours, int timeTypeId, string userLogin, System.Nullable<int> approvedBy, System.Nullable<System.DateTime> OldSeriesStartDate) {
+            base.Channel.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin, approvedBy, OldSeriesStartDate);
         }
         
         public DataTransferObjects.Quadruple<System.DateTime, System.DateTime, System.Nullable<int>, string> GetTimeOffSeriesPeriod(int personId, System.DateTime date) {
