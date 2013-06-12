@@ -462,7 +462,8 @@ namespace PraticeManagement.Controls
                                                                   (double?)Convert.ToDouble(txtHoursSingleDay.Text),
                                                                   Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
                                                                   Context.User.Identity.Name,
-                                                                  approvedBy
+                                                                  approvedBy,
+                                                                  null
                                                                   )
                                                );
                 UpdateCalendar();
@@ -510,7 +511,8 @@ namespace PraticeManagement.Controls
                                                                   (double?)hours,
                                                                   Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
                                                                   Context.User.Identity.Name,
-                                                                  approvedBy
+                                                                  approvedBy,
+                                                                  null
                                                                   )
                                                );
 
@@ -582,6 +584,12 @@ namespace PraticeManagement.Controls
                         approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
                     }
 
+                    DateTime? oldStartDate;
+                    if (SeriesStartDate.Date == DateTime.MinValue)
+                        oldStartDate = null;
+                    else
+                        oldStartDate = SeriesStartDate;
+
                     ServiceCallers.Custom.Calendar(
                         c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
                                                                       dtpEndDateTimeOff.DateValue,
@@ -590,7 +598,8 @@ namespace PraticeManagement.Controls
                                                                       (double?)hours,
                                                                       Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                       Context.User.Identity.Name,
-                                                                      approvedBy
+                                                                      approvedBy,
+                                                                      oldStartDate
                                                                       )
                                                    );
                   
@@ -604,7 +613,8 @@ namespace PraticeManagement.Controls
                                                                    (double?)hours,
                                                                    Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                    Context.User.Identity.Name,
-                                                                   approvedBy
+                                                                   approvedBy,
+                                                                   null
                                                                    )
                                                 );
                     }
@@ -664,7 +674,8 @@ namespace PraticeManagement.Controls
                                                                  (double?)Convert.ToDouble(txthoursTimeOff.Text),
                                                                  Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                  Context.User.Identity.Name,
-                                                                 approvedBy
+                                                                 approvedBy,
+                                                                 null
                                                                  )
                                               );
                 UpdateCalendar();
