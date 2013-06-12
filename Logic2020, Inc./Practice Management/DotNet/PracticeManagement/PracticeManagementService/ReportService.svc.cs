@@ -143,19 +143,19 @@ namespace PracticeManagementService
             return ReportDAL.ConsultingDemandSummary(startDate, endDate, titles, skills);
         }
 
-        public List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills,string sortColumns)
+        public List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
         {
             return ReportDAL.ConsultingDemandDetailsByTitleSkill(startDate, endDate, titles, skills, sortColumns);
         }
 
-        public List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills,string salesStages, string sortColumns,bool isFromPipeLinePopUp)
+        public List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills, string salesStages, string sortColumns, bool isFromPipeLinePopUp)
         {
-            return ReportDAL.ConsultingDemandDetailsByMonth(startDate, endDate, titles, skills,salesStages, sortColumns, isFromPipeLinePopUp);
+            return ReportDAL.ConsultingDemandDetailsByMonth(startDate, endDate, titles, skills, salesStages, sortColumns, isFromPipeLinePopUp);
         }
 
         public Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string Title, string salesStages)
         {
-            return ReportDAL.ConsultingDemandGraphsByTitle(startDate, endDate,Title,salesStages);
+            return ReportDAL.ConsultingDemandGraphsByTitle(startDate, endDate, Title, salesStages);
         }
 
         public Dictionary<string, int> ConsultingDemandGraphsBySkills(DateTime startDate, DateTime endDate, string Skill, string salesStages)
@@ -168,7 +168,7 @@ namespace PracticeManagementService
             return ReportDAL.ConsultingDemandTransactionReportByTitle(startDate, endDate, Title, sortColumns, salesStages);
         }
 
-        public List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill,string sortColumns,string salesStages)
+        public List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill, string sortColumns, string salesStages)
         {
             return ReportDAL.ConsultingDemandTransactionReportBySkill(startDate, endDate, Skill, sortColumns, salesStages);
         }
@@ -183,16 +183,39 @@ namespace PracticeManagementService
             return ReportDAL.ConsultingDemandGrphsGroupsBySkill(startDate, endDate, salesStages);
         }
 
-	     public List<ConsultantGroupBySalesStage> ConsultingDemandDetailsBySalesStage(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
-            {
-                return ReportDAL.ConsultingDemandDetailsBySalesStage(startDate, endDate, titles, skills, sortColumns);
-            }
-         public List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate)
-         {
-             return ReportDAL.AttainmentBillableutlizationReport(startDate, endDate);
-         }
+        public List<ConsultantGroupBySalesStage> ConsultingDemandDetailsBySalesStage(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns)
+        {
+            return ReportDAL.ConsultingDemandDetailsBySalesStage(startDate, endDate, titles, skills, sortColumns);
+        }
+        public List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.AttainmentBillableutlizationReport(startDate, endDate);
+        }
         #endregion
 
+        public List<Project> GetAttainmentProjectListMultiParameters(
+         string clientIds,
+         bool showProjected,
+         bool showCompleted,
+         bool showActive,
+         bool showInternal,
+         bool showExperimental,
+         bool showInactive,
+         DateTime periodStart,
+         DateTime periodEnd,
+         string salespersonIdsList,
+         string practiceManagerIdsList,
+         string practiceIdsList,
+         string projectGroupIdsList,
+         ProjectCalculateRangeType includeCurentYearFinancials,
+         bool excludeInternalPractices,
+         string userLogin,
+           bool IsQuarterColoumnsShown,
+       bool IsYearToDateColoumnsShown,
+         bool getFinancialsFromCache)
+        {
+            return ReportDAL.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+        }
     }
 }
 
