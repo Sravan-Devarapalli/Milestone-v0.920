@@ -539,7 +539,7 @@ namespace PraticeManagement.Controls.TimeEntry
             //  Check that hours is double between 0.25 and 8.0
             if (double.TryParse(tbActualHours.Text, out hours))
             {
-                if (hours > 0.25 && hours <= 8)
+                if (hours >= 0.25 && hours <= 8)
                 {
                     return true;
                 }
