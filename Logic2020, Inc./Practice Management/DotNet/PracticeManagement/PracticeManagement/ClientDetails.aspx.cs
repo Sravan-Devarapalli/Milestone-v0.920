@@ -40,6 +40,28 @@ namespace PraticeManagement
             }
         }
 
+        public string DefaultSalesperson
+        {
+            get
+            {
+                if (ddlDefaultSalesperson.SelectedValue != "")
+                    return ddlDefaultSalesperson.SelectedItem.Text;
+                else
+                    return string.Empty;
+            }
+        }
+
+        public string DefaultDirector
+        {
+            get
+            {
+                if (ddlDefaultDirector.SelectedValue != "")
+                    return ddlDefaultDirector.SelectedItem.Text;
+                else
+                    return string.Empty;
+            }
+        }
+
         private const string CLIENT_THRESHOLDS_LIST_KEY = "CLIENT_THRESHOLDS_LIST_KEY";
 
         private List<ClientMarginColorInfo> ClientMarginColorInfoList
@@ -618,6 +640,9 @@ namespace PraticeManagement
             {
                 try
                 {
+                    client.DefaultDirector = DefaultDirector;
+                    client.DefaultSalesperson = DefaultSalesperson;
+                    client.LoginPerson = DataHelper.CurrentPerson.PersonFirstLastName;
                     var id = serviceClient.SaveClientDetail(client, User.Identity.Name);
                     if (!ClientId.HasValue)
                     {
