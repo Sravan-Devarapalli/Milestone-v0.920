@@ -8,6 +8,7 @@ using PraticeManagement.Controls.Reports;
 using PraticeManagement.ExpenseService;
 using PraticeManagement.ProjectService;
 using System.Collections.Generic;
+using PraticeManagement.ReportService;
 
 namespace PraticeManagement.Controls
 {
@@ -234,6 +235,75 @@ namespace PraticeManagement.Controls
                                         filterSet.ProjectGroupIdsList,
                                         filterSet.ExcludeInternalPractices);
                                 }
+                            }
+                            catch (CommunicationException ex)
+                            {
+                                serviceClient.Abort();
+                                throw;
+                            }
+                        }
+
+                        singleton.ProjectListState = result;
+                        State = singleton;
+                    }
+                }
+                else
+                {
+                    result = null;
+                }
+
+                return result;
+            }
+            set
+            {
+                var singleton = State;
+                if (State != null)
+                {
+                    State.ProjectListState = value;
+                    State = singleton;
+                }
+            }
+        }
+
+        public static Project[] AttainmentProjectList
+        {
+            get
+            {
+                CompanyPerformanceState singleton = State;
+                CompanyPerformanceFilterSettings filterSet = Filter;
+                Project[] result;
+
+                if (singleton != null && filterSet != null)
+                {
+                    result = singleton.ProjectListState;
+
+                    if (result == null)
+                    {
+                        using (var serviceClient = new ReportServiceClient())
+                        {
+                            try
+                            {
+                                    result =
+                                        serviceClient.GetAttainmentProjectListMultiParameters(
+                                        filterSet.ClientIdsList,
+                                        filterSet.ShowProjected,
+                                        filterSet.ShowCompleted,
+                                        filterSet.ShowActive,
+                                        filterSet.ShowInternal,
+                                        filterSet.ShowExperimental,
+                                        filterSet.ShowInactive,
+                                        filterSet.PeriodStart,
+                                        filterSet.PeriodEnd,
+                                        filterSet.SalespersonIdsList,
+                                        filterSet.ProjectOwnerIdsList,
+                                        filterSet.PracticeIdsList,
+                                        filterSet.ProjectGroupIdsList,
+                                        filterSet.CalculateRangeSelected,
+                                        filterSet.ExcludeInternalPractices,
+                                        Thread.CurrentPrincipal.Identity.Name,
+                                        filterSet.IsQuarterColoumnsShown,
+                                        filterSet.IsYearToDateColoumnsShown,
+                                        filterSet.FinancialsFromCache);
                             }
                             catch (CommunicationException ex)
                             {
