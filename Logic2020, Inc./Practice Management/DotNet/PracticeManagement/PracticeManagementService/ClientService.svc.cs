@@ -22,6 +22,8 @@ namespace PracticeManagementService
             if (!client.Id.HasValue)
             {
                 ClientDAL.ClientInsert(client, userLogin);
+                var now = SettingsHelper.GetCurrentPMTime();
+                MailUtil.SendClientAddedEmail(client.LoginPerson, now.ToString("MM/dd/yyyy"), client.HtmlEncodedName, client.IsHouseAccount ? "Yes" : "No", client.DefaultSalesperson, client.DefaultDirector);
                 return client.Id;
             }
             else
