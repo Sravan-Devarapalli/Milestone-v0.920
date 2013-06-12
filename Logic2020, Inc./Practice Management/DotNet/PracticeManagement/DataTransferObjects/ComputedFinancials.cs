@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using DataTransferObjects.Financials;
 
 namespace DataTransferObjects
 {
@@ -133,6 +134,9 @@ namespace DataTransferObjects
         /// </summary>
         [DataMember]
         public DateTime? FinancialDate { get; set; }
+
+        [DataMember]
+        public RangeType FinancialRange { get; set; }
 
         /// <summary>
         /// Gets or sets a number of hours billed.
