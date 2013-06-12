@@ -89,6 +89,15 @@ namespace PracticeManagementService
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
         }
 
+
+        internal static void SendClientAddedEmail(string currentPerson ,string startDate, string clientName, string isHouseAccount, string salesperson, string director)
+        {
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.ClientAddedTemplateName);
+            var subject = string.Format(emailTemplate.Subject, clientName);
+            var body = string.Format(emailTemplate.Body, currentPerson, startDate, clientName, isHouseAccount, salesperson, director);
+            Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
+        }
+
         internal static void SendHireDateChangedEmail(string firstName, string lastName, string oldHireDate, string newHireDate, string emailAddress, string title, string payType, string telephoneNumber)
         {
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.HireDateChangedTemplateName);
