@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string MonthEnd = "MonthEnd";
             public const string RangeType = "RangeType";
             public const string IsHouseAccount = "IsHouseAccount";
             public const string SalesStage = "SalesStage";
@@ -716,6 +717,7 @@
             public const string SubstituteDayDateParam = "@SubstituteDayDate";
             public const string HolidayDateParam = "@HolidayDate";
             public const string ApprovedByParam = "@ApprovedBy";
+            public const string OldStartDate = "@OldStartDate";
             public const string PersonStatusIdsParam = "@PersonStatusIds";
             public const string OrderByCerteriaParam = "@OrderByCerteria";
             public const string SeniorityIdsParam = "@SeniorityIds";
@@ -762,6 +764,8 @@
             public const string UserName = "@UserName";
             public const string LastLockoutDate = "@LastLockoutDate";
             public const string UseActualsParam = "@UseActuals";
+            public const string CalculateQuarterValues = "@CalculateQuarterValues";
+            public const string CalculateYearToDateValues = "@CalculateYearToDateValues";
             public const string IsMonthlyReportParam = "@IsMonthlyReport";
             public const string IncludeCompanyHolidays = "@IncludeCompanyHolidays";
             public const string IsSummary = "@IsSummary";
@@ -1063,6 +1067,8 @@
 
             public class Reports
             {
+                public const string AttainmentProjectList = "dbo.AttainmentProjectList";
+                public const string AttainmentFinancialListByProject = "dbo.AttainmentFinancialListByProject";
                 public const string PersonTimeEntriesDetails = "dbo.PersonTimeEntriesDetails";
                 public const string PersonTimeEntriesSummary = "dbo.PersonTimeEntriesSummary";
                 public const string GetPersonTimeEntriesTotalsByPeriod = "dbo.GetPersonTimeEntriesTotalsByPeriod";
