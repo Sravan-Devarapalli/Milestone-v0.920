@@ -124,6 +124,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ClientAddedTemplate.
+        /// </summary>
+        internal static string ClientAddedTemplateName {
+            get {
+                return ResourceManager.GetString("ClientAddedTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DeActivateAccountTemplate.
         /// </summary>
         internal static string DeActivateAccountTemplateName {
