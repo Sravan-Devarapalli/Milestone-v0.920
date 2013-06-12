@@ -71,6 +71,12 @@ namespace PraticeManagement.Controls
         private bool useActualTimeEntries;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool isQuarterColoumnsShown;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool isYearToDateColoumnsShown;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool financialsFromCache;
 
         #endregion
@@ -269,7 +275,7 @@ namespace PraticeManagement.Controls
         }
 
         /// <summary>
-        /// Gets and sets a flagindicates whether or not to include internal Practices
+        /// Gets and sets a flag indicates whether or not to include internal Practices
         /// </summary>
         public bool ExcludeInternalPractices
         {
@@ -328,7 +334,7 @@ namespace PraticeManagement.Controls
         }
 
         /// <summary>
-        /// 	Gets or sets whether the advanced filter is hidded.
+        /// 	Gets or sets whether the advanced filter is hidden.
         /// </summary>
         public bool HideAdvancedFilter
         {
@@ -374,6 +380,18 @@ namespace PraticeManagement.Controls
         {
             get { return useActualTimeEntries; }
             set { useActualTimeEntries = value; }
+        }
+
+        public bool IsQuarterColoumnsShown
+        {
+            get { return isQuarterColoumnsShown; }
+            set { isQuarterColoumnsShown = value; }
+        }
+
+        public bool IsYearToDateColoumnsShown
+        {
+            get { return isYearToDateColoumnsShown; }
+            set { isYearToDateColoumnsShown = value; }
         }
 
         public bool FinancialsFromCache
@@ -422,6 +440,8 @@ namespace PraticeManagement.Controls
             SalespersonIdsList = null;
             UseActualTimeEntries = true;
             FinancialsFromCache = false;
+            IsQuarterColoumnsShown =false;
+            IsYearToDateColoumnsShown = false;
         }
 
         #endregion
@@ -482,7 +502,9 @@ namespace PraticeManagement.Controls
                     UseActualTimeEntries == compareObj.UseActualTimeEntries &&
 
                     IsGroupByPersonPage == compareObj.IsGroupByPersonPage &&
-                    FinancialsFromCache == compareObj.FinancialsFromCache;
+                    FinancialsFromCache == compareObj.FinancialsFromCache &&
+                    IsQuarterColoumnsShown == compareObj.IsQuarterColoumnsShown &&
+                    IsYearToDateColoumnsShown == compareObj.IsYearToDateColoumnsShown;
             }
 
             return result;
@@ -520,7 +542,9 @@ namespace PraticeManagement.Controls
                 // UseActuals
                     Convert.ToInt32(UseActualTimeEntries) +
                 // FinancialsFromCache
-        Convert.ToInt32(FinancialsFromCache);
+                    Convert.ToInt32(FinancialsFromCache) +
+                    Convert.ToInt32(IsQuarterColoumnsShown) +
+                    Convert.ToInt32(IsYearToDateColoumnsShown); 
         }
 
         /// <summary>
