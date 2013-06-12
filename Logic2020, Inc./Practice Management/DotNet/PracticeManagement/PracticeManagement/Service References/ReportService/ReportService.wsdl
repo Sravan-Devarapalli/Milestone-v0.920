@@ -7,11 +7,12 @@
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
       <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
-      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
-      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
-      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
+      <xsd:import schemaLocation="http://localhost:3262/ReportService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_AttainmentBillableutlizationReport_InputMessage">
@@ -19,6 +20,12 @@
   </wsdl:message>
   <wsdl:message name="IReportService_AttainmentBillableutlizationReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:AttainmentBillableutlizationReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAttainmentProjectListMultiParameters_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttainmentProjectListMultiParameters" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAttainmentProjectListMultiParameters_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttainmentProjectListMultiParametersResponse" />
   </wsdl:message>
   <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetails" />
@@ -217,6 +224,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReport" message="tns:IReportService_AttainmentBillableutlizationReport_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReportResponse" message="tns:IReportService_AttainmentBillableutlizationReport_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetAttainmentProjectListMultiParameters">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParameters" message="tns:IReportService_GetAttainmentProjectListMultiParameters_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParametersResponse" message="tns:IReportService_GetAttainmentProjectListMultiParameters_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse" message="tns:IReportService_PersonTimeEntriesDetails_OutputMessage" />
@@ -350,6 +361,15 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="AttainmentBillableutlizationReport">
       <soap:operation soapAction="http://tempuri.org/IReportService/AttainmentBillableutlizationReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAttainmentProjectListMultiParameters">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParameters" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
