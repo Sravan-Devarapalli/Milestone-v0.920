@@ -11,6 +11,7 @@ using DataTransferObjects.Reports.ByAccount;
 using DataTransferObjects.Reports.ConsultingDemand;
 using DataTransferObjects.Reports.HumanCapital;
 using DataTransferObjects.TimeEntry;
+using DataTransferObjects.Financials;
 
 namespace DataAccess
 {
@@ -2699,6 +2700,608 @@ namespace DataAccess
         }
 
         #endregion
+
+        public static List<Project> GetAttainmentProjectListMultiParameters(
+          string clientIds,
+          bool showProjected,
+          bool showCompleted,
+          bool showActive,
+          bool showInternal,
+          bool showExperimental,
+          bool showInactive,
+          DateTime periodStart,
+          DateTime periodEnd,
+          string salespersonIdsList,
+          string practiceManagerIdsList,
+          string practiceIdsList,
+          string projectGroupIdsList,
+          ProjectCalculateRangeType includeCurentYearFinancials,
+          bool excludeInternalPractices,
+          string userLogin,
+          bool IsQuarterColoumnsShown,
+          bool IsYearToDateColoumnsShown,
+          bool getFinancialsFromCache)
+        {
+            List<Project> result =
+                AttainmentProjectList(
+                clientIds,
+                showProjected,
+                showCompleted,
+                showActive,
+                showInternal,
+                showExperimental,
+                showInactive,
+                periodStart,
+                periodEnd,
+                salespersonIdsList,
+                practiceManagerIdsList,
+                practiceIdsList,
+                projectGroupIdsList,
+                excludeInternalPractices,
+                userLogin);
+            return LoadFinancialsAndMilestonePersonInfo(result, periodStart, periodEnd, includeCurentYearFinancials, IsQuarterColoumnsShown, IsYearToDateColoumnsShown);
+        }
+
+        private static List<Project>
+                  LoadFinancialsAndMilestonePersonInfo(
+                      List<Project> result,
+                      DateTime periodStart,
+                      DateTime periodEnd,
+                      ProjectCalculateRangeType calculatePeriodType,
+                      bool IsQuarterColoumnsShown,
+       bool IsYearToDateColoumnsShown
+                  )
+        {
+            LoadFinancialsPeriodForProjects(result, periodStart, periodEnd, IsQuarterColoumnsShown, IsYearToDateColoumnsShown);
+
+            CalculateTotalFinancials(result);
+
+            return result;
+        }
+
+        public static void LoadFinancialsPeriodForProjects(
+           List<Project> projects, DateTime startDate, DateTime endDate, bool IsQuarterColoumnsShown, bool IsYearToDateColoumnsShown)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(
+                Constants.ProcedureNames.Reports.AttainmentFinancialListByProject, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, DataTransferObjects.Utils.Generic.IdsListToString(projects));
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CalculateQuarterValues, IsQuarterColoumnsShown);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CalculateYearToDateValues, IsYearToDateColoumnsShown);
+
+                connection.Open();
+
+                projects.ForEach(delegate(Project project)
+                {
+                    if (project.ProjectedFinancialsByRange == null)
+                        project.ProjectedFinancialsByRange =
+                            new Dictionary<RangeType, ComputedFinancials>();
+                });
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadMonthlyFinancialsForListOfProjects(reader, projects);
+                }
+            }
+        }
+
+        private static void ReadMonthlyFinancialsForListOfProjects(DbDataReader reader, List<Project> projects)
+        {
+            if (reader.HasRows)
+            {
+                int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+                int monthEndIndex = reader.GetOrdinal(Constants.ColumnNames.MonthEnd);
+                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int rangeTypeIndex = reader.GetOrdinal(Constants.ColumnNames.RangeType);
+                int actualRevenueIndex = -1;
+                int actualGrossMarginIndex = -1;
+                try
+                {
+                    actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
+                    actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
+                }
+                catch { }
+
+                while (reader.Read())
+                {
+                    var project = new Project { Id = reader.GetInt32(projectIdIndex) };
+                    var financials =
+                        ReadComputedFinancials(
+                          reader,
+                          financialDateIndex,
+                          monthEndIndex,
+                          rangeTypeIndex,
+                          revenueIndex,
+                          grossMarginIndex,
+                          actualRevenueIndex,
+                          actualGrossMarginIndex);
+                    var i = projects.IndexOf(project);
+                    projects[i].ProjectedFinancialsByRange.Add(financials.FinancialRange, financials);
+                }
+            }
+        }
+
+        private static ComputedFinancials ReadComputedFinancials(
+          DbDataReader reader,
+          int financialDateIndex,
+            int monthEndIndex,
+           int rangeTypeIndex,
+          int revenueIndex,
+          int grossMarginIndex,
+          int actualRevenueIndex = -1,
+          int actualGrossMarginIndex = -1)
+        {
+            return new ComputedFinancials
+            {
+                FinancialDate = reader.IsDBNull(financialDateIndex) ? (DateTime?)null : reader.GetDateTime(financialDateIndex),
+                Revenue = reader.GetDecimal(revenueIndex),
+                GrossMargin = reader.GetDecimal(grossMarginIndex),
+                ActualRevenue = actualRevenueIndex > -1 && !reader.IsDBNull(actualRevenueIndex) ? reader.GetDecimal(actualRevenueIndex) : 0M,
+                ActualGrossMargin = actualGrossMarginIndex > -1 && !reader.IsDBNull(actualGrossMarginIndex) ? reader.GetDecimal(actualGrossMarginIndex) : 0M,
+                FinancialRange = new RangeType()
+                {
+                    StartDate = reader.GetDateTime(financialDateIndex),
+                    EndDate = reader.GetDateTime(monthEndIndex),
+                    Range = reader.GetString(rangeTypeIndex)
+                }
+            };
+        }
+
+        private static void CalculateTotalFinancials(List<Project> result)
+        {
+            foreach (var project in result)
+            {
+                var financials = new ComputedFinancials
+                {
+                    FinancialDate = project.StartDate,
+                };
+                financials.Revenue = project.ProjectedFinancialsByRange.Where(mf => (mf.Key.Range != "Q1" && mf.Key.Range != "Q2" && mf.Key.Range != "Q3" && mf.Key.Range != "Q4" && mf.Key.Range != "YTD")).Select(mf => mf.Value).Sum(mf => mf.Revenue);
+                financials.GrossMargin = project.ProjectedFinancialsByRange.Where(mf => (mf.Key.Range != "Q1" && mf.Key.Range != "Q2" && mf.Key.Range != "Q3" && mf.Key.Range != "Q4" && mf.Key.Range != "YTD")).Select(mf => mf.Value).Sum(mf => mf.GrossMargin);
+                financials.ActualRevenue = project.ProjectedFinancialsByRange.Where(mf => (mf.Key.Range != "Q1" && mf.Key.Range != "Q2" && mf.Key.Range != "Q3" && mf.Key.Range != "Q4" && mf.Key.Range != "YTD")).Select(mf => mf.Value).Sum(mf => mf.ActualRevenue);//.Sum(mf => mf.FinancialDate.HasValue && mf.FinancialDate.Value.Date < currentMonthStartDate.Date ? mf.ActualRevenue : mf.Revenue);
+                financials.ActualGrossMargin = project.ProjectedFinancialsByRange.Where(mf => (mf.Key.Range != "Q1" && mf.Key.Range != "Q2" && mf.Key.Range != "Q3" && mf.Key.Range != "Q4" && mf.Key.Range != "YTD")).Select(mf => mf.Value).Sum(mf => mf.ActualGrossMargin); ; //.Sum(mf => mf.FinancialDate.HasValue && mf.FinancialDate.Value.Date < currentMonthStartDate.Date ? mf.ActualGrossMargin : mf.GrossMargin);
+                project.ComputedFinancials = financials;
+            }
+        }
+
+        public static List<Project> AttainmentProjectList(
+          string clientIdsList,
+          bool showProjected,
+          bool showCompleted,
+          bool showActive,
+          bool showInternal,
+          bool showExperimental,
+          bool showInactive,
+          DateTime periodStart,
+          DateTime periodEnd,
+          string salespersonIdsList,
+          string practiceManagerIdsList,
+          string practiceIdsList,
+          string projectGroupIdsList,
+          bool excludeInternalPractices,
+          string userLogin)
+        {
+            var projectList = new List<Project>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AttainmentProjectList, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowProjectedParam, showProjected);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowCompletedParam, showCompleted);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowInternalParam, showInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdsParam, salespersonIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdsParam, practiceManagerIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdsParam, projectGroupIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, periodStart);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, periodEnd);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    ReadProjectsWithMilestones(reader, projectList);
+                }
+            }
+
+            return projectList;
+        }
+
+        private static void ReadProjectsWithMilestones(SqlDataReader reader, List<Project> resultList)
+        {
+            try
+            {
+                if (reader.HasRows)
+                {
+                    int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                    int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                    int discountIndex = reader.GetOrdinal(Constants.ColumnNames.DiscountColumn);
+                    int termsIndex = reader.GetOrdinal(Constants.ColumnNames.TermsColumn);
+                    int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+                    int practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                    int practiceNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                    int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                    int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                    int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                    int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+                    int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                    int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                    int buyerNameIndex = reader.GetOrdinal(Constants.ColumnNames.BuyerNameColumn);
+                    int opportunityId = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+                    int projectIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIsChargeable);
+                    int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
+                    int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
+
+                    int projectOwnerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerId);
+                    int projectOwnerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerLastName);
+                    int projectOwnerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerFirstName);
+                    int pONumberIndex = -1;
+
+                    int mileStoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+                    int mileStoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
+
+                    int sowBudgetIndex = reader.GetOrdinal(Constants.ColumnNames.SowBudgetColumn);
+                    int salesPersonNameIndex = -1;
+                    int practiceOwnerNameIndex = -1;
+                    int projectGroupIdIndex = -1;
+                    int projectGroupNameIndex = -1;
+
+                    int businessTypeIdIndex = -1;
+                    int pricingListIdIndex = -1;
+                    int pricingListNameIndex = -1;
+                    int businessGroupIdIndex = -1;
+                    int businessGroupNameIndex = -1;
+                    int hasAttachments = -1;
+                    int seniorManagerNameIndex = -1;
+                    int seniorManagerIdIndex = -1;
+                    int isHouseAccountIndex = -1;
+
+                    try
+                    {
+                        isHouseAccountIndex = reader.GetOrdinal(Constants.ColumnNames.IsHouseAccount);
+                    }
+                    catch
+                    { }
+                    try
+                    {
+                        pONumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
+                    }
+                    catch
+                    { }
+
+                    try
+                    {
+                        seniorManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerId);
+                    }
+                    catch
+                    { }
+
+
+                    try
+                    {
+                        seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
+                    }
+                    catch
+                    { }
+                    try
+                    {
+                        businessTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessTypeId);
+                    }
+                    catch
+                    {
+                        businessTypeIdIndex = -1;
+                    }
+                    try
+                    {
+                        pricingListIdIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListId);
+                        pricingListNameIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListNameColumn);
+                    }
+                    catch
+                    {
+                        pricingListIdIndex = -1;
+                        pricingListNameIndex = -1;
+                    }
+                    try
+                    {
+                        businessGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupIdColumn);
+                        businessGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupName);
+                    }
+                    catch
+                    {
+                        businessGroupIdIndex = -1;
+                        businessGroupNameIndex = -1;
+                    }
+
+                    try
+                    {
+                        projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+                        projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+
+                    }
+                    catch
+                    {
+                        projectGroupIdIndex = -1;
+                        projectGroupNameIndex = -1;
+
+                    }
+
+                    try
+                    {
+                        practiceOwnerNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeOwnerName);
+                    }
+                    catch
+                    {
+                        practiceOwnerNameIndex = -1;
+                    }
+                    try
+                    {
+                        salesPersonNameIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonFullNameColumn);
+                    }
+                    catch
+                    {
+                        salesPersonNameIndex = -1;
+                    }
+
+                    try
+                    {
+                        hasAttachments = reader.GetOrdinal(Constants.ColumnNames.HasAttachmentsColumn);
+                    }
+                    catch
+                    {
+                        hasAttachments = -1;
+                    }
+
+                    while (reader.Read())
+                    {
+                        var projectId = reader.GetInt32(projectIdIndex);
+                        Project project;
+
+                        if (resultList.Any(p => p.Id.Value == projectId))
+                        {
+                            project = resultList.First(p => p.Id.Value == projectId);
+                        }
+                        else
+                        {
+
+                            project = new Project
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Discount = reader.GetDecimal(discountIndex),
+                                Terms = reader.GetInt32(termsIndex),
+                                Name = reader.GetString(nameIndex),
+                                StartDate =
+                                    !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                                EndDate =
+                                    !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                                ProjectNumber = reader.GetString(projectNumberIndex),
+                                BuyerName = !reader.IsDBNull(buyerNameIndex) ? reader.GetString(buyerNameIndex) : null,
+                                IsChargeable = reader.GetBoolean(projectIsChargeableIndex),
+                                Practice = new Practice
+                                {
+                                    Id = reader.GetInt32(practiceIdIndex),
+                                    Name = reader.GetString(practiceNameIndex)
+                                },
+
+                                ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex)),
+                                SowBudget = !reader.IsDBNull(sowBudgetIndex) ? (Decimal?)reader.GetDecimal(sowBudgetIndex) : null
+                            };
+
+                            if (projectGroupIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    var group = new ProjectGroup
+                                    {
+                                        Id = (int)reader[projectGroupIdIndex],
+                                        Name = (string)reader[projectGroupNameIndex],
+                                    };
+
+                                    project.Group = group;
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            if (pricingListIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    var pricingList = new PricingList
+                                    {
+                                        PricingListId = (int)reader[pricingListIdIndex],
+                                        Name = (string)reader[pricingListNameIndex],
+                                    };
+
+                                    project.PricingList = pricingList;
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            if (businessGroupIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    var businessGroup = new BusinessGroup
+                                    {
+                                        Id = (int)reader[businessGroupIdIndex],
+                                        Name = (string)reader[businessGroupNameIndex],
+                                    };
+
+                                    project.BusinessGroup = businessGroup;
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            if (businessTypeIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    BusinessType businessType = (BusinessType)(int)reader[businessTypeIdIndex];
+                                    project.BusinessType = businessType;
+                                }
+                                catch
+                                {
+                                }
+                            }
+                            if (seniorManagerIdIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.SeniorManagerId = reader.GetInt32(seniorManagerIdIndex);
+                                }
+                                catch
+                                {
+                                }
+                            }
+                            if (seniorManagerNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.SeniorManagerName = reader.GetString(seniorManagerNameIndex);
+                                }
+                                catch
+                                {
+                                }
+                            }
+                            if (pONumberIndex > -1)
+                            {
+                                try
+                                {
+                                    project.PONumber = !reader.IsDBNull(pONumberIndex) ? reader.GetString(pONumberIndex) : string.Empty;
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            if (practiceOwnerNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.Practice.PracticeOwnerName = reader.GetString(practiceOwnerNameIndex);
+                                }
+                                catch
+                                {
+                                    project.Practice.PracticeOwnerName = string.Empty;
+                                }
+                            }
+
+                            if (salesPersonNameIndex >= 0)
+                            {
+                                try
+                                {
+                                    project.SalesPersonName = reader.GetString(salesPersonNameIndex);
+                                }
+                                catch
+                                {
+                                    project.SalesPersonName = string.Empty;
+                                }
+                            }
+
+                            if (hasAttachments >= 0)
+                            {
+                                project.HasAttachments = (int)reader[hasAttachments] == 1;
+                            }
+
+                            project.Client = new Client
+                            {
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex),
+                                IsChargeable = reader.GetBoolean(clientIsChargeableIndex)
+                            };
+                            if (isHouseAccountIndex > -1)
+                            {
+                                try
+                                {
+                                    project.Client.IsHouseAccount = !reader.IsDBNull(isHouseAccountIndex) ? reader.GetBoolean(isHouseAccountIndex) : false;
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            project.Status = new ProjectStatus
+                            {
+                                Id = reader.GetInt32(projectStatusIdIndex),
+                                Name = reader.GetString(projectStatusNameIndex)
+                            };
+
+                            project.OpportunityId =
+                            !reader.IsDBNull(opportunityId) ? (int?)reader.GetInt32(opportunityId) : null;
+
+                            try
+                            {
+                                int directorIdIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorIdColumn),
+                                 directorLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorLastNameColumn),
+                                 directorFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorFirstNameColumn);
+                                if (!reader.IsDBNull(directorIdIndex))
+                                {
+                                    project.Director = new Person()
+                                    {
+                                        Id = (int?)reader.GetInt32(directorIdIndex),
+                                        FirstName = reader.GetString(directorFirstNameIndex),
+                                        LastName = reader.GetString(directorLastNameIndex)
+                                    };
+                                }
+                            }
+                            catch
+                            {
+                            }
+                            resultList.Add(project);
+                        }
+
+                        if (!reader.IsDBNull(projectOwnerIdIndex))
+                        {
+                            project.ProjectOwner = new Person()
+                            {
+                                Id = reader.GetInt32(projectOwnerIdIndex),
+                                FirstName = reader.GetString(projectOwnerFirstNameIndex),
+                                LastName = reader.GetString(projectOwnerLastNameIndex)
+                            };
+                        }
+
+                        if (!reader.IsDBNull(mileStoneIdIndex))
+                        {
+                            var milestone = new Milestone
+                            {
+                                Description = reader.GetString(mileStoneNameIndex),
+                                Id = reader.GetInt32(mileStoneIdIndex)
+                            };
+                            if (project.Milestones == null)
+                            {
+                                project.Milestones = new List<Milestone>();
+                            }
+                            project.Milestones.Add(milestone);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public static List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate)
         {
