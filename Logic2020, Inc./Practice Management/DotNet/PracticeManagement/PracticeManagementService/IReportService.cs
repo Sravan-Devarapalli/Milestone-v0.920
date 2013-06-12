@@ -83,13 +83,13 @@ namespace PracticeManagementService
         List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string titles, string skills);
 
         [OperationContract]
-        List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills,string sortColumns);
+        List<ConsultantGroupbyTitleSkill> ConsultingDemandDetailsByTitleSkill(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns);
 
         [OperationContract]
         List<ConsultantGroupBySalesStage> ConsultingDemandDetailsBySalesStage(DateTime startDate, DateTime endDate, string titles, string skills, string sortColumns);
 
         [OperationContract]
-        List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills,string salesStages, string sortColumns,bool isFromPipeLinePopUp);
+        List<ConsultantGroupByMonth> ConsultingDemandDetailsByMonth(DateTime startDate, DateTime endDate, string titles, string skills, string salesStages, string sortColumns, bool isFromPipeLinePopUp);
 
         [OperationContract]
         Dictionary<string, int> ConsultingDemandGraphsByTitle(DateTime startDate, DateTime endDate, string Title, string salesStages);
@@ -98,10 +98,10 @@ namespace PracticeManagementService
         Dictionary<string, int> ConsultingDemandGraphsBySkills(DateTime startDate, DateTime endDate, string Skill, string salesStages);
 
         [OperationContract]
-        List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string Title,string sortColumns,string salesStages);
+        List<ConsultantGroupbyTitle> ConsultingDemandTransactionReportByTitle(DateTime startDate, DateTime endDate, string Title, string sortColumns, string salesStages);
 
         [OperationContract]
-        List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill, string sortColumns,string salesStages);
+        List<ConsultantGroupbySkill> ConsultingDemandTransactionReportBySkill(DateTime startDate, DateTime endDate, string Skill, string sortColumns, string salesStages);
 
         [OperationContract]
         Dictionary<string, int> ConsultingDemandGrphsGroupsByTitle(DateTime startDate, DateTime endDate, string salesStages);
@@ -109,8 +109,30 @@ namespace PracticeManagementService
         [OperationContract]
         Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(DateTime startDate, DateTime endDate, string salesStages);
 
-          [OperationContract]
+        [OperationContract]
         List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<Project> GetAttainmentProjectListMultiParameters(
+        string clientIds,
+        bool showProjected,
+        bool showCompleted,
+        bool showActive,
+        bool showInternal,
+        bool showExperimental,
+        bool showInactive,
+        DateTime periodStart,
+        DateTime periodEnd,
+        string salespersonIdsList,
+        string practiceManagerIdsList,
+        string practiceIdsList,
+        string projectGroupIdsList,
+        ProjectCalculateRangeType includeCurentYearFinancials,
+        bool excludeInternalPractices,
+        string userLogin,
+        bool IsQuarterColoumnsShown,
+        bool IsYearToDateColoumnsShown,
+        bool getFinancialsFromCache);
     }
 }
 
