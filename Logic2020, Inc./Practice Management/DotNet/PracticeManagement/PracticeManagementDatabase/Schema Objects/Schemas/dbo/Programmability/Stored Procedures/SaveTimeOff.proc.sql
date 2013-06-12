@@ -14,7 +14,8 @@ CREATE PROCEDURE [dbo].[SaveTimeOff]
       @UserLogin NVARCHAR(255) ,
       @ActualHours REAL ,
       @TimeTypeId INT ,
-      @ApprovedBy INT
+      @ApprovedBy INT,
+	  @OldStartDate DATETIME = NULL
     )
 AS 
     BEGIN
@@ -100,7 +101,7 @@ AS
                     WHERE P.SeriesId=(
 									 SELECT SeriesId 
 									 FROM PersonCalendar PC
-									 WHERE PC.Date=@StartDate AND PC.PersonId=@PersonId AND PC.DayOff=1)
+									 WHERE PC.Date=@OldStartDate AND PC.PersonId=@PersonId AND PC.DayOff=1)
 		
 
                     DECLARE @DaysExceptHolidays TABLE ( [Date] DATETIME )
