@@ -553,13 +553,12 @@ namespace PraticeManagement.Reports
                                 bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
                                 var columnValue = 0M;
                                 var rangeOtherthanMonthStart = periodStart;
-                                var now = Utils.Generic.GetNowWithTimeZone();
                                 DateTime rangeOtherthanMonthEnd = new DateTime();
                                 // Displaying the month values (main cell data)
                                 for (int k = 0; k < 4; k++)
                                 {
-                                    rangeOtherthanMonthStart = Utils.Calendar.QuarterStartDate(now, k + 1);
-                                    rangeOtherthanMonthEnd = Utils.Calendar.QuarterEndDate(now, k + 1);
+                                    rangeOtherthanMonthStart = Utils.Calendar.QuarterStartDate(periodStart, k + 1);
+                                    rangeOtherthanMonthEnd = Utils.Calendar.QuarterEndDate(periodStart, k + 1);
                                     columnValue = 0M;
                                     if (project.ProjectedFinancialsByRange != null)
                                     {
@@ -767,7 +766,7 @@ namespace PraticeManagement.Reports
 
 
             var projectsDataWithMargin = (from pro in ExportProjectList
-                                          where pro != null
+                                          where pro != null 
                                           select new
                                           {
                                               ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
