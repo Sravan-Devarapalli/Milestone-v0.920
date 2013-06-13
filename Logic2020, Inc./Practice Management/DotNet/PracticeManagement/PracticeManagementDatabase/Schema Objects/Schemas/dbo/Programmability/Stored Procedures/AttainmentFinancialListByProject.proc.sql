@@ -132,13 +132,14 @@ BEGIN
 		SELECT pexp.ProjectId,
 			CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
 			CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
-			C.StartDate AS FinancialDate,
-			C.EndDate AS MonthEnd,
-			C.RangeType
+			R.StartDate AS FinancialDate,
+			R.EndDate AS MonthEnd,
+			R.RangeType
 		FROM dbo.ProjectExpense as pexp
-		JOIN @Ranges c ON c.StartDate <= pexp.EndDate AND pexp.StartDate <= C.EndDate
+		INNER JOIN dbo.Calendar cal ON cal.Date BETWEEN pexp.StartDate  AND pexp.EndDate
+		INNER JOIN @Ranges R ON cal.Date BETWEEN R.StartDate AND R.EndDate
 		WHERE ProjectId IN (SELECT * FROM @ProjectIDs)
-		GROUP BY pexp.ProjectId, C.StartDate, C.EndDate,C.RangeType
+		GROUP BY pexp.ProjectId, R.StartDate, R.EndDate,R.RangeType
 	), 
 	ActualAndProjectedValuesMonthly  AS
 	(SELECT CT.ProjectId, 
