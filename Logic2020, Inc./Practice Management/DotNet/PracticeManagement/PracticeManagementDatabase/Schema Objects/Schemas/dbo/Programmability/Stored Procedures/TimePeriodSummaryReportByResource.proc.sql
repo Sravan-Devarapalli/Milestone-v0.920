@@ -149,7 +149,7 @@ AS
 					PS.PersonStatusId AS 'PersonStatusId',
 					PS.Name AS 'PersonStatusName',
 					P.DivisionId AS 'DivisionId',
-					ISNULL(CAST(PDH.DefaultHours AS INT),0) AS AvailableHours,
+					ISNULL(CAST(PDH.DefaultHoursUntilToday AS INT),0) AS AvailableHours,
 					ISNULL(CAST(PDH.DefaultHoursUntilToday AS INT),0) AS AvailableHoursUntilToday
 			FROM    ( SELECT    TE.PersonId ,
 								ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
