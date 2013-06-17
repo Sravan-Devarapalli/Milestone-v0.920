@@ -152,7 +152,7 @@ namespace PracticeManagementService
             // bool useActuals :From cache we renders data always useActuals as true
            )
         {
-            ComputedFinancialsDAL.LoadFinancialsPeriodForProjectsFromCache(result, periodStart, periodEnd);
+            ComputedFinancialsDAL.LoadFinancialsPeriodForProjectsFromCache(result, periodStart, periodEnd,false);
 
             switch (calculatePeriodType)
             {
@@ -172,7 +172,7 @@ namespace PracticeManagementService
                     {
                         currentYearProjectsList.Add(new Project() { Id = project.Id });
                     }
-                    ComputedFinancialsDAL.LoadFinancialsPeriodForProjectsFromCache(currentYearProjectsList, fyCalendar["StartMonth"], fyCalendar["EndMonth"]);
+                    ComputedFinancialsDAL.LoadFinancialsPeriodForProjectsFromCache(currentYearProjectsList, fyCalendar["StartMonth"], fyCalendar["EndMonth"],false);
                     CalculateCurrentFiscalYearTotalFinancials(result, currentYearProjectsList);
                     break;
 
