@@ -210,11 +210,12 @@ namespace PracticeManagementService
          ProjectCalculateRangeType includeCurentYearFinancials,
          bool excludeInternalPractices,
          string userLogin,
-           bool IsQuarterColoumnsShown,
-       bool IsYearToDateColoumnsShown,
+         bool IsMonthsColoumnsShown,
+         bool IsQuarterColoumnsShown,
+         bool IsYearToDateColoumnsShown,
          bool getFinancialsFromCache)
         {
-            return ReportDAL.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+            return ReportDAL.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
         }
     }
 }
