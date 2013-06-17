@@ -40,6 +40,7 @@
         <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="includeCurentYearFinancials" type="q2:ProjectCalculateRangeType" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IsMonthsColoumnsShown" type="xs:boolean" />
         <xs:element minOccurs="0" name="IsQuarterColoumnsShown" type="xs:boolean" />
         <xs:element minOccurs="0" name="IsYearToDateColoumnsShown" type="xs:boolean" />
         <xs:element minOccurs="0" name="getFinancialsFromCache" type="xs:boolean" />
