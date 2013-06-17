@@ -1373,7 +1373,6 @@ namespace PraticeManagement
 
         private void SetBackgroundColorForMargin(int clientId, decimal targetMargin, bool? individualClientMarginColorInfoEnabled)
         {
-            int margin = (int)targetMargin;
             List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
 
             if (individualClientMarginColorInfoEnabled.HasValue && individualClientMarginColorInfoEnabled.Value)
@@ -1389,7 +1388,7 @@ namespace PraticeManagement
             {
                 foreach (var item in cmciList)
                 {
-                    if (margin >= item.StartRange && margin <= item.EndRange)
+                    if (targetMargin >= item.StartRange && targetMargin <= item.EndRange)
                     {
                         tdTargetMargin.Style["background-color"] = item.ColorInfo.ColorValue;
                         break;
