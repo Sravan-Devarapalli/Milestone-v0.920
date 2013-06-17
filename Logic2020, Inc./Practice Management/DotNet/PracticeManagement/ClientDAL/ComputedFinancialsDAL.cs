@@ -97,7 +97,7 @@ namespace DataAccess
         /// <param name="startDate">A period start.</param>
         /// <param name="endDate">A period end.</param>
         /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static void LoadFinancialsPeriodForProjectsFromCache(List<Project> projects, DateTime startDate, DateTime endDate)
+        public static void LoadFinancialsPeriodForProjectsFromCache(List<Project> projects, DateTime startDate, DateTime endDate,bool isAttainmentReport)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -113,16 +113,33 @@ namespace DataAccess
 
                 connection.Open();
 
-                projects.ForEach(delegate(Project project)
+                if (!isAttainmentReport)
                 {
-                    if (project.ProjectedFinancialsByMonth == null)
-                        project.ProjectedFinancialsByMonth =
-                            new Dictionary<DateTime, ComputedFinancials>();
-                });
+                    projects.ForEach(delegate(Project project)
+                    {
+                        if (project.ProjectedFinancialsByMonth == null)
+                            project.ProjectedFinancialsByMonth =
+                                new Dictionary<DateTime, ComputedFinancials>();
+                    });
 
-                using (SqlDataReader reader = command.ExecuteReader())
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        ReadMonthlyFinancialsForListOfProjects(reader, projects);
+                    }
+                }
+                else
                 {
-                    ReadMonthlyFinancialsForListOfProjects(reader, projects);
+                    projects.ForEach(delegate(Project project)
+                    {
+                        if (project.ProjectedFinancialsByRange == null)
+                            project.ProjectedFinancialsByRange =
+                                new Dictionary<RangeType, ComputedFinancials>();
+                    });
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                       ReportDAL.ReadMonthlyFinancialsForListOfProjects(reader, projects);
+                    }
                 }
             }
         }
