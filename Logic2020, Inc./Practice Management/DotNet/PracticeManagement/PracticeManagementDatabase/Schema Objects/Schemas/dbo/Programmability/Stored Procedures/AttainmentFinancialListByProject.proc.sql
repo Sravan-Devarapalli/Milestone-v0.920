@@ -12,7 +12,14 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	SET ANSI_WARNINGS OFF
-
+	/*Quarters StartDate and Quarters EndDate is calculated based on following ways(This is to calculate only for Quarters)
+	If it is for summary cache i.e.@IsSummaryCache=1 then QuartersStartDate and QuartersEndDate will be equal to provided StartDate and EndDate
+	Otherwise then we check any CurrentYearDate overlaps with StartDate and EndDate 
+	   If any CurrentYearDate overlaps then QuartersStartDate = CurrentYearStartDate (Ex:1/1/2013) and QuartersEndDate = CurrentYearLastDate based on EndDate value(Ex:If EndDate=4/4/2014 then QuartersEndDate=12/31/2013,If EndDate=4/4/2013 then QuartersEndDate=4/4/2013)
+	   Else We will find QuartersStartDate,QuartersEndDate for the StartDate year.
+                i.e. QuartersStartDate = YearStartDate of StartDate year (Ex:StartDate = 14/4/2012 then QuartersStartDate = 1/1/2012)
+		 QuartersEndDate =  If the StartDate Year = EndDate Year then EndDate will be QuartersEndDate otherwise StartDate YearLastDate (Ex:14/4/2012 then QuartersEndDate=12/31/2012)
+	*/
 	DECLARE @ProjectIdLocal   VARCHAR(2500),
 			@StartDateLocal   DATETIME,
 			@EndDateLocal     DATETIME,
