@@ -19,6 +19,7 @@ BEGIN
 	SELECT [ProjectId]
 		  ,[MonthStartDate] AS FinancialDate
 		  ,[MonthEndDate] AS MonthEnd
+		  ,RangeType 
 		  ,[ProjectRevenue] AS Revenue
 		  ,[ProjectRevenueNet] AS RevenueNet
 		  ,[Cogs]
@@ -40,3 +41,4 @@ BEGIN
 			AND [ProjectId] IN (SELECT * FROM @ProjectIDs)
 			AND IsMonthlyRecord = @IsMonthlyReport
 END
+
