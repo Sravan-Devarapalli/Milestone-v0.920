@@ -130,6 +130,7 @@ namespace PracticeManagementService
         ProjectCalculateRangeType includeCurentYearFinancials,
         bool excludeInternalPractices,
         string userLogin,
+            bool IsMonthsColoumnsShown,
         bool IsQuarterColoumnsShown,
         bool IsYearToDateColoumnsShown,
         bool getFinancialsFromCache);
