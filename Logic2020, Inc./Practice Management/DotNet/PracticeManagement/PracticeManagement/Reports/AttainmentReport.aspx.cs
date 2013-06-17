@@ -115,17 +115,8 @@ namespace PraticeManagement.Reports
                 monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                for (int i = 0; i < 12; i++)//there are 12 columns before month columns.
+                for (int i = 0; i < 17; i++)//there are 12 columns before month columns.
                     headerCellStyleList.Add(headerCellStyle);
-                if (IsQuarterColoumnsShown)
-                {
-                    for (int i = 0; i < 4; i++)//there are 4 columns for the 4 quarters
-                        headerCellStyleList.Add(headerCellStyle);
-                }
-                if (IsYearToDateColoumnsShown)
-                {
-                    headerCellStyleList.Add(headerCellStyle);
-                }
                 if (renderMonthColumns)
                 {
                     var monthsInPeriod = GetPeriodLength();
@@ -134,7 +125,7 @@ namespace PraticeManagement.Reports
                         headerCellStyleList.Add(monthNameHeaderCellStyle);
                     }
                 }
-                headerCellStyleList.Add(headerCellStyle);
+                    headerCellStyleList.Add(headerCellStyle);
 
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
@@ -152,17 +143,12 @@ namespace PraticeManagement.Reports
 
                 CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
-                if (IsQuarterColoumnsShown)
-                {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        dataCellStyleList.Add(dataNumberDateCellStyle);
-                    }
-                }
-                if (IsYearToDateColoumnsShown)
+
+                for (int i = 0; i < 5; i++)
                 {
                     dataCellStyleList.Add(dataNumberDateCellStyle);
                 }
+
                 CellStyles[] dataCellStylearrayAfterQuarter = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
                 dataCellStyleList.AddRange(dataCellStylearrayAfterQuarter);
                 if (renderMonthColumns)
@@ -303,6 +289,15 @@ namespace PraticeManagement.Reports
             get
             {
                 CompanyPerformanceState.Filter = GetFilterSettings();
+                bool isProjectSummaryCachedToday = ServiceCallers.Custom.Project(p => p.IsProjectSummaryCachedToday());
+                if ((ddlPeriod.SelectedValue == "-13" || ddlPeriod.SelectedValue == "13") && isProjectSummaryCachedToday)
+                {
+                    CompanyPerformanceState.Filter.FinancialsFromCache = true;
+                }
+                else
+                {
+                    CompanyPerformanceState.Filter.FinancialsFromCache = false;
+                }
                 return CompanyPerformanceState.AttainmentProjectList;
 
             }
@@ -363,8 +358,9 @@ namespace PraticeManagement.Reports
                      ViewSelected = -1,
                      CalculateRangeSelected = (ProjectCalculateRangeType)1,
                      HideAdvancedFilter = false,
-                     IsQuarterColoumnsShown = IsQuarterColoumnsShown,
-                     IsYearToDateColoumnsShown = IsYearToDateColoumnsShown
+                     IsMonthsColoumnsShown = true,
+                     IsQuarterColoumnsShown = true,
+                     IsYearToDateColoumnsShown = true
                  };
             return filter;
         }
@@ -471,16 +467,9 @@ namespace PraticeManagement.Reports
             return result;
         }
 
-        private static bool IsInRange(RangeType range, DateTime periodStart, DateTime periodEnd, bool isQuarter)
+        private static bool IsInRange(RangeType range, string rangeType)
         {
-            var result =
-                (range.StartDate.Date == periodStart.Date && range.EndDate.Date == periodEnd.Date)
-                && (
-                    (isQuarter && (range.Range == "Q1" || range.Range == "Q2" || range.Range == "Q3" || range.Range == "Q4"))
-                    || (!isQuarter && range.Range == "YTD")
-                    );
-
-            return result;
+            return range.Range == rangeType;
         }
 
         private DataTable PrepareDataTable(Project[] projectsList, Object[] propertyBags, bool useActuals)
@@ -494,17 +483,11 @@ namespace PraticeManagement.Reports
             data.Columns.Add("Account");
             data.Columns.Add("Business Group");
             data.Columns.Add("Business Unit");
-            if (IsQuarterColoumnsShown)
-            {
-                data.Columns.Add("Q1 Total");
-                data.Columns.Add("Q2 Total");
-                data.Columns.Add("Q3 Total");
-                data.Columns.Add("Q4 Total");
-            }
-            if (IsYearToDateColoumnsShown)
-            {
-                data.Columns.Add("YTD");
-            }
+            data.Columns.Add("Q1 Total");
+            data.Columns.Add("Q2 Total");
+            data.Columns.Add("Q3 Total");
+            data.Columns.Add("Q4 Total");
+            data.Columns.Add("YTD");
             data.Columns.Add("Buyer");
             data.Columns.Add("Project Name");
             data.Columns.Add("New/Extension");
@@ -542,77 +525,47 @@ namespace PraticeManagement.Reports
                         {
                             project = projectsList.Where(p => p.ProjectNumber == property.GetValue(propertyBag).ToString()).FirstOrDefault();
                         }
-                        if (property.Name == "IsQuarterColoumnsShown")
+                        if (property.Name == "QuartersColumn")
                         {
-                            if (IsQuarterColoumnsShown)
+                            bool isMargin = property.GetValue(propertyBag).ToString() == Margin;
+                            //Add month columns.
+                            SeniorityAnalyzer personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+                            personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
+                            bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
+                            var columnValue = 0M;
+                            var now = Utils.Generic.GetNowWithTimeZone();
+                            string rangeType ="";
+                            // Displaying the month values (main cell data)
+                            for (int k = 0; k < 5; k++)
                             {
-                                bool isMargin = property.GetValue(propertyBag).ToString() == Margin;
-                                //Add month columns.
-                                SeniorityAnalyzer personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
-                                personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
-                                bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
-                                var columnValue = 0M;
-                                var rangeOtherthanMonthStart = periodStart;
-                                DateTime rangeOtherthanMonthEnd = new DateTime();
-                                // Displaying the month values (main cell data)
-                                for (int k = 0; k < 4; k++)
+                                if (k != 4)
                                 {
-                                    rangeOtherthanMonthStart = Utils.Calendar.QuarterStartDate(periodStart, k + 1);
-                                    rangeOtherthanMonthEnd = Utils.Calendar.QuarterEndDate(periodStart, k + 1);
-                                    columnValue = 0M;
-                                    if (project.ProjectedFinancialsByRange != null)
-                                    {
-                                        foreach (KeyValuePair<RangeType, ComputedFinancials> interestValue in
-                                            project.ProjectedFinancialsByRange)
-                                        {
-                                            if (IsInRange(interestValue.Key, rangeOtherthanMonthStart, rangeOtherthanMonthEnd, true))
-                                            {
-                                                columnValue = isMargin ? (useActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin) : (useActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue);
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    string color = columnValue < 0 ? "red" : isMargin ? "purple" : "green";
-                                    objects[column] = string.Format(NPOIExcel.CustomColorKey, color, greaterSeniorityExists && isMargin ? (object)"(Hidden)" : columnValue);
-                                    column++;
+                                   rangeType = "Q"+(k+1);
                                 }
-                            }
-                        }
-                        else if (property.Name == "IsYearToDateColoumnsShown")
-                        {
-                            if (IsYearToDateColoumnsShown)
-                            {
-                                bool isMargin = property.GetValue(propertyBag).ToString() == Margin;
-                                //Add month columns.
-                                SeniorityAnalyzer personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
-                                personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
-                                bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
-                                var columnValue = 0M;
-                                var rangeOtherthanMonthStart = periodStart;
-                                var now = Utils.Generic.GetNowWithTimeZone();
-                                DateTime rangeOtherthanMonthEnd = new DateTime();
-
-                                rangeOtherthanMonthStart = Utils.Calendar.YearStartDate(now);
-                                rangeOtherthanMonthEnd = now.AddDays(-1);
+                                else
+                                {
+                                   rangeType = "YTD";
+                                }
                                 columnValue = 0M;
                                 if (project.ProjectedFinancialsByRange != null)
                                 {
                                     foreach (KeyValuePair<RangeType, ComputedFinancials> interestValue in
                                         project.ProjectedFinancialsByRange)
                                     {
-                                        if (IsInRange(interestValue.Key, rangeOtherthanMonthStart, rangeOtherthanMonthEnd, false))
+                                        if (IsInRange(interestValue.Key, rangeType))
                                         {
                                             columnValue = isMargin ? (useActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin) : (useActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue);
                                             break;
                                         }
                                     }
                                 }
+
                                 string color = columnValue < 0 ? "red" : isMargin ? "purple" : "green";
                                 objects[column] = string.Format(NPOIExcel.CustomColorKey, color, greaterSeniorityExists && isMargin ? (object)"(Hidden)" : columnValue);
                                 column++;
                             }
                         }
+
                         else if (property.Name == "Type")
                         {
                             objects[column] = property.GetValue(propertyBag);
@@ -673,10 +626,8 @@ namespace PraticeManagement.Reports
                         }
                     }
                 }
-
                 data.Rows.Add(objects);
             }
-
             return data;
         }
 
@@ -689,13 +640,21 @@ namespace PraticeManagement.Reports
 
                 foreach (var bu in attainmentBillableutlizationList[0].BillableUtilizationList)
                 {
-                    coloumnsAll.Add(bu.RangeType);
+                    var now = Utils.Generic.GetNowWithTimeZone();
+                    var yearStarDate = Utils.Calendar.YearStartDate(now);
+                    
+                    if (bu.RangeType != "Q1" && bu.RangeType != "Q2" && bu.RangeType != "Q3" && bu.RangeType != "Q4" && bu.RangeType != "YTD")
+                    {
+                        int monthNumber = Convert.ToInt32(bu.RangeType.Substring(1).ToString());
+                        coloumnsAll.Add(Utils.Calendar.MonthStartDateByMonthNumber(yearStarDate, monthNumber).ToString());
+                    }
+                    else
+                    {
+                        coloumnsAll.Add(bu.RangeType);
+                    }
                     coloumnsAll.Add("");
                     coloumnsAll.Add("");
                 }
-                var now = Utils.Generic.GetNowWithTimeZone();
-                var yearStart = Utils.Calendar.YearStartDate(now);
-
                 List<object> row;
 
                 data.Columns.Add("Resource Name");
@@ -747,8 +706,7 @@ namespace PraticeManagement.Reports
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
                                     BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
-                                    IsQuarterColoumnsShown = Revenue,
-                                    IsYearToDateColoumnsShown = Revenue,
+                                    QuartersColumn = Revenue,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
@@ -774,8 +732,7 @@ namespace PraticeManagement.Reports
                                               Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
                                               BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
-                                              IsQuarterColoumnsShown = Margin,
-                                              IsYearToDateColoumnsShown = Margin,
+                                              QuartersColumn = Margin,
                                               Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                               ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                               BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType) : string.Empty,
