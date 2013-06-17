@@ -37,6 +37,7 @@ namespace PraticeManagement.ReportService {
                     DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
                     bool excludeInternalPractices, 
                     string userLogin, 
+                    bool IsMonthsColoumnsShown, 
                     bool IsQuarterColoumnsShown, 
                     bool IsYearToDateColoumnsShown, 
                     bool getFinancialsFromCache);
@@ -148,7 +149,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-     
+      
         
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -187,10 +188,11 @@ namespace PraticeManagement.ReportService {
                     DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
                     bool excludeInternalPractices, 
                     string userLogin, 
+                    bool IsMonthsColoumnsShown, 
                     bool IsQuarterColoumnsShown, 
                     bool IsYearToDateColoumnsShown, 
                     bool getFinancialsFromCache) {
-            return base.Channel.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+            return base.Channel.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
