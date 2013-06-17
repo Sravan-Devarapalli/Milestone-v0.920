@@ -134,7 +134,8 @@ namespace PraticeManagement.Utils.Excel
                                     c.WrapText == WrapText &&
                                     c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL) &&
                                     c.GetFont(parentWorkbook).Color == FontColorIndex &&
-                                    c.GetFont(parentWorkbook).FontHeight == FontHeight
+                                    c.GetFont(parentWorkbook).FontHeight == FontHeight &&
+                                     (string.IsNullOrEmpty(DataFormat) || c.DataFormat == allDataFormats.First(k => k.Key == DataFormat).Value)
                                     ))
             {
                 return allCellStyles.First(c => c.BorderBottom == BorderStyle &&
@@ -152,3 +153,4 @@ namespace PraticeManagement.Utils.Excel
         }
     }
 }
+
