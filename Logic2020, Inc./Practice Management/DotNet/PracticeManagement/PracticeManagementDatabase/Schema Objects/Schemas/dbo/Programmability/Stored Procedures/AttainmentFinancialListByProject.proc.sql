@@ -3,8 +3,10 @@
 	@ProjectId   VARCHAR(2500),
 	@StartDate   DATETIME,
 	@EndDate     DATETIME,
+	@CalculateMonthValues BIT = 0,
 	@CalculateQuarterValues BIT = 0,
-	@CalculateYearToDateValues BIT = 0
+	@CalculateYearToDateValues BIT = 0,
+	@IsSummaryCache BIT = 0
 ) WITH RECOMPILE
 AS
 BEGIN
@@ -13,12 +15,37 @@ BEGIN
 
 	DECLARE @ProjectIdLocal   VARCHAR(2500),
 			@StartDateLocal   DATETIME,
-			@EndDateLocal     DATETIME
+			@EndDateLocal     DATETIME,
+			@CurrentYearStartDate DATETIME,
+			@CurrentYearEndDate DATETIME,
+			@QuartersStarDate DATETIME,
+			@QuartersEndDate DATETIME
 			
 
 	SELECT @ProjectIdLocal =@ProjectId ,
 		   @StartDateLocal=@StartDate ,
-		   @EndDateLocal=@EndDate
+		   @EndDateLocal=@EndDate,
+		   @CurrentYearStartDate = DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()), 0),
+		   @CurrentYearEndDate = DATEADD(MILLISECOND, -3,DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()) + 1, 0))
+		   
+	IF @IsSummaryCache = 1
+	BEGIN
+	 SET @QuartersStarDate = @StartDateLocal
+	 SET @QuartersEndDate = @EndDateLocal
+	 
+	END	
+    ELSE IF @StartDateLocal <= @CurrentYearEndDate AND @CurrentYearStartDate <= @EndDateLocal
+    BEGIN
+	  SET	@QuartersStarDate = @CurrentYearStartDate
+	  SET  @QuartersEndDate = CASE WHEN @CurrentYearEndDate < @EndDateLocal THEN @CurrentYearEndDate ELSE @EndDateLocal END
+    END
+    ELSE 
+    BEGIN
+	 SET  @QuartersStarDate = DATEADD(YEAR, DATEDIFF(YEAR, 0, @StartDateLocal), 0) 
+	 SET  @QuartersEndDate = CASE WHEN DATEPART(YEAR,@StartDateLocal) = DATEPART(YEAR,@EndDateLocal) THEN @EndDateLocal
+								  ELSE DATEADD(MILLISECOND, -3,DATEADD(YEAR, DATEDIFF(YEAR, 0, @StartDateLocal) + 1, 0)) END
+	 
+    END
 
 	DECLARE @ProjectIDs TABLE
 	(
@@ -35,29 +62,34 @@ BEGIN
 	SELECT * FROM dbo.ConvertStringListIntoTable(@ProjectIdLocal)
 	
 	DECLARE @Ranges TABLE (StartDate DATETIME,EndDate DATETIME,RangeType NVARCHAR(11),ColOrder INT)
-	
+	IF(@CalculateMonthValues = 1)
+	BEGIN
 	INSERT INTO @Ranges 
 	SELECT	MonthStartDate AS StartDate,
 			MonthEndDate AS EndDate,
-			CONVERT(NVARCHAR(11),CONVERT(DATE,MonthStartDate)) AS RangeType,
+			'M'+CONVERT(NVARCHAR,MonthNumber) AS RangeType,
 			DATEPART(MM,MonthStartDate) AS ColOrder
 	FROM dbo.Calendar C
 	WHERE C.DATE between @StartDateLocal and @EndDateLocal
-	GROUP BY C.MonthStartDate,C.MonthEndDate 
+	GROUP BY C.MonthStartDate,C.MonthEndDate,C.MonthNumber
+	END
 	
 	IF (@CalculateQuarterValues = 1)
 	BEGIN
 		INSERT INTO @Ranges 
-		SELECT QuarterStartDate,QuarterEndDate,'Q'+CONVERT(NVARCHAR,DATEPART(Q,QuarterStartDate)),DATEPART(Q,QuarterStartDate)+12 FROM dbo.Calendar C
-		WHERE C.DATE between @StartDateLocal and @EndDateLocal 
+		SELECT QuarterStartDate,CASE WHEN @QuartersEndDate < QuarterEndDate THEN @QuartersEndDate ELSE QuarterEndDate END,'Q'+CONVERT(NVARCHAR,DATEPART(Q,QuarterStartDate)),DATEPART(Q,QuarterStartDate)+12 FROM dbo.Calendar C
+		WHERE C.DATE between @QuartersStarDate and @QuartersEndDate 
 		GROUP BY C.QuarterStartDate,C.QuarterEndDate
 	END
 
 	IF (@CalculateYearToDateValues = 1)
 	BEGIN
 		INSERT INTO @Ranges 
-		SELECT DATEADD(d,-DATEPART(dy,@Today)+1,@Today) ,DATEADD(d,-1,CONVERT(DATE,@Today)),'YTD',17
+		SELECT @QuartersStarDate ,@QuartersEndDate,'YTD',17
 	END
+	
+	SELECT @StartDateLocal = MIN(StartDate),@EndDateLocal = MAX(EndDate) 
+	FROM @Ranges
 
 	;WITH FinancialsRetro AS 
 	(
@@ -166,7 +198,14 @@ BEGIN
 		ISNULL(APV.MonthEnd,PEM.MonthEnd) MonthEnd,
 		ISNULL(APV.RangeType,PEM.RangeType) RangeType,
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedRevenue,0)) AS 'Revenue',
+		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedRevenueNet,0))   as 'RevenueNet',
+		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedCogs,0)) Cogs ,
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedGrossMargin,0)+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)) * (1 - ISNULL(APV.Discount,0)/100))  as 'GrossMargin',
+		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedHoursPerMonth,0)) Hours,
+		CONVERT(DECIMAL(18,2),ISNULL(APV.SalesCommission,0)) SalesCommission,
+		CONVERT(DECIMAL(18,2),ISNULL(APV.PracticeManagementCommission,0)) PracticeManagementCommission,
+		CONVERT(DECIMAL(18,2),ISNULL(PEM.Expense,0)) Expense,
+		CONVERT(DECIMAL(18,2),ISNULL(PEM.Reimbursement,0)) ReimbursedExpense,
 		CASE WHEN ISNULL(APV.FinancialDate,PEM.FinancialDate) < @CurrentMonthStartDate 
 			 THEN CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenue,0))
 			 ELSE CONVERT(DECIMAL(18,6), ISNULL(APV.ProjectedRevenue,0))
@@ -183,3 +222,4 @@ BEGIN
 	ON PEM.ProjectId = APV.ProjectId AND APV.FinancialDate = PEM.FinancialDate  AND APV.MonthEnd = PEM.MonthEnd
 	ORDER BY ProjectId
 END
+
