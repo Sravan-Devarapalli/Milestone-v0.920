@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 9-11-2008
--- Updated by:	Sainath
--- Update date:	
--- Description:	Selects financils for the specified project and period grouped by months
--- =============================================
-CREATE PROCEDURE [dbo].[FinancialsListByProjectPeriod] 
+﻿CREATE PROCEDURE [dbo].[FinancialsListByProjectPeriod] 
 (
 	@ProjectId   VARCHAR(2500),
 	@StartDate   DATETIME,
@@ -114,16 +107,18 @@ BEGIN
 			CONVERT(DECIMAL(18,2),SUM(pexp.Amount/((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Expense,
 			CONVERT(DECIMAL(18,2),SUM(pexp.Reimbursement*0.01*pexp.Amount /((DATEDIFF(dd,pexp.StartDate,pexp.EndDate)+1)))) Reimbursement,
 			C.MonthStartDate AS FinancialDate,
-			C.MonthEndDate AS MonthEnd
+			C.MonthEndDate AS MonthEnd,
+			C.MonthNumber
 		FROM dbo.ProjectExpense as pexp
 		JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
 		WHERE ProjectId IN (SELECT * FROM @ProjectIDs) AND c.Date BETWEEN @StartDateLocal AND @EndDateLocal
-		GROUP BY pexp.ProjectId, C.MonthStartDate, C.MonthEndDate
+		GROUP BY pexp.ProjectId, C.MonthStartDate, C.MonthEndDate,C.MonthNumber
 	), 
 	ActualAndProjectedValuesMonthly  AS
 	(SELECT CT.ProjectId, 
 			C.MonthStartDate AS FinancialDate, 
 			C.MonthEndDate AS MonthEnd,
+			C.MonthNumber,
 			SUM(ISNULL(CT.ProjectedRevenueperDay, 0)) AS ProjectedRevenue,
 			SUM(ISNULL(CT.ProjectedRevenueNet, 0)) as ProjectedRevenueNet,
 			SUM(ISNULL(CT.ProjectedGrossMargin, 0)) as ProjectedGrossMargin,
@@ -136,12 +131,13 @@ BEGIN
 			SUM(ISNULL(CT.PracticeManagementCommission, 0)) as PracticeManagementCommission
 	FROM ActualAndProjectedValuesDaily CT
 	INNER JOIN dbo.Calendar C ON C.Date = CT.Date 
-	GROUP BY CT.ProjectId, C.MonthStartDate, C.MonthEndDate
+	GROUP BY CT.ProjectId, C.MonthStartDate, C.MonthEndDate,C.MonthNumber
 	)
 	SELECT
 		ISNULL(APV.ProjectId,PEM.ProjectId) ProjectId,
 		ISNULL(APV.FinancialDate,PEM.FinancialDate) FinancialDate,
 		ISNULL(APV.MonthEnd,PEM.MonthEnd) MonthEnd,
+		'M'+CONVERT(NVARCHAR,ISNULL(APV.MonthNumber,PEM.MonthNumber)) AS RangeType,
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedRevenue,0)) AS 'Revenue',
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedRevenueNet,0))   as 'RevenueNet',
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedCogs,0)) Cogs ,
