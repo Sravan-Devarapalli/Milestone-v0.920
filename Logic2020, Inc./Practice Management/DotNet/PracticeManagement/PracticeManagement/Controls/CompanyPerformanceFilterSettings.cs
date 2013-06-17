@@ -74,6 +74,9 @@ namespace PraticeManagement.Controls
         private bool isQuarterColoumnsShown;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool isMonthsColoumnsShown;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool isYearToDateColoumnsShown;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -380,6 +383,12 @@ namespace PraticeManagement.Controls
         {
             get { return useActualTimeEntries; }
             set { useActualTimeEntries = value; }
+        }
+
+        public bool IsMonthsColoumnsShown
+        {
+            get { return isMonthsColoumnsShown; }
+            set { isMonthsColoumnsShown = value; }
         }
 
         public bool IsQuarterColoumnsShown
