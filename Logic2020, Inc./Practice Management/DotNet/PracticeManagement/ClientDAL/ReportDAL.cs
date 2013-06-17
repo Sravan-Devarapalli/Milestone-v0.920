@@ -2718,6 +2718,7 @@ namespace DataAccess
           ProjectCalculateRangeType includeCurentYearFinancials,
           bool excludeInternalPractices,
           string userLogin,
+           bool IsMonthsColoumnsShown,
           bool IsQuarterColoumnsShown,
           bool IsYearToDateColoumnsShown,
           bool getFinancialsFromCache)
@@ -2739,7 +2740,16 @@ namespace DataAccess
                 projectGroupIdsList,
                 excludeInternalPractices,
                 userLogin);
-            return LoadFinancialsAndMilestonePersonInfo(result, periodStart, periodEnd, includeCurentYearFinancials, IsQuarterColoumnsShown, IsYearToDateColoumnsShown);
+            if (!getFinancialsFromCache)
+            {
+                return LoadFinancialsAndMilestonePersonInfo(result, periodStart, periodEnd, includeCurentYearFinancials, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+            }
+            else
+            {
+                 ComputedFinancialsDAL.LoadFinancialsPeriodForProjectsFromCache(result, periodStart, periodEnd, true);
+                 CalculateTotalFinancials(result);
+                 return result;
+            }
         }
 
         private static List<Project>
@@ -2748,11 +2758,13 @@ namespace DataAccess
                       DateTime periodStart,
                       DateTime periodEnd,
                       ProjectCalculateRangeType calculatePeriodType,
+            bool IsMonthsColoumnsShown,
                       bool IsQuarterColoumnsShown,
-       bool IsYearToDateColoumnsShown
+       bool IsYearToDateColoumnsShown,
+          bool  IsSummaryCache
                   )
         {
-            LoadFinancialsPeriodForProjects(result, periodStart, periodEnd, IsQuarterColoumnsShown, IsYearToDateColoumnsShown);
+            LoadFinancialsPeriodForProjects(result, periodStart, periodEnd, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, IsSummaryCache);
 
             CalculateTotalFinancials(result);
 
@@ -2760,7 +2772,7 @@ namespace DataAccess
         }
 
         public static void LoadFinancialsPeriodForProjects(
-           List<Project> projects, DateTime startDate, DateTime endDate, bool IsQuarterColoumnsShown, bool IsYearToDateColoumnsShown)
+           List<Project> projects, DateTime startDate, DateTime endDate, bool IsMonthsColoumnsShown, bool IsQuarterColoumnsShown, bool IsYearToDateColoumnsShown, bool IsSummaryCache)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -2774,6 +2786,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CalculateQuarterValues, IsQuarterColoumnsShown);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CalculateYearToDateValues, IsYearToDateColoumnsShown);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CalculateMonthValues, IsMonthsColoumnsShown);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsSummaryCache, IsSummaryCache);
 
                 connection.Open();
 
@@ -2791,7 +2805,7 @@ namespace DataAccess
             }
         }
 
-        private static void ReadMonthlyFinancialsForListOfProjects(DbDataReader reader, List<Project> projects)
+        public static void ReadMonthlyFinancialsForListOfProjects(DbDataReader reader, List<Project> projects)
         {
             if (reader.HasRows)
             {
