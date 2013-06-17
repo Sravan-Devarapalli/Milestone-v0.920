@@ -464,6 +464,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IsSummaryCache = "@IsSummaryCache";
+            public static string CalculateMonthValues = "@CalculateMonthValues";
             public static string SalesStages = "@SalesStages";
             public static string PONumber = "PONumber";
             public const string IsExport = "@IsExport";
