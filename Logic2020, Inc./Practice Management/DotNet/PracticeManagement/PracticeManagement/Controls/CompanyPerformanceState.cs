@@ -301,6 +301,7 @@ namespace PraticeManagement.Controls
                                         filterSet.CalculateRangeSelected,
                                         filterSet.ExcludeInternalPractices,
                                         Thread.CurrentPrincipal.Identity.Name,
+                                        filterSet.IsMonthsColoumnsShown,
                                         filterSet.IsQuarterColoumnsShown,
                                         filterSet.IsYearToDateColoumnsShown,
                                         filterSet.FinancialsFromCache);
