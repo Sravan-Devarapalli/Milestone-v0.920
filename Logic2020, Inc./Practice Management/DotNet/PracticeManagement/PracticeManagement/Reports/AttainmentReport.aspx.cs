@@ -59,22 +59,6 @@ namespace PraticeManagement.Reports
             }
         }
 
-        private bool IsQuarterColoumnsShown
-        {
-            get
-            {
-                return ddlPeriod.SelectedValue == "13" || ddlPeriod.SelectedValue == "-13";
-            }
-        }
-
-        private bool IsYearToDateColoumnsShown
-        {
-            get
-            {
-                return ddlPeriod.SelectedValue == "13";
-            }
-        }
-
         private SheetStyles HeaderSheetStyle
         {
             get
@@ -645,8 +629,11 @@ namespace PraticeManagement.Reports
                     
                     if (bu.RangeType != "Q1" && bu.RangeType != "Q2" && bu.RangeType != "Q3" && bu.RangeType != "Q4" && bu.RangeType != "YTD")
                     {
-                        int monthNumber = Convert.ToInt32(bu.RangeType.Substring(1).ToString());
-                        coloumnsAll.Add(Utils.Calendar.MonthStartDateByMonthNumber(yearStarDate, monthNumber).ToString());
+                        int monthNumber;
+                        if (int.TryParse(bu.RangeType.Substring(1).ToString(), out monthNumber))
+                        {
+                            coloumnsAll.Add(Utils.Calendar.MonthStartDateByMonthNumber(yearStarDate, monthNumber).ToString());
+                        }
                     }
                     else
                     {
