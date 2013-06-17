@@ -4,7 +4,7 @@
 	[ProjectId]						INT NOT NULL,
 	[MonthStartDate]				DATETIME NULL,
 	[MonthEndDate]					DATETIME NULL,
-	[RangeType]						VARCHAR(20) NULL,
+	[RangeType]						NVARCHAR(20) NULL,
 	ProjectRevenue					DECIMAL (18, 2) NULL,
 	ProjectRevenueNet				DECIMAL (18, 2) NULL,
 	Cogs							DECIMAL (18, 2) NULL,
