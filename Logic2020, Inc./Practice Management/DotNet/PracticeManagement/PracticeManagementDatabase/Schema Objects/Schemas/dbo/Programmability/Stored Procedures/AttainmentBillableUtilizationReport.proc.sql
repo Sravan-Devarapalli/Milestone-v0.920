@@ -22,9 +22,9 @@ BEGIN
 		;WITH Ranges
 		AS
 		(
-			SELECT MonthStartDate AS StartDate,MonthEndDate AS EndDate,CONVERT(NVARCHAR(11),CONVERT(DATE,MonthStartDate)) AS RangeType,DATEPART(MM,MonthStartDate) AS ColOrder FROM dbo.Calendar C
+			SELECT MonthStartDate AS StartDate,MonthEndDate AS EndDate,'M'+CONVERT(NVARCHAR,MonthNumber) AS RangeType,DATEPART(MM,MonthStartDate) AS ColOrder FROM dbo.Calendar C
 			WHERE C.DATE between @StartDateLocal and @EndDateLocal
-			GROUP BY C.MonthStartDate,C.MonthEndDate 
+			GROUP BY C.MonthStartDate,C.MonthEndDate,C.MonthNumber 
 			UNION ALL
 			SELECT QuarterStartDate,QuarterEndDate,'Q'+CONVERT(NVARCHAR,DATEPART(Q,QuarterStartDate)),DATEPART(Q,QuarterStartDate)+12 FROM dbo.Calendar C
 			WHERE C.DATE between @StartDateLocal and @EndDateLocal
