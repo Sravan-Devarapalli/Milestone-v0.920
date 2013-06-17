@@ -4,6 +4,7 @@
 	[Year]					INT	NOT NULL,
 	[MonthStartDate]		DATETIME NOT NULL,
 	[MonthEndDate]			DATETIME NOT NULL,
+	[MonthNumber]			INT		 NOT NULL,
 	[DaysInMonth]			INT NOT NULL,
 	[DaysInYear]			INT NOT NULL,
 	[IsRecurring]			BIT NULL,
