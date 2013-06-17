@@ -502,8 +502,10 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DefaultDirector" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DefaultDirectorId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="DefaultDiscount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DefaultSalesperson" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DefaultSalespersonId" type="xs:int" />
       <xs:element minOccurs="0" name="DefaultTerms" type="xs:int" />
       <xs:element minOccurs="0" name="Groups" nillable="true" type="tns:ArrayOfProjectGroup" />
@@ -514,6 +516,7 @@
       <xs:element minOccurs="0" name="IsInternal" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsMarginColorInfoEnabled" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsNoteRequired" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LoginPerson" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
