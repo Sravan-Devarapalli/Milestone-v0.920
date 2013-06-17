@@ -97,6 +97,12 @@ namespace PraticeManagement.Utils
             return now.AddDays(1 - now.DayOfYear);
         }
 
+        public static DateTime MonthStartDateByMonthNumber(DateTime now,int MonthNumber)
+        {
+            var yearStarDate = Utils.Calendar.YearStartDate(now);
+            return now.AddMonths(MonthNumber-1).AddDays(1 - now.AddMonths(-MonthNumber).Day);
+        }
+
         public static DateTime YearEndDate(DateTime now)
         {
             return now.AddYears(1).AddDays(-now.AddYears(1).DayOfYear);
