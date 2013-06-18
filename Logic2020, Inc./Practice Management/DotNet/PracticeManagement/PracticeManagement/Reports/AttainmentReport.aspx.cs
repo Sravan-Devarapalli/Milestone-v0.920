@@ -99,7 +99,7 @@ namespace PraticeManagement.Reports
                 monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                for (int i = 0; i < 17; i++)//there are 12 columns before month columns.
+                for (int i = 0; i < 12; i++)//there are 12 columns before month columns.
                     headerCellStyleList.Add(headerCellStyle);
                 if (renderMonthColumns)
                 {
@@ -109,7 +109,7 @@ namespace PraticeManagement.Reports
                         headerCellStyleList.Add(monthNameHeaderCellStyle);
                     }
                 }
-                    headerCellStyleList.Add(headerCellStyle);
+                headerCellStyleList.Add(headerCellStyle);
 
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
@@ -125,16 +125,8 @@ namespace PraticeManagement.Reports
                 dataNumberDateCellStyle.DataFormat = "_($#,##0.00_);[Red]($#,##0.00)";
 
 
-                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle };
+                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
-
-                for (int i = 0; i < 5; i++)
-                {
-                    dataCellStyleList.Add(dataNumberDateCellStyle);
-                }
-
-                CellStyles[] dataCellStylearrayAfterQuarter = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
-                dataCellStyleList.AddRange(dataCellStylearrayAfterQuarter);
                 if (renderMonthColumns)
                 {
                     var monthsInPeriod = GetPeriodLength();
@@ -148,6 +140,12 @@ namespace PraticeManagement.Reports
                 dataCellStyleList.Add(dataCellStyle);
                 dataCellStyleList.Add(dataCellStyle);
                 dataCellStyleList.Add(dataCellStyle);
+                dataCellStyleList.Add(dataCellStyle);
+                for (int i = 0; i < 5; i++)
+                {
+                    dataCellStyleList.Add(dataNumberDateCellStyle);
+                }
+
 
                 RowStyles datarowStyle = new RowStyles(dataCellStyleList.ToArray());
 
@@ -467,11 +465,6 @@ namespace PraticeManagement.Reports
             data.Columns.Add("Account");
             data.Columns.Add("Business Group");
             data.Columns.Add("Business Unit");
-            data.Columns.Add("Q1 Total");
-            data.Columns.Add("Q2 Total");
-            data.Columns.Add("Q3 Total");
-            data.Columns.Add("Q4 Total");
-            data.Columns.Add("YTD");
             data.Columns.Add("Buyer");
             data.Columns.Add("Project Name");
             data.Columns.Add("New/Extension");
@@ -494,7 +487,11 @@ namespace PraticeManagement.Reports
             data.Columns.Add("Senior Manager");
             data.Columns.Add("Director");
             data.Columns.Add("Pricing List");
-            //	  data.Columns.Add("CSAT OWNER");
+            data.Columns.Add("Q1 Total");
+            data.Columns.Add("Q2 Total");
+            data.Columns.Add("Q3 Total");
+            data.Columns.Add("Q4 Total");
+            data.Columns.Add("YTD");
             foreach (var propertyBag in propertyBags)
             {
                 var objects = new object[data.Columns.Count];
@@ -538,7 +535,20 @@ namespace PraticeManagement.Reports
                                     {
                                         if (IsInRange(interestValue.Key, rangeType))
                                         {
-                                            columnValue = isMargin ? (useActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin) : (useActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue);
+                                            if (rangeType == "YTD")
+                                            {
+                                                foreach (KeyValuePair<RangeType, ComputedFinancials> quarterInterestValue in project.ProjectedFinancialsByRange)
+                                                {
+                                                    if (quarterInterestValue.Key.Range.Substring(0, 1) == "Q")
+                                                    {
+                                                        columnValue += isMargin ? (useActuals ? quarterInterestValue.Value.ActualGrossMargin : quarterInterestValue.Value.GrossMargin) : (useActuals ? quarterInterestValue.Value.ActualRevenue : quarterInterestValue.Value.Revenue);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                columnValue = isMargin ? (useActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin) : (useActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue);
+                                            }
                                             break;
                                         }
                                     }
@@ -693,7 +703,6 @@ namespace PraticeManagement.Reports
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
                                     BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
-                                    QuartersColumn = Revenue,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                     BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
@@ -706,7 +715,8 @@ namespace PraticeManagement.Reports
                                     ProjectManagers = string.Empty,
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : pro.Director.Name.ToString()) : (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : string.Empty),
-                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
+                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                    QuartersColumn = Revenue
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
 
 
@@ -719,7 +729,6 @@ namespace PraticeManagement.Reports
                                               Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
                                               BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
-                                              QuartersColumn = Margin,
                                               Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                               ProjectName = pro.Name != null ? pro.Name : string.Empty,
                                               BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType) : string.Empty,
@@ -732,7 +741,8 @@ namespace PraticeManagement.Reports
                                               ProjectManagers = string.Empty,
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : pro.Director.Name.ToString()) : (pro.Client != null && pro.Client.IsHouseAccount ? "House Account" : string.Empty),
-                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                              QuartersColumn = Margin
                                           }).ToList();
 
             projectsData.AddRange(projectsDataWithMargin);
