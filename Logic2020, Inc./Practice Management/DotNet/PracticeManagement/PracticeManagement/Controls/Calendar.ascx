@@ -135,7 +135,7 @@
 
         if (actualHoursText == null && noteText != '') {
             var noteTextStr = noteText.value.toString();
-            if (noteTextStr.length >= 3 && noteTextStr.length =<1000) {
+            if (noteTextStr.length >= 3 && noteTextStr.length <= 1000) {
                 SaveDetails(popupExtendar, btnOk);
             }
             else {
