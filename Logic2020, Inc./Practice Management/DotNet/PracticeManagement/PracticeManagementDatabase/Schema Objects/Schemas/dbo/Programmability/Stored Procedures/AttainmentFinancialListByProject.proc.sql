@@ -39,7 +39,6 @@ BEGIN
 	BEGIN
 	 SET @QuartersStarDate = @StartDateLocal
 	 SET @QuartersEndDate = @EndDateLocal
-	 
 	END	
     ELSE IF @StartDateLocal <= @CurrentYearEndDate AND @CurrentYearStartDate <= @EndDateLocal
     BEGIN
@@ -89,10 +88,18 @@ BEGIN
 		GROUP BY C.QuarterStartDate,C.QuarterEndDate
 	END
 
-	IF (@CalculateYearToDateValues = 1)
+	IF (@CalculateYearToDateValues = 1 AND @IsSummaryCache = 0)
 	BEGIN
 		INSERT INTO @Ranges 
 		SELECT @QuartersStarDate ,@QuartersEndDate,'YTD',17
+	END
+	ELSE IF (@CalculateYearToDateValues = 1 AND @IsSummaryCache = 1)
+	BEGIN 
+		INSERT INTO @Ranges 
+		SELECT CONVERT(NVARCHAR(4),C.Year) + '0101' AS QuarterStartDate,CONVERT(NVARCHAR(4),C.Year) + '1231' QuarterEndDate ,'YTD',17
+		FROM dbo.Calendar C
+		WHERE C.DATE between @QuartersStarDate and @QuartersEndDate 
+		GROUP BY C.Year
 	END
 	
 	SELECT @StartDateLocal = MIN(StartDate),@EndDateLocal = MAX(EndDate) 
