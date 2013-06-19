@@ -241,7 +241,7 @@
             var displayPanel = $("#" + displaypnl);
 
             iptop = obj.offset().top + obj[0].offsetHeight;
-            ipleft = obj.offset().left - 50;
+            ipleft = obj.offset().left - 70;
             displayPanel.offset({ top: iptop, left: ipleft });
             displayPanel.show();
             displayPanel.offset({ top: iptop, left: ipleft });
