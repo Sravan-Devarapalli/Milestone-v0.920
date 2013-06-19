@@ -483,7 +483,7 @@ namespace PracticeManagementService
 
                 DateTime currentPmTime = SettingsHelper.GetCurrentPMTime();
                 TimeSpan welcomeEmailTimeStamp = new TimeSpan(7, 0, 0);
-                if (person.HireDate.Date <= currentPmTime.Date && currentPmTime.TimeOfDay > welcomeEmailTimeStamp)
+                if (person.HireDate.Date < currentPmTime.Date || ( person.HireDate.Date == currentPmTime.Date && currentPmTime.TimeOfDay > welcomeEmailTimeStamp))
                 {
                     //send welcome mail if person have past hire date
                     var companyName = ConfigurationDAL.GetCompanyName();
@@ -512,7 +512,7 @@ namespace PracticeManagementService
                 //lockout the user
                 AspMembershipDAL.UserSetLockedOut(person.Alias, Membership.ApplicationName, null, null);
             }
-            else if (oldPerson.HireDate.Date > currentPmTime.Date && currentPmTime.TimeOfDay > welcomeEmailTimeStamp)
+            else if (oldPerson.HireDate.Date > currentPmTime.Date && (person.HireDate.Date < currentPmTime.Date || (person.HireDate.Date == currentPmTime.Date && currentPmTime.TimeOfDay > welcomeEmailTimeStamp)))
             {
                 //send welcome mail if person have past hire date
                 var companyName = ConfigurationDAL.GetCompanyName();
