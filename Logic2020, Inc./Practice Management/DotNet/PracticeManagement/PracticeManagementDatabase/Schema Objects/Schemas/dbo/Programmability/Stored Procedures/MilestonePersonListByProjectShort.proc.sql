@@ -1,10 +1,7 @@
-﻿-- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date,,>
--- Description:	<Description,,>
--- =============================================
-CREATE PROCEDURE dbo.MilestonePersonListByProjectShort 
-	@ProjectId   VARCHAR(1000)
+﻿CREATE PROCEDURE dbo.MilestonePersonListByProjectShort 
+(
+	@ProjectId   NVARCHAR(MAX)
+)
 AS
 BEGIN
 	SET NOCOUNT ON
