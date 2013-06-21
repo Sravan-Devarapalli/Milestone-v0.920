@@ -120,7 +120,7 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsUnpaidTimeType { get; set; }
 
-        #endregion
+        #endregion Properties
 
         public int CompareTo(CalendarItem other)
         {
@@ -146,7 +146,5 @@ namespace DataTransferObjects
         {
             return new CalendarItem { Date = d };
         }
-
     }
 }
-
