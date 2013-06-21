@@ -14,7 +14,7 @@ namespace DataTransferObjects
         private bool _inUse;
         private bool _isActive;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -76,7 +76,6 @@ namespace DataTransferObjects
         [DataMember]
         public int ClientId { get; set; }
 
-        #endregion
+        #endregion Properties
     }
 }
-
