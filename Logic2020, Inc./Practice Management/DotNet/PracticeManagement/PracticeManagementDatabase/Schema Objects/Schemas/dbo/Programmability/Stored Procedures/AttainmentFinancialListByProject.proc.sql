@@ -34,7 +34,7 @@ BEGIN
 		   @EndDateLocal=@EndDate,
 		   @CurrentYearStartDate = DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()), 0),
 		   @CurrentYearEndDate = DATEADD(MILLISECOND, -3,DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()) + 1, 0))
-		   
+
 	IF @IsSummaryCache = 1
 	BEGIN
 	 SET @QuartersStarDate = @StartDateLocal
@@ -90,13 +90,23 @@ BEGIN
 
 	IF (@CalculateYearToDateValues = 1 AND @IsSummaryCache = 0)
 	BEGIN
+	
+	IF @StartDateLocal <= @CurrentYearEndDate AND @CurrentYearStartDate <= @EndDateLocal
+    BEGIN
+		INSERT INTO @Ranges 
+		SELECT @QuartersStarDate ,DATEADD(dd,-1,@Today),'YTD',17
+		END
+		ELSE 
+		BEGIN
 		INSERT INTO @Ranges 
 		SELECT @QuartersStarDate ,@QuartersEndDate,'YTD',17
+		END
 	END
 	ELSE IF (@CalculateYearToDateValues = 1 AND @IsSummaryCache = 1)
 	BEGIN 
 		INSERT INTO @Ranges 
-		SELECT CONVERT(NVARCHAR(4),C.Year) + '0101' AS QuarterStartDate,CONVERT(NVARCHAR(4),C.Year) + '1231' QuarterEndDate ,'YTD',17
+		SELECT CONVERT(NVARCHAR(4),C.Year) + '0101' AS QuarterStartDate,
+		CASE WHEN C.Year = YEAR(@Today) THEN DATEADD(dd,-1,@Today) ELSE CONVERT(NVARCHAR(4),C.Year) + '1231' END QuarterEndDate ,'YTD',17
 		FROM dbo.Calendar C
 		WHERE C.DATE between @QuartersStarDate and @QuartersEndDate 
 		GROUP BY C.Year
