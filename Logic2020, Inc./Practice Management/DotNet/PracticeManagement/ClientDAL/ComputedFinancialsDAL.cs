@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.Financials;
 using DataTransferObjects.Utils;
-using System.Linq;
 
 namespace DataAccess
 {
@@ -97,7 +97,7 @@ namespace DataAccess
         /// <param name="startDate">A period start.</param>
         /// <param name="endDate">A period end.</param>
         /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static void LoadFinancialsPeriodForProjectsFromCache(List<Project> projects, DateTime startDate, DateTime endDate,bool isAttainmentReport)
+        public static void LoadFinancialsPeriodForProjectsFromCache(List<Project> projects, DateTime startDate, DateTime endDate, bool isAttainmentReport)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -110,6 +110,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsMonthlyReportParam, true);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsAttainmentReportParam, isAttainmentReport);
 
                 connection.Open();
 
@@ -138,7 +139,7 @@ namespace DataAccess
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                       ReportDAL.ReadMonthlyFinancialsForListOfProjects(reader, projects);
+                        ReportDAL.ReadMonthlyFinancialsForListOfProjects(reader, projects);
                     }
                 }
             }
@@ -204,7 +205,7 @@ namespace DataAccess
         /// <param name="milestoneId">An ID of the milestone to retrive the data for.</param>
         /// <param name="milestonePersons">Persons to init financials with</param>
         /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static void FinancialsGetByMilestonePersonsMonthly(int milestoneId,List<MilestonePerson> milestonePersons)
+        public static void FinancialsGetByMilestonePersonsMonthly(int milestoneId, List<MilestonePerson> milestonePersons)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -230,7 +231,7 @@ namespace DataAccess
         /// <param name="milestoneId">An ID of the milestone to retrive the data for.</param>
         /// <param name="milestonePersons">Persons to init financials with</param>
         /// <returns>The list of the <see cref="ComputedFinancials"/> objects.</returns>
-        public static void FinancialsGetByMilestonePersonsTotal(int milestoneId,List<MilestonePerson> milestonePersons)
+        public static void FinancialsGetByMilestonePersonsTotal(int milestoneId, List<MilestonePerson> milestonePersons)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(
@@ -309,7 +310,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         /// <summary>
         /// Retrives the list of the computed financials for the milestone-person association.
@@ -518,7 +518,6 @@ namespace DataAccess
                 }
                 catch { }
 
-
                 while (reader.Read())
                 {
                     var project = new Project { Id = reader.GetInt32(projectIdIndex) };
@@ -622,8 +621,8 @@ namespace DataAccess
                                             {
                                                 Person = new Person() { Id = reader.GetInt32(personIdIndex) },
                                                 Entries = new List<MilestonePersonEntry>(1)
-                                                                                { 
-                                                                                    new MilestonePersonEntry{ 
+                                                                                {
+                                                                                    new MilestonePersonEntry{
                                                                                                                Id = reader.GetInt32(milestonePersonEntryIdIndex),
                                                                                                                StartDate = reader.GetDateTime(startDateIndex),
                                                                                                                EndDate =  reader.GetDateTime(endDateIndex)
@@ -754,7 +753,7 @@ namespace DataAccess
             }
         }
 
-        public static ComputedFinancials FinancialsGetByMilestonePersonEntry(int mpeId, SqlConnection connection = null,SqlTransaction activeTransaction = null)
+        public static ComputedFinancials FinancialsGetByMilestonePersonEntry(int mpeId, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
             if (connection == null)
             {
@@ -768,7 +767,6 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.IdParam, mpeId);
-
 
                 if (connection.State != ConnectionState.Open)
                 {
@@ -793,7 +791,6 @@ namespace DataAccess
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }
-
