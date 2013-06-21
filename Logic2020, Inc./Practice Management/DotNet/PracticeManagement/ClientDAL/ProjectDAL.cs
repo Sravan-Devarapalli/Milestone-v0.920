@@ -18,7 +18,6 @@ namespace DataAccess
     /// </summary>
     public class ProjectDAL
     {
-
         /// <summary>
         /// Retrieves the list of projects which intended for the specific client.
         /// </summary>
@@ -48,7 +47,7 @@ namespace DataAccess
         /// <param name="clientId">An ID of the client.</param>
         /// <param name="viewerUsername"></param>
         /// <returns>The list of the <see cref="Project"/> objects.</returns>
-        /// 
+        ///
 
         public static DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId)
         {
@@ -111,7 +110,6 @@ namespace DataAccess
 
             return projectList;
         }
-
 
         public static List<Project> ListProjectsByClientShort(int clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects)
         {
@@ -241,6 +239,7 @@ namespace DataAccess
                 throw ex;
             }
         }
+
         /// <summary>
         /// Retrieves the list of projects which intended for the specific client.
         /// </summary>
@@ -276,6 +275,7 @@ namespace DataAccess
 
             return projectList;
         }
+
         /// <summary>
         /// Enlists the requested projects.
         /// </summary>
@@ -437,6 +437,7 @@ namespace DataAccess
 
             return projectList;
         }
+
         public static bool IsProjectSummaryCachedToday()
         {
             bool result = false;
@@ -665,8 +666,6 @@ namespace DataAccess
                 }
             }
 
-
-
             //foreach (var practiceId in practiceManagers.Select(p => p.PracticeId).Distinct())
             //{
             //    foreach
@@ -734,7 +733,6 @@ namespace DataAccess
                     }
                     project.Practice.PracticeOwner = new Person
                     {
-
                         Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn)),
                         FirstName = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerFirstNameColumn)),
                         LastName = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerLastNameColumn))
@@ -1000,7 +998,6 @@ namespace DataAccess
                 }
 
                 command.ExecuteNonQuery();
-
             }
         }
 
@@ -1251,13 +1248,11 @@ namespace DataAccess
                         pricingListNameIndex = -1;
                     }
 
-
                     try
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
                         projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
                         groupInUseIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupInUseColumn);
-
                     }
                     catch
                     {
@@ -1385,7 +1380,6 @@ namespace DataAccess
 
                         if (descriptionIndex > -1)
                         {
-
                             project.Description = !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : string.Empty;
                         }
 
@@ -1473,7 +1467,6 @@ namespace DataAccess
                             }
                             catch
                             {
-
                             }
                         }
                         if (canCreateCustomWorkTypesIndex > -1)
@@ -1589,14 +1582,12 @@ namespace DataAccess
                         {
                             try
                             {
-
                                 project.CSATOwnerName = reader.GetString(reviewerNameIndex);
                             }
                             catch
                             {
                             }
                         }
-
 
                         resultList.Add(project);
                     }
@@ -1677,7 +1668,6 @@ namespace DataAccess
                     catch
                     { }
 
-
                     try
                     {
                         seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
@@ -1717,13 +1707,11 @@ namespace DataAccess
                     {
                         projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
                         projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
-
                     }
                     catch
                     {
                         projectGroupIdIndex = -1;
                         projectGroupNameIndex = -1;
-
                     }
 
                     try
@@ -1763,7 +1751,6 @@ namespace DataAccess
                         }
                         else
                         {
-
                             project = new Project
                             {
                                 Id = reader.GetInt32(projectIdIndex),
@@ -1987,7 +1974,6 @@ namespace DataAccess
                 throw ex;
             }
         }
-
 
         private static void ReadProjectSearchList(DbDataReader reader, List<Project> result)
         {
@@ -2223,7 +2209,6 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CategoryTypeIdParam, categoryType);
 
-
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -2326,7 +2311,6 @@ namespace DataAccess
 
         private static void ReadCalculatedPracticeBudget(SqlDataReader reader, List<ProjectsGroupedByPractice> result)
         {
-
             if (reader.HasRows)
             {
                 int PracticeIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
@@ -2561,9 +2545,7 @@ namespace DataAccess
 
         public static void SaveProjectAttachmentData(ProjectAttachment attachment, int projectId, string userName)
         {
-
             var connection = new SqlConnection(DataSourceHelper.DataConnection);
-
 
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.SaveProjectAttachment, connection))
             {
@@ -2581,7 +2563,6 @@ namespace DataAccess
 
                 connection.Open();
                 command.ExecuteNonQuery();
-
             }
         }
 
@@ -2609,7 +2590,6 @@ namespace DataAccess
                         {
                             int AttachmentDataIndex = reader.GetOrdinal(Constants.ColumnNames.AttachmentDataColumn);
 
-
                             while (reader.Read())
                             {
                                 AttachmentData = (byte[])reader[AttachmentDataIndex];
@@ -2624,8 +2604,6 @@ namespace DataAccess
                     }
                 }
             }
-
-
         }
 
         public static List<ProjectAttachment> GetProjectAttachments(int projectId)
@@ -2916,7 +2894,6 @@ namespace DataAccess
 
         public static List<Project> GetOwnerProjectsAfterTerminationDate(int personId, DateTime terminationDate)
         {
-
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetOwnerProjectsAfterTerminationDateProcedure, connection))
             {
@@ -3036,12 +3013,10 @@ namespace DataAccess
                             isNoteRequiredIndex = -1;
                         }
 
-
                         if (isNoteRequiredIndex > -1)
                         {
                             project.IsNoteRequired = reader.GetBoolean(isNoteRequiredIndex);
                         }
-
                     }
                 }
             }
@@ -3093,7 +3068,6 @@ namespace DataAccess
                     return result;
                 }
             }
-
         }
 
         private static void ReadTimeTypes(SqlDataReader reader, List<TimeTypeRecord> result)
@@ -3217,7 +3191,6 @@ namespace DataAccess
                             int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
                             int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
 
-
                             var project = new Project
                             {
                                 Id = reader.GetInt32(projectIdIndex),
@@ -3233,12 +3206,10 @@ namespace DataAccess
 
                             project.Status = new ProjectStatus
                             {
-
                                 Name = reader.GetString(projectStatusNameIndex)
                             };
                             project.Client = new Client
                             {
-
                                 Name = reader.GetString(clientNameIndex)
                             };
 
@@ -3247,9 +3218,7 @@ namespace DataAccess
                                 Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn))
                             };
 
-
                             return project;
-
                         }
                     }
 
