@@ -447,7 +447,7 @@
             public static string PONumber = "PONumber";
         }
 
-        #endregion
+        #endregion Nested type: ColumnNames
 
         #region Nested type: FunctionNames
 
@@ -455,7 +455,7 @@
         {
         }
 
-        #endregion
+        #endregion Nested type: FunctionNames
 
         #region Nested type: ParameterNames
 
@@ -797,9 +797,10 @@
             public static string SeniorManagerId = "@SeniorManagerId";
             public static string CSATOwnerId = "@CSATOwnerId";
             public static string IsSeniorManagerUnassigned = "@IsSeniorManagerUnassigned";
+            public static string IsAttainmentReportParam = "@IsAttainmentReport";
         }
 
-        #endregion
+        #endregion Nested type: ParameterNames
 
         #region Nested type: ProcedureNames
 
@@ -808,7 +809,6 @@
         /// </summary>
         public class ProcedureNames
         {
-
             #region Nested type: ActivityLog
 
             public class ActivityLog
@@ -818,7 +818,8 @@
                 public const string UserActivityLogInsertProcedure = "dbo.UserActivityLogInsert";
                 public const string GetDatabaseVersionFunction = "SELECT dbo.GetDatabaseVersion()";
             }
-            #endregion
+
+            #endregion Nested type: ActivityLog
 
             #region Nested type: ComputedFinancials
 
@@ -837,7 +838,7 @@
                 public const string GetProjectSummaryCacheValue = "dbo.GetProjectSummaryCacheValue";
             }
 
-            #endregion
+            #endregion Nested type: ComputedFinancials
 
             #region Nested type: Configuration
 
@@ -857,10 +858,9 @@
                 public const string SaveAnnouncement = "dbo.SaveAnnouncement";
                 public const string GetLatestAnnouncement = "dbo.GetLatestAnnouncement";
                 public const string GetAllDomainsProcedure = "dbo.GetAllDomains";
-
             }
 
-            #endregion
+            #endregion Nested type: Configuration
 
             #region Nested type: Person
 
@@ -945,7 +945,7 @@
                 public const string PersonValidationsProcedure = "dbo.PersonValidations";
             }
 
-            #endregion
+            #endregion Nested type: Person
 
             #region Nested type: TimeEntry
 
@@ -962,6 +962,7 @@
             public class TimeEntry
             {
                 #region Time entry
+
                 public const string Get = "dbo.PersonTimeEntries";
                 public const string ListAll = "dbo.TimeEntriesAll";
                 public const string GetCount = "dbo.TimeEntriesGetCount";
@@ -975,13 +976,13 @@
 
                 //New sproc time track
                 public const string DeleteTimeEntryProcedure = "dbo.DeleteTimeEntry";
+
                 public const string SaveTimeTrackProcedure = "dbo.SaveTimeTrack";
                 public const string SetPersonTimeEntryRecursiveSelectionProcedure = "dbo.SetPersonTimeEntryRecursiveSelection";
                 public const string SetPersonTimeEntrySelectionProcedure = "dbo.SetPersonTimeEntrySelection";
                 public const string GetIsChargeCodeTurnOffByPeriodProcedure = "dbo.GetIsChargeCodeTurnOffByPeriod";
 
-
-                #endregion
+                #endregion Time entry
 
                 #region Filters
 
@@ -990,13 +991,14 @@
                 public const string TimeEntryAllMilestonesByClientId = "dbo.TimeEntryAllMilestonesByClientId";
                 public const string HasTimeEntriesForMilestoneBetweenOldAndNewDates = "dbo.HasTimeEntriesForMilestoneBetweenOldAndNewDates";
 
-                #endregion
+                #endregion Filters
 
                 #region Shared
 
                 public const string ConsultantMilestones = "dbo.ConsultantMilestones";
                 public const string CheckPersonTimeEntriesAfterTerminationDate = "dbo.CheckPersonTimeEntriesAfterTerminationDate";
-                #endregion
+
+                #endregion Shared
 
                 #region Reports
 
@@ -1005,10 +1007,10 @@
                 public const string TimeEntriesGetByPersonsForExcel = "dbo.TimeEntriesGetByPersonsForExcel";
                 public const string TimeEntriesGetByProjectCumulative = "dbo.TimeEntryHoursByPersonProject";
 
-                #endregion
+                #endregion Reports
             }
 
-            #endregion
+            #endregion Nested type: TimeEntry
 
             #region Nested type: Pay
 
@@ -1022,7 +1024,7 @@
                 public const string IsPersonSalaryTypeListByPeriodProcedure = "dbo.IsPersonSalaryTypeListByPeriod";
             }
 
-            #endregion
+            #endregion Nested type: Pay
 
             #region Nested type: Seniority
 
@@ -1032,7 +1034,7 @@
                 public const string ListAllSeniorityCategories = "dbo.ListAllSeniorityCategories";
             }
 
-            #endregion
+            #endregion Nested type: Seniority
 
             #region Nested type: Title
 
@@ -1046,7 +1048,7 @@
                 public const string GetTitleTypes = "dbo.GetTitleTypes";
             }
 
-            #endregion
+            #endregion Nested type: Title
 
             #region Nested type: Practices
 
@@ -1063,7 +1065,8 @@
                 public const string CapabilityUpdate = "dbo.CapabilityUpdate";
                 public const string CapabilityInsert = "dbo.CapabilityInsert";
             }
-            #endregion
+
+            #endregion Nested type: Practices
 
             #region Nested type: Reports
 
@@ -1094,7 +1097,8 @@
                 public const string CSATReportHeader = "dbo.CSATReportHeader";
                 public const string AttainmentBillableutlizationReport = "dbo.AttainmentBillableUtilizationReport";
             }
-            #endregion
+
+            #endregion Nested type: Reports
 
             #region Nested type: Calendar
 
@@ -1117,9 +1121,9 @@
                 public const string GetSubstituteDayDetails = "dbo.GetSubstituteDayDetails";
                 public const string CalendarGetWithBasicInfo = "dbo.CalendarGetWithBasicInfo";
                 public static string GetWorkingDaysForTheGivenYear = "dbo.GetWorkingDaysForTheGivenYear";
-
             }
-            #endregion
+
+            #endregion Nested type: Calendar
 
             #region Nested type: ProjectGroup
 
@@ -1136,9 +1140,9 @@
                 public static string BusinessGroupInsert = "dbo.BusinessGroupInsert";
                 public static string BusinessGroupDelete = "dbo.BusinessGroupDelete";
                 public static string GetBusinessGroupList = "dbo.GetBusinessGroupList";
-
             }
-            #endregion
+
+            #endregion Nested type: ProjectGroup
 
             #region Nested type: Note
 
@@ -1149,7 +1153,8 @@
                 public const string NoteUpdate = "dbo.NoteUpdate";
                 public const string NoteDelete = "dbo.NoteDelete";
             }
-            #endregion
+
+            #endregion Nested type: Note
 
             #region Nested type: Project
 
@@ -1207,9 +1212,9 @@
                 public const string CSATUpdate = "dbo.CSATUpdate";
                 public const string CSATDelete = "dbo.CSATDelete";
                 public const string CSATList = "dbo.CSATList";
-
             }
-            #endregion
+
+            #endregion Nested type: Project
 
             #region Nested type: MilestonePerson
 
@@ -1236,7 +1241,8 @@
                 public const string UpdateMilestonePersonEntry = "dbo.UpdateMilestonePersonEntry";
                 public const string MilestoneResourceUpdateProcedure = "dbo.MilestoneResourceUpdate";
             }
-            #endregion
+
+            #endregion Nested type: MilestonePerson
 
             #region Nested type: ProjectExpenses
 
@@ -1249,7 +1255,8 @@
                 public const string Insert = "dbo.ProjectExpenseInsert";
                 public const string Delete = "dbo.ProjectExpenseDelete";
             }
-            #endregion
+
+            #endregion Nested type: ProjectExpenses
 
             #region Nested type: Opportunitites
 
@@ -1285,9 +1292,9 @@
                 public const string GetOpportunityStatusChangeCount = "dbo.GetOpportunityStatusChangeCount";
                 public const string OpportunitySearchText = "dbo.OpportunitySearchText";
                 public const string AttachProjectToOpportunity = "dbo.AttachProjectToOpportunity";
-
             }
-            #endregion
+
+            #endregion Nested type: Opportunitites
 
             #region Nested type: OverHeads
 
@@ -1295,13 +1302,13 @@
             {
                 public const string GetMLFHistory = "dbo.GetMLFHistory";
             }
-            #endregion
+
+            #endregion Nested type: OverHeads
 
             #region Nested type: Client
 
             public class Client
             {
-
                 public const string ClientInsertProcedure = "dbo.ClientInsert";
                 public const string ClientUpdateProcedure = "dbo.ClientUpdate";
                 public const string ClientListAllProcedure = "dbo.ClientListAll";
@@ -1320,10 +1327,9 @@
                 public const string PricingListUpdate = "dbo.PricingListUpdate";
                 public const string GetPricingList = "dbo.GetPricingList";
                 public const string GetBusinessTypes = "dbo.GetBusinessTypes";
-
             }
 
-            #endregion
+            #endregion Nested type: Client
 
             #region Nested type: Commission
 
@@ -1332,7 +1338,8 @@
                 public const string CommissionGetByProjectTypeProcedure = "dbo.CommissionGetByProjectType";
                 public const string CommissionSetProcedure = "dbo.CommissionSet";
             }
-            #endregion
+
+            #endregion Nested type: Commission
 
             #region Nested type: AspMembership
 
@@ -1341,12 +1348,11 @@
                 public const string UserSetLockedOutProcedure = "dbo.aspnet_Membership_LockUser";
                 public const string UserUnLockedOutProcedure = "dbo.aspnet_Membership_UnlockUser";
             }
-            #endregion
 
-
+            #endregion Nested type: AspMembership
         }
 
-        #endregion
+        #endregion Nested type: ProcedureNames
 
         #region Nested type: Queries
 
@@ -1355,7 +1361,7 @@
             public const string SingleParameter = "SELECT {0}(@{1})";
         }
 
-        #endregion
+        #endregion Nested type: Queries
 
         public static class Formatting
         {
@@ -1364,4 +1370,3 @@
         }
     }
 }
-
