@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
-using System.Linq;
+
 namespace DataAccess
 {
     public static class MilestonePersonDAL
@@ -31,7 +32,7 @@ namespace DataAccess
         private const string LocationParam = "@Location";
         private const string UserLoginParam = "@UserLogin";
 
-        #endregion
+        #endregion Parameters
 
         #region Columns
 
@@ -68,9 +69,9 @@ namespace DataAccess
         private const string LocationColumn = "Location";
         private const string HasTimeEntriesColumn = "HasTimeEntries";
 
-        #endregion
+        #endregion Columns
 
-        #endregion
+        #endregion Constants
 
         #region Methods
 
@@ -331,7 +332,6 @@ namespace DataAccess
                     List<MilestonePerson> milestonePersons = null;
                     if (result.Any(mp => mp.Person.Id == personId))
                     {
-
                         milestonePersons = result.Where(mp => mp.Person.Id == personId).ToList();
                         foreach (MilestonePerson mp in milestonePersons)
                         {
@@ -351,7 +351,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         public static bool CheckTimeEntriesForMilestonePerson(int milestonePersonId, DateTime? startDate, DateTime? endDate
                 , bool checkStartDateEquality, bool checkEndDateEquality)
@@ -471,7 +470,6 @@ namespace DataAccess
             }
         }
 
-
         public static bool IsPersonAlreadyAddedtoMilestone(int mileStoneId, int personId, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
             if (connection == null)
@@ -499,7 +497,6 @@ namespace DataAccess
                     }
 
                     return (int)command.ExecuteScalar() > 0;
-
                 }
                 catch (Exception ex)
                 {
@@ -507,8 +504,6 @@ namespace DataAccess
                 }
             }
         }
-
-
 
         /// <summary>
         /// 	Inserts person-milestone details for the specified milestone and person.
@@ -773,7 +768,6 @@ namespace DataAccess
                         entry.Id = reader.GetInt32(milestonePersonEntryIdIndex);
                     }
 
-
                     if (!reader.IsDBNull(personRoleIdIndex))
                     {
                         entry.Role = new PersonRole
@@ -826,7 +820,6 @@ namespace DataAccess
                     {
                         milestonePerson.Person.LastTerminationDate = reader.GetDateTime(lastTerminationDateIndex);
                     }
-
 
                     // Seniority
                     if (!reader.IsDBNull(personSeniorityIdIndex))
@@ -895,8 +888,6 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     var milestonePerson = new MilestonePerson { Id = reader.GetInt32(milestonePersonIdIndex) };
-
-
 
                     // Person details
                     milestonePerson.Person = new Person
@@ -1154,11 +1145,10 @@ namespace DataAccess
             }
         }
 
-        #endregion
+        #endregion Methods
 
         public static List<MilestonePerson> MilestonePersonsGetByMilestoneId(int milestoneId)
         {
-
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (
                 var command =
@@ -1180,13 +1170,10 @@ namespace DataAccess
                     return result;
                 }
             }
-
         }
-
 
         public static MilestonePersonEntry LoadMilestonePersonEntryWithFinancials(int mpeId)
         {
-
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
                 using (var command =
@@ -1200,7 +1187,6 @@ namespace DataAccess
                     connection.Open();
                     using (var reader = command.ExecuteReader())
                     {
-
                         var entry = LoadMilestonePersonEntry(reader);
                         LoadMilestonePersonEntryFinancials(reader, entry);
                         ReadMilestonePersonEntriesTimeOffs(reader, new List<MilestonePersonEntry>() { entry });
@@ -1212,7 +1198,6 @@ namespace DataAccess
 
         public static void LoadMilestonePersonEntriesWithFinancials(List<MilestonePerson> milestonePersons, int milestoneId)
         {
-
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (
                 var command =
@@ -1234,7 +1219,6 @@ namespace DataAccess
                     ReadMilestonePersonEntriesTimeOffs(reader, milestonePersons);
                 }
             }
-
         }
 
         private static void LoadMilestonePersonEntriesFinancials(SqlDataReader reader, List<MilestonePerson> milestonePersons)
@@ -1323,10 +1307,7 @@ namespace DataAccess
                                 Name = reader.GetString(personRoleNameIndex)
                             };
 
-
-
                     return entry;
-
                 }
             }
 
@@ -1351,7 +1332,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         private static void LoadMilestonePersonEntries(SqlDataReader reader, List<MilestonePerson> milestonePersons)
         {
@@ -1406,8 +1386,6 @@ namespace DataAccess
                                                  },
                                 HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
                             };
-
-
 
                     if (!reader.IsDBNull(personRoleIdIndex))
                         entry.Role =
@@ -1502,7 +1480,6 @@ namespace DataAccess
                                                    ? (object)entry.ThisPerson.Id.Value
                                                    : DBNull.Value);
 
-
                     var milestonePersonId = new SqlParameter();
                     milestonePersonId.ParameterName = MilestonePersonIdParam;
                     milestonePersonId.SqlDbType = SqlDbType.Int;
@@ -1524,7 +1501,6 @@ namespace DataAccess
                                                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                     connection.Open();
-
 
                     command.ExecuteNonQuery();
 
