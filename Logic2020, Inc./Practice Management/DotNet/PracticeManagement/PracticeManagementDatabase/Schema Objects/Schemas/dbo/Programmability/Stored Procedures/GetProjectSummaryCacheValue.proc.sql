@@ -3,7 +3,8 @@
 	@ProjectId   VARCHAR(2500),
 	@StartDate   DATETIME = NULL,
 	@EndDate     DATETIME = NULL,
-	@IsMonthlyReport BIT = 0 
+	@IsMonthlyReport BIT = 0 ,
+	@IsAttainmentReport  BIT = 0 
 )
 AS
 BEGIN
@@ -40,5 +41,6 @@ BEGIN
 				) 
 			AND [ProjectId] IN (SELECT * FROM @ProjectIDs)
 			AND IsMonthlyRecord = @IsMonthlyReport
+			AND ((IsMonthlyRecord = 1 AND @IsAttainmentReport = 0 AND RangeType LIKE 'M%') OR IsMonthlyRecord = 0 OR @IsAttainmentReport = 1)
 END
 
