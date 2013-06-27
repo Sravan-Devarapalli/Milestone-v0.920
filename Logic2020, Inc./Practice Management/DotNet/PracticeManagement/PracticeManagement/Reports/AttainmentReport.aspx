@@ -27,26 +27,20 @@
                             <td class="Width9Percent">
                                 <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" CssClass="WholeWidth"
                                     OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged">
-                                    <asp:ListItem Text="Next 3 months"  Value="3"></asp:ListItem>
-                                    <asp:ListItem Text="Next 6 months" Value="6"></asp:ListItem>
-                                    <asp:ListItem Text="Next 12 months" Value="12"></asp:ListItem>
-                                    <asp:ListItem Text="Last 3 months" Value="-3"></asp:ListItem>
-                                    <asp:ListItem Text="Last 6 months" Value="-6"></asp:ListItem>
-                                    <asp:ListItem Text="Last 12 months" Value="-12"></asp:ListItem>
                                     <asp:ListItem Text="Previous FY" Value="-13"></asp:ListItem>
                                     <asp:ListItem Text="Current FY" Selected="True" Value="13"></asp:ListItem>
-                                    <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                 </asp:DropDownList>
-                                <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender" BackgroundCssClass="modalBackground"
-                                    PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false" />
-                                <asp:HiddenField ID="hdnPeriod" runat="server" Value="3" />          
+                                <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
+                                    BackgroundCssClass="modalBackground" PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates"
+                                    DropShadow="false" />
+                                <asp:HiddenField ID="hdnPeriod" runat="server" Value="3" />
                             </td>
                             <td class="Width47Percent padLeft5">
                                 <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                 <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             </td>
                             <td>
-                                <asp:Button ID="btnExport" runat="server" Text="Export" OnClick="btnExport_Click"/>
+                                <asp:Button ID="btnExport" runat="server" Text="Export" OnClick="btnExport_Click" />
                             </td>
                         </tr>
                     </table>
@@ -55,8 +49,8 @@
                         <table class="WholeWidth">
                             <tr>
                                 <td align="center">
-                                    <uc:DateInterval id="diRange" runat="server" isfromdaterequired="true" istodaterequired="true"
-                                        fromtodatefieldcssclass="Width60PxImp" />
+                                    <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
+                                        FromToDateFieldCssClass="Width60PxImp" />
                                 </td>
                             </tr>
                             <tr>
@@ -79,10 +73,9 @@
             </div>
         </ContentTemplate>
         <Triggers>
-        <asp:PostBackTrigger ControlID="btnExport"/>
+            <asp:PostBackTrigger ControlID="btnExport" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
 <asp:Content ID="Content5" ContentPlaceHolderID="footer" runat="server">
 </asp:Content>
-
