@@ -57,6 +57,8 @@ BEGIN
 						([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,SalesCommission,PracticeManagementCommission,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
 						EXEC dbo.AttainmentFinancialListByProject @StartDate=@StartDate ,@EndDate=@EndDate ,@ProjectId= @ProjectId,@CalculateMonthValues = 0,@CalculateQuarterValues = 1,@CalculateYearToDateValues = 1,@IsSummaryCache = 1
 
+						EXEC [dbo].[UpdateCurrentQuarterActualValuesInCache]
+
 						--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Month'
 						--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
 					END	
