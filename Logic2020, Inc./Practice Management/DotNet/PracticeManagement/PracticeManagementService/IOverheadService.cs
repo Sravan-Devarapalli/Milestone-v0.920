@@ -11,7 +11,7 @@ namespace PracticeManagementService
         /// <summary>
         /// Retrives the list of <see cref="OverheadRateType"/> objects.
         /// </summary>
-        /// <returns>The list of the <see cref=""/> objects.</returns>
+        /// <returns>The list of the <see cref="OverheadRateType"/> objects.</returns>
         [OperationContract]
         List<OverheadRateType> GetRateTypes();
 
@@ -78,4 +78,3 @@ namespace PracticeManagementService
         List<OverHeadHistory> GetOverheadHistory();
     }
 }
-
