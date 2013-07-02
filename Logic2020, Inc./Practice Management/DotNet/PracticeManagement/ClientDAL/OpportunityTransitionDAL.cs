@@ -63,7 +63,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, opportunityId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityTransitionStatusId, 
+                command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityTransitionStatusId,
                     statusType.HasValue ? statusType : null);
 
                 connection.Open();
@@ -112,24 +112,23 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityIdParam, transition.Opportunity.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OpportunityTransitionStatusId,
                                                 transition.OpportunityTransitionStatus != null
-                                                    ? (object) transition.OpportunityTransitionStatus.Id
+                                                    ? (object)transition.OpportunityTransitionStatus.Id
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
                                                 transition.Person != null && transition.Person.Id.HasValue
-                                                    ? (object) transition.Person.Id.Value
+                                                    ? (object)transition.Person.Id.Value
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.NoteText,
                                                 !string.IsNullOrEmpty(transition.NoteText)
-                                                    ? (object) transition.NoteText
+                                                    ? (object)transition.NoteText
                                                     : DBNull.Value);
 
-                var oppTransitionIdPrm = new SqlParameter(Constants.ParameterNames.OpportunityTransitionId, SqlDbType.Int) 
-                    { Direction = ParameterDirection.Output };
+                var oppTransitionIdPrm = new SqlParameter(Constants.ParameterNames.OpportunityTransitionId, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(oppTransitionIdPrm);
 
                 if (transition.TargetPerson != null)
                     command.Parameters.AddWithValue(
-                        Constants.ParameterNames.TargetPerson, 
+                        Constants.ParameterNames.TargetPerson,
                         transition.TargetPerson.Id);
 
                 try
@@ -142,7 +141,7 @@ namespace DataAccess
                     throw new DataAccessException(ex);
                 }
 
-                return (int) oppTransitionIdPrm.Value;
+                return (int)oppTransitionIdPrm.Value;
             }
         }
 
@@ -177,7 +176,7 @@ namespace DataAccess
                                              Opportunity = new Opportunity
                                                                {
                                                                    Id = reader.GetInt32(opportunityIdIndex),
-                                                                   Priority = new OpportunityPriority{ Priority = reader.GetString(opportunityPriorityIndex)},
+                                                                   Priority = new OpportunityPriority { Priority = reader.GetString(opportunityPriorityIndex) },
                                                                    Client = new Client { Name = reader.GetString(clientNameIndex) },
                                                                    OpportunityNumber = reader.GetString(opportunityNumberIndex),
                                                                    LastUpdate = reader.GetDateTime(opportunityLastUpdatedIndex),
@@ -203,28 +202,27 @@ namespace DataAccess
 
         private static void ReadOpportunityTransitions(DbDataReader reader, List<OpportunityTransition> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            var opportunityTransitionIdIndex =
+                reader.GetOrdinal(Constants.ColumnNames.OpportunityTransitionId);
+            var opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
+            var opportunityTransitionStatusIdIndex =
+                reader.GetOrdinal(Constants.ColumnNames.OpportunityTransitionStatusId);
+            var transitionDateIndex = reader.GetOrdinal(Constants.ColumnNames.TransitionDate);
+            var personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            var noteTextIndex = reader.GetOrdinal(Constants.ColumnNames.NoteText);
+            var opportunityTransitionStatusNameIndex =
+                reader.GetOrdinal(Constants.ColumnNames.OpportunityTransitionStatusName);
+            var firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            var lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+
+            var targetId = reader.GetOrdinal(Constants.ColumnNames.TargetPersonId);
+            var targetFirstName = reader.GetOrdinal(Constants.ColumnNames.TargetFirstName);
+            var targetLastName = reader.GetOrdinal(Constants.ColumnNames.TargetLastName);
+
+            while (reader.Read())
             {
-                var opportunityTransitionIdIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.OpportunityTransitionId);
-                var opportunityIdIndex = reader.GetOrdinal(Constants.ColumnNames.OpportunityIdColumn);
-                var opportunityTransitionStatusIdIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.OpportunityTransitionStatusId);
-                var transitionDateIndex = reader.GetOrdinal(Constants.ColumnNames.TransitionDate);
-                var personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                var noteTextIndex = reader.GetOrdinal(Constants.ColumnNames.NoteText);
-                var opportunityTransitionStatusNameIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.OpportunityTransitionStatusName);
-                var firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
-                var lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-
-                var targetId = reader.GetOrdinal(Constants.ColumnNames.TargetPersonId);
-                var targetFirstName = reader.GetOrdinal(Constants.ColumnNames.TargetFirstName);
-                var targetLastName = reader.GetOrdinal(Constants.ColumnNames.TargetLastName);
-
-                while (reader.Read())
-                {
-                    var transition = new OpportunityTransition
+                var transition = new OpportunityTransition
                     {
                         Id = reader.GetInt32(opportunityTransitionIdIndex),
                         Opportunity = new Opportunity { Id = reader.GetInt32(opportunityIdIndex) },
@@ -234,39 +232,38 @@ namespace DataAccess
                                 ? reader.GetString(noteTextIndex)
                                 : null,
                         OpportunityTransitionStatus = new OpportunityTransitionStatus
-                        {
-                            Id =
-                                reader.GetInt32(
-                                    opportunityTransitionStatusIdIndex),
-                            Name =
-                                reader.GetString(
-                                    opportunityTransitionStatusNameIndex)
-                        },
+                            {
+                                Id =
+                                    reader.GetInt32(
+                                        opportunityTransitionStatusIdIndex),
+                                Name =
+                                    reader.GetString(
+                                        opportunityTransitionStatusNameIndex)
+                            },
                         Person = new Person
-                        {
-                            Id = reader.GetInt32(personIdIndex),
-                            FirstName = reader.GetString(firstNameIndex),
-                            LastName = reader.GetString(lastNameIndex)
-                        }
+                            {
+                                Id = reader.GetInt32(personIdIndex),
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex)
+                            }
                     };
 
-                    if (!reader.IsDBNull(targetId))
-                    {
-                        var target = new Person
+                if (!reader.IsDBNull(targetId))
+                {
+                    var target = new Person
                         {
                             Id = reader.GetInt32(targetId),
                             FirstName = reader.GetString(targetFirstName),
                             LastName = reader.GetString(targetLastName)
                         };
 
-                        transition.TargetPerson = target;
-                    }
-
-                    result.Add(transition);
+                    transition.TargetPerson = target;
                 }
+
+                result.Add(transition);
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }
