@@ -33,7 +33,7 @@ namespace DataAccess
             get { return Constants.ProcedureNames.ProjectExpenses.Delete; }
         }
 
-        #endregion
+        #endregion Procedure names
 
         #region Base initializers
 
@@ -41,11 +41,9 @@ namespace DataAccess
         {
             InitPropertiesNoId(command, entity);
             command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, entity.ProjectId);
-           
 
             var outParam =
-                new SqlParameter(Constants.ParameterNames.ExpenseId, SqlDbType.Int)
-                    {Direction = ParameterDirection.Output};
+                new SqlParameter(Constants.ParameterNames.ExpenseId, SqlDbType.Int) { Direction = ParameterDirection.Output };
 
             command.Parameters.Add(outParam);
 
@@ -73,7 +71,7 @@ namespace DataAccess
             return new ProjectExpenseReader(reader);
         }
 
-        #endregion
+        #endregion Base initializers
 
         #region Derived initializers
 
@@ -91,14 +89,14 @@ namespace DataAccess
             command.Parameters.AddWithValue(Constants.ParameterNames.ExpenseId, entity.Id.Value);
         }
 
-        #endregion
+        #endregion Derived initializers
 
         #region Custom data access
 
         public ProjectExpense[] GetForMilestone(ProjectExpense projectExpense)
         {
             return ExecuteReader(
-                        projectExpense, 
+                        projectExpense,
                         Constants.ProcedureNames.ProjectExpenses.GetAllForMilestone,
                         GetForMilestoneInitializer);
         }
@@ -121,8 +119,8 @@ namespace DataAccess
             sqlCommand.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectExpense.ProjectId);
         }
 
-        #endregion
+        #endregion Custom data access
 
-        #endregion
+        #endregion Overrides of DalBase<ProjectExpense>
     }
 }
