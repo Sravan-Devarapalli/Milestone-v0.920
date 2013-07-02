@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel.Activation;
+using System.Web;
 using System.Web.Security;
 using DataAccess;
 using DataTransferObjects;
-using System.Web;
 
 namespace PracticeManagementService
 {
@@ -26,11 +26,8 @@ namespace PracticeManagementService
                 MailUtil.SendClientAddedEmail(client.LoginPerson, now.ToString("MM/dd/yyyy"), client.HtmlEncodedName, client.IsHouseAccount ? "Yes" : "No", client.DefaultSalesperson, client.DefaultDirector);
                 return client.Id;
             }
-            else
-            {
-                ClientDAL.ClientUpdate(client, userLogin);
-                return client.Id;
-            }
+            ClientDAL.ClientUpdate(client, userLogin);
+            return client.Id;
         }
 
         /// <summary>
@@ -75,41 +72,11 @@ namespace PracticeManagementService
         /// List all active clients in the system
         /// </summary>
         /// <returns><see cref="List{T}"/> of all active <see cref="Client"/>s in the system</returns>
-        public List<Client> ClientListAll()
+        public List<Client> ClientListAll(bool includeInactive)
         {
-            return ClientDAL.ClientListAll();
+            return ClientDAL.ClientListAll(includeInactive);
         }
 
-        /// <summary>
-        /// List all clients, including inactive clients
-        /// </summary>
-        /// <returns><see cref="List{T}"/> of all active and inactive <see cref="Client"/>s in the system</returns>
-        public List<Client> ClientListAllWithInactive()
-        {
-            return ClientDAL.ClientListAllWithInactive();
-        }
-
-        /// <summary>
-        /// List all active and inactive clients in the system
-        /// </summary>
-        /// <param name="person">Person to restrict results to</param>
-        /// <param name="inactives">Include inactive items</param>
-        /// <returns>A <see cref="List{T}"/> of <see cref="Client"/>s in the system</returns>
-        public List<Client> ClientListAllSecure(Person person, bool inactives)
-        {
-            try
-            {
-                return ClientDAL.ClientListAllSecure(person, inactives);
-            }
-            catch (Exception e)
-            {
-                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "ClientListAllSecure", "ClientService.svc", string.Empty,
-                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
-                ActivityLogDAL.ActivityLogInsert(20, logData);
-                throw e;
-            }
-        }
-        
         /// <summary>
         /// List all active and inactive clients in the system
         /// </summary>
@@ -199,7 +166,6 @@ namespace PracticeManagementService
             return ClientDAL.GetPricingLists(clientId);
         }
 
-        #endregion
+        #endregion IClientService Members
     }
 }
-
