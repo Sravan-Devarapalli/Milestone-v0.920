@@ -46,7 +46,8 @@ namespace PracticeManagementService
 
             foreach (OverheadFixedRate overhead in result)
             {
-                overhead.Timescales = OverheadFixedRateDAL.OverheadTimescaleList(overhead.Id.Value);
+                if (overhead.Id != null)
+                    overhead.Timescales = OverheadFixedRateDAL.OverheadTimescaleList(overhead.Id.Value);
             }
 
             return result;
@@ -119,7 +120,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="OverHeadName"></param>
         /// <returns></returns>
-        public Dictionary<int, decimal> GetMinimumLoadFactorOverheadMultipliers(string OverHeadName,ref bool isInActive)
+        public Dictionary<int, decimal> GetMinimumLoadFactorOverheadMultipliers(string OverHeadName, ref bool isInActive)
         {
             return OverheadFixedRateDAL.GetMinimumLoadFactorOverheadMultipliers(OverHeadName, ref isInActive);
         }
@@ -128,13 +129,12 @@ namespace PracticeManagementService
         {
             OverheadFixedRateDAL.UpdateMinimumLoadFactorHistory(timeScaleId, rate);
         }
+
         public void UpdateMinimumLoadFactorStatus(bool inActive)
         {
             OverheadFixedRateDAL.UpdateMinimumLoadFactorStatus(inActive);
         }
 
-
-        #endregion
+        #endregion IOverheadService Members
     }
 }
-
