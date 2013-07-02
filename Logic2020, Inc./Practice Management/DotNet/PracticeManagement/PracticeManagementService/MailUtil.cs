@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using System.Net.Mail;
+using System.Web;
 using DataAccess;
 using DataTransferObjects;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using System.Web;
-using System.Configuration;
 
 namespace PracticeManagementService
 {
@@ -58,12 +58,12 @@ namespace PracticeManagementService
             }
 
             var body = string.Format(emailTemplate.Body, person.FirstName, person.LastName, person.Alias, password, now.ToLongDateString(), now.ToShortTimeString(), loginUrl);
-            Email(emailTemplate.Subject, body, true, person.Alias, string.Empty, null, false, string.Format("{0} {0}", person.FirstName, person.LastName));
+            Email(emailTemplate.Subject, body, true, person.Alias, string.Empty, null, false, string.Format("{0} {1}", person.FirstName, person.LastName));
         }
 
         internal static void SendForgotPasswordNotification(string username, string password, EmailTemplate emailTemplate, string PMLoginPageUrl, string PMChangePasswordPageUrl)
         {
-            PMChangePasswordPageUrl = string.Format(PMChangePasswordPageUrl, username, System.Web.HttpUtility.UrlEncode(password));
+            PMChangePasswordPageUrl = string.Format(PMChangePasswordPageUrl, username, HttpUtility.UrlEncode(password));
             var body = string.Format(emailTemplate.Body, PMLoginPageUrl, PMChangePasswordPageUrl, password);
             Email(emailTemplate.Subject, body, true, username, string.Empty, null);
         }
@@ -89,8 +89,7 @@ namespace PracticeManagementService
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
         }
 
-
-        internal static void SendClientAddedEmail(string currentPerson ,string startDate, string clientName, string isHouseAccount, string salesperson, string director)
+        internal static void SendClientAddedEmail(string currentPerson, string startDate, string clientName, string isHouseAccount, string salesperson, string director)
         {
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.ClientAddedTemplateName);
             var subject = string.Format(emailTemplate.Subject, clientName);
@@ -117,15 +116,14 @@ namespace PracticeManagementService
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.LockedOutEmailTemplateName);
             var companyName = ConfigurationDAL.GetCompanyName();
             var lockedOutMinitues = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.UnlockUserMinituesKey);
-            string output = string.Empty;
-            int mins = 30;
+            string output;
             try
             {
-                mins = Convert.ToInt32(lockedOutMinitues);
+                int mins = Convert.ToInt32(lockedOutMinitues);
                 output = lockedOutMinitues + " minute(s)";
                 if (mins > 59)
                 {
-                    output = (mins / 60).ToString() + " hour(s)";
+                    output = (mins / 60) + " hour(s)";
                 }
                 if (mins == 1440)
                 {
@@ -154,9 +152,11 @@ namespace PracticeManagementService
                 smtpSettings = SettingsHelper.GetSMTPSettings();
             }
 
-            SmtpClient client = new SmtpClient(smtpSettings.MailServer, smtpSettings.PortNumber);
-            client.EnableSsl = smtpSettings.SSLEnabled;
-            client.Credentials = new NetworkCredential(smtpSettings.UserName, smtpSettings.Password);
+            SmtpClient client = new SmtpClient(smtpSettings.MailServer, smtpSettings.PortNumber)
+                {
+                    EnableSsl = smtpSettings.SSLEnabled,
+                    Credentials = new NetworkCredential(smtpSettings.UserName, smtpSettings.Password)
+                };
 
             return client;
         }
@@ -174,11 +174,9 @@ namespace PracticeManagementService
         {
             var smtpSettings = SettingsHelper.GetSMTPSettings();
 
-            MailMessage message = new MailMessage();
-            message.Priority = isHighPriority ? MailPriority.High : MailPriority.Normal;
+            MailMessage message = new MailMessage { Priority = isHighPriority ? MailPriority.High : MailPriority.Normal };
             var addresses = commaSeperatedToAddresses.Split(',');
-            string[] addressesDisplayName = null;
-            addressesDisplayName = !string.IsNullOrEmpty(commaSeperatedToAddressesDisplayNames) ? commaSeperatedToAddressesDisplayNames.Split(',') : addresses;
+            string[] addressesDisplayName = !string.IsNullOrEmpty(commaSeperatedToAddressesDisplayNames) ? commaSeperatedToAddressesDisplayNames.Split(',') : addresses;
             addressesDisplayName = !string.IsNullOrEmpty(commaSeperatedToAddressesDisplayNames) && addressesDisplayName.Length == addresses.Length ? addressesDisplayName : addresses;
 
             for (int i = 0; i < addresses.Length; i++)
@@ -233,13 +231,12 @@ namespace PracticeManagementService
                 }
             }
 
-            SmtpClient client = MailUtil.GetSmtpClient(smtpSettings);
+            SmtpClient client = GetSmtpClient(smtpSettings);
 
             message.From = new MailAddress(smtpSettings.PMSupportEmail);
             client.Send(message);
         }
 
-        #endregion
+        #endregion Methods
     }
 }
-
