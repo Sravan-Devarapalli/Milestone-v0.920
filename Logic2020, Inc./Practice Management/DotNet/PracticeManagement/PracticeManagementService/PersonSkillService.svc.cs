@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
-using DataTransferObjects.Skills;
-using DataAccess.Skills;
+﻿using System.Collections.Generic;
 using System.ServiceModel.Activation;
+using DataAccess.Skills;
 using DataTransferObjects;
-using DataAccess;
-
+using DataTransferObjects.Skills;
 
 namespace PracticeManagementService
 {
@@ -79,7 +72,6 @@ namespace PracticeManagementService
         public void SavePersonProfiles(int personId, string profilesXml, string userLogin)
         {
             PersonSkillDAL.SavePersonProfiles(personId, profilesXml, userLogin);
-        }       
+        }
     }
 }
-
