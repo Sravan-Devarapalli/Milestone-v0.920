@@ -9,7 +9,6 @@ namespace DataAccess
 {
     public static class SeniorityDAL
     {
-
         #region Methods
 
         /// <summary>
@@ -36,48 +35,44 @@ namespace DataAccess
 
         private static void ReadSeniorities(DbDataReader reader, List<Seniority> result)
         {
-            if (reader.HasRows)
-            {
-                int seniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityIdColumn);
-                int seniorityIndex = reader.GetOrdinal(Constants.ColumnNames.Seniority);
-                int seniorityCategoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategoryId);
-                int seniorityCategoryIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategory);
-                int seniorityValueIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityValue);
+            if (!reader.HasRows) return;
+            int seniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityIdColumn);
+            int seniorityIndex = reader.GetOrdinal(Constants.ColumnNames.Seniority);
+            int seniorityCategoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategoryId);
+            int seniorityCategoryIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategory);
+            int seniorityValueIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityValue);
 
-                while (reader.Read())
-                {
-                    result.Add(
-                        new Seniority()
+            while (reader.Read())
+            {
+                result.Add(
+                    new Seniority()
                         {
                             Id = reader.GetInt32(seniorityIdIndex),
                             Name = reader.GetString(seniorityIndex),
                             SeniorityValue = reader.GetInt32(seniorityValueIndex),
                             SeniorityCategory = new SeniorityCategory
-                            {
-                                Id = reader.GetInt32(seniorityCategoryIdIndex),
-                                Name = reader.GetString(seniorityCategoryIndex)
-                            }
+                                {
+                                    Id = reader.GetInt32(seniorityCategoryIdIndex),
+                                    Name = reader.GetString(seniorityCategoryIndex)
+                                }
                         });
-                }
             }
         }
 
         private static void ReadSeniorityCategories(DbDataReader reader, List<SeniorityCategory> result)
         {
-            if (reader.HasRows)
-            {
-                int seniorityCategoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategoryId);
-                int seniorityCategoryIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategory);
+            if (!reader.HasRows) return;
+            int seniorityCategoryIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategoryId);
+            int seniorityCategoryIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityCategory);
 
-                while (reader.Read())
-                {
-                    result.Add(
-                        new SeniorityCategory()
+            while (reader.Read())
+            {
+                result.Add(
+                    new SeniorityCategory()
                         {
                             Id = reader.GetInt32(seniorityCategoryIdIndex),
                             Name = reader.GetString(seniorityCategoryIndex)
                         });
-                }
             }
         }
 
@@ -99,7 +94,6 @@ namespace DataAccess
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }
-
