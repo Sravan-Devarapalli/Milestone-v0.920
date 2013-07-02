@@ -7,53 +7,50 @@ namespace DataAccess.Other
     /// </summary>
     public static class DataSourceHelper
     {
-		#region Constants
+        #region Constants
 
-		private const string ConnectionStringNotFound = "The connection string \"{0}\" not found.";
-		private const string ConnectionStringConnection = "connection";
-		private const string ConenctionStringAspNetMembership = "AspNetMembership";
+        private const string ConnectionStringNotFound = "The connection string \"{0}\" not found.";
+        private const string ConnectionStringConnection = "connection";
+        private const string ConenctionStringAspNetMembership = "AspNetMembership";
 
-		#endregion
+        #endregion Constants
 
         /// <summary>
         /// The SQL Server connection string for the data store is in
-		/// config file for the applciation hosting this service
+        /// config file for the applciation hosting this service
         /// </summary>
         public static string DataConnection
         {
             get
             {
-				return GetConnectionString(ConnectionStringConnection);
+                return GetConnectionString(ConnectionStringConnection);
             }
         }
 
-		/// <summary>
-		/// The SQL Server connection string for the membership store is in
-		/// config file for the applciation hosting this service
-		/// </summary>
-		public static string MembershipConnection
-		{
-			get
-			{
-				return GetConnectionString(ConenctionStringAspNetMembership);
-			}
-		}
+        /// <summary>
+        /// The SQL Server connection string for the membership store is in
+        /// config file for the applciation hosting this service
+        /// </summary>
+        public static string MembershipConnection
+        {
+            get
+            {
+                return GetConnectionString(ConenctionStringAspNetMembership);
+            }
+        }
 
-		private static string GetConnectionString(string connectionStringName)
-		{
-			ConnectionStringSettings settings =
-				ConfigurationManager.ConnectionStrings[connectionStringName];
-			string connectionString;
-			if (settings == null)
-			{
-				throw new ConfigurationErrorsException(
-					string.Format(ConnectionStringNotFound, connectionStringName));
-			}
-			else
-			{
-				connectionString = settings.ConnectionString;
-			}
-			return connectionString;
-		}
-	}
+        private static string GetConnectionString(string connectionStringName)
+        {
+            ConnectionStringSettings settings =
+                ConfigurationManager.ConnectionStrings[connectionStringName];
+            string connectionString;
+            if (settings == null)
+            {
+                throw new ConfigurationErrorsException(
+                    string.Format(ConnectionStringNotFound, connectionStringName));
+            }
+            connectionString = settings.ConnectionString;
+            return connectionString;
+        }
+    }
 }
