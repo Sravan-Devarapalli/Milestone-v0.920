@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.Reports.ByAccount
 {
@@ -19,43 +19,30 @@ namespace DataTransferObjects.Reports.ByAccount
         [DataMember]
         public Client Account { get; set; }
 
-        public int BusinessUnitsCount 
+        public int BusinessUnitsCount
         {
             get
             {
-                if (GroupedBusinessUnits != null)
-                {
-                    return GroupedBusinessUnits.Count;
-                }
-
-                return GroupedProjects.Select(p => p.Project.Group.Id).Distinct().Count();
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Count : GroupedProjects.Select(p => p.Project.Group.Id).Distinct().Count();
             }
         }
 
-        public int ProjectsCount 
+        public int ProjectsCount
         {
             get
             {
-                if (GroupedBusinessUnits != null)
-                {
-                    return GroupedBusinessUnits.Sum(g => g.ProjectsCount);
-                }
-                return GroupedProjects.Count;
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ProjectsCount) : GroupedProjects.Count;
             }
         }
 
         [DataMember]
         public int PersonsCount { get; set; }
 
-        public Double TotalProjectHours 
+        public Double TotalProjectHours
         {
             get
             {
-                if (GroupedBusinessUnits != null)
-                {
-                    return GroupedBusinessUnits.Sum(g => g.TotalHours);
-                }
-                return GroupedProjects.Sum(p => p.TotalHours);
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.TotalHours) : GroupedProjects.Sum(p => p.TotalHours);
             }
         }
 
@@ -63,11 +50,7 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                if (GroupedBusinessUnits != null)
-                {
-                    return GroupedBusinessUnits.Sum(g => g.BillableHours);
-                }
-                return GroupedProjects.Sum(p => p.BillableHours);
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.BillableHours) : GroupedProjects.Sum(p => p.BillableHours);
             }
         }
 
@@ -75,11 +58,7 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                if (GroupedBusinessUnits != null)
-                {
-                    return GroupedBusinessUnits.Sum(g => g.NonBillableHours);
-                }
-                return GroupedProjects.Sum(p => p.NonBillableHours);
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.NonBillableHours) : GroupedProjects.Sum(p => p.NonBillableHours);
             }
         }
 
@@ -87,13 +66,8 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                if (GroupedBusinessUnits != null)
-                {
-                    return GroupedBusinessUnits.Sum(g => g.BusinessDevelopmentHours);
-                }
-                return GroupedProjects.Where(p => p.Project.TimeEntrySectionId == (int)TimeEntrySectionType.BusinessDevelopment).Sum(p => p.NonBillableHours);
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.BusinessDevelopmentHours) : GroupedProjects.Where(p => p.Project.TimeEntrySectionId == (int)TimeEntrySectionType.BusinessDevelopment).Sum(p => p.NonBillableHours);
             }
         }
     }
 }
-
