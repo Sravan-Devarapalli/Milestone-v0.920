@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.Reports.ConsultingDemand
 {
@@ -11,7 +11,7 @@ namespace DataTransferObjects.Reports.ConsultingDemand
     public class ConsultantGroupBySalesStage
     {
         [DataMember]
-        public String  SalesStage { get; set; }
+        public String SalesStage { get; set; }
 
         [DataMember]
         public List<ConsultantDemandDetailsByMonth> ConsultantDetailsBySalesStage { get; set; }
@@ -20,14 +20,8 @@ namespace DataTransferObjects.Reports.ConsultingDemand
         {
             get
             {
-                if (ConsultantDetailsBySalesStage != null)
-                {
-                    return ConsultantDetailsBySalesStage.Sum(p => p.Count);
-                }
-
-                return 0;
+                return ConsultantDetailsBySalesStage != null ? ConsultantDetailsBySalesStage.Sum(p => p.Count) : 0;
             }
         }
     }
 }
-
