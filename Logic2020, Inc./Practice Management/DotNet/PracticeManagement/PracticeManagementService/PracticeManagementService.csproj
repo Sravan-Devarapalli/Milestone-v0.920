@@ -151,12 +151,9 @@
     <Compile Include="CustomMembershipProvider.cs" />
     <Compile Include="IPersonSkillService.cs" />
     <Compile Include="ITitleService.cs" />
-    <Compile Include="Mail\FileDeliveryProvider.cs" />
     <Compile Include="IConfigurationService.cs" />
-    <Compile Include="IEMailDeliveryProvider.cs" />
     <Compile Include="IProjectGroupService.cs" />
     <Compile Include="ITimeEntryService.cs" />
-    <Compile Include="Mail\EmailMessageDeliveryProvider.cs" />
     <Compile Include="PasswordGeneratorUtility.cs" />
     <Compile Include="PersonSkillService.svc.cs">
       <DependentUpon>PersonSkillService.svc</DependentUpon>
@@ -348,3 +345,4 @@
     </VisualStudio>
   </ProjectExtensions>
 </Project>
+
