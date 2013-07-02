@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
 using DataAccess.Other;
 using DataTransferObjects;
-using DataTransferObjects.CompositeObjects;
-using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
 
 namespace DataAccess
@@ -82,7 +79,6 @@ namespace DataAccess
                             projectId = reader.GetInt32(projectIdIndex);
                             businessUnitId = reader.GetInt32(businessUnitIdIndex);
                         }
-
                     }
 
                     return new Triple<int, int, int>(clientId, projectId, businessUnitId);
@@ -160,22 +156,20 @@ namespace DataAccess
 
         private static IEnumerable<TimeTypeRecord> ReadTimeTypes(DbDataReader reader)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) yield break;
+            int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+            int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+            int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+            int inFutureUseIndex = reader.GetOrdinal(Constants.ColumnNames.InFutureUse);
+            int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+            int isAllowedToEditColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAllowedToEditColumn);
+            int isActiveColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
+            int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
+            int isAdministrativeColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAdministrativeColumn);
+
+            while (reader.Read())
             {
-                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
-                int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
-                int inFutureUseIndex = reader.GetOrdinal(Constants.ColumnNames.InFutureUse);
-                int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
-                int isAllowedToEditColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAllowedToEditColumn);
-                int isActiveColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
-                int isInternalColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsInternalColumn);
-                int isAdministrativeColumnIndex = reader.GetOrdinal(Constants.ColumnNames.IsAdministrativeColumn);
-
-
-                while (reader.Read())
-                {
-                    var tt = new TimeTypeRecord
+                var tt = new TimeTypeRecord
                     {
                         Id = reader.GetInt32(timeTypeIdIndex),
                         Name = reader.GetString(nameIndex),
@@ -186,46 +180,42 @@ namespace DataAccess
                         InFutureUse = Convert.ToBoolean(reader.GetInt32(inFutureUseIndex)),
                         InUse = bool.Parse(reader.GetString(inUseIndex)),
                         IsAdministrative = reader.GetBoolean(isAdministrativeColumnIndex)
-
                     };
-                    yield return tt;
-
-                }
+                yield return tt;
             }
         }
 
         internal static void ReadTimeTypesShort(DbDataReader reader, List<TimeTypeRecord> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+            int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+            int isW2HourlyAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2HourlyAllowed);
+            int isW2SalaryAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2SalaryAllowed);
+
+            int isORTIndex = -1;
+            try
             {
-                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
-                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
-                int isW2HourlyAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2HourlyAllowed);
-                int isW2SalaryAllowed = reader.GetOrdinal(Constants.ColumnNames.IsW2SalaryAllowed);
+                isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTTimeTypeColumn);
+            }
+            catch
+            {
+                isORTIndex = -1;
+            }
 
-                int isORTIndex = -1;
-                try
-                {
-                    isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTTimeTypeColumn);
-                }
-                catch
-                {
-                    isORTIndex = -1;
-                }
+            int isUnpaidIndex = -1;
+            try
+            {
+                isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidTimeType);
+            }
+            catch
+            {
+                isUnpaidIndex = -1;
+            }
 
-                int isUnpaidIndex = -1;
-                try
-                {
-                    isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidTimeType);
-                }
-                catch
-                {
-                    isUnpaidIndex = -1;
-                }
-
-                while (reader.Read())
-                {
-                    var tt = new TimeTypeRecord
+            while (reader.Read())
+            {
+                var tt = new TimeTypeRecord
                     {
                         Id = reader.GetInt32(timeTypeIdIndex),
                         Name = reader.GetString(nameIndex),
@@ -233,16 +223,15 @@ namespace DataAccess
                         IsW2SalaryAllowed = reader.GetBoolean(isW2SalaryAllowed)
                     };
 
-                    if (isORTIndex > -1)
-                    {
-                        tt.IsORTTimeType = reader.GetBoolean(isORTIndex);
-                    }
-                    if (isUnpaidIndex > -1)
-                    {
-                        tt.IsUnpaidTimeType = reader.GetBoolean(isUnpaidIndex);
-                    }
-                    result.Add(tt);
+                if (isORTIndex > -1)
+                {
+                    tt.IsORTTimeType = reader.GetBoolean(isORTIndex);
                 }
+                if (isUnpaidIndex > -1)
+                {
+                    tt.IsUnpaidTimeType = reader.GetBoolean(isUnpaidIndex);
+                }
+                result.Add(tt);
             }
         }
 
@@ -265,12 +254,10 @@ namespace DataAccess
                             name = reader.GetString(reader.GetOrdinal(Constants.ParameterNames.Name));
                         }
                     }
-
                 }
             }
 
             return name;
-
         }
 
         public static TimeTypeRecord GetWorkTypeById(int worktypeId)
@@ -411,7 +398,5 @@ namespace DataAccess
             }
             return result;
         }
-
     }
 }
-
