@@ -14,16 +14,13 @@ namespace DataAccess
 {
     public static class TimeEntryDAL
     {
-
         #region Time Zone
-
 
         #region Constants
 
         private const string TimeZonesAllProcedure = "dbo.TimeZonesAll";
         private const string SetTimeZoneProcedure = "dbo.SetTimeZone";
 
-        private const string IdParameter = "@Id";
         private const string GMTParameter = "@GMT";
 
         private const string TimeZoneIdColumn = "Id";
@@ -31,7 +28,7 @@ namespace DataAccess
         private const string TimeZoneGMTNameColumn = "GMTName";
         private const string TimeZoneIsActiveColumn = "IsActive";
 
-        #endregion
+        #endregion Constants
 
         public static void SetTimeZone(Timezone timezone)
         {
@@ -74,28 +71,27 @@ namespace DataAccess
 
         private static void ReadTimeZones(SqlDataReader reader, List<Timezone> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int timeZoneIdIndex = reader.GetOrdinal(TimeZoneIdColumn);
+            int timeZoneGMTIndex = reader.GetOrdinal(TimeZoneGMTColumn);
+            int timeZoneGMTNameIndex = reader.GetOrdinal(TimeZoneGMTNameColumn);
+            int timeZoneIsActiveIndex = reader.GetOrdinal(TimeZoneIsActiveColumn);
+
+            while (reader.Read())
             {
-                int timeZoneIdIndex = reader.GetOrdinal(TimeZoneIdColumn);
-                int timeZoneGMTIndex = reader.GetOrdinal(TimeZoneGMTColumn);
-                int timeZoneGMTNameIndex = reader.GetOrdinal(TimeZoneGMTNameColumn);
-                int timeZoneIsActiveIndex = reader.GetOrdinal(TimeZoneIsActiveColumn);
+                Timezone timeZone = new Timezone
+                    {
+                        Id = reader.GetInt32(timeZoneIdIndex),
+                        GMT = reader.GetString(timeZoneGMTIndex),
+                        GMTName = reader.GetString(timeZoneGMTNameIndex),
+                        IsActive = reader.GetBoolean(timeZoneIsActiveIndex)
+                    };
 
-                while (reader.Read())
-                {
-                    Timezone timeZone = new Timezone();
-
-                    timeZone.Id = reader.GetInt32(timeZoneIdIndex);
-                    timeZone.GMT = reader.GetString(timeZoneGMTIndex);
-                    timeZone.GMTName = reader.GetString(timeZoneGMTNameIndex);
-                    timeZone.IsActive = reader.GetBoolean(timeZoneIsActiveIndex);
-
-                    result.Add(timeZone);
-                }
+                result.Add(timeZone);
             }
         }
 
-        #endregion
+        #endregion Time Zone
 
         #region Toggling
 
@@ -132,8 +128,7 @@ namespace DataAccess
             }
         }
 
-        #endregion
-
+        #endregion Toggling
 
         /// <summary>
         /// Get time entries by person
@@ -191,7 +186,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
 
-                if (reportContext.PersonIds != null && reportContext.PersonIds.Count() > 0)
+                if (reportContext.PersonIds != null && reportContext.PersonIds.Any())
                 {
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, DataTransferObjects.Utils.Generic.EnumerableToCsv(reportContext.PersonIds, id => id));
                 }
@@ -207,10 +202,8 @@ namespace DataAccess
             }
         }
 
-
         public static bool CheckPersonTimeEntriesAfterTerminationDate(int personId, DateTime terminationDate)
         {
-
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.TimeEntry.CheckPersonTimeEntriesAfterTerminationDate, connection))
             {
@@ -272,7 +265,6 @@ namespace DataAccess
             }
         }
 
-
         public static DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -293,7 +285,6 @@ namespace DataAccess
                 var dataset = new DataSet();
                 adapter.Fill(dataset, "excelDataTable");
                 return dataset;
-
             }
         }
 
@@ -308,36 +299,6 @@ namespace DataAccess
             return result;
         }
 
-        private static GroupedTimeEntries<TimeEntryHours> ReadTimeEntryHours(SqlDataReader reader)
-        {
-            var result = new GroupedTimeEntries<TimeEntryHours>();
-
-            if (reader.HasRows)
-                while (reader.Read())
-                    result.AddTimeEntry(ReadTeHours(reader), ReadTimeEntryMini(reader));
-
-            return result;
-        }
-
-        private static TimeEntryHours ReadTeHours(SqlDataReader reader)
-        {
-            //int dateIndex;
-            //int dayOffIndex;
-            //int companyDayOffIndex;
-            //int readOnlyIndex;
-            //CalendarDAL.GetCalendarItemIndexes(reader, out dateIndex, out dayOffIndex, out companyDayOffIndex, out readOnlyIndex);
-
-            return new TimeEntryHours
-            {
-                //Calendar = CalendarDAL.ReadSingleCalendarItem(reader, dateIndex, dayOffIndex, companyDayOffIndex, readOnlyIndex),
-                Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.Id)),
-                Name = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn))
-                + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.Name))
-                + " - " + reader.GetString(reader.GetOrdinal(Constants.ColumnNames.TimeTypeName))
-
-            };
-        }
-
         private static PersonTimeEntries ReadTimeEntryByPerson(SqlDataReader reader)
         {
             var result = new PersonTimeEntries();
@@ -350,7 +311,7 @@ namespace DataAccess
                     int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
                     int clientIdIndex = reader.GetOrdinal(Constants.ParameterNames.ClientId);
                     int groupIdIndex = reader.GetOrdinal(Constants.ParameterNames.GroupIdColumn);
-                    
+
                     var project = new Project
                     {
                         Id = (int)reader[Constants.ColumnNames.ProjectIdColumn],
@@ -390,7 +351,6 @@ namespace DataAccess
                     ter.ChargeCode = chargeCode;
 
                     result.AddTimeEntry(ter);
-
                 }
 
             return result;
@@ -636,7 +596,6 @@ namespace DataAccess
                     //ProjectStatus projectStatus = ReadProjectStatus(reader);
                     //project.Status = projectStatus;
 
-
                     // Milestone details
                     Milestone milestone = ReadMilestone(reader);
                     milestone.Project = project;
@@ -693,7 +652,6 @@ namespace DataAccess
             return result;
         }
 
-
         private static TimeEntryRecord[] ReadTimeEntries(SqlDataReader reader)
         {
             var result = new List<TimeEntryRecord>();
@@ -730,8 +688,7 @@ namespace DataAccess
                 isAllowedToEditIndex = -1;
             }
 
-            var timeType = new TimeTypeRecord();
-            timeType.Id = reader.GetInt32(timeTypeIdIndex);
+            var timeType = new TimeTypeRecord { Id = reader.GetInt32(timeTypeIdIndex) };
 
             if (isAllowedToEditIndex != -1)
             {
@@ -773,35 +730,13 @@ namespace DataAccess
             int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
             int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
 
-
-
-            var timeEntry = new TimeEntryRecord();
-            timeEntry.Note = reader.IsDBNull(noteIndex) ? string.Empty : reader.GetString(noteIndex);
-            timeEntry.ChargeCodeDate = reader.GetDateTime(chargeCodeDateIndex);
-
-
-
-
-            timeEntry.BillableHours = reader.GetDouble(billableHoursIndex);
-            timeEntry.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
-
-
-            return timeEntry;
-        }
-
-        private static TimeEntryRecord ReadTimeEntryMini(SqlDataReader reader)
-        {
-            var milestoneDateIndex = reader.GetOrdinal(Constants.ParameterNames.MilestoneDate);
-            var actualHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ActualHours);
-            // var timetypeIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeName);
-            var personIdIndex = reader.GetOrdinal(Constants.ParameterNames.PersonId);
             var timeEntry = new TimeEntryRecord
-            {
-                ChargeCodeDate = reader.GetDateTime(milestoneDateIndex),
-                ActualHours = reader.GetDouble(actualHrsIndex),
-                ParentMilestonePersonEntry = new MilestonePersonEntry() { ThisPerson = new Person() { Id = reader.GetInt32(personIdIndex) } }
-                // TimeType = new TimeTypeRecord { Name = reader.GetString(timetypeIndex) }
-            };
+                {
+                    Note = reader.IsDBNull(noteIndex) ? string.Empty : reader.GetString(noteIndex),
+                    ChargeCodeDate = reader.GetDateTime(chargeCodeDateIndex),
+                    BillableHours = reader.GetDouble(billableHoursIndex),
+                    NonBillableHours = reader.GetDouble(nonBillableHoursIndex)
+                };
 
             return timeEntry;
         }
@@ -890,7 +825,6 @@ namespace DataAccess
         {
             try
             {
-
                 project.Client = new Client { Id = reader.GetInt32(reader.GetOrdinal(Constants.ParameterNames.ClientId)) };
             }
             catch
@@ -922,7 +856,6 @@ namespace DataAccess
             };
             return person;
         }
-
 
         #region TimeTrack Methods
 
@@ -978,7 +911,6 @@ namespace DataAccess
                 connection.Open();
                 command.ExecuteNonQuery();
             }
-
         }
 
         public static void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate, string userName)
@@ -1000,7 +932,6 @@ namespace DataAccess
                 connection.Open();
                 command.ExecuteNonQuery();
             }
-
         }
 
         public static Dictionary<DateTime, bool> GetIsChargeCodeTurnOffByPeriod(int personId, int clientId, int groupId, int projectId, int timeTypeId, DateTime startDate, DateTime endDate)
@@ -1040,9 +971,7 @@ namespace DataAccess
             }
         }
 
-
-
-        #endregion
+        #endregion TimeTrack Methods
 
         #region Filtering
 
@@ -1059,7 +988,6 @@ namespace DataAccess
             }
 
             return result.ToArray();
-
         }
 
         /// <summary>
@@ -1202,7 +1130,6 @@ namespace DataAccess
                     reader.NextResult();
                     ReadTimeOffAttributes(reader, timeEntrySections);
 
-
                     return timeEntrySections;
                 }
             }
@@ -1210,157 +1137,146 @@ namespace DataAccess
 
         private static void ReadTimeOffAttributes(SqlDataReader reader, List<TimeEntrySection> timeEntrySections)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+            int timeTypeIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeId);
+            int isPTOIndex = reader.GetOrdinal(Constants.ColumnNames.IsPTOColumn);
+            int isSickLeaveIndex = reader.GetOrdinal(Constants.ColumnNames.IsSickLeaveColumn);
+            int isHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsHolidayColumn);
+            int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTColumn);
+            int isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidColoumn);
+
+            while (reader.Read())
             {
-                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
-                int timeTypeIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeId);
-                int isPTOIndex = reader.GetOrdinal(Constants.ColumnNames.IsPTOColumn);
-                int isSickLeaveIndex = reader.GetOrdinal(Constants.ColumnNames.IsSickLeaveColumn);
-                int isHolidayIndex = reader.GetOrdinal(Constants.ColumnNames.IsHolidayColumn);
-                int isORTIndex = reader.GetOrdinal(Constants.ColumnNames.IsORTColumn);
-                int isUnpaidIndex = reader.GetOrdinal(Constants.ColumnNames.IsUnpaidColoumn);
+                if (
+                    !timeEntrySections.Any(
+                        tes =>
+                        tes.SectionId == TimeEntrySectionType.Administrative &&
+                        tes.Project.Id == reader.GetInt32(projectIdIndex) &&
+                        (tes.TimeEntries == null ||
+                         (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex)))))
+                    continue;
+                var tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
 
-
-                while (reader.Read())
+                if ((reader.GetInt32(isPTOIndex) == 1))
                 {
-                    if (timeEntrySections.Any(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex)))))
-                    {
-                        var tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
-
-                        if ((reader.GetInt32(isPTOIndex) == 1))
-                        {
-                            tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && !tes.Project.IsSickLeaveProject &&tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
-                            tesection.Project.IsPTOProject = true;
-                        }
-
-                        if ((reader.GetInt32(isSickLeaveIndex) == 1))
-                        {
-                            tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && !tes.Project.IsPTOProject && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
-                            tesection.Project.IsSickLeaveProject = true;
-                        }
-
-                        tesection.Project.IsHolidayProject = (reader.GetInt32(isHolidayIndex) == 1);
-                        tesection.Project.IsORTProject = (reader.GetInt32(isORTIndex) == 1);
-                        tesection.Project.IsUnpaidProject = (reader.GetInt32(isUnpaidIndex) == 1);
-                        tesection.Project.TimeTypeId = reader.GetInt32(timeTypeIdIndex);
-                    }
+                    tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && !tes.Project.IsSickLeaveProject && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
+                    tesection.Project.IsPTOProject = true;
                 }
+
+                if ((reader.GetInt32(isSickLeaveIndex) == 1))
+                {
+                    tesection = timeEntrySections.First(tes => tes.SectionId == TimeEntrySectionType.Administrative && !tes.Project.IsPTOProject && tes.Project.Id == reader.GetInt32(projectIdIndex) && (tes.TimeEntries == null || (tes.TimeEntries != null && tes.TimeEntries[0].TimeType.Id == reader.GetInt32(timeTypeIdIndex))));
+                    tesection.Project.IsSickLeaveProject = true;
+                }
+
+                tesection.Project.IsHolidayProject = (reader.GetInt32(isHolidayIndex) == 1);
+                tesection.Project.IsORTProject = (reader.GetInt32(isORTIndex) == 1);
+                tesection.Project.IsUnpaidProject = (reader.GetInt32(isUnpaidIndex) == 1);
+                tesection.Project.TimeTypeId = reader.GetInt32(timeTypeIdIndex);
             }
-
         }
-
-
 
         public static void ReadTimeEntriesSections(SqlDataReader reader, List<TimeEntrySection> timeEntrySections, List<TimeEntryRecord> timeEntries)
         {
-            if (reader.HasRows)
-            {
-                int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
-                int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
-                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
-                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
-                int projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
-                int projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
-                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
-                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
-                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
-                int isRecursiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsRecursive);
-                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
-                int isNoteRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNoteRequired);
+            if (!reader.HasRows) return;
+            int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
+            int chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+            int projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+            int projectGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+            int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNameColumn);
+            int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+            int isRecursiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsRecursive);
+            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+            int isNoteRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNoteRequired);
 
-                while (reader.Read())
-                {
-                    var timeEntrySection = new TimeEntrySection
+            while (reader.Read())
+            {
+                var timeEntrySection = new TimeEntrySection
                     {
                         SectionId = ((TimeEntrySectionType)Enum.Parse(typeof(TimeEntrySectionType), reader.GetInt32(timeEntrySectionIdIndex).ToString())),
                         Account = new Client { Id = reader.GetInt32(clientIdIndex), Name = reader.GetString(clientNameIndex) },
                         Project = new Project
-                        {
-                            Id = reader.GetInt32(projectIdIndex),
-                            Name = reader.GetString(projectNameIndex),
-                            ProjectNumber = reader.GetString(projectNumberIndex),
-                            EndDate = reader.IsDBNull(endDateIndex) ? null : (DateTime?)reader.GetDateTime(endDateIndex),
-                            IsNoteRequired = reader.GetBoolean(isNoteRequiredIndex)
-                        },
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                ProjectNumber = reader.GetString(projectNumberIndex),
+                                EndDate = reader.IsDBNull(endDateIndex) ? null : (DateTime?)reader.GetDateTime(endDateIndex),
+                                IsNoteRequired = reader.GetBoolean(isNoteRequiredIndex)
+                            },
                         BusinessUnit = reader.IsDBNull(projectGroupIdIndex) ? null
-                                        : new ProjectGroup { Id = reader.GetInt32(projectGroupIdIndex), Name = reader.GetString(projectGroupNameIndex) },
+                                           : new ProjectGroup { Id = reader.GetInt32(projectGroupIdIndex), Name = reader.GetString(projectGroupNameIndex) },
                         IsRecursive = reader.GetInt32(isRecursiveIndex) > 0
-
                     };
 
-
-                    if (timeEntrySections.Any(tes => tes.SectionId != TimeEntrySectionType.Administrative && tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (timeEntrySection.BusinessUnit != null && tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value)))
-                    {
-                        timeEntrySection = timeEntrySections.First(tes => tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value));
-                    }
-                    else
-                    {
-                        timeEntrySections.Add(timeEntrySection);
-                    }
-
-                    var chargeCodeId = !reader.IsDBNull(chargeCodeIdIndex) ? ((int?)reader.GetInt32(chargeCodeIdIndex)) : null;
-
-                    var tentries = timeEntries.Where(te => te.ChargeCodeId == chargeCodeId);
-
-                    if (tentries.Count() > 0)
-                    {
-                        timeEntrySection.TimeEntries = timeEntrySection.TimeEntries ?? new List<TimeEntryRecord>();
-
-                        timeEntrySection.TimeEntries.AddRange(tentries);
-                    }
-
+                if (timeEntrySections.Any(tes => tes.SectionId != TimeEntrySectionType.Administrative && tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (timeEntrySection.BusinessUnit != null && tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value)))
+                {
+                    timeEntrySection = timeEntrySections.First(tes => tes.Project.Id == timeEntrySection.Project.Id && tes.Account.Id == timeEntrySection.Account.Id && (tes.BusinessUnit.Id.Value == timeEntrySection.BusinessUnit.Id.Value));
                 }
+                else
+                {
+                    timeEntrySections.Add(timeEntrySection);
+                }
+
+                var chargeCodeId = !reader.IsDBNull(chargeCodeIdIndex) ? ((int?)reader.GetInt32(chargeCodeIdIndex)) : null;
+
+                var tentries = timeEntries.Where(te => te.ChargeCodeId == chargeCodeId);
+
+                if (!tentries.Any()) continue;
+                timeEntrySection.TimeEntries = timeEntrySection.TimeEntries ?? new List<TimeEntryRecord>();
+
+                timeEntrySection.TimeEntries.AddRange(tentries);
             }
         }
 
         public static void ReadTimeEntries(SqlDataReader reader, List<TimeEntryRecord> timeEntries)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            var teIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeEntryId);
+            var noteIndex = reader.GetOrdinal(Constants.ParameterNames.Note);
+            var timeTypeIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeId);
+            var chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
+            var chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
+            var createDateIndex = reader.GetOrdinal(Constants.ColumnNames.CreateDateColumn);
+            var modifiedDateIndex = reader.GetOrdinal(Constants.ParameterNames.ModifiedDate);
+            var actualHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ActualHours);
+            var forecastedHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ForecastedHours);
+            var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
+            var isCorrectIndex = -1;
+            var revieweStatusIdIndex = reader.GetOrdinal(Constants.ParameterNames.ReviewStatusId);
+            int approvedByIdIndex = -1;
+            int approvedByFirstNameIndex = -1;
+            int approvedByLastNameIndex = -1;
+            try
             {
-                var teIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeEntryId);
-                var noteIndex = reader.GetOrdinal(Constants.ParameterNames.Note);
-                var timeTypeIdIndex = reader.GetOrdinal(Constants.ParameterNames.TimeTypeId);
-                var chargeCodeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeId);
-                var chargeCodeDateIndex = reader.GetOrdinal(Constants.ColumnNames.ChargeCodeDate);
-                var createDateIndex = reader.GetOrdinal(Constants.ColumnNames.CreateDateColumn);
-                var modifiedDateIndex = reader.GetOrdinal(Constants.ParameterNames.ModifiedDate);
-                var actualHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ActualHours);
-                var forecastedHrsIndex = reader.GetOrdinal(Constants.ParameterNames.ForecastedHours);
-                var isChargeableIndex = reader.GetOrdinal(Constants.ParameterNames.IsChargeable);
-                var isCorrectIndex = -1;
-                var revieweStatusIdIndex = reader.GetOrdinal(Constants.ParameterNames.ReviewStatusId);
-                int approvedByIdIndex = -1;
-                int approvedByFirstNameIndex = -1;
-                int approvedByLastNameIndex = -1;
-                try
-                {
-                    approvedByIdIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByColumn);
-                    approvedByFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByFirstNameColumn);
-                    approvedByLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByLastNameColumn);
-                }
-                catch
-                {
-                    approvedByIdIndex = -1;
-                    approvedByFirstNameIndex = -1;
-                    approvedByLastNameIndex = -1;
-                }
+                approvedByIdIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByColumn);
+                approvedByFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByFirstNameColumn);
+                approvedByLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApprovedByLastNameColumn);
+            }
+            catch
+            {
+                approvedByIdIndex = -1;
+                approvedByFirstNameIndex = -1;
+                approvedByLastNameIndex = -1;
+            }
 
-                try
-                {
-                    isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
-                }
-                catch
-                {
-                    isCorrectIndex = -1;
-                }
+            try
+            {
+                isCorrectIndex = reader.GetOrdinal(Constants.ParameterNames.IsCorrect);
+            }
+            catch
+            {
+                isCorrectIndex = -1;
+            }
 
-                while (reader.Read())
-                {
+            while (reader.Read())
+            {
+                var timeType = new TimeTypeRecord { Id = reader.GetInt32(timeTypeIdIndex) };
 
-                    var timeType = new TimeTypeRecord();
-                    timeType.Id = reader.GetInt32(timeTypeIdIndex);
-
-                    var timeEntry = new TimeEntryRecord
+                var timeEntry = new TimeEntryRecord
                     {
                         Id = reader.GetInt32(teIdIndex),
                         ChargeCodeId = reader.GetInt32(chargeCodeIdIndex),
@@ -1373,29 +1289,26 @@ namespace DataAccess
                         ModifiedDate = reader.GetDateTime(modifiedDateIndex),
                         IsChargeable = reader.GetBoolean(isChargeableIndex),
                         IsReviewed = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reader.GetInt32(revieweStatusIdIndex).ToString())
-
                     };
 
-                    if (isCorrectIndex >= 0)
-                    {
-                        timeEntry.IsCorrect = reader.GetBoolean(isCorrectIndex);
-                    }
-
-                    if (approvedByIdIndex > 0 && approvedByFirstNameIndex > 0 && approvedByLastNameIndex > 0)
-                    {
-                        if (!reader.IsDBNull(approvedByIdIndex) && !reader.IsDBNull(approvedByFirstNameIndex) && !reader.IsDBNull(approvedByLastNameIndex))
-                        {
-                            var approvedByPerson = new Person { Id = reader.GetInt32(approvedByIdIndex), FirstName = reader.GetString(approvedByFirstNameIndex), LastName = reader.GetString(approvedByLastNameIndex) };
-                            timeEntry.ApprovedBy = approvedByPerson;
-                        }
-                    }
-
-                    timeEntries.Add(timeEntry);
+                if (isCorrectIndex >= 0)
+                {
+                    timeEntry.IsCorrect = reader.GetBoolean(isCorrectIndex);
                 }
+
+                if (approvedByIdIndex > 0 && approvedByFirstNameIndex > 0 && approvedByLastNameIndex > 0)
+                {
+                    if (!reader.IsDBNull(approvedByIdIndex) && !reader.IsDBNull(approvedByFirstNameIndex) && !reader.IsDBNull(approvedByLastNameIndex))
+                    {
+                        var approvedByPerson = new Person { Id = reader.GetInt32(approvedByIdIndex), FirstName = reader.GetString(approvedByFirstNameIndex), LastName = reader.GetString(approvedByLastNameIndex) };
+                        timeEntry.ApprovedBy = approvedByPerson;
+                    }
+                }
+
+                timeEntries.Add(timeEntry);
             }
         }
 
-        #endregion
+        #endregion Filtering
     }
 }
-
