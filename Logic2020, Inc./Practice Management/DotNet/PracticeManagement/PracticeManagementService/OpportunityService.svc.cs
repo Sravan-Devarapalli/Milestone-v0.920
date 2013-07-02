@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
-using System.Transactions;
+using System.Web;
 using DataAccess;
-using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
-using System;
-using System.Web;
 
 namespace PracticeManagementService
 {
@@ -92,12 +88,10 @@ namespace PracticeManagementService
             OpportunityDAL.UpdateOpportunityPriority(oldPriorityId, opportunityPriority, userName);
         }
 
-
         public void DeleteOpportunityPriority(int? updatedPriorityId, int deletedPriorityId, string userName)
         {
             OpportunityDAL.DeleteOpportunityPriority(updatedPriorityId, deletedPriorityId, userName);
         }
-
 
         public bool IsOpportunityPriorityInUse(int priorityId)
         {
@@ -190,7 +184,7 @@ namespace PracticeManagementService
         }
 
         ///<summary>
-        /// Creates a project from an opportunity. 
+        /// Creates a project from an opportunity.
         ///</summary>
         ///<param name="opportunityId">An ID of the opportunity to be converted</param>
         ///<param name="userName">A Current User</param>
@@ -209,7 +203,7 @@ namespace PracticeManagementService
         ///<param name="personId">An Id of the person</param>
         public void OpportunityPersonInsert(int opportunityId, string personIdList, int relationTypeId, string outSideResources)
         {
-            OpportunityDAL.OpportunityPersonInsert(opportunityId, personIdList,relationTypeId, outSideResources);
+            OpportunityDAL.OpportunityPersonInsert(opportunityId, personIdList, relationTypeId, outSideResources);
         }
 
         ///<summary>
@@ -283,7 +277,6 @@ namespace PracticeManagementService
             }
         }
 
-        #endregion
+        #endregion IOpportunityService Members
     }
 }
-
