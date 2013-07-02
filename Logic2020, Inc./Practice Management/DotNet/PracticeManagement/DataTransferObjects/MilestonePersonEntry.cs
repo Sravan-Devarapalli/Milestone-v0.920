@@ -20,7 +20,7 @@ namespace DataTransferObjects
 
         private const string PROJECT_MILESTONE_START_DATE_FORMAT = "{0} ({1})";
 
-        #endregion
+        #endregion MyRegion
 
         #region Properties
 
@@ -96,14 +96,12 @@ namespace DataTransferObjects
             set;
         }
 
-
         [DataMember]
         public int Id
         {
             get;
             set;
         }
-
 
         /// <summary>
         /// Gets or sets an VacationDays of the person on Milestone
@@ -116,6 +114,7 @@ namespace DataTransferObjects
         }
 
         private decimal _vacationHours = -1;
+
         public decimal VacationHours
         {
             get
@@ -125,18 +124,17 @@ namespace DataTransferObjects
                     PersonTimeOffList = new Dictionary<DateTime, decimal>();
                 foreach (DateTime date in PersonTimeOffList.Keys)
                 {
-                    if (date >= StartDate && (!EndDate.HasValue || (EndDate.HasValue && date <= EndDate.Value)))
-                    {
-                        decimal TimeOffhours = PersonTimeOffList[date];
-                        _vacationHours += TimeOffhours == 8 ? HoursPerDay : (((Decimal)TimeOffhours) / 8) * HoursPerDay;
-                    }
+                    if (date < StartDate || (EndDate.HasValue && (!EndDate.HasValue || date > EndDate.Value))) continue;
+                    decimal TimeOffhours = PersonTimeOffList[date];
+                    _vacationHours += TimeOffhours == 8 ? HoursPerDay : (((Decimal)TimeOffhours) / 8) * HoursPerDay;
                 }
                 return _vacationHours;
             }
         }
 
-        private decimal _TimeOffHours = 0;
-        public decimal TimeOffHours 
+        private decimal _TimeOffHours;
+
+        public decimal TimeOffHours
         {
             get
             {
@@ -145,11 +143,9 @@ namespace DataTransferObjects
                     PersonTimeOffList = new Dictionary<DateTime, decimal>();
                 foreach (DateTime date in PersonTimeOffList.Keys)
                 {
-                    if (date >= StartDate && (!EndDate.HasValue || (EndDate.HasValue && date <= EndDate.Value)))
-                    {
-                        decimal TimeOffhours = PersonTimeOffList[date];
-                        _TimeOffHours += TimeOffhours ;
-                    }
+                    if (date < StartDate || (EndDate.HasValue && (!EndDate.HasValue || date > EndDate.Value))) continue;
+                    decimal TimeOffhours = PersonTimeOffList[date];
+                    _TimeOffHours += TimeOffhours;
                 }
                 return _TimeOffHours;
             }
@@ -201,11 +197,9 @@ namespace DataTransferObjects
         [DataMember]
         public decimal ProjectedWorkloadWithVacation
         {
-            get;            
+            get;
             set;
         }
-
-
 
         /// <summary>
         /// Gets or sets a person role for the milestone.
@@ -224,7 +218,7 @@ namespace DataTransferObjects
             set;
         }
 
-        #endregion
+        #endregion Properties
 
         #region Constructor
 
@@ -246,10 +240,9 @@ namespace DataTransferObjects
         public MilestonePersonEntry(int milestonePersonId)
         {
             MilestonePersonId = milestonePersonId;
-
         }
 
-        #endregion
+        #endregion Constructor
 
         #region IEquatable<MilestonePersonEntry> Members
 
@@ -258,7 +251,7 @@ namespace DataTransferObjects
             return other != null && MilestonePersonId == other.MilestonePersonId;
         }
 
-        #endregion
+        #endregion IEquatable<MilestonePersonEntry> Members
 
         #region IComparable<MilestonePersonEntry> Members
 
@@ -267,7 +260,7 @@ namespace DataTransferObjects
             return DateTime.Compare(StartDate, other.StartDate);
         }
 
-        #endregion
+        #endregion IComparable<MilestonePersonEntry> Members
 
         #region ToString
 
@@ -291,7 +284,7 @@ namespace DataTransferObjects
             return ToString(MilestonePersonEntryFormat.Default);
         }
 
-        #endregion
+        #endregion ToString
 
         #region "Members used in Milestone Detail Resources tab."
 
@@ -311,7 +304,6 @@ namespace DataTransferObjects
 
         public MilestonePersonEntry PreviouslySavedEntry { get; set; }
 
-        #endregion
+        #endregion "Members used in Milestone Detail Resources tab."
     }
 }
-
