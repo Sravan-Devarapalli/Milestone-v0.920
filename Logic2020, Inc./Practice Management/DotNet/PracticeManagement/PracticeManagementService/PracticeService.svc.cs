@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel.Activation;
 
 using DataAccess;
@@ -21,7 +20,7 @@ namespace PracticeManagementService
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
         public List<Practice> GetPracticeList()
         {
-            return this.PracticeListAll(null);
+            return PracticeListAll(null);
         }
 
         /// <summary>
@@ -119,6 +118,6 @@ namespace PracticeManagementService
             PracticeDAL.CapabilityInsert(capability, userLogin);
         }
 
-        #endregion
+        #endregion IPracticeService Members
     }
 }
