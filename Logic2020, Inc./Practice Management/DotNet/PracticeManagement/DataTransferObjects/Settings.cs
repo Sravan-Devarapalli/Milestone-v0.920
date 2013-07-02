@@ -1,6 +1,6 @@
-﻿using DataTransferObjects.Utils;
+﻿using System;
+using DataTransferObjects.Utils;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using System;
 
 namespace DataTransferObjects
 {
@@ -10,7 +10,7 @@ namespace DataTransferObjects
 
         private const string SenioritySeparationRangeValue = "senioritySeparationRangeValue";
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
@@ -22,24 +22,21 @@ namespace DataTransferObjects
             }
         }
 
-        #endregion
+        #endregion Properties
 
         public static int GetSenioritySeparationRange(string key)
         {
-            if (IsAzureWebRole())
+            if (!IsAzureWebRole())
             {
-                try
-                {
-                    return Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue(key));
-                }
-                catch
-                {
-                    return Generic.GetIntConfiguration(SenioritySeparationRangeValue); ;
-                }
+                return Generic.GetIntConfiguration(SenioritySeparationRangeValue);
             }
-            else
+            try
             {
-                return Generic.GetIntConfiguration(SenioritySeparationRangeValue);;
+                return Convert.ToInt32(RoleEnvironment.GetConfigurationSettingValue(key));
+            }
+            catch
+            {
+                return Generic.GetIntConfiguration(SenioritySeparationRangeValue);
             }
         }
 
@@ -47,11 +44,7 @@ namespace DataTransferObjects
         {
             try
             {
-                if (RoleEnvironment.IsAvailable)
-                {
-                    return true;
-                }
-                return false;
+                return RoleEnvironment.IsAvailable;
             }
             catch
             {
@@ -60,4 +53,3 @@ namespace DataTransferObjects
         }
     }
 }
-
