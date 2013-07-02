@@ -29,23 +29,21 @@
             for (int i = 0; i < sb.Length; i++)
             {
                 char c = sb[i];
-                if (!IsValidChar(c))
+                if (IsValidChar(c)) continue;
+                int randomQuantity = rnd.Next(0, 3000);
+                if (randomQuantity >= 0 && randomQuantity < 1000)
                 {
-                    int randomQuantity = rnd.Next(0, 3000);
-                    if (randomQuantity >= 0 && randomQuantity < 1000)
+                    sb[i] = (char)rnd.Next('0', '9');
+                }
+                else
+                {
+                    if (randomQuantity >= 1000 && randomQuantity < 2000)
                     {
-                        sb[i] = (char)rnd.Next('0', '9');
+                        sb[i] = (char)rnd.Next('a', 'z');
                     }
                     else
                     {
-                        if (randomQuantity >= 1000 && randomQuantity < 2000)
-                        {
-                            sb[i] = (char)rnd.Next('a', 'z');
-                        }
-                        else
-                        {
-                            sb[i] = (char)rnd.Next('A', 'Z');
-                        }
+                        sb[i] = (char)rnd.Next('A', 'Z');
                     }
                 }
             }
@@ -60,17 +58,9 @@
         /// <returns>true if character is allowed</returns>
         internal static bool IsValidChar(char c)
         {
-            if (((c >= '0') && (c <= '9')) ||
-                ((c >= 'a') && (c <= 'z')) ||
-                ((c >= 'A') && (c <= 'Z')))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ((c >= '0') && (c <= '9')) ||
+                   ((c >= 'a') && (c <= 'z')) ||
+                   ((c >= 'A') && (c <= 'Z'));
         }
     }
 }
-
