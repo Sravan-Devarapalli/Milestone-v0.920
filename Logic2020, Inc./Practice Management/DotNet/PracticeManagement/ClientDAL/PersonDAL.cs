@@ -10,7 +10,6 @@ using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
 
-
 namespace DataAccess
 {
     /// <summary>
@@ -40,16 +39,13 @@ namespace DataAccess
         private const string MilestonePersonIdParam = "@MilestonePersonId";
         private const string StartDateParam = "@StartDate";
         private const string EndDateParam = "@EndDate";
-        private const string MilestoneIdParam = "@MilestoneId";
         private const string PersonStatusIdParam = "@PersonStatusId";
         private const string RoleNameParam = "@RoleName";
         private const string TitleNameParam = "@TitleName";
         private const string PersonStatusIdsListParam = "@PersonStatusIdsList";
-        private const string ProjectIdParam = "@ProjectId";
         private const string LookedParam = "@Looked";
         private const string EmployeeNumberParam = "@EmployeeNumber";
         private const string UserIdParam = "@UserId";
-        private const string PracticeManagerIdParam = "@PracticeManagerId";
         private const string SeniorityIdParam = "@SeniorityId";
         private const string DateTodayParam = "@DateToday";
         private const string UserLoginParam = "@UserLogin";
@@ -84,9 +80,7 @@ namespace DataAccess
         private const string ProjectedParam = "@Projected";
         private const string TerminatedParam = "@Terminated";
         private const string TerminationPendingParam = "@TerminationPending";
-        private const string InactiveParam = "@Inactive";
         private const string AlphabetParam = "@Alphabet";
-        private const string CounselorIdParam = "@CounselorId";
         private const string TimeScaleIdsParam = "@TimescaleIds";
         private const string PersonStatusIdsParam = "@PersonStatusIds";
         private const string IsOffshoreParam = "@IsOffshore";
@@ -98,20 +92,18 @@ namespace DataAccess
         private const string SLTApprovalParam = "@SLTApproval";
         private const string SLTPTOApprovalParam = "@SLTPTOApproval";
 
-
         //StrawMan Puppose.
         private const string AmountParam = "@Amount";
+
         private const string TimescaleParam = "@Timescale";
-        private const string TimesPaidPerMonthParam = "@TimesPaidPerMonth";
-        private const string TermsParam = "@Terms";
         private const string VacationDaysParam = "@VacationDays";
         private const string BonusAmountParam = "@BonusAmount";
         private const string BonusHoursToCollectParam = "@BonusHoursToCollect";
-        private const string DefaultHoursPerDayParam = "@DefaultHoursPerDay";
 
-        #endregion
+        #endregion Parameters
 
         #region Columns
+
         private const string LastLoginDateColumn = "LastLoginDate";
         private const string DescriptionColumn = "Description";
         private const string RateColumn = "Rate";
@@ -138,8 +130,6 @@ namespace DataAccess
         private const string OverheadRateTypeNameColumn = "OverheadRateTypeName";
         private const string EmployeeNumberColumn = "EmployeeNumber";
         private const string BillRateMultiplierColumn = "BillRateMultiplier";
-        private const string EmployeesNumberColumn = "EmployeesNumber";
-        private const string ConsultantsNumberColumn = "ConsultantsNumber";
         private const string AliasColumn = "Alias";
         private const string SeniorityIdColumn = "SeniorityId";
         private const string SeniorityNameColumn = "SeniorityName";
@@ -154,31 +144,27 @@ namespace DataAccess
         private const string AmountColumn = "Amount";
         private const string TimescaleNameColumn = "TimescaleName";
         private const string AmountHourlyColumn = "AmountHourly";
-        private const string TimesPaidPerMonthColumn = "TimesPaidPerMonth";
-        private const string TermsColumn = "Terms";
         private const string VacationDaysColumn = "VacationDays";
         private const string BonusAmountColumn = "BonusAmount";
         private const string BonusHoursToCollectColumn = "BonusHoursToCollect";
         private const string IsYearBonusColumn = "IsYearBonus";
-        private const string DefaultHoursPerDayColumn = "DefaultHoursPerDay";
         private const string PayPersonIdColumn = "PayPersonId";
         private const string PracticeNameColumn = "PracticeName";
         private const string IsMinimumLoadFactorColumn = "IsMinimumLoadFactor";
         private const string TimeScaleChangeStatusColumn = "TimeScaleChangeStatus";
 
-        private const string DivisionIdColumn = "DivisionId";
         private const string TerminationReasonIdColumn = "TerminationReasonId";
         private const string TerminationReasonColumn = "TerminationReason";
         private const string PersonStatusId = "PersonStatusId";
 
-        #endregion
+        #endregion Columns
 
         #region Functions
 
         private const string CompensationCoversMilestoneFunction = "dbo.CompensationCoversMilestone";
         private const string GetCurrentPayTypeFunction = "dbo.GetCurrentPayType";
 
-        #endregion
+        #endregion Functions
 
         #region Queries
 
@@ -187,71 +173,9 @@ namespace DataAccess
         private const string CompensationCoversMilestoneQuery = "SELECT {0}({1}, DEFAULT, DEFAULT)";
         private const string CompensationCoversExtendedMilestoneQuery = "SELECT {0}({1}, {2}, {3})";
 
-        #endregion
+        #endregion Queries
 
-        #endregion
-
-        public static void SetAsDefaultManager(Person person)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.SetDefaultManager, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.DefaultManagerId, person.Id.Value);
-
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-        }
-
-        /// <summary>
-        /// Checks if the person is a manager to somebody
-        /// </summary>
-        public static Person[] ListManagersSubordinates(Person person)
-        {
-            var result = new List<Person>();
-
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(
-                                        Constants.ProcedureNames.Person.ListManagersSubordinates,
-                                        connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(PersonIdParam, person.Id.Value);
-
-                connection.Open();
-
-                using (var reader = command.ExecuteReader())
-                {
-                    ReadPersonsShort(reader, result);
-                }
-            }
-
-            return result.ToArray();
-        }
-
-        /// <summary>
-        /// Set new manager
-        /// </summary>
-        public static void SetNewManager(Person oldManager, Person newManager)
-        {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.SetNewManager, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.OldManagerId, oldManager.Id);
-                command.Parameters.AddWithValue(Constants.ParameterNames.NewManagerId, newManager.Id);
-
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-        }
+        #endregion Constants
 
         /// <summary>
         /// Retrives consultans report
@@ -273,6 +197,25 @@ namespace DataAccess
                 adapter.Fill(dataset, "PersonMilestoneWithFinancials");
 
                 return dataset;
+            }
+        }
+
+        /// <summary>
+        /// Sets the given person as default manager.
+        /// </summary>
+        /// <param name="personId"></param>
+        public static void SetAsDefaultManager(int personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.SetDefaultManager, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.DefaultManagerId, personId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
             }
         }
 
@@ -504,7 +447,6 @@ namespace DataAccess
 
                     int PersonVactionDays = reader.GetInt32(personVacationDaysIndex);
 
-
                     res.Add(new Quadruple<Person, int[], int, int>(person, load, avgUtil, PersonVactionDays));
                 }
 
@@ -541,35 +483,36 @@ namespace DataAccess
 
         private static void ReadPersonsEmploymentHistory(SqlDataReader reader, List<Quadruple<Person, int[], int, int>> result)
         {
-            if (result != null)
+            if (result == null) return;
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+            int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
+
+            while (reader.Read())
             {
-                if (reader.HasRows)
-                {
-                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                    int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
-                    int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
-
-                    while (reader.Read())
+                var employment = new Employment
                     {
-                        var employment = new Employment();
-                        employment.PersonId = reader.GetInt32(personIdIndex);
-                        employment.HireDate = reader.GetDateTime(hireDateIndex);
-                        employment.TerminationDate = reader.IsDBNull(terminationDateIndex) ? null : (DateTime?)reader.GetDateTime(terminationDateIndex);
+                        PersonId = reader.GetInt32(personIdIndex),
+                        HireDate = reader.GetDateTime(hireDateIndex),
+                        TerminationDate =
+                            reader.IsDBNull(terminationDateIndex)
+                                ? null
+                                : (DateTime?)reader.GetDateTime(terminationDateIndex)
+                    };
 
-                        Person person = null;
-                        if (result.Any(p => p.First.Id == employment.PersonId))
-                        {
-                            person = result.First(p => p.First.Id == employment.PersonId).First;
-                            if (person.EmploymentHistory == null)
-                            {
-                                person.EmploymentHistory = new List<Employment>();
-                            }
-                        }
-                        if (person != null)
-                        {
-                            person.EmploymentHistory.Add(employment);
-                        }
+                Person person = null;
+                if (result.Any(p => p.First.Id == employment.PersonId))
+                {
+                    person = result.First(p => p.First.Id == employment.PersonId).First;
+                    if (person.EmploymentHistory == null)
+                    {
+                        person.EmploymentHistory = new List<Employment>();
                     }
+                }
+                if (person != null)
+                {
+                    person.EmploymentHistory.Add(employment);
                 }
             }
         }
@@ -650,74 +593,6 @@ namespace DataAccess
 
                 return !Convert.IsDBNull(command.ExecuteScalar());
             }
-        }
-
-        /// <summary>
-        /// Gets permissions for single target type
-        /// </summary>
-        /// <param name="person">Person to get permissions for</param>
-        /// <param name="target">Target permissions type</param>
-        /// <returns></returns>
-        public static IEnumerable<int> GetPermissions(Person person, PermissionTarget target)
-        {
-            string procedure;
-
-            //  Choose right procedure to execute
-            switch (target)
-            {
-                case PermissionTarget.Client:
-                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedClientsProcedure;
-                    break;
-
-                case PermissionTarget.Group:
-                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedGroupsProcedure;
-                    break;
-
-                case PermissionTarget.Practice:
-                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedPracticesProcedure;
-                    break;
-
-                case PermissionTarget.PracticeManager:
-                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedPracticeManagersProcedure;
-                    break;
-
-                case PermissionTarget.Salesperson:
-                    procedure = Constants.ProcedureNames.Person.PermissionsGetAllowedSalespersonsProcedure;
-                    break;
-
-                default:
-                    throw new Exception("PersonDAL.GetPermissions: no such permission target.");
-            }
-
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (var command = new SqlCommand(procedure, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(PersonIdParam,
-                                                    person.Id.HasValue ? (object)person.Id.Value : DBNull.Value);
-
-                    connection.Open();
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            var permission = new PersonPermission();
-                            while (reader.Read())
-                            {
-                                permission.AddToList(target, (int)reader[PersonIdColumn]);
-                            }
-
-                            return permission.GetPermissions(target);
-                        }
-                    }
-                }
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -940,7 +815,7 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// Lists all active persons who receive some recruiter commissions.
+        /// Lists all active persons who have recruiter role.
         /// </summary>
         /// <returns>The list of <see cref="Person"/> objects.</returns>
         public static List<Person> PersonListRecruiter()
@@ -953,7 +828,6 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-
                 connection.Open();
 
                 ReadPersons(command, result);
@@ -963,7 +837,7 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// List the persons who recieve the sales commissions
+        /// List the persons who has Salesperson role
         /// </summary>
         /// <param name="person">Person to restrict permissions to</param>
         /// <param name="inactives">Determines whether inactive persons will are included into the results.</param>
@@ -991,9 +865,8 @@ namespace DataAccess
         }
 
         /// <summary>
-        /// List the persons who recieve the Practice Management commissions
+        /// List the persons who have project manager permission
         /// </summary>
-        /// <param name="endDate">An end date of the project the Practice Manager be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <param name="person"></param>
         /// <returns>
@@ -1019,7 +892,6 @@ namespace DataAccess
                 return result;
             }
         }
-
 
         /// <summary>
         /// Retrieves a person record from the database.
@@ -1148,7 +1020,7 @@ namespace DataAccess
         /// Retrives a short info on persons.
         /// </summary>
         /// <param name="practice">Practice filter, null meaning all practices</param>
-        /// <param name="statusId">Person status id</param>
+        /// <param name="statusIds">Person status id</param>
         /// <param name="startDate">Determines a start date when persons in the list must are available.</param>
         /// <param name="endDate">Determines an end date when persons in the list must are available.</param>
         /// <returns>A list of the <see cref="Person"/> objects.</returns>
@@ -1183,6 +1055,7 @@ namespace DataAccess
         /// Retrives a short info on persons.
         /// </summary>
         /// <param name="statusList">Comma seperated statusIds</param>
+        /// <param name="personId">personId</param>
         /// <returns></returns>
         public static List<Person> GetPersonListByStatusList(string statusList, int? personId)
         {
@@ -1209,7 +1082,6 @@ namespace DataAccess
                     return result;
                 }
             }
-
         }
 
         /// <summary>
@@ -1338,33 +1210,29 @@ namespace DataAccess
 
         private static void ReadPersonsIdFirstNameLastNameAndTitle(SqlDataReader reader, List<Person> result)
         {
-            if (reader.HasRows)
-            {
-                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
-                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+            int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
 
-                while (reader.Read())
-                {
-                    var personId = reader.GetInt32(personIdIndex);
-                    var person = new Person
+            while (reader.Read())
+            {
+                var personId = reader.GetInt32(personIdIndex);
+                var person = new Person
                     {
                         Id = personId,
                         FirstName = reader.GetString(firstNameIndex),
                         LastName = reader.GetString(lastNameIndex),
+                        Title = new Title
+                            {
+                                TitleId = reader.GetInt32(titleIdIndex),
+                                TitleName = reader.GetString(titleIndex)
+                            },
                     };
 
-                    person.Title =
-                                new Title
-                                {
-                                    TitleId = reader.GetInt32(titleIdIndex),
-                                    TitleName = reader.GetString(titleIndex)
-                                };
-
-                    result.Add(person);
-                }
+                result.Add(person);
             }
         }
 
@@ -1395,62 +1263,61 @@ namespace DataAccess
 
         private static void ReadPersonExpense(DbDataReader reader, List<Person> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+            int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
+            int monthIndex = reader.GetOrdinal(MonthColumn);
+            int revenueIndex = reader.GetOrdinal(RevenueColumn);
+            int cogsIndex = reader.GetOrdinal(CogsColumn);
+            int marginIndex = reader.GetOrdinal(MarginColumn);
+            int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
+            int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
+            //int benchStartDateColumnIndex = reader.GetOrdinal(BenchStartDateColumn);
+            int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
+            //int availableFromIndex = reader.GetOrdinal(AvailableFromColumn);
+            int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
+            int practiceNameIndex = reader.GetOrdinal(PracticeNameColumn);
+            int IsCompanyInternalIndex = reader.GetOrdinal(Constants.ParameterNames.IsCompanyInternal);
+            int timeScaleChangeStatusIndex = reader.GetOrdinal(TimeScaleChangeStatusColumn);
+
+            int? currentId = null;
+            while (reader.Read())
             {
-                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                int hireDateIndex = reader.GetOrdinal(HireDateColumn);
-                int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
-                int monthIndex = reader.GetOrdinal(MonthColumn);
-                int revenueIndex = reader.GetOrdinal(RevenueColumn);
-                int cogsIndex = reader.GetOrdinal(CogsColumn);
-                int marginIndex = reader.GetOrdinal(MarginColumn);
-                int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
-                int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
-                //int benchStartDateColumnIndex = reader.GetOrdinal(BenchStartDateColumn);
-                int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
-                //int availableFromIndex = reader.GetOrdinal(AvailableFromColumn);
-                int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
-                int practiceNameIndex = reader.GetOrdinal(PracticeNameColumn);
-                int IsCompanyInternalIndex = reader.GetOrdinal(Constants.ParameterNames.IsCompanyInternal);
-                int timeScaleChangeStatusIndex = reader.GetOrdinal(TimeScaleChangeStatusColumn);
+                int tmpId = reader.GetInt32(personIdIndex);
+                Person person;
 
-                int? currentId = null;
-                while (reader.Read())
+                if (!currentId.HasValue || currentId.Value != tmpId)
                 {
-                    int tmpId = reader.GetInt32(personIdIndex);
-                    Person person;
+                    person = new Person();
+                    result.Add(person);
+                }
+                else
+                {
+                    person = result[result.Count - 1];
+                }
+                currentId = tmpId;
 
-                    if (!currentId.HasValue || currentId.Value != tmpId)
-                    {
-                        person = new Person();
-                        result.Add(person);
-                    }
-                    else
-                    {
-                        person = result[result.Count - 1];
-                    }
-                    currentId = tmpId;
-
-                    person.Id = tmpId;
-                    person.LastName = reader.GetString(lastNameIndex);
-                    person.FirstName = reader.GetString(firstNameIndex);
-                    person.HireDate = reader.GetDateTime(hireDateIndex);
-                    person.TerminationDate = reader.GetDateTime(terminationDateIndex);
-                    person.DefaultPractice = new Practice()
+                person.Id = tmpId;
+                person.LastName = reader.GetString(lastNameIndex);
+                person.FirstName = reader.GetString(firstNameIndex);
+                person.HireDate = reader.GetDateTime(hireDateIndex);
+                person.TerminationDate = reader.GetDateTime(terminationDateIndex);
+                person.DefaultPractice = new Practice()
                     {
                         Name = reader.GetString(practiceNameIndex),
                         IsCompanyInternal = reader.GetBoolean(IsCompanyInternalIndex)
                     };
 
-                    if (person.ProjectedFinancialsByMonth == null)
-                    {
-                        person.ProjectedFinancialsByMonth = new Dictionary<DateTime, ComputedFinancials>();
-                    }
+                if (person.ProjectedFinancialsByMonth == null)
+                {
+                    person.ProjectedFinancialsByMonth = new Dictionary<DateTime, ComputedFinancials>();
+                }
 
-                    DateTime month = reader.GetDateTime(monthIndex);
-                    var financials = new ComputedFinancials
+                DateTime month = reader.GetDateTime(monthIndex);
+                var financials = new ComputedFinancials
                     {
                         Revenue = reader.GetDecimal(revenueIndex),
                         Cogs = reader.GetDecimal(cogsIndex),
@@ -1459,20 +1326,19 @@ namespace DataAccess
                         TimescaleChangeStatus = reader.GetInt32(timeScaleChangeStatusIndex)
                     };
 
-                    person.Status = new PersonStatus
+                person.Status = new PersonStatus
                     {
                         Id = reader.GetInt32(personStatusIdIndex),
                         Name = reader.GetString(personStatusNameIndex)
                     };
 
-                    person.Seniority =
-                        !reader.IsDBNull(seniorityIdIndex)
-                            ?
-                                new Seniority { Id = reader.GetInt32(seniorityIdIndex) }
-                            : null;
+                person.Seniority =
+                    !reader.IsDBNull(seniorityIdIndex)
+                        ?
+                        new Seniority { Id = reader.GetInt32(seniorityIdIndex) }
+                        : null;
 
-                    person.ProjectedFinancialsByMonth.Add(month, financials);
-                }
+                person.ProjectedFinancialsByMonth.Add(month, financials);
             }
         }
 
@@ -1540,10 +1406,11 @@ namespace DataAccess
         /// <summary>
         /// Deletes the user in aspnet_users.
         /// </summary>
-        /// <param name="userId">An ID of the user to the membership info be deleted for.</param>
+        /// <param name="userName">An ID of the user to the membership info be deleted for.</param>
+        /// <param name="connection"></param>
+        /// <param name="activeTransaction"></param>
         public static void DeleteUser(string userName, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
-
             if (connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
@@ -1577,7 +1444,6 @@ namespace DataAccess
         /// <param name="userId">An ID of the user to the membership info be deleted for.</param>
         public static void Createuser(string userName, string password, string salt, string email, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
-
             if (connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
@@ -1618,7 +1484,6 @@ namespace DataAccess
         /// <param name="userId">An ID of the user to the membership info be deleted for.</param>
         public static void MembershipAliasUpdate(string oldAlias, string newAlias, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
-
             if (connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
@@ -1648,7 +1513,6 @@ namespace DataAccess
         /// <param name="userId">An ID of the user to the membership info be deleted for.</param>
         public static void MembershipDelete(Guid userId, SqlConnection connection = null, SqlTransaction activeTransaction = null)
         {
-
             if (connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
@@ -1682,67 +1546,64 @@ namespace DataAccess
             //  person.Id can be null when adding new person
             //      In this case we're not adding any information about permissions
             //      By default nothing is allowed
-            if (person.Id != null)
+            if (person.Id == null) return;
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.PermissionsSetAllProcedure, connection))
             {
-                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-                using (var command = new SqlCommand(Constants.ProcedureNames.Person.PermissionsSetAllProcedure, connection))
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(PersonIdParam, person.Id);
+
+                command.Parameters.AddWithValue(ClientIdsListParam,
+                                                (object)
+                                                permissions.GetPermissionsAsStringList(PermissionTarget.Client) ??
+                                                DBNull.Value);
+                command.Parameters.AddWithValue(GroupIdsListParam,
+                                                (object)
+                                                permissions.GetPermissionsAsStringList(PermissionTarget.Group) ??
+                                                DBNull.Value);
+                command.Parameters.AddWithValue(SalespersonIdsListParam,
+                                                (object)
+                                                permissions.GetPermissionsAsStringList(PermissionTarget.Salesperson) ??
+                                                DBNull.Value);
+                command.Parameters.AddWithValue(PracticeManagerIdsListParam,
+                                                (object)
+                                                permissions.GetPermissionsAsStringList(
+                                                    PermissionTarget.PracticeManager) ?? DBNull.Value);
+                command.Parameters.AddWithValue(PracticeIdsListParam,
+                                                (object)
+                                                permissions.GetPermissionsAsStringList(PermissionTarget.Practice) ??
+                                                DBNull.Value);
+
+                try
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(PersonIdParam, person.Id);
-
-                    command.Parameters.AddWithValue(ClientIdsListParam,
-                                                    (object)
-                                                    permissions.GetPermissionsAsStringList(PermissionTarget.Client) ??
-                                                    DBNull.Value);
-                    command.Parameters.AddWithValue(GroupIdsListParam,
-                                                    (object)
-                                                    permissions.GetPermissionsAsStringList(PermissionTarget.Group) ??
-                                                    DBNull.Value);
-                    command.Parameters.AddWithValue(SalespersonIdsListParam,
-                                                    (object)
-                                                    permissions.GetPermissionsAsStringList(PermissionTarget.Salesperson) ??
-                                                    DBNull.Value);
-                    command.Parameters.AddWithValue(PracticeManagerIdsListParam,
-                                                    (object)
-                                                    permissions.GetPermissionsAsStringList(
-                                                        PermissionTarget.PracticeManager) ?? DBNull.Value);
-                    command.Parameters.AddWithValue(PracticeIdsListParam,
-                                                    (object)
-                                                    permissions.GetPermissionsAsStringList(PermissionTarget.Practice) ??
-                                                    DBNull.Value);
-
-                    try
-                    {
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
-                    catch (SqlException ex)
-                    {
-                        throw new DataAccessException(ex.Message, ex);
-                    }
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    throw new DataAccessException(ex.Message, ex);
                 }
             }
         }
 
         private static void ReadPersonOverheads(DbDataReader reader, List<PersonOverhead> result)
         {
-            if (reader.HasRows)
-            {
-                int descriptionIndex = reader.GetOrdinal(DescriptionColumn);
-                int rateIndex = reader.GetOrdinal(RateColumn);
-                int hoursToCollectIndex = reader.GetOrdinal(HoursToCollectColumn);
-                int startDateIndex = reader.GetOrdinal(StartDateColumn);
-                int endDateIndex = reader.GetOrdinal(EndDateColumn);
-                int isPercentageIndex = reader.GetOrdinal(IsPercentageColumn);
-                int overheadRateTypeIdIndex = reader.GetOrdinal(OverheadRateTypeIdColumn);
-                int overheadRateTypeNameIndex = reader.GetOrdinal(OverheadRateTypeNameColumn);
-                int billRateMultiplierIndex = reader.GetOrdinal(BillRateMultiplierColumn);
+            if (!reader.HasRows) return;
+            int descriptionIndex = reader.GetOrdinal(DescriptionColumn);
+            int rateIndex = reader.GetOrdinal(RateColumn);
+            int hoursToCollectIndex = reader.GetOrdinal(HoursToCollectColumn);
+            int startDateIndex = reader.GetOrdinal(StartDateColumn);
+            int endDateIndex = reader.GetOrdinal(EndDateColumn);
+            int isPercentageIndex = reader.GetOrdinal(IsPercentageColumn);
+            int overheadRateTypeIdIndex = reader.GetOrdinal(OverheadRateTypeIdColumn);
+            int overheadRateTypeNameIndex = reader.GetOrdinal(OverheadRateTypeNameColumn);
+            int billRateMultiplierIndex = reader.GetOrdinal(BillRateMultiplierColumn);
 
-                while (reader.Read())
-                {
-                    var overhead = new PersonOverhead
+            while (reader.Read())
+            {
+                var overhead = new PersonOverhead
                     {
                         Name =
                             !reader.IsDBNull(descriptionIndex)
@@ -1764,28 +1625,27 @@ namespace DataAccess
                         IsPercentage = reader.GetBoolean(isPercentageIndex)
                     };
 
-                    if (!reader.IsDBNull(overheadRateTypeIdIndex))
-                    {
-                        overhead.RateType = new OverheadRateType
+                if (!reader.IsDBNull(overheadRateTypeIdIndex))
+                {
+                    overhead.RateType = new OverheadRateType
                         {
                             Id = reader.GetInt32(overheadRateTypeIdIndex),
                             Name = reader.GetString(overheadRateTypeNameIndex)
                         };
-                    }
-
-                    overhead.BillRateMultiplier = reader.GetDecimal(billRateMultiplierIndex);
-
-                    try
-                    {
-                        var IsMinimumLoadFactorIndx = reader.GetOrdinal(IsMinimumLoadFactorColumn);
-                        overhead.IsMLF = reader.GetBoolean(IsMinimumLoadFactorIndx);
-                    }
-                    catch
-                    {
-                    }
-
-                    result.Add(overhead);
                 }
+
+                overhead.BillRateMultiplier = reader.GetDecimal(billRateMultiplierIndex);
+
+                try
+                {
+                    var IsMinimumLoadFactorIndx = reader.GetOrdinal(IsMinimumLoadFactorColumn);
+                    overhead.IsMLF = reader.GetBoolean(IsMinimumLoadFactorIndx);
+                }
+                catch
+                {
+                }
+
+                result.Add(overhead);
             }
         }
 
@@ -1798,129 +1658,127 @@ namespace DataAccess
         {
             using (SqlDataReader reader = command.ExecuteReader())
             {
-                if (reader.HasRows)
+                if (!reader.HasRows) return;
+                int aliasIndex = reader.GetOrdinal(AliasColumn);
+                int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
+                int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
+                int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
+                int seniorityNameIndex = reader.GetOrdinal(SeniorityNameColumn);
+                int managerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerId);
+                int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
+                int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
+                int managerAliasIndex = -1;
+                int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
+                int isDefManagerIndex;
+                int IsWelcomeEmailSentIndex;
+                int isStrawManIndex;
+                int isOffshoreIndex;
+                int paychexIDIndex;
+                int divisionIdIndex;
+                int terminationReasonIdIndex = -1;
+                int titleIdIndex = -1;
+                int recruterIdIndex = -1;
+                int titleIndex = -1;
+                try
                 {
-                    int aliasIndex = reader.GetOrdinal(AliasColumn);
-                    int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
-                    int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
-                    int seniorityIdIndex = reader.GetOrdinal(SeniorityIdColumn);
-                    int seniorityNameIndex = reader.GetOrdinal(SeniorityNameColumn);
-                    int managerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerId);
-                    int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
-                    int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
-                    int managerAliasIndex = -1;
-                    int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
-                    int isDefManagerIndex;
-                    int IsWelcomeEmailSentIndex;
-                    int isStrawManIndex;
-                    int isOffshoreIndex;
-                    int paychexIDIndex;
-                    int divisionIdIndex;
-                    int terminationReasonIdIndex = -1;
-                    int titleIdIndex = -1;
-                    int recruterIdIndex = -1;
-                    int titleIndex = -1;
-                    try
-                    {
-                        titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
-                        titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
-                    }
-                    catch
-                    { }
+                    titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                    titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                }
+                catch
+                { }
 
-                    try
-                    {
-                        recruterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterIdColumn);
-                    }
-                    catch
-                    { }
+                try
+                {
+                    recruterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterIdColumn);
+                }
+                catch
+                { }
 
-                    try
-                    {
-                        terminationReasonIdIndex = reader.GetOrdinal(TerminationReasonIdColumn);
-                    }
-                    catch
-                    { }
+                try
+                {
+                    terminationReasonIdIndex = reader.GetOrdinal(TerminationReasonIdColumn);
+                }
+                catch
+                { }
 
-                    try
-                    {
-                        isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
-                    }
-                    catch
-                    {
-                        isOffshoreIndex = -1;
-                    }
+                try
+                {
+                    isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+                }
+                catch
+                {
+                    isOffshoreIndex = -1;
+                }
 
-                    try
-                    {
-                        paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
-                    }
-                    catch
-                    {
-                        paychexIDIndex = -1;
-                    }
+                try
+                {
+                    paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
+                }
+                catch
+                {
+                    paychexIDIndex = -1;
+                }
 
-                    try
-                    {
-                        isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
-                    }
-                    catch
-                    {
-                        isStrawManIndex = -1;
-                    }
+                try
+                {
+                    isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+                }
+                catch
+                {
+                    isStrawManIndex = -1;
+                }
 
-                    try
-                    {
-                        managerAliasIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerAlias);
-                    }
-                    catch
-                    {
-                        managerAliasIndex = -1;
-                    }
+                try
+                {
+                    managerAliasIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerAlias);
+                }
+                catch
+                {
+                    managerAliasIndex = -1;
+                }
 
-                    try
-                    {
-                        IsWelcomeEmailSentIndex = reader.GetOrdinal(Constants.ColumnNames.IsWelcomeEmailSent);
-                    }
-                    catch
-                    {
-                        IsWelcomeEmailSentIndex = -1;
-                    }
+                try
+                {
+                    IsWelcomeEmailSentIndex = reader.GetOrdinal(Constants.ColumnNames.IsWelcomeEmailSent);
+                }
+                catch
+                {
+                    IsWelcomeEmailSentIndex = -1;
+                }
 
-                    try
-                    {
-                        isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
-                    }
-                    catch
-                    {
-                        isDefManagerIndex = -1;
-                    }
+                try
+                {
+                    isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
+                }
+                catch
+                {
+                    isDefManagerIndex = -1;
+                }
 
-                    try
-                    {
-                        divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
-                    }
-                    catch
-                    {
-                        divisionIdIndex = -1;
-                    }
+                try
+                {
+                    divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+                }
+                catch
+                {
+                    divisionIdIndex = -1;
+                }
 
+                //  PracticesOwned column is not defined for each set that
+                //  uses given method, so we need to know if that column exists
+                int practicesOwnedIndex;
+                try
+                {
+                    practicesOwnedIndex = reader.GetOrdinal(Constants.ColumnNames.PracticesOwned);
+                }
+                catch
+                {
+                    practicesOwnedIndex = -1;
+                }
 
-                    //  PracticesOwned column is not defined for each set that
-                    //  uses given method, so we need to know if that column exists
-                    int practicesOwnedIndex;
-                    try
-                    {
-                        practicesOwnedIndex = reader.GetOrdinal(Constants.ColumnNames.PracticesOwned);
-                    }
-                    catch
-                    {
-                        practicesOwnedIndex = -1;
-                    }
-
-                    while (reader.Read())
-                    {
-                        var person = new Person
+                while (reader.Read())
+                {
+                    var person = new Person
                         {
                             Id = (int)reader[PersonIdColumn],
                             FirstName = (string)reader[FirstNameColumn],
@@ -1933,125 +1791,125 @@ namespace DataAccess
                             TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty
                         };
 
-                        if (IsWelcomeEmailSentIndex > -1)
-                        {
-                            person.IsWelcomeEmailSent = reader.GetBoolean(IsWelcomeEmailSentIndex);
-                        }
+                    if (IsWelcomeEmailSentIndex > -1)
+                    {
+                        person.IsWelcomeEmailSent = reader.GetBoolean(IsWelcomeEmailSentIndex);
+                    }
 
-                        if (isDefManagerIndex > -1)
-                        {
-                            person.IsDefaultManager = reader.GetBoolean(isDefManagerIndex);
-                        }
+                    if (isDefManagerIndex > -1)
+                    {
+                        person.IsDefaultManager = reader.GetBoolean(isDefManagerIndex);
+                    }
 
-                        if (Convert.IsDBNull(reader[TerminationDateColumn]))
-                        {
-                            person.TerminationDate = null;
-                        }
-                        else
-                        {
-                            person.TerminationDate = (DateTime)reader[TerminationDateColumn];
-                        }
+                    if (Convert.IsDBNull(reader[TerminationDateColumn]))
+                    {
+                        person.TerminationDate = null;
+                    }
+                    else
+                    {
+                        person.TerminationDate = (DateTime)reader[TerminationDateColumn];
+                    }
 
-                        if (terminationReasonIdIndex != -1)
-                        {
-                            person.TerminationReasonid = reader.IsDBNull(terminationReasonIdIndex) ? null : (int?)reader.GetInt32(terminationReasonIdIndex);
-                        }
+                    if (terminationReasonIdIndex != -1)
+                    {
+                        person.TerminationReasonid = reader.IsDBNull(terminationReasonIdIndex) ? null : (int?)reader.GetInt32(terminationReasonIdIndex);
+                    }
 
-                        if (!Convert.IsDBNull(reader["DefaultPractice"]))
-                        {
-                            person.DefaultPractice = new Practice
+                    if (!Convert.IsDBNull(reader["DefaultPractice"]))
+                    {
+                        person.DefaultPractice = new Practice
                             {
                                 Id = (int)reader["DefaultPractice"],
                                 Name = (string)reader["PracticeName"]
                             };
-                        }
-                        if (!Convert.IsDBNull(reader[EmployeeNumberColumn]))
-                        {
-                            person.EmployeeNumber = (string)reader[EmployeeNumberColumn];
-                        }
+                    }
+                    if (!Convert.IsDBNull(reader[EmployeeNumberColumn]))
+                    {
+                        person.EmployeeNumber = (string)reader[EmployeeNumberColumn];
+                    }
 
-                        if (recruterIdIndex > -1 && !reader.IsDBNull(recruterIdIndex))
-                        {
-                            person.RecruiterId = reader.GetInt32(recruterIdIndex);
-                        }
+                    if (recruterIdIndex > -1 && !reader.IsDBNull(recruterIdIndex))
+                    {
+                        person.RecruiterId = reader.GetInt32(recruterIdIndex);
+                    }
 
-                        if (titleIdIndex > -1 && !reader.IsDBNull(titleIdIndex))
-                        {
-                            person.Title = new Title() { TitleId = reader.GetInt32(titleIdIndex), TitleName = reader.GetString(titleIndex) };
-                        }
+                    if (titleIdIndex > -1 && !reader.IsDBNull(titleIdIndex))
+                    {
+                        person.Title = new Title() { TitleId = reader.GetInt32(titleIdIndex), TitleName = reader.GetString(titleIndex) };
+                    }
 
-                        person.Status = new PersonStatus
+                    person.Status = new PersonStatus
                         {
                             Id = reader.GetInt32(personStatusIdIndex),
                             Name = reader.GetString(personStatusNameIndex)
                         };
 
-                        if (!reader.IsDBNull(seniorityIdIndex))
-                        {
-                            person.Seniority =
-                                new Seniority
+                    if (!reader.IsDBNull(seniorityIdIndex))
+                    {
+                        person.Seniority =
+                            new Seniority
                                 {
                                     Id = reader.GetInt32(seniorityIdIndex),
                                     Name = reader.GetString(seniorityNameIndex)
                                 };
-                        }
+                    }
 
-                        if (isStrawManIndex > -1)
+                    if (isStrawManIndex > -1)
+                    {
+                        person.IsStrawMan = reader.GetBoolean(isStrawManIndex);
+                    }
+
+                    if (isOffshoreIndex > -1)
+                    {
+                        person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
+                    }
+
+                    if (paychexIDIndex > -1)
+                    {
+                        person.PaychexID = reader.IsDBNull(paychexIDIndex) ? null : reader.GetString(paychexIDIndex);
+                    }
+
+                    if (divisionIdIndex > -1)
+                    {
+                        person.DivisionType = reader.IsDBNull(divisionIdIndex) ? (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), "0") : (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), reader.GetInt32(divisionIdIndex).ToString());
+                    }
+
+                    if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
+                    {
+                        person.PracticesOwned = new List<Practice>();
+
+                        var xdoc = new XmlDocument();
+                        var xmlPractices = reader.GetString(practicesOwnedIndex);
+                        xdoc.LoadXml(xmlPractices);
+
+                        foreach (XmlNode xpractice in xdoc.FirstChild.ChildNodes)
                         {
-                            person.IsStrawMan = reader.GetBoolean(isStrawManIndex);
-                        }
-
-                        if (isOffshoreIndex > -1)
-                        {
-                            person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
-                        }
-
-                        if (paychexIDIndex > -1)
-                        {
-                            person.PaychexID = reader.IsDBNull(paychexIDIndex) ? null : reader.GetString(paychexIDIndex);
-                        }
-
-                        if (divisionIdIndex > -1)
-                        {
-                            person.DivisionType = reader.IsDBNull(divisionIdIndex) ? (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), "0") : (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), reader.GetInt32(divisionIdIndex).ToString());
-                        }
-
-                        if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
-                        {
-                            person.PracticesOwned = new List<Practice>();
-
-                            var xdoc = new XmlDocument();
-                            var xmlPractices = reader.GetString(practicesOwnedIndex);
-                            xdoc.LoadXml(xmlPractices);
-
-                            foreach (XmlNode xpractice in xdoc.FirstChild.ChildNodes)
-                            {
+                            if (xpractice.Attributes != null)
                                 person.PracticesOwned.Add(
                                     new Practice
-                                    {
-                                        Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
-                                        Name = xpractice.Attributes["Name"].Value
-                                    });
-                            }
+                                        {
+                                            Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
+                                            Name = xpractice.Attributes["Name"].Value
+                                        });
                         }
+                    }
 
-                        if (!Convert.IsDBNull(reader[managerIdIndex]))
-                        {
-                            person.Manager = new Person
+                    if (!Convert.IsDBNull(reader[managerIdIndex]))
+                    {
+                        person.Manager = new Person
                             {
                                 Id = reader.GetInt32(managerIdIndex),
                                 FirstName = reader.GetString(managerFirstNameIndex),
                                 LastName = reader.GetString(managerLastNameIndex)
                             };
 
-                            if (managerAliasIndex >= 0)
-                            {
-                                person.Manager.Alias = reader.GetString(managerAliasIndex);
-                            }
+                        if (managerAliasIndex >= 0)
+                        {
+                            person.Manager.Alias = reader.GetString(managerAliasIndex);
                         }
-
-                        personList.Add(person);
                     }
+
+                    personList.Add(person);
                 }
             }
         }
@@ -2060,108 +1918,108 @@ namespace DataAccess
         {
             using (SqlDataReader reader = command.ExecuteReader())
             {
-                if (reader.HasRows)
+                if (!reader.HasRows) return;
+                int aliasIndex = reader.GetOrdinal(AliasColumn);
+                int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
+                int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleNameIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int managerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerId);
+                int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
+                int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
+                int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
+                int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
+                int lastLoginDateIndex = reader.GetOrdinal(LastLoginDateColumn);
+                int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+                //Pay Related columns
+                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+                int startDateIndex = reader.GetOrdinal(StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(EndDateColumn);
+                int amountIndex = reader.GetOrdinal(AmountColumn);
+                int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
+                int timescaleNameIndex = reader.GetOrdinal(TimescaleNameColumn);
+                int amountHourlyIndex = reader.GetOrdinal(AmountHourlyColumn);
+                int vacationDaysIndex = reader.GetOrdinal(VacationDaysColumn);
+                int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
+                int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
+                int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
+                int payPersonIdIndex = reader.GetOrdinal(PayPersonIdColumn);
+
+                //  PracticesOwned column is not defined for each set that
+                //  uses given method, so we need to know if that column exists
+                int practicesOwnedIndex;
+                try
                 {
-                    int aliasIndex = reader.GetOrdinal(AliasColumn);
-                    int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
-                    int personStatusNameIndex = reader.GetOrdinal(PersonStatusNameColumn);
-                    int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
-                    int titleNameIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
-                    int managerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerId);
-                    int managerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerFirstName);
-                    int managerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerLastName);
-                    int telephoneNumberIndex = reader.GetOrdinal(Constants.ColumnNames.TelephoneNumber);
-                    int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
-                    int lastLoginDateIndex = reader.GetOrdinal(LastLoginDateColumn);
-                    int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
-                    //Pay Related columns
-                    int personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                    int startDateIndex = reader.GetOrdinal(StartDateColumn);
-                    int endDateIndex = reader.GetOrdinal(EndDateColumn);
-                    int amountIndex = reader.GetOrdinal(AmountColumn);
-                    int timescaleIndex = reader.GetOrdinal(TimescaleColumn);
-                    int timescaleNameIndex = reader.GetOrdinal(TimescaleNameColumn);
-                    int amountHourlyIndex = reader.GetOrdinal(AmountHourlyColumn);
-                    int vacationDaysIndex = reader.GetOrdinal(VacationDaysColumn);
-                    int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
-                    int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
-                    int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
-                    int payPersonIdIndex = reader.GetOrdinal(PayPersonIdColumn);
+                    practicesOwnedIndex = reader.GetOrdinal(Constants.ColumnNames.PracticesOwned);
+                }
+                catch
+                {
+                    practicesOwnedIndex = -1;
+                }
 
-                    //  PracticesOwned column is not defined for each set that
-                    //  uses given method, so we need to know if that column exists
-                    int practicesOwnedIndex;
-                    try
-                    {
-                        practicesOwnedIndex = reader.GetOrdinal(Constants.ColumnNames.PracticesOwned);
-                    }
-                    catch
-                    {
-                        practicesOwnedIndex = -1;
-                    }
-
-                    while (reader.Read())
-                    {
-                        var person = new Person
+                while (reader.Read())
+                {
+                    var person = new Person
                         {
                             Id = (int)reader[PersonIdColumn],
                             FirstName = (string)reader[FirstNameColumn],
                             LastName = (string)reader[LastNameColumn],
                             Alias = !reader.IsDBNull(aliasIndex) ? reader.GetString(aliasIndex) : string.Empty,
                             HireDate = (DateTime)reader[HireDateColumn],
-                            IsStrawMan = !reader.IsDBNull(isStrawManIndex) ? (bool)reader.GetBoolean(isStrawManIndex) : false,
+                            IsStrawMan = !reader.IsDBNull(isStrawManIndex) && (bool)reader.GetBoolean(isStrawManIndex),
                             TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty,
                             TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null,
                             LastLogin = !reader.IsDBNull(lastLoginDateIndex) ? (DateTime?)reader[lastLoginDateIndex] : null,
                             DefaultPractice = !Convert.IsDBNull(reader["DefaultPractice"])
-                                                                            ? new Practice
-                                                                            {
-                                                                                Id = (int)reader["DefaultPractice"],
-                                                                                Name = (string)reader["PracticeName"]
-                                                                            } : null,
+                                                  ? new Practice
+                                                      {
+                                                          Id = (int)reader["DefaultPractice"],
+                                                          Name = (string)reader["PracticeName"]
+                                                      } : null,
                             EmployeeNumber = !Convert.IsDBNull(reader[EmployeeNumberColumn]) ? (string)reader[EmployeeNumberColumn] : null,
 
                             Status = new PersonStatus
-                            {
-                                Id = reader.GetInt32(personStatusIdIndex),
-                                Name = reader.GetString(personStatusNameIndex)
-                            },
+                                {
+                                    Id = reader.GetInt32(personStatusIdIndex),
+                                    Name = reader.GetString(personStatusNameIndex)
+                                },
                             Title = !reader.IsDBNull(titleIdIndex) ? new Title
-                            {
-                                TitleId = reader.GetInt32(titleIdIndex),
-                                TitleName = reader.GetString(titleNameIndex)
-                            } : null,
+                                {
+                                    TitleId = reader.GetInt32(titleIdIndex),
+                                    TitleName = reader.GetString(titleNameIndex)
+                                } : null,
                             Manager = !Convert.IsDBNull(reader[managerIdIndex]) ? new Person
-                            {
-                                Id = reader.GetInt32(managerIdIndex),
-                                FirstName = reader.GetString(managerFirstNameIndex),
-                                LastName = reader.GetString(managerLastNameIndex)
-                                // Alias = reader.GetString(managerAliasIndex)
-                            } : null
+                                {
+                                    Id = reader.GetInt32(managerIdIndex),
+                                    FirstName = reader.GetString(managerFirstNameIndex),
+                                    LastName = reader.GetString(managerLastNameIndex)
+                                    // Alias = reader.GetString(managerAliasIndex)
+                                } : null
                         };
 
-                        if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
+                    if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
+                    {
+                        person.PracticesOwned = new List<Practice>();
+
+                        var xdoc = new XmlDocument();
+                        var xmlPractices = reader.GetString(practicesOwnedIndex);
+                        xdoc.LoadXml(xmlPractices);
+
+                        foreach (XmlNode xpractice in xdoc.FirstChild.ChildNodes)
                         {
-                            person.PracticesOwned = new List<Practice>();
-
-                            var xdoc = new XmlDocument();
-                            var xmlPractices = reader.GetString(practicesOwnedIndex);
-                            xdoc.LoadXml(xmlPractices);
-
-                            foreach (XmlNode xpractice in xdoc.FirstChild.ChildNodes)
-                            {
+                            if (xpractice.Attributes != null)
                                 person.PracticesOwned.Add(
                                     new Practice
-                                    {
-                                        Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
-                                        Name = xpractice.Attributes["Name"].Value
-                                    });
-                            }
+                                        {
+                                            Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
+                                            Name = xpractice.Attributes["Name"].Value
+                                        });
                         }
+                    }
 
-                        if (!reader.IsDBNull(payPersonIdIndex))
-                        {
-                            Pay pay = new Pay
+                    if (!reader.IsDBNull(payPersonIdIndex))
+                    {
+                        Pay pay = new Pay
                             {
                                 PersonId = reader.GetInt32(personIdIndex),
                                 Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
@@ -2176,138 +2034,136 @@ namespace DataAccess
                                 BonusAmount = reader.GetDecimal(bonusAmountIndex),
                                 BonusHoursToCollect =
                                     !reader.IsDBNull(bonusHoursToCollectIndex) ?
-                                    (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
+                                        (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
                                 IsYearBonus = reader.GetBoolean(isYearBonusIndex)
                             };
-                            person.CurrentPay = pay;
-                        }
-
-                        personList.Add(person);
+                        person.CurrentPay = pay;
                     }
+
+                    personList.Add(person);
                 }
             }
         }
 
         private static void ReadPersonsShort(SqlDataReader reader, List<Person> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            int isDefManagerIndex;
+            int hireDateIndex;
+            int terminationDateIndex;
+            int isStrawManIndex;
+            int personStatusIdIndex;
+            int aliasIndex = -1;
+            int seniorityIdColumnIndex = -1;
+            int seniorityNameColumnIndex = -1;
+            try
             {
-                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                int isDefManagerIndex;
-                int hireDateIndex;
-                int terminationDateIndex;
-                int isStrawManIndex;
-                int personStatusIdIndex;
-                int aliasIndex = -1;
-                int seniorityIdColumnIndex = -1;
-                int seniorityNameColumnIndex = -1;
-                try
-                {
-                    isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
-                }
-                catch
-                {
-                    isDefManagerIndex = -1;
-                }
+                isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
+            }
+            catch
+            {
+                isDefManagerIndex = -1;
+            }
 
-                try
-                {
-                    personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
-                }
-                catch
-                {
-                    personStatusIdIndex = -1;
-                }
+            try
+            {
+                personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
+            }
+            catch
+            {
+                personStatusIdIndex = -1;
+            }
 
-                try
-                {
-                    isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
-                }
-                catch
-                {
-                    isStrawManIndex = -1;
-                }
-                try
-                {
-                    hireDateIndex = reader.GetOrdinal(HireDateColumn);
-                }
-                catch
-                {
-                    hireDateIndex = -1;
-                }
-                try
-                {
-                    terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
-                }
-                catch
-                {
-                    terminationDateIndex = -1;
-                }
+            try
+            {
+                isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+            }
+            catch
+            {
+                isStrawManIndex = -1;
+            }
+            try
+            {
+                hireDateIndex = reader.GetOrdinal(HireDateColumn);
+            }
+            catch
+            {
+                hireDateIndex = -1;
+            }
+            try
+            {
+                terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
+            }
+            catch
+            {
+                terminationDateIndex = -1;
+            }
 
-                try
-                {
-                    aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
-                }
-                catch
-                { }
-                try
-                {
-                    seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
-                    seniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
-                }
-                catch
-                { }
+            try
+            {
+                aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
+            }
+            catch
+            { }
+            try
+            {
+                seniorityIdColumnIndex = reader.GetOrdinal(SeniorityIdColumn);
+                seniorityNameColumnIndex = reader.GetOrdinal(SeniorityNameColumn);
+            }
+            catch
+            { }
 
-                while (reader.Read())
-                {
-                    var personId = reader.GetInt32(personIdIndex);
-                    var person = new Person
+            while (reader.Read())
+            {
+                var personId = reader.GetInt32(personIdIndex);
+                var person = new Person
                     {
                         Id = personId,
                         FirstName = reader.GetString(firstNameIndex),
                         LastName = reader.GetString(lastNameIndex),
                         HireDate = (hireDateIndex > -1) ? reader.GetDateTime(hireDateIndex) : DateTime.MinValue
                     };
-                    if (aliasIndex > -1 && !reader.IsDBNull(aliasIndex))
-                    {
-                        person.Alias = reader.GetString(aliasIndex);
-                    }
-                    if (seniorityIdColumnIndex > -1 && !reader.IsDBNull(seniorityIdColumnIndex))
-                    {
-                        person.Seniority = new Seniority
+                if (aliasIndex > -1 && !reader.IsDBNull(aliasIndex))
+                {
+                    person.Alias = reader.GetString(aliasIndex);
+                }
+                if (seniorityIdColumnIndex > -1 && !reader.IsDBNull(seniorityIdColumnIndex))
+                {
+                    person.Seniority = new Seniority
                         {
                             Id = reader.GetInt32(seniorityIdColumnIndex),
                             Name = reader.GetString(seniorityNameColumnIndex)
                         };
-                    }
-                    if (terminationDateIndex > -1)
-                    {
-                        person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
-                    }
-                    if (isStrawManIndex > -1)
-                    {
-                        person.IsStrawMan = reader.GetBoolean(isStrawManIndex);//== 0 ? false : true
-                    }
+                }
+                if (terminationDateIndex > -1)
+                {
+                    person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
+                }
+                if (isStrawManIndex > -1)
+                {
+                    person.IsStrawMan = reader.GetBoolean(isStrawManIndex);//== 0 ? false : true
+                }
 
-                    if (personStatusIdIndex > -1)
-                    {
-                        person.Status = new PersonStatus
+                if (personStatusIdIndex > -1)
+                {
+                    person.Status = new PersonStatus
                         {
                             Id = reader.GetInt32(personStatusIdIndex)
                         };
-                    }
-                    if (isDefManagerIndex > -1)
-                    {
-                        var isDefaultManager = reader.GetBoolean(isDefManagerIndex);
-                        if (isDefaultManager)
-                            person.Manager = new Person { Id = personId };
-                    }
-                    result.Add(person);
                 }
+                if (isDefManagerIndex > -1)
+                {
+                    var isDefaultManager = reader.GetBoolean(isDefManagerIndex);
+                    if (isDefaultManager)
+                        person.Manager = new Person { Id = personId };
+                }
+                result.Add(person);
             }
         }
+
         /// <summary>
         /// Retrives a short info of persons specified by personIds.
         /// </summary>
@@ -2383,7 +2239,6 @@ namespace DataAccess
                     return result;
                 }
             }
-            throw new NotImplementedException();
         }
 
         public static List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleName)
@@ -2406,7 +2261,6 @@ namespace DataAccess
                     return result;
                 }
             }
-            throw new NotImplementedException();
         }
 
         public static bool UserTemporaryCredentialsInsert(string userName, string password, int passwordFormat, string passwordSalt, SqlConnection connection = null, SqlTransaction activeTransaction = null)
@@ -2457,10 +2311,7 @@ namespace DataAccess
                 {
                     var users = new List<UserCredentials>();
                     ReadTemporaryCredentials(reader, users);
-                    if (users.Count > 0)
-                        return users[0];
-                    else
-                        return null;
+                    return users.Count > 0 ? users[0] : null;
                 }
             }
         }
@@ -2477,34 +2328,30 @@ namespace DataAccess
 
                 connection.Open();
                 command.ExecuteNonQuery();
-
             }
         }
 
         private static void ReadTemporaryCredentials(SqlDataReader reader, List<UserCredentials> users)
         {
-            if (reader.HasRows)
-            {
-                int userNameIndex = reader.GetOrdinal(UserNameColumn);
-                int passwordIndex = reader.GetOrdinal(PasswordColumn);
-                int passwordSaltIndex = reader.GetOrdinal(PasswordSaltColumn);
+            if (!reader.HasRows) return;
+            int userNameIndex = reader.GetOrdinal(UserNameColumn);
+            int passwordIndex = reader.GetOrdinal(PasswordColumn);
+            int passwordSaltIndex = reader.GetOrdinal(PasswordSaltColumn);
 
-                while (reader.Read())
-                {
-                    var userCredentials = new UserCredentials
+            while (reader.Read())
+            {
+                var userCredentials = new UserCredentials
                     {
                         UserName = reader.GetString(userNameIndex),
                         Password = reader.GetString(passwordIndex),
                         PasswordSalt = reader.GetString(passwordSaltIndex),
                     };
-                    users.Add(userCredentials);
-                }
+                users.Add(userCredentials);
             }
         }
 
         public static void SetNewPasswordForUser(string userName, string newPassword, string passwordSalt, int passwordFormat, DateTime currentTimeUtc, string applicationName = "PracticeManagement")
         {
-
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.SetNewPasswordForUserProcedure, connection))
             {
@@ -2524,7 +2371,6 @@ namespace DataAccess
 
                 command.ExecuteNonQuery();
             }
-
         }
 
         public static List<Person> PersonListByCategoryTypeAndPeriod(BudgetCategoryType categoryType, DateTime startDate, DateTime endDate)
@@ -2552,7 +2398,6 @@ namespace DataAccess
             }
 
             return result;
-
         }
 
         public static int PersonGetCount(string practiceIds, bool showAll, string looked, string recruiterIds, string timeScaleIds, bool projected, bool terminated, bool terminatedPending, char? alphabet)
@@ -2655,21 +2500,19 @@ namespace DataAccess
 
         private static void ReadPasswordHistory(SqlDataReader reader, List<UserPasswordsHistory> result)
         {
-            if (reader.HasRows)
-            {
-                int hashedPasswordIndex = reader.GetOrdinal(PasswordColumn);
-                int passwordSaltIndex = reader.GetOrdinal(PasswordSaltColumn);
+            if (!reader.HasRows) return;
+            int hashedPasswordIndex = reader.GetOrdinal(PasswordColumn);
+            int passwordSaltIndex = reader.GetOrdinal(PasswordSaltColumn);
 
-                while (reader.Read())
-                {
-                    var user = new UserPasswordsHistory
+            while (reader.Read())
+            {
+                var user = new UserPasswordsHistory
                     {
                         HashedPassword = reader.GetString(hashedPasswordIndex),
                         PasswordSalt = reader.GetString(passwordSaltIndex),
                     };
 
-                    result.Add(user);
-                }
+                result.Add(user);
             }
         }
 
@@ -2701,15 +2544,13 @@ namespace DataAccess
 
         private static void ReadNoteRequiredDetails(SqlDataReader reader, Dictionary<DateTime, bool> result)
         {
-            if (reader.HasRows)
-            {
-                int dateTimeIndex = reader.GetOrdinal("Date");
-                int isNotesRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNotesRequired);
+            if (!reader.HasRows) return;
+            int dateTimeIndex = reader.GetOrdinal("Date");
+            int isNotesRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsNotesRequired);
 
-                while (reader.Read())
-                {
-                    result.Add(reader.GetDateTime(dateTimeIndex), reader.GetInt32(isNotesRequiredIndex) == 1);
-                }
+            while (reader.Read())
+            {
+                result.Add(reader.GetDateTime(dateTimeIndex), reader.GetInt32(isNotesRequiredIndex) == 1);
             }
         }
 
@@ -2734,24 +2575,22 @@ namespace DataAccess
 
         private static void ReadOwnersShort(SqlDataReader reader, List<Person> result)
         {
-            if (reader.HasRows)
-            {
-                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            int lastNameIndex = reader.GetOrdinal(LastNameColumn);
 
-                while (reader.Read())
-                {
-                    var personId = reader.GetInt32(personIdIndex);
-                    var person = new Person
+            while (reader.Read())
+            {
+                var personId = reader.GetInt32(personIdIndex);
+                var person = new Person
                     {
                         Id = personId,
                         FirstName = reader.GetString(firstNameIndex),
                         LastName = reader.GetString(lastNameIndex)
                     };
 
-                    result.Add(person);
-                }
+                result.Add(person);
             }
         }
 
@@ -2764,15 +2603,16 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
 
-
                     command.Parameters.AddWithValue(FirstNameParam, person.FirstName);
                     command.Parameters.AddWithValue(LastNameParam, person.LastName);
 
-                    var personIdParameter = new SqlParameter();
-                    personIdParameter.ParameterName = PersonIdParam;
-                    personIdParameter.SqlDbType = SqlDbType.Int;
-                    personIdParameter.Value = existingPersonId;
-                    personIdParameter.Direction = ParameterDirection.InputOutput;
+                    var personIdParameter = new SqlParameter
+                        {
+                            ParameterName = PersonIdParam,
+                            SqlDbType = SqlDbType.Int,
+                            Value = existingPersonId,
+                            Direction = ParameterDirection.InputOutput
+                        };
                     command.Parameters.Add(personIdParameter);
 
                     command.Parameters.AddWithValue(AmountParam, person.CurrentPay.Amount.Value);
@@ -2809,11 +2649,13 @@ namespace DataAccess
                     command.Parameters.AddWithValue(UserLoginParam, userLogin);
 
                     //var personIdParameter = new SqlParameter(PersonIdParam, SqlDbType.Int) { Direction = ParameterDirection.InputOutput, Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value };
-                    var personIdParameter = new SqlParameter();
-                    personIdParameter.ParameterName = PersonIdParam;
-                    personIdParameter.SqlDbType = SqlDbType.Int;
-                    personIdParameter.Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value;
-                    personIdParameter.Direction = ParameterDirection.InputOutput;
+                    var personIdParameter = new SqlParameter
+                        {
+                            ParameterName = PersonIdParam,
+                            SqlDbType = SqlDbType.Int,
+                            Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value,
+                            Direction = ParameterDirection.InputOutput
+                        };
 
                     command.Parameters.Add(personIdParameter);
 
@@ -2824,7 +2666,6 @@ namespace DataAccess
                     command.Parameters.AddWithValue(BonusHoursToCollectParam, currentPay.BonusHoursToCollect.HasValue ? (object)currentPay.BonusHoursToCollect.Value : DBNull.Value);
                     command.Parameters.AddWithValue(StartDateParam, currentPay.StartDate == DateTime.MinValue ? DBNull.Value : (object)currentPay.StartDate);
                     command.Parameters.AddWithValue(PersonStatusIdParam, person.Status != null && person.Id.HasValue ? (object)person.Status.Id : (int)PersonStatusType.Active);
-
 
                     connection.Open();
                     try
@@ -2881,11 +2722,9 @@ namespace DataAccess
                     connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        var result = new List<Person>();
                         ReadConConsultantDemandItems(reader, consultants);
                         return consultants;
                     }
-
                 }
             }
         }
@@ -2910,14 +2749,13 @@ namespace DataAccess
             int linkedObjectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.LinkedObjectNumber);
 
             int personIdIndex = reader.GetOrdinal(PersonIdColumn);
-            if (reader.HasRows)
-            {
-                var clients = new List<Client>();
-                var persons = new List<Person>();
+            if (!reader.HasRows) return;
+            var clients = new List<Client>();
+            var persons = new List<Person>();
 
-                while (reader.Read())
-                {
-                    var consultant = new ConsultantDemandItem
+            while (reader.Read())
+            {
+                var consultant = new ConsultantDemandItem
                     {
                         ObjectId = reader.GetInt32(objectIdIndex),
                         ObjectName = reader.GetString(objectNameIndex),
@@ -2931,39 +2769,34 @@ namespace DataAccess
                         LinkedObjectNumber = reader.IsDBNull(linkedObjectNumberIndex) ? null : reader.GetString(linkedObjectNumberIndex),
                         OpportunintyDescription = !reader.IsDBNull(opportunintyDescriptionIndex) ? reader.GetString(opportunintyDescriptionIndex) : string.Empty,
                         ProjectDescription = !reader.IsDBNull(projectDescriptionIndex) ? reader.GetString(projectDescriptionIndex) : string.Empty
-
                     };
-                    var clientId = reader.GetInt32(clientIdIndex);
-                    var client = clients.FirstOrDefault(c => c.Id.Value == clientId);
-                    var personId = reader.GetInt32(personIdIndex);
-                    var person = persons.FirstOrDefault(p => p.Id.Value == personId);
-                    if (client == null)
-                    {
-                        client = new Client
+                var clientId = reader.GetInt32(clientIdIndex);
+                var client = clients.FirstOrDefault(c => c.Id.Value == clientId);
+                var personId = reader.GetInt32(personIdIndex);
+                var person = persons.FirstOrDefault(p => p.Id.Value == personId);
+                if (client == null)
+                {
+                    client = new Client
                         {
                             Id = clientId,
                             Name = reader.GetString(clientNameIndex)
                         };
-                        clients.Add(client);
-
-
-                    }
-                    if (person == null)
-                    {
-                        person = new Person
+                    clients.Add(client);
+                }
+                if (person == null)
+                {
+                    person = new Person
                         {
                             Id = reader.GetInt32(personIdIndex),
                             LastName = reader.GetString(lastNameIndex),
                             FirstName = reader.GetString(firstNameIndex)
                         };
-                        persons.Add(person);
-                    }
-                    consultant.Client = client;
-                    consultant.Consultant = person;
-                    consultants.Add(consultant);
+                    persons.Add(person);
                 }
+                consultant.Client = client;
+                consultant.Consultant = person;
+                consultants.Add(consultant);
             }
-
         }
 
         public static List<Person> GetStrawmenListAll()
@@ -3067,7 +2900,7 @@ namespace DataAccess
                         Id = reader.GetInt32(personIdIndex),
                         LastName = reader.GetString(lastNameIndex),
                         FirstName = reader.GetString(firstNameIndex),
-                        InUse = reader.GetInt32(inUseIndex) == 1 ? true : false,
+                        InUse = reader.GetInt32(inUseIndex) == 1,
                         Status = new PersonStatus
                         {
                             Id = (int)Enum.Parse(
@@ -3077,10 +2910,8 @@ namespace DataAccess
                         },
                     };
 
-
-                    if (!reader.IsDBNull(payPersonIdIndex))
-                    {
-                        Pay pay = new Pay
+                    if (reader.IsDBNull(payPersonIdIndex)) continue;
+                    Pay pay = new Pay
                         {
                             PersonId = reader.GetInt32(payPersonIdIndex),
                             Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
@@ -3094,11 +2925,10 @@ namespace DataAccess
                             BonusAmount = reader.GetDecimal(bonusAmountIndex),
                             BonusHoursToCollect =
                                 !reader.IsDBNull(bonusHoursToCollectIndex) ?
-                                (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
+                                    (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
                             IsYearBonus = reader.GetBoolean(isYearBonusIndex),
                         };
-                        person.CurrentPay = pay;
-                    }
+                    person.CurrentPay = pay;
                 }
             }
             return person;
@@ -3120,30 +2950,28 @@ namespace DataAccess
             int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
             int vacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.VacationDaysColumn);
 
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var person = new Person
+                var person = new Person
                     {
                         Id = reader.GetInt32(personIdIndex),
                         LastName = reader.GetString(lastNameIndex),
                         FirstName = reader.GetString(firstNameIndex),
-                        InUse = reader.GetInt32(inUseIndex) == 1 ? true : false,
+                        InUse = reader.GetInt32(inUseIndex) == 1,
 
                         Status = new PersonStatus
-                        {
-                            Id = (int)Enum.Parse(
-                                        typeof(PersonStatusType),
-                                        (string)reader[personStatusNameIndex]),
-                            Name = reader.GetString(personStatusNameIndex)
-                        },
+                            {
+                                Id = (int)Enum.Parse(
+                                    typeof(PersonStatusType),
+                                    (string)reader[personStatusNameIndex]),
+                                Name = reader.GetString(personStatusNameIndex)
+                            },
                     };
 
-
-                    if (!reader.IsDBNull(payPersonIdIndex))
-                    {
-                        Pay pay = new Pay
+                if (!reader.IsDBNull(payPersonIdIndex))
+                {
+                    Pay pay = new Pay
                         {
                             PersonId = reader.GetInt32(personIdIndex),
                             TimescaleName = reader.GetString(timescaleNameIndex),
@@ -3153,10 +2981,9 @@ namespace DataAccess
                             EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
                             VacationDays = !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : 0
                         };
-                        person.CurrentPay = pay;
-                    }
-                    result.Add(person);
+                    person.CurrentPay = pay;
                 }
+                result.Add(person);
             }
         }
 
@@ -3165,18 +2992,16 @@ namespace DataAccess
             int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
             int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
             int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var person = new Person
+                var person = new Person
                     {
                         Id = reader.GetInt32(personIdIndex),
                         LastName = reader.GetString(lastNameIndex),
                         FirstName = reader.GetString(firstNameIndex)
                     };
-                    result.Add(person);
-                }
+                result.Add(person);
             }
         }
 
@@ -3203,39 +3028,37 @@ namespace DataAccess
 
         private static void ReadFirstLastName(DbDataReader reader, Person person)
         {
-            if (reader.HasRows)
-            {
-                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
-                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
-                int timeScaleIndex = reader.GetOrdinal(TimescaleColumn);
-                int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
-                int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
-                int aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
-                int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
-                int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+            if (!reader.HasRows) return;
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+            int timeScaleIndex = reader.GetOrdinal(TimescaleColumn);
+            int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+            int personStatusIdIndex = reader.GetOrdinal(PersonStatusIdColumn);
+            int aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
+            int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+            int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
 
-                while (reader.Read())
-                {
-                    person.FirstName = reader.GetString(firstNameIndex);
-                    person.LastName = reader.GetString(lastNameIndex);
-                    person.Alias = reader.GetString(aliasIndex);
-                    person.HireDate = reader.GetDateTime(hireDateIndex);
-                    person.IsStrawMan = reader.IsDBNull(isStrawManIndex) ? false : reader.GetBoolean(isStrawManIndex);
-                    person.EmployeeNumber = reader.GetString(employeeNumberIndex);
-                    person.CurrentPay = new Pay
+            while (reader.Read())
+            {
+                person.FirstName = reader.GetString(firstNameIndex);
+                person.LastName = reader.GetString(lastNameIndex);
+                person.Alias = reader.GetString(aliasIndex);
+                person.HireDate = reader.GetDateTime(hireDateIndex);
+                person.IsStrawMan = !reader.IsDBNull(isStrawManIndex) && reader.GetBoolean(isStrawManIndex);
+                person.EmployeeNumber = reader.GetString(employeeNumberIndex);
+                person.CurrentPay = new Pay
                     {
                         TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
                     };
-                    person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
-                    person.Status = new PersonStatus
+                person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
+                person.Status = new PersonStatus
                     {
                         Id = reader.GetInt32(personStatusIdIndex)
                     };
-                    if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
-                    {
-                        break;
-                    }
+                if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
+                {
+                    break;
                 }
             }
         }
@@ -3387,14 +3210,16 @@ namespace DataAccess
 
                         while (reader.Read())
                         {
-                            var terminationReason = new TerminationReason();
-                            terminationReason.Id = reader.GetInt32(terminationReasonIdIndex);
-                            terminationReason.Name = reader.GetString(terminationReasonIndex);
-                            terminationReason.IsW2SalaryRule = reader.GetBoolean(isW2SalaryRuleIndex);
-                            terminationReason.IsW2HourlyRule = reader.GetBoolean(isW2HourlyRuleIndex);
-                            terminationReason.Is1099Rule = reader.GetBoolean(is1099RuleIndex);
-                            terminationReason.IsContigent = reader.GetBoolean(isContingentRuleIndex);
-                            terminationReason.IsVisible = reader.GetBoolean(isVisibleIndex);
+                            var terminationReason = new TerminationReason
+                                {
+                                    Id = reader.GetInt32(terminationReasonIdIndex),
+                                    Name = reader.GetString(terminationReasonIndex),
+                                    IsW2SalaryRule = reader.GetBoolean(isW2SalaryRuleIndex),
+                                    IsW2HourlyRule = reader.GetBoolean(isW2HourlyRuleIndex),
+                                    Is1099Rule = reader.GetBoolean(is1099RuleIndex),
+                                    IsContigent = reader.GetBoolean(isContingentRuleIndex),
+                                    IsVisible = reader.GetBoolean(isVisibleIndex)
+                                };
 
                             result.Add(terminationReason);
                         }
@@ -3436,17 +3261,14 @@ namespace DataAccess
         {
             using (SqlDataReader reader = command.ExecuteReader())
             {
-                if (reader.HasRows)
+                if (!reader.HasRows) return;
+                int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+                int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
+
+                while (reader.Read())
                 {
-                    int hireDateIndex = reader.GetOrdinal(HireDateColumn);
-                    int terminationDateIndex = reader.GetOrdinal(TerminationDateColumn);
-
-                    while (reader.Read())
-                    {
-                        person.HireDate = reader.GetDateTime(hireDateIndex);
-                        person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
-
-                    }
+                    person.HireDate = reader.GetDateTime(hireDateIndex);
+                    person.TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null;
                 }
             }
         }
@@ -3499,25 +3321,30 @@ namespace DataAccess
 
         private static void ReadPersonEmploymentHistory(SqlDataReader reader, List<Employment> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+            int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
+            int terminationReasonIdIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationReasonIdColumn);
+
+            while (reader.Read())
             {
-                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
-                int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
-                int terminationReasonIdIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationReasonIdColumn);
+                var employment = new Employment
+                    {
+                        PersonId = reader.GetInt32(personIdIndex),
+                        HireDate = reader.GetDateTime(hireDateIndex),
+                        TerminationDate =
+                            reader.IsDBNull(terminationDateIndex)
+                                ? null
+                                : (DateTime?)reader.GetDateTime(terminationDateIndex),
+                        TerminationReasonId =
+                            reader.IsDBNull(terminationReasonIdIndex)
+                                ? null
+                                : (int?)reader.GetInt32(terminationReasonIdIndex)
+                    };
 
-                while (reader.Read())
-                {
-                    var employment = new Employment();
-                    employment.PersonId = reader.GetInt32(personIdIndex);
-                    employment.HireDate = reader.GetDateTime(hireDateIndex);
-                    employment.TerminationDate = reader.IsDBNull(terminationDateIndex) ? null : (DateTime?)reader.GetDateTime(terminationDateIndex);
-                    employment.TerminationReasonId = reader.IsDBNull(terminationReasonIdIndex) ? null : (int?)reader.GetInt32(terminationReasonIdIndex);
-
-                    result.Add(employment);
-                }
+                result.Add(employment);
             }
-
         }
 
         public static List<TimeTypeRecord> GetPersonAdministrativeTimeTypesInRange(int personId, DateTime startDate, DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave)
@@ -3570,7 +3397,6 @@ namespace DataAccess
             }
         }
 
-
         public static PersonPassword GetPersonEncodedPassword(int personId)
         {
             using (SqlConnection connection = new SqlConnection(DataAccess.Other.DataSourceHelper.DataConnection))
@@ -3616,8 +3442,6 @@ namespace DataAccess
                 connection.Open();
                 command.ExecuteNonQuery();
             }
-
         }
     }
 }
-
