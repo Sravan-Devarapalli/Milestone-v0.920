@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using DataAccess.Other;
 using DataTransferObjects;
-using System.Linq;
 
 namespace DataAccess
 {
@@ -23,10 +23,9 @@ namespace DataAccess
         private const string ProjectIdParam = "@ProjectId";
         private const string NameParam = "@Name";
         private const string isActiveParam = "@IsActive";
-        private const string OldGroupNameParam = "@OldGroupName";
         private const string GroupNameParam = "@GroupName";
 
-        #endregion
+        #endregion Parameters
 
         #region Columns
 
@@ -36,9 +35,9 @@ namespace DataAccess
         private const string InUseColumn = "InUse";
         private const string CodeColumn = "Code";
 
-        #endregion
+        #endregion Columns
 
-        #endregion
+        #endregion Constants
 
         #region BusinessUnit Methods
 
@@ -131,30 +130,28 @@ namespace DataAccess
         {
             using (var reader = command.ExecuteReader())
             {
-                if (reader != null)
-                    while (reader.Read())
+                if (!reader.HasRows) return;
+                while (reader.Read())
+                {
+                    var clientId = (int)reader[Constants.ColumnNames.ClientIdColumn];
+                    var pg = new ProjectGroup
+                     {
+                         Id = (int)reader[GroupIdColumn],
+                         Name = (string)reader[NameColumn],
+                         IsActive = (bool)reader[IsActiveColumn],
+                         InUse = (int)reader[InUseColumn] == 1
+                     };
+
+                    if (clientGroups.Keys.Count > 0 && clientGroups.Keys.Any(c => clientId == c))
                     {
-                        var clientId = (int)reader[Constants.ColumnNames.ClientIdColumn];
-                        var pg = new ProjectGroup
-                         {
-                             Id = (int)reader[GroupIdColumn],
-                             Name = (string)reader[NameColumn],
-                             IsActive = (bool)reader[IsActiveColumn],
-                             InUse = (int)reader[InUseColumn] == 1
-                         };
-
-                        if (clientGroups.Keys.Count > 0 && clientGroups.Keys.Any(c => clientId == c))
-                        {
-                            clientGroups[clientId].Add(pg);
-                        }
-                        else
-                        {
-                            clientGroups.Add(clientId, new List<ProjectGroup>() { pg });
-                        }
-
+                        clientGroups[clientId].Add(pg);
                     }
+                    else
+                    {
+                        clientGroups.Add(clientId, new List<ProjectGroup>() { pg });
+                    }
+                }
             }
-
         }
 
         public static bool ProjectGroupUpdate(ProjectGroup projectGroup, string userLogin)
@@ -222,20 +219,15 @@ namespace DataAccess
         {
             using (var reader = command.ExecuteReader())
             {
-                if (reader != null)
-                    while (reader.Read())
-                    {
-                        groupList.Add(ReadGroup(reader));
-                    }
+                if (!reader.HasRows) return;
+                while (reader.Read())
+                {
+                    groupList.Add(ReadGroup(reader));
+                }
             }
         }
 
-        private static ProjectGroup ReadGroup(SqlDataReader reader)
-        {
-            return ReadGroup(reader, NameColumn);
-        }
-
-        public static ProjectGroup ReadGroup(SqlDataReader reader, string groupNameColumn)
+        public static ProjectGroup ReadGroup(SqlDataReader reader, string groupNameColumn = NameColumn)
         {
             return new ProjectGroup
                        {
@@ -257,7 +249,7 @@ namespace DataAccess
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
-                 
+
                     connection.Open();
                     using (var reader = command.ExecuteReader())
                     {
@@ -282,14 +274,13 @@ namespace DataAccess
                 }
             }
             return groupList;
-        
         }
 
-        #endregion
+        #endregion BusinessUnit Methods
 
         #region Business Group Methods
 
-        public static void BusinessGroupUpdate(BusinessGroup businessGroup,string userLogin)
+        public static void BusinessGroupUpdate(BusinessGroup businessGroup, string userLogin)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -357,7 +348,7 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdParam,
                         businessUnitId.HasValue ? (object)businessUnitId.Value : DBNull.Value);
-                    
+
                     connection.Open();
                     ReadBusinessGroups(command, BusinessGroupList);
                 }
@@ -369,12 +360,10 @@ namespace DataAccess
         {
             using (var reader = command.ExecuteReader())
             {
-                if (reader != null)
+                if (!reader.HasRows) return;
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        businessGroupList.Add(ReadBusinessGroup(reader));
-                    }
+                    businessGroupList.Add(ReadBusinessGroup(reader));
                 }
             }
         }
@@ -392,7 +381,6 @@ namespace DataAccess
             };
         }
 
-        #endregion
+        #endregion Business Group Methods
     }
 }
-
