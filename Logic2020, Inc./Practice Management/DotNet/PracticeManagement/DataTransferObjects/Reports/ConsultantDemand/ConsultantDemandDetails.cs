@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using System.Web;
 
@@ -13,16 +10,16 @@ namespace DataTransferObjects.Reports.ConsultingDemand
     {
         [DataMember]
         public string OpportunityNumber { get; set; }
-      
+
         [DataMember]
         public string ProjectNumber { get; set; }
-        
+
         [DataMember]
         public int? OpportunityId { get; set; }
-        
+
         [DataMember]
         public int? ProjectId { get; set; }
-        
+
         [DataMember]
         public string ProjectName { get; set; }
 
@@ -52,7 +49,7 @@ namespace DataTransferObjects.Reports.ConsultingDemand
 
         [DataMember]
         public int AccountId { get; set; }
-        
+
         [DataMember]
         public string AccountName { get; set; }
 
@@ -61,12 +58,11 @@ namespace DataTransferObjects.Reports.ConsultingDemand
 
         [DataMember]
         public string ProjectDescription { get; set; }
-        
+
         [DataMember]
         public DateTime ResourceStartDate { get; set; }
-        
+
         [DataMember]
         public int Count { get; set; }
     }
 }
-
