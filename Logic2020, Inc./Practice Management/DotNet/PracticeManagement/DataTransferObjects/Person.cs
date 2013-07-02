@@ -13,24 +13,21 @@ namespace DataTransferObjects
     [Serializable]
     public class Person : IEquatable<Person>, IIdNameObject, IComparable<Person>
     {
-
         #region Constants
 
         public const string RecruitingOverheadName = "Recruiting";
         public const string PersonNameFormat = "{0}, {1}";
 
-        #endregion
+        #endregion Constants
 
         #region Fields
 
         private DateTime? _terminationDate;
         private string _alias;
         private Practice _defaultPractice;
-        private List<Commission> _commissionList = new List<Commission>();
         private Pay _currentPay;
-       
 
-        #endregion
+        #endregion Fields
 
         #region Properties - data members
 
@@ -101,7 +98,7 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Person status 
+        /// Person status
         /// </summary>
         [DataMember]
         public PersonStatus Status
@@ -111,7 +108,7 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Person Locked-Out value 
+        /// Person Locked-Out value
         /// </summary>
         [DataMember]
         public bool LockedOut
@@ -147,7 +144,6 @@ namespace DataTransferObjects
             set;
         }
 
-
         [DataMember]
         public List<Employment> EmploymentHistory
         {
@@ -164,7 +160,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         [DataMember]
         public string ProjectRoleName
@@ -185,7 +180,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         /// <summary>
         /// Date person no longer works for firm.
@@ -235,11 +229,7 @@ namespace DataTransferObjects
         {
             get
             {
-                if (!string.IsNullOrEmpty(Alias))
-                {
-                    return Alias.Split('@')[0];
-                }
-                return string.Empty;
+                return !string.IsNullOrEmpty(Alias) ? Alias.Split('@')[0] : string.Empty;
             }
         }
 
@@ -247,14 +237,9 @@ namespace DataTransferObjects
         {
             get
             {
-                if (!string.IsNullOrEmpty(Alias))
-                {
-                    return Alias.Split('@')[1].ToLower();
-                }
-                return string.Empty;
+                return !string.IsNullOrEmpty(Alias) ? Alias.Split('@')[1].ToLower() : string.Empty;
             }
         }
-
 
         [DataMember]
         public bool IsDefaultManager
@@ -262,7 +247,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         [DataMember]
         public Practice DefaultPractice
@@ -299,7 +283,7 @@ namespace DataTransferObjects
         {
             get
             {
-                return RecruiterId.HasValue ? string.Format(PersonNameFormat, RecruiterLastName, RecruiterFirstName):string.Empty;
+                return RecruiterId.HasValue ? string.Format(PersonNameFormat, RecruiterLastName, RecruiterFirstName) : string.Empty;
             }
         }
 
@@ -388,6 +372,7 @@ namespace DataTransferObjects
             get;
             set;
         }
+
         [DataMember]
         public List<PersonDocument> Documents
         {
@@ -437,7 +422,7 @@ namespace DataTransferObjects
         public bool IsStrawMan { get; set; }
 
         [DataMember]
-        public double BillableUtilizationPercent { get; set; }       
+        public double BillableUtilizationPercent { get; set; }
 
         [DataMember]
         public bool IsOffshore { get; set; }
@@ -491,7 +476,7 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsTerminatedDueToPay { get; set; }
 
-        #endregion
+        #endregion Properties - data members
 
         #region Properties - calculated
 
@@ -528,30 +513,6 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Gets a person's Total Overhead exluding the recruiting commissions.
-        /// </summary>
-        /// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
-        public PracticeManagementCurrency OverheadWithoutRecruiting
-        {
-            get
-            {
-                decimal result = 0;
-                if (OverheadList != null)
-                {
-                    foreach (PersonOverhead overhead in OverheadList)
-                    {
-                        if (string.Compare(overhead.Name, RecruitingOverheadName, true) != 0)
-                        {
-                            result += overhead.HourlyValue;
-                        }
-                    }
-                }
-
-                return result;
-            }
-        }
-
-        /// <summary>
         /// Gets a person's Loaded hourly rate.
         /// </summary>
         /// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
@@ -564,18 +525,6 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Gets a person's Loaded Rate excluding the recruiting commissions.
-        /// </summary>
-        /// <remarks>The OverheadList property must be correctly set before calculating.</remarks>
-        public PracticeManagementCurrency LoadedHourlyRateWithoutRecruiting
-        {
-            get
-            {
-                return RawHourlyRate + OverheadWithoutRecruiting;
-            }
-        }
-
-        /// <summary>
         /// Substitution for ToString
         /// Used where it's not allowed to use methods, but properties
         /// </summary>
@@ -583,7 +532,7 @@ namespace DataTransferObjects
         {
             get
             {
-                return this.ToString();
+                return ToString();
             }
         }
 
@@ -595,7 +544,7 @@ namespace DataTransferObjects
             }
         }
 
-        #endregion
+        #endregion Properties - calculated
 
         #region Constructors
 
@@ -604,7 +553,7 @@ namespace DataTransferObjects
         /// </summary>
         public Person(int? id)
         {
-            this.Id = id;
+            Id = id;
         }
 
         /// <summary>
@@ -614,7 +563,7 @@ namespace DataTransferObjects
         {
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -634,7 +583,6 @@ namespace DataTransferObjects
             return Equals((Person)other);
         }
 
-
         public int CompareTo(Person other)
         {
             return other == null ? 1 : PersonLastFirstName.CompareTo(other.PersonLastFirstName);
@@ -652,8 +600,6 @@ namespace DataTransferObjects
             return Id.HasValue ? Id.Value : base.GetHashCode();
         }
 
-        #endregion
-
+        #endregion Methods
     }
 }
-
