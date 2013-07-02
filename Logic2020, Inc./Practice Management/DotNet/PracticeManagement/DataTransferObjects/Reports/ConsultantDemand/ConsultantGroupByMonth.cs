@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.Reports.ConsultingDemand
 {
@@ -18,15 +18,8 @@ namespace DataTransferObjects.Reports.ConsultingDemand
         {
             get
             {
-                if (ConsultantDetailsByMonth != null)
-                {
-                    return ConsultantDetailsByMonth.Sum(p => p.Count);
-                }
-              
-                return 0;
+                return ConsultantDetailsByMonth != null ? ConsultantDetailsByMonth.Sum(p => p.Count) : 0;
             }
         }
-
     }
 }
-
