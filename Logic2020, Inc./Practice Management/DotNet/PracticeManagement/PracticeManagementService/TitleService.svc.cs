@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel.Activation;
 using DataAccess;
 using DataTransferObjects;
@@ -80,4 +79,3 @@ namespace PracticeManagementService
         }
     }
 }
-
