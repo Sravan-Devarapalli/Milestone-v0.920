@@ -4,21 +4,16 @@ namespace DataAccess.Readers
 {
     public abstract class EntityReaderBase<T>
     {
-        private DbDataReader _reader;
-
-        public DbDataReader Reader
-        {
-            get { return _reader; }
-        }
+        public DbDataReader Reader { get; private set; }
 
         public virtual void SetReader(DbDataReader value)
         {
-            _reader = value;
+            Reader = value;
         }
 
         protected EntityReaderBase(DbDataReader reader)
         {
-            _reader = reader;
+            Reader = reader;
         }
 
         protected EntityReaderBase()
