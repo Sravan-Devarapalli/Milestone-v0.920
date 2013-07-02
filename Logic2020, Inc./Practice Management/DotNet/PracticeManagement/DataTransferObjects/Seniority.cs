@@ -13,7 +13,7 @@ namespace DataTransferObjects
 
         private static readonly int Separation = Settings.SenioritySeparationRange;
 
-        #endregion
+        #endregion Constants
 
         /// <summary>
         /// Gets or sets an ID of the seniority
@@ -54,7 +54,7 @@ namespace DataTransferObjects
 
         public bool OtherHasGreaterOrEqualSeniority(Seniority other)
         {
-            //  Currently in our database 
+            //  Currently in our database
             //  GREATER number means LOWER seniority
             //
             //      Settings.SenioritySeparationRange added according to #1457
@@ -88,7 +88,6 @@ namespace DataTransferObjects
                 case 107: seniorityValue = 65; break; //Lead Developer = Manager
                 case 108: seniorityValue = 75; break;//Senior Developer = Senior Consultant
                 case 109: seniorityValue = 85; break;//Developer = Consultant
-                default: break;
             }
 
             return seniorityValue;
@@ -100,11 +99,10 @@ namespace DataTransferObjects
             //As per the Defect 3086 : person with "Senior Manager" seniority should able to access one level below his seniority.
             if (id == 55)
                 return Separation - 10;
-            else
-                return Separation;
+            return Separation;
         }
 
-        public override int  GetHashCode()
+        public override int GetHashCode()
         {
             return Id;
         }
@@ -114,7 +112,5 @@ namespace DataTransferObjects
             var obj1 = (Seniority)obj;
             return obj1.Id == Id;
         }
-             
     }
 }
-
