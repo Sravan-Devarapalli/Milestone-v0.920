@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.SqlClient;
 using System.Data;
-using DataTransferObjects.Skills;
+using System.Data.SqlClient;
+using System.Linq;
 using DataAccess.Other;
 using DataTransferObjects;
-
+using DataTransferObjects.Skills;
 
 namespace DataAccess.Skills
 {
@@ -150,7 +148,6 @@ namespace DataAccess.Skills
                 }
             }
             return persons;
-
         }
 
         private static void ReadPersonsShort(SqlDataReader reader, List<Person> persons)
@@ -163,60 +160,55 @@ namespace DataAccess.Skills
             var profileUrlColumn = reader.GetOrdinal(Constants.ColumnNames.ProfileUrl);
             var isHighlighted = reader.GetOrdinal(Constants.ColumnNames.IsHighlighted);
 
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
+                int personId = reader.GetInt32(personIdColumn);
+                Person person;
+                if (!persons.Any(p => p.Id.Value == personId))
                 {
-                    int personId = reader.GetInt32(personIdColumn);
-                    Person person;
-                    if (!persons.Any(p => p.Id.Value == personId))
-                    {
-                        person = new Person
+                    person = new Person
                         {
                             Id = personId,
                             LastName = reader.GetString(LastNameColumn),
                             FirstName = reader.GetString(firstNameColumn),
-                            IsHighlighted = reader.GetInt32(isHighlighted) == 1
+                            IsHighlighted = reader.GetInt32(isHighlighted) == 1,
+                            Profiles = new List<Profile>()
                         };
-                        person.Profiles = new List<Profile>();
-                        persons.Add(person);
-                    }
-                    else
-                    {
-                        person = persons.First(p => p.Id.Value == personId);
-                    }
-
-                    if (!reader.IsDBNull(profileIdColumn))
-                    {
-                        Profile profile = new Profile();
-                        profile.ProfileId = reader.GetInt32(profileIdColumn);
-                        profile.ProfileName = reader.GetString(profileNameColumn);
-                        profile.ProfileUrl = reader.GetString(profileUrlColumn);
-                        person.Profiles.Add(profile);
-                    }
+                    persons.Add(person);
                 }
+                else
+                {
+                    person = persons.First(p => p.Id.Value == personId);
+                }
+
+                if (reader.IsDBNull(profileIdColumn)) continue;
+                Profile profile = new Profile
+                    {
+                        ProfileId = reader.GetInt32(profileIdColumn),
+                        ProfileName = reader.GetString(profileNameColumn),
+                        ProfileUrl = reader.GetString(profileUrlColumn)
+                    };
+                person.Profiles.Add(profile);
             }
         }
 
         private static void ReadPersonIndustriesShort(SqlDataReader reader, List<PersonIndustry> personIndustries)
         {
-
             var industryIdColumn = reader.GetOrdinal(Constants.ColumnNames.IndustryId);
             var yearsExperienceColumn = reader.GetOrdinal(Constants.ColumnNames.YearsExperience);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var personIndustry = new PersonIndustry
+                var personIndustry = new PersonIndustry
                     {
                         Industry = new Industry
-                        {
-                            Id = reader.GetInt32(industryIdColumn)
-                        },
+                            {
+                                Id = reader.GetInt32(industryIdColumn)
+                            },
                         YearsExperience = reader.GetInt32(yearsExperienceColumn)
                     };
-                    personIndustries.Add(personIndustry);
-                }
+                personIndustries.Add(personIndustry);
             }
         }
 
@@ -228,33 +220,31 @@ namespace DataAccess.Skills
             var lastUsedColumn = reader.GetOrdinal(Constants.ColumnNames.LastUsed);
             var skillCategoryIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillCategoryId);
             var skillTypeIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillTypeId);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var personSkill = new PersonSkill
+                var personSkill = new PersonSkill
                     {
                         Skill = new Skill
-                        {
-                            Id = reader.GetInt32(skillIdColumn),
-                            Category = new SkillCategory
                             {
-                                Id = reader.GetInt32(skillCategoryIdColumn),
-                                SkillType = new SkillType
-                                {
-                                    Id = reader.GetInt32(skillTypeIdColumn)
-                                }
-                            }
-                        },
+                                Id = reader.GetInt32(skillIdColumn),
+                                Category = new SkillCategory
+                                    {
+                                        Id = reader.GetInt32(skillCategoryIdColumn),
+                                        SkillType = new SkillType
+                                            {
+                                                Id = reader.GetInt32(skillTypeIdColumn)
+                                            }
+                                    }
+                            },
                         SkillLevel = new SkillLevel
-                        {
-                            Id = reader.GetInt32(skillLevelIdColumn)
-                        },
+                            {
+                                Id = reader.GetInt32(skillLevelIdColumn)
+                            },
                         YearsExperience = reader.GetInt32(yearsExperienceColumn),
                         LastUsed = reader.GetInt32(lastUsedColumn)
                     };
-                    personSkills.Add(personSkill);
-                }
+                personSkills.Add(personSkill);
             }
         }
 
@@ -264,20 +254,17 @@ namespace DataAccess.Skills
             var skillLevelNameColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelName);
             var skillLevelDefinitionColumn = reader.GetOrdinal(Constants.ColumnNames.SkillLevelDefinition);
             var displayOrderColumn = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var skillLevel = new SkillLevel
+                var skillLevel = new SkillLevel
                     {
                         Id = reader.GetInt32(skillLevelIdColumn),
                         Description = reader.GetString(skillLevelNameColumn),
                         DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)Convert.ToInt32(reader[displayOrderColumn]),
                         Definition = reader.GetString(skillLevelDefinitionColumn)
-
                     };
-                    skillLevels.Add(skillLevel);
-                }
+                skillLevels.Add(skillLevel);
             }
         }
 
@@ -286,18 +273,16 @@ namespace DataAccess.Skills
             var skillTypeIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SkillTypeId);
             var skillTypeDescriptionColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SkillTypeDescription);
             var displayOrderColumnIndex = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var skillType = new SkillType
+                var skillType = new SkillType
                     {
                         Id = reader.GetInt32(skillTypeIdColumnIndex),
                         Description = reader.GetString(skillTypeDescriptionColumnIndex),
                         DisplayOrder = reader.IsDBNull(displayOrderColumnIndex) ? null : (int?)Convert.ToInt32(reader[displayOrderColumnIndex]),
                     };
-                    skillTypes.Add(skillType);
-                }
+                skillTypes.Add(skillType);
             }
         }
 
@@ -307,22 +292,20 @@ namespace DataAccess.Skills
             var SkillTypeId = reader.GetOrdinal(Constants.ColumnNames.SkillTypeId);
             var skillCategoryNameColumn = reader.GetOrdinal(Constants.ColumnNames.SkillCategoryName);
             var displayOrderColumn = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var skillCat = new SkillCategory
+                var skillCat = new SkillCategory
                     {
                         Id = reader.GetInt32(skillCategoryIdColumn),
                         Description = reader.GetString(skillCategoryNameColumn),
                         DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn),
                         SkillType = new SkillType
-                        {
-                            Id = reader.GetInt32(SkillTypeId)
-                        }
+                            {
+                                Id = reader.GetInt32(SkillTypeId)
+                            }
                     };
-                    skillCategories.Add(skillCat);
-                }
+                skillCategories.Add(skillCat);
             }
         }
 
@@ -332,22 +315,20 @@ namespace DataAccess.Skills
             var skillIdColumn = reader.GetOrdinal(Constants.ColumnNames.SkillId);
             var skillNameColumn = reader.GetOrdinal(Constants.ColumnNames.SkillName);
             var displayOrderColumn = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var skill = new Skill
+                var skill = new Skill
                     {
                         Id = reader.GetInt32(skillIdColumn),
                         Description = reader.GetString(skillNameColumn),
                         DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn),
                         Category = new SkillCategory
-                        {
-                            Id = reader.GetInt32(skillCategoryIdColumn)
-                        }
+                            {
+                                Id = reader.GetInt32(skillCategoryIdColumn)
+                            }
                     };
-                    skills.Add(skill);
-                }
+                skills.Add(skill);
             }
         }
 
@@ -356,18 +337,16 @@ namespace DataAccess.Skills
             var industryIdColumn = reader.GetOrdinal(Constants.ColumnNames.IndustryId);
             var industryNameColumn = reader.GetOrdinal(Constants.ColumnNames.IndustryName);
             var displayOrderColumn = reader.GetOrdinal(Constants.ColumnNames.DisplayOrder);
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    var industry = new Industry
+                var industry = new Industry
                     {
                         Id = reader.GetInt32(industryIdColumn),
                         Description = reader.GetString(industryNameColumn),
                         DisplayOrder = reader.IsDBNull(displayOrderColumn) ? null : (int?)reader.GetInt32(displayOrderColumn)
                     };
-                    industrySkills.Add(industry);
-                }
+                industrySkills.Add(industry);
             }
         }
 
@@ -461,20 +440,20 @@ namespace DataAccess.Skills
             var modifiedDateColumn = reader.GetOrdinal(Constants.ColumnNames.ModifiedDate);
             var isDefaultColumn = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
 
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    Profile profile = new Profile();
-                    profile.ProfileId = reader.GetInt32(profileIdColumn);
-                    profile.ProfileName = reader.GetString(profileNameColumn);
-                    profile.ProfileUrl = reader.GetString(profileUrlColumn);
-                    profile.ModifiedBy = reader.GetInt32(modifiedByColumn);
-                    profile.ModifiedByName = reader.GetString(modifiedByNameColumn);
-                    profile.ModifiedDate = reader.GetDateTime(modifiedDateColumn);
-                    profile.IsDefault = reader.GetBoolean(isDefaultColumn);
-                    profiles.Add(profile);
-                }
+                Profile profile = new Profile
+                    {
+                        ProfileId = reader.GetInt32(profileIdColumn),
+                        ProfileName = reader.GetString(profileNameColumn),
+                        ProfileUrl = reader.GetString(profileUrlColumn),
+                        ModifiedBy = reader.GetInt32(modifiedByColumn),
+                        ModifiedByName = reader.GetString(modifiedByNameColumn),
+                        ModifiedDate = reader.GetDateTime(modifiedDateColumn),
+                        IsDefault = reader.GetBoolean(isDefaultColumn)
+                    };
+                profiles.Add(profile);
             }
         }
 
@@ -490,11 +469,7 @@ namespace DataAccess.Skills
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLogin, userLogin);
                     command.Parameters.AddWithValue(Constants.ParameterNames.PictureFileName, (pictureFileName != null) ? (object)pictureFileName : DBNull.Value);
-                    if (pictureData != null)
-                    {
-                        command.Parameters.AddWithValue(Constants.ParameterNames.PictureData, pictureData != null ? (object)pictureData : DBNull.Value);
-                    }
-
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PictureData, pictureData != null ? (object)pictureData : DBNull.Value);
                     connection.Open();
 
                     command.ExecuteNonQuery();
@@ -530,7 +505,7 @@ namespace DataAccess.Skills
                                 Id = reader.GetInt32(personIdColoum),
                                 LastName = reader.GetString(lastNameColoum),
                                 FirstName = reader.GetString(firstNameColoum),
-                                HasPicture = reader.GetInt32(HasPictureColoum) == 1 ? true : false
+                                HasPicture = reader.GetInt32(HasPictureColoum) == 1
                             };
                         }
                     }
@@ -538,7 +513,6 @@ namespace DataAccess.Skills
             }
             return person;
         }
-
 
         public static byte[] GetPersonPicture(int personId)
         {
@@ -572,13 +546,11 @@ namespace DataAccess.Skills
                         return pictureData;
                     }
                     catch (Exception e)
-                    {                       
+                    {
                         throw e;
                     }
                 }
             }
-
         }
     }
 }
-
