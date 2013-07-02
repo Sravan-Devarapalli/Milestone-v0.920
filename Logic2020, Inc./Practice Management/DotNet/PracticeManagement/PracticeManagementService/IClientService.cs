@@ -41,16 +41,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <returns><see cref="List{T}"/> of all active <see cref="Client"/>s in the system</returns>
         [OperationContract]
-        List<Client> ClientListAll();
-
-        /// <summary>
-        /// List all active and inactive clients in the system
-        /// </summary>
-        /// <param name="person">Person to restrict results to</param>
-        /// <param name="inactives">Include inactive items</param>
-        /// <returns>A <see cref="List{T}"/> of <see cref="Client"/>s in the system</returns>
-        [OperationContract]
-        List<Client> ClientListAllSecure(Person person, bool inactives);
+        List<Client> ClientListAll(bool includeInactive);
 
         /// <summary>
         /// List all active and inactive clients in the system
@@ -60,13 +51,6 @@ namespace PracticeManagementService
         /// <returns>A <see cref="List{T}"/> of <see cref="Client"/>s in the system</returns>
         [OperationContract]
         List<Client> ClientListAllSecureByNewRule(Person person, bool inactives, bool applyNewRule);
-
-        /// <summary>
-        /// List all clients, including inactive clients
-        /// </summary>
-        /// <returns><see cref="List{T}"/> of all active and inactive <see cref="Client"/>s in the system</returns>
-        [OperationContract]
-        List<Client> ClientListAllWithInactive();
 
         /// <summary>
         /// Retrives the list clients available for the specific project.
@@ -104,4 +88,3 @@ namespace PracticeManagementService
         List<PricingList> GetPricingLists(int? clientId);
     }
 }
-
