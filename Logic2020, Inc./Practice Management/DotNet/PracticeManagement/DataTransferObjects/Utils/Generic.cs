@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Reports;
-using System.ComponentModel;
+using DataTransferObjects.TimeEntry;
 
 namespace DataTransferObjects.Utils
 {
@@ -14,12 +14,12 @@ namespace DataTransferObjects.Utils
     {
         public const char StringListSeparator = ',';
         public const char PersonNameSeparator = ';';
-        private const string IdSeperator = "48429914-f383-4399-96c0-db719db82765" ;
+        private const string IdSeperator = "48429914-f383-4399-96c0-db719db82765";
         private const string FirstNameSeperator = "bc4ad2a9-2105-48b9-85e8-448408ba2a7a";
         public static string[] LastNameSeperator = { "8585ebd9-f14a-4729-9322-b0d834913e2e" };
 
-        public static string[] Seperators = { IdSeperator, FirstNameSeperator };  
-           
+        public static string[] Seperators = { IdSeperator, FirstNameSeperator };
+
         public static int GetIntConfiguration(string key)
         {
             return Convert.ToInt32(ConfigurationManager.AppSettings[key]);
@@ -29,10 +29,9 @@ namespace DataTransferObjects.Utils
         {
             var builder = new StringBuilder("Stack trace: \n");
 
-            StackFrame frame;
             for (var i = 0; i < stackTrace.FrameCount; i++)
             {
-                frame = stackTrace.GetFrame(i);
+                StackFrame frame = stackTrace.GetFrame(i);
                 builder.AppendFormat("{0} ({1}:{2})",
                                      frame.GetMethod(),
                                      frame.GetFileName(),
@@ -45,7 +44,7 @@ namespace DataTransferObjects.Utils
 
         public static string IdsListToString<T>(IEnumerable<T> ids) where T : IIdNameObject
         {
-            return EnumerableToCsv(from id in ids where id.Id.HasValue select id, id => id.Id.Value, StringListSeparator);
+            return EnumerableToCsv(from id in ids where id.Id.HasValue select id, id => id.Id != null ? id.Id.Value : 0, StringListSeparator);
         }
 
         public static string EnumerableToCsv<T, TV>(IEnumerable<T> existingIds, Func<T, TV> func)
@@ -128,21 +127,17 @@ namespace DataTransferObjects.Utils
         {
             List<int> proportionateList = new List<int>();
             int sum = ratioList.Sum();
-            if (sum > 0)
-            {
-                foreach (int no in ratioList)
-                {
-                    decimal noRatio = ((decimal)no / (decimal)sum) * (decimal)height;
-                    int i = (int)Math.Round(noRatio);
-                    proportionateList.Add(i);
-                }
-                return proportionateList;
-            }
-            else
+            if (sum <= 0)
             {
                 return ratioList;
             }
-            
+            foreach (int no in ratioList)
+            {
+                decimal noRatio = ((decimal)no / (decimal)sum) * (decimal)height;
+                int i = (int)Math.Round(noRatio);
+                proportionateList.Add(i);
+            }
+            return proportionateList;
         }
 
         public static List<GroupByDate> GetGroupByDateList(List<TimeEntriesGroupByClientAndProject> timeEntriesGroupByClientAndProjectList)
@@ -152,17 +147,14 @@ namespace DataTransferObjects.Utils
             {
                 foreach (var timeEntriesGroupByClientAndProject in timeEntriesGroupByClientAndProjectList)
                 {
-
                     foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
                     {
-
                         foreach (var byWorkType in byDateList.DayTotalHoursList)
                         {
                             GroupByDate groupByDate;
-                            if (!groupByDateList.Any(g => g.Date == byDateList.Date))
+                            if (groupByDateList.All(g => g.Date != byDateList.Date))
                             {
-                                groupByDate = new GroupByDate();
-                                groupByDate.Date = byDateList.Date;
+                                groupByDate = new GroupByDate { Date = byDateList.Date };
                                 groupByDateList.Add(groupByDate);
                             }
                             else
@@ -177,9 +169,11 @@ namespace DataTransferObjects.Utils
                             }
                             if (!groupByDate.ProjectTotalHours.Any(g => g.Project.ProjectNumber == timeEntriesGroupByClientAndProject.Project.ProjectNumber && g.Client.Code == timeEntriesGroupByClientAndProject.Client.Code))
                             {
-                                groupByClientAndProject = new GroupByClientAndProject();
-                                groupByClientAndProject.Client = timeEntriesGroupByClientAndProject.Client;
-                                groupByClientAndProject.Project = timeEntriesGroupByClientAndProject.Project;
+                                groupByClientAndProject = new GroupByClientAndProject
+                                    {
+                                        Client = timeEntriesGroupByClientAndProject.Client,
+                                        Project = timeEntriesGroupByClientAndProject.Project
+                                    };
                                 groupByDate.ProjectTotalHours.Add(groupByClientAndProject);
                             }
                             else
@@ -205,38 +199,40 @@ namespace DataTransferObjects.Utils
 
             foreach (PersonLevelGroupedHours PLGH in personLevelGroupedHoursList)
             {
-                if (PLGH.DayTotalHours != null)
+                if (PLGH.DayTotalHours == null) continue;
+                foreach (TimeEntriesGroupByDate TEGD in PLGH.DayTotalHours)
                 {
-                    foreach (TimeEntriesGroupByDate TEGD in PLGH.DayTotalHours)
+                    GroupByDateByPerson GDP;
+                    GroupByPersonByWorktype GPW;
+                    if (groupByDateByPersonList.Any(p => p.Date == TEGD.Date))
                     {
-                        GroupByDateByPerson GDP;
-                        GroupByPersonByWorktype GPW;
-                        if (groupByDateByPersonList.Any(p => p.Date == TEGD.Date))
-                        {
-                            GDP = groupByDateByPersonList.First(p => p.Date == TEGD.Date);
-                        }
-                        else
-                        {
-                            GDP = new GroupByDateByPerson();
-                            GDP.Date = TEGD.Date;
-                            GDP.ProjectTotalHours = new List<GroupByPersonByWorktype>();
-                            GDP.TimeEntrySectionId = PLGH.TimeEntrySectionId;
-                            groupByDateByPersonList.Add(GDP);
-                        }
-
-                        if (GDP.ProjectTotalHours.Any(p => p.Person.Id == PLGH.Person.Id))
-                        {
-                            GPW = GDP.ProjectTotalHours.First(p => p.Person.Id == PLGH.Person.Id);
-                        }
-                        else
-                        {
-                            GPW = new GroupByPersonByWorktype();
-                            GPW.Person = PLGH.Person;
-                            GPW.ProjectTotalHoursList = new List<TimeEntryByWorkType>();
-                            GDP.ProjectTotalHours.Add(GPW);
-                        }
-                        GPW.ProjectTotalHoursList.AddRange(TEGD.DayTotalHoursList);
+                        GDP = groupByDateByPersonList.First(p => p.Date == TEGD.Date);
                     }
+                    else
+                    {
+                        GDP = new GroupByDateByPerson
+                            {
+                                Date = TEGD.Date,
+                                ProjectTotalHours = new List<GroupByPersonByWorktype>(),
+                                TimeEntrySectionId = PLGH.TimeEntrySectionId
+                            };
+                        groupByDateByPersonList.Add(GDP);
+                    }
+
+                    if (GDP.ProjectTotalHours.Any(p => p.Person.Id == PLGH.Person.Id))
+                    {
+                        GPW = GDP.ProjectTotalHours.First(p => p.Person.Id == PLGH.Person.Id);
+                    }
+                    else
+                    {
+                        GPW = new GroupByPersonByWorktype
+                            {
+                                Person = PLGH.Person,
+                                ProjectTotalHoursList = new List<TimeEntryByWorkType>()
+                            };
+                        GDP.ProjectTotalHours.Add(GPW);
+                    }
+                    GPW.ProjectTotalHoursList.AddRange(TEGD.DayTotalHoursList);
                 }
             }
             return groupByDateByPersonList;
@@ -273,4 +269,3 @@ namespace DataTransferObjects.Utils
         }
     }
 }
-
