@@ -1,28 +1,22 @@
 ﻿namespace PraticeManagement
 {
-    using System.Web.Security;
-    using PracticeManagementService;
-    using System.Web;
-    using System;
-    using System.Web.UI.MobileControls.Adapters;
     using System.Collections.Specialized;
+    using System.Web.Security;
     using DataTransferObjects;
+    using PracticeManagementService;
 
     /// <summary>
     /// Custom Membership provider to override reset password functionality.
     /// </summary>
     public sealed class CustomMembershipProvider : SqlMembershipProvider
     {
-
         public override void Initialize(string name, NameValueCollection config)
         {
-
             string IsLockOutPolicyEnabled = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsLockOutPolicyEnabledKey);
             string maxInvalidPasswordAttempts = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.FailedPasswordAttemptCountKey);
             string passwordAttemptWindow = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.PasswordAttemptWindowKey);
 
-
-            bool result = true;
+            bool result;
             bool.TryParse(IsLockOutPolicyEnabled, out result);
 
             if (!string.IsNullOrEmpty(IsLockOutPolicyEnabled) && !string.IsNullOrEmpty(maxInvalidPasswordAttempts) && !string.IsNullOrEmpty(passwordAttemptWindow))
@@ -34,7 +28,6 @@
                     config.Add("maxInvalidPasswordAttempts", maxInvalidPasswordAttempts);
                     config.Add("passwordAttemptWindow", passwordAttemptWindow);
                 }
-
             }
 
             if (!result)
@@ -54,7 +47,5 @@
             string password = base.GeneratePassword();
             return PasswordGeneratorUtility.GeneratePassword(password);
         }
-
     }
 }
-
