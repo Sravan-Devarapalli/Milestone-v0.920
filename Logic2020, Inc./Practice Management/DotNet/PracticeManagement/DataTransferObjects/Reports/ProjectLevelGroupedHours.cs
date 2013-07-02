@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.Reports
 {
@@ -25,7 +25,6 @@ namespace DataTransferObjects.Reports
         {
             get;
             set;
-
         }
 
         [DataMember]
@@ -33,7 +32,6 @@ namespace DataTransferObjects.Reports
         {
             get;
             set;
-
         }
 
         [DataMember]
@@ -80,20 +78,18 @@ namespace DataTransferObjects.Reports
             }
         }
 
-
         public double BillableHoursVariance
         {
             get
             {
                 return (BillableHoursUntilToday - ForecastedHoursUntilToday);
             }
-        }      
+        }
 
         private int BillableFirstHalfWidth
         {
             get
             {
-
                 return VariancePercent < 0 ? (100 - (VariancePercent * (-1))) : 100;
             }
         }
@@ -112,15 +108,7 @@ namespace DataTransferObjects.Reports
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("background-color: ");
-                if (ForecastedHoursUntilToday == 0)
-                {
-                    sb.Append("Gray;");
-                }
-                else
-                {
-                    sb.Append("White;");
-                }
-
+                sb.Append(ForecastedHoursUntilToday == 0 ? "Gray;" : "White;");
                 sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(BillableFirstHalfWidth + "%;");
@@ -184,7 +172,6 @@ namespace DataTransferObjects.Reports
                 }
                 else if (!BillingType.Equals("Fixed"))
                 {
-
                     sb.Append("Green;");
                 }
                 else if (BillingType.Equals("Fixed"))
@@ -206,15 +193,7 @@ namespace DataTransferObjects.Reports
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("background-color: ");
-                if (ForecastedHoursUntilToday == 0)
-                {
-                    sb.Append("Gray;");
-                }
-                else
-                {
-                    sb.Append("White;");
-                }
-
+                sb.Append(ForecastedHoursUntilToday == 0 ? "Gray;" : "White;");
                 sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(ForecastedSecondHalfWidth + "%;");
@@ -222,7 +201,5 @@ namespace DataTransferObjects.Reports
                 return sb.ToString();
             }
         }
-
     }
 }
-
