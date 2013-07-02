@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-
-namespace DataAccess.Skills
+﻿namespace DataAccess.Skills
 {
     public class Constants
     {
         #region "Column Names"
+
         public class ColumnNames
         {
             public const string DisplayOrder = "DisplayOrder";
@@ -77,7 +72,6 @@ namespace DataAccess.Skills
             public const string DeletePersonPicture = "Skills.DeletePersonPicture";
         }
 
-        #endregion
+        #endregion "Column Names"
     }
 }
-
