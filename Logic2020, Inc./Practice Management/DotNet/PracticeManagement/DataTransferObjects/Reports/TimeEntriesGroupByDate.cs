@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.Reports
 {
@@ -21,14 +21,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                if (DayTotalHoursList != null)
-                {
-                    return DayTotalHoursList.Sum(d => d.BillableHours);
-                }
-                else
-                {
-                    return 0;
-                }
+                return DayTotalHoursList != null ? DayTotalHoursList.Sum(d => d.BillableHours) : 0;
             }
         }
 
@@ -36,14 +29,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                if (DayTotalHoursList != null)
-                {
-                    return DayTotalHoursList.Sum(d => d.NonBillableHours);
-                }
-                else
-                {
-                    return 0;
-                }
+                return DayTotalHoursList != null ? DayTotalHoursList.Sum(d => d.NonBillableHours) : 0;
             }
         }
 
@@ -55,7 +41,6 @@ namespace DataTransferObjects.Reports
             }
         }
 
-
         [DataMember]
         public List<TimeEntryByWorkType> DayTotalHoursList
         {
@@ -64,4 +49,3 @@ namespace DataTransferObjects.Reports
         }
     }
 }
-
