@@ -14,12 +14,12 @@ namespace DataAccess.Readers
         private int _startDateIndex;
         private int _endDateIndex;
 
-        public ProjectExpenseReader() : base()
+        public ProjectExpenseReader()
         {
-            
         }
 
-        public ProjectExpenseReader(DbDataReader reader) : base(reader)
+        public ProjectExpenseReader(DbDataReader reader)
+            : base(reader)
         {
             InitIndexes(reader);
         }
@@ -57,4 +57,3 @@ namespace DataAccess.Readers
         }
     }
 }
-
