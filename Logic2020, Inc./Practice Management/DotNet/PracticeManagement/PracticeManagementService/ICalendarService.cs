@@ -14,13 +14,9 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="startDate">The start of the period.</param>
         /// <param name="endDate">The end of the period.</param>
-        /// <param name="personId">
         /// An ID of the person to the calendar be retrieved for.
         /// If null the company calendar will be returned.
-        /// </param>
-        /// <param name="practiceManagerId">
         /// An ID of the practice manager to retrieve the data for his subordinate
-        /// </param>
         /// <returns>The list of the <see cref="CalendarItem"/> objects.</returns>
         [OperationContract]
         List<CalendarItem> GetCalendar(DateTime startDate, DateTime endDate);
@@ -69,7 +65,5 @@ namespace PracticeManagementService
 
         [OperationContract]
         KeyValuePair<DateTime, string> GetSubstituteDayDetails(int personId, DateTime substituteDate);
-
     }
 }
-
