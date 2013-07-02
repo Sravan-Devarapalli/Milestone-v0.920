@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel.Activation;
-using System.Transactions;
 using DataAccess;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
@@ -30,11 +29,12 @@ namespace PracticeManagementService
         /// <returns>The list of the <see cref="MilestonePerson"/> objects.</returns>
         public List<MilestonePerson> GetMilestonePersonListByProject(int projectId)
         {
-            List<MilestonePerson> result = MilestonePersonDAL.MilestonePersonListByProject(projectId,false);
+            List<MilestonePerson> result = MilestonePersonDAL.MilestonePersonListByProject(projectId, false);
             foreach (MilestonePerson milestonePerson in result)
-                milestonePerson.Person.CurrentPay = result.Any(mp => mp.Person.Id == milestonePerson.Person.Id && mp.Person.CurrentPay != null) 
-                                                        ? result.First(mp => mp.Person.Id == milestonePerson.Person.Id && mp.Person.CurrentPay != null).Person.CurrentPay 
-                                                        : PayDAL.GetCurrentByPerson(milestonePerson.Person.Id.Value);
+                if (milestonePerson.Person.Id != null)
+                    milestonePerson.Person.CurrentPay = result.Any(mp => mp.Person.Id == milestonePerson.Person.Id && mp.Person.CurrentPay != null)
+                                                            ? result.First(mp => mp.Person.Id == milestonePerson.Person.Id && mp.Person.CurrentPay != null).Person.CurrentPay
+                                                            : PayDAL.GetCurrentByPerson(milestonePerson.Person.Id.Value);
 
             return result;
         }
@@ -104,10 +104,11 @@ namespace PracticeManagementService
                 }
 
                 // Financials for the milestone person assignment
-                result.ComputedFinancials =
-                    ComputedFinancialsDAL.FinancialsGetByMilestonePerson(
-                    result.Milestone.Id.Value,
-                    result.Person.Id.Value);
+                if (result.Milestone != null && result.Person != null && result.Milestone.Id != null && result.Person.Id != null)
+                    result.ComputedFinancials =
+                        ComputedFinancialsDAL.FinancialsGetByMilestonePerson(
+                            result.Milestone.Id.Value,
+                            result.Person.Id.Value);
             }
             return result;
         }
@@ -152,7 +153,6 @@ namespace PracticeManagementService
             return MilestonePersonDAL.CheckTimeEntriesForMilestonePersonWithGivenRoleId(milestonePersonId, milestonePersonRoleId);
         }
 
-
         /// <summary>
         /// Saves the specified <see cref="Milestone"/>-<see cref="Person"/> link to the database.
         /// </summary>
@@ -166,8 +166,6 @@ namespace PracticeManagementService
         {
             MilestonePersonDAL.SaveMilestonePersonsWrapper(milestonePersons, userName);
         }
-
-
 
         /// <summary>
         /// Deletes the specified <see cref="Milestone"/>-<see cref="Person"/> link from the database.
@@ -208,7 +206,6 @@ namespace PracticeManagementService
             MilestonePersonDAL.MilestoneResourceUpdate(milestone, milestoneUpdateObj, userName);
         }
 
-        #endregion
+        #endregion IMilestonePersonService Members
     }
 }
-
