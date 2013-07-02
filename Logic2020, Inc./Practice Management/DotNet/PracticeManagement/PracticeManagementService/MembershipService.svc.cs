@@ -39,7 +39,7 @@ namespace PracticeManagementService
         public bool ChangePassword(string username, string oldPassword, string newPassword)
         {
             MembershipUser user = Membership.GetUser(username);
-            bool result = user != null ? user.ChangePassword(oldPassword, newPassword) : false;
+            bool result = user != null && user.ChangePassword(oldPassword, newPassword);
 
             return result;
         }
@@ -56,8 +56,7 @@ namespace PracticeManagementService
         {
             MembershipUser user = Membership.GetUser(username);
             return
-                user != null ?
-                user.ChangePasswordQuestionAndAnswer(password, newPasswordQuestion, newPasswordAnswer) : false;
+                user != null && user.ChangePasswordQuestionAndAnswer(password, newPasswordQuestion, newPasswordAnswer);
         }
 
         /// <summary>
@@ -204,10 +203,7 @@ namespace PracticeManagementService
             {
                 return user.GetPassword(passwordAnswer);
             }
-            else
-            {
-                throw new MembershipPasswordException();
-            }
+            throw new MembershipPasswordException();
         }
 
         /// <summary>
@@ -333,7 +329,6 @@ namespace PracticeManagementService
                     user.UnlockUser();
                 }
                 result = user.ResetPassword(answer);
-
             }
             else
             {
@@ -345,7 +340,7 @@ namespace PracticeManagementService
             {
                 try
                 {
-                    MailUtil.SendResetPasswordNotification(person,result);
+                    MailUtil.SendResetPasswordNotification(person, result);
                 }
                 catch (SmtpException)
                 {
@@ -367,7 +362,7 @@ namespace PracticeManagementService
         public bool UnlockUser(string userName)
         {
             MembershipUser user = Membership.GetUser(userName);
-            return user != null ? user.UnlockUser() : false;
+            return user != null && user.UnlockUser();
         }
 
         /// <summary>
@@ -382,4 +377,3 @@ namespace PracticeManagementService
         }
     }
 }
-
