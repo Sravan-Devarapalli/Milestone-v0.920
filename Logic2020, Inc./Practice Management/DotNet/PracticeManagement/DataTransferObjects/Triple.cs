@@ -12,7 +12,7 @@ namespace DataTransferObjects
     {
         #region Properties
 
-	    /// <summary>
+        /// <summary>
         /// Gets or sets the First object.
         /// </summary>
         [DataMember]
@@ -42,17 +42,16 @@ namespace DataTransferObjects
             set;
         }
 
-	    #endregion    
+        #endregion Properties
 
         /// <summary>
         /// Init constructor of Triple.
         /// </summary>
-            public Triple(A first, B second, C third)
+        public Triple(A first, B second, C third)
         {
-            this.First = first;
-            this.Second = second;
-            this.Third = third;
+            First = first;
+            Second = second;
+            Third = third;
         }
     }
 }
-
