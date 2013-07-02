@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Web;
 
 namespace DataTransferObjects.Reports.ConsultingDemand
@@ -47,11 +47,7 @@ namespace DataTransferObjects.Reports.ConsultingDemand
                 {
                     return ConsultantDetails.Sum(p => p.Count);
                 }
-                else if (MonthCount != null)
-                {
-                    return MonthCount.Values.Sum();
-                }
-                return 0;
+                return MonthCount != null ? MonthCount.Values.Sum() : 0;
             }
         }
 
@@ -62,7 +58,5 @@ namespace DataTransferObjects.Reports.ConsultingDemand
                 return HtmlEncodedTitle + ", " + HtmlEncodedSkill;
             }
         }
-
     }
 }
-
