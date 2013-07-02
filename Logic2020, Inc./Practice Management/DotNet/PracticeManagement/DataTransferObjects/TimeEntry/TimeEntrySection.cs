@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.TimeEntry
 {
@@ -10,7 +10,6 @@ namespace DataTransferObjects.TimeEntry
     [Serializable]
     public class TimeEntrySection
     {
-
         #region Properties
 
         [DataMember]
@@ -43,10 +42,9 @@ namespace DataTransferObjects.TimeEntry
             set;
         }
 
-
         public List<KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>> TimeEntriesByTimeType
         {
-            get 
+            get
             {
                 var kvList = new List<KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>>();
 
@@ -64,7 +62,7 @@ namespace DataTransferObjects.TimeEntry
 
                             if (keyValuePair.Value == null)
                             {
-                                keyValuePair = new KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>(terecord.TimeType, new List<TimeEntryRecord>() { terecord });
+                                keyValuePair = new KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>(terecord.TimeType, new List<TimeEntryRecord> { terecord });
                             }
                             else
                             {
@@ -73,15 +71,15 @@ namespace DataTransferObjects.TimeEntry
                         }
                         else
                         {
-                            kvList.Add(new KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>(terecord.TimeType, new List<TimeEntryRecord>() { terecord }));
+                            kvList.Add(new KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>(terecord.TimeType, new List<TimeEntryRecord> { terecord }));
                         }
                     }
                 }
                 else
                 {
                     int ttypeId = kvList.Count > 0 ? kvList.Min(k => k.Key.Id) : 0;
-                    timeEntries.Add(new TimeEntryRecord() { TimeType = new TimeTypeRecord() });
-                    kvList.Add(new KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>(new TimeTypeRecord() { Id = ttypeId < 1 ? ttypeId - 1 : -1 }, timeEntries));
+                    timeEntries.Add(new TimeEntryRecord { TimeType = new TimeTypeRecord() });
+                    kvList.Add(new KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>>(new TimeTypeRecord { Id = ttypeId < 1 ? ttypeId - 1 : -1 }, timeEntries));
                 }
 
                 TimeEntries = timeEntries;
@@ -90,7 +88,6 @@ namespace DataTransferObjects.TimeEntry
             }
         }
 
-        #endregion
+        #endregion Properties
     }
 }
-
