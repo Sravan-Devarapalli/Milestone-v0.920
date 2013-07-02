@@ -6,7 +6,6 @@ using System.ServiceModel.Activation;
 using System.Text;
 using System.Web;
 using System.Xml;
-using System.Linq;
 using DataAccess;
 using DataAccess.Other;
 using DataTransferObjects;
@@ -25,7 +24,7 @@ namespace PracticeManagementService
         {
             try
             {
-                var project = ProjectDAL.GetById(projectId, null, null);
+                var project = ProjectDAL.GetById(projectId);
                 return project;
             }
             catch (Exception e)
@@ -36,6 +35,7 @@ namespace PracticeManagementService
                 throw e;
             }
         }
+
         public ComputedFinancials GetProjectsComputedFinancials(int projectId)
         {
             try
@@ -49,7 +49,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public DataSet GetProjectMilestonesFinancials(int projectId)
@@ -83,7 +82,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<Project> ListProjectsByClient(int? clientId, string viewerUsername)
@@ -99,7 +97,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<Project> ListProjectsByClientShort(int? clientId, bool IsOnlyActiveAndProjective, bool IsOnlyActiveAndInternal, bool IsOnlyEnternalProjects)
@@ -115,7 +112,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<Project> ListProjectsByClientAndPersonInPeriod(int clientId, bool isOnlyActiveAndInternal, bool isOnlyEnternalProjects, int personId, DateTime startDate, DateTime endDate)
@@ -131,7 +127,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<Project> ListProjectsByClientWithSort(int? clientId, string viewerUsername, string sortBy)
@@ -147,7 +142,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public int CloneProject(ProjectCloningContext context)
@@ -163,7 +157,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         /// <summary>
@@ -171,21 +164,13 @@ namespace PracticeManagementService
         /// </summary>
         public List<Project> GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal)
         {
-
             try
             {
                 return ProjectDAL.ProjectListAll(
-                null,
                 projected,
                 completed,
                 active,
                 experimantal,
-                DateTime.MinValue,
-                DateTime.MaxValue,
-                null,
-                null,
-                null,
-                null,
                 false);
             }
             catch (Exception e)
@@ -195,8 +180,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
-
         }
 
         /// <summary>
@@ -238,7 +221,6 @@ namespace PracticeManagementService
             bool useActuals,
             bool getFinancialsFromCache)
         {
-
             try
             {
                 List<Project> result =
@@ -271,7 +253,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public bool IsProjectSummaryCachedToday()
@@ -300,7 +281,6 @@ namespace PracticeManagementService
                                                     DateTime periodEnd
                                                     )
         {
-
             try
             {
                 List<Project> result =
@@ -324,8 +304,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
-
         }
 
         public List<Project> GetProjectListWithFinancials(
@@ -345,7 +323,6 @@ namespace PracticeManagementService
             bool excludeInternalPractices
             )
         {
-
             try
             {
                 List<Project> result =
@@ -373,8 +350,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
-
         }
 
         public List<MilestonePerson> GetProjectListGroupByPracticeManagers(
@@ -394,7 +369,6 @@ namespace PracticeManagementService
             bool excludeInternalPractices
             )
         {
-
             try
             {
                 return ProjectDAL.GetProjectListGroupByPracticeManagers(clientIds,
@@ -420,8 +394,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
-
         }
 
         public List<Project> GetBenchList(BenchReportContext context)
@@ -437,7 +409,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<Project> GetBenchListWithoutBenchTotalAndAdminCosts(BenchReportContext context)
@@ -454,7 +425,6 @@ namespace PracticeManagementService
                 throw e;
             }
         }
-
 
         /// <summary>
         /// Retrives a list of the projects by the specified conditions.
@@ -490,7 +460,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         /// <summary>
@@ -503,11 +472,10 @@ namespace PracticeManagementService
         {
             try
             {
-                SqlTransaction currentTransaction = null;
                 using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
                 {
                     connection.Open();
-                    currentTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
+                    SqlTransaction currentTransaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
                     if (!project.Id.HasValue)
                     {
@@ -538,7 +506,8 @@ namespace PracticeManagementService
                     {
                         try
                         {
-                            ProjectDAL.SetProjectTimeTypes(project.Id.Value, project.ProjectWorkTypesList, connection, currentTransaction);
+                            if (project.Id != null)
+                                ProjectDAL.SetProjectTimeTypes(project.Id.Value, project.ProjectWorkTypesList, connection, currentTransaction);
                         }
                         catch (Exception ex)
                         {
@@ -556,14 +525,13 @@ namespace PracticeManagementService
                     currentTransaction.Commit();
                 }
 
-                return project.Id.Value;
+                if (project.Id != null) return project.Id.Value;
             }
             catch (Exception e)
             {
                 throw e;
             }
-
-
+            return -1;
         }
 
         /// <summary>
@@ -614,8 +582,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
-
         }
 
         /// <summary>
@@ -640,13 +606,12 @@ namespace PracticeManagementService
             bool showInactive,
             bool useActuals)
         {
-
             try
             {
                 // ProjectRateCalculator.VerifyPrivileges(userName, ref salespersonId, ref practiceManagerId);
                 var result
                     = ComputedFinancialsDAL.PersonStatsByDateRange(
-                        startDate, //startDate.AddMonths(-1), 
+                        startDate, //startDate.AddMonths(-1),
                         endDate,
                         salespersonId,
                         practiceManagerId,
@@ -674,9 +639,13 @@ namespace PracticeManagementService
                 var allAdmin = ProjectRateCalculator.GetAdminCosts(startDate, endDate, userName);
                 if (allAdmin != null)
                     foreach (var stats in result)
+                    {
+                        PersonStats stats1 = stats;
                         foreach (var financials in allAdmin.ProjectedFinancialsByMonth)
-                            if (stats.Date.Month == financials.Key.Month && stats.Date.Year == financials.Key.Year)
-                                stats.AdminCosts = financials.Value.Cogs;
+                        {
+                            if (stats1.Date.Month == financials.Key.Month && stats1.Date.Year == financials.Key.Year) stats.AdminCosts = financials.Value.Cogs;
+                        }
+                    }
 
                 return result;
             }
@@ -702,7 +671,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public Project GetProjectShortByProjectNumber(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate)
@@ -713,10 +681,8 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-
                 throw e;
             }
-
         }
 
         public DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId)
@@ -737,7 +703,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<ProjectsGroupedByPractice> PracticeBudgetListByYear(int year)
@@ -753,7 +718,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public void CategoryItemBudgetSave(int itemId, BudgetCategoryType categoryType, DateTime monthStartDate, PracticeManagementCurrency amount)
@@ -787,7 +751,6 @@ namespace PracticeManagementService
         {
             try
             {
-
                 return ProjectDAL.CalculateBudgetForPersons(
                                                              startDate,
                                                              endDate,
@@ -809,7 +772,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<ProjectsGroupedByPractice> CalculateBudgetForPractices
@@ -824,10 +786,8 @@ namespace PracticeManagementService
             string practiceIdsList,
             bool excludeInternalPractices)
         {
-
             try
             {
-
                 return ProjectDAL.CalculateBudgetForPractices(
                                                           startDate,
                                                           endDate,
@@ -847,14 +807,12 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public void CategoryItemsSaveFromXML(List<CategoryItemBudget> categoryItems, int year)
         {
             try
             {
-
                 ProjectDAL.CategoryItemsSaveFromXML(categoryItems, year);
             }
             catch (Exception e)
@@ -876,7 +834,6 @@ namespace PracticeManagementService
             {
                 throw e;
             }
-
         }
 
         public ProjectExpense[] GetProjectExpensesForProject(ProjectExpense entity)
@@ -892,7 +849,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<Project> AllProjectsWithFinancialTotalsAndPersons()
@@ -914,7 +870,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public bool IsUserHasPermissionOnProject(string user, int id, bool isProjectId)
@@ -945,7 +900,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public bool IsUserIsProjectOwner(string user, int id)
@@ -961,7 +915,6 @@ namespace PracticeManagementService
                 ActivityLogDAL.ActivityLogInsert(20, logData);
                 throw e;
             }
-
         }
 
         public List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, DateTime startDate, DateTime endDate)
@@ -999,14 +952,14 @@ namespace PracticeManagementService
             return ProjectDAL.GetTimeTypesInUseDetailsByProject(projectId, timeTypeIds);
         }
 
-        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId,bool link)
+        public string AttachOpportunityToProject(int projectId, int opportunityId, string userLogin, int? pricingListId, bool link)
         {
-            return ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin,pricingListId, link);
+            return ProjectDAL.AttachOpportunityToProject(projectId, opportunityId, userLogin, pricingListId, link);
         }
 
         public int CSATInsert(ProjectCSAT projectCSAT, string userLogin)
         {
-           return  ProjectCSATDAL.CSATInsert(projectCSAT, userLogin);
+            return ProjectCSATDAL.CSATInsert(projectCSAT, userLogin);
         }
 
         public void CSATDelete(int projectCSATId, string userLogin)
@@ -1034,7 +987,7 @@ namespace PracticeManagementService
             return ProjectCSATDAL.CSATReportHeader(startDate, endDate, practiceIds, accountIds);
         }
 
-        #endregion
+        #endregion IProjectService Members
     }
 }
 
