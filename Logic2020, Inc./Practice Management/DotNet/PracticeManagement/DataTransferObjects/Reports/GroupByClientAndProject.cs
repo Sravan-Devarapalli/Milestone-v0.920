@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataTransferObjects.Reports
 {
@@ -23,14 +21,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                if (ProjectTotalHoursList != null)
-                {
-                    return ProjectTotalHoursList.Sum(d => d.BillableHours);
-                }
-                else
-                {
-                    return 0;
-                }
+                return ProjectTotalHoursList != null ? ProjectTotalHoursList.Sum(d => d.BillableHours) : 0;
             }
         }
 
@@ -38,14 +29,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                if (ProjectTotalHoursList != null)
-                {
-                    return ProjectTotalHoursList.Sum(d => d.NonBillableHours);
-                }
-                else
-                {
-                    return 0;
-                }
+                return ProjectTotalHoursList != null ? ProjectTotalHoursList.Sum(d => d.NonBillableHours) : 0;
             }
         }
 
@@ -64,4 +48,3 @@ namespace DataTransferObjects.Reports
         }
     }
 }
-
