@@ -35,11 +35,11 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, context.EndDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
                                                 context.PersonId.HasValue
-                                                    ? (object) context.PersonId.Value
+                                                    ? (object)context.PersonId.Value
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId,
                                                 context.ProjectId.HasValue
-                                                    ? (object) context.ProjectId.Value
+                                                    ? (object)context.ProjectId.Value
                                                     : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PageSize, pageSize);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PageNo, pageNo);
@@ -85,7 +85,7 @@ namespace DataAccess
                                                 context.MilestoneId.HasValue ? (object)context.MilestoneId.Value : DBNull.Value);
 
                 connection.Open();
-                var result = (int) command.ExecuteScalar();
+                var result = (int)command.ExecuteScalar();
 
                 return result;
             }
@@ -93,65 +93,63 @@ namespace DataAccess
 
         private static void ReadActivityLog(DbDataReader reader, ICollection<ActivityLogItem> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            var activityIdIndex = reader.GetOrdinal(Constants.ColumnNames.ActivityId);
+            var activityTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ActivityTypeId);
+            var sessionIdIndex = reader.GetOrdinal(Constants.ColumnNames.SessionId);
+            var logDateIndex = reader.GetOrdinal(Constants.ColumnNames.LogDate);
+            var systemUserIndex = reader.GetOrdinal(Constants.ColumnNames.SystemUser);
+            var workstationIndex = reader.GetOrdinal(Constants.ColumnNames.Workstation);
+            var applicationNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApplicationName);
+            var userLoginIndex = reader.GetOrdinal(Constants.ColumnNames.UserLogin);
+            var personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            var lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            var firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            var logDataIndex = reader.GetOrdinal(Constants.ColumnNames.LogData);
+            var activityNameIndex = reader.GetOrdinal(Constants.ColumnNames.ActivityName);
+
+            while (reader.Read())
             {
-                var activityIdIndex = reader.GetOrdinal(Constants.ColumnNames.ActivityId);
-                var activityTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ActivityTypeId);
-                var sessionIdIndex = reader.GetOrdinal(Constants.ColumnNames.SessionId);
-                var logDateIndex = reader.GetOrdinal(Constants.ColumnNames.LogDate);
-                var systemUserIndex = reader.GetOrdinal(Constants.ColumnNames.SystemUser);
-                var workstationIndex = reader.GetOrdinal(Constants.ColumnNames.Workstation);
-                var applicationNameIndex = reader.GetOrdinal(Constants.ColumnNames.ApplicationName);
-                var userLoginIndex = reader.GetOrdinal(Constants.ColumnNames.UserLogin);
-                var personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                var lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-                var firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
-                var logDataIndex = reader.GetOrdinal(Constants.ColumnNames.LogData);
-                var activityNameIndex = reader.GetOrdinal(Constants.ColumnNames.ActivityName);
+                var item =
+                    new ActivityLogItem
+                        {
+                            // Log data
+                            Id = reader.GetInt32(activityIdIndex),
+                            ActivityTypeId = reader.GetInt32(activityTypeIdIndex),
+                            ActivityName = reader.GetString(activityNameIndex),
+                            SessionId = reader.GetInt32(sessionIdIndex),
+                            LogDate = reader.GetDateTime(logDateIndex),
+                            SystemUser = reader.GetString(systemUserIndex),
+                            Workstation =
+                                !reader.IsDBNull(workstationIndex) ? reader.GetString(workstationIndex) : null,
+                            ApplicationName =
+                                !reader.IsDBNull(applicationNameIndex)
+                                    ? reader.GetString(applicationNameIndex)
+                                    : null,
+                            LogData = !reader.IsDBNull(logDataIndex) ? reader.GetString(logDataIndex) : null,
+                            // User's data
+                            Person =
+                                !reader.IsDBNull(userLoginIndex)
+                                    ? new Person
+                                        {
+                                            Id =
+                                                !reader.IsDBNull(personIdIndex)
+                                                    ? (int?)reader.GetInt32(personIdIndex)
+                                                    : null,
+                                            Alias = reader.GetString(userLoginIndex),
+                                            FirstName =
+                                                !reader.IsDBNull(firstNameIndex)
+                                                    ? reader.GetString(firstNameIndex)
+                                                    : null,
+                                            LastName =
+                                                !reader.IsDBNull(lastNameIndex)
+                                                    ? reader.GetString(lastNameIndex)
+                                                    : null
+                                        }
+                                    : null
+                        };
 
-                while (reader.Read())
-                {
-                    var item =
-                        new ActivityLogItem
-                            {
-                                // Log data
-                                Id = reader.GetInt32(activityIdIndex),
-                                ActivityTypeId = reader.GetInt32(activityTypeIdIndex),
-                                ActivityName = reader.GetString(activityNameIndex),
-                                SessionId = reader.GetInt32(sessionIdIndex),
-                                LogDate = reader.GetDateTime(logDateIndex),
-                                SystemUser = reader.GetString(systemUserIndex),
-                                Workstation =
-                                    !reader.IsDBNull(workstationIndex) ? reader.GetString(workstationIndex) : null,
-                                ApplicationName =
-                                    !reader.IsDBNull(applicationNameIndex)
-                                        ? reader.GetString(applicationNameIndex)
-                                        : null,
-                                LogData = !reader.IsDBNull(logDataIndex) ? reader.GetString(logDataIndex) : null,
-                                // User's data
-                                Person =
-                                    !reader.IsDBNull(userLoginIndex)
-                                        ? new Person
-                                              {
-                                                  Id =
-                                                      !reader.IsDBNull(personIdIndex)
-                                                          ? (int?) reader.GetInt32(personIdIndex)
-                                                          : null,
-                                                  Alias = reader.GetString(userLoginIndex),
-                                                  FirstName =
-                                                      !reader.IsDBNull(firstNameIndex)
-                                                          ? reader.GetString(firstNameIndex)
-                                                          : null,
-                                                  LastName =
-                                                      !reader.IsDBNull(lastNameIndex)
-                                                          ? reader.GetString(lastNameIndex)
-                                                          : null
-                                              }
-                                        : null
-                            };
-
-                    result.Add(item);
-                }
+                result.Add(item);
             }
         }
 
@@ -171,7 +169,6 @@ namespace DataAccess
             }
         }
 
-
         /// <summary>
         /// 	Returns database version
         /// </summary>
@@ -184,10 +181,10 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 connection.Open();
-                return (string) command.ExecuteScalar();
+                return (string)command.ExecuteScalar();
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }
