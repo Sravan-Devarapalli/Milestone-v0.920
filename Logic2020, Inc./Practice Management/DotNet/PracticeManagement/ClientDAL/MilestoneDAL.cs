@@ -27,7 +27,6 @@ namespace DataAccess
         private const string ProjectedDeliveryDateParam = "@ProjectedDeliveryDate";
         private const string IsHourlyAmountParam = "@IsHourlyAmount";
         private const string ShiftDaysParam = "@ShiftDays";
-        private const string PersonIdParam = "@PersonId";
         private const string MoveFutureMilestonesParam = "@MoveFutureMilestones";
         private const string CloneDurationParam = "@CloneDuration";
         private const string MilestoneCloneIdParam = "@MilestoneCloneId";
@@ -36,8 +35,7 @@ namespace DataAccess
         private const string LowerBoundParam = "@LowerBound";
         private const string UpperBoundParam = "@UpperBound";
 
-
-        #endregion
+        #endregion Parameters
 
         #region Stored Procedures
 
@@ -58,7 +56,7 @@ namespace DataAccess
         public const string CheckIfExpensesExistsForMilestonePeriodProcedure = "dbo.CheckIfExpensesExistsForMilestonePeriod";
         public const string CanMoveFutureMilestonesProcedure = "dbo.CanMoveFutureMilestones";
 
-        #endregion
+        #endregion Stored Procedures
 
         #region Columns
 
@@ -79,12 +77,12 @@ namespace DataAccess
         private const string LowerBoundColumn = "LowerBound";
         private const string UpperBoundColumn = "UpperBound";
 
-        #endregion
+        #endregion Columns
 
-        #endregion
+        #endregion Constants
 
         /// <summary>
-        /// Saves Default Project-milestone details into DB. Persons not assigned to any Project-Milestone 
+        /// Saves Default Project-milestone details into DB. Persons not assigned to any Project-Milestone
         /// can enter time entery for this default Project Milestone.
         /// </summary>
         /// <param name="clientId"></param>
@@ -130,7 +128,6 @@ namespace DataAccess
                 }
             }
         }
-
 
         /// <summary>
         /// Lists <see cref="Milestones"/> by the specified Project.
@@ -183,7 +180,6 @@ namespace DataAccess
 
         public static List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate)
         {
-
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(GetPersonMilestonesAfterTerminationDateProcedure, connection))
             {
@@ -206,28 +202,29 @@ namespace DataAccess
 
         private static void ReadMilestonesForPersonTermination(SqlDataReader reader, List<Milestone> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int projectIdIndex = reader.GetOrdinal("ProjectId");
+            int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
+            int descriptionIndex = reader.GetOrdinal("MilestoneName");
+            int projectNameIndex = reader.GetOrdinal("ProjectName");
+            int projectNumberIndex = reader.GetOrdinal("ProjectNumber");
+
+            while (reader.Read())
             {
-                int projectIdIndex = reader.GetOrdinal("ProjectId");
-                int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
-                int descriptionIndex = reader.GetOrdinal("MilestoneName");
-                int projectNameIndex = reader.GetOrdinal("ProjectName");
-                int projectNumberIndex = reader.GetOrdinal("ProjectNumber");
+                Milestone milestone = new Milestone
+                    {
+                        Id = reader.GetInt32(milestoneIdIndex),
+                        Description = reader.GetString(descriptionIndex),
+                        Project =
+                            new Project
+                                {
+                                    Id = reader.GetInt32(projectIdIndex),
+                                    Name = reader.GetString(projectNameIndex),
+                                    ProjectNumber = reader.GetString(projectNumberIndex)
+                                }
+                    };
 
-
-                while (reader.Read())
-                {
-                    Milestone milestone = new Milestone();
-
-                    milestone.Id = reader.GetInt32(milestoneIdIndex);
-                    milestone.Description = reader.GetString(descriptionIndex);
-
-                    milestone.Project = new Project();
-                    milestone.Project.Id = reader.GetInt32(projectIdIndex);
-                    milestone.Project.Name = reader.GetString(projectNameIndex);
-                    milestone.Project.ProjectNumber = reader.GetString(projectNumberIndex);
-                    result.Add(milestone);
-                }
+                result.Add(milestone);
             }
         }
 
@@ -283,8 +280,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(IsHourlyAmountParam, milestone.IsHourlyAmount);
                 command.Parameters.AddWithValue(UserLoginParam, !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
-                SqlParameter milestoneIdParam = new SqlParameter(MilestoneIdParam, SqlDbType.Int);
-                milestoneIdParam.Direction = ParameterDirection.Output;
+                SqlParameter milestoneIdParam = new SqlParameter(MilestoneIdParam, SqlDbType.Int)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
                 command.Parameters.Add(milestoneIdParam);
 
                 connection.Open();
@@ -459,8 +458,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(CloneDurationParam, cloneDuration);
 
                 SqlParameter cloneIdParam =
-                    new SqlParameter(MilestoneCloneIdParam, SqlDbType.Int);
-                cloneIdParam.Direction = ParameterDirection.Output;
+                    new SqlParameter(MilestoneCloneIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
                 command.Parameters.Add(cloneIdParam);
 
                 try
@@ -495,12 +493,9 @@ namespace DataAccess
                     int csatCountIndex = reader.GetOrdinal(CSATCountColumn);
                     while (reader.Read())
                     {
-                        
                         result.Add(reader.GetInt32(milestoneCountIndex));
                         result.Add(reader.GetInt32(csatCountIndex));
                     }
-
-          
                 }
             }
             return result;
@@ -548,95 +543,97 @@ namespace DataAccess
         /// <param name="result">The list of <see cref="Milestone"/> objects.</param>
         private static void ReadMilestones(DbDataReader reader, List<Milestone> result)
         {
-            if (reader.HasRows)
-            {
-                int clientIdIndex = reader.GetOrdinal("ClientId");
-                int projectIdIndex = reader.GetOrdinal("ProjectId");
-                int projectStatusIdIndex = -1;
-                int projectStatusNameIndex = -1;
-                 
-                int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
-                int descriptionIndex = reader.GetOrdinal("Description");
-                int amountIndex = reader.GetOrdinal("Amount");
-                int startDateIndex = reader.GetOrdinal("StartDate");
-                int projectedDeliveryDateIndex = reader.GetOrdinal("ProjectedDeliveryDate");
-                int clientNameIndex = reader.GetOrdinal("ClientName");
-                int projectNameIndex = reader.GetOrdinal("ProjectName");
-                int projectStartDateIndex = reader.GetOrdinal(ProjectStartDateColumn);
-                int projectEndDateIndex = reader.GetOrdinal(ProjectEndDateColumn);
-                int isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
-                int expectedHoursIndex = reader.GetOrdinal(ExpectedHoursColumn);
-                int discountIndex = reader.GetOrdinal(DiscountColumn);
+            if (!reader.HasRows) return;
+            int clientIdIndex = reader.GetOrdinal("ClientId");
+            int projectIdIndex = reader.GetOrdinal("ProjectId");
+            int projectStatusIdIndex = -1;
+            int projectStatusNameIndex = -1;
+
+            int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
+            int descriptionIndex = reader.GetOrdinal("Description");
+            int amountIndex = reader.GetOrdinal("Amount");
+            int startDateIndex = reader.GetOrdinal("StartDate");
+            int projectedDeliveryDateIndex = reader.GetOrdinal("ProjectedDeliveryDate");
+            int clientNameIndex = reader.GetOrdinal("ClientName");
+            int projectNameIndex = reader.GetOrdinal("ProjectName");
+            int projectStartDateIndex = reader.GetOrdinal(ProjectStartDateColumn);
+            int projectEndDateIndex = reader.GetOrdinal(ProjectEndDateColumn);
+            int isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
+            int expectedHoursIndex = reader.GetOrdinal(ExpectedHoursColumn);
+            int discountIndex = reader.GetOrdinal(DiscountColumn);
                 int salesCommissionIndex = reader.GetOrdinal(SalesCommissionColumn);
-                int personCountIndex = reader.GetOrdinal(PersonCountColumn);
-                int projectedDurationIndex = reader.GetOrdinal(ProjectedDurationColumn);
-                int milestoneIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneIsChargeable);
-                int consultantsCanAdjustIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantsCanAdjust);
-                int isMarginColorInfoEnabledIndex = -1;
+            int personCountIndex = reader.GetOrdinal(PersonCountColumn);
+            int projectedDurationIndex = reader.GetOrdinal(ProjectedDurationColumn);
+            int milestoneIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneIsChargeable);
+            int consultantsCanAdjustIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantsCanAdjust);
+            int isMarginColorInfoEnabledIndex = -1;
 
-                try
-                {
-                    projectStatusIdIndex = reader.GetOrdinal("ProjectStatusId");
-                    projectStatusNameIndex = reader.GetOrdinal("ProjectStatusName");
-                }
-                catch
-                {
-                     projectStatusIdIndex = -1;
-                     projectStatusNameIndex = -1;
-                }
+            try
+            {
+                projectStatusIdIndex = reader.GetOrdinal("ProjectStatusId");
+                projectStatusNameIndex = reader.GetOrdinal("ProjectStatusName");
+            }
+            catch
+            {
+                projectStatusIdIndex = -1;
+                projectStatusNameIndex = -1;
+            }
 
-                try
-                {
-                    isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
-                }
-                catch
-                {
-                    isMarginColorInfoEnabledIndex = -1;
-                }
+            try
+            {
+                isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
+            }
+            catch
+            {
+                isMarginColorInfoEnabledIndex = -1;
+            }
 
-                while (reader.Read())
-                {
-                    Milestone milestone = new Milestone();
-
-                    milestone.Id = reader.GetInt32(milestoneIdIndex);
-                    milestone.Description = reader.GetString(descriptionIndex);
-                    milestone.Amount =
-                        !reader.IsDBNull(amountIndex) ? (decimal?)reader.GetDecimal(amountIndex) : null;
-                    milestone.StartDate = reader.GetDateTime(startDateIndex);
-                    milestone.ProjectedDeliveryDate = reader.GetDateTime(projectedDeliveryDateIndex);
-                    milestone.IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex);
-                    milestone.ExpectedHours = reader.GetDecimal(expectedHoursIndex);
-                    milestone.PersonCount = reader.GetInt32(personCountIndex);
-                    milestone.ProjectedDuration = reader.GetInt32(projectedDurationIndex);
-                    milestone.IsChargeable = reader.GetBoolean(milestoneIsChargeableIndex);
-                    milestone.ConsultantsCanAdjust = reader.GetBoolean(consultantsCanAdjustIndex);
-
-                    milestone.Project = new Project();
-                    milestone.Project.Id = reader.GetInt32(projectIdIndex);
-                    milestone.Project.Name = reader.GetString(projectNameIndex);
-                    milestone.Project.Discount = reader.GetDecimal(discountIndex);
-                    milestone.Project.StartDate = reader.GetDateTime(projectStartDateIndex);
-                    milestone.Project.EndDate = reader.GetDateTime(projectEndDateIndex);
-                   
-
-                    milestone.Project.Client = new Client();
-                    milestone.Project.Client.Id = reader.GetInt32(clientIdIndex);
-                    milestone.Project.Client.Name = reader.GetString(clientNameIndex);
-
-                    if (projectStatusIdIndex >= 0 && projectStatusNameIndex >= 0)
+            while (reader.Read())
+            {
+                Milestone milestone = new Milestone
                     {
-                        milestone.Project.Status = new ProjectStatus();
-                        milestone.Project.Status.Id = reader.GetInt32(projectStatusIdIndex);
-                        milestone.Project.Status.Name = reader.GetString(projectStatusNameIndex);
-                    }
+                        Id = reader.GetInt32(milestoneIdIndex),
+                        Description = reader.GetString(descriptionIndex),
+                        Amount = !reader.IsDBNull(amountIndex) ? (decimal?)reader.GetDecimal(amountIndex) : null,
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        ProjectedDeliveryDate = reader.GetDateTime(projectedDeliveryDateIndex),
+                        IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex),
+                        ExpectedHours = reader.GetDecimal(expectedHoursIndex),
+                        PersonCount = reader.GetInt32(personCountIndex),
+                        ProjectedDuration = reader.GetInt32(projectedDurationIndex),
+                        IsChargeable = reader.GetBoolean(milestoneIsChargeableIndex),
+                        ConsultantsCanAdjust = reader.GetBoolean(consultantsCanAdjustIndex),
+                        Project = new Project
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                Discount = reader.GetDecimal(discountIndex),
+                                StartDate = reader.GetDateTime(projectStartDateIndex),
+                                EndDate = reader.GetDateTime(projectEndDateIndex),
+                                Client = new Client
+                                    {
+                                        Id = reader.GetInt32(clientIdIndex),
+                                        Name = reader.GetString(clientNameIndex)
+                                    }
+                            }
+                    };
 
-                    if (isMarginColorInfoEnabledIndex >= 0)
-                    {
-                        try
+                if (projectStatusIdIndex >= 0 && projectStatusNameIndex >= 0)
+                {
+                    milestone.Project.Status = new ProjectStatus
                         {
-                            milestone.Project.Client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
-                        }
-                        catch
+                            Id = reader.GetInt32(projectStatusIdIndex),
+                            Name = reader.GetString(projectStatusNameIndex)
+                        };
+                }
+
+                if (isMarginColorInfoEnabledIndex >= 0)
+                {
+                    try
+                    {
+                        milestone.Project.Client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
+                    }
+                    catch
                         {
 
                         }
@@ -648,8 +645,7 @@ namespace DataAccess
 							new Commission() {FractionOfMargin = reader.GetDecimal(salesCommissionIndex)}
 						};
 
-                    result.Add(milestone);
-                }
+                result.Add(milestone);
             }
         }
 
@@ -659,10 +655,12 @@ namespace DataAccess
             int descriptionIndex = reader.GetOrdinal("Description");
             while (reader.Read())
             {
-                Milestone milestone = new Milestone();
+                Milestone milestone = new Milestone
+                    {
+                        Id = reader.GetInt32(milestoneIdIndex),
+                        Description = reader.GetString(descriptionIndex)
+                    };
 
-                milestone.Id = reader.GetInt32(milestoneIdIndex);
-                milestone.Description = reader.GetString(descriptionIndex);
                 result.Add(milestone);
             }
         }
