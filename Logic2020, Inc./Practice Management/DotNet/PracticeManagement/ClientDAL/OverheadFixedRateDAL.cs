@@ -28,7 +28,7 @@ namespace DataAccess
         private const string UpdateMinimumLoadFactorHistoryProcedure = "dbo.UpdateMinimumLoadFactorHistory";
         private const string UpdateMinimumLoadFactorStatusProcedure = "dbo.UpdateMinimumLoadFactorStatus";
 
-        #endregion
+        #endregion Procedures
 
         #region Parameters
 
@@ -42,12 +42,8 @@ namespace DataAccess
         private const string InactiveParam = "@Inactive";
         private const string ShowAllParam = "@ShowAll";
         private const string IsCogsParam = "@IsCogs";
-        private const string W2HourlyMultiplierParam = "@W2HourlyMultiplier";
-        private const string W2SalaryMultiplierParam = "@W2SalaryMultiplier";
-        private const string Hourly1099MultiplierParam = "@Hourly1099Multiplier";
 
-
-        #endregion
+        #endregion Parameters
 
         #region Columns
 
@@ -65,9 +61,9 @@ namespace DataAccess
         private const string IsSetColumn = "IsSet";
         private const string IsCogsColumn = "IsCogs";
 
-        #endregion
+        #endregion Columns
 
-        #endregion
+        #endregion Constants
 
         #region Methods
 
@@ -112,15 +108,15 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(DescriptionParam, OverHeadName);
 
-                SqlParameter isInActiveParam = new SqlParameter(InactiveParam, SqlDbType.Bit);
-                isInActiveParam.Direction = ParameterDirection.Output;
+                SqlParameter isInActiveParam = new SqlParameter(InactiveParam, SqlDbType.Bit)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
                 command.Parameters.Add(isInActiveParam);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    List<OverheadFixedRate> result = new List<OverheadFixedRate>();
-
                     ReadMLFMultipliers(reader, MLFMultipliers);
                     if (!reader.IsClosed)
                         reader.Close();
@@ -130,7 +126,7 @@ namespace DataAccess
             return MLFMultipliers;
         }
 
-        public static void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate )
+        public static void UpdateMinimumLoadFactorHistory(int timeScaleId, decimal rate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command =
@@ -159,18 +155,15 @@ namespace DataAccess
             }
         }
 
-
         private static void ReadMLFMultipliers(SqlDataReader reader, Dictionary<int, decimal> MLFMultipliers)
         {
-            if (reader.HasRows)
-            {
-                int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
-                int RateColumnIndex = reader.GetOrdinal(RateColumn);
+            if (!reader.HasRows) return;
+            int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+            int RateColumnIndex = reader.GetOrdinal(RateColumn);
 
-                while (reader.Read())
-                {
-                    MLFMultipliers.Add(reader.GetInt32(timescaleIdIndex), reader.GetDecimal(RateColumnIndex));
-                }
+            while (reader.Read())
+            {
+                MLFMultipliers.Add(reader.GetInt32(timescaleIdIndex), reader.GetDecimal(RateColumnIndex));
             }
         }
 
@@ -274,8 +267,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(InactiveParam, overhead.Inactive);
                 command.Parameters.AddWithValue(IsCogsParam, overhead.IsCogs);
 
-                SqlParameter overheadFixedRateIdParam = new SqlParameter(OverheadFixedRateIdParam, SqlDbType.Int);
-                overheadFixedRateIdParam.Direction = ParameterDirection.Output;
+                SqlParameter overheadFixedRateIdParam = new SqlParameter(OverheadFixedRateIdParam, SqlDbType.Int)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
                 command.Parameters.Add(overheadFixedRateIdParam);
 
                 connection.Open();
@@ -316,59 +311,56 @@ namespace DataAccess
 
         private static void ReadOverheadTimescales(DbDataReader reader, Dictionary<TimescaleType, bool> result)
         {
-            if (reader.HasRows)
-            {
-                int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
-                int isSetIndex = reader.GetOrdinal(IsSetColumn);
+            if (!reader.HasRows) return;
+            int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+            int isSetIndex = reader.GetOrdinal(IsSetColumn);
 
-                while (reader.Read())
-                {
-                    result.Add((TimescaleType)reader.GetInt32(timescaleIdIndex), reader.GetBoolean(isSetIndex));
-                }
+            while (reader.Read())
+            {
+                result.Add((TimescaleType)reader.GetInt32(timescaleIdIndex), reader.GetBoolean(isSetIndex));
             }
         }
 
         private static void ReadOverheadFixedRates(DbDataReader reader, List<OverheadFixedRate> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int overheadFixedRateIdIndex = reader.GetOrdinal(OverheadFixedRateIdColumn);
+            int descriptionIndex = reader.GetOrdinal(DescriptionColumn);
+            int rateIndex = reader.GetOrdinal(RateColumn);
+            int startDateIndex = reader.GetOrdinal(StartDateColumn);
+            int endDateIndex = reader.GetOrdinal(EndDateColumn);
+            int inactiveIndex = reader.GetOrdinal(InactiveColumn);
+            int overheadRateTypeIdIndex = reader.GetOrdinal(OverheadRateTypeIdColumn);
+            int overheadRateTypeNameIndex = reader.GetOrdinal(OverheadRateTypeNameColumn);
+            int isPercentageIndex = reader.GetOrdinal(IsPercentageColumn);
+            int hoursToCollectIndex = reader.GetOrdinal(HoursToCollectColumn);
+            int isCogsIndex = reader.GetOrdinal(IsCogsColumn);
+
+            while (reader.Read())
             {
-                int overheadFixedRateIdIndex = reader.GetOrdinal(OverheadFixedRateIdColumn);
-                int descriptionIndex = reader.GetOrdinal(DescriptionColumn);
-                int rateIndex = reader.GetOrdinal(RateColumn);
-                int startDateIndex = reader.GetOrdinal(StartDateColumn);
-                int endDateIndex = reader.GetOrdinal(EndDateColumn);
-                int inactiveIndex = reader.GetOrdinal(InactiveColumn);
-                int overheadRateTypeIdIndex = reader.GetOrdinal(OverheadRateTypeIdColumn);
-                int overheadRateTypeNameIndex = reader.GetOrdinal(OverheadRateTypeNameColumn);
-                int isPercentageIndex = reader.GetOrdinal(IsPercentageColumn);
-                int hoursToCollectIndex = reader.GetOrdinal(HoursToCollectColumn);
-                int isCogsIndex = reader.GetOrdinal(IsCogsColumn);
+                OverheadFixedRate rate = new OverheadFixedRate
+                    {
+                        Id = reader.GetInt32(overheadFixedRateIdIndex),
+                        Description = reader.GetString(descriptionIndex),
+                        Rate = reader.GetDecimal(rateIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                        Inactive = reader.GetBoolean(inactiveIndex),
+                        IsCogs = reader.GetBoolean(isCogsIndex),
+                        RateType =
+                            new OverheadRateType
+                                {
+                                    Id = reader.GetInt32(overheadRateTypeIdIndex),
+                                    Name = reader.GetString(overheadRateTypeNameIndex),
+                                    IsPercentage = reader.GetBoolean(isPercentageIndex),
+                                    HoursToCollect = reader.GetInt32(hoursToCollectIndex)
+                                }
+                    };
 
-                while (reader.Read())
-                {
-                    OverheadFixedRate rate = new OverheadFixedRate();
-
-                    rate.Id = reader.GetInt32(overheadFixedRateIdIndex);
-                    rate.Description = reader.GetString(descriptionIndex);
-                    rate.Rate = reader.GetDecimal(rateIndex);
-                    rate.StartDate = reader.GetDateTime(startDateIndex);
-                    rate.EndDate =
-                        !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
-                    rate.Inactive = reader.GetBoolean(inactiveIndex);
-                    rate.IsCogs = reader.GetBoolean(isCogsIndex);
-
-                    rate.RateType = new OverheadRateType();
-                    rate.RateType.Id = reader.GetInt32(overheadRateTypeIdIndex);
-                    rate.RateType.Name = reader.GetString(overheadRateTypeNameIndex);
-                    rate.RateType.IsPercentage = reader.GetBoolean(isPercentageIndex);
-                    rate.RateType.HoursToCollect = reader.GetInt32(hoursToCollectIndex);
-
-                    result.Add(rate);
-                }
+                result.Add(rate);
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }
-
