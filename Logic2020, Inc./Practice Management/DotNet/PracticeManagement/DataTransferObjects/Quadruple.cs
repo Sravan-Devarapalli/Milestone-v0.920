@@ -12,59 +12,57 @@ namespace DataTransferObjects
     {
         #region Properties
 
-		    /// <summary>
-            /// Gets or sets the First object.
-            /// </summary>
-            [DataMember]
-            public A First
-            {
-                get;
-                set;
-            }
+        /// <summary>
+        /// Gets or sets the First object.
+        /// </summary>
+        [DataMember]
+        public A First
+        {
+            get;
+            set;
+        }
 
-            /// <summary>
-            /// Gets or sets the Second object.
-            /// </summary>
-            [DataMember]
-            public B Second
-            {
-                get;
-                set;
-            }
+        /// <summary>
+        /// Gets or sets the Second object.
+        /// </summary>
+        [DataMember]
+        public B Second
+        {
+            get;
+            set;
+        }
 
-            /// <summary>
-            /// Gets or sets the Third object.
-            /// </summary>
-            [DataMember]
-            public C Third
-            {
-                get;
-                set;
-            }
+        /// <summary>
+        /// Gets or sets the Third object.
+        /// </summary>
+        [DataMember]
+        public C Third
+        {
+            get;
+            set;
+        }
 
-            /// <summary>
-            /// Gets or sets the Fourth object.
-            /// </summary>
-            [DataMember]
-            public D Fourth
-            {
-                get;
-                set;
-            }
+        /// <summary>
+        /// Gets or sets the Fourth object.
+        /// </summary>
+        [DataMember]
+        public D Fourth
+        {
+            get;
+            set;
+        }
 
-
-	    #endregion    
+        #endregion Properties
 
         /// <summary>
         /// Init constructor of Quadruple.
         /// </summary>
         public Quadruple(A first, B second, C third, D fourth)
         {
-            this.First = first;
-            this.Second = second;
-            this.Third = third;
-            this.Fourth = fourth;
+            First = first;
+            Second = second;
+            Third = third;
+            Fourth = fourth;
         }
     }
 }
-
