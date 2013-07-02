@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.Reports
 {
-
     [DataContract]
     [Serializable]
     public class PersonLevelGroupedHours
@@ -23,42 +22,41 @@ namespace DataTransferObjects.Reports
         {
             get;
             set;
-
         }
+
         [DataMember]
         public double PTOHours
         {
             get;
             set;
-
         }
+
         [DataMember]
         public double HolidayHours
         {
             get;
             set;
-
         }
+
         [DataMember]
         public double BereavementHours
         {
             get;
             set;
-
         }
+
         [DataMember]
         public double JuryDutyHours
         {
             get;
             set;
-
         }
+
         [DataMember]
         public double ORTHours
         {
             get;
             set;
-
         }
 
         [DataMember]
@@ -75,9 +73,8 @@ namespace DataTransferObjects.Reports
             set;
         }
 
-
         [DataMember]
-        public int TimeEntrySectionId { get; set; }       
+        public int TimeEntrySectionId { get; set; }
 
         public double NonBillableHours
         {
@@ -91,11 +88,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                if (BillableHours == 0 && NonBillableHours == 0)
-                {
-                    return false;
-                }
-                return true;
+                return BillableHours != 0 || NonBillableHours != 0;
             }
         }
 
@@ -111,7 +104,6 @@ namespace DataTransferObjects.Reports
         {
             get;
             set;
-
         }
 
         [DataMember]
@@ -119,7 +111,6 @@ namespace DataTransferObjects.Reports
         {
             get;
             set;
-
         }
 
         [DataMember]
@@ -127,9 +118,7 @@ namespace DataTransferObjects.Reports
         {
             get;
             set;
-
         }
-
 
         public double AdminstrativeHours
         {
@@ -137,7 +126,6 @@ namespace DataTransferObjects.Reports
             {
                 return PTOHours + HolidayHours + BereavementHours + JuryDutyHours + ORTHours + UnpaidHours + SickOrSafeLeaveHours;
             }
-
         }
 
         [DataMember]
@@ -184,7 +172,7 @@ namespace DataTransferObjects.Reports
             {
                 return ForecastedHoursUntilToday == 0 ? "N/A" : (BillableHoursUntilToday - ForecastedHoursUntilToday) >= 0 ? "+" + (BillableHoursUntilToday - ForecastedHoursUntilToday).ToString("0.00") : (BillableHoursUntilToday - ForecastedHoursUntilToday).ToString("0.00");
             }
-        }       
+        }
 
         public double BillableHoursVariance
         {
@@ -193,13 +181,11 @@ namespace DataTransferObjects.Reports
                 return (BillableHoursUntilToday - ForecastedHoursUntilToday);
             }
         }
-      
 
         private int BillableFirstHalfWidth
         {
             get
             {
-
                 return VariancePercent < 0 ? (100 - (VariancePercent * (-1))) : 100;
             }
         }
@@ -218,15 +204,7 @@ namespace DataTransferObjects.Reports
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("background-color: ");
-                if (ForecastedHoursUntilToday == 0)
-                {
-                    sb.Append("Gray;");
-                }
-                else
-                {
-                    sb.Append("White;");
-                }
-
+                sb.Append(ForecastedHoursUntilToday == 0 ? "Gray;" : "White;");
                 sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(BillableFirstHalfWidth + "%;");
@@ -290,7 +268,6 @@ namespace DataTransferObjects.Reports
                 }
                 else if (!BillingType.Equals("Fixed"))
                 {
-
                     sb.Append("Green;");
                 }
                 else if (BillingType.Equals("Fixed"))
@@ -312,15 +289,7 @@ namespace DataTransferObjects.Reports
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("background-color: ");
-                if (ForecastedHoursUntilToday == 0)
-                {
-                    sb.Append("Gray;");
-                }
-                else
-                {
-                    sb.Append("White;");
-                }
-
+                sb.Append(ForecastedHoursUntilToday == 0 ? "Gray;" : "White;");
                 sb.Append("height: 24px;");
                 sb.Append("width: ");
                 sb.Append(ForecastedSecondHalfWidth + "%;");
@@ -341,8 +310,6 @@ namespace DataTransferObjects.Reports
             {
                 DayTotalHours.Add(dt);
             }
-
         }
     }
 }
-
