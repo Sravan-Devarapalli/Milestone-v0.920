@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.ServiceModel.Activation;
 using DataAccess;
 using DataTransferObjects;
-using DataTransferObjects.CompositeObjects;
-using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
-using System.Web;
 
 namespace PracticeManagementService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TimeTypeService : ITimeTypeService
     {
-
         /// <summary>
         /// Retrieves all existing time types
         /// </summary>
@@ -64,7 +60,7 @@ namespace PracticeManagementService
             {
                 TimeTypeDAL.RemoveTimeType(timeTypeId);
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 throw e;
             }
@@ -82,7 +78,6 @@ namespace PracticeManagementService
             }
             catch (Exception e)
             {
-
                 throw e;
             }
         }
@@ -103,7 +98,6 @@ namespace PracticeManagementService
                 throw e;
             }
         }
-
 
         public string GetWorkTypeNameById(int worktypeId)
         {
@@ -143,8 +137,5 @@ namespace PracticeManagementService
         {
             return TimeTypeDAL.GetSickLeaveTimeType();
         }
-
     }
 }
-
-
