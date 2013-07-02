@@ -867,9 +867,7 @@
             public class Person
             {
                 public const string IsPersonAlreadyHavingStatus = "dbo.IsPersonAlreadyHavingStatus";
-                public const string SetNewManager = "dbo.SetNewManager";
                 public const string SetDefaultManager = "dbo.PersonSetDefaultManager";
-                public const string ListManagersSubordinates = "dbo.ListManagersSubordinates";
                 public const string PersonListByCategoryTypeAndPeriod = "[dbo].[PersonListByCategoryTypeAndPeriod]";
                 public const string UpdateIsWelcomeEmailSentForPerson = "dbo.UpdateIsWelcomeEmailSentForPerson";
                 public const string GetNoteRequiredDetailsForSelectedDateRange = "dbo.GetNoteRequiredDetailsForSelectedDateRange";
@@ -918,15 +916,10 @@
                 public const string MembershipAliasUpdateProcedure = "dbo.MembershipAliasUpdate";
                 public const string PersonOneOffListProcedure = "dbo.PersonOneOffList";
                 public const string PersonGetExcelSetProcedure = "dbo.PersonExcelSet";
-                public const string PermissionsGetAllowedClientsProcedure = "dbo.PermissionsGetAllowedClients";
-                public const string PermissionsGetAllowedGroupsProcedure = "dbo.PermissionsGetAllowedGroups";
                 public const string UserTemporaryCredentialsInsertProcedure = "dbo.UserTemporaryCredentialsInsert";
                 public const string GetTemporaryCredentialsByUserNameProcedure = "dbo.GetTemporaryCredentialsByUserName";
                 public const string SetNewPasswordForUserProcedure = "dbo.aspnet_Membership_SetPassword";
                 public const string DeleteTemporaryCredentialsByUserNameProcedure = "dbo.DeleteTemporaryCredentialsByUserName";
-                public const string PermissionsGetAllowedPracticeManagersProcedure = "dbo.PermissionsGetAllowedPracticeManagers";
-                public const string PermissionsGetAllowedPracticesProcedure = "dbo.PermissionsGetAllowedPractices";
-                public const string PermissionsGetAllowedSalespersonsProcedure = "dbo.PermissionsGetAllowedSalespersons";
                 public const string PermissionsGetAllProcedure = "dbo.PermissionsGetAll";
                 public const string PermissionsSetAllProcedure = "dbo.PermissionsSetAll";
                 public const string PersonMilestoneWithFinancials = "dbo.PersonMilestoneWithFinancials";
@@ -1370,3 +1363,4 @@
         }
     }
 }
+
