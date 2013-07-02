@@ -47,59 +47,51 @@ namespace DataAccess
 
         private static void ReadTitleTypes(SqlDataReader reader, List<TitleType> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int titleTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleTypeId);
+            int titleTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TitleType);
+            while (reader.Read())
             {
-                int titleTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleTypeId);
-                int titleTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TitleType);
-                while (reader.Read())
-                {
-                    result.Add(
-                        new TitleType()
+                result.Add(
+                    new TitleType()
                         {
                             TitleTypeId = reader.GetInt32(titleTypeIdIndex),
                             TitleTypeName = reader.GetString(titleTypeIndex)
                         });
-                }
             }
         }
 
-
         private static void ReadTitles(SqlDataReader reader, List<Title> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+            int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+            int titleTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleTypeId);
+            int titleTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TitleType);
+            int sortOrderIndex = reader.GetOrdinal(Constants.ColumnNames.SortOrder);
+            int pTOAccrualIndex = reader.GetOrdinal(Constants.ColumnNames.PTOAccrual);
+            int minimumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MinimumSalary);
+            int maximumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MaximumSalary);
+            int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.TitleInUse);
+
+            while (reader.Read())
             {
-
-                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
-                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
-                int titleTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleTypeId);
-                int titleTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TitleType);
-                int sortOrderIndex = reader.GetOrdinal(Constants.ColumnNames.SortOrder);
-                int pTOAccrualIndex = reader.GetOrdinal(Constants.ColumnNames.PTOAccrual);
-                int minimumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MinimumSalary);
-                int maximumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MaximumSalary);
-                int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.TitleInUse);
-
-
-                while (reader.Read())
-                {
-                    result.Add(
-                        new Title()
+                result.Add(
+                    new Title()
                         {
                             TitleId = reader.GetInt32(titleIdIndex),
                             TitleName = reader.GetString(titleIndex),
                             TitleType = new TitleType()
-                            {
-                                TitleTypeId = reader.GetInt32(titleTypeIdIndex),
-                                TitleTypeName = reader.GetString(titleTypeIndex)
-                            },
+                                {
+                                    TitleTypeId = reader.GetInt32(titleTypeIdIndex),
+                                    TitleTypeName = reader.GetString(titleTypeIndex)
+                                },
                             SortOrder = reader.GetInt32(sortOrderIndex),
                             PTOAccrual = reader.GetInt32(pTOAccrualIndex),
                             MinimumSalary = !reader.IsDBNull(minimumSalaryIndex) ? reader.GetInt32(minimumSalaryIndex) : (int?)null,
                             MaximumSalary = !reader.IsDBNull(maximumSalaryIndex) ? reader.GetInt32(maximumSalaryIndex) : (int?)null,
                             InUse = reader.GetBoolean(inUseIndex)
-
                         });
-                }
             }
         }
 
@@ -124,7 +116,6 @@ namespace DataAccess
         {
             if (reader.HasRows)
             {
-
                 int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
                 int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
                 int titleTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleTypeId);
@@ -133,7 +124,6 @@ namespace DataAccess
                 int pTOAccrualIndex = reader.GetOrdinal(Constants.ColumnNames.PTOAccrual);
                 int minimumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MinimumSalary);
                 int maximumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MaximumSalary);
-
 
                 while (reader.Read())
                 {
@@ -210,4 +200,3 @@ namespace DataAccess
         }
     }
 }
-
