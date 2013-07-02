@@ -292,61 +292,49 @@ namespace DataAccess
 
         private static void ReadMilestonePersonEntriesTimeOffs(SqlDataReader reader, List<MilestonePersonEntry> result)
         {
-            if (reader.NextResult() && reader.HasRows)
-            {
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var dateIndex = reader.GetOrdinal(Constants.ColumnNames.Date);
-                var actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
+            if (!reader.NextResult() || !reader.HasRows) return;
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var dateIndex = reader.GetOrdinal(Constants.ColumnNames.Date);
+            var actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
 
-                while (reader.Read())
+            while (reader.Read())
+            {
+                var personId = reader.GetInt32(personIdIndex);
+                if (!result.Any(mp => mp.ThisPerson.Id == personId)) continue;
+                MilestonePersonEntry mpe = result.First(mp => mp.ThisPerson.Id == personId);
+                if (mpe.PersonTimeOffList == null)
                 {
-                    var personId = reader.GetInt32(personIdIndex);
-                    MilestonePersonEntry mpe = null;
-                    if (result.Any(mp => mp.ThisPerson.Id == personId))
-                    {
-                        mpe = result.First(mp => mp.ThisPerson.Id == personId);
-                        if (mpe.PersonTimeOffList == null)
-                        {
-                            mpe.PersonTimeOffList = new Dictionary<DateTime, Decimal>();
-                        }
-                        mpe.PersonTimeOffList.Add(reader.GetDateTime(dateIndex), reader.GetDecimal(actualHoursIndex));
-                    }
+                    mpe.PersonTimeOffList = new Dictionary<DateTime, Decimal>();
                 }
+                mpe.PersonTimeOffList.Add(reader.GetDateTime(dateIndex), reader.GetDecimal(actualHoursIndex));
             }
         }
 
         private static void ReadMilestonePersonEntriesTimeOffs(SqlDataReader reader, List<MilestonePerson> result)
         {
-            if (reader.NextResult() && reader.HasRows)
+            if (!reader.NextResult() || !reader.HasRows) return;
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var dateIndex = reader.GetOrdinal(Constants.ColumnNames.Date);
+            var actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
+
+            while (reader.Read())
             {
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var dateIndex = reader.GetOrdinal(Constants.ColumnNames.Date);
-                var actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
+                var personId = reader.GetInt32(personIdIndex);
+                var date = reader.GetDateTime(dateIndex);
+                var hours = reader.GetDecimal(actualHoursIndex);
 
-                while (reader.Read())
+                if (!result.Any(mp => mp.Person.Id == personId)) continue;
+                List<MilestonePerson> milestonePersons = result.Where(mp => mp.Person.Id == personId).ToList();
+                foreach (MilestonePerson mp in milestonePersons)
                 {
-                    var personId = reader.GetInt32(personIdIndex);
-                    var date = reader.GetDateTime(dateIndex);
-                    var hours = reader.GetDecimal(actualHoursIndex);
-
-                    List<MilestonePerson> milestonePersons = null;
-                    if (result.Any(mp => mp.Person.Id == personId))
+                    if (mp.Entries == null) continue;
+                    foreach (var mpe in mp.Entries)
                     {
-                        milestonePersons = result.Where(mp => mp.Person.Id == personId).ToList();
-                        foreach (MilestonePerson mp in milestonePersons)
+                        if (mpe.PersonTimeOffList == null)
                         {
-                            if (mp.Entries != null)
-                            {
-                                foreach (var mpe in mp.Entries)
-                                {
-                                    if (mpe.PersonTimeOffList == null)
-                                    {
-                                        mpe.PersonTimeOffList = new Dictionary<DateTime, Decimal>();
-                                    }
-                                    mpe.PersonTimeOffList.Add(date, hours);
-                                }
-                            }
+                            mpe.PersonTimeOffList = new Dictionary<DateTime, Decimal>();
                         }
+                        mpe.PersonTimeOffList.Add(date, hours);
                     }
                 }
             }
@@ -655,214 +643,199 @@ namespace DataAccess
 
         private static void ReadMilestonePersons(DbDataReader reader, List<MilestonePerson> result)
         {
-            if (reader.HasRows)
-            {
-                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
-                var milestoneIdIndex = reader.GetOrdinal(MilestoneIdColumn);
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var startDateIndex = reader.GetOrdinal(StartDateColumn);
-                var endDateIndex = reader.GetOrdinal(EndDateColumn);
-                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                var projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
-                var projectNameIndex = reader.GetOrdinal(ProjectNameColumn);
-                var projectStartDateIndex = reader.GetOrdinal(ProjectStartDateColumn);
-                var projectEndDateIndex = reader.GetOrdinal(ProjectEndDateColumn);
-                var clientIdIndex = reader.GetOrdinal(ClientIdColumn);
-                var clientNameIndex = reader.GetOrdinal(ClientNameColumn);
-                var milestoneNameIndex = reader.GetOrdinal(MilestoneNameColumn);
-                var milestoneStartDateIndex = reader.GetOrdinal(MilestoneStartDateColumn);
-                var milestoneProjectedDeliveryDateIndex = reader.GetOrdinal(MilestoneProjectedDeliveryDateColumn);
-                var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
-                var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
+            if (!reader.HasRows) return;
+            var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+            var milestoneIdIndex = reader.GetOrdinal(MilestoneIdColumn);
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var startDateIndex = reader.GetOrdinal(StartDateColumn);
+            var endDateIndex = reader.GetOrdinal(EndDateColumn);
+            var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            var projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
+            var projectNameIndex = reader.GetOrdinal(ProjectNameColumn);
+            var projectStartDateIndex = reader.GetOrdinal(ProjectStartDateColumn);
+            var projectEndDateIndex = reader.GetOrdinal(ProjectEndDateColumn);
+            var clientIdIndex = reader.GetOrdinal(ClientIdColumn);
+            var clientNameIndex = reader.GetOrdinal(ClientNameColumn);
+            var milestoneNameIndex = reader.GetOrdinal(MilestoneNameColumn);
+            var milestoneStartDateIndex = reader.GetOrdinal(MilestoneStartDateColumn);
+            var milestoneProjectedDeliveryDateIndex = reader.GetOrdinal(MilestoneProjectedDeliveryDateColumn);
+            var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
+            var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
                 var salesCommissionIndex = reader.GetOrdinal(SalesCommissionColumn);
-                var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
-                var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
-                var amountIndex = reader.GetOrdinal(AmountColumn);
-                var isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
-                var discountIndex = reader.GetOrdinal(DiscountColumn);
-                var milestoneExpectedHoursIndex = reader.GetOrdinal(MilestoneExpectedHoursColumn);
-                var milestoneHourlyRevenueIndex = reader.GetOrdinal(MilestoneHourlyRevenueColumn);
-                var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+            var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
+            var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
+            var amountIndex = reader.GetOrdinal(AmountColumn);
+            var isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
+            var discountIndex = reader.GetOrdinal(DiscountColumn);
+            var milestoneExpectedHoursIndex = reader.GetOrdinal(MilestoneExpectedHoursColumn);
+            var milestoneHourlyRevenueIndex = reader.GetOrdinal(MilestoneHourlyRevenueColumn);
+            var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
 
-                int firstHireDateIndex;
-                try
-                {
-                    firstHireDateIndex = reader.GetOrdinal(Constants.ColumnNames.FirstHireDate);
-                }
-                catch
-                {
-                    firstHireDateIndex = -1;
-                }
+            int firstHireDateIndex;
+            try
+            {
+                firstHireDateIndex = reader.GetOrdinal(Constants.ColumnNames.FirstHireDate);
+            }
+            catch
+            {
+                firstHireDateIndex = -1;
+            }
 
-                int lastTerminationDateIndex;
-                try
-                {
-                    lastTerminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.LastTerminationDate);
-                }
-                catch
-                {
-                    lastTerminationDateIndex = -1;
-                }
+            int lastTerminationDateIndex;
+            try
+            {
+                lastTerminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.LastTerminationDate);
+            }
+            catch
+            {
+                lastTerminationDateIndex = -1;
+            }
 
-                int milestonePersonEntryIdIndex;
-                try
-                {
-                    milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
-                }
-                catch
-                {
-                    milestonePersonEntryIdIndex = -1;
-                }
+            int milestonePersonEntryIdIndex;
+            try
+            {
+                milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
+            }
+            catch
+            {
+                milestonePersonEntryIdIndex = -1;
+            }
 
-                int projectStatusIdIndex;
-                try
-                {
-                    projectStatusIdIndex = reader.GetOrdinal(ProjectStatusIdColumn);
-                }
-                catch
-                {
-                    projectStatusIdIndex = -1;
-                }
+            int projectStatusIdIndex;
+            try
+            {
+                projectStatusIdIndex = reader.GetOrdinal(ProjectStatusIdColumn);
+            }
+            catch
+            {
+                projectStatusIdIndex = -1;
+            }
 
-                int hireDateIndex, terminationDateIndex;
-                try
-                {
-                    hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
-                    terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
-                }
-                catch
-                {
-                    hireDateIndex = -1;
-                    terminationDateIndex = -1;
-                }
+            int hireDateIndex, terminationDateIndex;
+            try
+            {
+                hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
+            }
+            catch
+            {
+                hireDateIndex = -1;
+                terminationDateIndex = -1;
+            }
 
-                while (reader.Read())
-                {
-                    var milestonePerson = new MilestonePerson { Id = reader.GetInt32(milestonePersonIdIndex) };
+            while (reader.Read())
+            {
+                var milestonePerson = new MilestonePerson { Id = reader.GetInt32(milestonePersonIdIndex) };
 
-                    // Person on milestone
-                    var entry = new MilestonePersonEntry
-                                    {
-                                        StartDate = reader.GetDateTime(startDateIndex),
-                                        EndDate =
-                                            !reader.IsDBNull(endDateIndex)
-                                                ? (DateTime?)reader.GetDateTime(endDateIndex)
-                                                : null,
-                                        HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
-                                        ProjectedWorkloadWithVacation = reader.GetDecimal(expectedHoursWithVacationDaysIndex),
-                                        HourlyAmount = !reader.IsDBNull(milestoneHourlyRevenueIndex)
-                                                           ? reader.GetDecimal(milestoneHourlyRevenueIndex)
-                                                           : 0,
-                                        MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
-                                        ThisPerson = new Person()
-                                        {
-                                            Id = reader.GetInt32(personIdIndex),
-                                            FirstName = reader.GetString(firstNameIndex),
-                                            LastName = reader.GetString(lastNameIndex)
-                                        }
-                                    };
-
-                    if (milestonePersonEntryIdIndex > -1)
+                // Person on milestone
+                var entry = new MilestonePersonEntry
                     {
-                        entry.Id = reader.GetInt32(milestonePersonEntryIdIndex);
-                    }
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate =
+                            !reader.IsDBNull(endDateIndex)
+                                ? (DateTime?)reader.GetDateTime(endDateIndex)
+                                : null,
+                        HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
+                        ProjectedWorkloadWithVacation = reader.GetDecimal(expectedHoursWithVacationDaysIndex),
+                        HourlyAmount = !reader.IsDBNull(milestoneHourlyRevenueIndex)
+                                           ? reader.GetDecimal(milestoneHourlyRevenueIndex)
+                                           : 0,
+                        MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
+                        ThisPerson = new Person()
+                            {
+                                Id = reader.GetInt32(personIdIndex),
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex)
+                            }
+                    };
 
-                    if (!reader.IsDBNull(personRoleIdIndex))
+                if (milestonePersonEntryIdIndex > -1)
+                {
+                    entry.Id = reader.GetInt32(milestonePersonEntryIdIndex);
+                }
+
+                if (!reader.IsDBNull(personRoleIdIndex))
+                {
+                    entry.Role = new PersonRole
+                        {
+                            Id = reader.GetInt32(personRoleIdIndex),
+                            Name = reader.GetString(personRoleNameIndex)
+                        };
+                    entry.StartDate = !reader.IsDBNull(startDateIndex) ? reader.GetDateTime(startDateIndex) : DateTime.MinValue;
+                    entry.EndDate = !reader.IsDBNull(endDateIndex) ? reader.GetDateTime(endDateIndex) : DateTime.MaxValue;
+                }
+
+                milestonePerson.Entries = new List<MilestonePersonEntry>(1) { entry };
+
+                // Person details
+                milestonePerson.Person = new Person
                     {
-                        entry.Role = new PersonRole
-                                         {
-                                             Id = reader.GetInt32(personRoleIdIndex),
-                                             Name = reader.GetString(personRoleNameIndex)
-                                         };
-                        if (!reader.IsDBNull(startDateIndex))
-                        {
-                            entry.StartDate = reader.GetDateTime(startDateIndex);
-                        }
-                        else
-                        {
-                            entry.StartDate = DateTime.MinValue;
-                        }
-                        if (!reader.IsDBNull(endDateIndex))
-                        {
-                            entry.EndDate = reader.GetDateTime(endDateIndex);
-                        }
-                        else
-                        {
-                            entry.EndDate = DateTime.MaxValue;
-                        }
-                    }
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex)
+                    };
 
-                    milestonePerson.Entries = new List<MilestonePersonEntry>(1) { entry };
-
-                    // Person details
-                    milestonePerson.Person = new Person
-                                                 {
-                                                     Id = reader.GetInt32(personIdIndex),
-                                                     FirstName = reader.GetString(firstNameIndex),
-                                                     LastName = reader.GetString(lastNameIndex)
-                                                 };
-
-                    if (hireDateIndex >= 0 && terminationDateIndex >= 0)
-                    {
-                        milestonePerson.Person.HireDate = reader.GetDateTime(hireDateIndex);
-                        milestonePerson.Person.TerminationDate = !reader.IsDBNull(terminationDateIndex)
+                if (hireDateIndex >= 0 && terminationDateIndex >= 0)
+                {
+                    milestonePerson.Person.HireDate = reader.GetDateTime(hireDateIndex);
+                    milestonePerson.Person.TerminationDate = !reader.IsDBNull(terminationDateIndex)
                                                                  ? (DateTime?)reader.GetDateTime(terminationDateIndex)
                                                                  : null;
-                    }
+                }
 
-                    if (firstHireDateIndex > -1)
+                if (firstHireDateIndex > -1)
+                {
+                    milestonePerson.Person.FirstHireDate = reader.GetDateTime(firstHireDateIndex);
+                }
+
+                if (lastTerminationDateIndex > -1)
+                {
+                    milestonePerson.Person.LastTerminationDate = reader.GetDateTime(lastTerminationDateIndex);
+                }
+
+                // Seniority
+                if (!reader.IsDBNull(personSeniorityIdIndex))
+                {
+                    milestonePerson.Person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex) };
+                }
+
+                // Milestone details
+                var project = new Project
                     {
-                        milestonePerson.Person.FirstHireDate = reader.GetDateTime(firstHireDateIndex);
-                    }
-
-                    if (lastTerminationDateIndex > -1)
+                        Id = reader.GetInt32(projectIdIndex),
+                        Name = reader.GetString(projectNameIndex),
+                        StartDate = reader.GetDateTime(projectStartDateIndex),
+                        EndDate = reader.GetDateTime(projectEndDateIndex),
+                        Discount = reader.GetDecimal(discountIndex)
+                    };
+                milestonePerson.Milestone = new Milestone
                     {
-                        milestonePerson.Person.LastTerminationDate = reader.GetDateTime(lastTerminationDateIndex);
-                    }
+                        Id = reader.GetInt32(milestoneIdIndex),
+                        Description = reader.GetString(milestoneNameIndex),
+                        Amount =
+                            !reader.IsDBNull(amountIndex)
+                                ? (decimal?)reader.GetDecimal(amountIndex)
+                                : null,
+                        StartDate = reader.GetDateTime(milestoneStartDateIndex),
+                        ProjectedDeliveryDate =
+                            reader.GetDateTime(milestoneProjectedDeliveryDateIndex),
+                        IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex),
+                        ExpectedHours = reader.GetDecimal(milestoneExpectedHoursIndex),
+                        Project = project
+                    };
 
-                    // Seniority
-                    if (!reader.IsDBNull(personSeniorityIdIndex))
+                // Project details
+
+                if (projectStatusIdIndex >= 0)
+                    milestonePerson.Milestone.Project.Status = new ProjectStatus { Id = reader.GetInt32(projectStatusIdIndex) };
+
+                // Client details
+                milestonePerson.Milestone.Project.Client = new Client
                     {
-                        milestonePerson.Person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex) };
-                    }
-
-                    // Milestone details
-                    var project = new Project
-                                      {
-                                          Id = reader.GetInt32(projectIdIndex),
-                                          Name = reader.GetString(projectNameIndex),
-                                          StartDate = reader.GetDateTime(projectStartDateIndex),
-                                          EndDate = reader.GetDateTime(projectEndDateIndex),
-                                          Discount = reader.GetDecimal(discountIndex)
-                                      };
-                    milestonePerson.Milestone = new Milestone
-                                                    {
-                                                        Id = reader.GetInt32(milestoneIdIndex),
-                                                        Description = reader.GetString(milestoneNameIndex),
-                                                        Amount =
-                                                            !reader.IsDBNull(amountIndex)
-                                                                ? (decimal?)reader.GetDecimal(amountIndex)
-                                                                : null,
-                                                        StartDate = reader.GetDateTime(milestoneStartDateIndex),
-                                                        ProjectedDeliveryDate =
-                                                            reader.GetDateTime(milestoneProjectedDeliveryDateIndex),
-                                                        IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex),
-                                                        ExpectedHours = reader.GetDecimal(milestoneExpectedHoursIndex),
-                                                        Project = project
-                                                    };
-
-                    // Project details
-
-                    if (projectStatusIdIndex >= 0)
-                        milestonePerson.Milestone.Project.Status = new ProjectStatus { Id = reader.GetInt32(projectStatusIdIndex) };
-
-                    // Client details
-                    milestonePerson.Milestone.Project.Client = new Client
-                                                                   {
-                                                                       Id = reader.GetInt32(clientIdIndex),
-                                                                       Name = reader.GetString(clientNameIndex)
-                                                                   };
+                        Id = reader.GetInt32(clientIdIndex),
+                        Name = reader.GetString(clientNameIndex)
+                    };
 
                     // Sales Commission
                     milestonePerson.Milestone.Project.SalesCommission =
@@ -872,71 +845,69 @@ namespace DataAccess
                             };
 
                     result.Add(milestonePerson);
-                }
             }
         }
 
         private static void ReadMilestonePersonsForTEbyProjectReport(DbDataReader reader, List<MilestonePerson> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+
+            while (reader.Read())
             {
-                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
-
-                while (reader.Read())
-                {
-                    var milestonePerson = new MilestonePerson { Id = reader.GetInt32(milestonePersonIdIndex) };
-
-                    // Person details
-                    milestonePerson.Person = new Person
+                var milestonePerson = new MilestonePerson
                     {
-                        Id = reader.GetInt32(personIdIndex),
-                        FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex)
+                        Id = reader.GetInt32(milestonePersonIdIndex),
+                        Person = new Person
+                            {
+                                Id = reader.GetInt32(personIdIndex),
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex)
+                            }
                     };
 
-                    result.Add(milestonePerson);
-                }
+                // Person details
+
+                result.Add(milestonePerson);
             }
         }
 
         private static void ReadMilestonePersonsShort(DbDataReader reader, List<Project> projects)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            var projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
+            var seniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+
+            while (reader.Read())
             {
-                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                var projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
-                var seniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+                var project = new Project { Id = reader.GetInt32(projectIdIndex) };
 
-                while (reader.Read())
-                {
-                    var project = new Project { Id = reader.GetInt32(projectIdIndex) };
+                var milestonePerson =
+                    new MilestonePerson
+                        {
+                            Id = reader.GetInt32(milestonePersonIdIndex),
+                            Person = new Person
+                                {
+                                    Id = reader.GetInt32(personIdIndex),
+                                    FirstName = reader.GetString(firstNameIndex),
+                                    LastName = reader.GetString(lastNameIndex),
+                                    Seniority = !reader.IsDBNull(seniorityIdIndex) ?
+                                                    new Seniority
+                                                        {
+                                                            Id = reader.GetInt32(seniorityIdIndex)
+                                                        } : null
+                                }
+                        };
 
-                    var milestonePerson =
-                        new MilestonePerson
-                            {
-                                Id = reader.GetInt32(milestonePersonIdIndex),
-                                Person = new Person
-                                             {
-                                                 Id = reader.GetInt32(personIdIndex),
-                                                 FirstName = reader.GetString(firstNameIndex),
-                                                 LastName = reader.GetString(lastNameIndex),
-                                                 Seniority = !reader.IsDBNull(seniorityIdIndex) ?
-                                                 new Seniority
-                                                 {
-                                                     Id = reader.GetInt32(seniorityIdIndex)
-                                                 } : null
-                                             }
-                            };
-
-                    var i = projects.IndexOf(project);
-                    projects[i].ProjectPersons.Add(milestonePerson);
-                }
+                var i = projects.IndexOf(project);
+                projects[i].ProjectPersons.Add(milestonePerson);
             }
         }
 
@@ -1012,136 +983,132 @@ namespace DataAccess
 
         private static void ReadMilestonePersonAssociations(DbDataReader reader, List<MilestonePerson> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+            var milestoneIdIndex = reader.GetOrdinal(MilestoneIdColumn);
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
+            var milestoneNameIndex = reader.GetOrdinal(MilestoneNameColumn);
+            var milestoneStartDateIndex = reader.GetOrdinal(MilestoneStartDateColumn);
+            var milestoneProjectedDeliveryDateIndex = reader.GetOrdinal(MilestoneProjectedDeliveryDateColumn);
+            var projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
+            var projectNameIndex = reader.GetOrdinal(ProjectNameColumn);
+            var projectStartDateIndex = reader.GetOrdinal(ProjectStartDateColumn);
+            var projectEndDateIndex = reader.GetOrdinal(ProjectEndDateColumn);
+            var clientIdIndex = reader.GetOrdinal(ClientIdColumn);
+            var clientNameIndex = reader.GetOrdinal(ClientNameColumn);
+            var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+
+            while (reader.Read())
             {
-                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
-                var milestoneIdIndex = reader.GetOrdinal(MilestoneIdColumn);
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
-                var milestoneNameIndex = reader.GetOrdinal(MilestoneNameColumn);
-                var milestoneStartDateIndex = reader.GetOrdinal(MilestoneStartDateColumn);
-                var milestoneProjectedDeliveryDateIndex = reader.GetOrdinal(MilestoneProjectedDeliveryDateColumn);
-                var projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
-                var projectNameIndex = reader.GetOrdinal(ProjectNameColumn);
-                var projectStartDateIndex = reader.GetOrdinal(ProjectStartDateColumn);
-                var projectEndDateIndex = reader.GetOrdinal(ProjectEndDateColumn);
-                var clientIdIndex = reader.GetOrdinal(ClientIdColumn);
-                var clientNameIndex = reader.GetOrdinal(ClientNameColumn);
-                var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
-
-                while (reader.Read())
-                {
-                    var project = new Project
-                                      {
-                                          Id = reader.GetInt32(projectIdIndex),
-                                          Name = reader.GetString(projectNameIndex),
-                                          Client = new Client
-                                                       {
-                                                           Id = reader.GetInt32(clientIdIndex),
-                                                           Name = reader.GetString(clientNameIndex)
-                                                       },
-                                          StartDate = !reader.IsDBNull(projectStartDateIndex)
-                                                          ? (DateTime?)
-                                                            reader.GetDateTime(projectStartDateIndex)
-                                                          : null,
-                                          EndDate = !reader.IsDBNull(projectEndDateIndex)
-                                                        ? (DateTime?)
-                                                          reader.GetDateTime(projectEndDateIndex)
-                                                        : null
-                                      };
-
-                    var milestone = new Milestone
-                                        {
-                                            Id = reader.GetInt32(milestoneIdIndex),
-                                            IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex),
-                                            Description = reader.GetString(milestoneNameIndex),
-                                            StartDate = reader.GetDateTime(milestoneStartDateIndex),
-                                            ProjectedDeliveryDate =
-                                                reader.GetDateTime(milestoneProjectedDeliveryDateIndex),
-                                            Project = project
-                                        };
-
-                    var association = new MilestonePerson
-                                          {
-                                              Id = reader.GetInt32(milestonePersonIdIndex),
-                                              Milestone = milestone,
-                                              Person = new Person { Id = reader.GetInt32(personIdIndex) }
-                                          };
-
-                    if (!reader.IsDBNull(personSeniorityIdIndex))
+                var project = new Project
                     {
-                        association.Person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex) };
-                    }
+                        Id = reader.GetInt32(projectIdIndex),
+                        Name = reader.GetString(projectNameIndex),
+                        Client = new Client
+                            {
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex)
+                            },
+                        StartDate = !reader.IsDBNull(projectStartDateIndex)
+                                        ? (DateTime?)
+                                          reader.GetDateTime(projectStartDateIndex)
+                                        : null,
+                        EndDate = !reader.IsDBNull(projectEndDateIndex)
+                                      ? (DateTime?)
+                                        reader.GetDateTime(projectEndDateIndex)
+                                      : null
+                    };
 
-                    result.Add(association);
+                var milestone = new Milestone
+                    {
+                        Id = reader.GetInt32(milestoneIdIndex),
+                        IsHourlyAmount = reader.GetBoolean(isHourlyAmountIndex),
+                        Description = reader.GetString(milestoneNameIndex),
+                        StartDate = reader.GetDateTime(milestoneStartDateIndex),
+                        ProjectedDeliveryDate =
+                            reader.GetDateTime(milestoneProjectedDeliveryDateIndex),
+                        Project = project
+                    };
+
+                var association = new MilestonePerson
+                    {
+                        Id = reader.GetInt32(milestonePersonIdIndex),
+                        Milestone = milestone,
+                        Person = new Person { Id = reader.GetInt32(personIdIndex) }
+                    };
+
+                if (!reader.IsDBNull(personSeniorityIdIndex))
+                {
+                    association.Person.Seniority = new Seniority { Id = reader.GetInt32(personSeniorityIdIndex) };
                 }
+
+                result.Add(association);
             }
         }
 
         private static void ReadMilestonePersonEntries(SqlDataReader reader, List<MilestonePersonEntry> result)
         {
-            if (reader.HasRows)
-            {
-                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
-                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
-                var startDateIndex = reader.GetOrdinal(StartDateColumn);
-                var endDateIndex = reader.GetOrdinal(EndDateColumn);
-                var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
-                var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
-                var amountIndex = reader.GetOrdinal(AmountColumn);
-                var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
-                var personVacationsOnMilestoneIndex = reader.GetOrdinal(PersonVacationsOnMilestoneColumn);
-                var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
-                var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var locationIndex = reader.GetOrdinal(LocationColumn);
-                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            if (!reader.HasRows) return;
+            var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
+            var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+            var startDateIndex = reader.GetOrdinal(StartDateColumn);
+            var endDateIndex = reader.GetOrdinal(EndDateColumn);
+            var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
+            var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
+            var amountIndex = reader.GetOrdinal(AmountColumn);
+            var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
+            var personVacationsOnMilestoneIndex = reader.GetOrdinal(PersonVacationsOnMilestoneColumn);
+            var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
+            var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var locationIndex = reader.GetOrdinal(LocationColumn);
+            var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            var lastNameIndex = reader.GetOrdinal(LastNameColumn);
 
-                while (reader.Read())
-                {
-                    var entry =
-                        new MilestonePersonEntry
+            while (reader.Read())
+            {
+                var entry =
+                    new MilestonePersonEntry
+                        {
+                            Id = reader.GetInt32(milestonePersonEntryIdIndex),
+                            MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate =
+                                !reader.IsDBNull(endDateIndex)
+                                    ? (DateTime?)reader.GetDateTime(endDateIndex)
+                                    : null,
+                            HourlyAmount =
+                                !reader.IsDBNull(amountIndex)
+                                    ? (decimal?)reader.GetDecimal(amountIndex)
+                                    : null,
+                            HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
+                            VacationDays = reader.GetInt32(personVacationsOnMilestoneIndex),
+                            ProjectedWorkloadWithVacation = reader.GetDecimal(expectedHoursWithVacationDaysIndex),
+                            ThisPerson = new Person
+                                {
+                                    Id = reader.GetInt32(personIdIndex),
+                                    FirstName = reader.GetString(firstNameIndex),
+                                    LastName = reader.GetString(lastNameIndex),
+                                    Seniority = !reader.IsDBNull(personSeniorityIdIndex) ? new Seniority
+                                        {
+                                            Id = reader.GetInt32(personSeniorityIdIndex)
+                                        } : null
+                                },
+                            Location = !reader.IsDBNull(locationIndex)
+                                           ? reader.GetString(locationIndex)
+                                           : null
+                        };
+
+                if (!reader.IsDBNull(personRoleIdIndex))
+                    entry.Role =
+                        new PersonRole
                             {
-                                Id = reader.GetInt32(milestonePersonEntryIdIndex),
-                                MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
-                                StartDate = reader.GetDateTime(startDateIndex),
-                                EndDate =
-                                    !reader.IsDBNull(endDateIndex)
-                                        ? (DateTime?)reader.GetDateTime(endDateIndex)
-                                        : null,
-                                HourlyAmount =
-                                    !reader.IsDBNull(amountIndex)
-                                        ? (decimal?)reader.GetDecimal(amountIndex)
-                                        : null,
-                                HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
-                                VacationDays = reader.GetInt32(personVacationsOnMilestoneIndex),
-                                ProjectedWorkloadWithVacation = reader.GetDecimal(expectedHoursWithVacationDaysIndex),
-                                ThisPerson = new Person
-                                                 {
-                                                     Id = reader.GetInt32(personIdIndex),
-                                                     FirstName = reader.GetString(firstNameIndex),
-                                                     LastName = reader.GetString(lastNameIndex),
-                                                     Seniority = !reader.IsDBNull(personSeniorityIdIndex) ? new Seniority
-                                                                     {
-                                                                         Id = reader.GetInt32(personSeniorityIdIndex)
-                                                                     } : null
-                                                 },
-                                Location = !reader.IsDBNull(locationIndex)
-                                        ? reader.GetString(locationIndex)
-                                        : null
+                                Id = reader.GetInt32(personRoleIdIndex),
+                                Name = reader.GetString(personRoleNameIndex)
                             };
 
-                    if (!reader.IsDBNull(personRoleIdIndex))
-                        entry.Role =
-                            new PersonRole
-                                {
-                                    Id = reader.GetInt32(personRoleIdIndex),
-                                    Name = reader.GetString(personRoleNameIndex)
-                                };
-
-                    result.Add(entry);
-                }
+                result.Add(entry);
             }
         }
 
@@ -1212,8 +1179,6 @@ namespace DataAccess
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
-                    var result = new List<MilestonePerson>();
-
                     LoadMilestonePersonEntries(reader, milestonePersons);
                     LoadMilestonePersonEntriesFinancials(reader, milestonePersons);
                     ReadMilestonePersonEntriesTimeOffs(reader, milestonePersons);
@@ -1223,25 +1188,23 @@ namespace DataAccess
 
         private static void LoadMilestonePersonEntriesFinancials(SqlDataReader reader, List<MilestonePerson> milestonePersons)
         {
-            if (reader.NextResult() && reader.HasRows)
-            {
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
-                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            if (!reader.NextResult() || !reader.HasRows) return;
+            int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+            var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
 
-                while (reader.Read())
-                {
-                    var personId = reader.GetInt32(personIdIndex);
-                    var entryId = reader.GetInt32(milestonePersonEntryIdIndex);
-                    var entry = (milestonePersons.Find(mp => mp.Person.Id.Value == personId)).Entries.Find(e => e.Id == entryId);
-                    entry.ComputedFinancials
-                     = new ComputedFinancials
-                   {
-                       Revenue = reader.GetDecimal(revenueIndex),
-                       GrossMargin = reader.GetDecimal(grossMarginIndex),
-                   };
-                }
+            while (reader.Read())
+            {
+                var personId = reader.GetInt32(personIdIndex);
+                var entryId = reader.GetInt32(milestonePersonEntryIdIndex);
+                var entry = (milestonePersons.Find(mp => mp.Person.Id.Value == personId)).Entries.Find(e => e.Id == entryId);
+                entry.ComputedFinancials
+                    = new ComputedFinancials
+                        {
+                            Revenue = reader.GetDecimal(revenueIndex),
+                            GrossMargin = reader.GetDecimal(grossMarginIndex),
+                        };
             }
         }
 
@@ -1316,92 +1279,88 @@ namespace DataAccess
 
         private static void LoadMilestonePersonEntryFinancials(SqlDataReader reader, MilestonePersonEntry mpe)
         {
-            if (reader.NextResult() && reader.HasRows)
-            {
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+            if (!reader.NextResult() || !reader.HasRows) return;
+            int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
 
-                while (reader.Read())
-                {
-                    mpe.ComputedFinancials
-                     = new ComputedFinancials
-                     {
-                         Revenue = reader.GetDecimal(revenueIndex),
-                         GrossMargin = reader.GetDecimal(grossMarginIndex),
-                     };
-                }
+            while (reader.Read())
+            {
+                mpe.ComputedFinancials
+                    = new ComputedFinancials
+                        {
+                            Revenue = reader.GetDecimal(revenueIndex),
+                            GrossMargin = reader.GetDecimal(grossMarginIndex),
+                        };
             }
         }
 
         private static void LoadMilestonePersonEntries(SqlDataReader reader, List<MilestonePerson> milestonePersons)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+            var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
+            var startDateIndex = reader.GetOrdinal(StartDateColumn);
+            var endDateIndex = reader.GetOrdinal(EndDateColumn);
+            var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
+            var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
+            var amountIndex = reader.GetOrdinal(AmountColumn);
+            var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
+            var personVacationsOnMilestoneIndex = reader.GetOrdinal(PersonVacationsOnMilestoneColumn);
+            var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
+            var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
+            var personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+            var lastNameIndex = reader.GetOrdinal(LastNameColumn);
+            var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
+            var isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+            while (reader.Read())
             {
-                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
-                var milestonePersonIdIndex = reader.GetOrdinal(MilestonePersonIdColumn);
-                var startDateIndex = reader.GetOrdinal(StartDateColumn);
-                var endDateIndex = reader.GetOrdinal(EndDateColumn);
-                var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
-                var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
-                var amountIndex = reader.GetOrdinal(AmountColumn);
-                var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
-                var personVacationsOnMilestoneIndex = reader.GetOrdinal(PersonVacationsOnMilestoneColumn);
-                var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
-                var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
-                var personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                var firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                var lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
-                var isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
-                while (reader.Read())
-                {
-                    var entry =
-                        new MilestonePersonEntry
+                var entry =
+                    new MilestonePersonEntry
+                        {
+                            Id = reader.GetInt32(milestonePersonEntryIdIndex),
+                            MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate =
+                                !reader.IsDBNull(endDateIndex)
+                                    ? (DateTime?)reader.GetDateTime(endDateIndex)
+                                    : null,
+                            HourlyAmount =
+                                !reader.IsDBNull(amountIndex)
+                                    ? (decimal?)reader.GetDecimal(amountIndex)
+                                    : null,
+                            HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
+                            VacationDays = reader.GetInt32(personVacationsOnMilestoneIndex),
+                            ProjectedWorkloadWithVacation = reader.GetDecimal(expectedHoursWithVacationDaysIndex),
+                            ThisPerson = new Person
+                                {
+                                    Id = reader.GetInt32(personIdIndex),
+                                    FirstName = reader.GetString(firstNameIndex),
+                                    LastName = reader.GetString(lastNameIndex),
+                                    IsStrawMan = reader.GetBoolean(isStrawManIndex),
+                                    Seniority = !reader.IsDBNull(personSeniorityIdIndex)
+                                                    ? new Seniority
+                                                        {
+                                                            Id = reader.GetInt32(personSeniorityIdIndex)
+                                                        } : null
+                                },
+                            HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
+                        };
+
+                if (!reader.IsDBNull(personRoleIdIndex))
+                    entry.Role =
+                        new PersonRole
                             {
-                                Id = reader.GetInt32(milestonePersonEntryIdIndex),
-                                MilestonePersonId = reader.GetInt32(milestonePersonIdIndex),
-                                StartDate = reader.GetDateTime(startDateIndex),
-                                EndDate =
-                                    !reader.IsDBNull(endDateIndex)
-                                        ? (DateTime?)reader.GetDateTime(endDateIndex)
-                                        : null,
-                                HourlyAmount =
-                                    !reader.IsDBNull(amountIndex)
-                                        ? (decimal?)reader.GetDecimal(amountIndex)
-                                        : null,
-                                HoursPerDay = reader.GetDecimal(hoursPerDayIndex),
-                                VacationDays = reader.GetInt32(personVacationsOnMilestoneIndex),
-                                ProjectedWorkloadWithVacation = reader.GetDecimal(expectedHoursWithVacationDaysIndex),
-                                ThisPerson = new Person
-                                                 {
-                                                     Id = reader.GetInt32(personIdIndex),
-                                                     FirstName = reader.GetString(firstNameIndex),
-                                                     LastName = reader.GetString(lastNameIndex),
-                                                     IsStrawMan = reader.GetBoolean(isStrawManIndex),
-                                                     Seniority = !reader.IsDBNull(personSeniorityIdIndex)
-                                                                 ? new Seniority
-                                                                     {
-                                                                         Id = reader.GetInt32(personSeniorityIdIndex)
-                                                                     } : null
-                                                 },
-                                HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
+                                Id = reader.GetInt32(personRoleIdIndex),
+                                Name = reader.GetString(personRoleNameIndex)
                             };
 
-                    if (!reader.IsDBNull(personRoleIdIndex))
-                        entry.Role =
-                            new PersonRole
-                                {
-                                    Id = reader.GetInt32(personRoleIdIndex),
-                                    Name = reader.GetString(personRoleNameIndex)
-                                };
-
-                    var mperson = milestonePersons.Find(mp => mp.Person != null && mp.Person.Id == entry.ThisPerson.Id);
-                    if (mperson.Entries == null)
-                    {
-                        mperson.Entries = new List<MilestonePersonEntry>();
-                    }
-                    mperson.Entries.Add(entry);
+                var mperson = milestonePersons.Find(mp => mp.Person != null && mp.Person.Id == entry.ThisPerson.Id);
+                if (mperson.Entries == null)
+                {
+                    mperson.Entries = new List<MilestonePersonEntry>();
                 }
+                mperson.Entries.Add(entry);
             }
         }
 
@@ -1480,11 +1439,13 @@ namespace DataAccess
                                                    ? (object)entry.ThisPerson.Id.Value
                                                    : DBNull.Value);
 
-                    var milestonePersonId = new SqlParameter();
-                    milestonePersonId.ParameterName = MilestonePersonIdParam;
-                    milestonePersonId.SqlDbType = SqlDbType.Int;
-                    milestonePersonId.Value = entry.MilestonePersonId;
-                    milestonePersonId.Direction = ParameterDirection.InputOutput;
+                    var milestonePersonId = new SqlParameter
+                        {
+                            ParameterName = MilestonePersonIdParam,
+                            SqlDbType = SqlDbType.Int,
+                            Value = entry.MilestonePersonId,
+                            Direction = ParameterDirection.InputOutput
+                        };
                     command.Parameters.Add(milestonePersonId);
 
                     command.Parameters.AddWithValue(StartDateParam, entry.StartDate);
