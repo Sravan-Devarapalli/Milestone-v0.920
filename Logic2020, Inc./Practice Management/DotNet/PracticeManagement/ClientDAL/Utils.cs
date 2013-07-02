@@ -1,8 +1,7 @@
 ﻿using System;
-using DataTransferObjects.TimeEntry;
-using DataTransferObjects.Utils;
-using DataTransferObjects;
 using System.Collections.Generic;
+using DataTransferObjects;
+using DataTransferObjects.TimeEntry;
 
 namespace DataAccess
 {
@@ -29,33 +28,26 @@ namespace DataAccess
         public static List<Person> stringToProjectManagersList(string csv)
         {
             List<Person> pmanagers = new List<Person>();
-            string[] idFirstnameLastNamesList = csv.Split(DataTransferObjects.Utils.Generic.LastNameSeperator,StringSplitOptions.RemoveEmptyEntries);
+            string[] idFirstnameLastNamesList = csv.Split(DataTransferObjects.Utils.Generic.LastNameSeperator, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var idFirstnameLastName in idFirstnameLastNamesList)
             {
                 string[] pm = idFirstnameLastName.Split(DataTransferObjects.Utils.Generic.Seperators, StringSplitOptions.RemoveEmptyEntries);
-                
-                if(pm.Length == 3)
-                {
-                    int id = Convert.ToInt32(pm[0]);
-                    string firstName = pm[1];
-                    string lastName = pm[2];
 
-                    pmanagers.Add(new Person() 
+                if (pm.Length != 3) continue;
+                int id = Convert.ToInt32(pm[0]);
+                string firstName = pm[1];
+                string lastName = pm[2];
+
+                pmanagers.Add(new Person
                     {
-                        Id= id,
+                        Id = id,
                         FirstName = firstName,
                         LastName = lastName
                     });
-                }
             }
 
-            if (pmanagers.Count > 0)
-                return pmanagers;
-            else
-            {
-                return null;
-            }
+            return pmanagers.Count > 0 ? pmanagers : null;
         }
 
         #region Utils
@@ -85,7 +77,7 @@ namespace DataAccess
             if (status == null)
                 return null;
 
-            var reviewStatus = (ReviewStatus) Enum.Parse(typeof (ReviewStatus), status);
+            var reviewStatus = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), status);
 
             switch (reviewStatus)
             {
@@ -139,6 +131,6 @@ namespace DataAccess
             return result;
         }
 
-        #endregion
+        #endregion Utils
     }
 }
