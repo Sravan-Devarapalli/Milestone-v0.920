@@ -80,7 +80,6 @@ namespace DataAccess
                             int FilePathIndex = reader.GetOrdinal(FilePathColumn);
                             int DataColumnIndex = reader.GetOrdinal(DataColumn);
 
-
                             while (reader.Read())
                             {
                                 companylogo.Title = reader.GetString(titleIndex);
@@ -111,25 +110,22 @@ namespace DataAccess
 
         public static void SaveResourceKeyValuePairs(SettingsType settingType, Dictionary<string, string> dictionary)
         {
-            if (dictionary != null && dictionary.Keys.Count > 0)
+            if (dictionary == null || dictionary.Keys.Count <= 0) return;
+            foreach (var item in dictionary)
             {
-
-                foreach (var item in dictionary)
+                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
                 {
-                    using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                    using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveSettingsKeyValuePairsProcedure, connection))
                     {
-                        using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveSettingsKeyValuePairsProcedure, connection))
-                        {
-                            command.CommandType = CommandType.StoredProcedure;
-                            command.CommandTimeout = connection.ConnectionTimeout;
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandTimeout = connection.ConnectionTimeout;
 
-                            command.Parameters.AddWithValue(Constants.ParameterNames.SettingsTypeParam, (int)settingType);
-                            command.Parameters.AddWithValue(Constants.ParameterNames.SettingsKeyParam, item.Key);
-                            command.Parameters.AddWithValue(Constants.ParameterNames.ValueParam, item.Value);
+                        command.Parameters.AddWithValue(Constants.ParameterNames.SettingsTypeParam, (int)settingType);
+                        command.Parameters.AddWithValue(Constants.ParameterNames.SettingsKeyParam, item.Key);
+                        command.Parameters.AddWithValue(Constants.ParameterNames.ValueParam, item.Value);
 
-                            connection.Open();
-                            command.ExecuteNonQuery();
-                        }
+                        connection.Open();
+                        command.ExecuteNonQuery();
                     }
                 }
             }
@@ -202,40 +198,26 @@ namespace DataAccess
 
         public static void SaveMarginInfoDetail(List<Triple<DefaultGoalType, Triple<SettingsType, string, string>, List<ClientMarginColorInfo>>> marginInfoList)
         {
-            if (marginInfoList != null && marginInfoList.Count > 0)
+            if (marginInfoList == null || marginInfoList.Count <= 0) return;
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                connection.Open();
+
+                SqlTransaction transaction = connection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+
+                foreach (var triple in marginInfoList)
                 {
-                    connection.Open();
+                    SaveResourceKeyValuePairItem((SettingsType)triple.Second.First, triple.Second.Second, triple.Second.Third);
 
-                    SqlTransaction transaction = connection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
-
-                    foreach (var triple in marginInfoList)
+                    if (!Convert.ToBoolean(triple.Second.Third) || triple.Third == null) continue;
+                    for (int i = 0; i < triple.Third.Count; i++)
                     {
-                        SaveResourceKeyValuePairItem((SettingsType)triple.Second.First, triple.Second.Second.ToString(), triple.Second.Third.ToString());
-
-                        if (Convert.ToBoolean(triple.Second.Third) && triple.Third != null)
-                        {
-
-                            for (int i = 0; i < triple.Third.Count; i++)
-                            {
-                                bool isDeletePreviousMarginInfo = false;
-                                if (i == 0)
-                                {
-                                    isDeletePreviousMarginInfo = true;
-                                }
-                                else
-                                {
-                                    isDeletePreviousMarginInfo = false;
-                                }
-                                DefaultMarginColorInfoInsert((int)triple.First, triple.Third[i], isDeletePreviousMarginInfo, connection, transaction);
-                            }
-
-                        }
+                        bool isDeletePreviousMarginInfo = i == 0;
+                        DefaultMarginColorInfoInsert((int)triple.First, triple.Third[i], isDeletePreviousMarginInfo, connection, transaction);
                     }
-
-                    transaction.Commit();
                 }
+
+                transaction.Commit();
             }
         }
 
@@ -274,7 +256,6 @@ namespace DataAccess
                 {
                     throw ex;
                 }
-
             }
         }
 
@@ -296,38 +277,33 @@ namespace DataAccess
                     }
                 }
             }
-            if (clientMarginColorInfo.Count > 0)
-                return clientMarginColorInfo;
-            else
-                return null;
+            return clientMarginColorInfo.Count > 0 ? clientMarginColorInfo : null;
         }
 
         private static void ReadMarginColorInfoDefaults(SqlDataReader reader, List<ClientMarginColorInfo> clientMarginColorInfo)
         {
-            if (reader.HasRows)
-            {
-                int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.ColorIdColumn);
-                int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
-                int startRangeIndex = reader.GetOrdinal(Constants.ColumnNames.StartRangeColumn);
-                int endRangeIndex = reader.GetOrdinal(Constants.ColumnNames.EndRangeColumn);
-                int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+            if (!reader.HasRows) return;
+            int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.ColorIdColumn);
+            int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
+            int startRangeIndex = reader.GetOrdinal(Constants.ColumnNames.StartRangeColumn);
+            int endRangeIndex = reader.GetOrdinal(Constants.ColumnNames.EndRangeColumn);
+            int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
 
-                while (reader.Read())
-                {
-                    clientMarginColorInfo.Add(
-                                                new ClientMarginColorInfo()
-                                                {
-                                                    ColorInfo = new ColorInformation()
-                                                    {
-                                                        ColorId = reader.GetInt32(colorIdIndex),
-                                                        ColorValue = reader.GetString(colorValueIndex),
-                                                        ColorDescription = reader.GetString(colorDescriptionIndex)
-                                                    },
-                                                    StartRange = reader.GetInt32(startRangeIndex),
-                                                    EndRange = reader.GetInt32(endRangeIndex),
-                                                }
-                        );
-                }
+            while (reader.Read())
+            {
+                clientMarginColorInfo.Add(
+                    new ClientMarginColorInfo()
+                        {
+                            ColorInfo = new ColorInformation()
+                                {
+                                    ColorId = reader.GetInt32(colorIdIndex),
+                                    ColorValue = reader.GetString(colorValueIndex),
+                                    ColorDescription = reader.GetString(colorDescriptionIndex)
+                                },
+                            StartRange = reader.GetInt32(startRangeIndex),
+                            EndRange = reader.GetInt32(endRangeIndex),
+                        }
+                    );
             }
         }
 
@@ -387,28 +363,25 @@ namespace DataAccess
                 }
             }
             return quicklinks;
-
         }
 
         private static void ReadQuickLinks(SqlDataReader reader, List<QuickLinks> quicklinks)
         {
-            if (reader.HasRows)
-            {
-                int dashBoardTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.DashBoardTypeIdColumn);
-                int idIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
-                int linkNameIndex = reader.GetOrdinal(Constants.ColumnNames.LinkNameColumn);
-                int virtualPathIndex = reader.GetOrdinal(Constants.ColumnNames.VirtualPathColumn);
+            if (!reader.HasRows) return;
+            int dashBoardTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.DashBoardTypeIdColumn);
+            int idIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+            int linkNameIndex = reader.GetOrdinal(Constants.ColumnNames.LinkNameColumn);
+            int virtualPathIndex = reader.GetOrdinal(Constants.ColumnNames.VirtualPathColumn);
 
-                while (reader.Read())
-                {
-                    quicklinks.Add( new QuickLinks()
-                                                {
-                                                    DashBoardType = (DashBoardType)reader.GetInt32(dashBoardTypeIdIndex),
-                                                    Id = reader.GetInt32(idIndex),
-                                                    LinkName = reader.GetString(linkNameIndex),
-                                                    VirtualPath = reader.GetString(virtualPathIndex)
-                                                });
-                }
+            while (reader.Read())
+            {
+                quicklinks.Add(new QuickLinks()
+                    {
+                        DashBoardType = (DashBoardType)reader.GetInt32(dashBoardTypeIdIndex),
+                        Id = reader.GetInt32(idIndex),
+                        LinkName = reader.GetString(linkNameIndex),
+                        VirtualPath = reader.GetString(virtualPathIndex)
+                    });
             }
         }
 
@@ -485,7 +458,5 @@ namespace DataAccess
                 }
             }
         }
-
     }
 }
-
