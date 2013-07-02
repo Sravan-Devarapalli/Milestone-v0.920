@@ -7,7 +7,6 @@ using System.Linq;
 using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.Financials;
-using DataTransferObjects.Utils;
 
 namespace DataAccess
 {
@@ -447,99 +446,95 @@ namespace DataAccess
 
         private static void ReadMonthlyFinancialsForListOfProjects(DbDataReader reader, List<Project> projects)
         {
-            if (reader.HasRows)
-            {
-                int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
-                int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
-                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
-                int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
+            if (!reader.HasRows) return;
+            int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+            int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
+            int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
+            int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+            int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
                 int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
                 int practiceManagementCommissionIndex =
                     reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
-                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
-                int actualRevenueIndex = -1;
-                int actualGrossMarginIndex = -1;
+            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+            int actualRevenueIndex = -1;
+            int actualGrossMarginIndex = -1;
 
-                try
-                {
-                    actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
-                    actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
-                }
-                catch { }
+            try
+            {
+                actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
+                actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
+            }
+            catch { }
 
-                while (reader.Read())
-                {
-                    var project = new Project { Id = reader.GetInt32(projectIdIndex) };
-                    var financials =
-                        ReadComputedFinancials(
-                          reader,
-                          financialDateIndex,
-                          revenueIndex,
-                          revenueNetIndex,
-                          cogsIndex,
-                          grossMarginIndex,
-                          hoursIndex,
+            while (reader.Read())
+            {
+                var project = new Project { Id = reader.GetInt32(projectIdIndex) };
+                var financials =
+                    ReadComputedFinancials(
+                        reader,
+                        financialDateIndex,
+                        revenueIndex,
+                        revenueNetIndex,
+                        cogsIndex,
+                        grossMarginIndex,
+                        hoursIndex,
                           salesCommissionIndex,
                           practiceManagementCommissionIndex,
-                          -1,
-                          -1,
-                          actualRevenueIndex,
-                          actualGrossMarginIndex);
+                        -1,
+                        -1,
+                        actualRevenueIndex,
+                        actualGrossMarginIndex);
 
-                    var i = projects.IndexOf(project);
-                    projects[i].ProjectedFinancialsByMonth.Add(financials.FinancialDate.Value, financials);
-                }
+                var i = projects.IndexOf(project);
+                projects[i].ProjectedFinancialsByMonth.Add(financials.FinancialDate.Value, financials);
             }
         }
 
         private static void ReadTotalFinancialsForListOfProjects(DbDataReader reader, List<Project> projects)
         {
-            if (reader.HasRows)
-            {
-                int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
-                int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
-                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
-                int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
+            if (!reader.HasRows) return;
+            int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+            int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
+            int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
+            int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+            int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
                 int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
                 int practiceManagementCommissionIndex =
                     reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
-                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
-                int actualRevenueIndex = -1;
-                int actualGrossMarginIndex = -1;
+            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+            int actualRevenueIndex = -1;
+            int actualGrossMarginIndex = -1;
 
-                try
-                {
-                    actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
-                    actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
-                }
-                catch { }
+            try
+            {
+                actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
+                actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
+            }
+            catch { }
 
-                while (reader.Read())
-                {
-                    var project = new Project { Id = reader.GetInt32(projectIdIndex) };
-                    var financials =
-                        ReadComputedFinancials(
-                          reader,
-                          financialDateIndex,
-                          revenueIndex,
-                          revenueNetIndex,
-                          cogsIndex,
-                          grossMarginIndex,
-                          hoursIndex,
+            while (reader.Read())
+            {
+                var project = new Project { Id = reader.GetInt32(projectIdIndex) };
+                var financials =
+                    ReadComputedFinancials(
+                        reader,
+                        financialDateIndex,
+                        revenueIndex,
+                        revenueNetIndex,
+                        cogsIndex,
+                        grossMarginIndex,
+                        hoursIndex,
                           salesCommissionIndex,
                           practiceManagementCommissionIndex,
-                          -1,
-                          -1,
-                          actualRevenueIndex,
-                          actualGrossMarginIndex);
+                        -1,
+                        -1,
+                        actualRevenueIndex,
+                        actualGrossMarginIndex);
 
-                    var i = projects.IndexOf(project);
-                    projects[i].ComputedFinancials = financials;
-                }
+                var i = projects.IndexOf(project);
+                projects[i].ComputedFinancials = financials;
             }
         }
 
@@ -583,112 +578,108 @@ namespace DataAccess
 
         private static IEnumerable<KeyValuePair<MilestonePerson, ComputedFinancials>> ReadFinancialsByOneForPerson(DbDataReader reader)
         {
-            if (reader.HasRows)
-            {
-                var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
-                int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
-                int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
-                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
-                int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
+            if (!reader.HasRows) yield break;
+            var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
+            int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+            int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
+            int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
+            int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+            int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
                 int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
                 int practiceManagementCommissionIndex =
                     reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
-                int personIdIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
-                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
-                int expenseIndex;
-                int expenseReimbIndex;
+            int personIdIndex =
+                reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+            int expenseIndex;
+            int expenseReimbIndex;
 
-                try
-                {
-                    expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
-                    expenseReimbIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    expenseIndex = -1;
-                    expenseReimbIndex = -1;
-                }
+            try
+            {
+                expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
+                expenseReimbIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                expenseIndex = -1;
+                expenseReimbIndex = -1;
+            }
 
-                while (reader.Read())
-                {
-                    yield return
-                        new KeyValuePair<MilestonePerson, ComputedFinancials>(
-                                            new MilestonePerson()
-                                            {
-                                                Person = new Person() { Id = reader.GetInt32(personIdIndex) },
-                                                Entries = new List<MilestonePersonEntry>(1)
-                                                                                {
-                                                                                    new MilestonePersonEntry{
-                                                                                                               Id = reader.GetInt32(milestonePersonEntryIdIndex),
-                                                                                                               StartDate = reader.GetDateTime(startDateIndex),
-                                                                                                               EndDate =  reader.GetDateTime(endDateIndex)
-                                                                                                            }
-                                                                                }
-                                            },
+            while (reader.Read())
+            {
+                yield return
+                    new KeyValuePair<MilestonePerson, ComputedFinancials>(
+                        new MilestonePerson()
+                            {
+                                Person = new Person() { Id = reader.GetInt32(personIdIndex) },
+                                Entries = new List<MilestonePersonEntry>(1)
+                                    {
+                                        new MilestonePersonEntry{
+                                            Id = reader.GetInt32(milestonePersonEntryIdIndex),
+                                            StartDate = reader.GetDateTime(startDateIndex),
+                                            EndDate =  reader.GetDateTime(endDateIndex)
+                                        }
+                                    }
+                            },
                         ReadComputedFinancials(
-                          reader,
-                          financialDateIndex,
-                          revenueIndex,
-                          revenueNetIndex,
-                          cogsIndex,
-                          grossMarginIndex,
-                          hoursIndex,
+                            reader,
+                            financialDateIndex,
+                            revenueIndex,
+                            revenueNetIndex,
+                            cogsIndex,
+                            grossMarginIndex,
+                            hoursIndex,
                           salesCommissionIndex,
                           practiceManagementCommissionIndex,
-                          expenseIndex,
-                          expenseReimbIndex));
-                }
+                            expenseIndex,
+                            expenseReimbIndex));
             }
         }
 
         private static IEnumerable<ComputedFinancials> ReadFinancialsByOne(DbDataReader reader)
         {
-            if (reader.HasRows)
-            {
-                int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
-                int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
-                int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
-                int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
+            if (!reader.HasRows) yield break;
+            int financialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+            int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
+            int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
+            int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
+            int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
                 int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
                 int practiceManagementCommissionIndex =
                     reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
 
-                int expenseIndex;
-                int expenseReimbIndex;
+            int expenseIndex;
+            int expenseReimbIndex;
 
-                try
-                {
-                    expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
-                    expenseReimbIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
-                }
-                catch (IndexOutOfRangeException)
-                {
-                    expenseIndex = -1;
-                    expenseReimbIndex = -1;
-                }
+            try
+            {
+                expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
+                expenseReimbIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                expenseIndex = -1;
+                expenseReimbIndex = -1;
+            }
 
-                while (reader.Read())
-                {
-                    yield return
-                        ReadComputedFinancials(
-                          reader,
-                          financialDateIndex,
-                          revenueIndex,
-                          revenueNetIndex,
-                          cogsIndex,
-                          grossMarginIndex,
-                          hoursIndex,
+            while (reader.Read())
+            {
+                yield return
+                    ReadComputedFinancials(
+                        reader,
+                        financialDateIndex,
+                        revenueIndex,
+                        revenueNetIndex,
+                        cogsIndex,
+                        grossMarginIndex,
+                        hoursIndex,
                           salesCommissionIndex,
                           practiceManagementCommissionIndex,
-                          expenseIndex,
-                          expenseReimbIndex);
-                }
+                        expenseIndex,
+                        expenseReimbIndex);
             }
         }
 
@@ -730,26 +721,25 @@ namespace DataAccess
 
         private static void ReadPersonStats(DbDataReader reader, List<PersonStats> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int dateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
+            int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int virtualConsultantsIndex = reader.GetOrdinal(Constants.ColumnNames.VirtualConsultantsColumn);
+            int employeesNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeesNumberColumn);
+            int consultantsNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantsNumberColumn);
+
+            while (reader.Read())
             {
-                int dateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int virtualConsultantsIndex = reader.GetOrdinal(Constants.ColumnNames.VirtualConsultantsColumn);
-                int employeesNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeesNumberColumn);
-                int consultantsNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantsNumberColumn);
+                var stats = new PersonStats
+                    {
+                        Date = reader.GetDateTime(dateIndex),
+                        Revenue = reader.GetDecimal(revenueIndex),
+                        VirtualConsultants = reader.GetDecimal(virtualConsultantsIndex),
+                        EmployeesCount = reader.GetInt32(employeesNumberIndex),
+                        ConsultantsCount = reader.GetInt32(consultantsNumberIndex)
+                    };
 
-                while (reader.Read())
-                {
-                    var stats = new PersonStats();
-
-                    stats.Date = reader.GetDateTime(dateIndex);
-                    stats.Revenue = reader.GetDecimal(revenueIndex);
-                    stats.VirtualConsultants = reader.GetDecimal(virtualConsultantsIndex);
-                    stats.EmployeesCount = reader.GetInt32(employeesNumberIndex);
-                    stats.ConsultantsCount = reader.GetInt32(consultantsNumberIndex);
-
-                    result.Add(stats);
-                }
+                result.Add(stats);
             }
         }
 
@@ -794,3 +784,4 @@ namespace DataAccess
         #endregion Methods
     }
 }
+
