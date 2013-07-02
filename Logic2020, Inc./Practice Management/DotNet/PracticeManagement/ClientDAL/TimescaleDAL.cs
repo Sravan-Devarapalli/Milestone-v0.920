@@ -7,50 +7,50 @@ using DataTransferObjects;
 
 namespace DataAccess
 {
-	/// <summary>
-	/// Provides an access to the data in the Timescale table
-	/// </summary>
-	public static class TimescaleDAL
-	{
-		#region Constants
+    /// <summary>
+    /// Provides an access to the data in the Timescale table
+    /// </summary>
+    public static class TimescaleDAL
+    {
+        #region Constants
 
-		private const string TimescaleGetByIdProcedure = "dbo.TimescaleGetById";
+        private const string TimescaleGetByIdProcedure = "dbo.TimescaleGetById";
         private const string TimescaleGetAllProcedure = "dbo.TimeScaleGetAll";
 
-		private const string TimescaleIdParam = "@TimescaleId";
+        private const string TimescaleIdParam = "@TimescaleId";
 
-		private const string TimescaleIdColumn = "TimescaleId";
-		private const string NameColumn = "Name";
+        private const string TimescaleIdColumn = "TimescaleId";
+        private const string NameColumn = "Name";
 
-		#endregion
+        #endregion Constants
 
-		#region Methods
+        #region Methods
 
-		/// <summary>
-		/// Retrives a <see cref="Timescale"/> by its ID.
-		/// </summary>
-		/// <param name="timescaleId">An ID of the <see cref="Timescale"/> to be retrieved.</param>
-		/// <returns>A <see cref="Timescale"/> object if found and null otherwise.</returns>
-		public static Timescale GetById(TimescaleType timescaleId)
-		{
-			using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-			using (SqlCommand command = new SqlCommand(TimescaleGetByIdProcedure, connection))
-			{
-				command.CommandType = CommandType.StoredProcedure;
-				command.Parameters.AddWithValue(TimescaleIdParam, (int)timescaleId);
+        /// <summary>
+        /// Retrives a <see cref="Timescale"/> by its ID.
+        /// </summary>
+        /// <param name="timescaleId">An ID of the <see cref="Timescale"/> to be retrieved.</param>
+        /// <returns>A <see cref="Timescale"/> object if found and null otherwise.</returns>
+        public static Timescale GetById(TimescaleType timescaleId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(TimescaleGetByIdProcedure, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(TimescaleIdParam, (int)timescaleId);
 
-				connection.Open();
+                connection.Open();
 
-				using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
-				{
-					List<Timescale> result = new List<Timescale>(1);
+                using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
+                {
+                    List<Timescale> result = new List<Timescale>(1);
 
-					ReadTimescales(reader, result);
+                    ReadTimescales(reader, result);
 
-					return result.Count > 0 ? result[0] : null;
-				}
-			}
-		}
+                    return result.Count > 0 ? result[0] : null;
+                }
+            }
+        }
 
         public static List<Timescale> GetAll()
         {
@@ -58,7 +58,6 @@ namespace DataAccess
             using (SqlCommand command = new SqlCommand(TimescaleGetAllProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-                
 
                 connection.Open();
 
@@ -73,26 +72,20 @@ namespace DataAccess
             }
         }
 
-		private static void ReadTimescales(DbDataReader reader, List<Timescale> result)
-		{
-			if (reader.HasRows)
-			{
-				int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
-				int nameIndex = reader.GetOrdinal(NameColumn);
+        private static void ReadTimescales(DbDataReader reader, List<Timescale> result)
+        {
+            if (!reader.HasRows) return;
+            int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+            int nameIndex = reader.GetOrdinal(NameColumn);
 
-				while (reader.Read())
-				{
-					Timescale timescale = new Timescale();
+            while (reader.Read())
+            {
+                Timescale timescale = new Timescale { Id = reader.GetInt32(timescaleIdIndex), Name = reader.GetString(nameIndex) };
 
-					timescale.Id = reader.GetInt32(timescaleIdIndex);
-					timescale.Name = reader.GetString(nameIndex);
+                result.Add(timescale);
+            }
+        }
 
-					result.Add(timescale);
-				}
-			}
-		}
-
-		#endregion
-	}
+        #endregion Methods
+    }
 }
-
