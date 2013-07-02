@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
 using DataTransferObjects;
-using DataTransferObjects.CompositeObjects;
-using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
 
 namespace PracticeManagementService
@@ -21,13 +18,11 @@ namespace PracticeManagementService
         [OperationContract]
         IEnumerable<TimeTypeRecord> GetAllTimeTypes();
 
-
         [OperationContract]
-        List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid,bool includeSickLeave);
+        List<TimeTypeRecord> GetAllAdministrativeTimeTypes(bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave);
 
         [OperationContract]
         Triple<int, int, int> GetAdministrativeChargeCodeValues(int timeTypeId);
-
 
         /// <summary>
         /// Removes given time type
@@ -66,9 +61,6 @@ namespace PracticeManagementService
         [OperationContract]
         TimeTypeRecord GetSickLeaveTimeType();
 
-        #endregion
-
-
+        #endregion Time types
     }
 }
-
