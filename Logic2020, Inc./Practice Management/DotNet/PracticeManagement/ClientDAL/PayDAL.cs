@@ -28,9 +28,8 @@ namespace DataAccess
         private const string TitleIdParam = "@TitleId";
         private const string SLTApprovalParam = "@SLTApproval";
         private const string SLTPTOApprovalParam = "@SLTPTOApproval";
-        
 
-        #endregion
+        #endregion Parameters
 
         #region Columns
 
@@ -48,12 +47,12 @@ namespace DataAccess
         private const string PracticeNameColumn = "PracticeName";
         private const string TitleColumn = "Title";
         private const string TitleIdColumn = "TitleId";
-        private static string SLTApprovalColumn = "SLTApproval";
-        private static string SLTPTOApprovalColumn = "SLTPTOApproval";
+        private const string SLTApprovalColumn = "SLTApproval";
+        private const string SLTPTOApprovalColumn = "SLTPTOApproval";
 
-        #endregion
+        #endregion Columns
 
-        #endregion
+        #endregion Constants
 
         #region Methods
 
@@ -180,7 +179,7 @@ namespace DataAccess
                         command.Transaction = activeTransaction;
                     }
 
-                    return ((bool)command.ExecuteScalar());                  
+                    return ((bool)command.ExecuteScalar());
                 }
                 catch (SqlException ex)
                 {
@@ -218,80 +217,78 @@ namespace DataAccess
 
         private static void ReadPayShort(DbDataReader reader, List<Pay> result)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int startDateIndex = reader.GetOrdinal(StartDateColumn);
+            int endDateIndex = reader.GetOrdinal(EndDateColumn);
+            int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+
+            while (reader.Read())
             {
-                int startDateIndex = reader.GetOrdinal(StartDateColumn);
-                int endDateIndex = reader.GetOrdinal(EndDateColumn);
-                int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                Pay pay = new Pay
+                    {
+                        Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null
+                    };
 
-
-                while (reader.Read())
-                {
-                    Pay pay = new Pay();
-
-                    pay.Timescale = (TimescaleType)reader.GetInt32(timescaleIndex);
-
-                    pay.StartDate = reader.GetDateTime(startDateIndex);
-                    pay.EndDate =
-                        !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
-
-                    result.Add(pay);
-                }
+                result.Add(pay);
             }
         }
 
         private static void ReadPay(DbDataReader reader, List<Pay> result)
         {
-            if (reader.HasRows)
-            {
-                int personIdIndex = reader.GetOrdinal(PersonIdColumn);
-                int startDateIndex = reader.GetOrdinal(StartDateColumn);
-                int endDateIndex = reader.GetOrdinal(EndDateColumn);
-                int amountIndex = reader.GetOrdinal(AmountColumn);
-                int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
-                int timescaleNameIndex = reader.GetOrdinal(TimescaleNameColumn);
-                int amountHourlyIndex = reader.GetOrdinal(AmountHourlyColumn);
-                int vacationDaysIndex = reader.GetOrdinal(VacationDaysColumn);
-                int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
-                int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
-                int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
-                int practiceIdIndex = reader.GetOrdinal(PracticeIdColumn);
-                int practiceNameIndex = reader.GetOrdinal(PracticeNameColumn);
-                int titleColumnIndex = reader.GetOrdinal(TitleColumn);
-                int titleIdColumnIndex = reader.GetOrdinal(TitleIdColumn);
-                int sLTApprovalColumnIndex = reader.GetOrdinal(SLTApprovalColumn);
-                int sLTPTOApprovalColumnIndex = reader.GetOrdinal(SLTPTOApprovalColumn);
-                
-                while (reader.Read())
-                {
-                    Pay pay = new Pay();
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(PersonIdColumn);
+            int startDateIndex = reader.GetOrdinal(StartDateColumn);
+            int endDateIndex = reader.GetOrdinal(EndDateColumn);
+            int amountIndex = reader.GetOrdinal(AmountColumn);
+            int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+            int timescaleNameIndex = reader.GetOrdinal(TimescaleNameColumn);
+            int amountHourlyIndex = reader.GetOrdinal(AmountHourlyColumn);
+            int vacationDaysIndex = reader.GetOrdinal(VacationDaysColumn);
+            int bonusAmountIndex = reader.GetOrdinal(BonusAmountColumn);
+            int bonusHoursToCollectIndex = reader.GetOrdinal(BonusHoursToCollectColumn);
+            int isYearBonusIndex = reader.GetOrdinal(IsYearBonusColumn);
+            int practiceIdIndex = reader.GetOrdinal(PracticeIdColumn);
+            int practiceNameIndex = reader.GetOrdinal(PracticeNameColumn);
+            int titleColumnIndex = reader.GetOrdinal(TitleColumn);
+            int titleIdColumnIndex = reader.GetOrdinal(TitleIdColumn);
+            int sLTApprovalColumnIndex = reader.GetOrdinal(SLTApprovalColumn);
+            int sLTPTOApprovalColumnIndex = reader.GetOrdinal(SLTPTOApprovalColumn);
 
-                    pay.PersonId = reader.GetInt32(personIdIndex);
-                    pay.Timescale = (TimescaleType)reader.GetInt32(timescaleIndex);
-                    pay.TimescaleName = reader.GetString(timescaleNameIndex);
-                    pay.Amount = reader.GetDecimal(amountIndex);
-                    pay.StartDate = reader.GetDateTime(startDateIndex);
-                    pay.EndDate =
-                        !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null;
-                    pay.AmountHourly = reader.GetDecimal(amountHourlyIndex);
-                    pay.VacationDays =
-                        !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null;
-                    pay.BonusAmount = reader.GetDecimal(bonusAmountIndex);
-                    pay.BonusHoursToCollect =
-                        !reader.IsDBNull(bonusHoursToCollectIndex) ?
-                        (int?)reader.GetInt32(bonusHoursToCollectIndex) : null;
-                    pay.IsYearBonus = reader.GetBoolean(isYearBonusIndex);
-                    pay.PracticeId = !reader.IsDBNull(practiceIdIndex) ? (int?)reader.GetInt32(practiceIdIndex) : null;
-                    pay.PracticeName = !reader.IsDBNull(practiceNameIndex) ? reader.GetString(practiceNameIndex) : string.Empty;
-                    if (!reader.IsDBNull(titleIdColumnIndex))
+            while (reader.Read())
+            {
+                Pay pay = new Pay
                     {
-                        pay.TitleId = reader.GetInt32(titleIdColumnIndex);
-                        pay.TitleName = reader.GetString(titleColumnIndex);
-                    }
-                    pay.SLTApproval = reader.GetBoolean(sLTApprovalColumnIndex);
-                    pay.SLTPTOApproval = reader.GetBoolean(sLTPTOApprovalColumnIndex);
-                    result.Add(pay);
+                        PersonId = reader.GetInt32(personIdIndex),
+                        Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                        TimescaleName = reader.GetString(timescaleNameIndex),
+                        Amount = reader.GetDecimal(amountIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate =
+                            !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                        AmountHourly = reader.GetDecimal(amountHourlyIndex),
+                        VacationDays =
+                            !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
+                        BonusAmount = reader.GetDecimal(bonusAmountIndex),
+                        BonusHoursToCollect = !reader.IsDBNull(bonusHoursToCollectIndex)
+                                                  ? (int?)reader.GetInt32(bonusHoursToCollectIndex)
+                                                  : null,
+                        IsYearBonus = reader.GetBoolean(isYearBonusIndex),
+                        PracticeId =
+                            !reader.IsDBNull(practiceIdIndex) ? (int?)reader.GetInt32(practiceIdIndex) : null,
+                        PracticeName =
+                            !reader.IsDBNull(practiceNameIndex) ? reader.GetString(practiceNameIndex) : string.Empty
+                    };
+
+                if (!reader.IsDBNull(titleIdColumnIndex))
+                {
+                    pay.TitleId = reader.GetInt32(titleIdColumnIndex);
+                    pay.TitleName = reader.GetString(titleColumnIndex);
                 }
+                pay.SLTApproval = reader.GetBoolean(sLTApprovalColumnIndex);
+                pay.SLTPTOApproval = reader.GetBoolean(sLTPTOApprovalColumnIndex);
+                result.Add(pay);
             }
         }
 
@@ -320,10 +317,12 @@ namespace DataAccess
 
                         while (reader.Read())
                         {
-                            Triple<DateTime, bool, bool> resultLocal = new Triple<DateTime, bool, bool>(DateTime.Now, true, true);
-                            resultLocal.First = reader.GetDateTime(dateIndex);
-                            resultLocal.Second = reader.GetBoolean(isSalaryTypeIndex);
-                            resultLocal.Third = reader.GetBoolean(isHourlyTypeIndex);
+                            Triple<DateTime, bool, bool> resultLocal = new Triple<DateTime, bool, bool>(DateTime.Now, true, true)
+                                {
+                                    First = reader.GetDateTime(dateIndex),
+                                    Second = reader.GetBoolean(isSalaryTypeIndex),
+                                    Third = reader.GetBoolean(isHourlyTypeIndex)
+                                };
                             result.Add(resultLocal);
                         }
                     }
@@ -332,7 +331,6 @@ namespace DataAccess
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }
-
