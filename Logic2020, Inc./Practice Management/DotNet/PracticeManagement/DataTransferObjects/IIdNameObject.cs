@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DataTransferObjects
 {
@@ -35,7 +34,7 @@ namespace DataTransferObjects
             return obj.Id != null ? obj.Id.Value : 0;
         }
 
-        #endregion
+        #endregion Implementation of IEqualityComparer<T>
     }
 
     /// <summary>
@@ -44,7 +43,7 @@ namespace DataTransferObjects
     public interface IIdNameObject
     {
         int? Id { get; set; }
+
         string Name { get; set; }
     }
 }
-
