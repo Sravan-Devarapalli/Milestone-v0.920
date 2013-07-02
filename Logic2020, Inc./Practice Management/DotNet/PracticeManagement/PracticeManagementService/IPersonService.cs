@@ -22,13 +22,7 @@ namespace PracticeManagementService
         /// Set the person as default manager
         /// </summary>
         [OperationContract]
-        void SetAsDefaultManager(Person person);
-
-        /// <summary>
-        /// Set new manager
-        /// </summary>
-        [OperationContract]
-        void SetNewManager(Person oldManager, Person newManager);
+        void SetAsDefaultManager(int personId);
 
         /// <summary>
         /// Retrieves consultants report
@@ -67,7 +61,7 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref="Opportunity"/> objects.</returns>
         [OperationContract]
         System.Data.DataSet PersonGetExcelSet();
-        /// <summary>
+
         /// <summary>
         /// Gets all permissions for the given person
         /// </summary>
@@ -117,6 +111,7 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleName);
+
         /// <summary>
         /// Retrieves a short info on persons who are not in the Administration practice.
         /// </summary>
@@ -194,7 +189,7 @@ namespace PracticeManagementService
         /// Read All persons firstname and last name  except having inactive status and must have compensation for today or in future.
         /// </summary>
         /// <param name="today"></param>
-        /// <returns>List<Person></returns>
+        /// <returns>List<Person/></returns>
         [OperationContract]
         List<Person> GetOneOffList(DateTime today);
 
@@ -230,7 +225,7 @@ namespace PracticeManagementService
         /// the store, otherwise a new person is created, and an identifier is placed
         /// in the <paramref name="person"/>
         /// </remarks>
-        /// <param name="currentUser">current logged in user name</param>       
+        /// <param name="currentUser">current logged in user name</param>
         [OperationContract]
         [FaultContract(typeof(DataAccessFault))]
         int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay);
@@ -296,14 +291,6 @@ namespace PracticeManagementService
         /// <returns>Person</returns>
         [OperationContract]
         Person GetPersonById(int personId);
-
-        /// <summary>
-        /// Lists managers subordinates
-        /// </summary>
-        /// <param name="person">Manager</param>
-        /// <returns>List of subordinates</returns>
-        [OperationContract]
-        Person[] ListManagersSubordinates(Person person);
 
         /// <summary>
         /// Retrives a short info on persons.
@@ -451,4 +438,3 @@ namespace PracticeManagementService
         void SendAdministratorAddedEmail(Person person, Person oldPerson);
     }
 }
-
