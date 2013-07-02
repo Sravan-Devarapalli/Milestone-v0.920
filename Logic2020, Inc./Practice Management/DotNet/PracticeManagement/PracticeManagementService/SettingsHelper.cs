@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using DataTransferObjects;
-using System.ServiceModel;
 using DataAccess;
+using DataTransferObjects;
 
 namespace PracticeManagementService
 {
     public class SettingsHelper
     {
-        const string ApplicationSettingskey = "ApplicationSettings";
+        private const string ApplicationSettingskey = "ApplicationSettings";
 
         public static Dictionary<string, string> GetResourceKeyValuePairs(SettingsType settingType)
         {
@@ -24,44 +23,42 @@ namespace PracticeManagementService
                 HttpContext.Current.Cache[ApplicationSettingskey] = new Dictionary<SettingsType, Dictionary<string, string>>();
             }
             var mainDictionary = HttpContext.Current.Cache[ApplicationSettingskey] as Dictionary<SettingsType, Dictionary<string, string>>;
-            if (!mainDictionary.Keys.Any(k=>k == settingType))
+            if (mainDictionary != null && mainDictionary.Keys.All(k => k != settingType))
             {
                 mainDictionary[settingType] = GetResourceKeyValuePairs(settingType);
             }
 
-            if (mainDictionary[settingType].Any(kvp=>kvp.Key==key))
+            if (mainDictionary != null && mainDictionary[settingType].Any(kvp => kvp.Key == key))
             {
-                return mainDictionary[settingType][key] as string;
+                return mainDictionary[settingType][key];
             }
-            else
-            {
-                return string.Empty;
-            }
+            return string.Empty;
         }
 
         public static void SaveResourceValueToCache(SettingsType settingType, string key, string value)
         {
-            if (HttpContext.Current.Cache[ApplicationSettingskey] != null)
+            if (HttpContext.Current.Cache[ApplicationSettingskey] == null) return;
+            if (HttpContext.Current.Cache[ApplicationSettingskey] == null)
             {
-                if (HttpContext.Current.Cache[ApplicationSettingskey] == null)
-                {
-                    HttpContext.Current.Cache[ApplicationSettingskey] = new Dictionary<SettingsType, Dictionary<string, string>>();
-                }
-                var mainDictionary = HttpContext.Current.Cache[ApplicationSettingskey] as Dictionary<SettingsType, Dictionary<string, string>>;
-                if (!mainDictionary.Keys.Any(k=>k ==settingType))
-                {
-                    mainDictionary[settingType] = GetResourceKeyValuePairs(settingType);
-                }
-                mainDictionary[settingType][key] = value;
+                HttpContext.Current.Cache[ApplicationSettingskey] = new Dictionary<SettingsType, Dictionary<string, string>>();
             }
+            var mainDictionary = HttpContext.Current.Cache[ApplicationSettingskey] as Dictionary<SettingsType, Dictionary<string, string>>;
+            if (mainDictionary != null && mainDictionary.Keys.All(k => k != settingType))
+            {
+                mainDictionary[settingType] = GetResourceKeyValuePairs(settingType);
+            }
+            if (mainDictionary != null) mainDictionary[settingType][key] = value;
         }
 
         public static SMTPSettings GetSMTPSettings()
         {
-            var sMTPSettings = new SMTPSettings();
-            sMTPSettings.MailServer = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.MailServerKey);
+            var sMTPSettings = new SMTPSettings
+                {
+                    MailServer =
+                        GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.MailServerKey)
+                };
 
-            var sslEnabledString = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.SSLEnabledKey);
+            var sslEnabledString = GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.SSLEnabledKey);
             bool sSLEnabled;
             if (!string.IsNullOrEmpty(sslEnabledString) && bool.TryParse(sslEnabledString, out sSLEnabled))
             {
@@ -69,27 +66,24 @@ namespace PracticeManagementService
             }
 
             int portNumber;
-            var portNumberString = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PortNumberKey);
+            var portNumberString = GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PortNumberKey);
             if (!string.IsNullOrEmpty(portNumberString) && Int32.TryParse(portNumberString, out portNumber))
             {
                 sMTPSettings.PortNumber = portNumber;
             }
             else
             {
-                if (sMTPSettings.SSLEnabled)
-                    sMTPSettings.PortNumber = 25;
-                else
-                    sMTPSettings.PortNumber = 465;
+                sMTPSettings.PortNumber = sMTPSettings.SSLEnabled ? 25 : 465;
             }
 
             sMTPSettings.UserName =
-                SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.UserNameKey);
+                GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.UserNameKey);
 
             sMTPSettings.Password =
-                SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PasswordKey);
+                GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PasswordKey);
 
             sMTPSettings.PMSupportEmail =
-                SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
+                GetResourceValueByTypeAndKey(SettingsType.SMTP, Constants.ResourceKeys.PMSupportEmailAddressKey);
 
             return sMTPSettings;
         }
@@ -98,8 +92,8 @@ namespace PracticeManagementService
         {
             DateTime currentDate;
 
-            var timezone = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
-            var isDayLightSavingsTimeEffect = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
+            var timezone = GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.TimeZoneKey);
+            var isDayLightSavingsTimeEffect = GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDayLightSavingsTimeEffectKey);
 
             if (timezone == "-08:00" && isDayLightSavingsTimeEffect.ToLower() == "true")
             {
@@ -114,7 +108,5 @@ namespace PracticeManagementService
 
             return currentDate;
         }
-
     }
-
 }
