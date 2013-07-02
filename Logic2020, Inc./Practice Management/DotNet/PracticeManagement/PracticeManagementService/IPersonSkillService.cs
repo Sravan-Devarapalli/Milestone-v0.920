@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
-using System.Text;
-using DataTransferObjects.Skills;
 using DataTransferObjects;
-
+using DataTransferObjects.Skills;
 
 namespace PracticeManagementService
 {
@@ -14,7 +9,6 @@ namespace PracticeManagementService
     [ServiceContract]
     public interface IPersonSkillService
     {
-
         //[OperationContract]
         //List<SkillType> GetSkillStatuses();
 
@@ -52,8 +46,6 @@ namespace PracticeManagementService
         List<Person> PersonsSearchBySkills(string skillsSearchXML);
 
         [OperationContract]
-        void SavePersonProfiles(int personId, string profilesXml, string userLogin);       
-
+        void SavePersonProfiles(int personId, string profilesXml, string userLogin);
     }
 }
-
