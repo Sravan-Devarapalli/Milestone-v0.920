@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
 using DataAccess.Other;
 using DataTransferObjects;
-using System.Text;
-using System.Linq;
 
 namespace DataAccess
 {
@@ -15,7 +15,7 @@ namespace DataAccess
     public static class ClientDAL
     {
         #region Constants
-        
+
         #region Parameters
 
         private const string ClientIdParam = "@ClientId";
@@ -36,7 +36,7 @@ namespace DataAccess
         private const string ApplyNewRuleParam = "@ApplyNewRule";
         private const string IsInternalParam = "@IsInternal";
 
-        #endregion
+        #endregion Parameters
 
         #region Columns
 
@@ -47,11 +47,10 @@ namespace DataAccess
         private const string DefaultSalespersonIdColumn = "DefaultSalespersonId";
         private const string DefaultDirectorIdColumn = "DefaultDirectorId";
         private const string InactiveColumn = "Inactive";
-        private const string IsMarginColorInfoEnabledColumn = "IsMarginColorInfoEnabled";
 
-        #endregion
+        #endregion Columns
 
-        #endregion
+        #endregion Constants
 
         /// <summary>
         /// 	Insert client information to the system.
@@ -89,7 +88,6 @@ namespace DataAccess
                     command.Parameters.AddWithValue(IsInternalParam, client.IsInternal);
                     command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
 
-
                     try
                     {
                         connection.Open();
@@ -104,17 +102,9 @@ namespace DataAccess
                         {
                             for (int i = 0; i < client.ClientMarginInfo.Count; i++)
                             {
-                                bool isDeletePreviousMarginInfo = false;
-                                if (i == 0)
-                                {
-                                    isDeletePreviousMarginInfo = true;
-                                }
-                                else
-                                {
-                                    isDeletePreviousMarginInfo = false;
-                                }
+                                bool isDeletePreviousMarginInfo = i == 0;
                                 ClientMarginColorInfoInsert(client.Id, client.ClientMarginInfo[i], isDeletePreviousMarginInfo, connection, transaction);
-                            }  
+                            }
                         }
 
                         transaction.Commit();
@@ -162,10 +152,8 @@ namespace DataAccess
                 {
                     throw ex;
                 }
-
             }
         }
-
 
         /// <summary>
         /// 	Updates client information to the system.
@@ -211,17 +199,9 @@ namespace DataAccess
 
                         if (client.IsMarginColorInfoEnabled.HasValue && client.IsMarginColorInfoEnabled.Value && client.ClientMarginInfo != null)
                         {
-                            for (int i=0;i<client.ClientMarginInfo.Count;i++)
+                            for (int i = 0; i < client.ClientMarginInfo.Count; i++)
                             {
-                                bool isDeletePreviousMarginInfo = false;
-                                if (i == 0)
-                                {
-                                    isDeletePreviousMarginInfo = true;
-                                }
-                                else
-                                {
-                                    isDeletePreviousMarginInfo = false;
-                                }
+                                bool isDeletePreviousMarginInfo = i == 0;
                                 ClientMarginColorInfoInsert(client.Id, client.ClientMarginInfo[i], isDeletePreviousMarginInfo, connection, transaction);
                             }
                         }
@@ -248,14 +228,14 @@ namespace DataAccess
         /// 	The list of clients will probably not be large.  Locality of Reference suggests
         /// 	that if we want one client we are going to want another.  Might as well get them
         /// 	all at once.  A client can find a particular client by scanning the list.
-        /// 
+        ///
         /// 	If it should prove the case that the client list is large then a
         /// 	<see cref = "List{T}" />
         /// 	is not the best structure to support finding a specific
         /// 	<see cref = "Client" />
         /// 	.
         /// </remarks>
-        public static List<Client> ClientListAll()
+        public static List<Client> ClientListAll(bool includeInactive)
         {
             var clientList = new List<Client>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -264,6 +244,9 @@ namespace DataAccess
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
+
+                    if (includeInactive)
+                        command.Parameters.AddWithValue(ShowAllParam, 1);
 
                     connection.Open();
                     ReadClients(command, clientList, false);
@@ -343,37 +326,6 @@ namespace DataAccess
         /// <summary>
         /// 	List all active and inactive clients in the system
         /// </summary>
-        /// <returns>A
-        /// 	<see cref = "List{T}" />
-        /// 	of
-        /// 	<see cref = "Client" />
-        /// 	s in the system</returns>
-        /// <remarks>
-        /// 	This is to help reactivate a client, or to know the total activity in the client
-        /// 	entity
-        /// </remarks>
-        public static List<Client> ClientListAllWithInactive()
-        {
-            var clientList = new List<Client>();
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            {
-                using (var command = new SqlCommand(Constants.ProcedureNames.Client.ClientListAllProcedure, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.CommandTimeout = connection.ConnectionTimeout;
-
-                    command.Parameters.AddWithValue(ShowAllParam, 1);
-
-                    connection.Open();
-                    ReadClients(command, clientList, false);
-                }
-            }
-            return clientList;
-        }
-
-        /// <summary>
-        /// 	List all active and inactive clients in the system
-        /// </summary>
         /// <param name = "person">Person to restrict results to</param>
         /// <param name = "inactives">Include inactive items</param>
         /// <returns>A
@@ -398,8 +350,8 @@ namespace DataAccess
                         command.Parameters.AddWithValue(PersonIdParam, person.Id);
                     else
                         command.Parameters.AddWithValue(PersonIdParam, DBNull.Value);
-                    
-                    if (applyNewRule == true)
+
+                    if (applyNewRule)
                         command.Parameters.AddWithValue(ApplyNewRuleParam, 1);
 
                     connection.Open();
@@ -436,11 +388,6 @@ namespace DataAccess
             }
         }
 
-        private static void ReadClients(SqlCommand command, List<Client> result)
-        {
-            ReadClients(command, result, true);
-        }
-
         public static void UpdateStatusForClient(int clientId, bool inActive, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -463,20 +410,12 @@ namespace DataAccess
         private static void ReadClients(
             SqlCommand command,
             ICollection<Client> clientList,
-            bool loadGroups)
-        {
-            ReadClients(command, clientList, loadGroups, null);
-        }
-
-        private static void ReadClients(
-            SqlCommand command,
-            ICollection<Client> clientList,
             bool loadGroups,
-            Person person)
+            Person person = null)
         {
             using (var reader = command.ExecuteReader())
             {
-                int isMarginColorInfoEnabledIndex = -1;
+                int isMarginColorInfoEnabledIndex;
                 try
                 {
                     isMarginColorInfoEnabledIndex = reader.GetOrdinal(Constants.ColumnNames.IsMarginColorInfoEnabledColumn);
@@ -557,45 +496,33 @@ namespace DataAccess
                         }
                         catch
                         {
- 
                         }
                     }
 
                     clientList.Add(client);
                     clientIds.Add(client.Id.Value);
-
-
                 }
 
-                if (loadGroups)
+                if (!loadGroups) return;
+                var clienIds = clientIds.Distinct();
+                if (!clienIds.Any()) return;
+                foreach (var id in clienIds)
                 {
+                    commaSeperatedClientList.Append(id);
+                    commaSeperatedClientList.Append(",");
+                }
 
-                    var clienIds = clientIds.Distinct();
-                    if (clienIds.Count() > 0)
-                    {
-                        foreach (var id in clienIds)
-                        {
-                            commaSeperatedClientList.Append(id);
-                            commaSeperatedClientList.Append(",");
-                        }
+                var clientGroups = ProjectGroupDAL.ClientGroupListAll(commaSeperatedClientList.ToString(), null, person == null ? null : person.Id);
 
-                        var clientGroups = ProjectGroupDAL.ClientGroupListAll(commaSeperatedClientList.ToString(), null, person == null ? null : person.Id);
-
-                        foreach (Client client in clientList)
-                        {
-                            if (clientGroups.Keys.Count > 0 && clientGroups.Keys.Any(c => client.Id.Value == c))
-                                client.Groups = clientGroups[client.Id.Value];
-                        }
-                    }
-                }            }
+                foreach (Client client in clientList)
+                {
+                    if (clientGroups.Keys.Count > 0 && clientGroups.Keys.Any(c => client.Id.Value == c))
+                        client.Groups = clientGroups[client.Id.Value];
+                }
+            }
         }
 
-        private static Client ReadClientBasic(SqlDataReader reader)
-        {
-            return ReadClientBasic(reader, NameColumn);
-        }
-
-        private static Client ReadClientBasic(SqlDataReader reader, string clientNameColumn)
+        private static Client ReadClientBasic(SqlDataReader reader, string clientNameColumn = NameColumn)
         {
             return new Client { Id = (int)reader[ClientIdColumn], Name = (string)reader[clientNameColumn] };
         }
@@ -632,7 +559,6 @@ namespace DataAccess
                     connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-
                         ReadColor(reader, colors);
                         return colors;
                     }
@@ -642,24 +568,22 @@ namespace DataAccess
 
         private static void ReadColor(SqlDataReader reader, List<ColorInformation> result)
         {
-            if (reader.HasRows)
-            {
-                int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
-                int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
-                int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+            if (!reader.HasRows) return;
+            int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.Id);
+            int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
+            int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
 
-                while (reader.Read())
-                {
-                    result.Add(
-                        new ColorInformation()
+            while (reader.Read())
+            {
+                result.Add(
+                    new ColorInformation()
                         {
                             ColorId = reader.GetInt32(colorIdIndex),
                             ColorValue = reader.GetString(colorValueIndex),
                             ColorDescription = reader.GetString(colorDescriptionIndex)
                         }
 
-                                                );
-                }
+                    );
             }
         }
 
@@ -681,38 +605,33 @@ namespace DataAccess
                     }
                 }
             }
-            if (clientMarginColorInfo.Count > 0)
-                return clientMarginColorInfo;
-            else
-                return null;
+            return clientMarginColorInfo.Count > 0 ? clientMarginColorInfo : null;
         }
 
         private static void ReadClientMarginColorInfo(SqlDataReader reader, List<ClientMarginColorInfo> clientMarginColorInfo)
         {
-            if (reader.HasRows)
-            {
-                int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.ColorIdColumn);
-                int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
-                int startRangeIndex = reader.GetOrdinal(Constants.ColumnNames.StartRangeColumn);
-                int endRangeIndex = reader.GetOrdinal(Constants.ColumnNames.EndRangeColumn);
-                int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+            if (!reader.HasRows) return;
+            int colorIdIndex = reader.GetOrdinal(Constants.ColumnNames.ColorIdColumn);
+            int colorValueIndex = reader.GetOrdinal(Constants.ColumnNames.ValueColumn);
+            int startRangeIndex = reader.GetOrdinal(Constants.ColumnNames.StartRangeColumn);
+            int endRangeIndex = reader.GetOrdinal(Constants.ColumnNames.EndRangeColumn);
+            int colorDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
 
-                while (reader.Read())
-                {
-                    clientMarginColorInfo.Add(
-                                                new ClientMarginColorInfo()
-                                                {
-                                                    ColorInfo = new ColorInformation()
-                                                    {
-                                                        ColorId=reader.GetInt32(colorIdIndex),
-                                                        ColorValue = reader.GetString(colorValueIndex),
-                                                        ColorDescription = reader.GetString(colorDescriptionIndex)
-                                                    },
-                                                    StartRange = reader.GetInt32(startRangeIndex),
-                                                    EndRange = reader.GetInt32(endRangeIndex),
-                                                }
-                        );
-                }
+            while (reader.Read())
+            {
+                clientMarginColorInfo.Add(
+                    new ClientMarginColorInfo()
+                        {
+                            ColorInfo = new ColorInformation()
+                                {
+                                    ColorId = reader.GetInt32(colorIdIndex),
+                                    ColorValue = reader.GetString(colorValueIndex),
+                                    ColorDescription = reader.GetString(colorDescriptionIndex)
+                                },
+                            StartRange = reader.GetInt32(startRangeIndex),
+                            EndRange = reader.GetInt32(endRangeIndex),
+                        }
+                    );
             }
         }
 
@@ -725,7 +644,7 @@ namespace DataAccess
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
-                   
+
                     connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -756,7 +675,7 @@ namespace DataAccess
                     {
                         while (reader.Read())
                         {
-                           client = ReadClientBasic(reader);
+                            client = ReadClientBasic(reader);
                         }
                     }
                 }
@@ -783,7 +702,7 @@ namespace DataAccess
             }
         }
 
-        public static int PricingListInsert(PricingList pricingList,string userLogin)
+        public static int PricingListInsert(PricingList pricingList, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
@@ -849,7 +768,7 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
                     command.Parameters.AddWithValue(ClientIdParam, clientId);
                     connection.Open();
-              
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         ReadPricingLists(reader, result);
@@ -861,30 +780,28 @@ namespace DataAccess
 
         public static void ReadPricingLists(SqlDataReader reader, List<PricingList> result)
         {
-            if (reader.HasRows)
-            {
-                   int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
-                   int pricingListIdIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListId);
-                   int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
-                   int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
-                   int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
-                   int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
-                
-                while (reader.Read())
-                {
-                    PricingList pricinglist = new PricingList();
-                    pricinglist.ClientId = !reader.IsDBNull(clientIdIndex) ? reader.GetInt32(clientIdIndex) : -1;
-                    pricinglist.Name = !reader.IsDBNull(nameIndex) ? reader.GetString(nameIndex) : string.Empty;
-                    pricinglist.PricingListId = !reader.IsDBNull(pricingListIdIndex) ? reader.GetInt32(pricingListIdIndex) : -1;
-                    pricinglist.InUse = !reader.IsDBNull(inUseIndex) ? reader.GetBoolean(inUseIndex) :false;
-                    pricinglist.IsDefault = !reader.IsDBNull(isDefaultIndex) ? reader.GetBoolean(isDefaultIndex) : false;
-                    pricinglist.IsActive = !reader.IsDBNull(isActiveIndex) ? reader.GetBoolean(isActiveIndex) : false;
+            if (!reader.HasRows) return;
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int pricingListIdIndex = reader.GetOrdinal(Constants.ColumnNames.PricingListId);
+            int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+            int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+            int isDefaultIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefault);
+            int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
 
-                    result.Add(pricinglist);
-                }
+            while (reader.Read())
+            {
+                PricingList pricinglist = new PricingList
+                    {
+                        ClientId = !reader.IsDBNull(clientIdIndex) ? reader.GetInt32(clientIdIndex) : -1,
+                        Name = !reader.IsDBNull(nameIndex) ? reader.GetString(nameIndex) : string.Empty,
+                        PricingListId = !reader.IsDBNull(pricingListIdIndex) ? reader.GetInt32(pricingListIdIndex) : -1,
+                        InUse = !reader.IsDBNull(inUseIndex) && reader.GetBoolean(inUseIndex),
+                        IsDefault = !reader.IsDBNull(isDefaultIndex) && reader.GetBoolean(isDefaultIndex),
+                        IsActive = !reader.IsDBNull(isActiveIndex) && reader.GetBoolean(isActiveIndex)
+                    };
+
+                result.Add(pricinglist);
             }
         }
-
     }
 }
-
