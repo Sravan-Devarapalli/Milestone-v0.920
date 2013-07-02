@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Linq;
 using System.ServiceModel.Activation;
-using System.Transactions;
 using DataAccess;
-using DataAccess.Other;
 using DataTransferObjects;
 
 namespace PracticeManagementService
@@ -15,13 +13,13 @@ namespace PracticeManagementService
         #region IMilestoneService Members
 
         /// <summary>
-        /// Saves Default Project-milestone details into DB. Persons not assigned to any Project-Milestone 
+        /// Saves Default Project-milestone details into DB. Persons not assigned to any Project-Milestone
         /// can enter time entery for this default Project Milestone.
         /// </summary>
         /// <param name="clientId"></param>
         /// <param name="projectId"></param>
         /// <param name="mileStoneId"></param>
-        /// 
+        ///
         public void SaveDefaultMilestone(int? clientId, int? projectId, int? milestoneId, int? lowerBound, int? upperBound)
         {
             MilestoneDAL.SaveDefaultMilestone(clientId, projectId, milestoneId, lowerBound, upperBound);
@@ -81,9 +79,8 @@ namespace PracticeManagementService
                 if (result.IsHourlyAmount)
                 {
                     result.Amount = 0M;
-                    foreach (var milestonePerson in result.MilestonePersons)
-                        foreach (var entry in milestonePerson.Entries)
-                            result.Amount += entry.ProjectedWorkload * entry.HourlyAmount;
+                    foreach (var entry in result.MilestonePersons.SelectMany(milestonePerson => milestonePerson.Entries))
+                        result.Amount += entry.ProjectedWorkload * entry.HourlyAmount;
                 }
 
                 if (result.Project != null)
@@ -120,12 +117,7 @@ namespace PracticeManagementService
             return GetById(milestoneId, false);
         }
 
-        private static Milestone GetById(int milestoneId)
-        {
-            return GetById(milestoneId, true);
-        }
-
-        private static Milestone GetById(int milestoneId, bool fetchMilestonePersons)
+        private static Milestone GetById(int milestoneId, bool fetchMilestonePersons = true)
         {
             var milestone = MilestoneDAL.GetById(milestoneId);
 
@@ -153,9 +145,9 @@ namespace PracticeManagementService
                 MilestoneDAL.MilestoneUpdate(milestone, userName);
             }
 
-            return milestone.Id.Value;
+            if (milestone.Id != null) return milestone.Id.Value;
+            return -1;
         }
-
 
         /// <summary>
         /// Deletes a <see cref="Milestone"/> from the database.
@@ -211,7 +203,7 @@ namespace PracticeManagementService
             return MilestoneDAL.CanMoveFutureMilestones(milestoneId, shiftDays);
         }
 
-        #endregion
+        #endregion IMilestoneService Members
 
         #region Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
 
@@ -250,13 +242,13 @@ namespace PracticeManagementService
         public int NoteInsert(Note note)
         {
             NoteDAL.NoteInsert(note);
-            return note.Id.Value;
+            if (note.Id != null) return note.Id.Value;
+            return -1;
         }
 
         public void NoteUpdate(Note note)
         {
             NoteDAL.NoteUpdate(note);
-            
         }
 
         public void NoteDelete(int noteId)
@@ -294,7 +286,7 @@ namespace PracticeManagementService
             return MilestoneDAL.GetMilestoneAndCSATCountsByProject(projectId);
         }
 
-        #endregion
+        #endregion Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
     }
 }
 
