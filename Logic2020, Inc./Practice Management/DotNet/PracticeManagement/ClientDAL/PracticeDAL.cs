@@ -1,11 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 using DataAccess.Other;
 using DataTransferObjects;
-using System;
-using System.Linq;
 
 namespace DataAccess
 {
@@ -270,7 +270,6 @@ namespace DataAccess
             {
                 isActiveCapabilitiesExistsIndex = -1;
             }
-            
 
             while (reader.Read())
             {
@@ -338,20 +337,22 @@ namespace DataAccess
                 {
                     practice =
                         new Practice
-                        {
-                            Id = practiceId,
-                            Name = reader.GetString(nameIndex),
-                            IsActive = reader.GetBoolean(isActiveIndex),
-                            Abbreviation = !reader.IsDBNull(abbreviationIndex) ? reader.GetString(abbreviationIndex) : string.Empty
-                        };
-                    practice.PracticeCapabilities = new List<PracticeCapability>();
+                            {
+                                Id = practiceId,
+                                Name = reader.GetString(nameIndex),
+                                IsActive = reader.GetBoolean(isActiveIndex),
+                                Abbreviation =
+                                    !reader.IsDBNull(abbreviationIndex)
+                                        ? reader.GetString(abbreviationIndex)
+                                        : string.Empty,
+                                PracticeCapabilities = new List<PracticeCapability>()
+                            };
                     list.Add(practice);
                 }
 
-                if (!reader.IsDBNull(capabilityIdIndex))
-                {
-                    var practiceCapability =
-                        new PracticeCapability
+                if (reader.IsDBNull(capabilityIdIndex)) continue;
+                var practiceCapability =
+                    new PracticeCapability
                         {
                             CapabilityId = reader.GetInt32(capabilityIdIndex),
                             PracticeId = practiceId,
@@ -359,8 +360,7 @@ namespace DataAccess
                             Name = reader.GetString(capabilityNameIndex),
                             IsActive = reader.GetBoolean(capabilityIsActiveIndex)
                         };
-                    practice.PracticeCapabilities.Add(practiceCapability);
-                }
+                if (practice != null) practice.PracticeCapabilities.Add(practiceCapability);
             }
         }
 
@@ -390,4 +390,3 @@ namespace DataAccess
         }
     }
 }
-
