@@ -22,8 +22,8 @@ namespace DataAccess
         private const string EmailTemplateUpdateProcedure = "dbo.EmailTemplateUpdate";
         private const string EmailTemplateDeleteProcedure = "dbo.EmailTemplateDelete";
         private const string EmailTemplateGetByNameProcedure = "dbo.EmailTemplateGetByName";
-        
-        #endregion
+
+        #endregion Stored Procedures
 
         #region Parameters
 
@@ -34,7 +34,7 @@ namespace DataAccess
         private const string EmailTemplateSubjectParam = "@EmailTemplateSubject";
         private const string EmailTemplateBodyParam = "@EmailTemplateBody";
 
-        #endregion
+        #endregion Parameters
 
         #region Columns
 
@@ -45,9 +45,9 @@ namespace DataAccess
         private const string EmailTemplateSubjectColumn = "EmailTemplateSubject";
         private const string EmailTemplateBodyColumn = "EmailTemplateBody";
 
-        #endregion
+        #endregion Columns
 
-        #endregion
+        #endregion Constants
 
         #region Methods
 
@@ -86,10 +86,7 @@ namespace DataAccess
                 {
                     var templates = new List<EmailTemplate>();
                     ReadEmailTemplates(reader, templates);
-                    if (templates.Any())
-                        return templates[0];
-                    else
-                        return null;
+                    return templates.Any() ? templates[0] : null;
                 }
             }
         }
@@ -195,7 +192,7 @@ namespace DataAccess
                 {
                     if (reader.HasRows)
                     {
-                        reader.NextResult(); // step to email template select 
+                        reader.NextResult(); // step to email template select
                         var emailTemplate = ReadEmailMembers(reader);
 
                         return new EmailData
@@ -232,32 +229,32 @@ namespace DataAccess
 
         private static void ReadEmailTemplates(SqlDataReader reader, List<EmailTemplate> templates)
         {
-            if (reader.HasRows)
+            if (!reader.HasRows) return;
+            int emailTemplateIdIndex = reader.GetOrdinal(EmailTemplateIdColumn);
+            int emailTemplateNameIndex = reader.GetOrdinal(EmailTemplateNameColumn);
+            int emailTemplateToIndex = reader.GetOrdinal(EmailTemplateToColumn);
+            int emailTemplateCcIndex = reader.GetOrdinal(EmailTemplateCcColumn);
+            int emailTemplateSubjectIndex = reader.GetOrdinal(EmailTemplateSubjectColumn);
+            int emailTemplateBodyIndex = reader.GetOrdinal(EmailTemplateBodyColumn);
+
+            while (reader.Read())
             {
-                int emailTemplateIdIndex = reader.GetOrdinal(EmailTemplateIdColumn);
-                int emailTemplateNameIndex = reader.GetOrdinal(EmailTemplateNameColumn);
-                int emailTemplateToIndex = reader.GetOrdinal(EmailTemplateToColumn);
-                int emailTemplateCcIndex = reader.GetOrdinal(EmailTemplateCcColumn);
-                int emailTemplateSubjectIndex = reader.GetOrdinal(EmailTemplateSubjectColumn);
-                int emailTemplateBodyIndex = reader.GetOrdinal(EmailTemplateBodyColumn);
+                EmailTemplate template = new EmailTemplate
+                    {
+                        Id = reader.GetInt32(emailTemplateIdIndex),
+                        Name = reader.GetString(emailTemplateNameIndex),
+                        EmailTemplateTo =
+                            reader.IsDBNull(emailTemplateToIndex) ? null : reader.GetString(emailTemplateToIndex),
+                        EmailTemplateCc =
+                            reader.IsDBNull(emailTemplateCcIndex) ? null : reader.GetString(emailTemplateCcIndex),
+                        Subject = reader.GetString(emailTemplateSubjectIndex),
+                        Body = reader.GetString(emailTemplateBodyIndex)
+                    };
 
-
-                while (reader.Read())
-                {
-                    EmailTemplate template = new EmailTemplate();
-
-                    template.Id = reader.GetInt32(emailTemplateIdIndex);
-                    template.Name = reader.GetString(emailTemplateNameIndex);
-                    template.EmailTemplateTo = reader.IsDBNull(emailTemplateToIndex) ? null : reader.GetString(emailTemplateToIndex);
-                    template.EmailTemplateCc = reader.IsDBNull(emailTemplateCcIndex) ? null : reader.GetString(emailTemplateCcIndex);
-                    template.Subject = reader.GetString(emailTemplateSubjectIndex);
-                    template.Body = reader.GetString(emailTemplateBodyIndex);
-                    templates.Add(template);
-                }
+                templates.Add(template);
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }
-
