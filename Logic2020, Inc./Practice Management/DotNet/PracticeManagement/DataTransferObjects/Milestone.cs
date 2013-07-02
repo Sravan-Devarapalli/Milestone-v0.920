@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using DataTransferObjects.TimeEntry;
 using System.Web;
+using DataTransferObjects.TimeEntry;
 
 namespace DataTransferObjects
 {
@@ -17,14 +17,14 @@ namespace DataTransferObjects
 
         private List<TimeEntryRecord> _actualActivity;
 
-        #endregion
+        #endregion Fields
 
         #region Constants
 
         private const string PROJECT_MILESTONE_FORMAT = "{0} - {1}";
         private const string CLIENT_PROJECT_MILESTONE_FORMAT = "{0} - {1} - {2}";
 
-        #endregion
+        #endregion Constants
 
         #region Nested
 
@@ -38,7 +38,7 @@ namespace DataTransferObjects
             MilestoneProject
         }
 
-        #endregion
+        #endregion Nested
 
         #region Properties - Data members
 
@@ -60,12 +60,12 @@ namespace DataTransferObjects
         [DataMember]
         public string Description { get; set; }
 
-        public string HtmlEncodedDescription 
-        { 
-            get 
-            { 
-                return HttpUtility.HtmlEncode(Description); 
-            } 
+        public string HtmlEncodedDescription
+        {
+            get
+            {
+                return HttpUtility.HtmlEncode(Description);
+            }
         }
 
         /// <summary>
@@ -92,7 +92,6 @@ namespace DataTransferObjects
         [DataMember]
         public ComputedFinancials ComputedFinancials { get; set; }
 
-
         /// <summary>
         /// Gets or sets a number of expected hours for the <see cref="Milestone"/>.
         /// </summary>
@@ -105,7 +104,11 @@ namespace DataTransferObjects
         [Obsolete]
         public PracticeManagementCurrency EstimatedClientDiscount
         {
-            get { return Project.Discount * Amount.Value / 100M; }
+            get
+            {
+                if (Amount != null) return Project.Discount * Amount.Value / 100M;
+                return new PracticeManagementCurrency();
+            }
         }
 
         /// <summary>
@@ -161,7 +164,7 @@ namespace DataTransferObjects
         [DataMember]
         public DateTime StartDate { get; set; }
 
-        #endregion
+        #endregion Properties - Data members
 
         #region Properties - calculated
 
@@ -174,7 +177,7 @@ namespace DataTransferObjects
             get { return ToString(MilestoneFormat.ProjectMilestone); }
         }
 
-        #endregion
+        #endregion Properties - calculated
 
         #region Methods
 
@@ -206,7 +209,7 @@ namespace DataTransferObjects
             }
         }
 
-        #endregion
+        #endregion Methods
 
         #region IActivityPeriod members
 
@@ -274,18 +277,14 @@ namespace DataTransferObjects
                         var mpe = milestonePersonEntry;
                         var person = milestonePerson;
                         var allPointsInRange = datePoints.
-                            FindAll(delegate(DatePoint point)
-                                        {
-                                            return point.Date >= mpe.StartDate
-                                                   &&
-                                                   point.Date <=
-                                                   (mpe.EndDate.HasValue
-                                                        ?
-                                                            mpe.EndDate.Value
-                                                        : person.EndDate)
-                                                   && point.Date.DayOfWeek != DayOfWeek.Saturday
-                                                   && point.Date.DayOfWeek != DayOfWeek.Sunday;
-                                        });
+                            FindAll(point => point.Date >= mpe.StartDate
+                                             &&
+                                             point.Date <=
+                                             (mpe.EndDate.HasValue
+                                                  ? mpe.EndDate.Value
+                                                  : person.EndDate)
+                                             && point.Date.DayOfWeek != DayOfWeek.Saturday
+                                             && point.Date.DayOfWeek != DayOfWeek.Sunday);
                         allPointsInRange.ForEach(delegate(DatePoint point)
                                                      {
                                                          var hours = Convert.ToDouble(mpe.HoursPerDay);
@@ -323,7 +322,6 @@ namespace DataTransferObjects
             set { _actualActivity = value; }
         }
 
-        #endregion
+        #endregion IActivityPeriod members
     }
 }
-
