@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.Reports
 {
@@ -35,28 +35,25 @@ namespace DataTransferObjects.Reports
 
         public void SetEnddate(string groupByCerteria)
         {
-            if(StartDate != null)
+            if (StartDate == null || StartDate == DateTime.MinValue) return;
+            switch (groupByCerteria)
             {
-                switch (groupByCerteria)
-                { 
-                    case "day":
-                        EndDate = StartDate;
-                        break;
-                    case "week":
-                       EndDate = StartDate.AddDays(6);
-                       break;
-                    case "month":
-                       EndDate = StartDate.AddMonths(1).AddDays(-StartDate.AddMonths(1).Day);
-                       break;
-                    case "year":
-                       EndDate = StartDate.AddYears(1).AddDays(-StartDate.AddYears(1).DayOfYear);
-                       break;
+                case "day":
+                    EndDate = StartDate;
+                    break;
 
-                }
+                case "week":
+                    EndDate = StartDate.AddDays(6);
+                    break;
 
+                case "month":
+                    EndDate = StartDate.AddMonths(1).AddDays(-StartDate.AddMonths(1).Day);
+                    break;
+
+                case "year":
+                    EndDate = StartDate.AddYears(1).AddDays(-StartDate.AddYears(1).DayOfYear);
+                    break;
             }
         }
-
     }
 }
-
