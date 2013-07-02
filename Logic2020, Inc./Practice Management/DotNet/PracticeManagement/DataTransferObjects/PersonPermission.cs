@@ -11,8 +11,8 @@ namespace DataTransferObjects
     /// </summary>
     public enum PermissionTarget
     {
-        Client  = 1,
-        Group   = 2,
+        Client = 1,
+        Group = 2,
         Salesperson = 3,
         PracticeManager = 4,
         Practice = 5
@@ -20,10 +20,10 @@ namespace DataTransferObjects
 
     /// <summary>
     /// Keeps track on user's permissions.
-    /// 
-    /// Represented by corresponding between permission target 
+    ///
+    /// Represented by corresponding between permission target
     ///     and list of ID's that user is ALLOWED to see.
-    ///     
+    ///
     /// NULL value for the list means that user is allowed to see all items in the list
     /// </summary>
     [DataContract]
@@ -71,13 +71,12 @@ namespace DataTransferObjects
                 permissions[pt] = new List<int>(newPerm);
         }
 
-
         /// <summary>
         /// Checks if user is not allowed to see any child control
         /// </summary>
         public bool IsAllowedNothing()
         {
-            bool res = true;
+            const bool res = true;
 
             foreach (PermissionTarget pt in permissions.Keys)
                 if (!IsAllowedNothing(pt))
@@ -139,7 +138,6 @@ namespace DataTransferObjects
             return (PermissionTarget)Enum.ToObject(typeof(PermissionTarget), obj);
         }
 
-
         public override string ToString()
         {
             var sb = new StringBuilder("Permissions: \n");
@@ -161,4 +159,3 @@ namespace DataTransferObjects
         }
     }
 }
-
