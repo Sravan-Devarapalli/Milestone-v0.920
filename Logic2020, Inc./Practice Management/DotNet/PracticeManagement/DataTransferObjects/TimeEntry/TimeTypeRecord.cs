@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
 namespace DataTransferObjects.TimeEntry
 {
@@ -39,7 +39,6 @@ namespace DataTransferObjects.TimeEntry
             get
             {
                 return !IsAllowedToEdit;
-
             }
             set
             {
@@ -89,7 +88,7 @@ namespace DataTransferObjects.TimeEntry
             set;
         }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -102,7 +101,7 @@ namespace DataTransferObjects.TimeEntry
         /// </summary>
         public TimeTypeRecord(int id)
         {
-            this.Id = id;
+            Id = id;
         }
 
         /// <summary>
@@ -113,7 +112,7 @@ namespace DataTransferObjects.TimeEntry
         {
         }
 
-        #endregion
+        #endregion Constructors
 
         #region IEquatable<TimeTypeRecord> Members
 
@@ -122,12 +121,9 @@ namespace DataTransferObjects.TimeEntry
             if (other == null)
                 return false;
 
-            return this.Id == other.Id;
+            return Id == other.Id;
         }
 
-        #endregion
-
+        #endregion IEquatable<TimeTypeRecord> Members
     }
-
 }
-
