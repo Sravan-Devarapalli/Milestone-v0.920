@@ -134,7 +134,7 @@ namespace DataTransferObjects
 
         public bool Equals(CalendarItem other)
         {
-            return other == null ? false : Equals(other.Date);
+            return other != null && Equals(other.Date);
         }
 
         public static implicit operator CalendarItem(DateTime d)
