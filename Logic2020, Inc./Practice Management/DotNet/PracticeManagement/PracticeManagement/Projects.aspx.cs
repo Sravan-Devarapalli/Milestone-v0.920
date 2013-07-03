@@ -31,6 +31,7 @@ namespace PraticeManagement
     public partial class Projects : PracticeManagementSearchPageBase
     {
         #region Constants
+
         private const string CurrencyDisplayFormat = "$###,###,###,###,###,##0";
         private const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
         private const int NumberOfFixedColumns = 6;
@@ -41,44 +42,12 @@ namespace PraticeManagement
         private const int StartDateColumnIndex = 4;
         private const int EndDateColumnIndex = 5;
 
-        private const int TabNameColumnIndex = 0;
-
         private const int MaxPeriodLength = 24;
-
-        private const int FS_RevenueRowIndex = 0;
-        private const int FS_COGSRowIndex = 1;
-        private const int FS_GrossMarginRowIndex = 2;
-        private const int FS_TargetMarginRowIndex = 3;
-        private const int FS_ExpensesRowIndex = 4;
-        private const int FS_SalesCommissionsRowIndex = 5;
-        private const int FS_PMCommissionsRowIndex = 6;
-        private const int FS_BenchRowIndex = 7;
-        private const int FS_AdminRowIndex = 8;
-        private const int FS_NetProfitRowIndex = 9;
-
-        private const int CR_GrossMarginEligibleForCommissions = 0;
-        private const int CR_SalesCommissionsIndex = 1;
-        private const int CR_PMCommissionsIndex = 2;
-        private const int CR_AvgBillRateIndex = 3;
-        private const int CR_AvgPayRateIndex = 4;
-
-        private const string FS_RevenueRowName = "Revenue";
-        private const string FS_COGSRowName = "COGS";
-        private const string FS_GrossMarginRowName = "Contribution margin";
-        private const string FS_TargetMarginRowName = "Margin %";
-        private const string FS_ExpensesRowName = "Expenses";
-        private const string FS_SalesCommissionsRowName = "Sales Commissions";
-        private const string FS_PMCommissionsRowName = "PM Commissions";
-        private const string FS_BenchRowName = "Bench";
-        private const string FS_AdminRowName = "Admin";
-        private const string FS_NetProfitRowName = "Net Profit";
 
         private const string ButtonClientNameId = "btnClientName";
         private const string LabelProjectNumberId = "lblProjectNumber";
-        private const string ButtonProjectNameId = "btnProjectName";
         private const string LabelStartDateId = "lblStartDate";
         private const string LabelEndDateId = "lblEndDate";
-
 
         private const string LabelHeaderIdFormat = "lblHeader{0}";
         private const string LabelHeaderIdToolTipView = "{0} Monthly Report";
@@ -88,17 +57,13 @@ namespace PraticeManagement
         private const string ReportCellIdFormat = "cellReport{0}";
 
         private const string TotalHeaderFormat = "Total ({0})";
-        private const string EntireProjectPeriod = "Entire Project Period";
-        private const string SelectedText = "selected";
         private const string STR_SortExpression = "SortExpression";
         private const string STR_SortDirection = "SortDirection";
         private const string STR_SortColumnId = "SortColumnId";
         private const string ToolTipView = "<b>Buyer Name:&nbsp;</b>{0}<br/><b>Salesperson:&nbsp;</b>{1}<br/><b>Owner:&nbsp;</b>{2}<br/><b>SOW Budget:&nbsp;</b>{3}<br/><b>Resources:&nbsp;</b>{4}<br/>";
         private const string AppendPersonFormat = "{0}{1}, {2}";
-        private const string CompPerfDataCssClass = "CompPerfData";
         private const string CompPerfHeaderDivCssClass = "ie-bg no-wrap";
         private const string HintDivCssClass = "hint";
-        private const string AlternatingRowCssClass = "rowEven";
         private const string OneGreaterSeniorityExistsKey = "ProjectsListOneGreaterSeniorityExists";
         private const string Revenue = "Revenue";
         private const string Margin = "Cont. Margin";
@@ -107,19 +72,14 @@ namespace PraticeManagement
 
         private const string ViewExportProjects = "ExportProjects";
         private const string ViewExportAllProjects = "ExportAllProjects";
-        private const string ExportId = "ExportID";
-        private const string ExportAllId = "ExportAllID";
         private const string ExportDateRangeFormat = "Date Range: {0} - {1}";
-        private const string ClientGroupHeader = "Business Unit";
 
         protected const string PagerNextCommand = "Next";
         protected const string PagerPrevCommand = "Prev";
 
         private const string PageViewCountFormat = "Viewing {0} - {1} of {2} Projects";
 
-        private const string singleCellBreak = "<br style='mso-data-placement: same-cell;' />";
-
-        #endregion
+        #endregion Constants
 
         #region Fields
 
@@ -128,7 +88,7 @@ namespace PraticeManagement
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -236,7 +196,6 @@ namespace PraticeManagement
             }
         }
 
-
         /// <summary>
         /// Gets a list of projects to be displayed.
         /// </summary>
@@ -255,7 +214,6 @@ namespace PraticeManagement
                     CompanyPerformanceState.Filter.FinancialsFromCache = false;
                 }
                 return CompanyPerformanceState.ProjectList;
-
             }
         }
 
@@ -392,7 +350,6 @@ namespace PraticeManagement
                 CellStyles dataNumberDateCellStyle = new CellStyles();
                 dataNumberDateCellStyle.DataFormat = "_($#,##0.00_);[Red]($#,##0.00)";
 
-
                 CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
 
@@ -423,7 +380,7 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Methods
 
@@ -521,7 +478,6 @@ namespace PraticeManagement
             SetPeriodSelection(periodSelected);
 
             ValidateAndDisplay();
-
         }
 
         public void ddlView_SelectedIndexChanged(object sender, EventArgs e)
@@ -621,7 +577,6 @@ namespace PraticeManagement
             }
         }
 
-
         /// <summary>
         /// Selects item in list control according to some condition
         /// </summary>
@@ -706,7 +661,6 @@ namespace PraticeManagement
                     // Determine whether to display the project in the list.
                     rowVisible = IsProjectVisible(project);
 
-
                     string cssClass = ProjectHelper.GetIndicatorClassByStatusId(project.Status.Id);
 
                     if (project.Status.Id == 3 && !project.HasAttachments)
@@ -718,8 +672,8 @@ namespace PraticeManagement
 
                     if (project.Id.HasValue)
                     {
-                        /* 
-                         * TEMPORARY COMMENT 
+                        /*
+                         * TEMPORARY COMMENT
                          * Will be then used to fix #1257
                          */
                         personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
@@ -944,6 +898,7 @@ namespace PraticeManagement
                 case "Ascending":
                     ListViewSortDirection = "Descending";
                     break;
+
                 case "Descending":
                     ListViewSortDirection = "Ascending";
                     break;
@@ -1076,10 +1031,9 @@ namespace PraticeManagement
             DateTime periodStart,
             DateTime periodEnd)
         {
-
             int? defaultProjectId = MileStoneConfigurationManager.GetProjectId();
             int defaultProjectIdValue = defaultProjectId.HasValue ? defaultProjectId.Value : 0;
-            // Prepare Financial Summary GridView            
+            // Prepare Financial Summary GridView
             var financialSummaryRevenue = new Project
             {
                 ProjectedFinancialsByMonth =
@@ -1094,7 +1048,6 @@ namespace PraticeManagement
                 // Looking through the projects
                 foreach (var project in projects)
                 {
-
                     if (project.Id.HasValue && project.Id.Value == defaultProjectIdValue)
                         continue;
 
@@ -1129,7 +1082,6 @@ namespace PraticeManagement
         /// </summary>
         private void PreparePeriodView()
         {
-
             if (!IsPostBack)
             {
                 var filter = InitFilter();
@@ -1263,7 +1215,6 @@ namespace PraticeManagement
             }
 
             var sortedPersons = personList.OrderBy(k => k.Person.LastName).ThenBy(k => k.Person.FirstName).ToList();
-
 
             foreach (var t in sortedPersons)
             {
@@ -1500,16 +1451,14 @@ namespace PraticeManagement
             showInternal = Boolean.Parse(parameters[5]);
             showInactive = Boolean.Parse(parameters[6]);
             useActuals = Boolean.Parse(parameters[7]);
-
         }
-
 
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
             ((WebControl)((Control)sender).Parent).CssClass = "SelectedSwitch";
         }
 
-        #endregion
+        #endregion Methods
 
         private void FillSummaryTotalRow(int periodLength, Project summary, System.Web.UI.HtmlControls.HtmlTableRow row)
         {
@@ -1535,7 +1484,6 @@ namespace PraticeManagement
                     }
                 }
             }
-
 
             // Project totals
             PracticeManagementCurrency totalRevenue = 0M;
@@ -1581,7 +1529,6 @@ namespace PraticeManagement
 
             var stringWriter = new System.IO.StringWriter();
 
-
             var table = GetMonthReportTable(revenue, margin, greaterSeniorityExists);
 
             var div = new Panel() { CssClass = "cell-pad" };
@@ -1595,7 +1542,7 @@ namespace PraticeManagement
             return outterHtml;
         }
 
-        #endregion
+        #endregion Month table from resources
 
         protected void btnExportToExcel_Click(object sender, EventArgs e)
         {
@@ -1608,7 +1555,7 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
-                                    HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty ,
+                                    HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                     BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
                                     Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
@@ -1626,7 +1573,6 @@ namespace PraticeManagement
                                     PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
                                     PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
-
 
             var projectsDataWithMargin = (from pro in ExportProjectList
                                           where pro != null
@@ -1660,7 +1606,6 @@ namespace PraticeManagement
             renderMonthColumns = true;
             var data = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), false);
             var dataActual = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), true);
-
 
             string dateRangeTitle = string.Format(ExportDateRangeFormat, diRange.FromDate.Value.ToShortDateString(), diRange.ToDate.Value.ToShortDateString());
             DataTable header = new DataTable();
@@ -1879,7 +1824,6 @@ namespace PraticeManagement
             var data = PrepareDataTable(projectsList.ToArray(), (object[])projectsData.ToArray(), false);
             var dataActual = PrepareDataTable(projectsList.ToArray(), (object[])projectsData.ToArray(), true);
 
-
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
 
             sheetStylesList.Add(DataSheetStyle);
@@ -1896,7 +1840,6 @@ namespace PraticeManagement
             datasetActual.DataSetName = "Summary - Actuals";
             dataSetList.Add(datasetActual);
             NPOIExcel.Export("Projects.xls", dataSetList, sheetStylesList);
-
         }
 
         private Project[] GetProjectListAll()
@@ -1946,8 +1889,6 @@ namespace PraticeManagement
                     row.Cells[10].ForeColor = Color.Purple;
                     row.Cells[10].Text = marginValue.ToString(CurrencyExcelReportFormat);
                 }
-
-
             }
         }
 
@@ -2081,6 +2022,7 @@ namespace PraticeManagement
                         e.NewMaximumRows = e.Item.Pager.MaximumRows;
                     }
                     break;
+
                 case PagerPrevCommand:
                     int prevPageStartIndex = e.Item.Pager.StartRowIndex - e.Item.Pager.PageSize;
                     if (prevPageStartIndex >= 0)
@@ -2089,6 +2031,7 @@ namespace PraticeManagement
                         e.NewMaximumRows = e.Item.Pager.MaximumRows;
                     }
                     break;
+
                 default:
                     throw new ArgumentException(
                         string.Format(
@@ -2135,4 +2078,3 @@ namespace PraticeManagement
         }
     }
 }
-
