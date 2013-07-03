@@ -616,33 +616,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblTargetMargin;
         
         /// <summary>
-        /// lblSalesCommissionPercentage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSalesCommissionPercentage;
-        
-        /// <summary>
-        /// lblProjectedSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblProjectedSalesCommission;
-        
-        /// <summary>
-        /// lblPracticeManagerCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPracticeManagerCommission;
-        
-        /// <summary>
         /// lblFinalMilestoneMargin control.
         /// </summary>
         /// <remarks>
@@ -1381,13 +1354,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.HtmlControls.HtmlTableRow trShowSaveandCancel;
         
         /// <summary>
-        /// btnSavePopup  control.
+        /// btnSavePopup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSavePopup ;
+        protected global::System.Web.UI.WebControls.Button btnSavePopup;
         
         /// <summary>
         /// btnCancelSaving control.
