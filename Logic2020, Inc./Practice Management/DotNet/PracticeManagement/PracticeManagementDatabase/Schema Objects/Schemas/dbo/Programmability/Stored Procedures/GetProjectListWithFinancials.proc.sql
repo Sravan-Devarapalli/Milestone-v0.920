@@ -1,16 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[GetProjectListWithFinancials]
 (
-	@ClientIds			VARCHAR(250) = NULL,
+	@ClientIds			NVARCHAR(MAX) = NULL,
 	@ShowProjected		BIT = 0,
 	@ShowCompleted		BIT = 0,
 	@ShowActive			BIT = 0,
 	@showInternal		BIT = 0,
 	@ShowExperimental	BIT = 0,
 	@ShowInactive		BIT = 0,
-	@SalespersonIds		VARCHAR(250) = NULL,
-	@ProjectOwnerIds	VARCHAR(250) = NULL,
-	@PracticeIds		VARCHAR(250) = NULL,
-	@ProjectGroupIds	VARCHAR(250) = NULL,
+	@SalespersonIds		NVARCHAR(MAX) = NULL,
+	@ProjectOwnerIds	NVARCHAR(MAX) = NULL,
+	@PracticeIds		NVARCHAR(MAX) = NULL,
+	@ProjectGroupIds	NVARCHAR(MAX) = NULL,
 	@StartDate			DATETIME,
 	@EndDate			DATETIME,
 	@ExcludeInternalPractices BIT = 0
@@ -20,17 +20,17 @@ BEGIN
 	SET NOCOUNT ON ;
 
 	DECLARE 
-	@ClientIdsLocal			VARCHAR(250) = NULL,
+	@ClientIdsLocal			NVARCHAR(MAX) = NULL,
 	@ShowProjectedLocal		BIT = 0,
 	@ShowCompletedLocal		BIT = 0,
 	@ShowActiveLocal			BIT = 0,
 	@showInternalLocal		BIT = 0,
 	@ShowExperimentalLocal	BIT = 0,
 	@ShowInactiveLocal		BIT = 0,
-	@SalespersonIdsLocal		VARCHAR(250) = NULL,
-	@ProjectOwnerIdsLocal	VARCHAR(250) = NULL,
-	@PracticeIdsLocal		VARCHAR(250) = NULL,
-	@ProjectGroupIdsLocal	VARCHAR(250) = NULL,
+	@SalespersonIdsLocal		NVARCHAR(MAX) = NULL,
+	@ProjectOwnerIdsLocal	NVARCHAR(MAX) = NULL,
+	@PracticeIdsLocal		NVARCHAR(MAX) = NULL,
+	@ProjectGroupIdsLocal	NVARCHAR(MAX) = NULL,
 	@StartDateLocal			DATETIME,
 	@EndDateLocal			DATETIME,
 	@ExcludeInternalPracticesLocal BIT = 0
@@ -102,7 +102,6 @@ BEGIN
 									SalespersonId				INT,
 									SalespersonFirstName		NVARCHAR(40),
 									SalespersonLastName			NVARCHAR(40),
-									CommissionType				INT,
 									PracticeManagerFirstName	NVARCHAR(40),
 									PracticeManagerLastName		NVARCHAR(40),
 									DirectorId					INT,
@@ -125,10 +124,9 @@ BEGIN
 			p.ProjectNumber,
 			p.GroupId,
 			PG.Name GroupName,
-			c.PersonId as 'SalespersonId',
-			sp.FirstName as SalespersonFirstName,
-			sp.LastName as SalespersonLastName,
-			c.CommissionType,
+			p.SalesPersonId,
+			sp.FirstName AS SalespersonFirstName,
+			sp.LastName AS SalespersonLastName,
 			pm.FirstName PracticeManagerFirstName,
 			pm.LastName PracticeManagerLastName,
 			p.DirectorId,
@@ -138,11 +136,9 @@ BEGIN
 	FROM	dbo.v_Project AS p
 	INNER JOIN dbo.Person pm ON pm.PersonId = p.PracticeManagerId AND P.IsAdministrative = 0 AND P.ProjectId != 174 
 	INNER JOIN dbo.Practice pr ON pr.PracticeId = p.PracticeId
-	LEFT JOIN dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
-	LEFT JOIN  dbo.Person sp on sp.PersonId = c.PersonId
+	LEFT JOIN  dbo.Person sp on sp.PersonId = p.SalesPersonId 
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
 	WHERE P.ProjectId <> @DefaultProjectId
-			AND (c.CommissionType is NULL OR c.CommissionType = 1)
 			AND	( (p.StartDate IS NULL AND p.EndDate IS NULL) OR (p.StartDate <= @EndDateLocal AND p.EndDate >= @StartDateLocal))
 			AND ( @ClientIdsLocal IS NULL OR p.ClientId IN (SELECT Id from @ClientsList) )
 			AND ( @ProjectGroupIdsLocal IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
@@ -154,7 +150,7 @@ BEGIN
 							)
 				)
 			AND (    @SalespersonIdsLocal IS NULL 
-				  OR c.PersonId IN (SELECT Id FROM @SalespersonsList)
+				  OR p.SalesPersonId IN (SELECT Id FROM @SalespersonsList)
 			    )
 			AND (    ( @ShowProjectedLocal = 1 AND p.ProjectStatusId = 2 )
 				  OR ( @ShowActiveLocal = 1 AND p.ProjectStatusId = 3 )
