@@ -60,7 +60,7 @@
 
         function txtEmployeeNumber_ClientClick(source)
         {
-        if ( !source.readOnly && (source.getAttribute('accept') == 0) && !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) source.blur(); 
+        if ( !source.readOnly && (source.getAttribute('accept') == 0) && !confirm('This value should not normally be changed once set. Please be cautious about changing this value. Press OK to continue or Cancel to return without changing it.')) source.blur();
         else { if(source.getAttribute('accept') == 0) source.setAttribute('accept',1);}
         }
 
@@ -211,10 +211,9 @@
             CheckIfDatesValid();
         }
 
-
         function SetWrapText(str) {
             for (var i = 30; i < str.length; i = i + 10) {
-                str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
+                str = str.slice(0, i) + "<wbr />" + str.slice(i, str.length);
             }
             return str;
         }
@@ -249,7 +248,7 @@
             }
         }
     <%--
-        The following script is needed to implement dirty checks on Projects tab        
+        The following script is needed to implement dirty checks on Projects tab
         Use Page.ClientScript.GetPostBackClientHyperlink(...) method to generate
         personProjects control postback url
     --%>
@@ -285,7 +284,7 @@
             var terminationDateTextValue = terminationDateExt._textbox.get_Value();
             var compensationEndDate = new Date(btnTerminatePersonOk.getAttribute('CompensationEndDate'));
             var hasNotClosedCompensation = btnTerminatePersonOk.getAttribute('HasNotClosedCompensation');
-                        
+
             if(terminationDate != '' && terminationDate != undefined && terminationDate != null && compensationEndDate != null && (compensationEndDate > terminationDate || (hasNotClosedCompensation == 'true')) && ddlterminationReason.value != '')
             {
                 var message = '';
@@ -328,14 +327,14 @@
         }
 
         function showDivContingent()
-        {         
+        {
             var rbn = document.getElementById('<%= rbnContingent.ClientID %>');
             var div = document.getElementById('<%= divContingent.ClientID %>');
             var divActv = document.getElementById('<%= divActive.ClientID %>');
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
             var displayNoneClass = "displayNone";
-       
+
             if( rbn.checked)
             {
                 div.className = "padLeft25 PaddingTop6";
@@ -343,17 +342,17 @@
 
                 if(valSumActv != null)
                 {
-                    valSumActv.className = displayNoneClass; 
-                }  
+                    valSumActv.className = displayNoneClass;
+                }
                 if(valSumCont != null)
                 {
-                    valSumCont.className = ""; 
-                } 
-            } 
+                    valSumCont.className = "";
+                }
+            }
         }
 
         function showDivActive()
-        {             
+        {
             var rbnContgn = document.getElementById('<%= rbnContingent.ClientID %>');
             var rbnTermin = document.getElementById('<%= rbnTerminate.ClientID %>');
             var rbn = document.getElementById('<%= rbnActive.ClientID %>');
@@ -362,8 +361,8 @@
             var divTerm = document.getElementById('<%= divTerminate.ClientID %>');
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
-            var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>'); 
-            var displayNoneClass = "displayNone";                       
+            var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>');
+            var displayNoneClass = "displayNone";
 
             if( rbn.checked)
             {
@@ -392,33 +391,33 @@
         }
 
         function showDivTerminate()
-        {             
+        {
             var rbn = document.getElementById('<%= rbnTerminate.ClientID %>');
             var div = document.getElementById('<%= divTerminate.ClientID %>');
             var rbnActve = document.getElementById('<%= rbnActive.ClientID %>');
-            var divActv = document.getElementById('<%= divActive.ClientID %>'); 
+            var divActv = document.getElementById('<%= divActive.ClientID %>');
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>');
             var displayNoneClass = "displayNone";
-           
+
             if( rbn.checked)
             {
                 div.className = "padLeft25 PaddingTop6";
 
                 if(valSumTerm != null)
                 {
-                    valSumTerm.className = ""; 
-                } 
+                    valSumTerm.className = "";
+                }
                 if(divActv != null)
-                {                    
+                {
                     divActv.className = displayNoneClass;
                 }
                 if(valSumActv != null)
                 {
-                    valSumActv.className = displayNoneClass; 
-                }                   
-            }           
-        } 
+                    valSumActv.className = displayNoneClass;
+                }
+            }
+        }
 
         function enterPressed(evn) {
             if (window.event && window.event.keyCode == 13) {
@@ -433,11 +432,10 @@
             SetTooltipsForallDropDowns();
         }
 
-        
         function SetTooltipsForallDropDowns() {
             var optionList = document.getElementsByTagName('option');
 
-            for (var i = 0; i < optionList.length; ++i) {            
+            for (var i = 0; i < optionList.length; ++i) {
                 optionList[i].title = DecodeString(optionList[i].innerHTML);
             }
 
@@ -445,7 +443,7 @@
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
+        <contenttemplate>
             <table class="PersonForm">
                 <tr>
                     <td>
@@ -566,11 +564,6 @@
                                         EnableClientScript="False" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
                                         Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'"
                                         Type="Date">*</asp:CompareValidator>
-                                    <asp:CustomValidator ID="custHireDate" runat="server" ControlToValidate="dtpHireDate"
-                                        ErrorMessage="Cannot set a Hire Date outside recruiting commissions period."
-                                        ToolTip="Cannot set a Hire Date outside recruiting commissions period." ValidationGroup="Person"
-                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                        OnServerValidate="custHireDate_ServerValidate"></asp:CustomValidator>&nbsp;
                                     <asp:CustomValidator ID="custWithPreviousTermDate" runat="server" ControlToValidate="dtpHireDate"
                                         ErrorMessage="Hire Date should be greater than previous Termination date." ToolTip="Hire Date should be greater than previous Termination date."
                                         ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate"
@@ -724,6 +717,11 @@
                                     <asp:RequiredFieldValidator ID="rfvRecruiter" runat="server" ErrorMessage="The Recruiter is required."
                                         ControlToValidate="ddlRecruiter" ToolTip="The Recruiter is required." ValidationGroup="Person"
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                        <asp:CustomValidator ID="custRecruiter" runat="server" ControlToValidate="ddlRecruiter"
+                                        ErrorMessage="Cannot set a other person as recruiter."
+                                        ToolTip="Cannot set a other person as recruiter." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                        OnServerValidate="custRecruiter_ServerValidate"></asp:CustomValidator>&nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -1877,15 +1875,14 @@
                     </tr>
                 </table>
             </asp:Panel>
-        </ContentTemplate>
-        <Triggers>
+        </contenttemplate>
+        <triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
             <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" />
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
             <asp:PostBackTrigger ControlID="bntEndCompensationOk" />
             <asp:PostBackTrigger ControlID="btnTerminationProcessOK" />
             <asp:PostBackTrigger ControlID="btnSave" />
-        </Triggers>
+        </triggers>
     </asp:UpdatePanel>
 </asp:Content>
-
