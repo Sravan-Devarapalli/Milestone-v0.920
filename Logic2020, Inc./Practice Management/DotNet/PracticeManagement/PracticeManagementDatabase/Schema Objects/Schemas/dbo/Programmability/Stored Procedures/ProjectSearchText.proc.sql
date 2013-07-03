@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 11-07-2008
--- Updated by:	sainathc
--- Update date: 05-06-2012
--- Description:	Retrives the list of projects by the specified conditions.
--- =============================================
-CREATE PROCEDURE [dbo].[ProjectSearchText]
+﻿CREATE PROCEDURE  [dbo].[ProjectSearchText]
 (
 	@Looked              NVARCHAR(255),
 	@PersonId			 INT
@@ -90,9 +83,8 @@ AS
 		SELECT proj.ClientId 
 		FROM dbo.Project AS proj
 		INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
-		LEFT JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
 		WHERE projManagers.ProjectManagerId = @PersonId 
-				OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
+				OR proj.SalesPersonId = @PersonId -- Adding Salesperson - Project clients into the list.
 				OR proj.projectownerId = @PersonId
 
 		INSERT INTO @OwnerProjectGroupList (GroupId) 
@@ -117,10 +109,10 @@ AS
 			   m.GroupId,
 			   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 						ELSE 0 END AS HasAttachments,
-			   m.ProjectOwnerId
+			   m.ProjectOwnerId,
+			   m.SalesPersonId
 		  FROM dbo.v_Milestone AS m
 			   INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = m.ProjectId AND m.IsAllowedToShow = 1
-			   INNER JOIN dbo.Commission AS c ON m.ProjectId = c.ProjectId 
 			   INNER JOIN dbo.ProjectStatus AS s ON m.ProjectStatusId = s.ProjectStatusId
 		  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = m.ProjectId) A
 		 WHERE (
@@ -132,7 +124,7 @@ AS
 			   )
 			   AND (@PersonId is NULL OR m.ClientId IN (select * from @ClientsList) OR  m.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
 			   AND (@PersonId is NULL OR m.GroupId IN (select * from @ProjectGroupsList) OR  m.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
-			   AND (@PersonId is NULL OR projManagers.ProjectManagerId = @PersonId OR c.PersonId = @PersonId OR projManagers.ProjectManagerId in (select * from @ProjectOwnerList) 
+			   AND (@PersonId is NULL OR projManagers.ProjectManagerId = @PersonId OR m.SalesPersonId= @PersonId OR projManagers.ProjectManagerId in (select * from @ProjectOwnerList) 
 									  OR m.ProjectOwnerId = @PersonId OR m.ProjectOwnerId in (select * from @ProjectOwnerList) )   
 		UNION ALL
 		SELECT p.ClientId,
@@ -150,10 +142,10 @@ AS
 			   p.GroupId,
 			   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 						ELSE 0 END AS HasAttachments,
-			   p.ProjectOwnerId
+			   p.ProjectOwnerId,
+			   p.SalesPersonId
 		  FROM dbo.v_Project AS p
 		  INNER JOIN ProjectManagers AS projManagers ON projManagers.ProjectId = p.ProjectId AND p.IsAllowedToShow = 1
-			INNER JOIN dbo.Commission AS c ON  p.ProjectId = c.ProjectId 
 		  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 		 WHERE NOT EXISTS (SELECT 1 FROM dbo.Milestone AS m WHERE m.ProjectId = p.ProjectId)
 		   AND (   
@@ -165,17 +157,16 @@ AS
 		   AND (@PersonId is NULL OR p.ClientId in (SELECT * FROM @ClientsList) OR  p.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
 		   AND (@PersonId is NULL OR p.GroupId in (SELECT * FROM @ProjectGroupsList) OR  P.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
 		   AND (@PersonId is NULL OR p.PracticeId in (SELECT * FROM @PracticesList))	
-		   AND (@PersonId is NULL OR projManagers.ProjectManagerId = @PersonId  OR c.PersonId = @PersonId OR projManagers.ProjectManagerId in (SELECT * FROM @ProjectOwnerList)
+		   AND (@PersonId is NULL OR projManagers.ProjectManagerId = @PersonId  OR p.SalesPersonId = @PersonId OR projManagers.ProjectManagerId in (SELECT * FROM @ProjectOwnerList)
 								  OR p.ProjectOwnerId = @PersonId OR p.ProjectOwnerId in (select * from @ProjectOwnerList))
 		)
 		SELECT DISTINCT FP.*
 		FROM FoundProjects FP
 		LEFT JOIN ProjectManagers PM ON PM.ProjectId = FP.ProjectId
-		LEFT JOIN Commission C ON C.ProjectId = FP.ProjectId AND C.CommissionType = 1
 		WHERE FP.ProjectId <> @DefaultProjectId
 			AND ( @UserHasHighRoleThanProjectLead IS NULL 
 					OR @UserHasHighRoleThanProjectLead <> 0
-					OR (@UserHasHighRoleThanProjectLead = 0 AND (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId OR FP.ProjectOwnerId = @PersonId ))
+					OR (@UserHasHighRoleThanProjectLead = 0 AND (PM.ProjectManagerId = @PersonId OR FP.SalesPersonId = @PersonId OR FP.ProjectOwnerId = @PersonId ))
 				)
 		ORDER BY FP.ProjectName, FP.MilestoneStartDate
 
