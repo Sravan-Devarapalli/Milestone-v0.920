@@ -229,15 +229,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlSalesperson;
         
         /// <summary>
-        /// hidSalesCommissionId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidSalesCommissionId;
-        
-        /// <summary>
         /// reqSalesperson control.
         /// </summary>
         /// <remarks>
@@ -515,15 +506,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectManagers;
-        
-        /// <summary>
-        /// hidPracticeManagementCommissionId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidPracticeManagementCommissionId;
         
         /// <summary>
         /// cvProjectManager control.
@@ -938,96 +920,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.View vwCommissions;
-        
-        /// <summary>
-        /// pnlCommissions control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlCommissions;
-        
-        /// <summary>
-        /// chbReceivesSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbReceivesSalesCommission;
-        
-        /// <summary>
-        /// txtSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSalesCommission;
-        
-        /// <summary>
-        /// reqSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqSalesCommission;
-        
-        /// <summary>
-        /// cstSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cstSalesCommission;
-        
-        /// <summary>
-        /// chbReceiveManagementCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbReceiveManagementCommission;
-        
-        /// <summary>
-        /// txtManagementCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtManagementCommission;
-        
-        /// <summary>
-        /// reqManagementCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqManagementCommission;
-        
-        /// <summary>
-        /// cstManagementCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cstManagementCommission;
-        
-        /// <summary>
-        /// rlstManagementCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rlstManagementCommission;
         
         /// <summary>
         /// vwExpenses control.
