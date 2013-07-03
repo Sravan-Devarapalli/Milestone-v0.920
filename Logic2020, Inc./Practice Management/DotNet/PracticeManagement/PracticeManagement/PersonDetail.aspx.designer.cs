@@ -256,15 +256,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CompareValidator compHireDate;
         
         /// <summary>
-        /// custHireDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator custHireDate;
-        
-        /// <summary>
         /// custWithPreviousTermDate control.
         /// </summary>
         /// <remarks>
@@ -533,6 +524,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvRecruiter;
+        
+        /// <summary>
+        /// custRecruiter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custRecruiter;
         
         /// <summary>
         /// lblEmployeeNumber control.
