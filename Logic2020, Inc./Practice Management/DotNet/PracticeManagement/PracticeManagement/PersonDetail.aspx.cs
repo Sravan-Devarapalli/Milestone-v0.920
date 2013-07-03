@@ -24,7 +24,6 @@ namespace PraticeManagement
 {
     public partial class PersonDetail : PracticeManagementPersonDetailPageBase, IPostBackEventHandler
     {
-
         #region Constants
 
         private const string PersonStatusKey = "PersonStatus";
@@ -54,10 +53,10 @@ namespace PraticeManagement
         public const string SLTApprovalPopUpMessage = "The inputted value is outside of the approved salary band for this level. A salary figure outside of the band requires approval from a member of the Senior Leadership Team. Please ensure that you have received that approval before continuing.";
         public const string SLTPTOApprovalPopUpMessage = "Any change to a person's allotted PTO accrual requires approval from a member of the Senior Leadership Team. Please ensure that you have received that approval before continuing.";
 
-        #endregion
+        #endregion Constants
 
         #region Fields
-        
+
         private int _saveCode;
         private bool? _userIsAdministratorValue;
         private bool? _userIsHRValue;
@@ -121,7 +120,7 @@ namespace PraticeManagement
                 }
                 else if ((PrevPersonStatusId == (int)PersonStatusType.Terminated && rbnContingent.Checked) || (PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnCancleTermination.Checked))
                 {
-                    //system automatically opens new compensation record.  
+                    //system automatically opens new compensation record.
                     return PersonStatusType.Contingent;
                 }
                 else
@@ -415,7 +414,7 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Events
 
@@ -473,7 +472,7 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion Page Events
 
         #region Control Events
 
@@ -493,7 +492,7 @@ namespace PraticeManagement
             mpeChangeStatusEndCompensation.Hide();
         }
 
-        #endregion
+        #endregion mpeChangeStatusEndCompensation Events
 
         #region mpeEmployeePayTypeChange Events
 
@@ -531,7 +530,7 @@ namespace PraticeManagement
             mpeEmployeePayTypeChange.Hide();
         }
 
-        #endregion
+        #endregion mpeEmployeePayTypeChange Events
 
         #region mpeHireDateChange Events
 
@@ -548,7 +547,7 @@ namespace PraticeManagement
             mpeHireDateChange.Hide();
         }
 
-        #endregion
+        #endregion mpeHireDateChange Events
 
         #region mpeRehireConfirmation Events
 
@@ -587,7 +586,7 @@ namespace PraticeManagement
             mpeRehireConfirmation.Hide();
         }
 
-        #endregion
+        #endregion mpeRehireConfirmation Events
 
         #region mpeViewPersonChangeStatus Events
 
@@ -633,8 +632,9 @@ namespace PraticeManagement
                             FillTerminationReasonsByTerminationDate(dtpPopUpTerminateDate, ddlTerminationReason);
                         }
                         break;
+
                     case PersonStatusType.Contingent:
-                        //change employee status to contingent.                        
+                        //change employee status to contingent.
                         if (rbnCancleTermination.Checked)
                         {
                             dtpPopUpTerminateDate.TextValue = ddlPopUpTerminationReason.SelectedValue = string.Empty;
@@ -651,6 +651,7 @@ namespace PraticeManagement
                             }
                         }
                         break;
+
                     case PersonStatusType.Active:
                         if (rbnCancleTermination.Checked)
                         {
@@ -670,10 +671,10 @@ namespace PraticeManagement
                             }
                         }
                         break;
+
                     default:
                         IsStatusChangeClicked = false;
                         break;
-
                 }
                 if (Page.IsValid && IsStatusChangeClicked)
                 {
@@ -697,7 +698,7 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion mpeViewPersonChangeStatus Events
 
         #region mpeCancelTermination Events
 
@@ -714,7 +715,7 @@ namespace PraticeManagement
             mpeCancelTermination.Hide();
         }
 
-        #endregion
+        #endregion mpeCancelTermination Events
 
         #region mpeViewTerminationDateErrors Events
 
@@ -768,7 +769,7 @@ namespace PraticeManagement
             HTMLToPdf(html, "Information");
         }
 
-        #endregion
+        #endregion mpeViewTerminationDateErrors Events
 
         protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
@@ -894,7 +895,6 @@ namespace PraticeManagement
                     btnResetPassword.Visible = false;
                     lblPaswordResetted.Visible = true;
                     chbLockedOut.Checked = user.IsLockedOut;
-
                 }
             }
         }
@@ -1004,7 +1004,7 @@ namespace PraticeManagement
             return string.Empty;
         }
 
-        #endregion
+        #endregion Control Events
 
         #region Validation
 
@@ -1139,32 +1139,41 @@ namespace PraticeManagement
                 case (int)MembershipCreateStatus.DuplicateEmail:
                     message = Messages.DuplicateEmail;
                     break;
+
                 case (int)MembershipCreateStatus.DuplicateUserName:
                     //  Because we're using email as username in the system,
                     //      DuplicateUserName is equal to our PersonEmailUniquenesViolation
                     message = Messages.DuplicateEmail;
                     break;
+
                 case (int)MembershipCreateStatus.InvalidAnswer:
                     message = Messages.InvalidAnswer;
                     break;
+
                 case (int)MembershipCreateStatus.InvalidEmail:
                     message = Messages.InvalidEmail;
                     break;
+
                 case (int)MembershipCreateStatus.InvalidPassword:
                     message = Messages.InvalidPassword;
                     break;
+
                 case (int)MembershipCreateStatus.InvalidQuestion:
                     message = Messages.InvalidQuestion;
                     break;
+
                 case (int)MembershipCreateStatus.InvalidUserName:
                     message = Messages.InvalidUserName;
                     break;
+
                 case (int)MembershipCreateStatus.ProviderError:
                     message = Messages.ProviderError;
                     break;
+
                 case (int)MembershipCreateStatus.UserRejected:
                     message = Messages.UserRejected;
                     break;
+
                 default:
                     message = custUserName.ErrorMessage;
                     return;
@@ -1180,13 +1189,12 @@ namespace PraticeManagement
                 PersonStatusId.Value == PersonStatusType.Contingent || PersonStatusId.Value == PersonStatusType.Inactive;//#2817 UserisHR is added as per requirement.
         }
 
-        protected void custHireDate_ServerValidate(object sender, ServerValidateEventArgs e)
+        protected void custRecruiter_ServerValidate(object sender, ServerValidateEventArgs e)
         {
-            //need to refill the ddlRecruiter as per the new hire date
             Person current = DataHelper.CurrentPerson;
             e.IsValid =
                 UserIsAdministrator || UserIsHR ||
-                (current != null && current.Id.HasValue && int.Parse(ddlRecruiter.SelectedValue) != current.Id.Value);//#2817 UserisHR This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.is added as per requirement.
+                (current != null && current.Id.HasValue && int.Parse(ddlRecruiter.SelectedValue) != current.Id.Value);
         }
 
         protected void cvEndCompensation_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -1465,7 +1473,7 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion Validation
 
         #region gvCompensationHistory Events
 
@@ -1565,7 +1573,6 @@ namespace PraticeManagement
             var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
             var hdVacationDay = gvRow.FindControl("hdVacationDay") as HiddenField;
 
-
             bool IsSLTApproval = !(hdSLTApproval.Value == false.ToString() || hdAmount.Value != txtAmount.Text);
 
             custValTitle.Validate();
@@ -1597,7 +1604,7 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion mpeSLTApprovalPopUp Events
 
         #region mpeSLTPTOApprovalPopUp Events
 
@@ -1720,11 +1727,10 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion mpeSLTPTOApprovalPopUp Events
 
         private void _gvCompensationHistory_OnRowDataBound(GridViewRow gvRow, Pay pay)
         {
-
             var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
             var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
             var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
@@ -1736,8 +1742,6 @@ namespace PraticeManagement
             var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
             var hdVacationDay = gvRow.FindControl("hdVacationDay") as HiddenField;
             var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
-
-
 
             DataHelper.FillTitleList(ddlTitle, "-- Select Title --");
             DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
@@ -1789,7 +1793,6 @@ namespace PraticeManagement
                 }
             }
 
-
             if (pay.TitleId.HasValue)
             {
                 ListItem selectedTitle = ddlTitle.Items.FindByValue(pay.TitleId.Value.ToString());
@@ -1834,7 +1837,6 @@ namespace PraticeManagement
                 PayFooter.SLTPTOApproval = false;
                 _gvCompensationHistory_OnRowDataBound(gvRow, PayFooter);
             }
-
         }
 
         protected void imgCompensationDelete_OnClick(object sender, EventArgs args)
@@ -1858,7 +1860,6 @@ namespace PraticeManagement
 
             if (PersonId.HasValue)
             {
-
                 if (DateTime.Today >= startDate)
                 {
                     using (var serviceClient = new PersonServiceClient())
@@ -1885,7 +1886,6 @@ namespace PraticeManagement
                         PayHistory.Remove(PayHistory.First(p => p.StartDate.Date == startDate));
                         PayHistory = PayHistory;
                         PopulatePayment(PayHistory);
-
                     }
                 }
             }
@@ -1922,7 +1922,6 @@ namespace PraticeManagement
                 compVacationDays.Enabled = false;
                 rfvVacationDays.Enabled = false;
                 txtVacationDays.Enabled = false;
-
             }
             else
             {
@@ -1954,7 +1953,6 @@ namespace PraticeManagement
                 var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
                 var hdSLTApproval = gvRow.FindControl("hdSLTApproval") as HiddenField;
                 var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
-
 
                 var index = 0;
                 Pay oldPay;
@@ -2122,7 +2120,6 @@ namespace PraticeManagement
             _gvCompensationHistory.ShowFooter = false;
             PopulatePayment(PayHistory);
             mlConfirmation.ClearMessage();
-
         }
 
         protected void imgCopy_OnClick(object sender, EventArgs e)
@@ -2231,7 +2228,7 @@ namespace PraticeManagement
             e.IsValid = ddlPractice.SelectedIndex > 0;
         }
 
-        #endregion
+        #endregion gvCompensationHistory Events
 
         #region IPostBackEventHandler Members
 
@@ -2241,7 +2238,6 @@ namespace PraticeManagement
             bool result = ValidateAndSavePersonDetails();
             if (result)
             {
-
                 var query = Request.QueryString.ToString();
                 var backUrl = string.Format(
                         Constants.ApplicationPages.DetailRedirectFormat,
@@ -2249,10 +2245,9 @@ namespace PraticeManagement
                         this.PersonId.Value);
                 RedirectWithBack(eventArgument, backUrl);
             }
-
         }
 
-        #endregion
+        #endregion IPostBackEventHandler Members
 
         #region Wizards Events
 
@@ -2278,13 +2273,11 @@ namespace PraticeManagement
             {
                 if (ActiveWizard == _finalWizardView)
                 {
-
                     Save_Click(null, new EventArgs());
                     if (Page.IsValid)
                     {
                         Response.Redirect(Constants.ApplicationPages.PersonsPage);
                     }
-
                 }
                 if (ActiveWizard != _finalWizardView)
                 {
@@ -2295,9 +2288,9 @@ namespace PraticeManagement
             IsOtherPanelDisplay = personnelCompensation.SLTApprovalPopupDisplayed ? true : IsOtherPanelDisplay;
         }
 
-        #endregion
+        #endregion Wizards Events
 
-        #endregion
+        #endregion Events
 
         #region Methods
 
@@ -2306,7 +2299,6 @@ namespace PraticeManagement
             if (string.IsNullOrEmpty(person.Alias)) return;
 
             // Saving roles
-
 
             if (person.RoleNames.Length > 0)
             {
@@ -2531,13 +2523,16 @@ namespace PraticeManagement
                         case TimescaleType.Hourly:
                             reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2HourlyRule == true).ToList();
                             break;
+
                         case TimescaleType.Salary:
                             reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsW2SalaryRule == true).ToList();
                             break;
+
                         case TimescaleType._1099Ctc:
                         case TimescaleType.PercRevenue:
                             reasons = SettingsHelper.GetTerminationReasonsList().Where(tr => tr.Is1099Rule == true).ToList();
                             break;
+
                         default:
                             break;
                     }
@@ -2570,7 +2565,6 @@ namespace PraticeManagement
                 ClearDirty();
                 mlError.ShowInfoMessage(string.Format(Resources.Messages.SavedDetailsConfirmation, "Person"));
                 IsErrorPanelDisplay = true;
-
             }
             if (!string.IsNullOrEmpty(ExMessage) || Page.IsValid)
             {
@@ -3007,7 +3001,7 @@ namespace PraticeManagement
             PreviousTerminationDate = terminationDate;
         }
 
-        #endregion
+        #endregion Populate controls
 
         private void PopulateData(Person person)
         {
@@ -3263,8 +3257,6 @@ namespace PraticeManagement
             mpeErrorPanel.Show();
         }
 
-        #endregion
-
+        #endregion Methods
     }
 }
-
