@@ -12,9 +12,9 @@ using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
+using PraticeManagement.ProjectGroupService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
-using PraticeManagement.ProjectGroupService;
 
 namespace PraticeManagement
 {
@@ -34,7 +34,7 @@ namespace PraticeManagement
         public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
         public const string ViewStateLoggedInPerson = "ViewStateLoggedInPerson";
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
@@ -78,7 +78,6 @@ namespace PraticeManagement
                     return client;
                 }
             }
-
         }
 
         public int? ProjectId
@@ -256,7 +255,6 @@ namespace PraticeManagement
         {
             get
             {
-
                 return Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
             }
         }
@@ -279,7 +277,8 @@ namespace PraticeManagement
 
         public bool CompletedStatus
         {
-            get {
+            get
+            {
                 if (ViewState["CompletedStatus_Key"] == null)
                 {
                     ViewState["CompletedStatus_Key"] = false;
@@ -292,9 +291,7 @@ namespace PraticeManagement
             }
         }
 
-
-
-        #endregion
+        #endregion Properties
 
         public bool IsErrorPanelDisplay;
         private bool IsOtherPanelDisplay;
@@ -438,7 +435,7 @@ namespace PraticeManagement
 
             btnUpload.Attributes["onclick"] = "startUpload(); return false;";
 
-           ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
         }
 
         public void ShowTabs()
@@ -516,11 +513,7 @@ namespace PraticeManagement
                 userIsProjectManagerOfTheProject = Project.ProjectManagers.Any(p => p.Id == DataHelper.CurrentPerson.Id);
             }
             txtProjectName.ReadOnly = isReadOnly;
-            txtSalesCommission.ReadOnly = !userIsAdministrator;
             ddlClientName.Enabled = ddlPractice.Enabled = !isReadOnly;
-            chbReceiveManagementCommission.Enabled = rlstManagementCommission.Enabled = userIsSalesPerson || userIsAdministrator;
-            txtManagementCommission.ReadOnly = !userIsSalesPerson && !userIsAdministrator;
-            chbReceivesSalesCommission.Enabled = userIsAdministrator;
             ddlSalesperson.Enabled = ddlProjectGroup.Enabled = !string.IsNullOrEmpty(ddlClientName.SelectedValue) && !isReadOnly;
             ddlPricingList.Enabled = !string.IsNullOrEmpty(ddlClientName.SelectedValue);
             if ((userIsPracticeManager || userIsBusinessUnitManager || userIsProjectLead) && !cblProjectManagers.Enabled && !ProjectId.HasValue)
@@ -542,10 +535,6 @@ namespace PraticeManagement
                 // Practice Managers and Sales persons can change the status from Experimental, Inactive or Projected
                 IsStatusValidForNonadmin(Project);
 
-            foreach (ListItem item in rlstManagementCommission.Items)
-            {
-                item.Enabled = !isReadOnly;
-            }
             btnAddMilistone.Visible = btnSave.Visible = !isReadOnly;
 
             AllowContinueWithoutSave = ProjectId.HasValue;
@@ -555,10 +544,6 @@ namespace PraticeManagement
                 Page.Validate(vsumProject.ValidationGroup);
                 IsErrorPanelDisplay = !Page.IsValid;
             }
-
-            txtSalesCommission.Enabled = !string.IsNullOrEmpty(ddlSalesperson.SelectedValue);
-            chbReceivesSalesCommission.Enabled =
-                chbReceivesSalesCommission.Enabled && !string.IsNullOrEmpty(ddlSalesperson.SelectedValue);
 
             NeedToShowDeleteButton();
 
@@ -572,7 +557,7 @@ namespace PraticeManagement
                 ddlSalesperson.Enabled = txtSowBudget.Enabled = ddlDirector.Enabled = false;
             }
 
-            #endregion
+            #endregion Security
 
             if (IsErrorPanelDisplay && !IsOtherPanelDisplay)
             {
@@ -668,7 +653,6 @@ namespace PraticeManagement
             {
                 mpeEditProjectName.Show();
             }
-
         }
 
         protected void btnAddMilistone_Click(object sender, EventArgs e)
@@ -798,7 +782,6 @@ namespace PraticeManagement
                     throw ex;
                 }
             }
-
         }
 
         /// <summary>
@@ -815,8 +798,8 @@ namespace PraticeManagement
 
                 FillUnlinkedOpportunityList(clientId);
             }
-
         }
+
         protected void ddlDirector_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopulateCSATOwnerList();
@@ -893,7 +876,6 @@ namespace PraticeManagement
                         ddlDirector.SelectedIndex = 0;
                     }
 
-
                     if (client.IsNoteRequired)
                     {
                         ddlNotes.SelectedValue = "1";
@@ -942,8 +924,6 @@ namespace PraticeManagement
                 try
                 {
                     return serviceClient.GetClientDetail(clientId, DataHelper.CurrentPerson.Alias);
-
-
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -964,7 +944,7 @@ namespace PraticeManagement
                         BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(null, Convert.ToInt32(ddlProjectGroup.SelectedValue));
 
                         lblBusinessGroup.Text = businessGroupList.Any() ? businessGroupList.First().HtmlEncodedName : string.Empty;
-                        lblBusinessGroup.ToolTip =businessGroupList.Any() ?  businessGroupList.First().Name : string.Empty;
+                        lblBusinessGroup.ToolTip = businessGroupList.Any() ? businessGroupList.First().Name : string.Empty;
                     }
                     else
                     {
@@ -1127,7 +1107,6 @@ namespace PraticeManagement
                 Project.OpportunityId = null;
                 Project.OpportunityNumber = null;
                 ddlOpportunities.SelectedIndex = -1;
-
             }
             catch
             { }
@@ -1138,7 +1117,6 @@ namespace PraticeManagement
             Page.Validate(valSumLinkOpportunity.ValidationGroup);
             if (Page.IsValid)
             {
-
                 try
                 {
                     int opportunityId = Convert.ToInt32(ddlOpportunities.SelectedValue);
@@ -1162,54 +1140,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void chbReceivesSalesCommission_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateSalesCommissionState();
-
-            IsDirty = true;
-            chbReceivesSalesCommission.Focus();
-        }
-
-        protected void cstSalesCommission_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            string regex = @"[1-9]?\d(\.\d{1,2})?";
-            RegexStringValidator rsv = new RegexStringValidator(regex);
-            try
-            {
-                rsv.Validate(args.Value);
-            }
-            catch
-            {
-                args.IsValid = false;
-                cstSalesCommission.ErrorMessage = cstSalesCommission.ToolTip = "A number with 2 decimal digits is allowed for the Sales Commission.";
-            }
-            if (args.IsValid && Convert.ToDecimal(args.Value) <= 0)
-            {
-                args.IsValid = false;
-                cstSalesCommission.ErrorMessage = cstSalesCommission.ToolTip = "The Sales Commission must be greater than zero.";
-            }
-        }
-
-        protected void cstManagementCommission_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            string regex = @"[1-9]?\d(\.\d{1,2})?";
-            RegexStringValidator rsv = new RegexStringValidator(regex);
-            try
-            {
-                rsv.Validate(args.Value);
-            }
-            catch
-            {
-                args.IsValid = false;
-                cstManagementCommission.ErrorMessage = cstManagementCommission.ToolTip = "A number with 2 decimal digits is allowed for the Management Commission.";
-            }
-            if (args.IsValid && Convert.ToDecimal(args.Value) <= 0)
-            {
-                args.IsValid = false;
-                cstManagementCommission.ErrorMessage = cstManagementCommission.ToolTip = "The Management Commission must be greater than zero.";
-            }
-        }
-
         protected void custProjectStatus_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             // Verify for the selected status can be set by the user
@@ -1226,7 +1156,6 @@ namespace PraticeManagement
                 (IsStatusValidForNonadmin(currentStatus) && IsStatusValidForNonadmin(Project)) ||
                 // Status was not changed
                 currentStatus == (Project != null && Project.Status != null ? Project.Status.Id : 0);
-
         }
 
         protected void custActiveStatus_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -1310,7 +1239,7 @@ namespace PraticeManagement
             bool result = false;
 
             Page.Validate(vsumProject.ValidationGroup);
-            if (Page.IsValid && ValidateProjectTimeTypesTab() && 
+            if (Page.IsValid && ValidateProjectTimeTypesTab() &&
                     (CompletedStatus || ValidateCompleStatusPopup())
                  )
             {
@@ -1362,29 +1291,6 @@ namespace PraticeManagement
         public bool ValidateAndSaveFromOtherChildControls()
         {
             return (!IsDirty || ValidateAndSave());
-        }
-
-        private void UpdateSalesCommissionState()
-        {
-            txtSalesCommission.Enabled = reqSalesCommission.Enabled =
-                cstSalesCommission.Enabled =
-                chbReceivesSalesCommission.Checked;
-        }
-
-        protected void chbReceiveManagementCommission_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateManagementCommissionState();
-
-            IsDirty = true;
-            chbReceiveManagementCommission.Focus();
-        }
-
-        private void UpdateManagementCommissionState()
-        {
-            txtManagementCommission.Enabled = reqManagementCommission.Enabled =
-                cstManagementCommission.Enabled =
-                rlstManagementCommission.Enabled =
-                chbReceiveManagementCommission.Checked && chbReceiveManagementCommission.Enabled;
         }
 
         protected void btnPersonName_Command(object sender, CommandEventArgs e)
@@ -1446,7 +1352,6 @@ namespace PraticeManagement
                 {
                     throw e;
                 }
-
             }
 
             if (AttachmentsForNewProject != null && result != -1)
@@ -1460,7 +1365,6 @@ namespace PraticeManagement
             }
 
             return result;
-
         }
 
         protected override void Display()
@@ -1478,7 +1382,6 @@ namespace PraticeManagement
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
             DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
             DataHelper.FillListDefault(ddlProjectOwner, "-- Select Project Owner --", persons, false, "Id", "PersonLastFirstName");
-
 
             int? id = ProjectId;
             if (id.HasValue)
@@ -1499,7 +1402,6 @@ namespace PraticeManagement
                     ddlProjectStatus.Items.IndexOf(
                     ddlProjectStatus.Items.FindByValue(((int)ProjectStatusType.Projected).ToString()));
 
-
                 if (int.TryParse(Page.Request.QueryString["clientId"], out clientId))
                 {
                     ddlClientName.SelectedValue = clientId.ToString();
@@ -1519,9 +1421,6 @@ namespace PraticeManagement
                 var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null)).Where(pc => pc.IsActive);
                 DataHelper.FillListDefault(cblPracticeCapabilities, "All Capabilities", capabilities.ToArray(), false, "CapabilityId", "MergedName");
             }
-
-            UpdateSalesCommissionState();
-            UpdateManagementCommissionState();
         }
 
         private Project GetCurrentProject(int? id)
@@ -1571,14 +1470,11 @@ namespace PraticeManagement
                 PopulatePracticeDropDown(project);
                 SelectProjectStatus(project);
                 PopulateProjectManagerDropDown(project);
+                PopulateSalesPersonDropDown(project);
 
                 financials.Project = project;
 
                 txtBuyerName.Text = project.BuyerName;
-
-                DisplaySalesCommissions(project);
-
-                DisplayPracticeManagementCommissions(project);
 
                 if (project.Director != null && project.Director.Id.HasValue)
                 {
@@ -1614,7 +1510,7 @@ namespace PraticeManagement
                     {
                         selectedManager = new ListItem(project.SeniorManagerName, project.SeniorManagerId.ToString());
                         ddlSeniorManager.Items.Add(selectedManager);
-                      //  ddlSeniorManager.SortByText();
+                        //  ddlSeniorManager.SortByText();
                     }
 
                     ddlSeniorManager.SelectedValue = selectedManager.Value;
@@ -1638,7 +1534,6 @@ namespace PraticeManagement
                 {
                     activityLog.Update();
                 }
-
             }
 
             PopulateAttachmentControl(project);
@@ -1677,17 +1572,14 @@ namespace PraticeManagement
             return (Project == null || !Project.Id.HasValue);
         }
 
-        private void PopulateSalesPersonDropDown()
+        private void PopulateSalesPersonDropDown(Project project)
         {
-            if (Project == null)
-                Project = GetCurrentProject(ProjectId);
-
-            if (Project != null && Project.SalesCommission != null)
+            if (project != null && project.SalesPersonId > 0)
             {
-                ListItem selectedSalesPerson = ddlSalesperson.Items.FindByValue(Project.SalesCommission[0].PersonId.Value.ToString());
+                ListItem selectedSalesPerson = ddlSalesperson.Items.FindByValue(project.SalesPersonId.ToString());
                 if (selectedSalesPerson == null)
                 {
-                    Person selectedPerson = DataHelper.GetPersonWithoutFinancials(Project.SalesCommission[0].PersonId.Value);
+                    Person selectedPerson = DataHelper.GetPersonWithoutFinancials(project.SalesPersonId);
 
                     selectedSalesPerson = new ListItem(selectedPerson.PersonLastFirstName, selectedPerson.Id.Value.ToString());
                     ddlSalesperson.Items.Add(selectedSalesPerson);
@@ -1695,7 +1587,6 @@ namespace PraticeManagement
                 }
 
                 ddlSalesperson.SelectedValue = selectedSalesPerson.Value;
-
             }
         }
 
@@ -1719,7 +1610,6 @@ namespace PraticeManagement
                 }
 
                 cblProjectManagers.SelectedItems = selectedStr;
-
             }
             else
             {
@@ -1727,38 +1617,9 @@ namespace PraticeManagement
             }
         }
 
-        private void DisplayPracticeManagementCommissions(Project project)
-        {
-            // Practice Management Commissions
-            if (project.ManagementCommission != null)
-            {
-                chbReceiveManagementCommission.Checked = project.ManagementCommission.FractionOfMargin != 0;
-                txtManagementCommission.Text = project.ManagementCommission.FractionOfMargin.ToString();
-                rlstManagementCommission.SelectedIndex =
-                    rlstManagementCommission.Items.IndexOf(rlstManagementCommission.Items.FindByValue(
-                    project.ManagementCommission.MarginTypeId.HasValue ?
-                    project.ManagementCommission.MarginTypeId.Value.ToString() : string.Empty));
-                hidPracticeManagementCommissionId.Value = Convert.ToString(project.ManagementCommission.Id);
-            }
-        }
-
-        private void DisplaySalesCommissions(Project project)
-        {
-            // Sales Commissions
-            if (project.SalesCommission != null && project.SalesCommission.Count > 0)
-            {
-                PopulateSalesPersonDropDown();
-
-                chbReceivesSalesCommission.Checked = project.SalesCommission[0].FractionOfMargin != 0;
-                txtSalesCommission.Text = project.SalesCommission[0].FractionOfMargin.ToString();
-                hidSalesCommissionId.Value = Convert.ToString(project.SalesCommission[0].Id);
-            }
-        }
-
         private void SelectProjectStatus(Project project)
         {
             ddlProjectStatus.SelectedValue = project.Status != null ? project.Status.Id.ToString() : string.Empty;
-
         }
 
         private void PopulatePracticeDropDown(Project project)
@@ -1881,7 +1742,7 @@ namespace PraticeManagement
             project.ProjectManagerIdsList = cblProjectManagers.SelectedItems;
             //project.IsChargeable = chbIsChargeable.Checked;
 
-            project.IsInternal = false; //AS per Matt Reilly MattR@logic2020.com  
+            project.IsInternal = false; //AS per Matt Reilly MattR@logic2020.com
             //date: Sat, Mar 17, 2012 at 1:53 AM
             //subject: RE: Time Entry conversion - deployment step
 
@@ -1889,8 +1750,7 @@ namespace PraticeManagement
             project.CanCreateCustomWorkTypes = true;
 
             PopulateProjectGroup(project);
-            PopulateSalesCommission(project);
-            PopulatePracticeManagementCommission(project);
+            project.SalesPersonId = ddlSalesperson.SelectedIndex > 0 ? int.Parse(ddlSalesperson.SelectedValue) : 0;
             project.Description = txtDescription.Text;
             project.SowBudget = string.IsNullOrEmpty(txtSowBudget.Text) ? null : (decimal?)Convert.ToDecimal(txtSowBudget.Text);
 
@@ -1917,47 +1777,6 @@ namespace PraticeManagement
             project.PricingList = ddlPricingList.SelectedValue == "" ? null : new PricingList { PricingListId = int.Parse(ddlPricingList.SelectedValue) };
         }
 
-        private void PopulatePracticeManagementCommission(Project project)
-        {
-            // Practice Management Commissions
-            project.ManagementCommission = new Commission();
-            project.ManagementCommission.TypeOfCommission = CommissionType.PracticeManagement;
-            if (!string.IsNullOrEmpty(txtManagementCommission.Text) && chbReceiveManagementCommission.Checked)
-            {
-                project.ManagementCommission.FractionOfMargin = decimal.Parse(txtManagementCommission.Text);
-            }
-            project.ManagementCommission.MarginTypeId = int.Parse(rlstManagementCommission.SelectedValue);
-            project.ManagementCommission.Id =
-                !string.IsNullOrEmpty(hidPracticeManagementCommissionId.Value) ?
-                (int?)int.Parse(hidPracticeManagementCommissionId.Value) : null;
-
-            var practiceList = DataHelper.GetPracticeById(project.Practice.Id);
-
-            if (practiceList.Length > 0)
-            {
-                project.ManagementCommission.PersonId = practiceList[0].PracticeOwner.Id;
-            }
-        }
-
-        private void PopulateSalesCommission(Project project)
-        {
-            // Sales Commissions
-            Commission salesCommission = new Commission();
-            salesCommission.TypeOfCommission = CommissionType.Sales;
-            if (!string.IsNullOrEmpty(ddlSalesperson.SelectedValue))
-            {
-                salesCommission.PersonId = int.Parse(ddlSalesperson.SelectedValue);
-            }
-            if (chbReceivesSalesCommission.Checked && !string.IsNullOrEmpty(txtSalesCommission.Text))
-            {
-                salesCommission.FractionOfMargin = decimal.Parse(txtSalesCommission.Text);
-            }
-
-            salesCommission.Id =
-                !string.IsNullOrEmpty(hidSalesCommissionId.Value) ? (int?)int.Parse(hidSalesCommissionId.Value) : null;
-            project.SalesCommission = new List<Commission>() { salesCommission };
-        }
-
         private void PopulateProjectGroup(Project project)
         {
             project.Group = new ProjectGroup { Id = int.Parse(ddlProjectGroup.SelectedValue) };
@@ -1966,12 +1785,6 @@ namespace PraticeManagement
         public static string GetProjectIdArgument(bool useAmpersand, int projectId)
         {
             return (useAmpersand ? "&" : "?") + string.Format(ProjectIdFormat, projectId);
-        }
-
-        protected void rlstManagementCommission_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            IsDirty = true;
-            rlstManagementCommission.Focus();
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -2131,7 +1944,6 @@ namespace PraticeManagement
             int salesPersonId = 0;
             int.TryParse(ddlSalesperson.SelectedValue, out salesPersonId);
             MailTo(salesPersonId, (ImageButton)sender);
-
         }
 
         private void MailTo(int personId, ImageButton img)
@@ -2160,14 +1972,14 @@ namespace PraticeManagement
             PopulateControls(Project);
         }
 
-        #endregion
+        #endregion Methods
 
         #region Implementation of IPostBackEventHandler
 
         /// <summary>
         /// When implemented by a class, enables a server control to process an event raised when a form is posted to the server.
         /// </summary>
-        /// <param name="eventArgument">A <see cref="T:System.String"/> that represents an optional 
+        /// <param name="eventArgument">A <see cref="T:System.String"/> that represents an optional
         /// event argument to be passed to the event handler. </param>
         public void RaisePostBackEvent(string eventArgument)
         {
@@ -2183,10 +1995,12 @@ namespace PraticeManagement
                 case PraticeManagement.Controls.Projects.ProjectPersons.PERSON_TARGET:
                     SaveAndRedirectToMilestone(args[1]);
                     break;
+
                 case PraticeManagement.Controls.Projects.ProjectCSAT.ProjectCSAT_TARGET:
                     if (!SaveDirty || ValidateAndSave())
                         Redirect(eventArgument);
                     break;
+
                 default:
                     if (!SaveDirty || ValidateAndSave())
                         Redirect(eventArgument);
@@ -2194,7 +2008,6 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion Implementation of IPostBackEventHandler
     }
 }
-
