@@ -122,16 +122,6 @@ AS
 			INNER JOIN dbo.Calendar AS cal ON cal.Date = CT.Date
 			INNER JOIN dbo.Person pr ON pr.PersonId = CT.PersonId
 			INNER JOIN dbo.Project P ON P.ProjectId = CT.ProjectId
-	 WHERE ((@SalespersonIdLocal IS NULL AND @PracticeManagerIdLocal IS NULL)
-	        OR EXISTS (SELECT 1
-	                      FROM dbo.v_PersonProjectCommission AS c
-	                     WHERE c.ProjectId = p.ProjectId AND c.PersonId = @SalespersonIdLocal AND c.CommissionType = 1
-	                   UNION ALL
-	                   SELECT 1
-	                     FROM dbo.v_PersonProjectCommission AS c
-	                    WHERE c.ProjectId = p.ProjectId AND c.PersonId = @PracticeManagerIdLocal AND c.CommissionType = 2 
-	                   )
-	       )
 	GROUP BY cal.MonthStartDate, cal.MonthEndDate
 	ORDER BY cal.MonthStartDate
 
