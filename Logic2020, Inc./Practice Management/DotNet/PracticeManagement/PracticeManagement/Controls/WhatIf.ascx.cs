@@ -1,18 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.ServiceModel;
 using System.Text.RegularExpressions;
 using System.Web.Security;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.PersonService;
-using Resources;
-using System.Linq;
-using System.Collections.Generic;
 using PraticeManagement.Security;
 using PraticeManagement.Utils;
-using System.Web.UI.HtmlControls;
+using Resources;
 
 namespace PraticeManagement.Controls
 {
@@ -23,8 +23,8 @@ namespace PraticeManagement.Controls
         private const string BillRateDefaultValue = "120";
         private const string MLFText = "Minimum Load Factor (MLF)";
         private const string ClientDiscountDefaultValue = "0";
-        private const string LoggedInPersonSalesCommissionKey = "LoggedInPersonSalesCommission";
         private const string ComputeRate = "ComputeRate";
+
         private Regex validatePercentage =
             new Regex("(\\d+\\.?\\d*)%?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -116,8 +116,7 @@ namespace PraticeManagement.Controls
         {
             get
             {
-
-                decimal clientDiscount = 0.0M; // Default Sales Commission
+                decimal clientDiscount = 0.0M;
                 if (!string.IsNullOrEmpty(txtClientDiscount.Text))
                 {
                     decimal.TryParse(txtClientDiscount.Text, out clientDiscount);
@@ -144,7 +143,7 @@ namespace PraticeManagement.Controls
             lblBillRateMin.Text = sldBillRate.Minimum.ToString();
             lblBillRateMax.Text = sldBillRate.Maximum.ToString();
 
-            // Security            
+            // Security
             bool isAdmin = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             gvOverheadWhatIf.Visible = isAdmin;
 
@@ -164,7 +163,7 @@ namespace PraticeManagement.Controls
                 e.IsValid = decimal.TryParse(m.Groups[1].Captures[0].Value, out value) && value >= 0.0M && value <= 10M;
             }
         }
-        
+
         protected void txtBillRateSlider_TextChanged(object sender, EventArgs e)
         {
             Page.Validate(ComputeRate);
@@ -177,7 +176,7 @@ namespace PraticeManagement.Controls
                 ClearContents();
             }
         }
-        
+
         protected void dtpEffectiveDate_SelectionChanged(object sender, EventArgs e)
         {
             Page.Validate(ComputeRate);
@@ -230,12 +229,10 @@ namespace PraticeManagement.Controls
                     {
                         tmpPerson.CurrentPay = tmpPerson.PaymentHistory.FirstOrDefault(c => EffectiveDate >= c.StartDate && (!c.EndDate.HasValue || EffectiveDate < c.EndDate))
                            ?? tmpPerson.PaymentHistory.First(c => EffectiveDate < c.StartDate);
-
                     }
                     ComputedFinancialsEx rate = serviceClient.CalculateProposedFinancialsPerson(tmpPerson, billRate, hoursPerWeek, ClientDiscount, IsMarginTestPage, EffectiveDate);
 
                     DisplayRate(rate);
-
                 }
                 catch (FaultException<ExceptionDetail> exception)
                 {
@@ -256,7 +253,6 @@ namespace PraticeManagement.Controls
             {
                 td.Style["background-color"] = "White";
             }
-
 
             int margin = (int)targetMargin;
             List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
@@ -335,12 +331,12 @@ namespace PraticeManagement.Controls
             lblMonthlyRevenue.CssClass =
             lblMonthlyCogs.CssClass =
             lblMonthlyGrossMargin.CssClass = string.Empty;
-           
+
             gvOverheadWhatIf.Visible = false;
             gvOverheadWhatIf.DataBind();
         }
 
-        #endregion
+        #endregion Projected rates
 
         protected void cvWithTerminationDate_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -356,9 +352,6 @@ namespace PraticeManagement.Controls
             {
                 args.IsValid = Person.PaymentHistory.Any(c => EffectiveDate >= c.StartDate && (!c.EndDate.HasValue || EffectiveDate < c.EndDate));
             }
-
         }
-
     }
 }
-
