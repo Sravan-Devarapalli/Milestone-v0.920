@@ -47,7 +47,6 @@ AS
 	       END AS MilestoneHourlyRevenue,
 	       mpe.PersonRoleId,
 	       r.Name AS RoleName,
-	       m.SalesCommission,
 	       m.ExpectedHours AS MilestoneExpectedHours,
 		   ISNULL((SELECT COUNT(*)
 				FROM dbo.v_PersonCalendar AS pcal
@@ -59,4 +58,3 @@ AS
 	       INNER JOIN dbo.v_Milestone AS m ON mp.MilestoneId = m.MilestoneId
 	       INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	       LEFT JOIN dbo.PersonRole AS r ON mpe.PersonRoleId = r.PersonRoleId
-
