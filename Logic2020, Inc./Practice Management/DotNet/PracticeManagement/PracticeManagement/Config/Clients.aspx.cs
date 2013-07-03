@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Drawing;
+using System.Linq;
 using System.ServiceModel;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
-using System.Linq;
-using System.Web.UI.HtmlControls;
-using System.Drawing;
 
 namespace PraticeManagement.Config
 {
@@ -48,9 +48,7 @@ namespace PraticeManagement.Config
                     {
                         try
                         {
-                            var result = IsShowActive
-                                    ? serviceClient.ClientListAll()
-                                    : serviceClient.ClientListAllWithInactive();
+                            var result = serviceClient.ClientListAll(!IsShowActive);
                             ViewState[CLIENTS_LIST_KEY] = result;
                             return result;
                         }
@@ -64,7 +62,7 @@ namespace PraticeManagement.Config
             }
         }
 
-        private Client[] FilteredClientList{get;set;}
+        private Client[] FilteredClientList { get; set; }
 
         private bool IsShowActive
         {
@@ -377,7 +375,6 @@ namespace PraticeManagement.Config
 
             lnkbtnAll.CssClass =
             lnkbtnAll1.CssClass = FontBold;
-
         }
 
         protected void Next_Clicked(object sender, EventArgs e)
@@ -442,7 +439,7 @@ namespace PraticeManagement.Config
 
             if (!lnkbtnNext.Enabled)
             {
-                lnkbtnNext.CssClass = lnkbtnNext1.CssClass = "color8F8F8F"; 
+                lnkbtnNext.CssClass = lnkbtnNext1.CssClass = "color8F8F8F";
             }
             else
             {
@@ -470,4 +467,3 @@ namespace PraticeManagement.Config
         }
     }
 }
-
