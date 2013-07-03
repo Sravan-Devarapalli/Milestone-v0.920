@@ -73,7 +73,7 @@
 
         function SetWrapText(str) {
             for (var i = 30; i < str.length; i = i + 10) {
-                str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
+                str = str.slice(0, i) + "<wbr />" + str.slice(i, str.length);
             }
             return str;
         }
@@ -200,7 +200,6 @@
             }
         }
 
-
         //milestonePersonList.ascx
         function imgMilestonePersonDelete_OnClientClick(imgDelete) {
             var hdMilestonePersonEntryId = document.getElementById('<%= MilestonePersonEntryListControl.ClientID%>' + '_hdMilestonePersonEntryId');
@@ -251,7 +250,7 @@
 
             var displayPanel = $("#" + hiddenpnl);
             displayPanel.hide();
-        }   
+        }
     </script>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
@@ -542,23 +541,6 @@
                                             </td>
                                         </tr>
                                     </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Sales commission (<asp:Label ID="lblSalesCommissionPercentage" runat="server"></asp:Label>
-                                    &nbsp;%)
-                                </td>
-                                <td class="textRight">
-                                    <asp:Label ID="lblProjectedSalesCommission" runat="server" class="fontBold"></asp:Label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Practice Manager commission
-                                </td>
-                                <td class="textRight">
-                                    <asp:Label ID="lblPracticeManagerCommission" runat="server" class="fontBold"></asp:Label>
                                 </td>
                             </tr>
                             <tr>
@@ -1071,4 +1053,3 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
-
