@@ -85,13 +85,10 @@ BEGIN
 										INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = pro.ProjectId
 										WHERE projManagers.ProjectManagerId = @PersonId )
 						 OR pg.GroupId IN (SELECT pro.GroupId FROM Project AS pro
-										WHERE pro.ProjectOwnerId = @PersonId )
-						 OR pg.GroupId IN (SELECT proj.GroupId 
-										FROM dbo.Project AS proj
-										JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
-										WHERE C.PersonId = @PersonId)
+										WHERE pro.ProjectOwnerId = @PersonId OR pro.SalesPersonId = @PersonId)
 						 )
 	END
 
 
 END
+
