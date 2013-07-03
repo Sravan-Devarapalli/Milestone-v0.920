@@ -20,7 +20,7 @@ namespace DataTransferObjects
         private PracticeManagementCurrency _actualMarginValue;
         private PracticeManagementCurrency _actualRevenueValue;
 
-        #endregion
+        #endregion Fields
 
         #region Constructor
 
@@ -29,7 +29,7 @@ namespace DataTransferObjects
             Timescale = TimescaleType.Salary;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Properties
 
@@ -118,18 +118,6 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Gets or sets a computed value of the sales commission.
-        /// </summary>
-        [DataMember]
-        public PracticeManagementCurrency SalesCommission { get; set; }
-
-        /// <summary>
-        /// Gets or sets a computed value of the practice management commission.
-        /// </summary>
-        [DataMember]
-        public PracticeManagementCurrency PracticeManagementCommission { get; set; }
-
-        /// <summary>
         /// Gets or sets a date the financials tied with.
         /// </summary>
         [DataMember]
@@ -147,7 +135,7 @@ namespace DataTransferObjects
         /// <summary>
         /// Gets an average hourly bill rate minus discount.
         /// </summary>
-        /// 
+        ///
         [DataMember]
         public PracticeManagementCurrency? BillRateMinusDiscount { get; set; }
 
@@ -185,7 +173,7 @@ namespace DataTransferObjects
         [DataMember]
         public int TimescaleChangeStatus { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Calculated Values
 
@@ -220,7 +208,7 @@ namespace DataTransferObjects
         {
             get
             {
-                PracticeManagementCurrency result = GrossMargin - SalesCommission - PracticeManagementCommission;
+                PracticeManagementCurrency result = GrossMargin;
                 result.FormatStyle = NumberFormatStyle.Margin;
                 return result;
             }
@@ -234,8 +222,6 @@ namespace DataTransferObjects
             get { return Revenue != 0M ? GrossMargin.Value * 100M / Revenue.Value : 0M; }
         }
 
-        #endregion
-
+        #endregion Calculated Values
     }
 }
-
