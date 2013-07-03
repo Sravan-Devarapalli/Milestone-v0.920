@@ -26,9 +26,7 @@ namespace PraticeManagement.Controls.Reports
             DateTime periodStart,
             DateTime periodEnd)
         {
-
-
-            // Prepare Financial Summary GridView            
+            // Prepare Financial Summary GridView
             var financialSummaryRevenue = new Project();
             var financialAvgRates = new Project();
             var financialExpenses = new Project();
@@ -57,10 +55,8 @@ namespace PraticeManagement.Controls.Reports
                             financials.Cogs += projectFinancials.Value.Cogs;
                             financials.GrossMargin += projectFinancials.Value.GrossMargin;
 
-                            // Expenses                            
+                            // Expenses
                             financials.RevenueNet += projectFinancials.Value.RevenueNet;
-                            financials.SalesCommission += projectFinancials.Value.SalesCommission;
-                            financials.PracticeManagementCommission += projectFinancials.Value.PracticeManagementCommission;
 
                             // Average rates
                             avgRates.Revenue += projectFinancials.Value.Revenue;
@@ -71,7 +67,7 @@ namespace PraticeManagement.Controls.Reports
                     }
                 }
 
-                // Net Profit = GM - (Expenses + Bench + Sales Commissions + PM Commissions + Admin)
+                // Net Profit = GM - (Expenses + Bench + Admin)
                 foreach (var expenseItem in expenses)
                     if (expenseItem.MonthlyAmount.ContainsKey(dtTemp))
                         totalExpenses += expenseItem.MonthlyAmount[dtTemp];
@@ -101,8 +97,6 @@ namespace PraticeManagement.Controls.Reports
             financialSummary[AvgRatesProjectIndex] = financialAvgRates;
             financialSummary[ExpensesProjectIndex] = financialExpenses;
 
-
-
             return financialSummary;
         }
 
@@ -117,9 +111,9 @@ namespace PraticeManagement.Controls.Reports
             {
                 var newColumn = new BoundField
                                     {
-                                        HeaderText = 
+                                        HeaderText =
                                             Resources.Controls.TableHeaderOpenTag +
-                                            periodStart.ToString(Constants.Formatting.CompPerfMonthYearFormat) + 
+                                            periodStart.ToString(Constants.Formatting.CompPerfMonthYearFormat) +
                                             Resources.Controls.TableHeaderCloseTag,
                                         HtmlEncode = false
                                     };
