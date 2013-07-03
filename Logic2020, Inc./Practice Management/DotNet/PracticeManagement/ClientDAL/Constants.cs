@@ -160,7 +160,6 @@
             public const string ProjectName = "ProjectName";
             public const string ProjectStartDate = "ProjectStartDate";
             public const string ProjectStatusId = "ProjectStatusId";
-            public const string SalesCommission = "SalesCommission";
             public const string PersonStatusName = "PersonStatusName";
             public const string PersonStatusId = "PersonStatusId";
             public const string SortExpression = "SortExpression";
@@ -176,8 +175,6 @@
             public const string TotalForecastedHours = "TotalForecastedHours";
             public const string GrossMarginColumn = "GrossMargin";
             public const string HoursColumn = "Hours";
-            public const string SalesCommissionColumn = "SalesCommission";
-            public const string PracticeManagementCommissionColumn = "PracticeManagementCommission";
             public const string DateColumn = "Date";
             public const string VirtualConsultantsColumn = "VirtualConsultants";
             public const string EmployeesNumberColumn = "EmployeesNumber";
@@ -251,7 +248,6 @@
             public const string SalespersonLastNameColumn = "SalespersonLastName";
             public const string SalespersonFullNameColumn = "SalespersonName";
             public const string SalespersonStatusColumn = "SalespersonStatus";
-            public const string CommissionTypeColumn = "CommissionType";
             public const string OpportunityStatusNameColumn = "OpportunityStatusName";
             public const string CreateDateColumn = "CreateDate";
             public const string PipelineColumn = "Pipeline";
@@ -1323,16 +1319,6 @@
             }
 
             #endregion Nested type: Client
-
-            #region Nested type: Commission
-
-            public class Commission
-            {
-                public const string CommissionGetByProjectTypeProcedure = "dbo.CommissionGetByProjectType";
-                public const string CommissionSetProcedure = "dbo.CommissionSet";
-            }
-
-            #endregion Nested type: Commission
 
             #region Nested type: AspMembership
 
