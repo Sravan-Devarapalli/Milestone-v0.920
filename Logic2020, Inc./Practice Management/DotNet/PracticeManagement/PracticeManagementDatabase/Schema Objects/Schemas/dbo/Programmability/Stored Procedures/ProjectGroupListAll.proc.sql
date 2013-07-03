@@ -56,8 +56,7 @@ AS
 										WHERE pro.ProjectOwnerId = @PersonId )
 						 OR GroupId IN (SELECT proj.GroupId 
 										FROM Project AS proj
-										JOIN Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
-										WHERE C.PersonId = @PersonId)
+										WHERE proj.SalesPersonId = @PersonId)
 						 )
 			ORDER BY Name
 
