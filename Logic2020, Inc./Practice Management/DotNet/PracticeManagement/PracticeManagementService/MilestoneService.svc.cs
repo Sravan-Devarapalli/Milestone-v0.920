@@ -82,21 +82,6 @@ namespace PracticeManagementService
                     foreach (var entry in result.MilestonePersons.SelectMany(milestonePerson => milestonePerson.Entries))
                         result.Amount += entry.ProjectedWorkload * entry.HourlyAmount;
                 }
-
-                if (result.Project != null)
-                {
-                    // Practice management commission
-                    List<Commission> managementCommission =
-                        CommissionDAL.CommissionGetByProjectType(result.Project.Id.Value,
-                        CommissionType.PracticeManagement);
-                    result.Project.ManagementCommission =
-                        managementCommission.Count > 0 ? managementCommission[0] : null;
-
-                    // Sales commission
-                    result.Project.SalesCommission =
-                        CommissionDAL.CommissionGetByProjectType(result.Project.Id.Value,
-                        CommissionType.Sales);
-                }
             }
 
             return result;
