@@ -1,7 +1,9 @@
-﻿CREATE PROCEDURE dbo.ClientListAll
+﻿CREATE PROCEDURE  dbo.ClientListAll
+(
 	@ShowAll BIT = 0,
 	@PersonId INT = NULL,
 	@ApplyNewRule BIT = 0
+)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -52,11 +54,10 @@ BEGIN
 		FROM dbo.Client C
 		INNER JOIN dbo.Project P ON P.ClientId = C.ClientId
 		INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = P.ProjectId
-		LEFT  JOIN dbo.Commission Cm ON Cm.ProjectId = p.ProjectId AND Cm.CommissionType = 1
 		WHERE ((@ShowAll = 0 AND C.Inactive = 0) OR @ShowAll <> 0)
 		AND	(@PersonId IS null
 			OR ( ISNULL(@UserHasHighRoleThanProjectLead,1) <> 0 AND p.DirectorId = @PersonId )--if Only Project Lead Role then we are not considering Director. as per #2941.
-			OR Cm.PersonId = @PersonId
+			OR P.SalesPersonId = @PersonId
 			OR projmanager.ProjectManagerId = @PersonId
 			OR P.projectOwnerId = @PersonId
 			)
@@ -94,9 +95,8 @@ BEGIN
 			SELECT proj.ClientId 
 			FROM dbo.Project AS proj
 			INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = proj.ProjectId
-			LEFT JOIN dbo.Commission C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1
 			WHERE projmanager.ProjectManagerId = @PersonId 
-					OR C.PersonId = @PersonId -- Adding Salesperson - Project clients into the list.
+					OR proj.SalesPersonId = @PersonId -- Adding Salesperson - Project clients into the list.
 					OR proj.projectOwnerId = @PersonId 
 		END
 
