@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 5-21-2008
--- Updated by:	Anatoliy Lokshin
--- Update date:	8-26-2008
--- Description:	List Milestones by the specified Project
--- =============================================
-CREATE PROCEDURE dbo.MilestoneListByProject
+﻿CREATE PROCEDURE dbo.MilestoneListByProject
 (
 	@ProjectId   INT
 )
@@ -26,7 +19,6 @@ AS
 	       m.Discount,
 	       m.ClientName,
 	       m.ExpectedHours,
-	       m.SalesCommission,
 	       m.PersonCount,
 	       m.ProjectedDuration,
 	       m.ConsultantsCanAdjust,
