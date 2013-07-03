@@ -124,11 +124,6 @@ BEGIN
 		   f.Date, 
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
-		   ISNULL((SELECT SUM(c.FractionOfMargin) 
-							  FROM dbo.Commission AS  c 
-							  WHERE c.ProjectId = f.ProjectId 
-									AND c.CommissionType = 1
-								),0) ProjectSalesCommisionFraction,
 		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)) SLHR,
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
@@ -175,11 +170,6 @@ BEGIN
 								END ,0)
 					) AS HourlyActualMarginPerDay,
 			ISNULL(SUM(f.PersonHoursPerDay), 0) AS ProjectedHoursPerDay,
-			(SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-						(CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
-					    *ISNULL(f.PersonHoursPerDay, 0))* (f.ProjectSalesCommisionFraction/100))) SalesCommission,
-			0 AS PracticeManagementCommission,
 		  	min(f.Discount) as Discount,
 			MIN(CONVERT(INT, f.IsHourlyAmount)) as IsHourlyAmount
 	FROM FinancialsRetro AS f
@@ -212,9 +202,7 @@ BEGIN
 			SUM(ISNULL(CT.HourlyActualMarginPerDay, 0) + ISNULL(CT.FixedActualMarginPerDay, 0)) as ActualMargin,
 			SUM(ISNULL(CT.ProjectedCogsperDay, 0)) as ProjectedCogs,
 			MAX(ISNULL(CT.Discount, 0)) Discount,
-			SUM(ISNULL(CT.ProjectedHoursPerDay, 0)) as ProjectedHoursPerMonth,
-			SUM(ISNULL(CT.SalesCommission, 0)) as SalesCommission,
-			SUM(ISNULL(CT.PracticeManagementCommission, 0)) as PracticeManagementCommission
+			SUM(ISNULL(CT.ProjectedHoursPerDay, 0)) as ProjectedHoursPerMonth
 	FROM ActualAndProjectedValuesDaily CT
 	INNER JOIN @Ranges C ON CT.Date BETWEEN C.StartDate AND C.EndDate
 	GROUP BY CT.ProjectId, C.StartDate, C.EndDate,C.RangeType
@@ -229,8 +217,6 @@ BEGIN
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedCogs,0)) Cogs ,
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedGrossMargin,0)+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)) * (1 - ISNULL(APV.Discount,0)/100))  as 'GrossMargin',
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedHoursPerMonth,0)) Hours,
-		CONVERT(DECIMAL(18,2),ISNULL(APV.SalesCommission,0)) SalesCommission,
-		CONVERT(DECIMAL(18,2),ISNULL(APV.PracticeManagementCommission,0)) PracticeManagementCommission,
 		CONVERT(DECIMAL(18,2),ISNULL(PEM.Expense,0)) Expense,
 		CONVERT(DECIMAL(18,2),ISNULL(PEM.Reimbursement,0)) ReimbursedExpense,
 		CASE WHEN ISNULL(APV.FinancialDate,PEM.FinancialDate) < @CurrentMonthStartDate 
