@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading;
@@ -14,6 +15,10 @@ using DataTransferObjects.ContextObjects;
 using PraticeManagement.ActivityLogService;
 using PraticeManagement.CalendarService;
 using PraticeManagement.ClientService;
+using PraticeManagement.ConfigurationService;
+using PraticeManagement.Controls.Generic;
+using PraticeManagement.Controls.Generic.Filtering;
+using PraticeManagement.Controls.Opportunities;
 using PraticeManagement.Controls.Reports;
 using PraticeManagement.ExpenseCategoryService;
 using PraticeManagement.ExpenseService;
@@ -29,17 +34,12 @@ using PraticeManagement.PracticeService;
 using PraticeManagement.ProjectGroupService;
 using PraticeManagement.ProjectService;
 using PraticeManagement.ProjectStatusService;
+using PraticeManagement.ReportService;
 using PraticeManagement.TimeEntryService;
 using PraticeManagement.TimescaleService;
-using PraticeManagement.Controls.Generic.Filtering;
-using PraticeManagement.Controls.Generic;
-using PraticeManagement.ConfigurationService;
-using PraticeManagement.Controls.Opportunities;
-using PraticeManagement.ReportService;
-using System.ComponentModel;
 using PraticeManagement.Utils;
 
-#endregion
+#endregion using
 
 namespace PraticeManagement.Controls
 {
@@ -56,7 +56,6 @@ namespace PraticeManagement.Controls
             get;
             set;
         }
-
     }
 
     /// <summary>
@@ -71,7 +70,7 @@ namespace PraticeManagement.Controls
         private const string DefaultNameFieldEndodedName = "HtmlEncodedName";
         private const string CurrentPersonKey = "CurrentPerson";
 
-        #endregion
+        #endregion Constants
 
         public static Opportunity[] GetOpportunitiesPrevNext(int? opportunityId)
         {
@@ -221,30 +220,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        /// <summary>
-        /// Lists managers subordinates
-        /// </summary>
-        /// <param name="person">Manager</param>
-        /// <returns>List of subordinates</returns>
-        public static Person[] ListManagersSubordinates(Person person)
-        {
-            using (var client = new PersonServiceClient())
-            {
-                return client.ListManagersSubordinates(person);
-            }
-        }
-
-        /// <summary>
-        /// Set new manager
-        /// </summary>
-        public static void SetNewManager(Person oldManager, Person newManager)
-        {
-            using (var client = new PersonServiceClient())
-            {
-                client.SetNewManager(oldManager, newManager);
-            }
-        }
-
         private static int Comp(Triple<Person, int[], int> x, Triple<Person, int[], int> y)
         {
             return x.Third.CompareTo(y.Third);
@@ -270,13 +245,11 @@ namespace PraticeManagement.Controls
             string sortDirection,
             bool excludeInternalPractices, bool isSampleReport = false)
         {
-
             var consultants =
                 ReportsHelper.GetConsultantsTimelineReport(
                     startDate, duration, step, activePersons, projectedPersons,
                     activeProjects, projectedProjects, experimentalProjects, internalProjects,
                     timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, isSampleReport);
-
 
             return consultants.FindAll(Q => Q.Third < avgUtil);
         }
@@ -290,7 +263,6 @@ namespace PraticeManagement.Controls
             bool experimentalProjects,
             int personId)
         {
-
             var context = new ConsultantTimelineReportContext
             {
                 Start = startDate,
@@ -344,7 +316,6 @@ namespace PraticeManagement.Controls
             return result;
         }
 
-
         public static List<DetailedProjectReportItem> GetProjects(DateTime startDate, DateTime endDate)
         {
             var result = new List<DetailedProjectReportItem>();
@@ -362,10 +333,8 @@ namespace PraticeManagement.Controls
                 }
             }
 
-
             foreach (var project in projectsList)
                 result.Add(new DetailedProjectReportItem(startDate, endDate, project));
-
 
             return result;
         }
@@ -428,6 +397,7 @@ namespace PraticeManagement.Controls
         {
             return ServiceCallers.Custom.Person(c => c.CurrentPayExists(personId));
         }
+
         /// <summary>
         /// Check's if there's compensation record covering milestone/
         /// See #886 for details.
@@ -629,6 +599,7 @@ namespace PraticeManagement.Controls
         {
             return practices.AsQueryable().Where(p => p.IsActive).ToArray();
         }
+
         /// <summary>
         /// Fills the list control with the list of practices.
         /// </summary>
@@ -783,7 +754,6 @@ namespace PraticeManagement.Controls
 
                     Array.Sort(persons);
                     FillPersonListWithTitle(control, firstItemText, persons, "-1");
-
                 }
                 catch (CommunicationException)
                 {
@@ -931,8 +901,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
-
         public static void FillSalespersonListOnlyActive(ListControl control, string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
@@ -973,6 +941,7 @@ namespace PraticeManagement.Controls
         {
             return persons.AsQueryable().Where(p => p.Status.Id == (int)PersonStatusType.Active || p.Status.Id == (int)PersonStatusType.TerminationPending).ToArray(); // Here Status.Id == 1 means only active person. (Not projected)
         }
+
         /// <summary>
         /// Fills the list control with the list of active salespersons.
         /// </summary>
@@ -1052,7 +1021,6 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-
         }
 
         public static void FillUnlinkedOpportunityList(int? clientId, ListControl control, string firstItemText)
@@ -1071,9 +1039,7 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-
         }
-
 
         public static void FillPersonList(ListControl control, string firstItemText, Person[] persons, string firstItemValue, bool fillWithPersonFirstLastName = false)
         {
@@ -1177,7 +1143,6 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-
         }
 
         public static void FillPersonListWithTitle(ListControl control, string firstItemText, Person[] persons, string firstItemValue)
@@ -1551,7 +1516,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         public static void FillPricingLists(ListControl control, PricingList[] pricingList, string firstItemText = null, bool noFirstItem = false, string valueField = "PricingListId", string NameField = "Name")
         {
             pricingList = pricingList.Where(p => p.IsActive).ToArray();
@@ -1644,16 +1608,6 @@ namespace PraticeManagement.Controls
         }
 
         /// <summary>
-        /// Fills the list control with the list of active clients.
-        /// </summary>
-        /// <param name="control">The control to be filled.</param>
-        /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static void FillClientListWithInactive(ListControl control, string firstItemText)
-        {
-            FillClientListWithInactive(control, firstItemText, true);
-        }
-
-        /// <summary>
         /// Fills the client list control with the list of active clients and groups list control with corresponding groups
         /// </summary>
         /// <param name="clientList">Clients list control</param>
@@ -1670,7 +1624,6 @@ namespace PraticeManagement.Controls
 
             IEnumerable<Client> clients = GetAllClientsSecure(person, true);
 
-
             PrepareClientList(clientList, clients);
             PrepareGroupList(clientList, groupList, clients);
         }
@@ -1682,7 +1635,6 @@ namespace PraticeManagement.Controls
         /// <param name="groupList">Groups list control</param>
         public static void FillClientsAndGroupsCheckBoxListInPersonDetailPage(CascadingMsdd clientList, ListControl groupList)
         {
-
             //  If current user is administrator, don't apply restrictions
             Person person =
                 (
@@ -1693,7 +1645,6 @@ namespace PraticeManagement.Controls
                     : CurrentPerson;
 
             IEnumerable<Client> clients = GetAllClientsSecure(person, false);
-
 
             PrepareClientList(clientList, clients);
             PrepareGroupList(clientList, groupList, clients);
@@ -1874,11 +1825,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    Client[] clients =
-                        includeInactive
-                            ?
-                                serviceClient.ClientListAllWithInactive()
-                            : serviceClient.ClientListAll();
+                    Client[] clients = serviceClient.ClientListAll(includeInactive);
 
                     FillListDefault(control, firstItemText, clients, false);
                 }
@@ -2148,7 +2095,6 @@ namespace PraticeManagement.Controls
             OpportunityPriority[] priorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
 
             FillListDefault(ddlPriority, firstItemText, priorities, false, "Id", "HtmlEncodedDisplayName");
-
         }
 
         public static Dictionary<string, DateTime> GetFiscalYearPeriod(DateTime currentMonth)
@@ -2336,7 +2282,6 @@ namespace PraticeManagement.Controls
                 Array.Sort(opportunities, comp);
 
             return opportunities.ToList();
-
         }
 
         public static List<QuickLinks> GetQuickLinksByDashBoardType(DashBoardType dashBoardtype)
@@ -2526,7 +2471,7 @@ namespace PraticeManagement.Controls
                         DateTime? activeHireDate = null;
                         if (dontCheckActiveRecord && (person.Status.Id == (int)PersonStatusType.Active || person.Status.Id == (int)PersonStatusType.TerminationPending))
                         {
-                            //person is active 
+                            //person is active
                             activeHireDate = person.EmploymentHistory.Max(e => e.HireDate);
                         }
 
@@ -2547,7 +2492,6 @@ namespace PraticeManagement.Controls
                     {
                         check = person.HireDate <= date &&
                                 ((person.TerminationDate.HasValue && person.TerminationDate.Value >= date) || (!person.TerminationDate.HasValue));
-
                     }
                 }
             }
@@ -2560,7 +2504,7 @@ namespace PraticeManagement.Controls
             bool check = true;
             if (person != null && person.EmploymentHistory != null && (person.Status.Id == (int)PersonStatusType.Active || person.Status.Id == (int)PersonStatusType.TerminationPending))
             {
-                //person is active 
+                //person is active
                 int i = 0;
                 foreach (var date in dates)
                 {
@@ -2577,8 +2521,5 @@ namespace PraticeManagement.Controls
 
             return check;
         }
-
     }
 }
-
-
