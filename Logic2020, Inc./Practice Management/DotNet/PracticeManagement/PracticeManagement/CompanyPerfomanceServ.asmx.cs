@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel;
@@ -6,10 +7,9 @@ using System.Web.Script.Services;
 using System.Web.Services;
 using AjaxControlToolkit;
 using PraticeManagement.ClientService;
+using PraticeManagement.Configuration;
 using PraticeManagement.Controls;
 using PraticeManagement.MilestoneService;
-using PraticeManagement.Configuration;
-using System;
 
 namespace PraticeManagement
 {
@@ -19,7 +19,7 @@ namespace PraticeManagement
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [ToolboxItem(false)]
-    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
+    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line.
     // [ScriptService]
     [ScriptService]
     public class CompanyPerfomanceServ : WebService
@@ -39,28 +39,6 @@ namespace PraticeManagement
                             group.Name,
                             group.Id.ToString())).ToArray();
         }
-        
-        [WebMethod]
-        [ScriptMethod]
-        public CascadingDropDownNameValue[] GetClients(string knownCategoryValues, string category)
-        {
-            var res = new List<CascadingDropDownNameValue>();
-            using (var serviceClient = new ClientServiceClient())
-            {
-                try
-                {
-                    var clients = serviceClient.ClientListAll();
-                    foreach (var client in clients)
-                        res.Add(new CascadingDropDownNameValue(client.Name, client.Id.ToString()));
-                }
-                catch (FaultException<ExceptionDetail>)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-            return res.ToArray();
-        }
 
         [WebMethod]
         [ScriptMethod]
@@ -77,7 +55,6 @@ namespace PraticeManagement
                                     project.Id.Value == selectedProjectId)).ToArray();
         }
 
-
         [WebMethod]
         [ScriptMethod]
         public CascadingDropDownNameValue[] GetProjectsListByProjectGroupId(string knownCategoryValues, string category, string contextKey)
@@ -90,9 +67,8 @@ namespace PraticeManagement
             var projects = ServiceCallers.Custom.Project(group => group.GetProjectsListByProjectGroupId(groupId, true, personId, startDate, endDate));
 
             return projects.Select(
-                project => new CascadingDropDownNameValue(project.Name,project.Id.ToString())).ToArray();
+                project => new CascadingDropDownNameValue(project.Name, project.Id.ToString())).ToArray();
         }
-
 
         [WebMethod]
         [ScriptMethod]
@@ -106,10 +82,9 @@ namespace PraticeManagement
             var projects = ServiceCallers.Custom.Project(client => client.ListProjectsByClientAndPersonInPeriod(clientId, true, true, personId, startDate, endDate));
 
             var cddlist = projects.Select(
-                project => new CascadingDropDownNameValue(project.Name,project.Id.ToString())).ToArray();
+                project => new CascadingDropDownNameValue(project.Name, project.Id.ToString())).ToArray();
             return cddlist;
         }
-
 
         [WebMethod]
         [ScriptMethod]
@@ -147,4 +122,3 @@ namespace PraticeManagement
         }
     }
 }
-
