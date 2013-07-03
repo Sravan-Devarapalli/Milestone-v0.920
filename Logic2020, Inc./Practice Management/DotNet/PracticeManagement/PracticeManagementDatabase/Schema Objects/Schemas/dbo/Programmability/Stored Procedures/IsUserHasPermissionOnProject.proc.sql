@@ -23,12 +23,11 @@ AS
 	END
 
 	
-	SELECT @SalespersonId = c.PersonId
+	SELECT @SalespersonId = proj.SalesPersonId
 			,@PracticeId = proj.PracticeId
 			,@ClientId = proj.ClientId
 			,@ProjectGroup = proj.GroupId
 	FROM Project proj
-	LEFT JOIN dbo.Commission c ON c.ProjectId = proj.ProjectId AND c.CommissionType = 1
 	WHERE proj.ProjectId = @Id
 
 
@@ -70,3 +69,4 @@ AS
 		SELECT 'False'
 	END
 GO
+
