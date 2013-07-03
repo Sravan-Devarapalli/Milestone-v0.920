@@ -453,9 +453,6 @@ namespace DataAccess
             int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
             int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
             int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
-                int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
-                int practiceManagementCommissionIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
             int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
             int actualRevenueIndex = -1;
             int actualGrossMarginIndex = -1;
@@ -479,8 +476,6 @@ namespace DataAccess
                         cogsIndex,
                         grossMarginIndex,
                         hoursIndex,
-                          salesCommissionIndex,
-                          practiceManagementCommissionIndex,
                         -1,
                         -1,
                         actualRevenueIndex,
@@ -500,9 +495,6 @@ namespace DataAccess
             int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
             int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
             int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
-                int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
-                int practiceManagementCommissionIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
             int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
             int actualRevenueIndex = -1;
             int actualGrossMarginIndex = -1;
@@ -526,8 +518,6 @@ namespace DataAccess
                         cogsIndex,
                         grossMarginIndex,
                         hoursIndex,
-                          salesCommissionIndex,
-                          practiceManagementCommissionIndex,
                         -1,
                         -1,
                         actualRevenueIndex,
@@ -586,9 +576,6 @@ namespace DataAccess
             int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
             int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
             int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
-                int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
-                int practiceManagementCommissionIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
             int personIdIndex =
                 reader.GetOrdinal(Constants.ColumnNames.PersonId);
             int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
@@ -631,8 +618,6 @@ namespace DataAccess
                             cogsIndex,
                             grossMarginIndex,
                             hoursIndex,
-                          salesCommissionIndex,
-                          practiceManagementCommissionIndex,
                             expenseIndex,
                             expenseReimbIndex));
             }
@@ -647,9 +632,6 @@ namespace DataAccess
             int cogsIndex = reader.GetOrdinal(Constants.ColumnNames.CogsColumn);
             int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
             int hoursIndex = reader.GetOrdinal(Constants.ColumnNames.HoursColumn);
-                int salesCommissionIndex = reader.GetOrdinal(Constants.ColumnNames.SalesCommissionColumn);
-                int practiceManagementCommissionIndex =
-                    reader.GetOrdinal(Constants.ColumnNames.PracticeManagementCommissionColumn);
 
             int expenseIndex;
             int expenseReimbIndex;
@@ -676,8 +658,6 @@ namespace DataAccess
                         cogsIndex,
                         grossMarginIndex,
                         hoursIndex,
-                          salesCommissionIndex,
-                          practiceManagementCommissionIndex,
                         expenseIndex,
                         expenseReimbIndex);
             }
@@ -691,8 +671,6 @@ namespace DataAccess
             int cogsIndex,
             int grossMarginIndex,
             int hoursIndex,
-            int salesCommissionIndex,
-            int practiceManagementCommissionIndex,
             int expenseIndex,
             int expenseReimbIndex,
             int actualRevenueIndex = -1,
@@ -706,12 +684,6 @@ namespace DataAccess
                            Cogs = reader.GetDecimal(cogsIndex),
                            GrossMargin = reader.GetDecimal(grossMarginIndex),
                            HoursBilled = reader.GetDecimal(hoursIndex),
-                           SalesCommission =
-                               !reader.IsDBNull(salesCommissionIndex) ? reader.GetDecimal(salesCommissionIndex) : 0M,
-                           PracticeManagementCommission = !reader.IsDBNull(practiceManagementCommissionIndex)
-                                                              ?
-                                                                  reader.GetDecimal(practiceManagementCommissionIndex)
-                                                              : 0M,
                            Expenses = expenseIndex < 0 ? 0 : reader.GetDecimal(expenseIndex),
                            ReimbursedExpenses = expenseReimbIndex < 0 ? 0 : reader.GetDecimal(expenseReimbIndex),
                            ActualRevenue = actualRevenueIndex > -1 && !reader.IsDBNull(actualRevenueIndex) ? reader.GetDecimal(actualRevenueIndex) : 0M,
