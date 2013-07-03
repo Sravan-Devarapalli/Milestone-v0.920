@@ -109,8 +109,7 @@ BEGIN
 		INNER JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
 		INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
 		INNER JOIN dbo.Practice PR ON PR.PracticeId = P.PracticeId
-		INNER JOIN dbo.Commission Comm ON Comm.ProjectId = P.ProjectId AND Comm.CommissionType = 1 
-		INNER JOIN dbo.Person Per3 ON Per3.PersonId = Comm.PersonId
+		INNER JOIN dbo.Person Per3 ON Per3.PersonId = P.SalesPersonId
 		INNER JOIN dbo.Person Per1 ON Per1.PersonId = P.ProjectOwnerId
 		LEFT JOIN EstimatedRevenueByProject ERP ON ERP.ProjectId = P.ProjectId
 		LEFT JOIN dbo.Person Per2 ON Per2.PersonId = P.DirectorId
