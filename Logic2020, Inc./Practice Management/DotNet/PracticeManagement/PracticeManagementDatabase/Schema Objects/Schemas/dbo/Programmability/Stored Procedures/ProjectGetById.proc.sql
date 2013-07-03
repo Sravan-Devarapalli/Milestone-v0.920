@@ -3,11 +3,9 @@
 -- Updated By:	ThulasiRam.P
 -- Updated Date: 2012-06-07
 -- =============================================
-CREATE PROCEDURE [dbo].[ProjectGetById]
+CREATE PROCEDURE  [dbo].[ProjectGetById]
 (
-	@ProjectId	         INT,
-	@SalespersonId       INT = NULL,
-	@PracticeManagerId   INT = NULL
+	@ProjectId	         INT
 )
 AS
 	SET NOCOUNT ON
@@ -63,7 +61,8 @@ AS
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE  sm.LastName+', ' +sm.FirstName END AS 'SeniorManagerName',
 			re.PersonId AS 'ReviewerId',
 			re.LastName+', ' +re.FirstName AS 'ReviewerName',
-			p.PONumber
+			p.PONumber,
+			p.SalesPersonId
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
@@ -73,14 +72,4 @@ AS
 	  LEFT JOIN dbo.PricingList AS pl ON pl.PricingListId = p.PricingListId
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	  WHERE p.ProjectId = @ProjectId
-       AND (   (@SalespersonId IS NULL AND @PracticeManagerId IS NULL)
-	        OR EXISTS (SELECT 1
-	                      FROM dbo.v_PersonProjectCommission AS c
-	                     WHERE c.ProjectId = p.ProjectId AND c.PersonId = @SalespersonId AND c.CommissionType = 1
-	                   UNION ALL
-	                   SELECT 1
-	                     FROM dbo.v_PersonProjectCommission AS c
-	                    WHERE c.ProjectId = p.ProjectId AND c.PersonId = @PracticeManagerId AND c.CommissionType = 2 
-	                   )
-	       )
-
+	  
