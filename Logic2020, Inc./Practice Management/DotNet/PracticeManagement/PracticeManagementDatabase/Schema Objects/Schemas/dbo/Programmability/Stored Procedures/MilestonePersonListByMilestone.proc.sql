@@ -40,7 +40,6 @@ AS
 	       mp.RoleName,
 	       mp.Amount,
 	       mp.IsHourlyAmount,
-	       mp.SalesCommission,
 	       mp.MilestoneExpectedHours,
 	       mp.MilestoneHourlyRevenue,
 	       p.HireDate,
