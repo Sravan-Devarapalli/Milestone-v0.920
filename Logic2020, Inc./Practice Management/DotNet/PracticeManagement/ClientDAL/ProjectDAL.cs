@@ -601,8 +601,6 @@ namespace DataAccess
                         FinancialDate = reader.GetDateTime(MonthStartDateIndex),
                         Revenue = reader.GetDecimal(revenueIndex),
                         GrossMargin = reader.GetDecimal(grossMarginIndex),
-                        SalesCommission = 0M,
-                        PracticeManagementCommission = 0M,
                         Expenses = 0M,
                         ReimbursedExpenses = 0M
                     };
@@ -686,19 +684,13 @@ namespace DataAccess
                     };
                 try
                 {
-                    int SalespersonIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonIdColumn);
-                    int SalespersonFirstNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonFirstNameColumn);
-                    int SalespersonLastNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonLastNameColumn);
-                        int CommissionTypeColumnIndex = reader.GetOrdinal(Constants.ColumnNames.CommissionTypeColumn);
-                        var commission = new Commission
-                        {
-                            TypeOfCommission = (CommissionType)reader.GetInt32(CommissionTypeColumnIndex),
-                            PersonId = reader.GetInt32(SalespersonIdColumnIndex),
-                            PersonFirstName = reader.GetString(SalespersonFirstNameColumnIndex),
-                            PersonLastName = reader.GetString(SalespersonLastNameColumnIndex)
-                        };
-                        project.SalesCommission = new List<Commission>();
-                        project.SalesCommission.Add(commission);
+                    int salespersonIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonIdColumn);
+                    int salespersonFirstNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonFirstNameColumn);
+                    int salespersonLastNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonLastNameColumn);
+
+                    project.SalesPersonName = reader.GetString(salespersonLastNameColumnIndex) + ", " +
+                                              reader.GetString(salespersonFirstNameColumnIndex);
+                    project.SalesPersonId = reader.GetInt32(salespersonIdColumnIndex);
                 }
                 catch
                 {
@@ -734,8 +726,6 @@ namespace DataAccess
                             FinancialDate = reader.IsDBNull(financialDateIndex) ? (DateTime?)null : reader.GetDateTime(financialDateIndex),
                             Revenue = reader.GetDecimal(revenueIndex),
                             GrossMargin = reader.GetDecimal(grossMarginIndex),
-                            SalesCommission = 0M,
-                            PracticeManagementCommission = 0M,
                             Expenses = 0M,
                             ReimbursedExpenses = 0M
                         };
@@ -777,7 +767,7 @@ namespace DataAccess
         /// </summary>
         /// <param name="projectId">The ID of the requested project.</param>
         /// <returns>The <see cref="Project"/> record if found and null otherwise.</returns>
-        public static Project GetById(int projectId, int? salespersonId, int? practiceManagerId)
+        public static Project GetById(int projectId)
         {
             List<Project> projectList = new List<Project>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -788,10 +778,6 @@ namespace DataAccess
                     command.CommandTimeout = connection.ConnectionTimeout;
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdParam,
-                        salespersonId.HasValue ? (object)salespersonId.Value : DBNull.Value);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
-                        practiceManagerId.HasValue ? (object)practiceManagerId.Value : DBNull.Value);
 
                     connection.Open();
 
@@ -848,6 +834,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PONumber, !string.IsNullOrEmpty(project.PONumber) ? (Object)project.PONumber : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdParam, project.SalesPersonId > 0 ? (object)project.SalesPersonId : DBNull.Value);
                 if (project.SeniorManagerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSeniorManagerUnassigned, project.IsSeniorManagerUnassigned);
@@ -920,6 +907,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PONumber, !string.IsNullOrEmpty(project.PONumber) ? (Object)project.PONumber : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdParam, project.SalesPersonId > 0 ? (object)project.SalesPersonId : DBNull.Value);
                 if (project.SeniorManagerId > 0)
                     command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerId, project.SeniorManagerId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSeniorManagerUnassigned, project.IsSeniorManagerUnassigned);
@@ -1350,34 +1338,46 @@ namespace DataAccess
                                     Name = (string)reader[businessGroupNameIndex],
                                 };
 
-                                project.BusinessGroup = businessGroup;
-                            }
-                            catch
-                            {
-                            }
+                            project.BusinessGroup = businessGroup;
                         }
-                        if (salesPersonNameIndex >= 0)
+                        catch
                         {
-                            try
-                            {
-                                project.SalesPersonName = reader.GetString(salesPersonNameIndex);
-                            }
-                            catch
-                            {
-                                project.SalesPersonName = string.Empty;
-                            }
                         }
-                        if (pricingListIdIndex > -1)
+                    }
+                    if (salesPersonIdIndex >= 0)
+                    {
+                        try
                         {
-                            project.PricingList = !reader.IsDBNull(pricingListIdIndex) ?
-                                       new PricingList
-                                       {
-                                           PricingListId = reader.GetInt32(pricingListIdIndex),
-                                           Name = pricingListNameIndex > -1 ? reader.GetString(pricingListNameIndex) : string.Empty
-                                       }
-                                        : null;
+                            project.SalesPersonId = reader.GetInt32(salesPersonIdIndex);
                         }
-                        project.Client = new Client
+                        catch
+                        {
+                            project.SalesPersonId = 0;
+                        }
+                    }
+
+                    if (salesPersonNameIndex >= 0)
+                    {
+                        try
+                        {
+                            project.SalesPersonName = reader.GetString(salesPersonNameIndex);
+                        }
+                        catch
+                        {
+                            project.SalesPersonName = string.Empty;
+                        }
+                    }
+                    if (pricingListIdIndex > -1)
+                    {
+                        project.PricingList = !reader.IsDBNull(pricingListIdIndex) ?
+                                                  new PricingList
+                                                      {
+                                                          PricingListId = reader.GetInt32(pricingListIdIndex),
+                                                          Name = pricingListNameIndex > -1 ? reader.GetString(pricingListNameIndex) : string.Empty
+                                                      }
+                                                  : null;
+                    }
+                    project.Client = new Client
                         {
                             Id = reader.GetInt32(clientIdIndex),
                             Name = reader.GetString(clientNameIndex),
@@ -1446,7 +1446,7 @@ namespace DataAccess
                                         InUse = (int)reader[groupInUseIndex] == 1
                                     };
 
-                                project.Group = group;
+                                project.Group = @group;
                             }
                             catch
                             {
