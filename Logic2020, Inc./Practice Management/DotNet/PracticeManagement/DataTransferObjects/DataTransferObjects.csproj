@@ -111,8 +111,6 @@
     <Compile Include="Client.cs" />
     <Compile Include="ClientMarginColorInfo.cs" />
     <Compile Include="ColorInformation.cs" />
-    <Compile Include="Commission.cs" />
-    <Compile Include="CommissionType.cs" />
     <Compile Include="CompanyLogo.cs" />
     <Compile Include="CompositeObjects\GroupedTimeEntries.cs" />
     <Compile Include="CompositeObjects\PersonTimeEntries.cs" />
@@ -233,7 +231,6 @@
     <Compile Include="OverheadRateTypes.cs" />
     <Compile Include="PersonOverhead.cs" />
     <Compile Include="PersonPermission.cs" />
-    <Compile Include="PersonRate.cs" />
     <Compile Include="PersonRole.cs" />
     <Compile Include="PersonSeniorityType.cs" />
     <Compile Include="PersonStats.cs" />
@@ -271,7 +268,6 @@
     <Compile Include="Practice.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RateType.cs" />
     <Compile Include="Timezone.cs" />
     <Compile Include="Title.cs" />
     <Compile Include="TitleType.cs" />
