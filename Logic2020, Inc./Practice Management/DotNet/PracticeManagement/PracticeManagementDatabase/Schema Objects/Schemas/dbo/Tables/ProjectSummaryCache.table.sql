@@ -10,8 +10,6 @@
 	Cogs							DECIMAL (18, 2) NULL,
 	GrossMargin						DECIMAL (18, 2) NULL,
 	ProjectedhoursperMonth			DECIMAL (18, 2)  NULL,
-	SalesCommission					DECIMAL (18, 2)  NULL,
-	PracticeManagementCommission	INT NULL,
 	Expense							INT NULL,
 	ReimbursedExpense				INT NULL,
 	ActualRevenue					DECIMAL (18, 2) NULL,
