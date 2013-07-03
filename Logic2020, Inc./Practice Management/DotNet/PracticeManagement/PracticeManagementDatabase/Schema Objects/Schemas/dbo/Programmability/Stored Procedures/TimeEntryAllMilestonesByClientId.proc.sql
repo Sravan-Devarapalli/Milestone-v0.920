@@ -2,10 +2,12 @@
 -- Updated by:	Sainath C
 -- Update date:	06-05-2012
 -- =============================================
-CREATE  PROCEDURE [dbo].[TimeEntryAllMilestonesByClientId] 
+CREATE PROCEDURE [dbo].[TimeEntryAllMilestonesByClientId] 
+(
 @ClientId INT = NULL,
 @PersonId INT = NULL,
 @ShowAll BIT = 1
+)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -22,14 +24,13 @@ BEGIN
                 INNER JOIN dbo.Milestone AS m ON m.MilestoneId = mp.MilestoneId
                 INNER JOIN dbo.Project AS proj ON proj.ProjectId = m.ProjectId
 				INNER JOIN dbo.ProjectManagers AS projManagers ON proj.ProjectId = projManagers.ProjectId
-				LEFT JOIN dbo.Commission AS C ON C.ProjectId = proj.ProjectId AND C.CommissionType = 1 --1 is SalesCommission
         WHERE   (proj.ClientId =  @ClientId  OR @ClientId IS NULL)
 				AND (
 						@PersonId IS NULL
 						OR projManagers.ProjectManagerId = @PersonId
 						OR proj.ProjectOwnerId = @PersonId
 						OR proj.DirectorId = @PersonId
-						OR C.PersonId = @PersonId
+						OR proj.SalesPersonId = @PersonId
 					)
 				AND (@ShowAll = 1 OR (@ShowAll = 0 AND (proj.ProjectStatusId = 3 or proj.ProjectStatusId = 6) ) )
 		UNION
@@ -41,16 +42,16 @@ BEGIN
 				P.ClientId
         FROM dbo.Project P
 		INNER JOIN dbo.ProjectManagers AS projManagers ON P.ProjectId = projManagers.ProjectId
-        JOIN Milestone M ON M.ProjectId = P.ProjectId
-		LEFT JOIN dbo.Commission AS C ON C.ProjectId = P.ProjectId AND C.CommissionType = 1 --1 is SalesCommission
+        INNER JOIN Milestone M ON M.ProjectId = P.ProjectId
         WHERE (@ClientId IS NULL OR P.ClientId = @ClientId)
 				AND (
 						@PersonId IS NULL
 						OR projManagers.ProjectManagerId = @PersonId
 						OR p.ProjectOwnerId = @PersonId
 						OR P.DirectorId = @PersonId
-						OR C.PersonId = @PersonId
+						OR P.SalesPersonId = @PersonId
 					)
               AND (@ShowAll = 1 OR (@ShowAll = 0 AND (P.ProjectStatusId = 3 or P.ProjectStatusId = 6) ) )
         
 END
+
