@@ -73,12 +73,8 @@ BEGIN
 		@CanCreateCustomWorkTypes = 0,
 		@IsInternal = 0,
 		@SowBudget = NULL,
-		@BusinessTypeId=@BusinessTypeId
-
-	-- Add a sales commission
-	INSERT INTO dbo.Commission
-	            (ProjectId, PersonId, FractionOfMargin, CommissionType, MarginTypeId)
-	SELECT @ProjectId, @SalespersonId, 0 , 1 /* sales commission*/, 2 /* Sub-ordinate person margin */
+		@BusinessTypeId=@BusinessTypeId,
+		@SalesPersonId = @SalesPersonId
 
 	IF(@HasPersons = 1)
 	BEGIN
