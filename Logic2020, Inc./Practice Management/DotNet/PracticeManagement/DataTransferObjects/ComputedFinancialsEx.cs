@@ -4,24 +4,23 @@ using System.Runtime.Serialization;
 
 namespace DataTransferObjects
 {
-	/// <summary>
-	/// Represents a results of rate computing with additional values.
-	/// </summary>
-	[DataContract]
-	[Serializable]
-	public class ComputedFinancialsEx : ComputedFinancials
-	{
+    /// <summary>
+    /// Represents a results of rate computing with additional values.
+    /// </summary>
+    [DataContract]
+    [Serializable]
+    public class ComputedFinancialsEx : ComputedFinancials
+    {
+        /// <summary>
+        /// Gets or sets a computed value of the loaded hourly rate (salary + overheads)
+        /// </summary>
+        [DataMember]
+        public PracticeManagementCurrency LoadedHourlyRate
+        {
+            get;
+            set;
+        }
 
-		/// <summary>
-		/// Gets or sets a computed value of the loaded hourly rate (salary + overheads)
-		/// </summary>
-		[DataMember]
-		public PracticeManagementCurrency LoadedHourlyRate
-		{
-			get;
-			set;
-		}
- 
         [DataMember]
         public PracticeManagementCurrency SemiLoadedHourlyRate
         {
@@ -36,23 +35,14 @@ namespace DataTransferObjects
             set;
         }
 
+        /// <summary>
+        /// Gets or sets a computed Overheads.
+        /// </summary>
         [DataMember]
-        public PracticeManagementCurrency SaleCommissionPerHour
+        public List<PersonOverhead> OverheadList
         {
             get;
             set;
         }
-
-		/// <summary>
-		/// Gets or sets a computed Overheads.
-		/// </summary>
-		[DataMember]
-		public List<PersonOverhead> OverheadList
-		{
-			get;
-			set;
-		}
-
-	}
+    }
 }
-
