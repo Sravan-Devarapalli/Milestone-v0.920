@@ -62,7 +62,7 @@
                 Expenses (net of discount), $
             </td>
             <td class="textRightImp">
-                <asp:Label ID="lblExpenses" runat="server" Font-Bold="true" >Unavailable</asp:Label>
+                <asp:Label ID="lblExpenses" runat="server" Font-Bold="true">Unavailable</asp:Label>
             </td>
             <td class="NoBorder">
                 &nbsp;
@@ -70,7 +70,7 @@
         </tr>
         <tr>
             <td>
-                Contribution Margin 
+                Contribution Margin
             </td>
             <td class="textRightImp">
                 <asp:Label ID="lblGrossMargin" CssClass="Margin" runat="server">Unavailable</asp:Label>
@@ -78,30 +78,8 @@
             <td>
                 &nbsp;
             </td>
-            <td id="tdTargetMargin" runat="server"  class="textRightImp">
+            <td id="tdTargetMargin" runat="server" class="textRightImp">
                 (<asp:Label ID="lblTargetMargin" runat="server">Unavailable</asp:Label>)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Sales Commission
-            </td>
-            <td class="textRightImp">
-                <asp:Label ID="lblSalesCommission" runat="server">Unavailable</asp:Label>
-            </td>
-            <td colspan="2">
-                &nbsp;
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Practice Area Manager Commission
-            </td>
-            <td class="textRightImp">
-                <asp:Label ID="lblPracticeManagerCommission" runat="server">Unavailable</asp:Label>
-            </td>
-            <td colspan="2">
-                &nbsp;
             </td>
         </tr>
         <tr>
@@ -117,4 +95,3 @@
         </tr>
     </table>
 </asp:Panel>
-
