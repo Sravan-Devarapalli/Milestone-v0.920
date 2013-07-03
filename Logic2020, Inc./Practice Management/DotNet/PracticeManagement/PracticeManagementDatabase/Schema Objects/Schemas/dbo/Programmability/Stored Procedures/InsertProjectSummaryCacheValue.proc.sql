@@ -50,11 +50,11 @@ BEGIN
 				IF NOT EXISTS (SELECT 1 FROM [dbo].[ProjectSummaryCache]  WHERE CacheDate = CONVERT(DATE,@InsertingTime) and ismonthlyrecorD = 1)
 					BEGIN
 						INSERT  [dbo].[ProjectSummaryCache] 
-						([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,SalesCommission,PracticeManagementCommission,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
+						([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
 						EXEC dbo.FinancialsListByProjectPeriod @StartDate=@StartDate ,@EndDate=@EndDate,@UseActuals=1,@ProjectId= @ProjectId
 
 						INSERT  [dbo].[ProjectSummaryCache] 
-						([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,SalesCommission,PracticeManagementCommission,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
+						([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
 						EXEC dbo.AttainmentFinancialListByProject @StartDate=@StartDate ,@EndDate=@EndDate ,@ProjectId= @ProjectId,@CalculateMonthValues = 0,@CalculateQuarterValues = 1,@CalculateYearToDateValues = 1,@IsSummaryCache = 1
 
 						EXEC [dbo].[UpdateCurrentQuarterActualValuesInCache]
@@ -76,7 +76,7 @@ BEGIN
 					IF NOT EXISTS (SELECT 1 FROM [dbo].[ProjectSummaryCache]  WHERE CacheDate = CONVERT(DATE,@InsertingTime) and ismonthlyrecorD = 0)
 						BEGIN
 							INSERT  [dbo].[ProjectSummaryCache] 
-							([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,SalesCommission,PracticeManagementCommission,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
+							([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
 							EXEC dbo.FinancialsListByProjectPeriodTotal @UseActuals=1,@ProjectId = @ProjectId 
 							
 							--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Total'
