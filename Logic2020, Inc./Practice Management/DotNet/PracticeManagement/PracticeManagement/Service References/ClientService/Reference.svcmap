@@ -21,14 +21,15 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/ClientService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ClientService3.xsd" MetadataType="Schema" ID="f8c084ec-a308-49a1-a9c9-f62c67d88c90" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" />
-    <MetadataFile FileName="ClientService4.xsd" MetadataType="Schema" ID="1ca3223b-9361-48e9-b2af-36ec7743a9d3" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ClientService2.wsdl" MetadataType="Wsdl" ID="08dba026-e11d-4785-a4da-69de87375bca" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?wsdl" />
-    <MetadataFile FileName="ClientService5.xsd" MetadataType="Schema" ID="09e1ee51-fe5d-4aa3-a7ee-05c8bf537221" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd3" />
-    <MetadataFile FileName="ClientService6.xsd" MetadataType="Schema" ID="9d7b7342-c4f6-4c1a-a5bf-3a2828c0c96c" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ClientService1.disco" MetadataType="Disco" ID="9de732b3-bc85-4e3f-b429-c66324532b39" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?disco" />
-    <MetadataFile FileName="ClientService3.wsdl" MetadataType="Wsdl" ID="8bb95191-33cd-4ddd-b65e-8e701bd1e06d" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?wsdl=wsdl0" />
-    <MetadataFile FileName="ClientService7.xsd" MetadataType="Schema" ID="95ac958a-3920-4139-8626-60122092f694" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ClientService2.wsdl" MetadataType="Wsdl" ID="d3e6ca59-5fa4-44ab-bb82-ef601f53eada" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?wsdl" />
+    <MetadataFile FileName="ClientService3.xsd" MetadataType="Schema" ID="b9c51b08-e126-40f8-b46a-6532b8fa5c97" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd5" />
+    <MetadataFile FileName="ClientService4.xsd" MetadataType="Schema" ID="9a5fac9c-eb15-44f7-ad6a-ea192f9797bb" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ClientService5.xsd" MetadataType="Schema" ID="768aaa86-0357-474d-bbe2-ed917242e2be" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ClientService3.wsdl" MetadataType="Wsdl" ID="179a4466-307b-4403-9c72-6eb3c81e08b6" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="ClientService6.xsd" MetadataType="Schema" ID="f3ab87e4-1160-4cc7-95ef-46e80c760028" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ClientService7.xsd" MetadataType="Schema" ID="095f1ce5-139a-4be4-ba51-8105f5f86740" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ClientService9.xsd" MetadataType="Schema" ID="f80191bb-87e4-4ef5-ae7e-a50e3736ef09" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ClientService1.disco" MetadataType="Disco" ID="6159c98d-c90a-4cd2-8760-07eb78fe3123" SourceId="1" SourceUrl="http://system80.ggk.com/PracticeManagementService/ClientService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
