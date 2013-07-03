@@ -112,24 +112,6 @@ namespace PraticeManagement.Controls.Projects {
         protected global::System.Web.UI.WebControls.Label lblTargetMargin;
         
         /// <summary>
-        /// lblSalesCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSalesCommission;
-        
-        /// <summary>
-        /// lblPracticeManagerCommission control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPracticeManagerCommission;
-        
-        /// <summary>
         /// lblEstimatedMargin control.
         /// </summary>
         /// <remarks>
