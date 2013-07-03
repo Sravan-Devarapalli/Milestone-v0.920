@@ -31,7 +31,7 @@ AS
 		   p.DirectorFirstName,
 		   pg.Name AS GroupName,
 		   1 AS InUse,
-		   c.PersonId AS 'SalespersonId',
+		   p.SalesPersonId,
 		   cp.LastName+', ' +cp.FirstName AS 'SalespersonName',
 		   	p.BusinessTypeId,
 			p.PricingListId,
@@ -45,14 +45,11 @@ AS
 		   p.PONumber
 	FROM v_Project p
 	LEFT JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
-	LEFT JOIN dbo.Commission c ON c.ProjectId = p.ProjectId AND c.CommissionType = 1
-	LEFT JOIN dbo.Person cp ON cp.PersonId = c.PersonId
+	LEFT JOIN dbo.Person cp ON cp.PersonId = p.SalesPersonId
     LEFT JOIN Person as sm on sm.PersonId = p.SeniorManagerId
 	LEFT JOIN Person as re on re.PersonId = p.ReviewerId
 	LEFT JOIN dbo.BusinessGroup AS BG ON PG.BusinessGroupId=BG.BusinessGroupId
 	LEFT JOIN dbo.PricingList AS PL ON P.PricingListId=PL.PricingListId 
 	WHERE P.ProjectId <> @DefaultProjectId
 	AND P.IsAllowedToShow = 1
-
-GO
 
