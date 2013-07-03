@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Nikita Goncharenko
--- Create date: 2010-03-27
--- Updated By: ThulasiRam.P
--- Updated Date: 2012-05-21
--- Description:	Clones project specified
--- =============================================
-CREATE PROCEDURE [dbo].[CloneProject]
+﻿CREATE PROCEDURE  [dbo].[CloneProject]
     @ProjectId INT,
 	@ProjectStatusId INT,
     @CloneMilestones BIT = 1,
@@ -43,7 +36,8 @@ AS
 				 CanCreateCustomWorkTypes,
 				 IsInternal,
 				 IsNoteRequired,
-				 ProjectOwnerId)
+				 ProjectOwnerId,
+				 SalesPersonId)
                 SELECT  p.ClientId,
                         p.Discount,
                         p.Terms,
@@ -64,7 +58,8 @@ AS
 						p.CanCreateCustomWorkTypes,
 						p.IsInternal,
 						p.IsNoteRequired,
-						p.ProjectOwnerId
+						p.ProjectOwnerId,
+						p.SalesPersonId
                 FROM    dbo.Project AS p
                 WHERE   p.ProjectId = @projectId
                 
@@ -111,31 +106,10 @@ AS
             END 
             
         IF @CloneCommissions = 1
-            AND EXISTS ( SELECT 1
-                         FROM   dbo.Commission
-                         WHERE  ProjectId = @ProjectId ) 
             BEGIN
-         	
-                INSERT  INTO dbo.Commission
-                        (
-                          ProjectId,
-                          PersonId,
-                          FractionOfMargin,
-                          CommissionType,
-                          ExpectedDatePaid,
-                          ActualDatePaid,
-                          MarginTypeId
-         		        
-                        )
-                        SELECT  @ClonedProjectId,
-                                PersonId,
-                                FractionOfMargin,
-                                CommissionType,
-                                ExpectedDatePaid,
-                                ActualDatePaid,
-                                MarginTypeId
-                        FROM    dbo.Commission
-                        WHERE   ProjectId = @ProjectId
+
+			--need to clone new tables Attribution
+         	SELECT 1
          	
             END
 
