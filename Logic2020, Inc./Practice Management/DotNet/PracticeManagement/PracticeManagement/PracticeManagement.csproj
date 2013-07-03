@@ -484,7 +484,6 @@
     <Content Include="Config\BecomeUser.aspx" />
     <Content Include="Config\Branding.aspx" />
     <Content Include="Config\Clients.aspx" />
-    <Content Include="Config\Commissions.aspx" />
     <Content Include="Config\CompanyHolidays.aspx" />
     <Content Include="Config\ConsultantUtilTimelineReport.aspx" />
     <Content Include="Config\DefaultLineManager.aspx" />
@@ -538,7 +537,6 @@
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\ConsultingDemand_New.aspx" />
     <Content Include="Reports\CSATReport.aspx" />
-    <Content Include="Reports\Expenses.aspx" />
     <Content Include="Reports\HumanCapital.aspx" />
     <Content Include="Reports\NewHireReport.aspx" />
     <Content Include="Reports\PersonDetailTimeReport.aspx" />
@@ -547,7 +545,6 @@
     <Content Include="Reports\TimeEntryReport_new.aspx" />
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
     <Content Include="RevenueGoals.aspx" />
-    <Content Include="Controls\DefaultMilestoneSettingControl.ascx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\PersonPicture.ashx" />
     <Content Include="Controls\Projects\AttachmentUpload.ashx" />
@@ -977,7 +974,6 @@
     <Content Include="Controls\MilestonePersons\MilestonePersonFinancials.ascx" />
     <Content Include="Controls\Reports\UTilTimelineFilter.ascx" />
     <Content Include="Controls\TimeEntry\TimeEntriesByProject.ascx" />
-    <Content Include="DefaultMilestoneSetting.aspx" />
     <Content Include="EmailTemplates.aspx" />
     <Content Include="GroupBy.aspx" />
     <Content Include="Images\balloon-ellipsis.png" />
@@ -1817,13 +1813,6 @@
     <Compile Include="Config\Clients.aspx.designer.cs">
       <DependentUpon>Clients.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Config\Commissions.aspx.cs">
-      <DependentUpon>Commissions.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Config\Commissions.aspx.designer.cs">
-      <DependentUpon>Commissions.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Config\CompanyHolidays.aspx.cs">
       <DependentUpon>CompanyHolidays.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2076,13 +2065,6 @@
     <Compile Include="Reports\CSATReport.aspx.designer.cs">
       <DependentUpon>CSATReport.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reports\Expenses.aspx.cs">
-      <DependentUpon>Expenses.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reports\Expenses.aspx.designer.cs">
-      <DependentUpon>Expenses.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reports\HumanCapital.aspx.cs">
       <DependentUpon>HumanCapital.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2214,13 +2196,6 @@
     </Compile>
     <Compile Include="Controls\DatePicker.ascx.designer.cs">
       <DependentUpon>DatePicker.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\DefaultMilestoneSettingControl.ascx.cs">
-      <DependentUpon>DefaultMilestoneSettingControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\DefaultMilestoneSettingControl.ascx.designer.cs">
-      <DependentUpon>DefaultMilestoneSettingControl.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Generic\Buttons\CancelAndReturnButton.cs" />
     <Compile Include="Controls\Generic\Buttons\IsCorrectImageButton.cs" />
@@ -2366,13 +2341,6 @@
     </Compile>
     <Compile Include="Controls\TimeEntry\TimeEntriesByProject.ascx.designer.cs">
       <DependentUpon>TimeEntriesByProject.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="DefaultMilestoneSetting.aspx.cs">
-      <DependentUpon>DefaultMilestoneSetting.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DefaultMilestoneSetting.aspx.designer.cs">
-      <DependentUpon>DefaultMilestoneSetting.aspx</DependentUpon>
     </Compile>
     <Compile Include="EmailTemplates.aspx.cs">
       <DependentUpon>EmailTemplates.aspx</DependentUpon>
@@ -3686,3 +3654,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
