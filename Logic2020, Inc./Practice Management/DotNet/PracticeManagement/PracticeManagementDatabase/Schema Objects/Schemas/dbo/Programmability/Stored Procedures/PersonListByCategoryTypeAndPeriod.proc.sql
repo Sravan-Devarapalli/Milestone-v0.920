@@ -51,8 +51,7 @@ BEGIN
 				P.FirstName,
 				P.IsDefaultManager
 		 FROM dbo.Person AS P 
-		 INNER JOIN dbo.Commission Com ON Com.PersonId = P.PersonId AND Com.CommissionType = 1
-		 INNER JOIN dbo.Project Proj ON Proj.ProjectId = Com.ProjectId AND 
+		 INNER JOIN dbo.Project Proj ON Proj.ProjectId = Proj.SalesPersonId AND 
 										Proj.StartDate <=  @EndDateLocal AND 
 										ISNULL(Proj.EndDate,@FutureDateLocal) >= @StartDateLocal
 
