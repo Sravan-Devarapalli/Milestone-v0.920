@@ -486,22 +486,7 @@ namespace PracticeManagementService
                         ProjectDAL.UpdateProject(project, userName, connection, currentTransaction);
                     }
 
-                    // Save project's commissions
-                    if (project.SalesCommission != null)
-                    {
-                        project.SalesCommission.ForEach(delegate(Commission salesCommission)
-                        {
-                            salesCommission.ProjectWithMargin = project;
-                            CommissionDAL.CommissionSet(salesCommission, connection, currentTransaction);
-                        });
-                    }
-                    if (project.ManagementCommission != null)
-                    {
-                        project.ManagementCommission.ProjectWithMargin = project;
-                        CommissionDAL.CommissionSet(project.ManagementCommission, connection, currentTransaction);
-                    }
-
-                    //Save ProjectTimetypes 
+                    //Save ProjectTimetypes
                     if (!String.IsNullOrEmpty(project.ProjectWorkTypesList))
                     {
                         try
@@ -990,4 +975,3 @@ namespace PracticeManagementService
         #endregion IProjectService Members
     }
 }
-
