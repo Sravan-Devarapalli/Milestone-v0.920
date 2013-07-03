@@ -56,9 +56,8 @@ BEGIN
 				SP.TelephoneNumber
 		FROM Project P
 		LEFT JOIN ProjectManagers PM ON PM.ProjectId = P.ProjectId
-		LEFT JOIN Commission C ON C.ProjectId = P.ProjectId AND C.CommissionType = 1
-		JOIN v_Person SP ON SP.PersonId = C.PersonId
-		WHERE (PM.ProjectManagerId = @PersonId OR C.PersonId = @PersonId OR P.projectOwnerId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
+		JOIN v_Person SP ON SP.PersonId = P.SalesPersonId
+		WHERE (PM.ProjectManagerId = @PersonId OR P.SalesPersonId = @PersonId OR P.projectOwnerId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
 			AND (SP.PersonStatusId IN (1,5) /* Active person only */
 					OR @IncludeInactive = 1)
 			AND sp.IsStrawman = 0
@@ -101,12 +100,12 @@ BEGIN
 		ELSE
 		BEGIN
 			INSERT INTO @OwnerProjectSalesPersonList (PersonId) 
-			SELECT DISTINCT vppc.PersonId
-			FROM v_PersonProjectCommission AS vppc 
-			INNER JOIN  dbo.Project AS proj  ON proj.ProjectId = vppc.ProjectId
-			INNER JOIN  dbo.ProjectManagers AS projManagers  ON proj.ProjectId = projManagers.ProjectId
-			WHERE projManagers.ProjectManagerId = @PersonId or (vppc.PersonId = @PersonId AND vppc.CommissionType = 1)
-					OR proj.projectOwnerId = @PersonId 
+			SELECT proj.SalesPersonId
+			FROM dbo.Project AS proj 
+			INNER JOIN  dbo.ProjectManagers AS projManagers ON proj.ProjectId = projManagers.ProjectId
+			WHERE projManagers.ProjectManagerId = @PersonId 
+				OR proj.SalesPersonId = @PersonId 
+				OR proj.projectOwnerId = @PersonId 
 		END
 
 			;WITH    Salespersons
@@ -151,3 +150,4 @@ BEGIN
 					s.FirstName
 	END
 END
+
