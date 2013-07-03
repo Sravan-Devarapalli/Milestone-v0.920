@@ -56,7 +56,6 @@ namespace DataAccess
         private const string MilestoneProjectedDeliveryDateColumn = "MilestoneProjectedDeliveryDate";
         private const string HoursPerDayColumn = "HoursPerDay";
         private const string ExpectedHoursWithVacationDaysColumn = "ExpectedHoursWithVacationDays";
-        private const string SalesCommissionColumn = "SalesCommission";
         private const string PersonRoleIdColumn = "PersonRoleId";
         private const string PersonRoleNameColumn = "RoleName";
         private const string AmountColumn = "Amount";
@@ -662,7 +661,7 @@ namespace DataAccess
             var milestoneProjectedDeliveryDateIndex = reader.GetOrdinal(MilestoneProjectedDeliveryDateColumn);
             var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
             var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
-                var salesCommissionIndex = reader.GetOrdinal(SalesCommissionColumn);
+
             var personRoleIdIndex = reader.GetOrdinal(PersonRoleIdColumn);
             var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
             var amountIndex = reader.GetOrdinal(AmountColumn);
@@ -836,15 +835,7 @@ namespace DataAccess
                         Id = reader.GetInt32(clientIdIndex),
                         Name = reader.GetString(clientNameIndex)
                     };
-
-                    // Sales Commission
-                    milestonePerson.Milestone.Project.SalesCommission =
-                        new List<Commission>
-                            {
-                                new Commission {FractionOfMargin = reader.GetDecimal(salesCommissionIndex)}
-                            };
-
-                    result.Add(milestonePerson);
+                result.Add(milestonePerson);
             }
         }
 
