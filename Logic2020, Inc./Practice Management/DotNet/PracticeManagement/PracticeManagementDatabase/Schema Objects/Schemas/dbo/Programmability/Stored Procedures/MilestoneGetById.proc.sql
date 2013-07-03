@@ -22,7 +22,6 @@ BEGIN
 	       m.Discount,
 	       m.ClientName,
 	       m.ExpectedHours,
-	       m.SalesCommission,
 	       m.PersonCount,
 	       m.ProjectedDuration,
 	       m.ConsultantsCanAdjust,
