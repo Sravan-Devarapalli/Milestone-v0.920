@@ -414,11 +414,7 @@ namespace PracticeManagementService
         /// <returns>The <see cref="Project"/> record if found and null otherwise.</returns>
         public static Project GetProjectDetail(int projectId, string userName)
         {
-            int? salespersonId = null;
-            int? practiceManagerId = null;
-
-            // VerifyPrivileges(userName, ref salespersonId, ref practiceManagerId);
-            Project result = ProjectDAL.GetById(projectId, salespersonId, practiceManagerId);
+            Project result = ProjectDAL.GetById(projectId);
             if (result != null)
             {
                 result.Milestones = MilestoneDAL.MilestoneListByProject(projectId);
@@ -427,12 +423,6 @@ namespace PracticeManagementService
                 {
                     result.Attachments = ProjectDAL.GetProjectAttachments(projectId);
                 }
-
-                // Project's commissions
-                result.SalesCommission = CommissionDAL.CommissionGetByProjectType(projectId, CommissionType.Sales);
-                List<Commission> managementCommission =
-                    CommissionDAL.CommissionGetByProjectType(projectId, CommissionType.PracticeManagement);
-                result.ManagementCommission = managementCommission.Count > 0 ? managementCommission[0] : null;
             }
 
             return result;
