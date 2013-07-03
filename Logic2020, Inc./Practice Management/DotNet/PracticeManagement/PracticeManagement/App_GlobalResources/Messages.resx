@@ -221,9 +221,6 @@
   <data name="WhatIfError" xml:space="preserve">
     <value>Unable to calculate values. Please check, if the person has active compensation record.</value>
   </data>
-  <data name="RecruiterIsNotInTheList" xml:space="preserve">
-    <value>You are not in the recruiters list. Make sure that your recruiting commission is active.</value>
-  </data>
   <data name="PersonsStartGreaterMilestoneStart" xml:space="preserve">
     <value>Persons highlighted in red have their start dates greater than the milestone start date.</value>
   </data>
