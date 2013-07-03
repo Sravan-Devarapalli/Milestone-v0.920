@@ -5,6 +5,7 @@
 	@SortBy			NVARCHAR(225) = NULL
 )
 AS
+BEGIN
 	SET NOCOUNT ON
 	DECLARE @SqlQuery NVARCHAR(4000)
 	DECLARE @OrderBy NVARCHAR(1000)
@@ -106,11 +107,7 @@ AS
 				p.GroupId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 2) OR
 				p.PracticeId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 5) OR
 				p.PracticeManagerId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 4) OR
-				EXISTS ( SELECT	1
-							  FROM	 dbo.v_PersonProjectCommission AS c
-							  WHERE	 c.ProjectId = p.ProjectId
-										AND c.PersonId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 3)
-										AND c.CommissionType = 1)
+				p.SalespersonId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 3)
 			)'
 		+ @OrderBy+'
 	END'
@@ -121,4 +118,5 @@ AS
 				@ClientId = @ClientId, @Alias = @Alias
 
 
+END
 
