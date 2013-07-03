@@ -1,11 +1,4 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 9-11-2008
--- Updated by:	Anatoliy Lokshin
--- Update date:	9-25-2008
--- Description:	Selects summary financils for the specified project
--- =============================================
-CREATE PROCEDURE dbo.FinancialsGetByProject
+﻿CREATE PROCEDURE dbo.FinancialsGetByProject
 (
 	@ProjectId   INT
 )
@@ -65,13 +58,6 @@ AS
 		ELSE ISNULL(pf.Cogs,0) END AS 'Cogs',
 		ISNULL(pf.GrossMargin,0)+((ISNULL(PE.ReimbursedExpenseSum,0)-ISNULL(PE.ExpenseSum,0)) * (1 - P.Discount/100))  as 'GrossMargin',
 		ISNULL(pf.Hours,0) Hours,
-		(ISNULL(pf.GrossMargin,0)+((ISNULL(PE.ReimbursedExpenseSum,0)-ISNULL(PE.ExpenseSum,0)) * (1 - P.Discount/100)))
-		* ISNULL((SELECT SUM(c.FractionOfMargin) 
-							  FROM dbo.Commission AS  c 
-							  WHERE c.ProjectId = P.ProjectId 
-									AND c.CommissionType = 1
-								),0) *0.01 SalesCommission,
-		0.0 PracticeManagementCommission,
 		ISNULL(PE.ExpenseSum,0) Expense,
 		ISNULL(PE.ReimbursedExpenseSum,0) ReimbursedExpense
 	FROM  Project p 
