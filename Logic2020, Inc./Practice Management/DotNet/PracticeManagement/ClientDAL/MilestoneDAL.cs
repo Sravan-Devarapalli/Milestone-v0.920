@@ -67,7 +67,6 @@ namespace DataAccess
         private const string IsHourlyAmountColumn = "IsHourlyAmount";
         private const string ExpectedHoursColumn = "ExpectedHours";
         private const string DiscountColumn = "Discount";
-        private const string SalesCommissionColumn = "SalesCommission";
         private const string PersonCountColumn = "PersonCount";
         private const string ProjectedDurationColumn = "ProjectedDuration";
         private const string ClientIdColumn = "ClientId";
@@ -561,7 +560,7 @@ namespace DataAccess
             int isHourlyAmountIndex = reader.GetOrdinal(IsHourlyAmountColumn);
             int expectedHoursIndex = reader.GetOrdinal(ExpectedHoursColumn);
             int discountIndex = reader.GetOrdinal(DiscountColumn);
-                int salesCommissionIndex = reader.GetOrdinal(SalesCommissionColumn);
+
             int personCountIndex = reader.GetOrdinal(PersonCountColumn);
             int projectedDurationIndex = reader.GetOrdinal(ProjectedDurationColumn);
             int milestoneIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneIsChargeable);
@@ -634,16 +633,9 @@ namespace DataAccess
                         milestone.Project.Client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
                     }
                     catch
-                        {
-
-                        }
+                    {
                     }
-
-                    milestone.Project.SalesCommission =
-                        new List<Commission>()
-						{
-							new Commission() {FractionOfMargin = reader.GetDecimal(salesCommissionIndex)}
-						};
+                }
 
                 result.Add(milestone);
             }
