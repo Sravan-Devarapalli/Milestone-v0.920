@@ -219,10 +219,10 @@
                     var ddlAttachmentCategory = document.getElementById('<%= ddlAttachmentCategory.ClientID %>');
                     var categoryValue = ddlAttachmentCategory.value;
                     if (categoryValue != "0") {
-                        return true; // Valid 
+                        return true; // Valid
                     }
                     else {
-                        return false; // Not valid 
+                        return false; // Not valid
                     }
                 }
 
@@ -248,7 +248,7 @@
 
                 function SetWrapText(str) {
                     for (var i = 30; i < str.length; i = i + 10) {
-                        str = str.slice(0, i) + "<wbr/>" + str.slice(i, str.length);
+                        str = str.slice(0, i) + "<wbr />" + str.slice(i, str.length);
                     }
                     return str;
                 }
@@ -414,7 +414,6 @@
                     mailtoHiddenLink.click();
                     return false;
                 }
-
             </script>
             <table class="WholeWidth">
                 <tr>
@@ -565,7 +564,6 @@
                                             <td class="width60P">
                                                 <asp:DropDownList ID="ddlSalesperson" runat="server" CssClass="Width95Per" onchange="setDirty();">
                                                 </asp:DropDownList>
-                                                <asp:HiddenField ID="hidSalesCommissionId" runat="server" />
                                             </td>
                                             <td class="Width2Percent WhiteSpaceNoWrap">
                                                 <asp:RequiredFieldValidator ID="reqSalesperson" runat="server" ControlToValidate="ddlSalesperson"
@@ -845,7 +843,6 @@
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
                                                     Width="94%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
-                                                <asp:HiddenField ID="hidPracticeManagementCommissionId" runat="server" />
                                             </td>
                                             <td class="Width10Percent">
                                                 <asp:CustomValidator ID="cvProjectManager" runat="server" EnableClientScript="false"
@@ -1141,58 +1138,6 @@
                                 <uc:ProjectFinancials ID="financials" runat="server" />
                             </asp:View>
                             <asp:View ID="vwCommissions" runat="server">
-                                <asp:Panel ID="pnlCommissions" runat="server" CssClass="tab-pane">
-                                    <table>
-                                        <tr>
-                                            <td nowrap="nowrap">
-                                                <asp:CheckBox ID="chbReceivesSalesCommission" runat="server" Text="Receives sales commission of"
-                                                    AutoPostBack="True" OnCheckedChanged="chbReceivesSalesCommission_CheckedChanged" />
-                                            </td>
-                                            <td>
-                                                <asp:TextBox ID="txtSalesCommission" runat="server" Width="40px" onchange="setDirty();"></asp:TextBox>
-                                                <asp:RequiredFieldValidator ID="reqSalesCommission" runat="server" ControlToValidate="txtSalesCommission"
-                                                    ErrorMessage="The Sales Commission is required." ToolTip="The Sales Commission is required."
-                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic"></asp:RequiredFieldValidator>
-                                                <asp:CustomValidator ID="cstSalesCommission" runat="server" ControlToValidate="txtSalesCommission"
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                    ValidationGroup="Project" OnServerValidate="cstSalesCommission_ServerValidate"></asp:CustomValidator>
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                            <td>
-                                                &nbsp;
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td nowrap="nowrap" rowspan="2">
-                                                <asp:CheckBox ID="chbReceiveManagementCommission" runat="server" Text="receives practice mgmt commission"
-                                                    AutoPostBack="True" OnCheckedChanged="chbReceiveManagementCommission_CheckedChanged" />
-                                            </td>
-                                            <td>
-                                                <asp:TextBox ID="txtManagementCommission" runat="server" Width="40px" onchange="setDirty();"></asp:TextBox>
-                                                <asp:RequiredFieldValidator ID="reqManagementCommission" runat="server" ControlToValidate="txtManagementCommission"
-                                                    ErrorMessage="The Management Commission is required." ToolTip="The Management Commission is required."
-                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic"></asp:RequiredFieldValidator>
-                                                <asp:CustomValidator ID="cstManagementCommission" runat="server" ControlToValidate="txtManagementCommission"
-                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                                    ValidationGroup="Project" OnServerValidate="cstManagementCommission_ServerValidate"></asp:CustomValidator>
-                                            </td>
-                                            <td rowspan="2">
-                                                based&nbsp;on&nbsp;
-                                            </td>
-                                            <td rowspan="2">
-                                                <asp:RadioButtonList ID="rlstManagementCommission" runat="server" AutoPostBack="True"
-                                                    OnSelectedIndexChanged="rlstManagementCommission_SelectedIndexChanged">
-                                                    <asp:ListItem Text="Own margin" Value="1"></asp:ListItem>
-                                                    <asp:ListItem Text="Sub-ordinate person margin" Value="2" Selected="True"></asp:ListItem>
-                                                </asp:RadioButtonList>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwExpenses" runat="server">
                                 <div class="tab-pane">
@@ -1257,10 +1202,10 @@
                         <ajax:TabContainer ID="tcProjectDetails" runat="server" CssClass="CustomTabStyle CustomTabStyleProjectDetail"
                             ActiveTabIndex="0">
                             <ajax:TabPanel ID="tpDescription" runat="server">
-                                <HeaderTemplate>
+                                <headertemplate>
                                     <span class="bg"><a href="#"><span>Project Time Types</span></a></span>
-                                </HeaderTemplate>
-                                <ContentTemplate>
+                                </headertemplate>
+                                <contenttemplate>
                                     <div class="PaddingBottom6">
                                         <uc:ProjectTimeTypes ID="ucProjectTimeTypes" runat="server" />
                                         <asp:Button ID="btnDeleteWorkType" OnClick="btnDeleteWorkType_OnClick" runat="server"
@@ -1268,7 +1213,7 @@
                                         <asp:CustomValidator ID="cvWorkTypesAssigned" runat="server" EnableClientScript="false"
                                             ErrorMessage="" ValidateEmptyText="true" Text=""></asp:CustomValidator>
                                     </div>
-                                </ContentTemplate>
+                                </contenttemplate>
                             </ajax:TabPanel>
                         </ajax:TabContainer>
                     </td>
@@ -1548,4 +1493,3 @@
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
-
