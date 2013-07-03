@@ -265,14 +265,13 @@ BEGIN
 			LEFT JOIN dbo.aspnet_UsersRolesHistory  UIR
 			ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
 			LEFT JOIN dbo.aspnet_Roles UR ON UIR.RoleId = UR.RoleId AND UR.RoleName='Salesperson'
-			LEFT JOIN dbo.Commission Com ON Com.PersonId = P.PersonId AND Com.CommissionType = 1
-			LEFT JOIN dbo.Project Proj ON Proj.ProjectId = Com.ProjectId AND C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate,@FutureDateLocal)
+			LEFT JOIN dbo.Project Proj ON C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate,@FutureDateLocal)
 			LEFT JOIN dbo.CategoryItemBudget CIB ON CIB.CategoryTypeId = @CategoryTypeId 
 							AND CIB.MonthStartDate  BETWEEN @StartDateLocal AND	 @EndDateLocal
 							AND MONTH(CIB.MonthStartDate) = MONTH(C.Date)
 								AND CIB.ItemId = P.PersonId 
-			WHERE (UR.RoleId IS NOT NULL OR Com.PersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL)
-				  AND (PSH.PersonStatusId IS NOT NULL OR(Com.PersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL))
+			WHERE (UR.RoleId IS NOT NULL OR Proj.SalesPersonId = P.PersonId)
+				  AND (PSH.PersonStatusId IS NOT NULL OR(Proj.SalesPersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL))
 				  AND (P.PersonId IN (SELECT * From [dbo].[ConvertStringListIntoTable](@ItemIdsLocal) )
 						OR @ItemIdsLocal IS NULL)
 			GROUP BY P.PersonId,
@@ -426,14 +425,12 @@ BEGIN
 		FROM BusinessDevelopmentDManagers BDM
 		LEFT JOIN 
 		(
-		SELECT C.PersonId,
+		SELECT P.SalesPersonId AS PersonId,
 	       MonthStartDate,
 	       SUM(f.Revenue) AS Revenue
-		FROM dbo.Commission C
-		JOIN  dbo.Project P ON C.ProjectId = P.ProjectId
-		JOIN ProjectFinancialsMonthly F ON F.ProjectId = P.ProjectId
-		WHERE C.CommissionType = 1
-		GROUP BY C.PersonId,MonthStartDate
+		FROM  dbo.Project P 
+		INNER JOIN ProjectFinancialsMonthly F ON F.ProjectId = P.ProjectId
+		GROUP BY P.SalesPersonId,MonthStartDate
 		) B 	ON BDM.PersonId = B.PersonId AND BDM.MonthStartDate = B.MonthStartDate
 		
 		
