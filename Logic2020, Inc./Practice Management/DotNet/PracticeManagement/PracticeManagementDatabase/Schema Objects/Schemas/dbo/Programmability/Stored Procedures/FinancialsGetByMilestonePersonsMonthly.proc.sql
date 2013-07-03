@@ -14,11 +14,6 @@ AS
 		   f.Date, 
 		   f.PersonMilestoneDailyAmount,
 		   f.PersonDiscountDailyAmount,
-		   ISNULL((SELECT SUM(c.FractionOfMargin) 
-							  FROM dbo.Commission AS  c 
-							  WHERE c.ProjectId = f.ProjectId 
-									AND c.CommissionType = 1
-								),0) ProjectSalesCommisionFraction,
 		   (ISNULL(f.PayRate, 0) + ISNULL(f.OverheadRate, 0)+ISNULL(f.BonusRate,0)+ISNULL(f.VacationRate,0)) SLHR,
 		   ISNULL(f.PayRate,0) PayRate,
 		   f.MLFOverheadRate,
@@ -44,13 +39,8 @@ AS
 							  THEN f.SLHR ELSE  f.PayRate +f.MLFOverheadRate END) 
 					    *ISNULL(f.PersonHoursPerDay, 0)), 0) GrossMargin,
 
-	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours,
+	       ISNULL(SUM(f.PersonHoursPerDay), 0) AS Hours
 
-	       (SUM((f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
-						(CASE WHEN f.SLHR >=  f.PayRate +f.MLFOverheadRate 
-							  THEN f.SLHR ELSE f.PayRate +f.MLFOverheadRate END) 
-					    *ISNULL(f.PersonHoursPerDay, 0))* (f.ProjectSalesCommisionFraction/100))) SalesCommission,
-			0.0 AS PracticeManagementCommission
 	  FROM FinancialsRetro AS f
 	  INNER JOIN dbo.Calendar C ON C.Date = f.Date
 	  JOIN MilestonePersonEntry MPE ON f.EntryId = MPE.Id AND f.Date BETWEEN MPE.StartDate AND MPE.EndDate
