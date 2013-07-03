@@ -5,10 +5,10 @@
 	@ShowInactive		BIT = 0,
 	@ShowLost		BIT = 0,
 	@ShowWon		BIT = 0,
-	@ClientIds			VARCHAR(250) = NULL,
-	@SalespersonIds		VARCHAR(250) = NULL,
-	@OpportunityOwnerIds	VARCHAR(250) = NULL,
-	@OpportunityGroupIds	VARCHAR(250) = NULL
+	@ClientIds			NVARCHAR(MAX) = NULL,
+	@SalespersonIds		NVARCHAR(MAX) = NULL,
+	@OpportunityOwnerIds	NVARCHAR(MAX) = NULL,
+	@OpportunityGroupIds	NVARCHAR(MAX) = NULL
 	
 )
 AS
@@ -143,3 +143,4 @@ BEGIN
 
 END
 	
+
