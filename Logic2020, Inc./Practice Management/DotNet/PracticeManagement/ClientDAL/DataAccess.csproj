@@ -98,7 +98,6 @@
     <Compile Include="ActivityLogDAL.cs" />
     <Compile Include="CalendarDAL.cs" />
     <Compile Include="ClientDAL.cs" />
-    <Compile Include="CommissionDAL.cs" />
     <Compile Include="ComputedFinancialsDAL.cs" />
     <Compile Include="ConfigurationDAL.cs" />
     <Compile Include="Constants.cs" />
