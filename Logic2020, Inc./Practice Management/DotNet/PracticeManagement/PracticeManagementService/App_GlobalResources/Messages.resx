@@ -147,9 +147,6 @@
   <data name="RawHourlyRateTitle" xml:space="preserve">
     <value>Raw Hourly Rate (RHR)</value>
   </data>
-  <data name="SalesCommissionTitle" xml:space="preserve">
-    <value>Sales Commission Per Hour (SCPH)</value>
-  </data>
   <data name="UnspecifiedPerson" xml:space="preserve">
     <value>The Person is not specified properly.</value>
   </data>
