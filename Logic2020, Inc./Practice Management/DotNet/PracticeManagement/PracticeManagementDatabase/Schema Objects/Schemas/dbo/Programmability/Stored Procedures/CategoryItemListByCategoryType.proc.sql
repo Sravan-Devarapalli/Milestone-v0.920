@@ -61,13 +61,12 @@ BEGIN
 		LEFT JOIN dbo.aspnet_UsersRolesHistory  UIR
 		ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
 		LEFT JOIN dbo.aspnet_Roles UR ON UIR.RoleId = UR.RoleId AND UR.RoleName='Salesperson'
-		LEFT JOIN dbo.Commission Com ON Com.PersonId = P.PersonId AND Com.CommissionType = 1
-		LEFT JOIN dbo.Project Proj ON Proj.ProjectId = Com.ProjectId AND C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate, @FutureDate)
+		LEFT JOIN dbo.Project Proj ON C.Date BETWEEN Proj.StartDate  AND ISNULL(Proj.EndDate, @FutureDate)
 		LEFT JOIN dbo.CategoryItemBudget CIB ON CIB.CategoryTypeId = @CategoryTypeId 
 						AND YEAR(CIB.MonthStartDate) = @Year AND MONTH(CIB.MonthStartDate) = MONTH(C.Date)
 							AND CIB.ItemId = P.PersonId 
-		WHERE (UR.RoleId IS NOT NULL OR Com.PersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL)
-			  AND (PSH.PersonStatusId IS NOT NULL OR(Com.PersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL))
+		WHERE (UR.RoleId IS NOT NULL OR Proj.SalesPersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL)
+			  AND (PSH.PersonStatusId IS NOT NULL OR(Proj.SalesPersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL))
 		GROUP BY P.PersonId,
 				 P.LastName,
 				 P.FirstName,
@@ -100,3 +99,4 @@ BEGIN
 			ORDER BY  p.Name
 	END
 END
+
