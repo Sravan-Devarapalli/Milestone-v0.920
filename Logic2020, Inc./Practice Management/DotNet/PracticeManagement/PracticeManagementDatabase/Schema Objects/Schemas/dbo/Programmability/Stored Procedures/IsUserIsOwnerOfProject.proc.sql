@@ -14,11 +14,9 @@ AS
 	IF(@IsProjectId = 1)
 	BEGIN
 
-		IF EXISTS ( SELECT 1 FROM dbo.project AS p WHERE p.ProjectId = @Id AND p.ProjectOwnerId = @PersonId )
+		IF EXISTS ( SELECT 1 FROM dbo.project AS p WHERE p.ProjectId = @Id AND ( p.ProjectOwnerId = @PersonId OR p.SalesPersonId = @PersonId))
 			SELECT 'True'
 		ELSE IF EXISTS ( SELECT 1 FROM dbo.ProjectManagers AS pm WHERE pm.ProjectId = @Id AND ProjectManagerId = @PersonId )
-			SELECT 'True'
-		ELSE IF EXISTS (SELECT 1 FROM dbo.Commission WHERE PersonId = @PersonId AND ProjectId = @Id AND CommissionType = 1)
 			SELECT 'True'
 		ELSE
 		SELECT 'False'
@@ -27,7 +25,7 @@ AS
 	BEGIN
 		IF EXISTS ( SELECT 1 FROM dbo.Milestone AS m
 						INNER JOIN dbo.project AS P ON P.projectId = m.projectId
-					WHERE m.MilestoneId = @Id AND P.ProjectOwnerId = @PersonId )
+					WHERE m.MilestoneId = @Id AND (P.ProjectOwnerId = @PersonId OR p.SalesPersonId = @PersonId))
 			SELECT 'True'
 		ELSE IF EXISTS ( SELECT pm.ProjectManagerId  
 						FROM dbo.Milestone AS milestone 
@@ -36,12 +34,8 @@ AS
 							AND ProjectManagerId = @PersonId 
 						)
 			SELECT 'True'
-		ELSE IF EXISTS (SELECT 1 FROM Milestone M 
-					JOIN  dbo.Commission C ON  M.ProjectId = C.ProjectId
-					 WHERE C.PersonId = @PersonId AND M.MilestoneId = @Id AND C.CommissionType = 1)
-			SELECT 'True'
 		ELSE
 		SELECT 'False'
 		
 	END
-GO
+
