@@ -1,16 +1,16 @@
 ﻿CREATE PROCEDURE [dbo].[GetProjectListForGroupingPracticeManagers]
 (
-	@ClientIds			VARCHAR(250) = NULL,
+	@ClientIds			NVARCHAR(MAX) = NULL,
 	@ShowProjected		BIT = 0,
 	@ShowCompleted		BIT = 0,
 	@ShowActive			BIT = 0,
 	@showInternal		BIT = 0,
 	@ShowExperimental	BIT = 0,
 	@ShowInactive		BIT = 0,
-	@SalespersonIds		VARCHAR(250) = NULL,
-	@ProjectOwnerIds	VARCHAR(250) = NULL,
-	@PracticeIds		VARCHAR(250) = NULL,
-	@ProjectGroupIds	VARCHAR(250) = NULL,
+	@SalespersonIds		NVARCHAR(MAX) = NULL,
+	@ProjectOwnerIds	NVARCHAR(MAX) = NULL,
+	@PracticeIds		NVARCHAR(MAX) = NULL,
+	@ProjectGroupIds	NVARCHAR(MAX) = NULL,
 	@StartDate			DATETIME,
 	@EndDate			DATETIME,
 	@ExcludeInternalPractices BIT = 0
@@ -99,11 +99,8 @@ BEGIN
 	FROM	dbo.v_Project AS p
 	JOIN dbo.Person pm ON pm.PersonId = p.PracticeManagerId
 	JOIN dbo.Practice pr ON pr.PracticeId = p.PracticeId
-	left join dbo.v_PersonProjectCommission AS c on c.ProjectId = p.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
-	WHERE	    (c.CommissionType is NULL OR c.CommissionType = 1)
-		    --AND ( (p.StartDate <= @EndDate AND p.EndDate <= @EndDate) OR (p.StartDate IS NULL AND p.EndDate IS NULL))
-			AND ((p.StartDate <= @EndDate AND @StartDate <= p.EndDate ) OR (p.StartDate IS NULL AND p.EndDate IS NULL))
+	WHERE ((p.StartDate <= @EndDate AND @StartDate <= p.EndDate ) OR (p.StartDate IS NULL AND p.EndDate IS NULL))
 			AND ( @ClientIds IS NULL OR p.ClientId IN (select Id from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @ProjectOwnerIds IS NULL 
@@ -114,7 +111,7 @@ BEGIN
 					OR p.ProjectOwnerId IN (SELECT POL.Id  FROM @ProjectOwnersList POL)
 			    )
 			AND (    @SalespersonIds IS NULL 
-				  OR c.PersonId IN (SELECT Id FROM @SalespersonsList)
+				  OR p.SalesPersonId IN (SELECT Id FROM @SalespersonsList)
 			)
 			AND (    ( @ShowProjected = 1 AND p.ProjectStatusId = 2 )
 				  OR ( @ShowActive = 1 AND p.ProjectStatusId = 3 )
