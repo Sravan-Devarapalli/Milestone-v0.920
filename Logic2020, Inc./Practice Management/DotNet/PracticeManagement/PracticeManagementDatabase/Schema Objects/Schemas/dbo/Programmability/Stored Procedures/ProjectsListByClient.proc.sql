@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE dbo.ProjectsListByClient
+﻿CREATE PROCEDURE  dbo.ProjectsListByClient
 (
 	@ClientId INT,
 	@Alias VARCHAR(100) = NULL 
@@ -78,11 +77,7 @@ AS
 				p.GroupId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 2) OR
 				p.PracticeId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 5) OR
 				p.PracticeManagerId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 4) OR
-				EXISTS ( SELECT	1
-							  FROM	 dbo.v_PersonProjectCommission AS c
-							  WHERE	 c.ProjectId = p.ProjectId
-										AND c.PersonId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 3)
-										AND c.CommissionType = 1)
+				p.SalesPersonId IN (SELECT TargetId FROM Perms AS s WHERE s.TargetType = 3)
 			)
 		ORDER BY p.NAME
 	END 
