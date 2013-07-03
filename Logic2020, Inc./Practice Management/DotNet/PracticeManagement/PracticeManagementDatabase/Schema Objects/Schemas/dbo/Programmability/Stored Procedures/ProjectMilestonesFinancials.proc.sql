@@ -60,11 +60,6 @@ BEGIN
 		ISNULL(Cogs,0) Cogs,
 		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100)  as 'GrossMargin',
 		fin.Hours,
-		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100)
-						*  ISNULL((SELECT SUM(c.FractionOfMargin)  FROM dbo.Commission AS  c   WHERE c.ProjectId = P.ProjectId 
-									AND c.CommissionType = 1
-								),0)*0.01  SalesCommission,
-		0.0 AS PracticeManagementCommission,
 		ISNULL(me.Expense,0) Expense,
 		ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense,
 		case 
