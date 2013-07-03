@@ -84,12 +84,6 @@ BEGIN
 				WHERE ProjectId = @ProjectID
 			END
 			
-			IF EXISTS (SELECT ProjectId FROM dbo.Commission WHERE ProjectId = @ProjectID)
-			BEGIN
-				DELETE dbo.Commission
-				WHERE ProjectId = @ProjectID
-			END
-			
 			IF EXISTS (SELECT ProjectId FROM dbo.ProjectAttachment WHERE ProjectId = @ProjectID)
 			BEGIN
 				EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
