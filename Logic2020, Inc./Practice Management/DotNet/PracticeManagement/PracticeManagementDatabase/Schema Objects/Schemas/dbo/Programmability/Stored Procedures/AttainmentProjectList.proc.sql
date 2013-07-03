@@ -1,16 +1,16 @@
 ﻿
-CREATE PROCEDURE [dbo].[AttainmentProjectList]
-	@ClientIds			VARCHAR(8000) = NULL,
+CREATE PROCEDURE  [dbo].[AttainmentProjectList]
+	@ClientIds			NVARCHAR(MAX) = NULL,
 	@ShowProjected		BIT = 0,
 	@ShowCompleted		BIT = 0,
 	@ShowActive			BIT = 0,
 	@showInternal		BIT = 0,
 	@ShowExperimental	BIT = 0,
 	@ShowInactive		BIT = 0,
-	@SalespersonIds		VARCHAR(8000) = NULL,
-	@ProjectOwnerIds	VARCHAR(8000) = NULL,
-	@PracticeIds		VARCHAR(8000) = NULL,
-	@ProjectGroupIds	VARCHAR(8000) = NULL,
+	@SalespersonIds		NVARCHAR(MAX) = NULL,
+	@ProjectOwnerIds	NVARCHAR(MAX) = NULL,
+	@PracticeIds		NVARCHAR(MAX) = NULL,
+	@ProjectGroupIds	NVARCHAR(MAX) = NULL,
 	@StartDate			DATETIME,
 	@EndDate			DATETIME,
 	@ExcludeInternalPractices BIT = 0,
@@ -97,9 +97,8 @@ AS
 			PG.Name AS GroupName,
 			Clnt.IsChargeable AS [ClientIsChargeable],
 	        P.IsChargeable AS [ProjectIsChargeable],
-		   c.PersonId AS 'SalespersonId',
+			P.SalesPersonId AS 'SalespersonId',
 		   sperson.LastName+', ' +sperson.FirstName AS 'SalespersonName' ,
-		   c.CommissionType,
 		   P.DirectorId,
 		   d.LastName AS 'DirectorLastName',
 		   d.FirstName AS 'DirectorFirstName',
@@ -122,18 +121,16 @@ AS
 	INNER JOIN dbo.Client AS Clnt ON P.ClientId = Clnt.ClientId
 	INNER JOIN dbo.ProjectStatus AS s ON P.ProjectStatusId = s.ProjectStatusId
 	LEFT JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
-	LEFT JOIN dbo.Commission AS c on c.ProjectId = P.ProjectId
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = P.GroupId
 	LEFT JOIN dbo.BusinessGroup AS BG ON PG.BusinessGroupId=BG.BusinessGroupId
 	LEFT JOIN dbo.PricingList AS PL ON P.PricingListId=PL.PricingListId 
 	LEFT JOIN dbo.Person as d on d.PersonId = P.DirectorId
-	LEFT JOIN dbo.Person AS sperson ON sperson.PersonId = c.PersonId
+	LEFT JOIN dbo.Person AS sperson ON sperson.PersonId = p.SalesPersonId
 	LEFT JOIN dbo.Person AS Powner ON Powner.PersonId = P.ProjectOwnerId
 	LEFT JOIN dbo.Person as sm on sm.PersonId = p.SeniorManagerId
 	LEFT JOIN dbo.Person as re on re.PersonId = p.ReviewerId
 	OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = P.ProjectId) A
-	WHERE	    (c.CommissionType IS NULL OR c.CommissionType = 1)
-		    AND ( (P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))
+	WHERE	  ( (P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))
 			AND ( @ClientIds IS NULL OR P.ClientId IN (SELECT * from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR P.GroupId IN (SELECT * FROM @ProjectGroupsList) )
 			AND ( @PracticeIds IS NULL OR P.PracticeId IN (SELECT * FROM @PracticesList) OR P.PracticeId IS NULL )
@@ -145,7 +142,7 @@ AS
 					OR Powner.PersonId IN ( SELECT ID FROM @ProjectOwnersList)
 			    )
 			AND (    @SalespersonIds IS NULL 
-				  OR c.PersonId IN (SELECT * FROM @SalespersonsList)
+				  OR p.SalesPersonId IN (SELECT * FROM @SalespersonsList)
 			)
 			AND (    ( @ShowProjected = 1 AND P.ProjectStatusId = 2 )
 				  OR ( @ShowActive = 1 AND P.ProjectStatusId = 3 )
@@ -159,12 +156,9 @@ AS
 			AND (@UserHasHighRoleThanProjectLead IS NULL
 					OR @UserHasHighRoleThanProjectLead > 0
 					OR (@UserHasHighRoleThanProjectLead = 0
-						AND EXISTS (SELECT 1 FROM dbo.ProjectManagers projManagers2
-									LEFT JOIN dbo.Commission Css ON Css.ProjectId = projManagers2.ProjectId AND Css.CommissionType = 1
+						AND EXISTS (SELECT 1 FROM dbo.ProjectManagers projManagers2 
 									WHERE projManagers2.ProjectId = P.ProjectId
-											AND (projManagers2.ProjectManagerId = @PersonId
-												OR Css.PersonId = @PersonId
-												)
+											AND ( projManagers2.ProjectManagerId = @PersonId OR p.SalesPersonId = @PersonId )
 									)
 						)
 				)
