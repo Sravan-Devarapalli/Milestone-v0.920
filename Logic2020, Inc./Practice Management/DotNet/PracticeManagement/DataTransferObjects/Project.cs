@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
-using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Financials;
+using DataTransferObjects.TimeEntry;
 
 namespace DataTransferObjects
 {
@@ -38,10 +38,11 @@ namespace DataTransferObjects
         ///                 </exception>
         public override int GetHashCode(Project obj)
         {
-            return obj.Id.Value;
+            if (obj != null && obj.Id != null) return obj.Id.Value;
+            return base.GetHashCode();
         }
 
-        #endregion
+        #endregion Overrides of EqualityComparer<Project>
     }
 
     /// <summary>
@@ -210,26 +211,6 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Gets or sets a project's sales commission
-        /// </summary>
-        [DataMember]
-        public List<Commission> SalesCommission
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets a project's management commission.
-        /// </summary>
-        [DataMember]
-        public Commission ManagementCommission
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Gets or sets a <see cref="Project"/> status.
         /// </summary>
         [DataMember]
@@ -267,17 +248,6 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-        /// Gets or sets a Practice Manager Commission for the project.
-        /// </summary>
-        [DataMember]
-        [Obsolete]
-        public PracticeManagementCurrency PracticeManagerCommission
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Gets or sets an access level for the project.
         /// </summary>
         [DataMember]
@@ -300,7 +270,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         [DataMember]
         public List<Person> ProjectManagers
@@ -343,6 +312,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public int SalesPersonId
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets a SalesPersonName
         /// </summary>
@@ -352,6 +328,7 @@ namespace DataTransferObjects
             get;
             set;
         }
+
         /// <summary>
         /// Gets a default start date for a new milestone.
         /// </summary>
@@ -374,7 +351,6 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsCSATEligible { get; set; }
 
-
         [DataMember]
         public bool HasAttachments { get; set; }
 
@@ -393,7 +369,6 @@ namespace DataTransferObjects
 
         [DataMember]
         public bool HasMultipleCSATs { get; set; }
-
 
         [DataMember]
         public bool CanCreateCustomWorkTypes { get; set; }
@@ -469,7 +444,7 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsSeniorManagerUnassigned { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Formatting
 
@@ -513,7 +488,7 @@ namespace DataTransferObjects
             }
         }
 
-        #endregion
+        #endregion Formatting
 
         #region IEquatable<Project> Members
 
@@ -522,7 +497,6 @@ namespace DataTransferObjects
             return Id.HasValue && other.Id.HasValue && Id == other.Id;
         }
 
-        #endregion
+        #endregion IEquatable<Project> Members
     }
 }
-
