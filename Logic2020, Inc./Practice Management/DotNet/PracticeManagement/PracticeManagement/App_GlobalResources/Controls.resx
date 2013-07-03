@@ -162,9 +162,6 @@
   <data name="DefaultGroup" xml:space="preserve">
     <value>No group selected</value>
   </data>
-  <data name="DefaultSalesCommissionTitle" xml:space="preserve">
-    <value>Default sales commission</value>
-  </data>
   <data name="EventSourceAll" xml:space="preserve">
     <value>All Events</value>
   </data>
