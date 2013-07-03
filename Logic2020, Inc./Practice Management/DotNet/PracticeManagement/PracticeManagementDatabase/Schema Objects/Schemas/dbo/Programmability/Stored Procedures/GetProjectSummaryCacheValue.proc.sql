@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[GetProjectSummaryCacheValue]
 (
-	@ProjectId   VARCHAR(2500),
+	@ProjectId   NVARCHAR(MAX),
 	@StartDate   DATETIME = NULL,
 	@EndDate     DATETIME = NULL,
 	@IsMonthlyReport BIT = 0 ,
@@ -26,8 +26,6 @@ BEGIN
 		  ,[Cogs]
 		  ,[GrossMargin]
 		  ,[ProjectedhoursperMonth] AS Hours
-		  ,[SalesCommission]
-		  ,CONVERT(DECIMAL,[PracticeManagementCommission]) AS PracticeManagementCommission
 		  ,[Expense]
 		  ,[ReimbursedExpense]
 		  ,[ActualRevenue]
