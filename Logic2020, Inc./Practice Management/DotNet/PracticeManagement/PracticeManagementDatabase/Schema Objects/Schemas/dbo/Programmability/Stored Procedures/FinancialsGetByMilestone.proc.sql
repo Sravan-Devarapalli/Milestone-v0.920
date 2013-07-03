@@ -1,15 +1,9 @@
-﻿-- =============================================
--- Author:		Anatoliy Lokshin
--- Create date: 9-11-2008
--- Updated by:	Anatoliy Lokshin
--- Update date:	9-24-2008
--- Description:	Selects summary financils for the specified milestone.
--- =============================================
-CREATE PROCEDURE dbo.FinancialsGetByMilestone
+﻿CREATE PROCEDURE dbo.FinancialsGetByMilestone
 (
 	@MilestoneId      INT
 )
 AS
+BEGIN
 	SET NOCOUNT ON;
 	DECLARE @MilestoneIdLocal INT
 	SELECT @MilestoneIdLocal = @MilestoneId
@@ -60,11 +54,6 @@ AS
 		ISNULL(Cogs,0) Cogs,
 		ISNULL(GrossMargin,0)+((ISNULL(Me.ReimbursedExpense,0) -ISNULL(ME.Expense,0))*(1 - P.Discount/100)) as 'GrossMargin',
 		ISNULL(Hours,0) Hours,
-		(ISNULL(GrossMargin,0)+((ISNULL(Me.ReimbursedExpense,0) -ISNULL(ME.Expense,0))*(1 - P.Discount/100)))
-			*  ISNULL((SELECT SUM(c.FractionOfMargin)  FROM dbo.Commission AS  c   WHERE c.ProjectId = P.ProjectId 
-									AND c.CommissionType = 1
-								),0)  *0.01 SalesCommission,
-		0.0 PracticeManagementCommission,
 		ISNULL(ME.Expense,0) Expense,
 		ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense
 	FROM Milestone M
@@ -73,4 +62,5 @@ AS
 	LEFT JOIN v_MilestoneExpenses ME ON Me.MilestoneId = M.MilestoneId
 	WHERE M.MilestoneId = @MilestoneIdLocal AND (f.MilestoneId IS NOT NULL OR ME.MilestoneId IS NOT NULL)
 	
+END
 
