@@ -9,12 +9,10 @@ namespace PraticeManagement.Controls.Reports
     {
         private const int TabNameColumnIndex = 0;
 
-        private const int CR_TotalRowCount = 5;
+        private const int CR_TotalRowCount = 3;
         private const int CR_GrossMarginEligibleForCommissions = 0;
-        private const int CR_SalesCommissionsIndex = 1;
-        private const int CR_PMCommissionsIndex = 2;
-        private const int CR_AvgBillRateIndex = 3;
-        private const int CR_AvgPayRateIndex = 4;
+        private const int CR_AvgBillRateIndex = 1;
+        private const int CR_AvgPayRateIndex = 2;
 
         /// <summary>
         /// Gets a selected period start.
@@ -140,16 +138,6 @@ namespace PraticeManagement.Controls.Reports
                                         e.Row.Cells[TabNameColumnIndex].Text = "Contribution Margin Eligible for Commissions";
                                         e.Row.Cells[i].Text = interestValue.Value.GrossMargin.ToString();
                                         break;
-                                    //Sales Commision
-                                    case CR_SalesCommissionsIndex:
-                                        e.Row.Cells[TabNameColumnIndex].Text = "Sales Commissions";
-                                        e.Row.Cells[i].Text = interestValue.Value.SalesCommission.ToString();
-                                        break;
-                                    //PMComission
-                                    case CR_PMCommissionsIndex:
-                                        e.Row.Cells[TabNameColumnIndex].Text = "PM Commissions";
-                                        e.Row.Cells[i].Text = interestValue.Value.PracticeManagementCommission.ToString();
-                                        break;
                                     //Avg Bill Rate
                                     case CR_AvgBillRateIndex:
                                         e.Row.Cells[TabNameColumnIndex].Text = "Avg Bill Rate";
@@ -179,4 +167,3 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
-
