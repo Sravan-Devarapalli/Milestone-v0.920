@@ -1,31 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using PraticeManagement.Controls;
-using DataTransferObjects;
-using System.Web.UI.HtmlControls;
-using System.Text;
-using System.Web.Security;
 using System.Configuration;
-using PraticeManagement.Utils;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using PraticeManagement.ProjectService;
+using System.Linq;
 using System.ServiceModel;
+using System.Text;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using DataTransferObjects;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using PraticeManagement.Configuration;
+using PraticeManagement.Controls;
+using PraticeManagement.ProjectService;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement
 {
     public partial class GroupByDirector : PracticeManagementPageBase
     {
         #region "Constants"
+
         private const int NumberOfFixedColumns = 2;
         private const string GrandTotalCellTemplate = "<table><tr><td class='textRightImp'>{0}</td></tr><tr><td align='right'>{1}</td></tr></table>";
         private const string MonthCellTemplate = "<td class='PaddingRight3Px' align='right'><table><tr><td class='textRightImp'>{0}</td></tr><tr><td class='TextAlignRightImp'>{1}</td></tr></table></td>";
         private const string CurrentMonthCellTemplate = "<td align='right' class='CurrentMonthCell'><table><tr><td class='textRightImp'>{0}</td></tr><tr><td class='TextAlignRightImp'>{1}</td></tr></table></td>";
         private const string CurrentMonthLastCellTemplate = "<td align='right' class='CurrentMonthCell BorderBottom1Px'><table><tr><td class='textRightImp'>{0}</td></tr><tr><td class='TextAlignRightImp'>{1}</td></tr></table></td>";
+
         private const string RowHTMLTemplate =
                             @"</tr><tr {5} class='hidden Height35Px'>
                             <td class='BackGroundWhiteImp'></td>
@@ -33,13 +35,16 @@ namespace PraticeManagement
                             <td align='right' class='padRight5'>
                                 <table> <tr><td class='textRightImp'>{2}</td></tr><tr><td class='TextAlignRightImp'>{3}</td></tr></table>
                             </td>";
+
         private const string GrandTotalRowHTMLTemplate = "</tr><tr class='summary border1Px Height40Px'><td class='TextAlignCenterImp BorderLeft2Px'>Grand Total</td><td></td>{0}<td class='textRightImp padRight5'><table class='WholeWidth'><tr><td>{1}</td></tr><tr><td>{2}</td></tr></table></td>";
+
         private const string CollpseExpandCellTemplate =
                    @"<table><tr><td class='Width15Px'>
                   <img alt='Collapse' name='Collapse' {0} onclick='ExpandCollapseChilds(this);' src='Images/collapse.jpg' class='hidden'  />
                   <img alt='Expand' name='Expand' {0} onclick='ExpandCollapseChilds(this);' src='Images/expand.jpg' {3} />
                     </td><td class='padLeft6'><font style='{1}'>{2}</font>
                     </td></tr></table>";
+
         private const int ProjectCellLeftPadding = 50;
         private const int ClientCellLeftPadding = 0;
         private const int ClientGroupCellLeftPadding = 20;
@@ -55,7 +60,6 @@ namespace PraticeManagement
         private const string STRPMReportSortDirection = "PMReportSortDirection";
         private const string STRPMReportSortColumnId = "PMReportSortColumnId";
 
-        
         private const string ProjectsGroupedByPracticeKey = "ProjectsGroupedByPractice";
         private const string GroupedByPracticeGrandTotalKey = "GroupedByPracticeGrandTotal";
         private const string ProjectBagroundStyle = " style='background-color : #EEF3F9;'";
@@ -69,13 +73,13 @@ namespace PraticeManagement
         private const string LinkHTMLTemplate = "<a href='{0}' target='_blank'>{1}</a>";
         private const string ProjectDetailPagePath = "ProjectDetail.aspx";
         private const string DefaultProjectId_Key = "DefaultProjectId";
-        #endregion
+
+        #endregion "Constants"
 
         #region "Properties"
 
         private int? DefaultProjectId
         {
-
             get
             {
                 if (ViewState[DefaultProjectId_Key] == null)
@@ -112,7 +116,6 @@ namespace PraticeManagement
                     {
                         try
                         {
-
                             milestonePersons =
                                 serviceClient.GetProjectListGroupByPracticeManagers(
                                 filterSet.ClientIdsList,
@@ -199,7 +202,6 @@ namespace PraticeManagement
             }
             AllPracticesGrandTotals.ComputedFinancials.Revenue += groupedPractice.ComputedFinancials.Revenue;
             AllPracticesGrandTotals.ComputedFinancials.GrossMargin += groupedPractice.ComputedFinancials.GrossMargin;
-
         }
 
         private void AddClientsToPractice(ProjectsGroupedByPractice groupedPractice, List<MilestonePerson> milestonePersonList)
@@ -225,7 +227,6 @@ namespace PraticeManagement
                 groupedClient.ProjectedFinancialsByMonth = GetProjectedFinancials(GetMonthBegin(), GetPeriodLength());
 
                 AddClientGroupsToClient(groupedClient, clientMilestonePersons, groupedPractice.PracticeId);
-
 
                 var mpsWithoutClientGroups = clientMilestonePersons.FindAll(mp => mp.Milestone.Project.Group == null ||
                                                                     !mp.Milestone.Project.Group.Id.HasValue);
@@ -392,7 +393,6 @@ namespace PraticeManagement
                     MilestonePersonPractice.ComputedFinancials.GrossMargin += financials.GrossMargin;
                 }
             }
-
         }
 
         private void AddFinancialsToProject(Project project, List<MilestonePerson> projectMilestonePersons, int practiceId)
@@ -561,7 +561,8 @@ namespace PraticeManagement
                 cblProjectOwner.SelectedItems = value;
             }
         }
-        #endregion
+
+        #endregion "Properties"
 
         private CompanyPerformanceFilterSettings GetFilterSettings()
         {
@@ -650,7 +651,6 @@ namespace PraticeManagement
                     true,
                     person);
 
-
                 PraticeManagement.Controls.DataHelper.FillClientsAndGroups(
                     cblClient, cblProjectGroup);
 
@@ -697,7 +697,6 @@ namespace PraticeManagement
             AddAttributesToCheckBoxes(this.cblProjectGroup);
             AddAttributesToCheckBoxes(this.cblClient);
         }
-
 
         private void AddAttributesToCheckBoxes(ScrollingDropDown ddlpractices)
         {
@@ -801,9 +800,7 @@ namespace PraticeManagement
             AllPersonsGrandTotals.ComputedFinancials = new ComputedFinancials();
             AllPersonsGrandTotals.ProjectedFinancialsByMonth = GetProjectedFinancials(GetMonthBegin(), GetPeriodLength());
             var GroupedAMs = new List<ProjectsGroupedByPerson>();
-            IEnumerable<int> tempAccountManagerIdList = ProjectList.FindAll(p => p.SalesCommission != null
-                                                                            && p.SalesCommission.Any(c => c.PersonId.HasValue && c.TypeOfCommission == CommissionType.Sales))
-                                                                   .Select(q => q.SalesCommission.First(c => c.PersonId.HasValue && c.TypeOfCommission == CommissionType.Sales).PersonId.Value);
+            IEnumerable<int> tempAccountManagerIdList = ProjectList.FindAll(p => p.SalesPersonId > 0).Select(q => q.SalesPersonId);
 
             var AccountManagerIdList = tempAccountManagerIdList.Distinct().ToList();
 
@@ -811,16 +808,12 @@ namespace PraticeManagement
             {
                 List<Project> personProjects;
 
-                personProjects = ProjectList.FindAll(p => p.SalesCommission != null
-                                                    && p.SalesCommission.Any(c => c.PersonId.HasValue
-                                                                            && c.PersonId.Value == personId
-                                                                            && c.TypeOfCommission == CommissionType.Sales)
-                                                    );
+                personProjects = ProjectList.FindAll(p => p.SalesPersonId > 0 && p.SalesPersonId == personId);
                 var groupedPerson = new ProjectsGroupedByPerson();
                 groupedPerson.PersonId = personId;
-                var salesCommission = personProjects.First().SalesCommission.First();
-                groupedPerson.FirstName = salesCommission.PersonFirstName;
-                groupedPerson.LastName = salesCommission.PersonLastName;
+                var salesPersonProject = personProjects.First();
+                groupedPerson.FirstName = salesPersonProject.SalesPersonName.Split(',')[1];
+                groupedPerson.LastName = salesPersonProject.SalesPersonName.Split(',')[0];
                 CreatePersonAndFillDetails(personProjects, groupedPerson, AllPersonsGrandTotals);
                 GroupedAMs.Add(groupedPerson);
             }
@@ -1120,7 +1113,6 @@ namespace PraticeManagement
                 }
                 if (GroupedPractices.Any())
                 {
-
                     lvGroupByPractice.DataSource = GroupedPractices;
                     lvGroupByPractice.DataBind();
                     lvGroupByPractice.Visible = true;
@@ -1257,7 +1249,6 @@ namespace PraticeManagement
                 sb.Append(practicemanager.PracticeManagerLastName +
                     (!string.IsNullOrEmpty(practicemanager.PracticeManagerFirstName) ? " " + practicemanager.PracticeManagerFirstName : string.Empty)
                     + ",<br/>");
-
             }
             return sb.ToString();
         }
@@ -1400,6 +1391,7 @@ namespace PraticeManagement
                 case "Ascending":
                     sortDirection = "Descending";
                     break;
+
                 case "Descending":
                     sortDirection = "Ascending";
                     break;
@@ -1561,7 +1553,6 @@ namespace PraticeManagement
                                                   ProjectDetailPagePath,
                                                   project.Id),
                                     project.HtmlEncodedName);
-
         }
 
         private string GetProjectNameHTML(MilestonePerson milestonePerson)
@@ -1574,7 +1565,6 @@ namespace PraticeManagement
                                                   ProjectDetailPagePath,
                                                   milestonePerson.Milestone.Project.Id),
                                     projectname);
-
         }
 
         private string getMonthCellsHTML(Dictionary<DateTime, ComputedFinancials> FinancialsByMonth, bool IsGrandTotalRow = false)
@@ -1597,7 +1587,6 @@ namespace PraticeManagement
                 {
                     MonthCellSb.Append(string.Format(MonthCellTemplate, monthFinancial.Value.Revenue, monthFinancial.Value.GrossMargin));
                 }
-
             }
             return MonthCellSb.ToString();
         }
@@ -1623,7 +1612,5 @@ namespace PraticeManagement
 
             return clientGroupNameHTML;
         }
-
     }
 }
-
