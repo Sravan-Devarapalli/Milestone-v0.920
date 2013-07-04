@@ -427,6 +427,9 @@ namespace DataTransferObjects
         public List<ProjectCSAT> CSATList { get; set; }
 
         [DataMember]
+        public List<Attribution> AttributionList { get; set; }
+        
+        [DataMember]
         public int CSATOwnerId { get; set; }
 
         [DataMember]
@@ -500,3 +503,4 @@ namespace DataTransferObjects
         #endregion IEquatable<Project> Members
     }
 }
+
