@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using DataTransferObjects;
 using DataTransferObjects.Financials;
 using DataTransferObjects.Reports;
@@ -22,8 +25,10 @@ namespace PraticeManagement.Reports
         private bool renderMonthColumns;
         private int headerRowsCount = 1;
         private int billingheaderRowsCount = 1;
+        private int attributionHeaderRowsCount = 1;
         private int coloumnsCount = 1;
         private int billingcoloumnsCount = 1;
+        private int attributionColoumnsCount = 1;
 
         private Project[] _ExportProjectList = null;
 
@@ -53,6 +58,20 @@ namespace PraticeManagement.Reports
                     _BillableUtlizationList = ServiceCallers.Custom.Report(p => p.AttainmentBillableutlizationReport(CurrentYearStartdate, CurrentYearEnddate));
                 }
                 return (AttainmentBillableutlizationReport[])_BillableUtlizationList;
+            }
+        }
+
+        private Project[] _ProjectAttributionList = null;
+
+        private Project[] ProjectAttributionList
+        {
+            get
+            {
+                if (_ProjectAttributionList == null)
+                {
+                    _ProjectAttributionList = ServiceCallers.Custom.Report(p => p.ProjectAttributionReport(diRange.FromDate.Value, diRange.ToDate.Value));
+                }
+                return (Project[])_ProjectAttributionList;
             }
         }
 
@@ -242,6 +261,76 @@ namespace PraticeManagement.Reports
                 sheetStyle.FreezePanRowSplit = billingheaderRowsCount + 1;
                 sheetStyle.FreezePanColSplit = 3;
                 //sheetStyle.ColoumnWidths = coloumnWidth;
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles AttributionHeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, attributionColoumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles AttributionDataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
+
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                for (int i = 1; i <= 14; i++)
+                    headerCellStyleList.Add(headerCellStyle);
+
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dataStartDateCellStyle = new CellStyles();
+                dataStartDateCellStyle.DataFormat = "mm/dd/yyyy";
+
+                CellStyles decimaldataCellStyle = new CellStyles();
+                decimaldataCellStyle.DataFormat = "0.0%";
+
+                List<CellStyles> dataCellStyleList = new List<CellStyles>();
+
+                for (int i = 1; i <= 11; i++)
+                    dataCellStyleList.Add(dataCellStyle);
+                dataCellStyleList.Add(dataStartDateCellStyle);
+                dataCellStyleList.Add(dataStartDateCellStyle);
+                dataCellStyleList.Add(decimaldataCellStyle);
+
+                RowStyles datarowStyle = new RowStyles(dataCellStyleList.ToArray());
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+
+                sheetStyle.TopRowNo = attributionHeaderRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanRowSplit = attributionHeaderRowsCount;
+                sheetStyle.FreezePanColSplit = 0;
                 return sheetStyle;
             }
         }
@@ -666,6 +755,55 @@ namespace PraticeManagement.Reports
             return data;
         }
 
+        private DataTable PrepareDataTableForAttribution(Project[] attributionList)
+        {
+            DataTable data = new DataTable();
+            if (attributionList.Length > 0)
+            {
+                List<object> row;
+
+                data.Columns.Add("Record Type");
+                data.Columns.Add("Attribution Type");
+                data.Columns.Add("Project Status");
+                data.Columns.Add("Project Number");
+                data.Columns.Add("Account");
+                data.Columns.Add("Business Group");
+                data.Columns.Add("Business Unit");
+                data.Columns.Add("Project Name");
+                data.Columns.Add("New/Extension");
+                data.Columns.Add("Name");
+                data.Columns.Add("Title");
+                data.Columns.Add("Start Date");
+                data.Columns.Add("End Date");
+                data.Columns.Add("%Commission");
+
+                foreach (var pro in attributionList)
+                {
+                    int i;
+                    for (i = 0; i < pro.AttributionList.Count; i++)
+                    {
+                        row = new List<object>();
+                        row.Add(pro.AttributionList[i].AttributionRecordType.ToString());
+                        row.Add(pro.AttributionList[i].AttributionType.ToString());
+                        row.Add(pro.Status.Name);
+                        row.Add(pro.ProjectNumber);
+                        row.Add(pro.Client.HtmlEncodedName);
+                        row.Add(pro.BusinessGroup.Name);
+                        row.Add(pro.Group.Name);
+                        row.Add(pro.HtmlEncodedName);
+                        row.Add(pro.BusinessType == (BusinessType)0 ? string.Empty :DataTransferObjects.Utils.Generic.GetDescription(pro.BusinessType));
+                        row.Add(pro.AttributionList[i].TargetName);
+                        row.Add(pro.AttributionList[i].Title.HtmlEncodedTitleName);
+                        row.Add(pro.AttributionList[i].StartDate.Value.ToShortDateString());
+                        row.Add(pro.AttributionList[i].EndDate.Value.ToShortDateString());
+                        row.Add(pro.AttributionList[i].CommissionPercentage);
+                        data.Rows.Add(row.ToArray());
+                    }
+                }
+            }
+            return data;
+        }
+
         protected void btnExport_Click(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage("Attainment Export");
@@ -735,6 +873,12 @@ namespace PraticeManagement.Reports
             billableUtilheader.Columns.Add("Billable Utilization: " + CurrentYearStartdate.Year);
             billingheaderRowsCount = billableUtilheader.Rows.Count + 3;
 
+            var attributionReport = PrepareDataTableForAttribution(ProjectAttributionList);
+            attributionColoumnsCount = attributionReport.Columns.Count;
+            DataTable attributionHeader = new DataTable();
+            attributionHeader.Columns.Add("Commissions - " + now.ToShortDateString());
+            attributionHeaderRowsCount = attributionHeader.Rows.Count + 3;
+
             string dateRangeTitle = string.Format(ExportDateRangeFormat, diRange.FromDate.Value.ToShortDateString(), diRange.ToDate.Value.ToShortDateString());
             DataTable header = new DataTable();
             header.Columns.Add(dateRangeTitle);
@@ -747,6 +891,8 @@ namespace PraticeManagement.Reports
             sheetStylesList.Add(DataSheetStyle);
             sheetStylesList.Add(BillingHeaderSheetStyle);
             sheetStylesList.Add(BillableUtilSheetDataSheetStyle);
+            sheetStylesList.Add(AttributionHeaderSheetStyle);
+            sheetStylesList.Add(AttributionDataSheetStyle);
 
             var dataSetList = new List<DataSet>();
             var dataset = new DataSet();
@@ -767,7 +913,14 @@ namespace PraticeManagement.Reports
             datasetBillableUtil.Tables.Add(blliableUtilization);
             dataSetList.Add(datasetBillableUtil);
 
+            var datasetAttribution = new DataSet();
+            datasetAttribution.DataSetName = "Sales Delivery Attributions";
+            datasetAttribution.Tables.Add(attributionHeader);
+            datasetAttribution.Tables.Add(attributionReport);
+            dataSetList.Add(datasetAttribution);
+
             NPOIExcel.Export("AttainmentReportingDataSource.xls", dataSetList, sheetStylesList);
         }
     }
 }
+
