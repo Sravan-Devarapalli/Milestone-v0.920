@@ -972,6 +972,26 @@ namespace PracticeManagementService
             return ProjectCSATDAL.CSATReportHeader(startDate, endDate, practiceIds, accountIds);
         }
 
+        public List<Attribution> GetProjectAttributionValues(int projectId)
+        {
+            return ProjectDAL.GetProjectAttributionValues(projectId);
+        }
+
+        public void SetProjectAttributionValues(int projectId, string attributionXML, string userLogin)
+        {
+            try
+            {
+                ProjectDAL.SetProjectAttributionValues(projectId, attributionXML, userLogin);
+            }
+            catch (Exception e)
+            {
+                string logData = string.Format(Constants.Formatting.ErrorLogMessage, "SetProjectAttributionValues", "ProjectService.svc", string.Empty,
+                    HttpUtility.HtmlEncode(e.Message), e.Source, e.InnerException == null ? string.Empty : HttpUtility.HtmlEncode(e.InnerException.Message), e.InnerException == null ? string.Empty : e.InnerException.Source);
+                ActivityLogDAL.ActivityLogInsert(20, logData);
+                throw e;
+            }
+        }
+
         #endregion IProjectService Members
     }
 }
