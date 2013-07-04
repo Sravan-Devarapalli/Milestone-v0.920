@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="ActivityEventSource.cs" />
     <Compile Include="ActivityLogItem.cs" />
+    <Compile Include="Attribution.cs" />
     <Compile Include="BusinessGroup.cs" />
     <Compile Include="CalendarItem.cs" />
     <Compile Include="CategoryItemBudget.cs" />
