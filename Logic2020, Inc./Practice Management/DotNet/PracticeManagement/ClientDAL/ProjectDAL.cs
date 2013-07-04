@@ -3184,6 +3184,94 @@ namespace DataAccess
                 return link ? result.ToString() : null;
             }
         }
+
+        public static List<Attribution> GetProjectAttributionValues(int projectId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectAttributionValues, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<Attribution> result = new List<Attribution>();
+                    ReadProjectAttributionValues(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadProjectAttributionValues(SqlDataReader reader, List<Attribution> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int attributionIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionId);
+                int attributionTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionTypeId);
+                int attributionRecordIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionRecordId);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                int targetIdIndex = reader.GetOrdinal(Constants.ColumnNames.TargetId);
+                int targetNameIndex = reader.GetOrdinal(Constants.ColumnNames.TargetName);
+                int percentageIndex = reader.GetOrdinal(Constants.ColumnNames.Percentage);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+
+                while (reader.Read())
+                {
+                    int targetId = reader.GetInt32(targetIdIndex);
+                    string targetName = reader.GetString(targetNameIndex);
+                    AttributionTypes attributionType = (AttributionTypes)reader.GetInt32(attributionTypeIdIndex);
+                    AttributionRecordTypes attributionRecordType = (AttributionRecordTypes)reader.GetInt32(attributionRecordIdIndex);
+                    int titleId = !reader.IsDBNull(titleIdIndex) ? (int)reader.GetInt32(titleIdIndex) : -1;
+                    Attribution attribution = new Attribution()
+                        {
+                            Id = reader.GetInt32(attributionIdIndex),
+                            AttributionType = attributionType,
+                            AttributionRecordType = attributionRecordType,
+                            CommissionPercentage = reader.GetDecimal(percentageIndex),
+                            EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                            StartDate = !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                            TargetId = targetId,
+                            TargetName = targetName
+                        };
+                        if (titleId != -1)
+                        {
+                            attribution.Title = new Title()
+                            {
+                                TitleId = titleId,
+                                TitleName = reader.GetString(titleIndex)
+                            };
+                        }
+                        else
+                        {
+                            attribution.Title = null;
+                        }
+                    result.Add(attribution);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void SetProjectAttributionValues(int projectId, string attributionXML, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.SetProjectAttributionValues, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AttributionXML, attributionXML);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
 
