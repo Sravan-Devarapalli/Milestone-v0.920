@@ -5,19 +5,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.ServiceModel;
-using System.Threading;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
-using DataTransferObjects.CompositeObjects;
 using DataTransferObjects.ContextObjects;
 using PraticeManagement.ActivityLogService;
 using PraticeManagement.CalendarService;
 using PraticeManagement.ClientService;
 using PraticeManagement.ConfigurationService;
-using PraticeManagement.Controls.Generic;
-using PraticeManagement.Controls.Generic.Filtering;
 using PraticeManagement.Controls.Opportunities;
 using PraticeManagement.Controls.Reports;
 using PraticeManagement.ExpenseCategoryService;
@@ -201,11 +197,11 @@ namespace PraticeManagement.Controls
                 return client.GetPersonHireAndTerminationDate(personId);
         }
 
-        public static void SetNewDefaultManager(Person person)
+        public static void SetNewDefaultManager(int personId)
         {
             using (var client = new PersonServiceClient())
             {
-                client.SetAsDefaultManager(person);
+                client.SetAsDefaultManager(personId);
             }
         }
 
@@ -1032,6 +1028,23 @@ namespace PraticeManagement.Controls
                     Opportunity[] opportunities = serviceClient.OpportunityListWithMinimumDetails(clientId, false);
 
                     FillListDefault(control, firstItemText, opportunities, false, "Id", "ClientOpportunity");
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static void FillPersonListByDivisionId(ListControl control, string firstItemText, int divisionId)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    Person[] persons = serviceClient.GetActivePersonsListShortByDivision(divisionId);
+                    FillPersonList(control, firstItemText, persons, string.Empty);
                 }
                 catch (CommunicationException)
                 {
