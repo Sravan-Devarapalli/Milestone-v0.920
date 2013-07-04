@@ -381,8 +381,7 @@ namespace PracticeManagementService
             // MembershipPasswordFormat.Hashed
             HashAlgorithm s = HashAlgorithm.Create(Membership.HashAlgorithmType);
             if (s != null) bRet = s.ComputeHash(bAll);
-            if (bRet != null) return Convert.ToBase64String(bRet);
-            return null;
+            return bRet != null ? Convert.ToBase64String(bRet) : null;
         }
 
         /// <summary>
@@ -1081,6 +1080,16 @@ namespace PracticeManagementService
         public Pay GetCurrentByPerson(int personId)
         {
             return PayDAL.GetCurrentByPerson(personId);
+        }
+
+        public List<Person> GetActivePersonsListShortByDivision(int divisionId)
+        {
+            return PersonDAL.GetActivePersonsListShortByDivision(divisionId);
+        }
+
+        public Title GetPersonTitleByRange(int personId, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.GetPersonTitleByRange(personId, startDate, endDate);
         }
 
         #endregion IPersonService Members
