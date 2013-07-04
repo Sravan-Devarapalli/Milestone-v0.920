@@ -12,7 +12,7 @@ namespace PracticeManagementService
     public interface IProjectService
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="projectId"></param>
         /// <returns></returns>
@@ -23,7 +23,7 @@ namespace PracticeManagementService
         DateTime GetProjectLastChangeDateFortheGivenStatus(int projectId, int projectStatusId);
 
         /// <summary>
-        /// Projects Computed Financials 
+        /// Projects Computed Financials
         /// </summary>
         [OperationContract]
         ComputedFinancials GetProjectsComputedFinancials(int projectId);
@@ -140,6 +140,7 @@ namespace PracticeManagementService
             string projectGroupIdsList,
             bool excludeInternalPractices
             );
+
         [OperationContract]
         List<MilestonePerson> GetProjectListGroupByPracticeManagers(
             string clientIds,
@@ -157,6 +158,7 @@ namespace PracticeManagementService
             string projectGroupIdsList,
             bool excludeInternalPractices
             );
+
         [OperationContract]
         List<Project> GetBenchList(BenchReportContext context);
 
@@ -342,6 +344,11 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<int> CSATReportHeader(DateTime startDate, DateTime endDate, string practiceIds, string accountIds);
+
+        [OperationContract]
+        List<Attribution> GetProjectAttributionValues(int projectId);
+
+        [OperationContract]
+        void SetProjectAttributionValues(int projectId, string attributionXML, string userLogin);
     }
 }
-
