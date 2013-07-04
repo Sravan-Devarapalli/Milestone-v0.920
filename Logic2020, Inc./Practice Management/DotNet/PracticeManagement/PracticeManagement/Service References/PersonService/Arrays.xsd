@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
   <xs:complexType name="ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5">
     <xs:annotation>
       <xs:appinfo>
@@ -43,6 +44,24 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfdateTimedecimal" nillable="true" type="tns:ArrayOfKeyValueOfdateTimedecimal" />
+  <xs:complexType name="ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" name="Key" nillable="true" type="q2:RangeType" />
+            <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Value" nillable="true" type="q3:ComputedFinancials" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" nillable="true" type="tns:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
   <xs:complexType name="ArrayOfKeyValueOfdateTimeboolean">
     <xs:annotation>
       <xs:appinfo>
@@ -77,7 +96,7 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfPermissionTargetArrayOfintrdkL8Uaz">
         <xs:complexType>
           <xs:sequence>
-            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" type="q2:PermissionTarget" />
+            <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" name="Key" type="q4:PermissionTarget" />
             <xs:element name="Value" nillable="true" type="tns:ArrayOfint" />
           </xs:sequence>
         </xs:complexType>
