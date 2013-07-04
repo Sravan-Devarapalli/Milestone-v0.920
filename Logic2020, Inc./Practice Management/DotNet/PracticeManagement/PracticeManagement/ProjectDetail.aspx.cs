@@ -445,6 +445,7 @@ namespace PraticeManagement
                 TableCellHistoryg.Visible = true;
                 cellProjectTools.Visible = true;
                 cellProjectCSAT.Visible = true;
+                cellCommissions.Visible = true;
             }
         }
 
@@ -453,10 +454,12 @@ namespace PraticeManagement
             if (ProjectId.HasValue && Project != null && Project.Milestones != null && Project.Milestones.Count > 0)
             {
                 cellExpenses.Visible = true;
+                cellCommissions.Visible = true;
             }
             else
             {
                 cellExpenses.Visible = false;
+                cellCommissions.Visible = false;
             }
             if (ddlProjectGroup.Items.Count > 0)
                 ddlProjectGroup.SortByText();
@@ -558,7 +561,15 @@ namespace PraticeManagement
             }
 
             #endregion Security
+            try
+            {
+                if (!Page.IsValid)
+                    IsErrorPanelDisplay = true;
+            }
+            catch
+            {
 
+            }
             if (IsErrorPanelDisplay && !IsOtherPanelDisplay)
             {
                 PopulateErrorPanel();
@@ -1237,10 +1248,9 @@ namespace PraticeManagement
         protected override bool ValidateAndSave()
         {
             bool result = false;
-
             Page.Validate(vsumProject.ValidationGroup);
             if (Page.IsValid && ValidateProjectTimeTypesTab() &&
-                    (CompletedStatus || ValidateCompleStatusPopup())
+                    (CompletedStatus || ValidateCompleStatusPopup()) && (!ProjectId.HasValue || projectAttribution.ValidateCommissionsPercentage())
                  )
             {
                 cvCompletedStatus.IsValid = true;
@@ -1258,7 +1268,7 @@ namespace PraticeManagement
                     IsErrorPanelDisplay = true;
                 }
                 int viewIndex = mvProjectDetailTab.ActiveViewIndex;
-                if (viewIndex == 8 && ProjectId.HasValue)
+                if (viewIndex == 9 && ProjectId.HasValue)
                 {
                     ucCSAT.PopulateData(null);
                 }
@@ -1327,6 +1337,8 @@ namespace PraticeManagement
                     hdnProjectId.Value = result.ToString();
                     DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty, new List<int>());
                     SelectProjectStatus(project);
+                    if (ProjectId.HasValue && Project != null && Project.Milestones != null && Project.Milestones.Count > 0)
+                        projectAttribution.FinalSave();
                     ShowTabs();
                 }
                 catch (CommunicationException ex)
@@ -1363,8 +1375,8 @@ namespace PraticeManagement
                 }
                 ViewState.Remove(ProjectAttachmentsKey);
             }
-
             return result;
+
         }
 
         protected override void Display()
@@ -1530,7 +1542,7 @@ namespace PraticeManagement
                     ddlProjectOwner.SelectedValue = project.ProjectOwner.Id.ToString();
                 }
                 int viewIndex = mvProjectDetailTab.ActiveViewIndex;
-                if (viewIndex == 6) //History
+                if (viewIndex == 7) //History
                 {
                     activityLog.Update();
                 }
@@ -1792,15 +1804,15 @@ namespace PraticeManagement
             int viewIndex = int.Parse((string)e.CommandArgument);
             SelectView((Control)sender, viewIndex, false);
             tblProjectDetailTabViewSwitch_ActiveViewIndex = viewIndex;
-            if (viewIndex == 6) //History
+            if (viewIndex == 7) //History
             {
                 activityLog.Update();
             }
-            else if (viewIndex == 2 && ProjectId.HasValue)
+            else if (viewIndex == 3 && ProjectId.HasValue)
             {
                 financials.Project = GetCurrentProject(ProjectId.Value);
             }
-            else if (viewIndex == 8 && ProjectId.HasValue)
+            else if (viewIndex == 9 && ProjectId.HasValue)
             {
                 ucCSAT.PopulateData(null);
             }
@@ -2011,3 +2023,4 @@ namespace PraticeManagement
         #endregion Implementation of IPostBackEventHandler
     }
 }
+
