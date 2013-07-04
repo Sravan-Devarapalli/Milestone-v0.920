@@ -3443,5 +3443,67 @@ namespace DataAccess
                 command.ExecuteNonQuery();
             }
         }
+
+        public static List<Person> GetActivePersonsListShortByDivision(int divisionId)
+        {
+            var result = new List<Person>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetActivePersonsListShortByDivision, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, divisionId);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadPersonsShort(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static Title GetPersonTitleByRange(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonTitleByRange, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                   return ReadTitle(reader);
+                }
+            }
+        }
+
+        private static Title ReadTitle(SqlDataReader reader)
+        {
+            if (reader.HasRows)
+            {
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleNameIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                while (reader.Read())
+                {
+                    int titleId = reader.IsDBNull(titleIdIndex) ? -1 : reader.GetInt32(titleIdIndex);
+                    if (titleId != -1)
+                    {
+                        Title title = new Title()
+                        {
+                            TitleId = titleId,
+                            TitleName = reader.GetString(titleNameIndex)
+                        };
+                        return title;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
+
