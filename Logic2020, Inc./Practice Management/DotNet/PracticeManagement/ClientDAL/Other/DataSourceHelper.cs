@@ -43,13 +43,12 @@ namespace DataAccess.Other
         {
             ConnectionStringSettings settings =
                 ConfigurationManager.ConnectionStrings[connectionStringName];
-            string connectionString;
             if (settings == null)
             {
                 throw new ConfigurationErrorsException(
                     string.Format(ConnectionStringNotFound, connectionStringName));
             }
-            connectionString = settings.ConnectionString;
+            string connectionString = settings.ConnectionString;
             return connectionString;
         }
     }
