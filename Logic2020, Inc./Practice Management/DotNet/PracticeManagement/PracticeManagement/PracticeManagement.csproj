@@ -381,6 +381,7 @@
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\PersonCalendar.ascx" />
     <Content Include="Controls\PersonMonthCalendar.ascx" />
+    <Content Include="Controls\Projects\CommissionsAttribution.ascx" />
     <Content Include="Controls\Projects\ProjectCSAT.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
@@ -548,6 +549,7 @@
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\PersonPicture.ashx" />
     <Content Include="Controls\Projects\AttachmentUpload.ashx" />
+    <None Include="Properties\DataSources\DataTransferObjects.Attribution.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.BusinessGroup.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
@@ -717,6 +719,9 @@
     <None Include="Service References\OpportunityService\OpportunityService21.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\PersonService\DataTransferObjects.Financials1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\PersonService\DataTransferObjects.TimeEntry5.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -810,6 +815,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ProjectService\ProjectService22.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService24.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />
@@ -964,9 +972,9 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <None Include="Service References\ClientService\ClientService1.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\NPOI.dll" />
     <Content Include="TimEntry_New.xml">
@@ -1468,6 +1476,13 @@
     </Compile>
     <Compile Include="Controls\Projects\AttachmentUpload.ashx.cs">
       <DependentUpon>AttachmentUpload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Projects\CommissionsAttribution.ascx.cs">
+      <DependentUpon>CommissionsAttribution.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\CommissionsAttribution.ascx.designer.cs">
+      <DependentUpon>CommissionsAttribution.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Projects\ProjectCSAT.ascx.cs">
       <DependentUpon>ProjectCSAT.ascx</DependentUpon>
