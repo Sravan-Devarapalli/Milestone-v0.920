@@ -136,6 +136,7 @@ namespace PracticeManagementService
         {
             return ReportDAL.TerminationReportGraph(startDate, endDate);
         }
+
         #region ConsultingDemand
 
         public List<ConsultantGroupbyTitleSkill> ConsultingDemandSummary(DateTime startDate, DateTime endDate, string titles, string skills)
@@ -187,11 +188,13 @@ namespace PracticeManagementService
         {
             return ReportDAL.ConsultingDemandDetailsBySalesStage(startDate, endDate, titles, skills, sortColumns);
         }
+
         public List<AttainmentBillableutlizationReport> AttainmentBillableutlizationReport(DateTime startDate, DateTime endDate)
         {
             return ReportDAL.AttainmentBillableutlizationReport(startDate, endDate);
         }
-        #endregion
+
+        #endregion ConsultingDemand
 
         public List<Project> GetAttainmentProjectListMultiParameters(
          string clientIds,
@@ -217,6 +220,10 @@ namespace PracticeManagementService
         {
             return ReportDAL.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
         }
+
+        public List<Project> ProjectAttributionReport(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.ProjectAttributionReport(startDate, endDate);
+        }
     }
 }
-
