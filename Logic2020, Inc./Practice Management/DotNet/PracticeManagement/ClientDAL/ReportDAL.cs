@@ -2235,7 +2235,7 @@ namespace DataAccess
                     ReadConsultantDemandDetailsByMonth(reader, result, isFromPipelinePopUp);
                     foreach (var month in months)
                     {
-                        if (!result.All(r => r.MonthStartDate != month)) continue;
+                        if (result.Any(r => r.MonthStartDate == month)) continue;
                         ConsultantGroupByMonth res = new ConsultantGroupByMonth
                             {
                                 MonthStartDate = month,
@@ -3370,5 +3370,85 @@ namespace DataAccess
                 attainmentBillableutlizationReport.BillableUtilizationList.Add(billableUtlizationByRange);
             }
         }
+
+        public static List<Project> ProjectAttributionReport(DateTime startDate, DateTime endDate)
+        {
+            List<Project> result = new List<Project>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectAttributionReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadProjectAttributionReport(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static void ReadProjectAttributionReport(SqlDataReader reader, List<Project> result)
+        {
+            if (!reader.HasRows) return;
+            int recordTypeIndex = reader.GetOrdinal(Constants.ColumnNames.RecordType);
+            int attributionTypeIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionType);
+            int projectStatusIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatus);
+            int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+            int accountIndex = reader.GetOrdinal(Constants.ColumnNames.Account);
+            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+            int BusinessGroupIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroup);
+            int businessUnitIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnit);
+            int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+            int newOrExtensionIndex = reader.GetOrdinal(Constants.ColumnNames.NewOrExtension);
+            int nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+            int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+            int commissionPercentageIndex = reader.GetOrdinal(Constants.ColumnNames.CommissionPercentage);
+
+            while (reader.Read())
+            {
+                Project attributionReport;
+                string projectNumber = reader.GetString(projectNumberIndex);
+                if (result.Any(p => p.ProjectNumber == projectNumber))
+                {
+                    attributionReport = result.First(p => p.ProjectNumber == projectNumber);
+                }
+                else
+                {
+                    attributionReport = new Project
+                        {
+                            Status = new ProjectStatus { Name = reader.GetString(projectStatusIndex) },
+                            ProjectNumber = projectNumber,
+                            Client = new Client { Name = reader.GetString(accountIndex) },
+                            BusinessGroup = new BusinessGroup { Name = reader.GetString(BusinessGroupIndex) },
+                            Group = new ProjectGroup { Name = reader.GetString(businessUnitIndex) },
+                            Name = reader.GetString(projectNameIndex),
+                            BusinessType = reader.IsDBNull(newOrExtensionIndex) ? (BusinessType)0 : (BusinessType)reader.GetInt32(newOrExtensionIndex),
+                            AttributionList = new List<Attribution>()
+                        };
+                    result.Add(attributionReport);
+                }
+                Attribution attributionRecord = new Attribution
+                    {
+                        StartDate =
+                             reader.GetDateTime(startDateIndex),
+                        EndDate = reader.GetDateTime(endDateIndex),
+                        AttributionType =
+                            (AttributionTypes)Enum.Parse(typeof(AttributionTypes), reader.GetString(attributionTypeIndex)),
+                        AttributionRecordType =
+                            (AttributionRecordTypes)
+                            Enum.Parse(typeof(AttributionRecordTypes), reader.GetString(recordTypeIndex)),
+                        TargetName = reader.GetString(nameIndex),
+                        Title = new Title { TitleName = reader.GetString(titleIndex) },
+                        CommissionPercentage = (decimal)(reader.GetDecimal(commissionPercentageIndex)) / 100
+                    };
+                attributionReport.AttributionList.Add(attributionRecord);
+            }
+        }
     }
 }
+
