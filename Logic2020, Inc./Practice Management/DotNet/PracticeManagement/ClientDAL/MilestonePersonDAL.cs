@@ -299,7 +299,7 @@ namespace DataAccess
             while (reader.Read())
             {
                 var personId = reader.GetInt32(personIdIndex);
-                if (!result.Any(mp => mp.ThisPerson.Id == personId)) continue;
+                if (result.All(mp => mp.ThisPerson.Id != personId)) continue;
                 MilestonePersonEntry mpe = result.First(mp => mp.ThisPerson.Id == personId);
                 if (mpe.PersonTimeOffList == null)
                 {
@@ -322,7 +322,7 @@ namespace DataAccess
                 var date = reader.GetDateTime(dateIndex);
                 var hours = reader.GetDecimal(actualHoursIndex);
 
-                if (!result.Any(mp => mp.Person.Id == personId)) continue;
+                if (result.All(mp => mp.Person.Id != personId)) continue;
                 List<MilestonePerson> milestonePersons = result.Where(mp => mp.Person.Id == personId).ToList();
                 foreach (MilestonePerson mp in milestonePersons)
                 {
@@ -1493,4 +1493,3 @@ namespace DataAccess
         }
     }
 }
-
