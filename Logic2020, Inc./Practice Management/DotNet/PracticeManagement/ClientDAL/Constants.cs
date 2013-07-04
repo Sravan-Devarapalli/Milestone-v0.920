@@ -9,6 +9,19 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string Percentage = "Percentage";
+            public const string TargetName = "TargetName";
+            public const string AttributionRecordId = "AttributionRecordId";
+            public const string AttributionTypeId = "AttributionTypeId";
+            public const string AttributionId = "AttributionId";
+            public const string CommissionPercentage = "CommissionPercentage";
+            public const string NewOrExtension = "NewOrExtension";
+            public const string BusinessUnit = "BusinessUnit";
+            public const string BusinessGroup = "BusinessGroup";
+            public const string ProjectNumber = "ProjectNumber";
+            public const string ProjectStatus = "ProjectStatus";
+            public const string AttributionType = "AttributionType";
+            public const string RecordType = "RecordType";
             public const string MonthEnd = "MonthEnd";
             public const string RangeType = "RangeType";
             public const string IsHouseAccount = "IsHouseAccount";
@@ -460,6 +473,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string DivisionId = "@DivisionId";
+            public static string AttributionXML = "@AttributionXML"; 
             public static string IsSummaryCache = "@IsSummaryCache";
             public static string CalculateMonthValues = "@CalculateMonthValues";
             public static string SalesStages = "@SalesStages";
@@ -862,6 +877,7 @@
 
             public class Person
             {
+                public const string GetActivePersonsListShortByDivision = "dbo.GetActivePersonsListShortByDivision";
                 public const string IsPersonAlreadyHavingStatus = "dbo.IsPersonAlreadyHavingStatus";
                 public const string SetDefaultManager = "dbo.PersonSetDefaultManager";
                 public const string PersonListByCategoryTypeAndPeriod = "[dbo].[PersonListByCategoryTypeAndPeriod]";
@@ -932,6 +948,7 @@
                 public const string GetPersonEncodedPasswordProcedure = "dbo.GetPersonEncodedPassword";
                 public const string DeletePersonEncodedPasswordProcedure = "dbo.DeletePersonEncodedPassword";
                 public const string PersonValidationsProcedure = "dbo.PersonValidations";
+                public static string GetPersonTitleByRange = "dbo.GetPersonTitleByRange";
             }
 
             #endregion Nested type: Person
@@ -1061,6 +1078,7 @@
 
             public class Reports
             {
+                public const string ProjectAttributionReport = "dbo.ProjectAttributionReport";
                 public const string AttainmentProjectList = "dbo.AttainmentProjectList";
                 public const string AttainmentFinancialListByProject = "dbo.AttainmentFinancialListByProject";
                 public const string PersonTimeEntriesDetails = "dbo.PersonTimeEntriesDetails";
@@ -1149,6 +1167,8 @@
 
             public class Project
             {
+                public const string SetProjectAttributionValues = "dbo.SetProjectAttributionValues";
+                public const string GetProjectAttributionValues = "dbo.GetProjectAttributionValues";
                 public const string GetProjectLastChangeDateFortheGivenStatus = "dbo.GetProjectLastChangeDateFortheGivenStatus";
                 public const string GetProjectsByClientId = "dbo.GetProjectsByClientId";
                 public const string GetProjectListByDateRange = "dbo.GetProjectListByDateRange";
