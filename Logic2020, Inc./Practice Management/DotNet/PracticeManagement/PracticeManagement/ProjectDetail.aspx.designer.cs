@@ -643,6 +643,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.LinkButton btnMilestones;
         
         /// <summary>
+        /// cellProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellProjectTimeTypes;
+        
+        /// <summary>
+        /// btnProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnProjectTimeTypes;
+        
+        /// <summary>
         /// CellAttachments control.
         /// </summary>
         /// <remarks>
@@ -832,6 +850,60 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Projects.ProjectMilestonesFinancials milestones;
         
         /// <summary>
+        /// View1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View View1;
+        
+        /// <summary>
+        /// pnlProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlProjectTimeTypes;
+        
+        /// <summary>
+        /// ucProjectTimeTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Projects.ProjectTimeTypes ucProjectTimeTypes;
+        
+        /// <summary>
+        /// btnDeleteWorkType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDeleteWorkType;
+        
+        /// <summary>
+        /// hdnWorkTypeId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnWorkTypeId;
+        
+        /// <summary>
+        /// cvWorkTypesAssigned control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvWorkTypesAssigned;
+        
+        /// <summary>
         /// vmAttachments control.
         /// </summary>
         /// <remarks>
@@ -920,6 +992,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.View vwCommissions;
+        
+        /// <summary>
+        /// pnlCommissions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlCommissions;
+        
+        /// <summary>
+        /// projectAttribution control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Projects.CommissionsAttribution projectAttribution;
         
         /// <summary>
         /// vwExpenses control.
@@ -1073,60 +1163,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Projects.ProjectCSAT ucCSAT;
-        
-        /// <summary>
-        /// tcProjectDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.TabContainer tcProjectDetails;
-        
-        /// <summary>
-        /// tpDescription control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel tpDescription;
-        
-        /// <summary>
-        /// ucProjectTimeTypes control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Projects.ProjectTimeTypes ucProjectTimeTypes;
-        
-        /// <summary>
-        /// btnDeleteWorkType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDeleteWorkType;
-        
-        /// <summary>
-        /// hdnWorkTypeId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnWorkTypeId;
-        
-        /// <summary>
-        /// cvWorkTypesAssigned control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator cvWorkTypesAssigned;
         
         /// <summary>
         /// hdnProjectId control.
@@ -1406,6 +1442,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ValidationSummary vsumCSAT;
+        
+        /// <summary>
+        /// vsumAttribution control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsumAttribution;
         
         /// <summary>
         /// btnOKErrorPanel control.
