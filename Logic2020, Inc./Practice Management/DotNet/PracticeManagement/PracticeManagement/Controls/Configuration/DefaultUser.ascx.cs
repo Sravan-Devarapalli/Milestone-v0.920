@@ -5,6 +5,7 @@ using DataTransferObjects;
 using PraticeManagement.Events;
 using PraticeManagement.Utils;
 using Resources;
+
 namespace PraticeManagement.Controls.Configuration
 {
     public partial class DefaultUser : PracticeManagementUserControl
@@ -16,14 +17,14 @@ namespace PraticeManagement.Controls.Configuration
         private const string ViewStateDefUserEnabled = "DefUserEnabled";
         private const string personsRole = "PersonsRole";
 
-        #endregion
+        #endregion Constants
 
         #region Fields
 
         private int _defManagerId = -1;
         private Person _personToSelect;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -133,7 +134,7 @@ namespace PraticeManagement.Controls.Configuration
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Methods
 
@@ -160,7 +161,7 @@ namespace PraticeManagement.Controls.Configuration
                 ddlActivePersons.Items.Remove(selected);
         }
 
-        #endregion
+        #endregion Methods
 
         #region Events
 
@@ -170,7 +171,6 @@ namespace PraticeManagement.Controls.Configuration
             {
                 EnsureChildControls();
                 btnSetDefault.Visible = AllowChange;
-               
             }
 
             if (!string.IsNullOrEmpty(OnClientChange))
@@ -188,7 +188,7 @@ namespace PraticeManagement.Controls.Configuration
         {
             try
             {
-                DataHelper.SetNewDefaultManager(SelectedManager);
+                DataHelper.SetNewDefaultManager(SelectedManager.Id.Value);
                 mlMessage.ShowInfoMessage(Messages.ManagerSet);
 
                 HostingPage.ClearDirty();
@@ -237,10 +237,12 @@ namespace PraticeManagement.Controls.Configuration
             //else
             //    SelectDropDownValue(_personToSelect.Id.Value.ToString());
         }
+
         protected void odsPersons_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
         {
             e.InputParameters["roleName"] = PersonsRole;
         }
+
         private void SelectDefaultManager(IEnumerable<Person> persons)
         {
             if (persons != null)
@@ -261,7 +263,6 @@ namespace PraticeManagement.Controls.Configuration
             }
         }
 
-        #endregion
+        #endregion Events
     }
 }
-
