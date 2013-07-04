@@ -436,5 +436,13 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SendAdministratorAddedEmail(Person person, Person oldPerson);
+
+        [OperationContract]
+        List<Person> GetActivePersonsListShortByDivision(int divisionId);
+
+        [OperationContract]
+        Title GetPersonTitleByRange(int personId, DateTime startDate, DateTime endDate);
+ 
     }
 }
+
