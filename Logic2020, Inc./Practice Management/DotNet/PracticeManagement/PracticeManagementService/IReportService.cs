@@ -134,6 +134,9 @@ namespace PracticeManagementService
         bool IsQuarterColoumnsShown,
         bool IsYearToDateColoumnsShown,
         bool getFinancialsFromCache);
+
+        [OperationContract]
+        List<Project> ProjectAttributionReport(DateTime startDate, DateTime endDate);
     }
 }
 
