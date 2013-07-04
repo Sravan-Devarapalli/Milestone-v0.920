@@ -1,5 +1,5 @@
-﻿using System.Runtime.Serialization;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace DataTransferObjects
 {
@@ -8,8 +8,10 @@ namespace DataTransferObjects
     {
         [EnumMember]
         ClientDirector = 1,
+
         [EnumMember]
         PracticeArea = 2,
+
         [EnumMember]
         BusinessDevelopmentManager = 3
     }
@@ -19,10 +21,13 @@ namespace DataTransferObjects
     {
         [EnumMember]
         Reports = 1,
+
         [EnumMember]
         SMTP = 2,
+
         [EnumMember]
         Project = 3,
+
         [EnumMember]
         Application = 4
     }
@@ -32,8 +37,10 @@ namespace DataTransferObjects
     {
         [EnumMember]
         ProjectValueInRange = 1,
+
         [EnumMember]
         TotalProjectValue = 2,
+
         [EnumMember]
         CurrentFiscalYear = 3
     }
@@ -43,6 +50,7 @@ namespace DataTransferObjects
     {
         [EnumMember]
         NormalPerson = 1,
+
         [EnumMember]
         StrikedPerson = 2
     }
@@ -52,6 +60,7 @@ namespace DataTransferObjects
     {
         [EnumMember]
         ProposedResource = 1,
+
         [EnumMember]
         TeamStructure = 2
     }
@@ -61,6 +70,7 @@ namespace DataTransferObjects
     {
         [EnumMember]
         Client = 1,
+
         [EnumMember]
         Person = 2,
     }
@@ -70,8 +80,10 @@ namespace DataTransferObjects
     {
         [EnumMember]
         ConsultantName = 1,
+
         [EnumMember]
         Practice = 2,
+
         [EnumMember]
         Status = 3
     }
@@ -81,21 +93,27 @@ namespace DataTransferObjects
     {
         [EnumMember]
         Consulant = 1,
+
         [EnumMember]
         Manager = 2,
+
         [EnumMember]
         BusinessDevelopment = 3,
+
         [EnumMember]
         ClientDirector = 4,
+
         [EnumMember]
         SeniorLeadership = 5,
+
         [EnumMember]
         Recruiter = 6,
+
         [EnumMember]
         Admin = 7,
+
         [EnumMember]
         ProjectLead = 8
-
     }
 
     [DataContract]
@@ -104,19 +122,22 @@ namespace DataTransferObjects
         [EnumMember]
         [Description("Undefined")]
         Undefined = 0,
-        [EnumMember]
-        [Description("Project")] 
-        Project = 1,
-        [EnumMember]
-        [Description("Business Development")] 
-        BusinessDevelopment = 2,
-        [EnumMember]
-        [Description("Internal")] 
-        Internal = 3,
-        [EnumMember]
-        [Description("Administrative")] 
-        Administrative = 4
 
+        [EnumMember]
+        [Description("Project")]
+        Project = 1,
+
+        [EnumMember]
+        [Description("Business Development")]
+        BusinessDevelopment = 2,
+
+        [EnumMember]
+        [Description("Internal")]
+        Internal = 3,
+
+        [EnumMember]
+        [Description("Administrative")]
+        Administrative = 4
     }
 
     [DataContract]
@@ -125,15 +146,19 @@ namespace DataTransferObjects
         [EnumMember]
         [Description("- - Select Division - -")]
         Undefined = 0,
+
         [EnumMember]
         [Description("Business Development")]
         BusinessDevelopment = 1,
+
         [EnumMember]
         [Description("Consulting")]
         Consulting = 2,
+
         [EnumMember]
         [Description("Operations")]
         Operations = 3,
+
         [EnumMember]
         [Description("Recruiting")]
         Recruiting = 4
@@ -145,24 +170,30 @@ namespace DataTransferObjects
         [EnumMember]
         [Description("- - Select Category - -")]
         Undefined = 0,
+
         [EnumMember]
         [Description("SOW")]
         SOW = 1,
+
         [EnumMember]
         [Description("MSA")]
         MSA = 2,
+
         [EnumMember]
         [Description("Change Request")]
         ChangeRequest = 3,
+
         [EnumMember]
         [Description("Proposal")]
         Proposal = 4,
+
         [EnumMember]
         [Description("Project Estimate")]
-        ProjectEstimate = 5, 
+        ProjectEstimate = 5,
+
         [EnumMember]
         [Description("Purchase Order")]
-        PurchaseOrder = 6 
+        PurchaseOrder = 6
     }
 
     [DataContract]
@@ -180,5 +211,28 @@ namespace DataTransferObjects
         [Description("Extension")]
         Extension = 2
     }
-}
 
+    [DataContract]
+    public enum AttributionTypes
+    {
+        [EnumMember]
+        [Description("Sales")]
+        Sales = 1,
+
+        [EnumMember]
+        [Description("Delivery")]
+        Delivery = 2
+    }
+
+    [DataContract]
+    public enum AttributionRecordTypes
+    {
+        [EnumMember]
+        [Description("Person")]
+        Person = 1,
+
+        [EnumMember]
+        [Description("Practice")]
+        Practice = 2
+    }
+}
