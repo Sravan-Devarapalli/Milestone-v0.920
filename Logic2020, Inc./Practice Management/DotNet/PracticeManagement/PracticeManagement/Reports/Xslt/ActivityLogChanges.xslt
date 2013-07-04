@@ -70,7 +70,8 @@
                   or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'
                   or $attrName = 'ProfileId'  or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' 
                   or $attrName = 'ManagerId' or $attrName = 'SeniorityId' or $attrName = 'RecruiterId' or $attrName = 'TitleId' or $attrName = 'TitleTypeId' or $attrName = 'PricingListId' 
-                  or $attrName = 'BusinessUnitId' or $attrName = 'BusinessGroupId' or $attrName = 'CSATId' or $attrName = 'ReviewerId' or $attrName = 'SeniorManagerId' or $attrName = 'BusinessTypeId'"></xsl:when>
+                  or $attrName = 'BusinessUnitId' or $attrName = 'BusinessGroupId' or $attrName = 'CSATId' or $attrName = 'ReviewerId' or $attrName = 'SeniorManagerId' or $attrName = 'BusinessTypeId' 
+                  or $attrName = 'AttributionId' or $attrName = 'AttributionTypeId' or $attrName = 'AttributionRecordTypeId' or $attrName = 'TargetId' "></xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
             <xsl:if test="name() = $attrName and . != $value">
@@ -107,7 +108,8 @@
                   or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'
                   or $attrName = 'ProfileId' or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' 
                   or $attrName = 'ManagerId' or $attrName = 'SeniorityId' or $attrName = 'RecruiterId' or $attrName = 'TitleId' or $attrName = 'TitleTypeId' or $attrName = 'PricingListId' 
-                  or $attrName = 'BusinessUnitId' or $attrName = 'BusinessGroupId'  or $attrName = 'CSATId' or $attrName = 'ReviewerId' or $attrName = 'SeniorManagerId' or $attrName = 'BusinessTypeId' "></xsl:when>
+                  or $attrName = 'BusinessUnitId' or $attrName = 'BusinessGroupId'  or $attrName = 'CSATId' or $attrName = 'ReviewerId' or $attrName = 'SeniorManagerId' or $attrName = 'BusinessTypeId'
+                  or $attrName = 'AttributionId' or $attrName = 'AttributionTypeId' or $attrName = 'AttributionRecordTypeId' or $attrName = 'TargetId'"></xsl:when>
         <xsl:otherwise>
           <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
             <xsl:call-template name="DisplayChange">
@@ -179,7 +181,8 @@
                   or $attrName = 'DivisionId' or $attrName = 'AccountId' or $attrName = 'DefaultDirectorID' or $attrName = 'DefaultSalespersonID' or $attrName = 'TerminationReasonId'
                   or $attrName = 'ProfileId' or $attrName = 'ProjectOwnerId' or $attrName = 'PracticeCapabilityId' or $attrName = 'OpportunityTransitionId' or $attrName = 'PriorityId' 
                   or $attrName = 'ManagerId' or $attrName = 'SeniorityId' or $attrName = 'RecruiterId' or $attrName = 'TitleId' or $attrName = 'TitleTypeId' or $attrName = 'PricingListId' 
-                  or $attrName = 'BusinessUnitId' or $attrName = 'BusinessGroupId'  or $attrName = 'CSATId' or $attrName = 'ReviewerId' or $attrName = 'SeniorManagerId' or $attrName = 'BusinessTypeId' "></xsl:when>
+                  or $attrName = 'BusinessUnitId' or $attrName = 'BusinessGroupId'  or $attrName = 'CSATId' or $attrName = 'ReviewerId' or $attrName = 'SeniorManagerId' or $attrName = 'BusinessTypeId' 
+                  or $attrName = 'AttributionId' or $attrName = 'AttributionTypeId' or $attrName = 'AttributionRecordTypeId' or $attrName = 'TargetId' "></xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="FriendlyName">
             <xsl:with-param name="attrName" select="name()" />
@@ -508,6 +511,9 @@
       <xsl:when test="$attrName = 'BusinessType'">Business Type</xsl:when>
       <xsl:when test="$attrName = 'Reviewer'">CSAT Owner</xsl:when>
       <xsl:when test="$attrName = 'PONumber'">PO Number</xsl:when>
+      <xsl:when test="$attrName = 'AttributionType'">Attribution Type</xsl:when>
+      <xsl:when test="$attrName = 'CommissionPercentage'">Commission Percentage</xsl:when>
+      <xsl:when test="$attrName = 'TargetName'">Target Name</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$attrName"/>
       </xsl:otherwise>
