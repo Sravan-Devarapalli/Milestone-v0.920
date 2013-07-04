@@ -177,11 +177,9 @@
       <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" minOccurs="0" name="FinancialRange" nillable="true" type="q12:RangeType" />
       <xs:element minOccurs="0" name="GrossMargin" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
-      <xs:element minOccurs="0" name="PracticeManagementCommission" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="ReimbursedExpenses" type="xs:decimal" />
       <xs:element minOccurs="0" name="Revenue" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="RevenueNet" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="SalesCommission" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="Timescale" type="tns:TimescaleType" />
       <xs:element minOccurs="0" name="TimescaleChangeStatus" type="xs:int" />
     </xs:sequence>
@@ -366,6 +364,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
       <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
+      <xs:element minOccurs="0" name="AttributionList" nillable="true" type="tns:ArrayOfAttribution" />
       <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BusinessGroup" nillable="true" type="tns:BusinessGroup" />
       <xs:element minOccurs="0" name="BusinessType" type="tns:BusinessType" />
@@ -396,14 +395,12 @@
       <xs:element minOccurs="0" name="IsSeniorManagerUnassigned" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsSickLeaveProject" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsUnpaidProject" type="xs:boolean" />
-      <xs:element minOccurs="0" name="ManagementCommission" nillable="true" type="tns:Commission" />
       <xs:element minOccurs="0" name="Milestones" nillable="true" type="tns:ArrayOfMilestone" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="OpportunityId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="OpportunityNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PONumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
-      <xs:element minOccurs="0" name="PracticeManagerCommission" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="PricingList" nillable="true" type="tns:PricingList" />
       <xs:element minOccurs="0" name="ProjectCapabilityIds" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectManagerIdsList" nillable="true" type="xs:string" />
@@ -416,7 +413,7 @@
       <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q13:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
       <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByRange" nillable="true" type="q14:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
       <xs:element minOccurs="0" name="RecentCompletedStatusDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="SalesCommission" nillable="true" type="tns:ArrayOfCommission" />
+      <xs:element minOccurs="0" name="SalesPersonId" type="xs:int" />
       <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SeniorManagerId" type="xs:int" />
       <xs:element minOccurs="0" name="SeniorManagerName" nillable="true" type="xs:string" />
@@ -459,6 +456,66 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ProjectAttachmentCategory" nillable="true" type="tns:ProjectAttachmentCategory" />
+  <xs:complexType name="ArrayOfAttribution">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Attribution" nillable="true" type="tns:Attribution" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAttribution" nillable="true" type="tns:ArrayOfAttribution" />
+  <xs:complexType name="Attribution">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AttributionRecordType" type="tns:AttributionRecordTypes" />
+      <xs:element minOccurs="0" name="AttributionType" type="tns:AttributionTypes" />
+      <xs:element minOccurs="0" name="CommissionPercentage" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
+      <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TargetId" type="xs:int" />
+      <xs:element minOccurs="0" name="TargetName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="tns:Title" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Attribution" nillable="true" type="tns:Attribution" />
+  <xs:simpleType name="AttributionRecordTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Person">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Practice">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AttributionRecordTypes" nillable="true" type="tns:AttributionRecordTypes" />
+  <xs:simpleType name="AttributionTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Sales">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Delivery">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AttributionTypes" nillable="true" type="tns:AttributionTypes" />
   <xs:complexType name="BusinessGroup">
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientId" type="xs:int" />
@@ -562,86 +619,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
-  <xs:complexType name="Commission">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="FractionOfMargin" type="xs:decimal">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element minOccurs="0" name="MarginTypeId" nillable="true" type="xs:int">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element minOccurs="0" name="PersonFirstName" nillable="true" type="xs:string">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element minOccurs="0" name="PersonId" nillable="true" type="xs:int">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element minOccurs="0" name="PersonLastName" nillable="true" type="xs:string">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element minOccurs="0" name="ProjectWithMargin" nillable="true" type="tns:Project">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-      <xs:element minOccurs="0" name="TypeOfCommission" type="tns:CommissionType">
-        <xs:annotation>
-          <xs:appinfo>
-            <DefaultValue EmitDefaultValue="false" xmlns="http://schemas.microsoft.com/2003/10/Serialization/" />
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Commission" nillable="true" type="tns:Commission" />
-  <xs:simpleType name="CommissionType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Sales">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PracticeManagement">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="CommissionType" nillable="true" type="tns:CommissionType" />
   <xs:complexType name="ArrayOfMilestone">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Milestone" nillable="true" type="tns:Milestone" />
@@ -735,12 +712,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
-  <xs:complexType name="ArrayOfCommission">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Commission" nillable="true" type="tns:Commission" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfCommission" nillable="true" type="tns:ArrayOfCommission" />
   <xs:complexType name="ProjectStatus">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
