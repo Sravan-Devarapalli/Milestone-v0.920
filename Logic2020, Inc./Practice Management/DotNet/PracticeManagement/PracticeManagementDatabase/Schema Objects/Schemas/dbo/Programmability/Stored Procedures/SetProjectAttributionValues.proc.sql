@@ -6,6 +6,7 @@
 	)
 AS
 BEGIN
+	SET ANSI_NULLS ON;
 	/*
 	<Attributions>
 		<AttributionType AttributionTypeId="">
