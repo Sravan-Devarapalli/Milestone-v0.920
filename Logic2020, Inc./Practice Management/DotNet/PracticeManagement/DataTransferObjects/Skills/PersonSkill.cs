@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects.Skills
@@ -10,8 +7,6 @@ namespace DataTransferObjects.Skills
     [Serializable]
     public class PersonSkill
     {
-        
-
         [DataMember]
         public Person Person
         {
@@ -62,4 +57,3 @@ namespace DataTransferObjects.Skills
         }
     }
 }
-
