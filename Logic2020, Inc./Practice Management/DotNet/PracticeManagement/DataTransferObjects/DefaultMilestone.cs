@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects
@@ -10,16 +7,15 @@ namespace DataTransferObjects
     [Serializable]
     public class DefaultMilestone
     {
-
         /// <summary>
         /// Id of the Default Milestone
         /// </summary>
         [DataMember]
-		public int MilestoneId
-		{
-			get;
-			set;
-		}
+        public int MilestoneId
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Project Id of the Milstone.
@@ -40,7 +36,7 @@ namespace DataTransferObjects
             get;
             set;
         }
-        
+
         /// <summary>
         /// Date on which milestone is set as Default milestone.
         /// </summary>
@@ -72,4 +68,3 @@ namespace DataTransferObjects
         }
     }
 }
-
