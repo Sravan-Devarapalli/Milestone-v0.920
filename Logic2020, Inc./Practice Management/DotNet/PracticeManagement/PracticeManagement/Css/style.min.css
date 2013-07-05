@@ -406,6 +406,7 @@ TABLE.Section td{padding:4px 0 0 4px}
 .Width43Percent{width:43%}
 .Width44Percent{width:44%}
 .Width45Percent{width:45%}
+.Width47Percent{width:47%}
 .Width45PercentImp{width:45%!important}
 .Width48Percent{width:48%}
 .Width50Percent{width:50%}
@@ -1501,3 +1502,5 @@ table#ctl00_body_login tr td label{float:left}
 .tblPanelNetCSATScore td{width:30%;white-space:normal;text-align:center}
 .tblCSATHeader{width:100%;table-layout:fixed;font-weight:bold}
 .tblCSATHeader td{width:25%;vertical-align:top;font-size:14px;text-align:center}
+.attributionHeader{font-size:20px;font-weight:bold;text-align:center}
+.attributionFirstTd{width:47%;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;text-align:center}
