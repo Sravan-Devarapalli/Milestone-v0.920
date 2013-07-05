@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects.Reports
@@ -13,10 +10,8 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public DateTime StartDate { get; set; }
 
-
         [DataMember]
         public DateTime EndDate { get; set; }
-
 
         [DataMember]
         public double BillableUtilization { get; set; }
@@ -35,4 +30,3 @@ namespace DataTransferObjects.Reports
         }
     }
 }
-
