@@ -1,33 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.ServiceModel;
 using System.Web;
 using DataTransferObjects;
-using PraticeManagement.ConfigurationService;
-using System.ServiceModel;
-using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Skills;
+using DataTransferObjects.TimeEntry;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using System.Configuration;
+using PraticeManagement.ConfigurationService;
 using PraticeManagement.TimeTypeService;
 
 namespace PraticeManagement.Utils
 {
     public class SettingsHelper
     {
-        const string ApplicationSettingskey = "ApplicationSettings";
-        const string CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY = "CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY";
-        const string PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY = "PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY";
-        const string TimeType_System = "Time_Type_System";
-        const string SkillCategory = "SkillCategory";
-        const string Skill = "Skill";
-        const string SkillLevel = "SkillLevel";
-        const string SkillType = "SkillType";
-        const string TitleTypes = "TitleTypes";
-        const string SkillsIndustry = "SkillIndustry";
-        const string Person_TerminationReasons_List_Key = "Person_TerminationReasons_List_Key";
-        const string Person_Domain_List_Key = "Person_Domain_List_Key";
-        const string OpportunitySalesStages = "OpportunitySalesStages";
+        private const string ApplicationSettingskey = "ApplicationSettings";
+        private const string CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY = "CLIENT_MARGIN_COLORINFO_DEFAULT_THRESHOLDS_LIST_KEY";
+        private const string PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY = "PERSON_MARGIN_COLORINFO_THRESHOLDS_LIST_KEY";
+        private const string TimeType_System = "Time_Type_System";
+        private const string SkillCategory = "SkillCategory";
+        private const string Skill = "Skill";
+        private const string SkillLevel = "SkillLevel";
+        private const string SkillType = "SkillType";
+        private const string TitleTypes = "TitleTypes";
+        private const string SkillsIndustry = "SkillIndustry";
+        private const string Person_TerminationReasons_List_Key = "Person_TerminationReasons_List_Key";
+        private const string Person_Domain_List_Key = "Person_Domain_List_Key";
+        private const string OpportunitySalesStages = "OpportunitySalesStages";
 
         public static Dictionary<int, string> DemandOpportunitySalesStages
         {
@@ -38,7 +38,7 @@ namespace PraticeManagement.Utils
                     using (var serviceClient = new OpportunityService.OpportunityServiceClient())
                     {
                         var list = serviceClient.GetOpportunityPriorities(true).ToList();
-                        if (list.Count() > 0 && list.Any(op => op.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || op.Id == Constants.OpportunityPriorityIds.PriorityIdOfB))
+                        if (list.Any() && list.Any(op => op.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || op.Id == Constants.OpportunityPriorityIds.PriorityIdOfB))
                         {
                             HttpContext.Current.Cache[OpportunitySalesStages] = list.Where(op => op.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || op.Id == Constants.OpportunityPriorityIds.PriorityIdOfB).ToDictionary(o => o.Id, o => o.DisplayName);// .Select(o => new { key = o.Id, value = o.Priority }).ToDictionary(o =>  o.key);
                         }
@@ -97,7 +97,7 @@ namespace PraticeManagement.Utils
             {
                 try
                 {
-                    serviceClient.SaveResourceKeyValuePairs(settingType, dictionary); ;
+                    serviceClient.SaveResourceKeyValuePairs(settingType, dictionary);
                 }
                 catch (FaultException<ExceptionDetail> ex)
                 {
@@ -127,10 +127,7 @@ namespace PraticeManagement.Utils
             }
             else
             {
-                if (sMTPSettings.SSLEnabled)
-                    sMTPSettings.PortNumber = 25;
-                else
-                    sMTPSettings.PortNumber = 465;
+                sMTPSettings.PortNumber = sMTPSettings.SSLEnabled ? 25 : 465;
             }
 
             sMTPSettings.UserName =
@@ -357,7 +354,5 @@ namespace PraticeManagement.Utils
             }
             return HttpContext.Current.Cache[TitleTypes] as TitleType[];
         }
-
     }
 }
-
