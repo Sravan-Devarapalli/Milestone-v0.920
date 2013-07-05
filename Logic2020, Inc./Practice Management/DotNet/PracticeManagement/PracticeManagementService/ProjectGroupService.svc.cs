@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel.Activation;
-
 using DataAccess;
 using DataTransferObjects;
-using System;
 
 namespace PracticeManagementService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class ProjectGroupService : IProjectGroupService
-	{
-		#region IProjectGroupService Members
+    {
+        #region IProjectGroupService Members
 
         /// <summary>
         /// Retrives the list groups available for the specific client or project.
@@ -26,7 +25,7 @@ namespace PracticeManagementService
 
         public List<ProjectGroup> ListGroupByClientAndPersonInPeriod(int clientId, int personId, DateTime startDate, DateTime endDate)
         {
-            var result = ProjectGroupDAL.ListGroupByClientAndPersonInPeriod(clientId, personId, startDate,  endDate);
+            var result = ProjectGroupDAL.ListGroupByClientAndPersonInPeriod(clientId, personId, startDate, endDate);
             return result;
         }
 
@@ -37,7 +36,7 @@ namespace PracticeManagementService
         /// <param name="oldGroupName">Original name of the group</param>
         /// <param name="newGroupName">Name that will be assign to the group</param>
         /// <returns>True for successfully renaming</returns>
-        public  bool ProjectGroupUpdate(ProjectGroup projectGroup,string userLogin)
+        public bool ProjectGroupUpdate(ProjectGroup projectGroup, string userLogin)
         {
             return ProjectGroupDAL.ProjectGroupUpdate(projectGroup, userLogin);
         }
@@ -50,7 +49,7 @@ namespace PracticeManagementService
         /// <returns>Unique Id created group in DB</returns>
         public int ProjectGroupInsert(ProjectGroup projectGroup, string userLogin)
         {
-           return ProjectGroupDAL.ProjectGroupInsert(projectGroup, userLogin);
+            return ProjectGroupDAL.ProjectGroupInsert(projectGroup, userLogin);
         }
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace PracticeManagementService
 
         public int BusinessGroupInsert(BusinessGroup businessGroup, string userLogin)
         {
-           return  ProjectGroupDAL.BusinessGroupInsert(businessGroup, userLogin);
+            return ProjectGroupDAL.BusinessGroupInsert(businessGroup, userLogin);
         }
 
         public void BusinessGroupDelete(int businessGroupId, string userLogin)
@@ -88,7 +87,6 @@ namespace PracticeManagementService
             return ProjectGroupDAL.GetBusinessGroupList(clientId, businessUnitId);
         }
 
-        #endregion
-	}
+        #endregion IProjectGroupService Members
+    }
 }
-
