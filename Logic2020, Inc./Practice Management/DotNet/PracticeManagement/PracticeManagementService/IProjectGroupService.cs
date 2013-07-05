@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using DataTransferObjects;
-using System;
 
 namespace PracticeManagementService
 {
@@ -61,7 +61,5 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<BusinessGroup> GetBusinessGroupList(int? clientId, int? businessUnitId);
-
     }
 }
-
