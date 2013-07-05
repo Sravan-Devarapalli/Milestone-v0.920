@@ -3477,7 +3477,7 @@ namespace DataAccess
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                   return ReadTitle(reader);
+                    return ReadTitle(reader);
                 }
             }
         }
@@ -3506,4 +3506,3 @@ namespace DataAccess
         }
     }
 }
-
