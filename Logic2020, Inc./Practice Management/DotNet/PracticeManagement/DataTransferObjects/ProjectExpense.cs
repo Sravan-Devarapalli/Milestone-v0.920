@@ -1,11 +1,11 @@
-﻿using System.Runtime.Serialization;
-using System;
+﻿using System;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace DataTransferObjects
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ProjectExpense : IIdNameObject
     {
@@ -69,7 +69,5 @@ namespace DataTransferObjects
                 return 0.01M * Amount * Reimbursement;
             }
         }
-
     }
 }
-
