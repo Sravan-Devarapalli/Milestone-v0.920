@@ -41,50 +41,22 @@ namespace PraticeManagement.Utils
 
         public static DateTime PayrollCurrentStartDate(DateTime now)
         {
-            if (now.Day < 16)
-            {
-                return MonthStartDate(now);
-            }
-            else
-            {
-                return CurrentMonthSecondHalfStartDate(now);
-            }
+            return now.Day < 16 ? MonthStartDate(now) : CurrentMonthSecondHalfStartDate(now);
         }
 
         public static DateTime PayrollCurrentEndDate(DateTime now)
         {
-            if (now.Day < 16)
-            {
-                return CurrentMonthFirstHalfEndDate(now);
-            }
-            else
-            {
-                return MonthEndDate(now);
-            }
+            return now.Day < 16 ? CurrentMonthFirstHalfEndDate(now) : MonthEndDate(now);
         }
 
         public static DateTime PayrollPerviousStartDate(DateTime now)
         {
-            if (now.Day < 16)
-            {
-                return LastMonthSecondHalfStartDate(now);
-            }
-            else
-            {
-                return MonthStartDate(now);
-            }
+            return now.Day < 16 ? LastMonthSecondHalfStartDate(now) : MonthStartDate(now);
         }
 
         public static DateTime PayrollPerviousEndDate(DateTime now)
         {
-            if (now.Day < 16)
-            {
-                return LastMonthEndDate(now);
-            }
-            else
-            {
-                return CurrentMonthFirstHalfEndDate(now);
-            }
+            return now.Day < 16 ? LastMonthEndDate(now) : CurrentMonthFirstHalfEndDate(now);
         }
 
         public static DateTime MonthEndDate(DateTime now)
@@ -97,10 +69,9 @@ namespace PraticeManagement.Utils
             return now.AddDays(1 - now.DayOfYear);
         }
 
-        public static DateTime MonthStartDateByMonthNumber(DateTime now,int MonthNumber)
+        public static DateTime MonthStartDateByMonthNumber(DateTime now, int MonthNumber)
         {
-            var yearStarDate = Utils.Calendar.YearStartDate(now);
-            return now.AddMonths(MonthNumber-1).AddDays(1 - now.AddMonths(-MonthNumber).Day);
+            return now.AddMonths(MonthNumber - 1).AddDays(1 - now.AddMonths(-MonthNumber).Day);
         }
 
         public static DateTime YearEndDate(DateTime now)
@@ -142,7 +113,7 @@ namespace PraticeManagement.Utils
         {
             return MonthStartDate(now.AddMonths(-12));
         }
-        
+
         //Current month + next 3 months
         public static DateTime Next4MonthEndDate(DateTime now)
         {
@@ -172,7 +143,7 @@ namespace PraticeManagement.Utils
         {
             return now.AddDays(16 - now.AddMonths(-1).Day);
         }
-        
+
         //returns 15th of the current month
         public static DateTime CurrentMonthFirstHalfEndDate(DateTime now)
         {
@@ -196,51 +167,41 @@ namespace PraticeManagement.Utils
 
         public static DateTime QuarterStartDate(DateTime now, int quater)
         {
-            if (quater == 1)
+            switch (quater)
             {
-                return YearStartDate(now);
-            }
-            else if (quater == 2)
-            {
-                return new DateTime(now.Year, 4, 1);
-            }
-            else if (quater == 3)
-            {
-                return new DateTime(now.Year, 7, 1);
-            }
-            else
-            {
-                return new DateTime(now.Year, 10, 1);
+                case 1:
+                    return YearStartDate(now);
+                case 2:
+                    return new DateTime(now.Year, 4, 1);
+                case 3:
+                    return new DateTime(now.Year, 7, 1);
+                default:
+                    return new DateTime(now.Year, 10, 1);
             }
         }
-        
+
         public static DateTime QuarterEndDate(DateTime now, int quater)
         {
-            if (quater == 1)
+            switch (quater)
             {
-                return new DateTime(now.Year, 3, 31);
-            }
-            else if (quater == 2)
-            {
-                return new DateTime(now.Year, 6, 30);
-            }
-            else if (quater == 3)
-            {
-                return new DateTime(now.Year, 9, 30);
-            }
-            else
-            {
-                return YearEndDate(now);
+                case 1:
+                    return new DateTime(now.Year, 3, 31);
+                case 2:
+                    return new DateTime(now.Year, 6, 30);
+                case 3:
+                    return new DateTime(now.Year, 9, 30);
+                default:
+                    return YearEndDate(now);
             }
         }
 
-        public static List<string> GetMonthYearWithInThePeriod(DateTime startDate,DateTime endDate)
+        public static List<string> GetMonthYearWithInThePeriod(DateTime startDate, DateTime endDate)
         {
-            startDate =MonthStartDate(startDate).Date;
-            endDate =MonthStartDate(endDate).Date;
+            startDate = MonthStartDate(startDate).Date;
+            endDate = MonthStartDate(endDate).Date;
 
             List<string> result = new List<string>();
-            if(startDate <= endDate)
+            if (startDate <= endDate)
             {
                 while (startDate <= endDate)
                 {
@@ -252,4 +213,3 @@ namespace PraticeManagement.Utils
         }
     }
 }
-
