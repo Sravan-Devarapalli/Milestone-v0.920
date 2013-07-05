@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
-using DataTransferObjects.TimeEntry;
 using System.Web;
+using DataTransferObjects.TimeEntry;
 
 namespace DataTransferObjects.Reports
 {
@@ -12,10 +9,8 @@ namespace DataTransferObjects.Reports
     [Serializable]
     public class TimeEntryByWorkType
     {
-
         [DataMember]
         public TimeTypeRecord TimeType { get; set; }
-
 
         [DataMember]
         public string Note { get; set; }
@@ -54,9 +49,9 @@ namespace DataTransferObjects.Reports
 
         public string NoteForExport
         {
-            get 
+            get
             {
-                return Note.Replace("\n", " ").Replace("\r"," ");
+                return Note.Replace("\n", " ").Replace("\r", " ");
             }
         }
 
@@ -67,7 +62,6 @@ namespace DataTransferObjects.Reports
                 return HttpUtility.HtmlEncode(NoteForExport);
             }
         }
-
 
         public string HTMLNote
         {
@@ -84,9 +78,5 @@ namespace DataTransferObjects.Reports
                 return HttpUtility.HtmlEncode(HTMLNote).Replace("&lt;br/&gt;", "<br/>");
             }
         }
-        
-
-
     }
 }
-
