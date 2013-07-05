@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using DataTransferObjects;
-using System.Text;
 
 namespace PraticeManagement.Objects
 {
@@ -11,12 +11,11 @@ namespace PraticeManagement.Objects
     {
         #region Constants
 
-        private const string NotEndDate = "No End Date Specified.";
         private const string DetailsLabelFormat = "{0} - {1}";
         private const string AppendPersonFormat = "{0} {2}, {1}";
         private const string ToolTipView = " {1}{0}{2}{0}<b>Start:</b>{3:d}{0}<b>End:</b>{4:d}{0}<b>Project Manager(s):</b>{5}{0}<b>Resources:</b>{6}";
 
-        #endregion
+        #endregion Constants
 
         #region ItemType enum
 
@@ -26,7 +25,7 @@ namespace PraticeManagement.Objects
             ProjectedProject
         }
 
-        #endregion
+        #endregion ItemType enum
 
         #region Constructors
 
@@ -38,9 +37,7 @@ namespace PraticeManagement.Objects
             ReportEndDate = reportEndDate;
         }
 
-        #endregion
-
-
+        #endregion Constructors
 
         #region Properties
 
@@ -111,10 +108,9 @@ namespace PraticeManagement.Objects
         {
             get
             {
-                return GetRedirectUrl(Project.Id.Value, Constants.ApplicationPages.ProjectDetail); ;
+                return GetRedirectUrl(Project.Id.Value, Constants.ApplicationPages.ProjectDetail);
             }
         }
-
 
         private static string GetRedirectUrl(int argProjectId, string targetUrl)
         {
@@ -133,28 +129,24 @@ namespace PraticeManagement.Objects
                 foreach (var projectPerson in project.ProjectPersons)
                 {
                     var personExist = false;
-                    if (personList != null)
-                    {
-                        foreach (var mp in personList)
-                            if (mp.Person.Id == projectPerson.Person.Id)
-                            {
-                                personExist = true;
-                                break;
-                            }
-                    }
+                    foreach (var mp in personList)
+                        if (mp.Person.Id == projectPerson.Person.Id)
+                        {
+                            personExist = true;
+                            break;
+                        }
                     if (!personExist)
                     {
                         personList.Add(projectPerson);
                     }
                 }
             }
-            for (int i = 0; i < personList.Count; i++)
+            foreach (MilestonePerson t in personList)
             {
-
                 persons.AppendFormat(AppendPersonFormat,
                                      "<br />",
-                                     HttpUtility.HtmlEncode(personList[i].Person.FirstName),
-                                     HttpUtility.HtmlEncode(personList[i].Person.LastName));
+                                     HttpUtility.HtmlEncode(t.Person.FirstName),
+                                     HttpUtility.HtmlEncode(t.Person.LastName));
             }
 
             return string.Format(ToolTipView,
@@ -168,7 +160,6 @@ namespace PraticeManagement.Objects
                 );
         }
 
-
         private static string GetProjectManagers(List<Person> list)
         {
             string names = string.Empty;
@@ -180,9 +171,6 @@ namespace PraticeManagement.Objects
             return names;
         }
 
-        #endregion
-
-
+        #endregion Properties
     }
 }
-
