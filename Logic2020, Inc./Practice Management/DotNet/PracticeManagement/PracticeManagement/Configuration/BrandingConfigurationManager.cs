@@ -2,13 +2,13 @@
 {
     using System;
     using System.Configuration;
-    using System.Web;
-    using System.Web.Configuration;
-    using PraticeManagement.Controls;
-    using DataTransferObjects;
     using System.Drawing;
     using System.IO;
+    using System.Web;
+    using System.Web.Configuration;
+    using DataTransferObjects;
     using PraticeManagement.ConfigurationService;
+    using PraticeManagement.Controls;
 
     /// <summary>
     /// Manages company Logo and Image.
@@ -40,6 +40,7 @@
                 return BrandingConfigurationManager.GetCompanyLogoData();
             }
         }
+
         /// <summary>
         /// Gets the configured image URL.
         /// </summary>
@@ -53,13 +54,12 @@
 
         /// <summary>
         /// Gets configured logo image url.
-        /// Checks whether it is valid virtual path, returns empty string if 
+        /// Checks whether it is valid virtual path, returns empty string if
         /// invalid virtual path was set.
         /// </summary>
         /// <returns>Configured logo image URL.</returns>
         internal static string GetLogoImageUrl()
         {
-
             string logoImagePath = HttpContext.Current.Cache[LogoImagePathKey] as string;
 
             // Check if it was already added to cache.
@@ -89,11 +89,8 @@
             {
                 return title;
             }
-            else
-            {
-                HttpContext.Current.Cache[CompanyTitleKey] = CompanyTitle;
-                return CompanyTitle;
-            }
+            HttpContext.Current.Cache[CompanyTitleKey] = CompanyTitle;
+            return CompanyTitle;
         }
 
         /// <summary>
@@ -194,7 +191,7 @@
 
                     HttpContext.Current.Cache[CompanyLogoKey] = companyLogo;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     serviceClient.Abort();
                 }
@@ -218,4 +215,3 @@
         }
     }
 }
-
