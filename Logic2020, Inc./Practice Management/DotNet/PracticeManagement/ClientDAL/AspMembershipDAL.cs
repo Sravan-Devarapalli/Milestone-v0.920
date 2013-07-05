@@ -10,10 +10,9 @@ namespace DataAccess
     /// </summary>
     public static class AspMembershipDAL
     {
-       
         /// <summary>
         /// Set User to Locked-Out
-        /// </summary>        
+        /// </summary>
         /// <param name="username"></param>
         /// <param name="applicationName"></param>
         public static void UserSetLockedOut(string username, string applicationName, SqlConnection connection = null, SqlTransaction activeTransaction = null)
@@ -65,5 +64,4 @@ namespace DataAccess
             }
         }
     }
-
 }
