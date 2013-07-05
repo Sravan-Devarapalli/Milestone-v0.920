@@ -474,7 +474,7 @@
         public class ParameterNames
         {
             public static string DivisionId = "@DivisionId";
-            public static string AttributionXML = "@AttributionXML"; 
+            public static string AttributionXML = "@AttributionXML";
             public static string IsSummaryCache = "@IsSummaryCache";
             public static string CalculateMonthValues = "@CalculateMonthValues";
             public static string SalesStages = "@SalesStages";
@@ -1369,4 +1369,3 @@
         }
     }
 }
-
