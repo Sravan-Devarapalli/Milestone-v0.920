@@ -15,7 +15,7 @@ namespace DataTransferObjects.Financials
         private PracticeManagementCurrency _grossHourlyBillRate;
         private PracticeManagementCurrency _loadedHourlyPayRate;
 
-        #endregion
+        #endregion Fields
 
         #region Entity Properties
 
@@ -40,7 +40,7 @@ namespace DataTransferObjects.Financials
         }
 
         /// <summary>
-        /// Loaded Hourly Pay Rate 
+        /// Loaded Hourly Pay Rate
         /// </summary>
         [DataMember]
         public PracticeManagementCurrency LoadedHourlyPayRate
@@ -59,7 +59,7 @@ namespace DataTransferObjects.Financials
         [DataMember]
         public decimal HoursInPeriod { get; set; }
 
-        #endregion
+        #endregion Entity Properties
 
         #region Calculated Properties
 
@@ -71,7 +71,7 @@ namespace DataTransferObjects.Financials
         {
             get
             {
-                var revenueValue = (HoursInPeriod * GrossHourlyBillRate.Value) * (1 - ProjectDiscount/100.0M);
+                var revenueValue = (HoursInPeriod * GrossHourlyBillRate.Value) * (1 - ProjectDiscount / 100.0M);
 
                 var revenue = new PracticeManagementCurrency
                                   {
@@ -117,6 +117,6 @@ namespace DataTransferObjects.Financials
             }
         }
 
-        #endregion
+        #endregion Calculated Properties
     }
 }
