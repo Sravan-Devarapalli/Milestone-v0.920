@@ -52,7 +52,7 @@ namespace DataTransferObjects
         [DataMember]
         public List<Practice> PracticeList { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Implementation of IActivityPeriod
 
@@ -136,7 +136,6 @@ namespace DataTransferObjects
                                 var timeOffHours = ((pt.TimeOffHours / 8) * milestoneHoursPerDay);
 
                                 pt.Value = (timeOffHours > milestoneHoursPerDay) ? 0 : (milestoneHoursPerDay - timeOffHours);
-
                             }
                             else
                             {
@@ -162,7 +161,6 @@ namespace DataTransferObjects
         /// </summary>
         public List<TimeEntryRecord> ActualActivity { get; set; }
 
-        #endregion
+        #endregion Implementation of IActivityPeriod
     }
 }
-
