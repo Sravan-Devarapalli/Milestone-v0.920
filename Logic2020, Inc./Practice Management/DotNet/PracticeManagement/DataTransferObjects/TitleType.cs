@@ -14,14 +14,12 @@ namespace DataTransferObjects
             set;
         }
 
-
         [DataMember]
         public string TitleTypeName
         {
             get;
             set;
         }
-
 
         public int StartPosition
         {
@@ -36,4 +34,3 @@ namespace DataTransferObjects
         }
     }
 }
-
