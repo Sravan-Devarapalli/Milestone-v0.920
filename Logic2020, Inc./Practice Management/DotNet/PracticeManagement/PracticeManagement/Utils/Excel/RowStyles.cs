@@ -19,23 +19,16 @@ namespace PraticeManagement.Utils.Excel
 
         public void ApplyRowStyles(IRow row, List<ICellStyle> allCellStyles, Dictionary<string, short> allDataFormats)
         {
-            if (parentWorkbook != null)
+            if (parentWorkbook == null || cellStyles == null || row == null) return;
+            row.Height = Height;
+            int i = 0;
+            foreach (ICell cell in row.Cells)
             {
-
-                if (cellStyles != null && row != null)
+                cellStyles[i].parentWorkbook = parentWorkbook;
+                cellStyles[i].ApplyStyles(cell, allCellStyles, allDataFormats);
+                if (i < cellStyles.Length - 1)
                 {
-                    row.Height = Height;
-
-                    int i = 0;
-                    foreach (ICell cell in row.Cells)
-                    {
-                        cellStyles[i].parentWorkbook = parentWorkbook;
-                        cellStyles[i].ApplyStyles(cell, allCellStyles, allDataFormats);
-                        if (i < cellStyles.Length - 1)
-                        {
-                            i++;
-                        }
-                    }
+                    i++;
                 }
             }
         }
