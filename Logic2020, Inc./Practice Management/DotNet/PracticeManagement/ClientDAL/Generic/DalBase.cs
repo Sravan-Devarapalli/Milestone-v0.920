@@ -9,26 +9,33 @@ using DataTransferObjects;
 
 namespace DataAccess.Generic
 {
-    public abstract class DalBase<TE, TR> : IDataTransferObjectManipulator<TE> where TE : class, IIdNameObject, new() 
+    public abstract class DalBase<TE, TR> : IDataTransferObjectManipulator<TE>
+        where TE : class, IIdNameObject, new()
         where TR : EntityReaderBase<TE>, new()
     {
         #region Procedure Names
 
         protected abstract string GetByIdProcedure { get; }
+
         protected abstract string AddProcedure { get; }
+
         protected abstract string UpdateProcedure { get; }
+
         protected abstract string RemoveProcedure { get; }
 
-        #endregion
+        #endregion Procedure Names
 
         #region Initializers
 
         protected abstract SqlParameter InitAddCommand(TE entity, SqlCommand command);
+
         protected abstract void InitRemoveCommand(TE entity, SqlCommand command);
+
         protected abstract void InitUpdateCommand(TE entity, SqlCommand command);
+
         protected abstract void InitGetById(TE entity, SqlCommand command);
 
-        #endregion
+        #endregion Initializers
 
         #region Method body templates
 
@@ -80,13 +87,13 @@ namespace DataAccess.Generic
             }
         }
 
-        #endregion
+        #endregion Method body templates
 
         #region Basic operations
 
         public virtual TE GetById(int id)
         {
-            var items = ExecuteReader(new TE {Id = id}, GetByIdProcedure, InitGetById);
+            var items = ExecuteReader(new TE { Id = id }, GetByIdProcedure, InitGetById);
             return items.Length == 0 ? null : items[0];
         }
 
@@ -105,7 +112,7 @@ namespace DataAccess.Generic
             ExecNonQueryNoReturnParameters(entity, UpdateProcedure, InitUpdateCommand);
         }
 
-        #endregion
+        #endregion Basic operations
 
         #region Reading
 
@@ -121,7 +128,6 @@ namespace DataAccess.Generic
 
         protected abstract EntityReaderBase<TE> InitEntityReader(DbDataReader reader);
 
-        #endregion
+        #endregion Reading
     }
 }
-
