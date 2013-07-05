@@ -78,7 +78,7 @@ namespace PracticeManagementService
             return CalendarDAL.GetRecurringHolidaysInWeek(date, personId);
         }
 
-        public void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy,DateTime?  OldSeriesStartDate)
+        public void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy, DateTime? OldSeriesStartDate)
         {
             CalendarDAL.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin, approvedBy, OldSeriesStartDate);
         }
@@ -98,8 +98,6 @@ namespace PracticeManagementService
             return CalendarDAL.GetSubstituteDayDetails(personId, substituteDate);
         }
 
-
-        #endregion
+        #endregion ICalendarService Members
     }
 }
-
