@@ -164,8 +164,6 @@ namespace PracticeManagementService
             return Roles.RoleExists(roleName);
         }
 
-        #endregion
-
+        #endregion Methods
     }
 }
-
