@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects
@@ -23,7 +20,6 @@ namespace DataTransferObjects
             set;
         }
 
-
         /// <summary>
         /// Gets or sets a  <see cref="TimeZone"/> GMT value.
         /// </summary>
@@ -33,7 +29,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         /// <summary>
         /// Gets or sets GMTName <see cref="TimeZone"/>.
@@ -56,4 +51,3 @@ namespace DataTransferObjects
         }
     }
 }
-
