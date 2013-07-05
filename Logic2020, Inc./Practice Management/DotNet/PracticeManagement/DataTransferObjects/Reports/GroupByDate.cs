@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataTransferObjects.Reports
 {
@@ -26,7 +25,5 @@ namespace DataTransferObjects.Reports
                 return ProjectTotalHours != null ? ProjectTotalHours.Sum(p => p.TotalHours) : 0;
             }
         }
-
     }
 }
-
