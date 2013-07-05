@@ -15,7 +15,6 @@ namespace PraticeManagement.Controls.Projects
     {
         #region Constants
 
-        private const string projectAttributionXmlKey = "ProjectAttribution_Key";
         private const string deliveryPersonAttributionXmlKey = "DeliveryPersonAttribution_Key";
         private const string deliveryPracticeAttributionXmlKey = "DeliveryPracticeAttribution_Key";
         private const string salesPersonAttributionXmlKey = "SalesPersonAttribution_Key";
@@ -125,14 +124,10 @@ namespace PraticeManagement.Controls.Projects
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                if (HostingPage.ProjectId.HasValue)
-                {
-                    GetProjectAttributionValues();
-                    BindAttributions();
-                }
-            }
+            if (IsPostBack) return;
+            if (!HostingPage.ProjectId.HasValue) return;
+            GetProjectAttributionValues();
+            BindAttributions();
         }
 
         protected void chbDeliveryAttributes_CheckedChanged(object sender, EventArgs e)
@@ -143,11 +138,11 @@ namespace PraticeManagement.Controls.Projects
             Label lblStartDate = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
             XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-            for (int i = 0; i < xlist.Count; i++)
+            foreach (XElement t in xlist)
             {
-                if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text && xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == false.ToString())
+                if (t.Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text && t.Attribute(XName.Get(IsEditModeXname)).Value == false.ToString())
                 {
-                    xlist[i].Attribute(XName.Get(IsCheckboxCheckedXname)).Value = chbDeliveryAttribute.Checked.ToString();
+                    t.Attribute(XName.Get(IsCheckboxCheckedXname)).Value = chbDeliveryAttribute.Checked.ToString();
                 }
             }
             DeliveryPersonAttributionXML = xdoc.ToString();
@@ -161,11 +156,11 @@ namespace PraticeManagement.Controls.Projects
             Label lblStartDate = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
             XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-            for (int i = 0; i < xlist.Count; i++)
+            foreach (XElement t in xlist)
             {
-                if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text && xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == false.ToString())
+                if (t.Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text && t.Attribute(XName.Get(IsEditModeXname)).Value == false.ToString())
                 {
-                    xlist[i].Attribute(XName.Get(IsCheckboxCheckedXname)).Value = chbSalesAttribute.Checked.ToString();
+                    t.Attribute(XName.Get(IsCheckboxCheckedXname)).Value = chbSalesAttribute.Checked.ToString();
                 }
             }
             SalesPersonAttributionXML = xdoc.ToString();
@@ -177,129 +172,123 @@ namespace PraticeManagement.Controls.Projects
             {
                 Persons = new List<string>();
             }
-            if (e.Row.RowType == DataControlRowType.DataRow)
+            if (e.Row.RowType != DataControlRowType.DataRow) return;
+            var item = (XElement)e.Row.DataItem;
+            EnableDisableValidators(e.Row, deliveryPersonAttribution);
+            CheckBox chbDeliveryAttributes = e.Row.FindControl("chbDeliveryAttributes") as CheckBox;
+            Label lblPersonName = e.Row.FindControl("lblPersonName") as Label;
+            HiddenField hdnPersonId = e.Row.FindControl("hdnPersonId") as HiddenField;
+            HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
+            Label lblTitleName = e.Row.FindControl("lblTitleName") as Label;
+            Label lblStartDate = e.Row.FindControl("lblStartDate") as Label;
+            Label lblEndDate = e.Row.FindControl("lblEndDate") as Label;
+
+            ImageButton imgDeliveryPersonAttributeEdit = e.Row.FindControl("imgDeliveryPersonAttributeEdit") as ImageButton;
+            ImageButton imgDeliveryPersonAttributeUpdate = e.Row.FindControl("imgDeliveryPersonAttributeUpdate") as ImageButton;
+            ImageButton imgDeliveryPersonAttributeCancel = e.Row.FindControl("imgDeliveryPersonAttributeCancel") as ImageButton;
+            ImageButton imgDeliveryAttributionAdditionalAllocationOfResource = e.Row.FindControl("imgDeliveryAttributionAdditionalAllocationOfResource") as ImageButton;
+            ImageButton imgDeliveryAttributionPersonDelete = e.Row.FindControl("imgDeliveryAttributionPersonDelete") as ImageButton;
+
+            DatePicker dpStartDate = e.Row.FindControl("dpStartDate") as DatePicker;
+            DatePicker dpEndDate = e.Row.FindControl("dpEndDate") as DatePicker;
+            DropDownList ddlPerson = e.Row.FindControl("ddlPerson") as DropDownList;
+
+            imgDeliveryAttributionPersonDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
+            imgDeliveryPersonAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
+
+            chbDeliveryAttributes.Checked = item.Attribute(XName.Get(IsCheckboxCheckedXname)).Value == true.ToString();
+            lblPersonName.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
+            hdnPersonId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
+            lblTitleName.Text = item.Attribute(XName.Get(TitleXname)).Value;
+            hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
+            lblStartDate.Text = item.Attribute(XName.Get(TempStartDateXname)).Value != string.Empty ? Convert.ToDateTime(item.Attribute(XName.Get(TempStartDateXname)).Value).ToShortDateString() : string.Empty;
+            lblEndDate.Text = item.Attribute(XName.Get(TempEndDateXname)).Value != string.Empty ? Convert.ToDateTime(item.Attribute(XName.Get(TempEndDateXname)).Value).ToShortDateString() : string.Empty;
+            if (item.Attribute(XName.Get(IsEditModeXname)).Value == "True")
             {
-                var item = (XElement)e.Row.DataItem;
-                EnableDisableValidators(e.Row, deliveryPersonAttribution);
-                CheckBox chbDeliveryAttributes = e.Row.FindControl("chbDeliveryAttributes") as CheckBox;
-                Label lblPersonName = e.Row.FindControl("lblPersonName") as Label;
-                HiddenField hdnPersonId = e.Row.FindControl("hdnPersonId") as HiddenField;
-                HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
-                Label lblTitleName = e.Row.FindControl("lblTitleName") as Label;
-                Label lblStartDate = e.Row.FindControl("lblStartDate") as Label;
-                Label lblEndDate = e.Row.FindControl("lblEndDate") as Label;
+                chbDeliveryAttributes.Visible = lblPersonName.Visible = lblTitleName.Visible = lblStartDate.Visible = lblEndDate.Visible = imgDeliveryAttributionAdditionalAllocationOfResource.Visible = imgDeliveryAttributionPersonDelete.Visible = imgDeliveryPersonAttributeEdit.Visible = false;
+                ddlPerson.Visible = imgDeliveryPersonAttributeUpdate.Visible = imgDeliveryPersonAttributeCancel.Visible = dpStartDate.Visible = dpEndDate.Visible = true;
 
-                ImageButton imgDeliveryPersonAttributeEdit = e.Row.FindControl("imgDeliveryPersonAttributeEdit") as ImageButton;
-                ImageButton imgDeliveryPersonAttributeUpdate = e.Row.FindControl("imgDeliveryPersonAttributeUpdate") as ImageButton;
-                ImageButton imgDeliveryPersonAttributeCancel = e.Row.FindControl("imgDeliveryPersonAttributeCancel") as ImageButton;
-                ImageButton imgDeliveryAttributionAdditionalAllocationOfResource = e.Row.FindControl("imgDeliveryAttributionAdditionalAllocationOfResource") as ImageButton;
-                ImageButton imgDeliveryAttributionPersonDelete = e.Row.FindControl("imgDeliveryAttributionPersonDelete") as ImageButton;
-
-                DatePicker dpStartDate = e.Row.FindControl("dpStartDate") as DatePicker;
-                DatePicker dpEndDate = e.Row.FindControl("dpEndDate") as DatePicker;
-                DropDownList ddlPerson = e.Row.FindControl("ddlPerson") as DropDownList;
-
-                imgDeliveryAttributionPersonDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
-                imgDeliveryPersonAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
-
-                chbDeliveryAttributes.Checked = item.Attribute(XName.Get(IsCheckboxCheckedXname)).Value == true.ToString();
-                lblPersonName.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
-                hdnPersonId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
-                lblTitleName.Text = item.Attribute(XName.Get(TitleXname)).Value;
-                hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
-                lblStartDate.Text = item.Attribute(XName.Get(TempStartDateXname)).Value != string.Empty ? Convert.ToDateTime(item.Attribute(XName.Get(TempStartDateXname)).Value).ToShortDateString() : string.Empty;
-                lblEndDate.Text = item.Attribute(XName.Get(TempEndDateXname)).Value != string.Empty ? Convert.ToDateTime(item.Attribute(XName.Get(TempEndDateXname)).Value).ToShortDateString() : string.Empty;
-                if (item.Attribute(XName.Get(IsEditModeXname)).Value == "True")
+                DataHelper.FillPersonListByDivisionId(ddlPerson, "-- Select a Person --", 2);//Fill persons with Consulting division(i.e. division Id = 2)
+                ListItem selectedPerson = null;
+                selectedPerson = ddlPerson.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
+                if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True" || item.Attribute(XName.Get(TargetIdXname)).Value != "0")
                 {
-                    chbDeliveryAttributes.Visible = lblPersonName.Visible = lblTitleName.Visible = lblStartDate.Visible = lblEndDate.Visible = imgDeliveryAttributionAdditionalAllocationOfResource.Visible = imgDeliveryAttributionPersonDelete.Visible = imgDeliveryPersonAttributeEdit.Visible = false;
-                    ddlPerson.Visible = imgDeliveryPersonAttributeUpdate.Visible = imgDeliveryPersonAttributeCancel.Visible = dpStartDate.Visible = dpEndDate.Visible = true;
-
-                    DataHelper.FillPersonListByDivisionId(ddlPerson, "-- Select a Person --", 2);//Fill persons with Consulting division(i.e. division Id = 2)
-                    ListItem selectedPerson = null;
-                    selectedPerson = ddlPerson.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
-                    if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True" || item.Attribute(XName.Get(TargetIdXname)).Value != "0")
+                    if (selectedPerson == null)
                     {
-                        if (selectedPerson == null)
-                        {
-                            selectedPerson = new ListItem(lblPersonName.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
-                            ddlPerson.Items.Add(selectedPerson);
-                        }
-                        ddlPerson.SelectedValue = selectedPerson.Value;
+                        selectedPerson = new ListItem(lblPersonName.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
+                        ddlPerson.Items.Add(selectedPerson);
                     }
-                    else
-                    {
-                        ddlPerson.SelectedValue = string.Empty;
-                    }
-                    dpStartDate.TextValue = lblStartDate.Text;
-                    dpEndDate.TextValue = lblEndDate.Text;
+                    ddlPerson.SelectedValue = selectedPerson.Value;
                 }
-                if (Persons.Any(p => p == lblPersonName.Text))
+                else
                 {
-                    ddlPerson.Visible = lblPersonName.Visible = imgDeliveryAttributionAdditionalAllocationOfResource.Visible = false;
+                    ddlPerson.SelectedValue = string.Empty;
                 }
-                Persons.Add(lblPersonName.Text);
+                dpStartDate.TextValue = lblStartDate.Text;
+                dpEndDate.TextValue = lblEndDate.Text;
             }
+            if (Persons.Any(p => p == lblPersonName.Text))
+            {
+                ddlPerson.Visible = lblPersonName.Visible = imgDeliveryAttributionAdditionalAllocationOfResource.Visible = false;
+            }
+            Persons.Add(lblPersonName.Text);
         }
 
         protected void gvSalesAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.DataRow)
+            if (e.Row.RowType != DataControlRowType.DataRow) return;
+            EnableDisableValidators(e.Row, salesPracticeAttribution);
+            var item = (XElement)e.Row.DataItem;
+            Label lblPractice = e.Row.FindControl("lblPractice") as Label;
+            Label lblCommisssionPercentage = e.Row.FindControl("lblCommisssionPercentage") as Label;
+            HiddenField hdnPracticeId = e.Row.FindControl("hdnPracticeId") as HiddenField;
+            HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
+            ImageButton imgSalesPracticeAttributeEdit = e.Row.FindControl("imgSalesPracticeAttributeEdit") as ImageButton;
+            ImageButton imgSalesPracticeAttributeUpdate = e.Row.FindControl("imgSalesPracticeAttributeUpdate") as ImageButton;
+            ImageButton imgSalesPracticeAttributeCancel = e.Row.FindControl("imgSalesPracticeAttributeCancel") as ImageButton;
+            ImageButton imgSalesAttributionPracticeDelete = e.Row.FindControl("imgSalesAttributionPracticeDelete") as ImageButton;
+
+            TextBox txtCommisssionPercentage = e.Row.FindControl("txtCommisssionPercentage") as TextBox;
+            DropDownList ddlPractice = e.Row.FindControl("ddlPractice") as DropDownList;
+
+            imgSalesAttributionPracticeDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
+            imgSalesPracticeAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
+
+            lblPractice.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
+            hdnPracticeId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
+            hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
+            lblCommisssionPercentage.Text = item.Attribute(XName.Get(TempPercentageXname)).Value;
+
+            if (item.Attribute(XName.Get(IsEditModeXname)).Value != "True") return;
+            lblPractice.Visible = lblCommisssionPercentage.Visible = imgSalesPracticeAttributeEdit.Visible = imgSalesAttributionPracticeDelete.Visible = false;
+            imgSalesPracticeAttributeUpdate.Visible = imgSalesPracticeAttributeCancel.Visible = txtCommisssionPercentage.Visible = ddlPractice.Visible = true;
+            DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select a Practice Area--");
+            if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True")
             {
-                EnableDisableValidators(e.Row, salesPracticeAttribution);
-                var item = (XElement)e.Row.DataItem;
-                Label lblPractice = e.Row.FindControl("lblPractice") as Label;
-                Label lblCommisssionPercentage = e.Row.FindControl("lblCommisssionPercentage") as Label;
-                HiddenField hdnPracticeId = e.Row.FindControl("hdnPracticeId") as HiddenField;
-                HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
-                ImageButton imgSalesPracticeAttributeEdit = e.Row.FindControl("imgSalesPracticeAttributeEdit") as ImageButton;
-                ImageButton imgSalesPracticeAttributeUpdate = e.Row.FindControl("imgSalesPracticeAttributeUpdate") as ImageButton;
-                ImageButton imgSalesPracticeAttributeCancel = e.Row.FindControl("imgSalesPracticeAttributeCancel") as ImageButton;
-                ImageButton imgSalesAttributionPracticeDelete = e.Row.FindControl("imgSalesAttributionPracticeDelete") as ImageButton;
-
-                TextBox txtCommisssionPercentage = e.Row.FindControl("txtCommisssionPercentage") as TextBox;
-                DropDownList ddlPractice = e.Row.FindControl("ddlPractice") as DropDownList;
-
-                imgSalesAttributionPracticeDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
-                imgSalesPracticeAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
-
-                lblPractice.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
-                hdnPracticeId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
-                hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
-                lblCommisssionPercentage.Text = item.Attribute(XName.Get(TempPercentageXname)).Value;
-
-                if (item.Attribute(XName.Get(IsEditModeXname)).Value == "True")
+                ListItem selectedPractice = null;
+                selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
+                if (selectedPractice == null)
                 {
-                    lblPractice.Visible = lblCommisssionPercentage.Visible = imgSalesPracticeAttributeEdit.Visible = imgSalesAttributionPracticeDelete.Visible = false;
-                    imgSalesPracticeAttributeUpdate.Visible = imgSalesPracticeAttributeCancel.Visible = txtCommisssionPercentage.Visible = ddlPractice.Visible = true;
-                    DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select a Practice Area--");
-                    if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True")
+                    selectedPractice = new ListItem(lblPractice.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
+                    ddlPractice.Items.Add(selectedPractice);
+                }
+                ddlPractice.SelectedValue = selectedPractice.Value;
+            }
+            else
+            {
+                ddlPractice.SelectedValue = string.Empty;
+                List<int> practices = AvailablePractices(SalesPracticeAttributionXML);
+                if (practices.Count > 0)
+                {
+                    foreach (var i in practices)
                     {
                         ListItem selectedPractice = null;
-                        selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
-                        if (selectedPractice == null)
-                        {
-                            selectedPractice = new ListItem(lblPractice.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
-                            ddlPractice.Items.Add(selectedPractice);
-                        }
-                        ddlPractice.SelectedValue = selectedPractice.Value;
+                        selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
+                        ddlPractice.Items.Remove(selectedPractice);
                     }
-                    else
-                    {
-                        ddlPractice.SelectedValue = string.Empty;
-                        List<int> practices = AvailablePractices(SalesPracticeAttributionXML);
-                        if (practices.Count > 0)
-                        {
-                            foreach (var i in practices)
-                            {
-                                ListItem selectedPractice = null;
-                                selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
-                                ddlPractice.Items.Remove(selectedPractice);
-                            }
-                        }
-                    }
-                    txtCommisssionPercentage.Text = lblCommisssionPercentage.Text;
                 }
             }
+            txtCommisssionPercentage.Text = lblCommisssionPercentage.Text;
         }
 
         protected void gvSalesAttributionPerson_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -308,127 +297,121 @@ namespace PraticeManagement.Controls.Projects
             {
                 Persons = new List<string>();
             }
-            if (e.Row.RowType == DataControlRowType.DataRow)
+            if (e.Row.RowType != DataControlRowType.DataRow) return;
+            EnableDisableValidators(e.Row, salesPersonAttribution);
+            var item = (XElement)e.Row.DataItem;
+            CheckBox chbSalesAttributes = e.Row.FindControl("chbSalesAttributes") as CheckBox;
+            Label lblPersonName = e.Row.FindControl("lblPersonName") as Label;
+            HiddenField hdnPersonId = e.Row.FindControl("hdnPersonId") as HiddenField;
+            HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
+            Label lblTitleName = e.Row.FindControl("lblTitleName") as Label;
+            Label lblStartDate = e.Row.FindControl("lblStartDate") as Label;
+            Label lblEndDate = e.Row.FindControl("lblEndDate") as Label;
+
+            ImageButton imgSalesPersonAttributeEdit = e.Row.FindControl("imgSalesPersonAttributeEdit") as ImageButton;
+            ImageButton imgSalesPersonAttributeUpdate = e.Row.FindControl("imgSalesPersonAttributeUpdate") as ImageButton;
+            ImageButton imgSalesPersonAttributeCancel = e.Row.FindControl("imgSalesPersonAttributeCancel") as ImageButton;
+            ImageButton imgSalesAttributionAdditionalAllocationOfResource = e.Row.FindControl("imgSalesAttributionAdditionalAllocationOfResource") as ImageButton;
+            ImageButton imgSalesAttributionPersonDelete = e.Row.FindControl("imgSalesAttributionPersonDelete") as ImageButton;
+
+            DatePicker dpStartDate = e.Row.FindControl("dpStartDate") as DatePicker;
+            DatePicker dpEndDate = e.Row.FindControl("dpEndDate") as DatePicker;
+            DropDownList ddlPerson = e.Row.FindControl("ddlPerson") as DropDownList;
+
+            imgSalesAttributionPersonDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
+            imgSalesPersonAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
+
+            hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
+            chbSalesAttributes.Checked = item.Attribute(XName.Get(IsCheckboxCheckedXname)).Value == true.ToString();
+            lblPersonName.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
+            hdnPersonId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
+            lblTitleName.Text = item.Attribute(XName.Get(TitleXname)).Value;
+            lblStartDate.Text = Convert.ToDateTime(item.Attribute(XName.Get(TempStartDateXname)).Value).ToShortDateString();
+            lblEndDate.Text = Convert.ToDateTime(item.Attribute(XName.Get(TempEndDateXname)).Value).ToShortDateString();
+            if (item.Attribute(XName.Get(IsEditModeXname)).Value == "True")
             {
-                EnableDisableValidators(e.Row, salesPersonAttribution);
-                var item = (XElement)e.Row.DataItem;
-                CheckBox chbSalesAttributes = e.Row.FindControl("chbSalesAttributes") as CheckBox;
-                Label lblPersonName = e.Row.FindControl("lblPersonName") as Label;
-                HiddenField hdnPersonId = e.Row.FindControl("hdnPersonId") as HiddenField;
-                HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
-                Label lblTitleName = e.Row.FindControl("lblTitleName") as Label;
-                Label lblStartDate = e.Row.FindControl("lblStartDate") as Label;
-                Label lblEndDate = e.Row.FindControl("lblEndDate") as Label;
-
-                ImageButton imgSalesPersonAttributeEdit = e.Row.FindControl("imgSalesPersonAttributeEdit") as ImageButton;
-                ImageButton imgSalesPersonAttributeUpdate = e.Row.FindControl("imgSalesPersonAttributeUpdate") as ImageButton;
-                ImageButton imgSalesPersonAttributeCancel = e.Row.FindControl("imgSalesPersonAttributeCancel") as ImageButton;
-                ImageButton imgSalesAttributionAdditionalAllocationOfResource = e.Row.FindControl("imgSalesAttributionAdditionalAllocationOfResource") as ImageButton;
-                ImageButton imgSalesAttributionPersonDelete = e.Row.FindControl("imgSalesAttributionPersonDelete") as ImageButton;
-
-                DatePicker dpStartDate = e.Row.FindControl("dpStartDate") as DatePicker;
-                DatePicker dpEndDate = e.Row.FindControl("dpEndDate") as DatePicker;
-                DropDownList ddlPerson = e.Row.FindControl("ddlPerson") as DropDownList;
-
-                imgSalesAttributionPersonDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
-                imgSalesPersonAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
-
-                hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
-                chbSalesAttributes.Checked = item.Attribute(XName.Get(IsCheckboxCheckedXname)).Value == true.ToString();
-                lblPersonName.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
-                hdnPersonId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
-                lblTitleName.Text = item.Attribute(XName.Get(TitleXname)).Value;
-                lblStartDate.Text = Convert.ToDateTime(item.Attribute(XName.Get(TempStartDateXname)).Value).ToShortDateString();
-                lblEndDate.Text = Convert.ToDateTime(item.Attribute(XName.Get(TempEndDateXname)).Value).ToShortDateString();
-                if (item.Attribute(XName.Get(IsEditModeXname)).Value == "True")
+                chbSalesAttributes.Visible = lblPersonName.Visible = lblTitleName.Visible = lblStartDate.Visible = lblEndDate.Visible = imgSalesAttributionAdditionalAllocationOfResource.Visible = imgSalesAttributionPersonDelete.Visible = imgSalesPersonAttributeEdit.Visible = false;
+                ddlPerson.Visible = imgSalesPersonAttributeUpdate.Visible = imgSalesPersonAttributeCancel.Visible = dpStartDate.Visible = dpEndDate.Visible = true;
+                DataHelper.FillPersonListByDivisionId(ddlPerson, "-- Select a Person --", 2);//Fill persons with Consulting division(i.e. division Id = 2)
+                ListItem selectedPerson = null;
+                selectedPerson = ddlPerson.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
+                if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True" || item.Attribute(XName.Get(TargetIdXname)).Value != "0")
                 {
-                    chbSalesAttributes.Visible = lblPersonName.Visible = lblTitleName.Visible = lblStartDate.Visible = lblEndDate.Visible = imgSalesAttributionAdditionalAllocationOfResource.Visible = imgSalesAttributionPersonDelete.Visible = imgSalesPersonAttributeEdit.Visible = false;
-                    ddlPerson.Visible = imgSalesPersonAttributeUpdate.Visible = imgSalesPersonAttributeCancel.Visible = dpStartDate.Visible = dpEndDate.Visible = true;
-                    DataHelper.FillPersonListByDivisionId(ddlPerson, "-- Select a Person --", 2);//Fill persons with Consulting division(i.e. division Id = 2)
-                    ListItem selectedPerson = null;
-                    selectedPerson = ddlPerson.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
-                    if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True" || item.Attribute(XName.Get(TargetIdXname)).Value != "0")
+                    if (selectedPerson == null)
                     {
-                        if (selectedPerson == null)
-                        {
-                            selectedPerson = new ListItem(lblPersonName.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
-                            ddlPerson.Items.Add(selectedPerson);
-                        }
-                        ddlPerson.SelectedValue = selectedPerson.Value;
+                        selectedPerson = new ListItem(lblPersonName.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
+                        ddlPerson.Items.Add(selectedPerson);
                     }
-                    else
-                        ddlPerson.SelectedValue = string.Empty;
+                    ddlPerson.SelectedValue = selectedPerson.Value;
+                }
+                else
+                    ddlPerson.SelectedValue = string.Empty;
 
-                    dpStartDate.TextValue = lblStartDate.Text;
-                    dpEndDate.TextValue = lblEndDate.Text;
-                }
-                if (Persons.Any(p => p == lblPersonName.Text))
-                {
-                    ddlPerson.Visible = lblPersonName.Visible = imgSalesAttributionAdditionalAllocationOfResource.Visible = false;
-                }
-                Persons.Add(lblPersonName.Text);
+                dpStartDate.TextValue = lblStartDate.Text;
+                dpEndDate.TextValue = lblEndDate.Text;
             }
+            if (Persons.Any(p => p == lblPersonName.Text))
+            {
+                ddlPerson.Visible = lblPersonName.Visible = imgSalesAttributionAdditionalAllocationOfResource.Visible = false;
+            }
+            Persons.Add(lblPersonName.Text);
         }
 
         protected void gvDeliveryAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.DataRow)
+            if (e.Row.RowType != DataControlRowType.DataRow) return;
+            EnableDisableValidators(e.Row, deliveryPracticeAttribution);
+            var item = (XElement)e.Row.DataItem;
+            Label lblPractice = e.Row.FindControl("lblPractice") as Label;
+            HiddenField hdnPracticeId = e.Row.FindControl("hdnPracticeId") as HiddenField;
+            Label lblCommisssionPercentage = e.Row.FindControl("lblCommisssionPercentage") as Label;
+            HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
+            ImageButton imgDeliveryPracticeAttributeEdit = e.Row.FindControl("imgDeliveryPracticeAttributeEdit") as ImageButton;
+            ImageButton imgDeliveryPracticeAttributeUpdate = e.Row.FindControl("imgDeliveryPracticeAttributeUpdate") as ImageButton;
+            ImageButton imgDeliveryPracticeAttributeCancel = e.Row.FindControl("imgDeliveryPracticeAttributeCancel") as ImageButton;
+            ImageButton imgDeliveryAttributionPracticeDelete = e.Row.FindControl("imgDeliveryAttributionPracticeDelete") as ImageButton;
+
+            TextBox txtCommisssionPercentage = e.Row.FindControl("txtCommisssionPercentage") as TextBox;
+            DropDownList ddlPractice = e.Row.FindControl("ddlPractice") as DropDownList;
+
+            imgDeliveryAttributionPracticeDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
+            imgDeliveryPracticeAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
+
+            hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
+            lblPractice.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
+            hdnPracticeId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
+            lblCommisssionPercentage.Text = item.Attribute(XName.Get(TempPercentageXname)).Value;
+
+            if (item.Attribute(XName.Get(IsEditModeXname)).Value != "True") return;
+            lblPractice.Visible = lblCommisssionPercentage.Visible = imgDeliveryPracticeAttributeEdit.Visible = imgDeliveryAttributionPracticeDelete.Visible = false;
+            imgDeliveryPracticeAttributeUpdate.Visible = imgDeliveryPracticeAttributeCancel.Visible = txtCommisssionPercentage.Visible = ddlPractice.Visible = true;
+            DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select a Practice Area--");
+            if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True")
             {
-                EnableDisableValidators(e.Row, deliveryPracticeAttribution);
-                var item = (XElement)e.Row.DataItem;
-                Label lblPractice = e.Row.FindControl("lblPractice") as Label;
-                HiddenField hdnPracticeId = e.Row.FindControl("hdnPracticeId") as HiddenField;
-                Label lblCommisssionPercentage = e.Row.FindControl("lblCommisssionPercentage") as Label;
-                HiddenField hdnEditMode = e.Row.FindControl("hdnEditMode") as HiddenField;
-                ImageButton imgDeliveryPracticeAttributeEdit = e.Row.FindControl("imgDeliveryPracticeAttributeEdit") as ImageButton;
-                ImageButton imgDeliveryPracticeAttributeUpdate = e.Row.FindControl("imgDeliveryPracticeAttributeUpdate") as ImageButton;
-                ImageButton imgDeliveryPracticeAttributeCancel = e.Row.FindControl("imgDeliveryPracticeAttributeCancel") as ImageButton;
-                ImageButton imgDeliveryAttributionPracticeDelete = e.Row.FindControl("imgDeliveryAttributionPracticeDelete") as ImageButton;
-
-                TextBox txtCommisssionPercentage = e.Row.FindControl("txtCommisssionPercentage") as TextBox;
-                DropDownList ddlPractice = e.Row.FindControl("ddlPractice") as DropDownList;
-
-                imgDeliveryAttributionPracticeDelete.Attributes.Add(AttributionIdXname, item.Attribute(XName.Get(AttributionIdXname)).Value);
-                imgDeliveryPracticeAttributeCancel.Attributes.Add(IsNewEntryXname, item.Attribute(XName.Get(IsNewEntryXname)).Value);
-
-                hdnEditMode.Value = item.Attribute(XName.Get(IsEditModeXname)).Value;
-                lblPractice.Text = item.Attribute(XName.Get(TempTargetNameXname)).Value;
-                hdnPracticeId.Value = item.Attribute(XName.Get(TargetIdXname)).Value;
-                lblCommisssionPercentage.Text = item.Attribute(XName.Get(TempPercentageXname)).Value;
-
-                if (item.Attribute(XName.Get(IsEditModeXname)).Value == "True")
+                ListItem selectedPractice = null;
+                selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
+                if (selectedPractice == null)
                 {
-                    lblPractice.Visible = lblCommisssionPercentage.Visible = imgDeliveryPracticeAttributeEdit.Visible = imgDeliveryAttributionPracticeDelete.Visible = false;
-                    imgDeliveryPracticeAttributeUpdate.Visible = imgDeliveryPracticeAttributeCancel.Visible = txtCommisssionPercentage.Visible = ddlPractice.Visible = true;
-                    DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select a Practice Area--");
-                    if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True")
+                    selectedPractice = new ListItem(lblPractice.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
+                    ddlPractice.Items.Add(selectedPractice);
+                }
+                ddlPractice.SelectedValue = selectedPractice.Value;
+            }
+            else
+            {
+                ddlPractice.SelectedValue = string.Empty;
+                List<int> practices = AvailablePractices(DeliveryPracticeAttributionXML);
+                if (practices.Count > 0)
+                {
+                    foreach (var i in practices)
                     {
                         ListItem selectedPractice = null;
-                        selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
-                        if (selectedPractice == null)
-                        {
-                            selectedPractice = new ListItem(lblPractice.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
-                            ddlPractice.Items.Add(selectedPractice);
-                        }
-                        ddlPractice.SelectedValue = selectedPractice.Value;
+                        selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
+                        ddlPractice.Items.Remove(selectedPractice);
                     }
-                    else
-                    {
-                        ddlPractice.SelectedValue = string.Empty;
-                        List<int> practices = AvailablePractices(DeliveryPracticeAttributionXML);
-                        if (practices.Count > 0)
-                        {
-                            foreach (var i in practices)
-                            {
-                                ListItem selectedPractice = null;
-                                selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
-                                ddlPractice.Items.Remove(selectedPractice);
-                            }
-                        }
-                    }
-                    txtCommisssionPercentage.Text = lblCommisssionPercentage.Text;
                 }
             }
+            txtCommisssionPercentage.Text = lblCommisssionPercentage.Text;
         }
 
         protected void imgPersonEdit_Click(object sender, EventArgs e)
@@ -493,23 +476,22 @@ namespace PraticeManagement.Controls.Projects
             int.TryParse(gv.Attributes["Attribution"], out attributionNum);
             AttributionCategory attributionType = (AttributionCategory)(attributionNum);
             Validate(row, attributionType);
-            if (Page.IsValid)
-            {
-                Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-                HiddenField hdnPersonId = gv.Rows[row.DataItemIndex].FindControl("hdnPersonId") as HiddenField;
-                var ddlPerson = row.FindControl("ddlPerson") as DropDownList;
-                var dpStartDate = row.FindControl("dpStartDate") as DatePicker;
-                var dpEndDate = row.FindControl("dpEndDate") as DatePicker;
+            if (!Page.IsValid) return;
+            Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
+            HiddenField hdnPersonId = gv.Rows[row.DataItemIndex].FindControl("hdnPersonId") as HiddenField;
+            var ddlPerson = row.FindControl("ddlPerson") as DropDownList;
+            var dpStartDate = row.FindControl("dpStartDate") as DatePicker;
+            var dpEndDate = row.FindControl("dpEndDate") as DatePicker;
 
-                int personId;
-                DateTime startDate;
-                DateTime endDate;
-                if (int.TryParse(ddlPerson.SelectedValue, out personId)) ;
-                if (DateTime.TryParse(dpStartDate.TextValue, out startDate)) ;
-                if (DateTime.TryParse(dpEndDate.TextValue, out endDate)) ;
+            int personId;
+            DateTime startDate;
+            DateTime endDate;
+            int.TryParse(ddlPerson.SelectedValue, out personId);
+            DateTime.TryParse(dpStartDate.TextValue, out startDate);
+            DateTime.TryParse(dpEndDate.TextValue, out endDate);
 
-                Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
-                Attribution attribution = new Attribution
+            Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
+            Attribution attribution = new Attribution
                 {
                     Title = title,
                     TargetId = personId,
@@ -518,23 +500,22 @@ namespace PraticeManagement.Controls.Projects
                     EndDate = endDate,
                     CommissionPercentage = 100
                 };
-                XDocument xdocLatest;
-                if (attributionType == AttributionCategory.DeliveryPersonAttribution)
-                {
-                    XDocument xdoc = OnUpdateClick(attribution, DeliveryPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
-                    DeliveryPersonAttributionXML = xdoc.ToString();
-                    CopyTempValuesAsReal(attributionType);
-                    xdocLatest = XDocument.Parse(DeliveryPersonAttributionXML);
-                }
-                else
-                {
-                    XDocument xdoc = OnUpdateClick(attribution, SalesPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
-                    SalesPersonAttributionXML = xdoc.ToString();
-                    CopyTempValuesAsReal(attributionType);
-                    xdocLatest = XDocument.Parse(SalesPersonAttributionXML);
-                }
-                DatabindGridView(gv, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
+            XDocument xdocLatest;
+            if (attributionType == AttributionCategory.DeliveryPersonAttribution)
+            {
+                XDocument xdoc = OnUpdateClick(attribution, DeliveryPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
+                DeliveryPersonAttributionXML = xdoc.ToString();
+                CopyTempValuesAsReal(attributionType);
+                xdocLatest = XDocument.Parse(DeliveryPersonAttributionXML);
             }
+            else
+            {
+                XDocument xdoc = OnUpdateClick(attribution, SalesPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
+                SalesPersonAttributionXML = xdoc.ToString();
+                CopyTempValuesAsReal(attributionType);
+                xdocLatest = XDocument.Parse(SalesPersonAttributionXML);
+            }
+            DatabindGridView(gv, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
         protected void imgPracticeUpdate_Click(object sender, EventArgs e)
@@ -546,18 +527,17 @@ namespace PraticeManagement.Controls.Projects
             int.TryParse(gv.Attributes["Attribution"], out attributionNum);
             AttributionCategory attributionType = (AttributionCategory)(attributionNum);
             Validate(row, attributionType);
-            if (Page.IsValid)
-            {
-                Label lblPractice = gv.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-                HiddenField hdnPracticeId = gv.Rows[row.DataItemIndex].FindControl("hdnPracticeId") as HiddenField;
-                var ddlPractice = row.FindControl("ddlPractice") as DropDownList;
-                var txtCommisssionPercentage = row.FindControl("txtCommisssionPercentage") as TextBox;
+            if (!Page.IsValid) return;
+            Label lblPractice = gv.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
+            HiddenField hdnPracticeId = gv.Rows[row.DataItemIndex].FindControl("hdnPracticeId") as HiddenField;
+            var ddlPractice = row.FindControl("ddlPractice") as DropDownList;
+            var txtCommisssionPercentage = row.FindControl("txtCommisssionPercentage") as TextBox;
 
-                int practiceId;
-                decimal commissionPercentage;
-                if (int.TryParse(ddlPractice.SelectedValue, out practiceId)) ;
-                if (decimal.TryParse(txtCommisssionPercentage.Text, out commissionPercentage)) ;
-                Attribution attribution = new Attribution
+            int practiceId;
+            decimal commissionPercentage;
+            int.TryParse(ddlPractice.SelectedValue, out practiceId);
+            decimal.TryParse(txtCommisssionPercentage.Text, out commissionPercentage);
+            Attribution attribution = new Attribution
                 {
                     Title = null,
                     TargetId = practiceId,
@@ -566,23 +546,22 @@ namespace PraticeManagement.Controls.Projects
                     EndDate = null,
                     CommissionPercentage = commissionPercentage
                 };
-                XDocument xdocLatest;
-                if (attributionType == AttributionCategory.DeliveryPracticeAttribution)
-                {
-                    XDocument xdoc = OnUpdateClick(attribution, DeliveryPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
-                    DeliveryPracticeAttributionXML = xdoc.ToString();
-                    CopyTempValuesAsReal(attributionType);
-                    xdocLatest = XDocument.Parse(DeliveryPracticeAttributionXML);
-                }
-                else
-                {
-                    XDocument xdoc = OnUpdateClick(attribution, SalesPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
-                    SalesPracticeAttributionXML = xdoc.ToString();
-                    CopyTempValuesAsReal(attributionType);
-                    xdocLatest = XDocument.Parse(SalesPracticeAttributionXML);
-                }
-                DatabindGridView(gv, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
+            XDocument xdocLatest;
+            if (attributionType == AttributionCategory.DeliveryPracticeAttribution)
+            {
+                XDocument xdoc = OnUpdateClick(attribution, DeliveryPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
+                DeliveryPracticeAttributionXML = xdoc.ToString();
+                CopyTempValuesAsReal(attributionType);
+                xdocLatest = XDocument.Parse(DeliveryPracticeAttributionXML);
             }
+            else
+            {
+                XDocument xdoc = OnUpdateClick(attribution, SalesPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
+                SalesPracticeAttributionXML = xdoc.ToString();
+                CopyTempValuesAsReal(attributionType);
+                xdocLatest = XDocument.Parse(SalesPracticeAttributionXML);
+            }
+            DatabindGridView(gv, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
         protected void imgPersonCancel_Click(object sender, EventArgs e)
@@ -600,26 +579,12 @@ namespace PraticeManagement.Controls.Projects
             XDocument xdoc;
             if (attributionType == AttributionCategory.SalesPersonAttribution)
             {
-                if (imgCancel.Attributes[IsNewEntryXname] == "True")
-                {
-                    xdoc = DeleteRow(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-                }
-                else
-                {
-                    xdoc = OnEditClick(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-                }
+                xdoc = imgCancel.Attributes[IsNewEntryXname] == "True" ? DeleteRow(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text) : OnEditClick(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
                 SalesPersonAttributionXML = xdoc.ToString();
             }
             else
             {
-                if (imgCancel.Attributes[IsNewEntryXname] == "True")
-                {
-                    xdoc = DeleteRow(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-                }
-                else
-                {
-                    xdoc = OnEditClick(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-                }
+                xdoc = imgCancel.Attributes[IsNewEntryXname] == "True" ? DeleteRow(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text) : OnEditClick(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
                 DeliveryPersonAttributionXML = xdoc.ToString();
             }
             DatabindGridView(gv, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
@@ -665,37 +630,47 @@ namespace PraticeManagement.Controls.Projects
             AttributionCategory attribution = (AttributionCategory)(attributionNum);
             CancelAllEditModeRows(attribution);
             CopyTempValuesAsReal(attribution);
-            if (btnAdd.Attributes["Attribution"] == "1")
+            switch (btnAdd.Attributes["Attribution"])
             {
-                XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
-                XDocument latestXdoc = AddEmptyRow(2, 1, xdoc);
-                DeliveryPersonAttributionXML = latestXdoc.ToString();
-                DatabindGridView(gvDeliveryAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-                DeliveryPersonAttributionXML = xdoc.ToString();
-            }
-            else if (btnAdd.Attributes["Attribution"] == "2")
-            {
-                XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
-                XDocument latestXdoc = AddEmptyRow(1, 1, xdoc);
-                SalesPersonAttributionXML = latestXdoc.ToString();
-                DatabindGridView(gvSalesAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-                SalesPersonAttributionXML = xdoc.ToString();
-            }
-            else if (btnAdd.Attributes["Attribution"] == "3")
-            {
-                XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
-                XDocument latestXdoc = AddEmptyRow(2, 2, xdoc);
-                DeliveryPracticeAttributionXML = latestXdoc.ToString();
-                DatabindGridView(gvDeliveryAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-                DeliveryPracticeAttributionXML = xdoc.ToString();
-            }
-            else
-            {
-                XDocument xdoc = XDocument.Parse(SalesPracticeAttributionXML);
-                XDocument latestXdoc = AddEmptyRow(1, 2, xdoc);
-                SalesPracticeAttributionXML = latestXdoc.ToString();
-                DatabindGridView(gvSalesAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-                SalesPracticeAttributionXML = xdoc.ToString();
+                case "1":
+                    {
+                        XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
+                        XDocument latestXdoc = AddEmptyRow(2, 1, xdoc);
+                        DeliveryPersonAttributionXML = latestXdoc.ToString();
+                        DatabindGridView(gvDeliveryAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                        DeliveryPersonAttributionXML = xdoc.ToString();
+                    }
+                    break;
+
+                case "2":
+                    {
+                        XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
+                        XDocument latestXdoc = AddEmptyRow(1, 1, xdoc);
+                        SalesPersonAttributionXML = latestXdoc.ToString();
+                        DatabindGridView(gvSalesAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                        SalesPersonAttributionXML = xdoc.ToString();
+                    }
+                    break;
+
+                case "3":
+                    {
+                        XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
+                        XDocument latestXdoc = AddEmptyRow(2, 2, xdoc);
+                        DeliveryPracticeAttributionXML = latestXdoc.ToString();
+                        DatabindGridView(gvDeliveryAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                        DeliveryPracticeAttributionXML = xdoc.ToString();
+                    }
+                    break;
+
+                default:
+                    {
+                        XDocument xdoc = XDocument.Parse(SalesPracticeAttributionXML);
+                        XDocument latestXdoc = AddEmptyRow(1, 2, xdoc);
+                        SalesPracticeAttributionXML = latestXdoc.ToString();
+                        DatabindGridView(gvSalesAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                        SalesPracticeAttributionXML = xdoc.ToString();
+                    }
+                    break;
             }
         }
 
@@ -762,32 +737,31 @@ namespace PraticeManagement.Controls.Projects
             Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
             Label lblStartDate = gv.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
 
-            XDocument xdoc;
-            xdoc = attributionType == AttributionCategory.DeliveryPersonAttribution ? XDocument.Parse(DeliveryPersonAttributionXML) : XDocument.Parse(SalesPersonAttributionXML);
+            XDocument xdoc = attributionType == AttributionCategory.DeliveryPersonAttribution ? XDocument.Parse(DeliveryPersonAttributionXML) : XDocument.Parse(SalesPersonAttributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
 
             Attribution attribution = new Attribution();
             int personId;
             int titleId;
-            for (int i = 0; i < xlist.Count; i++)
+            foreach (XElement t in xlist)
             {
-                if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text)
-                {
-                    if (int.TryParse(xlist[i].Attribute(XName.Get(TargetIdXname)).Value, out personId)) ;
-                    if (int.TryParse(xlist[i].Attribute(XName.Get(TitleIdXname)).Value, out titleId)) ;
-                    attribution.TargetId = personId;
-                    attribution.TargetName = xlist[i].Attribute(XName.Get(TargetNameXname)).Value;
-                    attribution.StartDate = Convert.ToDateTime(HostingPage.Project.StartDate);
-                    attribution.EndDate = Convert.ToDateTime(HostingPage.Project.EndDate);
-                    attribution.Title = new Title()
+                if (t.Attribute(XName.Get(TargetNameXname)).Value != lblpersonName.Text ||
+                    Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() !=
+                    lblStartDate.Text) continue;
+                int.TryParse(t.Attribute(XName.Get(TargetIdXname)).Value, out personId);
+                int.TryParse(t.Attribute(XName.Get(TitleIdXname)).Value, out titleId);
+                attribution.TargetId = personId;
+                attribution.TargetName = t.Attribute(XName.Get(TargetNameXname)).Value;
+                attribution.StartDate = Convert.ToDateTime(HostingPage.Project.StartDate);
+                attribution.EndDate = Convert.ToDateTime(HostingPage.Project.EndDate);
+                attribution.Title = new Title()
                     {
                         TitleId = titleId,
-                        TitleName = xlist[i].Attribute(XName.Get(TitleXname)).Value
+                        TitleName = t.Attribute(XName.Get(TitleXname)).Value
                     };
-                    attribution.IsEditMode = true;
-                    attribution.IsNewEntry = true;
-                    break;
-                }
+                attribution.IsEditMode = true;
+                attribution.IsNewEntry = true;
+                break;
             }
 
             XDocument xdocLatest = AddEmptyRow(2, 1, xdoc, attribution);
@@ -850,7 +824,7 @@ namespace PraticeManagement.Controls.Projects
             GridViewRow row = custPersonStart.NamingContainer as GridViewRow;
             DatePicker dpStartDate = row.FindControl("dpStartDate") as DatePicker;
             DateTime startDate;
-            if (DateTime.TryParse(dpStartDate.TextValue, out startDate)) ;
+            DateTime.TryParse(dpStartDate.TextValue, out startDate);
             args.IsValid = (startDate >= HostingPage.Project.StartDate.Value);
         }
 
@@ -860,7 +834,7 @@ namespace PraticeManagement.Controls.Projects
             GridViewRow row = custPersonEnd.NamingContainer as GridViewRow;
             DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
             DateTime endDate;
-            if (DateTime.TryParse(dpEndDate.TextValue, out endDate)) ;
+            DateTime.TryParse(dpEndDate.TextValue, out endDate);
             args.IsValid = (endDate <= HostingPage.Project.EndDate.Value);
         }
 
@@ -878,27 +852,23 @@ namespace PraticeManagement.Controls.Projects
             DateTime startDate;
             DateTime endDate;
             int personId;
-            if (hdnEditMode.Value == true.ToString() && DateTime.TryParse(dpStartDate.TextValue, out startDate) &&
-                    DateTime.TryParse(dpEndDate.TextValue, out endDate) &&
-                    int.TryParse(ddlPerson.SelectedValue, out personId))
+            if (hdnEditMode.Value != true.ToString() || !DateTime.TryParse(dpStartDate.TextValue, out startDate) ||
+                !DateTime.TryParse(dpEndDate.TextValue, out endDate) ||
+                !int.TryParse(ddlPerson.SelectedValue, out personId)) return;
+            Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
+            XDocument xdoc = attributionType.Value == "Delivery" ? XDocument.Parse(DeliveryPersonAttributionXML) : XDocument.Parse(SalesPersonAttributionXML);
+            List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+            foreach (var item in xlist)
             {
-                Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
-                XDocument xdoc = attributionType.Value == "Delivery" ? XDocument.Parse(DeliveryPersonAttributionXML) : XDocument.Parse(SalesPersonAttributionXML);
-                List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-                foreach (var item in xlist)
-                {
-                    if (item.Attribute(XName.Get(IsEditModeXname)).Value == false.ToString())
-                    {
-                        if (ddlPerson.SelectedValue == item.Attribute(XName.Get(TargetIdXname)).Value || (title != null && item.Attribute(XName.Get(TitleIdXname)).Value == title.TitleId.ToString()))
-                        {
-                            DateTime itemStartDate = Convert.ToDateTime(item.Attribute(XName.Get(StartDateXname)).Value);
-                            DateTime itemEndDate = Convert.ToDateTime(item.Attribute(XName.Get(EndDateXname)).Value);
-                            args.IsValid = !(startDate <= itemEndDate && itemStartDate <= endDate);
-                            if (!args.IsValid)
-                                break;
-                        }
-                    }
-                }
+                if (item.Attribute(XName.Get(IsEditModeXname)).Value != false.ToString()) continue;
+                if (ddlPerson.SelectedValue != item.Attribute(XName.Get(TargetIdXname)).Value &&
+                    (title == null || item.Attribute(XName.Get(TitleIdXname)).Value != title.TitleId.ToString()))
+                    continue;
+                DateTime itemStartDate = Convert.ToDateTime(item.Attribute(XName.Get(StartDateXname)).Value);
+                DateTime itemEndDate = Convert.ToDateTime(item.Attribute(XName.Get(EndDateXname)).Value);
+                args.IsValid = !(startDate <= itemEndDate && itemStartDate <= endDate);
+                if (!args.IsValid)
+                    break;
             }
         }
 
@@ -910,12 +880,12 @@ namespace PraticeManagement.Controls.Projects
             HiddenField attributionType = gridView.HeaderRow.FindControl("hdnAttributionType") as HiddenField;
             decimal totalPercentage = 0;
             args.IsValid = true;
-            XDocument xdoc = attributionType.Value == "Delivery" ? XDocument.Parse(DeliveryPracticeAttributionXML):XDocument.Parse(SalesPracticeAttributionXML);
+            XDocument xdoc = attributionType.Value == "Delivery" ? XDocument.Parse(DeliveryPracticeAttributionXML) : XDocument.Parse(SalesPracticeAttributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
             foreach (var item in xlist)
             {
                 decimal itemPercentage;
-                if (decimal.TryParse(item.Attribute(XName.Get(PercentageXname)).Value, out itemPercentage)) ;
+                decimal.TryParse(item.Attribute(XName.Get(PercentageXname)).Value, out itemPercentage);
                 totalPercentage += itemPercentage;
             }
             args.IsValid = totalPercentage == 100;
@@ -932,9 +902,9 @@ namespace PraticeManagement.Controls.Projects
                 int targetId;
                 DateTime startDate;
                 DateTime endDate;
-                if (int.TryParse(item.Attribute(XName.Get(TargetIdXname)).Value, out targetId)) ;
-                if (DateTime.TryParse(item.Attribute(XName.Get(StartDateXname)).Value, out startDate)) ;
-                if (DateTime.TryParse(item.Attribute(XName.Get(EndDateXname)).Value, out endDate)) ;
+                int.TryParse(item.Attribute(XName.Get(TargetIdXname)).Value, out targetId);
+                DateTime.TryParse(item.Attribute(XName.Get(StartDateXname)).Value, out startDate);
+                DateTime.TryParse(item.Attribute(XName.Get(EndDateXname)).Value, out endDate);
                 if (xlistRight.Any(x => x.Attribute(XName.Get(TargetIdXname)).Value == targetId.ToString()))
                 {
                     List<XElement> xlist = xlistRight.FindAll(x => x.Attribute(XName.Get(TargetIdXname)).Value == targetId.ToString());
@@ -998,9 +968,9 @@ namespace PraticeManagement.Controls.Projects
                 int targetId;
                 DateTime startDate;
                 DateTime endDate;
-                if (int.TryParse(item.Attribute(XName.Get(TargetIdXname)).Value, out targetId)) ;
-                if (DateTime.TryParse(item.Attribute(XName.Get(StartDateXname)).Value, out startDate)) ;
-                if (DateTime.TryParse(item.Attribute(XName.Get(EndDateXname)).Value, out endDate)) ;
+                int.TryParse(item.Attribute(XName.Get(TargetIdXname)).Value, out targetId);
+                DateTime.TryParse(item.Attribute(XName.Get(StartDateXname)).Value, out startDate);
+                DateTime.TryParse(item.Attribute(XName.Get(EndDateXname)).Value, out endDate);
                 if (xlistLeft.Any(x => x.Attribute(XName.Get(TargetIdXname)).Value == targetId.ToString()))
                 {
                     List<XElement> xlist = xlistLeft.FindAll(x => x.Attribute(XName.Get(TargetIdXname)).Value == targetId.ToString());
@@ -1062,11 +1032,11 @@ namespace PraticeManagement.Controls.Projects
             XDocument xdoc = XDocument.Parse(attributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
 
-            for (int i = 0; i < xlist.Count; i++)
+            foreach (XElement t in xlist)
             {
-                if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == targetName && (startDate == null || Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == startDate) && (title == null || xlist[i].Attribute(XName.Get(TitleXname)).Value == title))
+                if (t.Attribute(XName.Get(TargetNameXname)).Value == targetName && (startDate == null || Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == startDate) && (title == null || t.Attribute(XName.Get(TitleXname)).Value == title))
                 {
-                    xlist[i].Attribute(XName.Get(IsEditModeXname)).Value = editMode ? "True" : "False";
+                    t.Attribute(XName.Get(IsEditModeXname)).Value = editMode ? "True" : "False";
                 }
             }
 
@@ -1077,33 +1047,30 @@ namespace PraticeManagement.Controls.Projects
         {
             XDocument xdoc = XDocument.Parse(attributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-            for (int i = 0; i < xlist.Count; i++)
+            foreach (XElement t in xlist)
             {
-                if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
+                if (t.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
                 {
-                    xlist[i].Attribute(XName.Get(IsEditModeXname)).Value = "False";
-                    xlist[i].Attribute(XName.Get(TargetIdXname)).Value = attribution.TargetId.ToString();
-                    xlist[i].Attribute(XName.Get(TargetNameXname)).Value = attribution.TargetName.ToString();
-                    xlist[i].Attribute(XName.Get(StartDateXname)).Value = attribution.StartDate.HasValue ? attribution.StartDate.Value.ToShortDateString() : string.Empty;
-                    xlist[i].Attribute(XName.Get(EndDateXname)).Value = attribution.EndDate.HasValue ? attribution.EndDate.Value.ToShortDateString() : string.Empty;
-                    xlist[i].Attribute(XName.Get(PercentageXname)).Value = attribution.CommissionPercentage.ToString();
-                    xlist[i].Attribute(XName.Get(TitleIdXname)).Value = attribution.Title != null ? attribution.Title.TitleId.ToString() : string.Empty;
-                    xlist[i].Attribute(XName.Get(TitleXname)).Value = attribution.Title != null ? attribution.Title.HtmlEncodedTitleName : string.Empty;
-                    xlist[i].Attribute(XName.Get(IsNewEntryXname)).Value = "False";
+                    t.Attribute(XName.Get(IsEditModeXname)).Value = "False";
+                    t.Attribute(XName.Get(TargetIdXname)).Value = attribution.TargetId.ToString();
+                    t.Attribute(XName.Get(TargetNameXname)).Value = attribution.TargetName;
+                    t.Attribute(XName.Get(StartDateXname)).Value = attribution.StartDate.HasValue ? attribution.StartDate.Value.ToShortDateString() : string.Empty;
+                    t.Attribute(XName.Get(EndDateXname)).Value = attribution.EndDate.HasValue ? attribution.EndDate.Value.ToShortDateString() : string.Empty;
+                    t.Attribute(XName.Get(PercentageXname)).Value = attribution.CommissionPercentage.ToString();
+                    t.Attribute(XName.Get(TitleIdXname)).Value = attribution.Title != null ? attribution.Title.TitleId.ToString() : string.Empty;
+                    t.Attribute(XName.Get(TitleXname)).Value = attribution.Title != null ? attribution.Title.HtmlEncodedTitleName : string.Empty;
+                    t.Attribute(XName.Get(IsNewEntryXname)).Value = "False";
                 }
-                if (isPersonType)
-                {
-                    if ((xlist[i].Attribute(XName.Get(TargetIdXname)).Value == targetId && xlist[i].Attribute(XName.Get(TargetNameXname)).Value == targetName))
-                    {
-                        xlist[i].Attribute(XName.Get(IsEditModeXname)).Value = "False";
-                        xlist[i].Attribute(XName.Get(TargetIdXname)).Value = attribution.TargetId.ToString();
-                        xlist[i].Attribute(XName.Get(TargetNameXname)).Value = attribution.TargetName.ToString();
-                        xlist[i].Attribute(XName.Get(IsNewEntryXname)).Value = "False";
-                        Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(attribution.TargetId, Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date, Convert.ToDateTime(xlist[i].Attribute(XName.Get(EndDateXname)).Value).Date));
-                        xlist[i].Attribute(XName.Get(TitleIdXname)).Value = title != null ? title.TitleId.ToString() : string.Empty;
-                        xlist[i].Attribute(XName.Get(TitleXname)).Value = title != null ? title.HtmlEncodedTitleName : string.Empty;
-                    }
-                }
+                if (!isPersonType) continue;
+                if ((t.Attribute(XName.Get(TargetIdXname)).Value != targetId ||
+                     t.Attribute(XName.Get(TargetNameXname)).Value != targetName)) continue;
+                t.Attribute(XName.Get(IsEditModeXname)).Value = "False";
+                t.Attribute(XName.Get(TargetIdXname)).Value = attribution.TargetId.ToString();
+                t.Attribute(XName.Get(TargetNameXname)).Value = attribution.TargetName;
+                t.Attribute(XName.Get(IsNewEntryXname)).Value = "False";
+                Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(attribution.TargetId, Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value).Date, Convert.ToDateTime(t.Attribute(XName.Get(EndDateXname)).Value).Date));
+                t.Attribute(XName.Get(TitleIdXname)).Value = title != null ? title.TitleId.ToString() : string.Empty;
+                t.Attribute(XName.Get(TitleXname)).Value = title != null ? title.HtmlEncodedTitleName : string.Empty;
             }
             attributionXML = xdoc.ToString();
 
@@ -1170,11 +1137,10 @@ namespace PraticeManagement.Controls.Projects
 
         private void DatabindGridView(GridView gridView, List<XElement> xlist)
         {
-            List<XElement> xlistLatest;
-            xlistLatest = xlist.OrderByDescending(x => (x.Attribute(XName.Get(TargetIdXname)).Value != "0" || x.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString()))
-                .ThenBy(x => x.Attribute(XName.Get(TargetNameXname)).Value)
-                .ThenBy(x => x.Attribute(XName.Get(IsNewEntryXname)).Value)
-                .ThenBy(x => x.Attribute(XName.Get(StartDateXname)).Value).ToList();
+            List<XElement> xlistLatest = xlist.OrderByDescending(x => (x.Attribute(XName.Get(TargetIdXname)).Value != "0" || x.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString()))
+                                    .ThenBy(x => x.Attribute(XName.Get(TargetNameXname)).Value)
+                                    .ThenBy(x => x.Attribute(XName.Get(IsNewEntryXname)).Value)
+                                    .ThenBy(x => x.Attribute(XName.Get(StartDateXname)).Value).ToList();
             gridView.DataSource = xlistLatest;
             gridView.DataBind();
         }
@@ -1281,89 +1247,91 @@ namespace PraticeManagement.Controls.Projects
 
         public void CancelAllEditModeRows(AttributionCategory attribution)
         {
-            if (attribution == AttributionCategory.DeliveryPersonAttribution)
+            switch (attribution)
             {
-                XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
-                List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-
-                for (int i = 0; i < xlist.Count; i++)
-                {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
+                case AttributionCategory.DeliveryPersonAttribution:
                     {
-                        if (xlist[i].Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
-                        {
-                            xlist[i].Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
-                        }
-                        else
-                        {
-                            xdoc = DeleteRow(DeliveryPersonAttributionXML, false, xlist[i].Attribute(XName.Get(TargetNameXname)).Value, xlist[i].Attribute(XName.Get(StartDateXname)).Value, xlist[i].Attribute(XName.Get(TitleXname)).Value);
-                        }
-                    }
-                }
-                DeliveryPersonAttributionXML = xdoc.ToString();
-            }
-            else if (attribution == AttributionCategory.DeliveryPracticeAttribution)
-            {
-                XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
-                List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+                        XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
+                        List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
 
-                for (int i = 0; i < xlist.Count; i++)
-                {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
-                    {
-                        if (xlist[i].Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
+                        foreach (XElement t in xlist)
                         {
-                            xlist[i].Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
+                            if (t.Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                            if (t.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
+                            {
+                                t.Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
+                            }
+                            else
+                            {
+                                xdoc = DeleteRow(DeliveryPersonAttributionXML, false, t.Attribute(XName.Get(TargetNameXname)).Value, t.Attribute(XName.Get(StartDateXname)).Value, t.Attribute(XName.Get(TitleXname)).Value);
+                            }
                         }
-                        else
-                        {
-                            xdoc = DeleteRow(DeliveryPracticeAttributionXML, false, xlist[i].Attribute(XName.Get(TargetNameXname)).Value, xlist[i].Attribute(XName.Get(StartDateXname)).Value);
-                        }
+                        DeliveryPersonAttributionXML = xdoc.ToString();
                     }
-                }
-                DeliveryPracticeAttributionXML = xdoc.ToString();
-            }
-            else if (attribution == AttributionCategory.SalesPersonAttribution)
-            {
-                XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
-                List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+                    break;
 
-                for (int i = 0; i < xlist.Count; i++)
-                {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
+                case AttributionCategory.DeliveryPracticeAttribution:
                     {
-                        if (xlist[i].Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
-                        {
-                            xlist[i].Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
-                        }
-                        else
-                        {
-                            xdoc = DeleteRow(SalesPersonAttributionXML, false, xlist[i].Attribute(XName.Get(TargetNameXname)).Value, xlist[i].Attribute(XName.Get(StartDateXname)).Value, xlist[i].Attribute(XName.Get(TitleXname)).Value);
-                        }
-                    }
-                }
-                SalesPersonAttributionXML = xdoc.ToString();
-            }
-            else
-            {
-                XDocument xdoc = XDocument.Parse(SalesPracticeAttributionXML);
-                List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+                        XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
+                        List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
 
-                for (int i = 0; i < xlist.Count; i++)
-                {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
-                    {
-                        if (xlist[i].Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
+                        foreach (XElement t in xlist)
                         {
-                            xlist[i].Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
+                            if (t.Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                            if (t.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
+                            {
+                                t.Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
+                            }
+                            else
+                            {
+                                xdoc = DeleteRow(DeliveryPracticeAttributionXML, false, t.Attribute(XName.Get(TargetNameXname)).Value, t.Attribute(XName.Get(StartDateXname)).Value);
+                            }
                         }
-                        else
-                        {
-                            xdoc = DeleteRow(SalesPracticeAttributionXML, false, xlist[i].Attribute(XName.Get(TargetNameXname)).Value, xlist[i].Attribute(XName.Get(StartDateXname)).Value);
-                        }
+                        DeliveryPracticeAttributionXML = xdoc.ToString();
                     }
-                }
-                SalesPracticeAttributionXML = xdoc.ToString();
+                    break;
+
+                case AttributionCategory.SalesPersonAttribution:
+                    {
+                        XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
+                        List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+
+                        foreach (XElement t in xlist)
+                        {
+                            if (t.Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                            if (t.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
+                            {
+                                t.Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
+                            }
+                            else
+                            {
+                                xdoc = DeleteRow(SalesPersonAttributionXML, false, t.Attribute(XName.Get(TargetNameXname)).Value, t.Attribute(XName.Get(StartDateXname)).Value, t.Attribute(XName.Get(TitleXname)).Value);
+                            }
+                        }
+                        SalesPersonAttributionXML = xdoc.ToString();
+                    }
+                    break;
+
+                default:
+                    {
+                        XDocument xdoc = XDocument.Parse(SalesPracticeAttributionXML);
+                        List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+
+                        foreach (XElement t in xlist)
+                        {
+                            if (t.Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                            if (t.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
+                            {
+                                t.Attribute(XName.Get(IsEditModeXname)).Value = false.ToString();
+                            }
+                            else
+                            {
+                                xdoc = DeleteRow(SalesPracticeAttributionXML, false, t.Attribute(XName.Get(TargetNameXname)).Value, t.Attribute(XName.Get(StartDateXname)).Value);
+                            }
+                        }
+                        SalesPracticeAttributionXML = xdoc.ToString();
+                    }
+                    break;
             }
         }
 
@@ -1372,14 +1340,14 @@ namespace PraticeManagement.Controls.Projects
             XDocument xdoc;
             List<XElement> xlist;
             GridView gv;
-            if (attribution == AttributionCategory.DeliveryPersonAttribution)
+            switch (attribution)
             {
-                gv = gvDeliveryAttributionPerson;
-                for (int j = 0; j < gv.Rows.Count; j++)
-                {
-                    HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
-                    if (hdnEditMode.Value == true.ToString())
+                case AttributionCategory.DeliveryPersonAttribution:
+                    gv = gvDeliveryAttributionPerson;
+                    for (int j = 0; j < gv.Rows.Count; j++)
                     {
+                        HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
+                        if (hdnEditMode.Value != true.ToString()) continue;
                         Label lblpersonName = gv.Rows[j].FindControl("lblPersonName") as Label;
                         Label lblStartDate = gv.Rows[j].FindControl("lblStartDate") as Label;
                         DropDownList ddlPerson = gv.Rows[j].FindControl("ddlPerson") as DropDownList;
@@ -1387,28 +1355,26 @@ namespace PraticeManagement.Controls.Projects
                         DatePicker dpEndDate = gv.Rows[j].FindControl("dpEndDate") as DatePicker;
                         xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
                         xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-                        for (int i = 0; i < xlist.Count; i++)
+                        foreach (XElement t in xlist)
                         {
-                            if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && (Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text))
-                            {
-                                xlist[i].Attribute(XName.Get(TempTargetNameXname)).Value = ddlPerson.SelectedItem.Text;
-                                xlist[i].Attribute(XName.Get(TempTargetIdXname)).Value = ddlPerson.SelectedValue;
-                                xlist[i].Attribute(XName.Get(TempStartDateXname)).Value = dpStartDate.TextValue;
-                                xlist[i].Attribute(XName.Get(TempEndDateXname)).Value = dpEndDate.TextValue;
-                            }
+                            if (t.Attribute(XName.Get(TargetNameXname)).Value != lblpersonName.Text ||
+                                (Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value)
+                                        .Date.ToShortDateString() != lblStartDate.Text)) continue;
+                            t.Attribute(XName.Get(TempTargetNameXname)).Value = ddlPerson.SelectedItem.Text;
+                            t.Attribute(XName.Get(TempTargetIdXname)).Value = ddlPerson.SelectedValue;
+                            t.Attribute(XName.Get(TempStartDateXname)).Value = dpStartDate.TextValue;
+                            t.Attribute(XName.Get(TempEndDateXname)).Value = dpEndDate.TextValue;
                         }
                         DeliveryPersonAttributionXML = xdoc.ToString();
                     }
-                }
-            }
-            else if (attribution == AttributionCategory.SalesPersonAttribution)
-            {
-                gv = gvSalesAttributionPerson;
-                for (int j = 0; j < gv.Rows.Count; j++)
-                {
-                    HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
-                    if (hdnEditMode.Value == true.ToString())
+                    break;
+
+                case AttributionCategory.SalesPersonAttribution:
+                    gv = gvSalesAttributionPerson;
+                    for (int j = 0; j < gv.Rows.Count; j++)
                     {
+                        HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
+                        if (hdnEditMode.Value != true.ToString()) continue;
                         Label lblpersonName = gv.Rows[j].FindControl("lblPersonName") as Label;
                         Label lblStartDate = gv.Rows[j].FindControl("lblStartDate") as Label;
                         DropDownList ddlPerson = gv.Rows[j].FindControl("ddlPerson") as DropDownList;
@@ -1416,73 +1382,63 @@ namespace PraticeManagement.Controls.Projects
                         DatePicker dpEndDate = gv.Rows[j].FindControl("dpEndDate") as DatePicker;
                         xdoc = XDocument.Parse(SalesPersonAttributionXML);
                         xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-                        for (int i = 0; i < xlist.Count; i++)
+                        foreach (XElement t in xlist)
                         {
-                            if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && (Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text))
-                            {
-                                xlist[i].Attribute(XName.Get(TempTargetNameXname)).Value = ddlPerson.SelectedItem.Text;
-                                xlist[i].Attribute(XName.Get(TempTargetIdXname)).Value = ddlPerson.SelectedValue;
-                                xlist[i].Attribute(XName.Get(TempStartDateXname)).Value = dpStartDate.TextValue;
-                                xlist[i].Attribute(XName.Get(TempEndDateXname)).Value = dpEndDate.TextValue;
-                            }
+                            if (t.Attribute(XName.Get(TargetNameXname)).Value != lblpersonName.Text ||
+                                (Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value)
+                                        .Date.ToShortDateString() != lblStartDate.Text)) continue;
+                            t.Attribute(XName.Get(TempTargetNameXname)).Value = ddlPerson.SelectedItem.Text;
+                            t.Attribute(XName.Get(TempTargetIdXname)).Value = ddlPerson.SelectedValue;
+                            t.Attribute(XName.Get(TempStartDateXname)).Value = dpStartDate.TextValue;
+                            t.Attribute(XName.Get(TempEndDateXname)).Value = dpEndDate.TextValue;
                         }
                         SalesPersonAttributionXML = xdoc.ToString();
                     }
-                }
-            }
-            else if (attribution == AttributionCategory.DeliveryPracticeAttribution)
-            {
-                gv = gvDeliveryAttributionPractice;
-                for (int j = 0; j < gv.Rows.Count; j++)
-                {
-                    HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
-                    if (hdnEditMode.Value == true.ToString())
+                    break;
+
+                case AttributionCategory.DeliveryPracticeAttribution:
+                    gv = gvDeliveryAttributionPractice;
+                    for (int j = 0; j < gv.Rows.Count; j++)
                     {
+                        HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
+                        if (hdnEditMode.Value != true.ToString()) continue;
                         Label lblPractice = gv.Rows[j].FindControl("lblPractice") as Label;
-                        Label lblCommisssionPercentage = gv.Rows[j].FindControl("lblCommisssionPercentage") as Label;
                         DropDownList ddlPractice = gv.Rows[j].FindControl("ddlPractice") as DropDownList;
                         TextBox txtCommisssionPercentage = gv.Rows[j].FindControl("txtCommisssionPercentage") as TextBox;
                         xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
                         xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-                        for (int i = 0; i < xlist.Count; i++)
+                        foreach (XElement t in xlist)
                         {
-                            if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblPractice.Text)
-                            {
-                                xlist[i].Attribute(XName.Get(TempTargetNameXname)).Value = ddlPractice.SelectedItem.Text;
-                                xlist[i].Attribute(XName.Get(TempTargetIdXname)).Value = ddlPractice.SelectedValue;
-                                xlist[i].Attribute(XName.Get(TempPercentageXname)).Value = txtCommisssionPercentage.Text;
-                            }
+                            if (t.Attribute(XName.Get(TargetNameXname)).Value != lblPractice.Text) continue;
+                            t.Attribute(XName.Get(TempTargetNameXname)).Value = ddlPractice.SelectedItem.Text;
+                            t.Attribute(XName.Get(TempTargetIdXname)).Value = ddlPractice.SelectedValue;
+                            t.Attribute(XName.Get(TempPercentageXname)).Value = txtCommisssionPercentage.Text;
                         }
                         DeliveryPracticeAttributionXML = xdoc.ToString();
                     }
-                }
-            }
-            else
-            {
-                gv = gvSalesAttributionPractice;
-                for (int j = 0; j < gv.Rows.Count; j++)
-                {
-                    HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
-                    if (hdnEditMode.Value == true.ToString())
+                    break;
+
+                default:
+                    gv = gvSalesAttributionPractice;
+                    for (int j = 0; j < gv.Rows.Count; j++)
                     {
+                        HiddenField hdnEditMode = gv.Rows[j].FindControl("hdnEditMode") as HiddenField;
+                        if (hdnEditMode.Value != true.ToString()) continue;
                         Label lblPractice = gv.Rows[j].FindControl("lblPractice") as Label;
-                        Label lblCommisssionPercentage = gv.Rows[j].FindControl("lblCommisssionPercentage") as Label;
                         DropDownList ddlPractice = gv.Rows[j].FindControl("ddlPractice") as DropDownList;
                         TextBox txtCommisssionPercentage = gv.Rows[j].FindControl("txtCommisssionPercentage") as TextBox;
                         xdoc = XDocument.Parse(SalesPracticeAttributionXML);
                         xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-                        for (int i = 0; i < xlist.Count; i++)
+                        foreach (XElement t in xlist)
                         {
-                            if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblPractice.Text)
-                            {
-                                xlist[i].Attribute(XName.Get(TempTargetNameXname)).Value = ddlPractice.SelectedItem.Text;
-                                xlist[i].Attribute(XName.Get(TempTargetIdXname)).Value = ddlPractice.SelectedValue;
-                                xlist[i].Attribute(XName.Get(TempPercentageXname)).Value = txtCommisssionPercentage.Text;
-                            }
+                            if (t.Attribute(XName.Get(TargetNameXname)).Value != lblPractice.Text) continue;
+                            t.Attribute(XName.Get(TempTargetNameXname)).Value = ddlPractice.SelectedItem.Text;
+                            t.Attribute(XName.Get(TempTargetIdXname)).Value = ddlPractice.SelectedValue;
+                            t.Attribute(XName.Get(TempPercentageXname)).Value = txtCommisssionPercentage.Text;
                         }
                         SalesPracticeAttributionXML = xdoc.ToString();
                     }
-                }
+                    break;
             }
         }
 
@@ -1498,14 +1454,24 @@ namespace PraticeManagement.Controls.Projects
                 item.Attribute(XName.Get(TempEndDateXname)).Value = item.Attribute(XName.Get(EndDateXname)).Value;
                 item.Attribute(XName.Get(TempPercentageXname)).Value = item.Attribute(XName.Get(PercentageXname)).Value;
             }
-            if (attribution == AttributionCategory.DeliveryPersonAttribution)
-                DeliveryPersonAttributionXML = xdoc.ToString();
-            else if (attribution == AttributionCategory.DeliveryPracticeAttribution)
-                DeliveryPracticeAttributionXML = xdoc.ToString();
-            else if (attribution == AttributionCategory.SalesPersonAttribution)
-                SalesPersonAttributionXML = xdoc.ToString();
-            else
-                SalesPracticeAttributionXML = xdoc.ToString();
+            switch (attribution)
+            {
+                case AttributionCategory.DeliveryPersonAttribution:
+                    DeliveryPersonAttributionXML = xdoc.ToString();
+                    break;
+
+                case AttributionCategory.DeliveryPracticeAttribution:
+                    DeliveryPracticeAttributionXML = xdoc.ToString();
+                    break;
+
+                case AttributionCategory.SalesPersonAttribution:
+                    SalesPersonAttributionXML = xdoc.ToString();
+                    break;
+
+                default:
+                    SalesPracticeAttributionXML = xdoc.ToString();
+                    break;
+            }
         }
 
         public void EnableDisableValidators(GridViewRow row, string attributionCategory)
@@ -1555,8 +1521,6 @@ namespace PraticeManagement.Controls.Projects
         {
             if (attribution == AttributionCategory.DeliveryPersonAttribution || attribution == AttributionCategory.SalesPersonAttribution)
             {
-                DatePicker dpStart = row.FindControl("dpStartDate") as DatePicker;
-                DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
                 RequiredFieldValidator reqPersonName = row.FindControl("reqPersonName") as RequiredFieldValidator;
                 RequiredFieldValidator reqPersonStart = row.FindControl("reqPersonStart") as RequiredFieldValidator;
                 CompareValidator compPersonStartType = row.FindControl("compPersonStartType") as CompareValidator;
@@ -1594,12 +1558,10 @@ namespace PraticeManagement.Controls.Projects
             foreach (var item in xlist)
             {
                 int practiceId;
-                if (item.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString())
+                if (item.Attribute(XName.Get(IsNewEntryXname)).Value != false.ToString()) continue;
+                if (int.TryParse(item.Attribute(XName.Get(TargetIdXname)).Value, out practiceId))
                 {
-                    if (int.TryParse(item.Attribute(XName.Get(TargetIdXname)).Value, out practiceId))
-                    {
-                        practices.Add(practiceId);
-                    }
+                    practices.Add(practiceId);
                 }
             }
             return practices;
@@ -1619,12 +1581,10 @@ namespace PraticeManagement.Controls.Projects
 
         public void FinalSave()
         {
-            if (ValidateCommissionsPercentage())
-            {
-                string attributionXml = FinalXml();
-                ProjectId = HostingPage.ProjectId.Value;
-                ServiceCallers.Custom.Project(p => p.SetProjectAttributionValues(ProjectId, attributionXml, Context.User.Identity.Name));
-            }
+            if (!ValidateCommissionsPercentage()) return;
+            string attributionXml = FinalXml();
+            ProjectId = HostingPage.ProjectId.Value;
+            ServiceCallers.Custom.Project(p => p.SetProjectAttributionValues(ProjectId, attributionXml, Context.User.Identity.Name));
         }
 
         public bool ValidateCommissionsPercentage()
@@ -1641,23 +1601,19 @@ namespace PraticeManagement.Controls.Projects
 
         public bool SaveRecordsOnFinalSave()
         {
-            XDocument xdoc;
-            List<XElement> xlist;
             int j = 0;
-            xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
-            xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+            XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
+            List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
             if (xlist.Any(x => x.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString()))
             {
                 for (int i = 0; i < gvDeliveryAttributionPerson.Rows.Count; i++)
                 {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
-                    {
-                        ImageButton imgUpdate =
-                            gvDeliveryAttributionPerson.Rows[i].FindControl("imgDeliveryPersonAttributeUpdate") as
-                            ImageButton;
-                        imgPersonUpdate_Click(imgUpdate, new EventArgs());
-                        j++;
-                    }
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                    ImageButton imgUpdate =
+                        gvDeliveryAttributionPerson.Rows[i].FindControl("imgDeliveryPersonAttributeUpdate") as
+                        ImageButton;
+                    imgPersonUpdate_Click(imgUpdate, new EventArgs());
+                    j++;
                 }
             }
             xdoc = XDocument.Parse(SalesPersonAttributionXML);
@@ -1666,14 +1622,12 @@ namespace PraticeManagement.Controls.Projects
             {
                 for (int i = 0; i < gvSalesAttributionPerson.Rows.Count; i++)
                 {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
-                    {
-                        ImageButton imgUpdate =
-                            gvSalesAttributionPerson.Rows[i].FindControl("imgSalesPersonAttributeUpdate") as
-                            ImageButton;
-                        imgPersonUpdate_Click(imgUpdate, new EventArgs());
-                        j++;
-                    }
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                    ImageButton imgUpdate =
+                        gvSalesAttributionPerson.Rows[i].FindControl("imgSalesPersonAttributeUpdate") as
+                        ImageButton;
+                    imgPersonUpdate_Click(imgUpdate, new EventArgs());
+                    j++;
                 }
             }
             xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
@@ -1682,14 +1636,12 @@ namespace PraticeManagement.Controls.Projects
             {
                 for (int i = 0; i < gvDeliveryAttributionPractice.Rows.Count; i++)
                 {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
-                    {
-                        ImageButton imgUpdate =
-                            gvDeliveryAttributionPractice.Rows[i].FindControl("imgDeliveryPracticeAttributeUpdate") as
-                            ImageButton;
-                        imgPracticeUpdate_Click(imgUpdate, new EventArgs());
-                        j++;
-                    }
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                    ImageButton imgUpdate =
+                        gvDeliveryAttributionPractice.Rows[i].FindControl("imgDeliveryPracticeAttributeUpdate") as
+                        ImageButton;
+                    imgPracticeUpdate_Click(imgUpdate, new EventArgs());
+                    j++;
                 }
             }
             xdoc = XDocument.Parse(SalesPracticeAttributionXML);
@@ -1698,22 +1650,17 @@ namespace PraticeManagement.Controls.Projects
             {
                 for (int i = 0; i < gvSalesAttributionPractice.Rows.Count; i++)
                 {
-                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
-                    {
-                        ImageButton imgUpdate =
-                            gvSalesAttributionPractice.Rows[i].FindControl("imgSalesPracticeAttributeUpdate") as
-                            ImageButton;
-                        imgPracticeUpdate_Click(imgUpdate, new EventArgs());
-                        j++;
-                    }
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value != true.ToString()) continue;
+                    ImageButton imgUpdate =
+                        gvSalesAttributionPractice.Rows[i].FindControl("imgSalesPracticeAttributeUpdate") as
+                        ImageButton;
+                    imgPracticeUpdate_Click(imgUpdate, new EventArgs());
+                    j++;
                 }
             }
-            if (j != 0)
-                return false;
-            return true;
+            return j == 0;
         }
 
         #endregion Methods
     }
 }
-
