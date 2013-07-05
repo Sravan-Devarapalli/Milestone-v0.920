@@ -41,7 +41,7 @@ namespace DataTransferObjects
         [DataMember]
         public double? TimeOffHours { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Conversion
 
@@ -83,7 +83,7 @@ namespace DataTransferObjects
             };
         }
 
-        #endregion
+        #endregion Conversion
 
         #region IEquatable<DatePoint> Members
 
@@ -92,7 +92,7 @@ namespace DataTransferObjects
             return (Date == other.Date) && (Value == other.Value) && (DayOff == other.DayOff);
         }
 
-        #endregion
+        #endregion IEquatable<DatePoint> Members
 
         #region IComparable<DatePoint> Members
 
@@ -101,7 +101,6 @@ namespace DataTransferObjects
             return Date.CompareTo(other.Date);
         }
 
-        #endregion
+        #endregion IComparable<DatePoint> Members
     }
 }
-
