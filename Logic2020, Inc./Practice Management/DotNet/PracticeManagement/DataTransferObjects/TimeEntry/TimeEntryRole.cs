@@ -1,5 +1,4 @@
-﻿
-namespace DataTransferObjects.TimeEntry
+﻿namespace DataTransferObjects.TimeEntry
 {
     /// <summary>
     /// Time Entry Roles
@@ -22,4 +21,3 @@ namespace DataTransferObjects.TimeEntry
         AccountingAdministrator
     }
 }
-
