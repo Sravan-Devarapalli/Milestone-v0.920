@@ -112,6 +112,14 @@ namespace PraticeManagement.Controls.Projects
 
         public int ProjectId { get; set; }
 
+        public enum AttributionCategory
+        {
+            DeliveryPersonAttribution = 1,
+            SalesPersonAttribution = 2,
+            DeliveryPracticeAttribution = 3,
+            SalesPracticeAttribution = 4
+        }
+
         #endregion Properities
 
         #region Events
@@ -424,375 +432,339 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        protected void imgDeliveryPersonAttributeEdit_Click(object sender, EventArgs e)
+        protected void imgPersonEdit_Click(object sender, EventArgs e)
         {
-            CancelAllEditModeRows(deliveryPersonAttribution);
-            CopyTempValuesAsReal(deliveryPersonAttribution);
             ImageButton imgEdit = sender as ImageButton;
             GridViewRow row = imgEdit.NamingContainer as GridViewRow;
-            Label lblpersonName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
-            Label lblTitleName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
-            XDocument xdoc = OnEditClick(DeliveryPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-            DeliveryPersonAttributionXML = xdoc.ToString();
-            DatabindGridView(gvDeliveryAttributionPerson, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgSalesPracticeAttributeEdit_Click(object sender, EventArgs e)
-        {
-            CancelAllEditModeRows(salesPracticeAttribution);
-            CopyTempValuesAsReal(salesPracticeAttribution);
-            ImageButton imgEdit = sender as ImageButton;
-            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
-            Label lblPractice = gvSalesAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-            XDocument xdoc = OnEditClick(SalesPracticeAttributionXML, true, lblPractice.Text);
-            SalesPracticeAttributionXML = xdoc.ToString();
-            DatabindGridView(gvSalesAttributionPractice, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgSalesPersonAttributeEdit_Click(object sender, EventArgs e)
-        {
-            CancelAllEditModeRows(salesPersonAttribution);
-            CopyTempValuesAsReal(salesPersonAttribution);
-            ImageButton imgEdit = sender as ImageButton;
-            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
-            Label lblpersonName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
-            Label lblTitleName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
-            XDocument xdoc = OnEditClick(SalesPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-            SalesPersonAttributionXML = xdoc.ToString();
-            DatabindGridView(gvSalesAttributionPerson, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgDeliveryPracticeAttributeEdit_Click(object sender, EventArgs e)
-        {
-            CancelAllEditModeRows(deliveryPracticeAttribution);
-            CopyTempValuesAsReal(deliveryPracticeAttribution);
-            ImageButton imgEdit = sender as ImageButton;
-            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
-            Label lblPractice = gvDeliveryAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-            XDocument xdoc = OnEditClick(DeliveryPracticeAttributionXML, true, lblPractice.Text);
-            DeliveryPracticeAttributionXML = xdoc.ToString();
-            DatabindGridView(gvDeliveryAttributionPractice, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgDeliveryPersonAttributeUpdate_Click(object sender, EventArgs e)
-        {
-            ImageButton imgUpdate = sender as ImageButton;
-            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
-            Validate(row, deliveryPersonAttribution);
-            if (Page.IsValid)
-            {
-                Label lblpersonName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-                HiddenField hdnPersonId = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("hdnPersonId") as HiddenField;
-                var ddlPerson = row.FindControl("ddlPerson") as DropDownList;
-                var dpStartDate = row.FindControl("dpStartDate") as DatePicker;
-                var dpEndDate = row.FindControl("dpEndDate") as DatePicker;
-
-                int personId;
-                DateTime startDate;
-                DateTime endDate;
-                if (int.TryParse(ddlPerson.SelectedValue, out personId)) ;
-                if (DateTime.TryParse(dpStartDate.TextValue, out startDate)) ;
-                if (DateTime.TryParse(dpEndDate.TextValue, out endDate)) ;
-
-                Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
-                Attribution attribution = new Attribution
-                {
-                    Title = title,
-                    TargetId = personId,
-                    TargetName = ddlPerson.SelectedItem.Text,
-                    StartDate = startDate,
-                    EndDate = endDate,
-                    CommissionPercentage = 100
-                };
-
-                XDocument xdoc = OnUpdateClick(attribution, DeliveryPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
-                DeliveryPersonAttributionXML = xdoc.ToString();
-                CopyTempValuesAsReal(deliveryPersonAttribution);
-                XDocument xdocLatest = XDocument.Parse(DeliveryPersonAttributionXML);
-                DatabindGridView(gvDeliveryAttributionPerson, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
-            }
-        }
-
-        protected void imgSalesPersonAttributeUpdate_Click(object sender, EventArgs e)
-        {
-            ImageButton imgUpdate = sender as ImageButton;
-            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
-
-            Validate(row, salesPersonAttribution);
-            if (Page.IsValid)
-            {
-                Label lblpersonName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-                HiddenField hdnPersonId = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("hdnPersonId") as HiddenField;
-                var ddlPerson = row.FindControl("ddlPerson") as DropDownList;
-                var dpStartDate = row.FindControl("dpStartDate") as DatePicker;
-                var dpEndDate = row.FindControl("dpEndDate") as DatePicker;
-                int personId;
-                DateTime startDate;
-                DateTime endDate;
-                if (int.TryParse(ddlPerson.SelectedValue, out personId)) ;
-                if (DateTime.TryParse(dpStartDate.TextValue, out startDate)) ;
-                if (DateTime.TryParse(dpEndDate.TextValue, out endDate)) ;
-
-                Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
-                Attribution attribution = new Attribution
-                {
-                    Title = title,
-                    TargetId = personId,
-                    TargetName = ddlPerson.SelectedItem.Text,
-                    StartDate = startDate,
-                    EndDate = endDate,
-                    CommissionPercentage = 100
-                };
-
-                XDocument xdoc = OnUpdateClick(attribution, SalesPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
-                SalesPersonAttributionXML = xdoc.ToString();
-                CopyTempValuesAsReal(salesPersonAttribution);
-                XDocument xdocLatest = XDocument.Parse(SalesPersonAttributionXML);
-                DatabindGridView(gvSalesAttributionPerson, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
-            }
-        }
-
-        protected void imgDeliveryPracticeAttributeUpdate_Click(object sender, EventArgs e)
-        {
-            ImageButton imgUpdate = sender as ImageButton;
-            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
-
-            Validate(row, deliveryPracticeAttribution);
-            if (Page.IsValid)
-            {
-                Label lblPractice = gvDeliveryAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-                HiddenField hdnPracticeId = gvDeliveryAttributionPractice.Rows[row.DataItemIndex].FindControl("hdnPracticeId") as HiddenField;
-                var ddlPractice = row.FindControl("ddlPractice") as DropDownList;
-                var txtCommisssionPercentage = row.FindControl("txtCommisssionPercentage") as TextBox;
-
-                int practiceId;
-                decimal commissionPercentage;
-                if (int.TryParse(ddlPractice.SelectedValue, out practiceId)) ;
-                if (decimal.TryParse(txtCommisssionPercentage.Text, out commissionPercentage)) ;
-                Attribution attribution = new Attribution
-                {
-                    Title = null,
-                    TargetId = practiceId,
-                    TargetName = ddlPractice.SelectedItem.Text,
-                    StartDate = null,
-                    EndDate = null,
-                    CommissionPercentage = commissionPercentage
-                };
-
-                XDocument xdoc = OnUpdateClick(attribution, DeliveryPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
-                DeliveryPracticeAttributionXML = xdoc.ToString();
-                CopyTempValuesAsReal(deliveryPracticeAttribution);
-                XDocument xdocLatest = XDocument.Parse(DeliveryPracticeAttributionXML);
-                DatabindGridView(gvDeliveryAttributionPractice, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
-            }
-        }
-
-        protected void imgSalesPracticeAttributeUpdate_Click(object sender, EventArgs e)
-        {
-            ImageButton imgUpdate = sender as ImageButton;
-            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
-            Validate(row, salesPracticeAttribution);
-            if (Page.IsValid)
-            {
-                Label lblPractice = gvSalesAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-                HiddenField hdnPracticeId = gvSalesAttributionPractice.Rows[row.DataItemIndex].FindControl("hdnPracticeId") as HiddenField;
-                var ddlPractice = row.FindControl("ddlPractice") as DropDownList;
-                var txtCommisssionPercentage = row.FindControl("txtCommisssionPercentage") as TextBox;
-
-                int practiceId;
-                decimal commissionPercentage;
-                if (int.TryParse(ddlPractice.SelectedValue, out practiceId)) ;
-                if (decimal.TryParse(txtCommisssionPercentage.Text, out commissionPercentage)) ;
-                Attribution attribution = new Attribution
-                {
-                    Title = null,
-                    TargetId = practiceId,
-                    TargetName = ddlPractice.SelectedItem.Text,
-                    StartDate = null,
-                    EndDate = null,
-                    CommissionPercentage = commissionPercentage
-                };
-
-                XDocument xdoc = OnUpdateClick(attribution, SalesPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
-                SalesPracticeAttributionXML = xdoc.ToString();
-                CopyTempValuesAsReal(salesPracticeAttribution);
-                XDocument xdocLatest = XDocument.Parse(SalesPracticeAttributionXML);
-                DatabindGridView(gvSalesAttributionPractice, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
-            }
-        }
-
-        protected void imgSalesPracticeAttributeCancel_Click(object sender, EventArgs e)
-        {
-            ImageButton imgCancel = sender as ImageButton;
-            GridViewRow row = imgCancel.NamingContainer as GridViewRow;
-            Label lblPractice = gvSalesAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-            CopyTempValuesAsReal(salesPracticeAttribution);
-            XDocument xdoc = OnEditClick(SalesPracticeAttributionXML, false, lblPractice.Text);
-            if (imgCancel.Attributes[IsNewEntryXname] == "True")
-            {
-                xdoc = DeleteRow(SalesPracticeAttributionXML, false, lblPractice.Text);
-            }
-            SalesPracticeAttributionXML = xdoc.ToString();
-            DatabindGridView(gvSalesAttributionPractice, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgSalesPersonAttributeCancel_Click(object sender, EventArgs e)
-        {
-            ImageButton imgCancel = sender as ImageButton;
-            GridViewRow row = imgCancel.NamingContainer as GridViewRow;
-            Label lblpersonName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
-            Label lblTitleName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
-            CopyTempValuesAsReal(salesPersonAttribution);
-            XDocument xdoc = OnEditClick(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-            if (imgCancel.Attributes[IsNewEntryXname] == "True")
-            {
-                xdoc = DeleteRow(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-            }
-            SalesPersonAttributionXML = xdoc.ToString();
-            DatabindGridView(gvSalesAttributionPerson, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgDeliveryPracticeAttributeCancel_Click(object sender, EventArgs e)
-        {
-            ImageButton imgCancel = sender as ImageButton;
-            GridViewRow row = imgCancel.NamingContainer as GridViewRow;
-            Label lblPractice = gvDeliveryAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-            XDocument xdoc = OnEditClick(DeliveryPracticeAttributionXML, false, lblPractice.Text);
-            CopyTempValuesAsReal(deliveryPracticeAttribution);
-            if (imgCancel.Attributes[IsNewEntryXname] == "True")
-            {
-                xdoc = DeleteRow(DeliveryPracticeAttributionXML, false, lblPractice.Text);
-            }
-            DeliveryPracticeAttributionXML = xdoc.ToString();
-            DatabindGridView(gvDeliveryAttributionPractice, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgDeliveryPersonAttributeCancel_Click(object sender, EventArgs e)
-        {
-            ImageButton imgCancel = sender as ImageButton;
-            GridViewRow row = imgCancel.NamingContainer as GridViewRow;
-            Label lblpersonName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
-            Label lblTitleName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
-            CopyTempValuesAsReal(deliveryPersonAttribution);
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attribution = (AttributionCategory)(attributionNum);
+            CancelAllEditModeRows(attribution);
+            CopyTempValuesAsReal(attribution);
+            Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
+            Label lblStartDate = gv.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
+            Label lblTitleName = gv.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
             XDocument xdoc;
-            if (imgCancel.Attributes[IsNewEntryXname] == "True")
+            if (attribution == AttributionCategory.DeliveryPersonAttribution)
             {
-                xdoc = DeleteRow(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                xdoc = OnEditClick(DeliveryPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                DeliveryPersonAttributionXML = xdoc.ToString();
             }
             else
             {
-                xdoc = OnEditClick(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                xdoc = OnEditClick(SalesPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                SalesPersonAttributionXML = xdoc.ToString();
             }
-            DeliveryPersonAttributionXML = xdoc.ToString();
-            DatabindGridView(gvDeliveryAttributionPerson, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
+
+            DatabindGridView(gv, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
-        protected void btnAddDeliveryAttributionResource_Click(object sender, EventArgs e)
+        protected void imgPracticeEdit_Click(object sender, EventArgs e)
         {
-            CancelAllEditModeRows(deliveryPersonAttribution);
-            CopyTempValuesAsReal(deliveryPersonAttribution);
-            XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
-            XDocument latestXdoc = AddEmptyRow(2, 1, xdoc);
-            DeliveryPersonAttributionXML = latestXdoc.ToString();
-            DatabindGridView(gvDeliveryAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-            DeliveryPersonAttributionXML = xdoc.ToString();
+            ImageButton imgEdit = sender as ImageButton;
+            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attribution = (AttributionCategory)(attributionNum);
+            CancelAllEditModeRows(attribution);
+            CopyTempValuesAsReal(attribution);
+            Label lblPractice = gv.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
+            XDocument xdoc;
+            if (attribution == AttributionCategory.SalesPracticeAttribution)
+            {
+                xdoc = OnEditClick(SalesPracticeAttributionXML, true, lblPractice.Text);
+                SalesPracticeAttributionXML = xdoc.ToString();
+            }
+            else
+            {
+                xdoc = OnEditClick(DeliveryPracticeAttributionXML, true, lblPractice.Text);
+                DeliveryPracticeAttributionXML = xdoc.ToString();
+            }
+            DatabindGridView(gv, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
-        protected void btnAddDeliveryAttributionPractice_Click(object sender, EventArgs e)
+        protected void imgPersonUpdate_Click(object sender, EventArgs e)
         {
-            CancelAllEditModeRows(deliveryPracticeAttribution);
-            CopyTempValuesAsReal(deliveryPracticeAttribution);
-            XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
-            XDocument latestXdoc = AddEmptyRow(2, 2, xdoc);
-            DeliveryPracticeAttributionXML = latestXdoc.ToString();
-            DatabindGridView(gvDeliveryAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-            DeliveryPracticeAttributionXML = xdoc.ToString();
+            ImageButton imgUpdate = sender as ImageButton;
+            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attributionType = (AttributionCategory)(attributionNum);
+            Validate(row, attributionType);
+            if (Page.IsValid)
+            {
+                Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
+                HiddenField hdnPersonId = gv.Rows[row.DataItemIndex].FindControl("hdnPersonId") as HiddenField;
+                var ddlPerson = row.FindControl("ddlPerson") as DropDownList;
+                var dpStartDate = row.FindControl("dpStartDate") as DatePicker;
+                var dpEndDate = row.FindControl("dpEndDate") as DatePicker;
+
+                int personId;
+                DateTime startDate;
+                DateTime endDate;
+                if (int.TryParse(ddlPerson.SelectedValue, out personId)) ;
+                if (DateTime.TryParse(dpStartDate.TextValue, out startDate)) ;
+                if (DateTime.TryParse(dpEndDate.TextValue, out endDate)) ;
+
+                Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
+                Attribution attribution = new Attribution
+                {
+                    Title = title,
+                    TargetId = personId,
+                    TargetName = ddlPerson.SelectedItem.Text,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    CommissionPercentage = 100
+                };
+                XDocument xdocLatest;
+                if (attributionType == AttributionCategory.DeliveryPersonAttribution)
+                {
+                    XDocument xdoc = OnUpdateClick(attribution, DeliveryPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
+                    DeliveryPersonAttributionXML = xdoc.ToString();
+                    CopyTempValuesAsReal(attributionType);
+                    xdocLatest = XDocument.Parse(DeliveryPersonAttributionXML);
+                }
+                else
+                {
+                    XDocument xdoc = OnUpdateClick(attribution, SalesPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
+                    SalesPersonAttributionXML = xdoc.ToString();
+                    CopyTempValuesAsReal(attributionType);
+                    xdocLatest = XDocument.Parse(SalesPersonAttributionXML);
+                }
+                DatabindGridView(gv, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
+            }
         }
 
-        protected void btnAddSalesAttributionResource_Click(object sender, EventArgs e)
+        protected void imgPracticeUpdate_Click(object sender, EventArgs e)
         {
-            CancelAllEditModeRows(salesPersonAttribution);
-            CopyTempValuesAsReal(salesPersonAttribution);
-            XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
-            XDocument latestXdoc = AddEmptyRow(1, 1, xdoc);
-            SalesPersonAttributionXML = latestXdoc.ToString();
-            DatabindGridView(gvSalesAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-            SalesPersonAttributionXML = xdoc.ToString();
+            ImageButton imgUpdate = sender as ImageButton;
+            GridViewRow row = imgUpdate.NamingContainer as GridViewRow;
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attributionType = (AttributionCategory)(attributionNum);
+            Validate(row, attributionType);
+            if (Page.IsValid)
+            {
+                Label lblPractice = gv.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
+                HiddenField hdnPracticeId = gv.Rows[row.DataItemIndex].FindControl("hdnPracticeId") as HiddenField;
+                var ddlPractice = row.FindControl("ddlPractice") as DropDownList;
+                var txtCommisssionPercentage = row.FindControl("txtCommisssionPercentage") as TextBox;
+
+                int practiceId;
+                decimal commissionPercentage;
+                if (int.TryParse(ddlPractice.SelectedValue, out practiceId)) ;
+                if (decimal.TryParse(txtCommisssionPercentage.Text, out commissionPercentage)) ;
+                Attribution attribution = new Attribution
+                {
+                    Title = null,
+                    TargetId = practiceId,
+                    TargetName = ddlPractice.SelectedItem.Text,
+                    StartDate = null,
+                    EndDate = null,
+                    CommissionPercentage = commissionPercentage
+                };
+                XDocument xdocLatest;
+                if (attributionType == AttributionCategory.DeliveryPracticeAttribution)
+                {
+                    XDocument xdoc = OnUpdateClick(attribution, DeliveryPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
+                    DeliveryPracticeAttributionXML = xdoc.ToString();
+                    CopyTempValuesAsReal(attributionType);
+                    xdocLatest = XDocument.Parse(DeliveryPracticeAttributionXML);
+                }
+                else
+                {
+                    XDocument xdoc = OnUpdateClick(attribution, SalesPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
+                    SalesPracticeAttributionXML = xdoc.ToString();
+                    CopyTempValuesAsReal(attributionType);
+                    xdocLatest = XDocument.Parse(SalesPracticeAttributionXML);
+                }
+                DatabindGridView(gv, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
+            }
         }
 
-        protected void btnAddSalesAttributionPractice_Click(object sender, EventArgs e)
+        protected void imgPersonCancel_Click(object sender, EventArgs e)
         {
-            CancelAllEditModeRows(salesPracticeAttribution);
-            CopyTempValuesAsReal(salesPracticeAttribution);
-            XDocument xdoc = XDocument.Parse(SalesPracticeAttributionXML);
-            XDocument latestXdoc = AddEmptyRow(1, 2, xdoc);
-            SalesPracticeAttributionXML = latestXdoc.ToString();
-            DatabindGridView(gvSalesAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
-            SalesPracticeAttributionXML = xdoc.ToString();
+            ImageButton imgCancel = sender as ImageButton;
+            GridViewRow row = imgCancel.NamingContainer as GridViewRow;
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attributionType = (AttributionCategory)(attributionNum);
+            Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
+            Label lblStartDate = gv.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
+            Label lblTitleName = gv.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
+            CopyTempValuesAsReal(attributionType);
+            XDocument xdoc;
+            if (attributionType == AttributionCategory.SalesPersonAttribution)
+            {
+                if (imgCancel.Attributes[IsNewEntryXname] == "True")
+                {
+                    xdoc = DeleteRow(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                }
+                else
+                {
+                    xdoc = OnEditClick(SalesPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                }
+                SalesPersonAttributionXML = xdoc.ToString();
+            }
+            else
+            {
+                if (imgCancel.Attributes[IsNewEntryXname] == "True")
+                {
+                    xdoc = DeleteRow(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                }
+                else
+                {
+                    xdoc = OnEditClick(DeliveryPersonAttributionXML, false, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                }
+                DeliveryPersonAttributionXML = xdoc.ToString();
+            }
+            DatabindGridView(gv, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
-        protected void imgDeliveryAttributionPersonDelete_Click(object sender, EventArgs e)
+        protected void imgPracticeCancel_Click(object sender, EventArgs e)
+        {
+            ImageButton imgCancel = sender as ImageButton;
+            GridViewRow row = imgCancel.NamingContainer as GridViewRow;
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attributionType = (AttributionCategory)(attributionNum);
+            Label lblPractice = gv.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
+            XDocument xdoc;
+            if (attributionType == AttributionCategory.DeliveryPracticeAttribution)
+            {
+                xdoc = OnEditClick(DeliveryPracticeAttributionXML, false, lblPractice.Text);
+                CopyTempValuesAsReal(attributionType);
+                if (imgCancel.Attributes[IsNewEntryXname] == "True")
+                {
+                    xdoc = DeleteRow(DeliveryPracticeAttributionXML, false, lblPractice.Text);
+                }
+                DeliveryPracticeAttributionXML = xdoc.ToString();
+            }
+            else
+            {
+                xdoc = OnEditClick(SalesPracticeAttributionXML, false, lblPractice.Text);
+                if (imgCancel.Attributes[IsNewEntryXname] == "True")
+                {
+                    xdoc = DeleteRow(SalesPracticeAttributionXML, false, lblPractice.Text);
+                }
+                SalesPracticeAttributionXML = xdoc.ToString();
+            }
+            DatabindGridView(gv, xdoc.Descendants(XName.Get(AttributionXname)).ToList());
+        }
+
+        protected void btnAddRecord_Click(object sender, EventArgs e)
+        {
+            Button btnAdd = sender as Button;
+            int attributionNum;
+            int.TryParse(btnAdd.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attribution = (AttributionCategory)(attributionNum);
+            CancelAllEditModeRows(attribution);
+            CopyTempValuesAsReal(attribution);
+            if (btnAdd.Attributes["Attribution"] == "1")
+            {
+                XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
+                XDocument latestXdoc = AddEmptyRow(2, 1, xdoc);
+                DeliveryPersonAttributionXML = latestXdoc.ToString();
+                DatabindGridView(gvDeliveryAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                DeliveryPersonAttributionXML = xdoc.ToString();
+            }
+            else if (btnAdd.Attributes["Attribution"] == "2")
+            {
+                XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
+                XDocument latestXdoc = AddEmptyRow(1, 1, xdoc);
+                SalesPersonAttributionXML = latestXdoc.ToString();
+                DatabindGridView(gvSalesAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                SalesPersonAttributionXML = xdoc.ToString();
+            }
+            else if (btnAdd.Attributes["Attribution"] == "3")
+            {
+                XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
+                XDocument latestXdoc = AddEmptyRow(2, 2, xdoc);
+                DeliveryPracticeAttributionXML = latestXdoc.ToString();
+                DatabindGridView(gvDeliveryAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                DeliveryPracticeAttributionXML = xdoc.ToString();
+            }
+            else
+            {
+                XDocument xdoc = XDocument.Parse(SalesPracticeAttributionXML);
+                XDocument latestXdoc = AddEmptyRow(1, 2, xdoc);
+                SalesPracticeAttributionXML = latestXdoc.ToString();
+                DatabindGridView(gvSalesAttributionPractice, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
+                SalesPracticeAttributionXML = xdoc.ToString();
+            }
+        }
+
+        protected void imgPersonDelete_Click(object sender, EventArgs e)
         {
             ImageButton imgDelete = sender as ImageButton;
             GridViewRow row = imgDelete.NamingContainer as GridViewRow;
-            Label lblpersonName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
-            Label lblTitleName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
-            StoreTempDataWhileDeleting(deliveryPersonAttribution);
-            XDocument latestXml = DeleteRow(DeliveryPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-            DeliveryPersonAttributionXML = latestXml.ToString();
-            DatabindGridView(gvDeliveryAttributionPerson, latestXml.Descendants(XName.Get(AttributionXname)).ToList());
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attributionType = (AttributionCategory)(attributionNum);
+            Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
+            Label lblStartDate = gv.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
+            Label lblTitleName = gv.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
+            StoreTempDataWhileDeleting(attributionType);
+            XDocument latestXml;
+            if (attributionType == AttributionCategory.DeliveryPersonAttribution)
+            {
+                latestXml = DeleteRow(DeliveryPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                DeliveryPersonAttributionXML = latestXml.ToString();
+            }
+            else
+            {
+                latestXml = DeleteRow(SalesPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
+                SalesPersonAttributionXML = latestXml.ToString();
+            }
+            DatabindGridView(gv, latestXml.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
-        protected void imgDeliveryAttributionPracticeDelete_Click(object sender, EventArgs e)
+        protected void imgPracticeDelete_Click(object sender, EventArgs e)
         {
             ImageButton imgDelete = sender as ImageButton;
             GridViewRow row = imgDelete.NamingContainer as GridViewRow;
-            Label lblPractice = gvDeliveryAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-            StoreTempDataWhileDeleting(deliveryPracticeAttribution);
-            XDocument latestXml = DeleteRow(DeliveryPracticeAttributionXML, true, lblPractice.Text);
-            DeliveryPracticeAttributionXML = latestXml.ToString();
-            DatabindGridView(gvDeliveryAttributionPractice, latestXml.Descendants(XName.Get(AttributionXname)).ToList());
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attributionType = (AttributionCategory)(attributionNum);
+            Label lblPractice = gv.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
+            StoreTempDataWhileDeleting(attributionType);
+            XDocument latestXml;
+            if (attributionType == AttributionCategory.SalesPracticeAttribution)
+            {
+                latestXml = DeleteRow(SalesPracticeAttributionXML, true, lblPractice.Text);
+                SalesPracticeAttributionXML = latestXml.ToString();
+            }
+            else
+            {
+                latestXml = DeleteRow(DeliveryPracticeAttributionXML, true, lblPractice.Text);
+                DeliveryPracticeAttributionXML = latestXml.ToString();
+            }
+            DatabindGridView(gv, latestXml.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
-        protected void imgSalesAttributionPersonDelete_Click(object sender, EventArgs e)
+        protected void imgAdditionalAllocationOfResource_Click(object sender, EventArgs e)
         {
-            ImageButton imgDelete = sender as ImageButton;
-            GridViewRow row = imgDelete.NamingContainer as GridViewRow;
-            Label lblpersonName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
-            Label lblTitleName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
-            StoreTempDataWhileDeleting(salesPersonAttribution);
-            XDocument latestXml = DeleteRow(SalesPersonAttributionXML, true, lblpersonName.Text, lblStartDate.Text, lblTitleName.Text);
-            SalesPersonAttributionXML = latestXml.ToString();
-            DatabindGridView(gvSalesAttributionPerson, latestXml.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgSalesAttributionPracticeDelete_Click(object sender, EventArgs e)
-        {
-            ImageButton imgDelete = sender as ImageButton;
-            GridViewRow row = imgDelete.NamingContainer as GridViewRow;
-            Label lblPractice = gvSalesAttributionPractice.Rows[row.DataItemIndex].FindControl("lblPractice") as Label;
-            StoreTempDataWhileDeleting(salesPracticeAttribution);
-            XDocument latestXml = DeleteRow(SalesPracticeAttributionXML, true, lblPractice.Text);
-            SalesPracticeAttributionXML = latestXml.ToString();
-            DatabindGridView(gvSalesAttributionPractice, latestXml.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgDeliveryAttributionAdditionalAllocationOfResource_Click(object sender, EventArgs e)
-        {
-            CancelAllEditModeRows(deliveryPersonAttribution);
-            CopyTempValuesAsReal(deliveryPersonAttribution);
             ImageButton imgAdd = sender as ImageButton;
             GridViewRow row = imgAdd.NamingContainer as GridViewRow;
-            Label lblpersonName = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvDeliveryAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
+            GridView gv = row.NamingContainer as GridView;
+            int attributionNum;
+            int.TryParse(gv.Attributes["Attribution"], out attributionNum);
+            AttributionCategory attributionType = (AttributionCategory)(attributionNum);
+            CancelAllEditModeRows(attributionType);
+            CopyTempValuesAsReal(attributionType);
+            Label lblpersonName = gv.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
+            Label lblStartDate = gv.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
 
-            XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
+            XDocument xdoc;
+            xdoc = attributionType == AttributionCategory.DeliveryPersonAttribution ? XDocument.Parse(DeliveryPersonAttributionXML) : XDocument.Parse(SalesPersonAttributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
 
             Attribution attribution = new Attribution();
@@ -820,50 +792,11 @@ namespace PraticeManagement.Controls.Projects
             }
 
             XDocument xdocLatest = AddEmptyRow(2, 1, xdoc, attribution);
-            DeliveryPersonAttributionXML = xdocLatest.ToString();
-            DatabindGridView(gvDeliveryAttributionPerson, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
-        }
-
-        protected void imgSalesAttributionAdditionalAllocationOfResource_Click(object sender, EventArgs e)
-        {
-            CancelAllEditModeRows(salesPersonAttribution);
-            CopyTempValuesAsReal(salesPersonAttribution);
-            ImageButton imgAdd = sender as ImageButton;
-            GridViewRow row = imgAdd.NamingContainer as GridViewRow;
-
-            Label lblpersonName = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblPersonName") as Label;
-            Label lblStartDate = gvSalesAttributionPerson.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
-
-            XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
-            List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-
-            Attribution attribution = new Attribution();
-            int personId;
-            int titleId;
-            for (int i = 0; i < xlist.Count; i++)
-            {
-                if (xlist[i].Attribute(XName.Get(TargetNameXname)).Value == lblpersonName.Text && Convert.ToDateTime(xlist[i].Attribute(XName.Get(StartDateXname)).Value).Date.ToShortDateString() == lblStartDate.Text)
-                {
-                    if (int.TryParse(xlist[i].Attribute(XName.Get(TargetIdXname)).Value, out personId)) ;
-                    if (int.TryParse(xlist[i].Attribute(XName.Get(TitleIdXname)).Value, out titleId)) ;
-                    attribution.TargetId = personId;
-                    attribution.TargetName = xlist[i].Attribute(XName.Get(TargetNameXname)).Value;
-                    attribution.StartDate = Convert.ToDateTime(HostingPage.Project.StartDate);
-                    attribution.EndDate = Convert.ToDateTime(HostingPage.Project.EndDate);
-                    attribution.Title = new Title()
-                    {
-                        TitleId = titleId,
-                        TitleName = xlist[i].Attribute(XName.Get(TitleXname)).Value
-                    };
-                    attribution.IsEditMode = true;
-                    attribution.IsNewEntry = true;
-                    break;
-                }
-            }
-
-            XDocument xdocLatest = AddEmptyRow(1, 1, xdoc, attribution);
-            SalesPersonAttributionXML = xdocLatest.ToString();
-            DatabindGridView(gvSalesAttributionPerson, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
+            if (attributionType == AttributionCategory.DeliveryPersonAttribution)
+                DeliveryPersonAttributionXML = xdocLatest.ToString();
+            else
+                SalesPersonAttributionXML = xdocLatest.ToString();
+            DatabindGridView(gv, xdocLatest.Descendants(XName.Get(AttributionXname)).ToList());
         }
 
         protected void btnCopyAlltoRight_Click(object sender, EventArgs e)
@@ -934,6 +867,7 @@ namespace PraticeManagement.Controls.Projects
 
         protected void custPersonDatesOverlapping_ServerValidate(object source, ServerValidateEventArgs args)
         {
+            args.IsValid = true;
             CustomValidator custPersonDatesOverlapping = source as CustomValidator;
             GridViewRow row = custPersonDatesOverlapping.NamingContainer as GridViewRow;
             GridView gridView = row.NamingContainer as GridView;
@@ -941,42 +875,29 @@ namespace PraticeManagement.Controls.Projects
             HiddenField hdnEditMode = row.FindControl("hdnEditMode") as HiddenField;
             DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
             DatePicker dpStartDate = row.FindControl("dpStartDate") as DatePicker;
-            Label lblPersonName = row.FindControl("lblPersonName") as Label;
-            Label lblTitleName = row.FindControl("lblTitleName") as Label;
-            Label lblStartDate = row.FindControl("lblStartDate") as Label;
             DropDownList ddlPerson = row.FindControl("ddlPerson") as DropDownList;
-
-            if (hdnEditMode.Value == "True")
+            DateTime startDate;
+            DateTime endDate;
+            int personId;
+            if (hdnEditMode.Value == true.ToString() && DateTime.TryParse(dpStartDate.TextValue, out startDate) &&
+                    DateTime.TryParse(dpEndDate.TextValue, out endDate) &&
+                    int.TryParse(ddlPerson.SelectedValue, out personId))
             {
-                DateTime startDate;
-                DateTime endDate;
-                int personId;
-                if (DateTime.TryParse(dpStartDate.TextValue, out startDate)) ;
-                if (DateTime.TryParse(dpEndDate.TextValue, out endDate)) ;
-                if (int.TryParse(ddlPerson.SelectedValue, out personId)) ;
                 Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(personId, startDate, endDate));
-                args.IsValid = true;
-                List<XElement> xlist;
-                if (attributionType.Value == "Delivery")
-                {
-                    XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
-                    xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-                }
-                else
-                {
-                    XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
-                    xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-                }
+                XDocument xdoc = attributionType.Value == "Delivery" ? XDocument.Parse(DeliveryPersonAttributionXML) : XDocument.Parse(SalesPersonAttributionXML);
+                List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
                 foreach (var item in xlist)
                 {
                     if (item.Attribute(XName.Get(IsEditModeXname)).Value == false.ToString())
                     {
-                        if (ddlPerson.SelectedValue == item.Attribute(XName.Get(TargetIdXname)).Value && item.Attribute(XName.Get(TitleIdXname)).Value == (title == null ? string.Empty : title.TitleId.ToString()))
+                        if (ddlPerson.SelectedValue == item.Attribute(XName.Get(TargetIdXname)).Value &&
+                            item.Attribute(XName.Get(TitleIdXname)).Value ==
+                            (title == null ? string.Empty : title.TitleId.ToString()))
                         {
                             DateTime itemStartDate = Convert.ToDateTime(item.Attribute(XName.Get(StartDateXname)).Value);
                             DateTime itemEndDate = Convert.ToDateTime(item.Attribute(XName.Get(EndDateXname)).Value);
                             args.IsValid = !(startDate <= itemEndDate && itemStartDate <= endDate);
-                            if (args.IsValid == false)
+                            if (!args.IsValid)
                                 break;
                         }
                     }
@@ -1249,7 +1170,7 @@ namespace PraticeManagement.Controls.Projects
 
             foreach (var attribution in attributionList)
             {
-                xml.Append(string.Format(AttributionXmlOpen, attribution.Id, attribution.TargetId, attribution.TargetName, attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(), attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage, attribution.Title == null ? string.Empty : attribution.Title.TitleId.ToString(), attribution.Title == null ? string.Empty : attribution.Title.HtmlEncodedTitleName, attribution.IsEditMode, attribution.IsNewEntry, attribution.IsCheckBoxChecked, attribution.TargetId, attribution.TargetName, !attribution.StartDate.HasValue ? string.Empty : attribution.StartDate.Value.ToShortDateString(), !attribution.EndDate.HasValue ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage));
+                xml.Append(string.Format(AttributionXmlOpen, attribution.Id, attribution.TargetId, attribution.TargetName, attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(), attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage, attribution.Title == null ? string.Empty : attribution.Title.TitleId.ToString(), attribution.Title == null ? string.Empty : attribution.Title.HtmlEncodedTitleName, attribution.IsEditMode, attribution.IsNewEntry, attribution.IsCheckBoxChecked, attribution.TargetId, attribution.TargetName, attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(), attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage));
                 xml.Append(AttributionXmlClose);
             }
 
@@ -1372,9 +1293,9 @@ namespace PraticeManagement.Controls.Projects
             return xdoc;
         }
 
-        public void CancelAllEditModeRows(string attriibutionCategory)
+        public void CancelAllEditModeRows(AttributionCategory attribution)
         {
-            if (attriibutionCategory == deliveryPersonAttribution)
+            if (attribution == AttributionCategory.DeliveryPersonAttribution)
             {
                 XDocument xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
                 List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
@@ -1395,7 +1316,7 @@ namespace PraticeManagement.Controls.Projects
                 }
                 DeliveryPersonAttributionXML = xdoc.ToString();
             }
-            else if (attriibutionCategory == deliveryPracticeAttribution)
+            else if (attribution == AttributionCategory.DeliveryPracticeAttribution)
             {
                 XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
                 List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
@@ -1416,7 +1337,7 @@ namespace PraticeManagement.Controls.Projects
                 }
                 DeliveryPracticeAttributionXML = xdoc.ToString();
             }
-            else if (attriibutionCategory == salesPersonAttribution)
+            else if (attribution == AttributionCategory.SalesPersonAttribution)
             {
                 XDocument xdoc = XDocument.Parse(SalesPersonAttributionXML);
                 List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
@@ -1460,12 +1381,12 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        public void StoreTempDataWhileDeleting(string attributionCategory)
+        public void StoreTempDataWhileDeleting(AttributionCategory attribution)
         {
             XDocument xdoc;
             List<XElement> xlist;
             GridView gv;
-            if (attributionCategory == deliveryPersonAttribution)
+            if (attribution == AttributionCategory.DeliveryPersonAttribution)
             {
                 gv = gvDeliveryAttributionPerson;
                 for (int j = 0; j < gv.Rows.Count; j++)
@@ -1494,7 +1415,7 @@ namespace PraticeManagement.Controls.Projects
                     }
                 }
             }
-            else if (attributionCategory == salesPersonAttribution)
+            else if (attribution == AttributionCategory.SalesPersonAttribution)
             {
                 gv = gvSalesAttributionPerson;
                 for (int j = 0; j < gv.Rows.Count; j++)
@@ -1523,7 +1444,7 @@ namespace PraticeManagement.Controls.Projects
                     }
                 }
             }
-            else if (attributionCategory == deliveryPracticeAttribution)
+            else if (attribution == AttributionCategory.DeliveryPracticeAttribution)
             {
                 gv = gvDeliveryAttributionPractice;
                 for (int j = 0; j < gv.Rows.Count; j++)
@@ -1579,9 +1500,9 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        public void CopyTempValuesAsReal(string attributionCategory)
+        public void CopyTempValuesAsReal(AttributionCategory attribution)
         {
-            XDocument xdoc = (attributionCategory == deliveryPersonAttribution) ? XDocument.Parse(DeliveryPersonAttributionXML) : (attributionCategory == deliveryPracticeAttribution) ? XDocument.Parse(DeliveryPracticeAttributionXML) : (attributionCategory == salesPersonAttribution) ? XDocument.Parse(SalesPersonAttributionXML) : XDocument.Parse(SalesPracticeAttributionXML);
+            XDocument xdoc = (attribution == AttributionCategory.DeliveryPersonAttribution) ? XDocument.Parse(DeliveryPersonAttributionXML) : (attribution == AttributionCategory.DeliveryPracticeAttribution) ? XDocument.Parse(DeliveryPracticeAttributionXML) : (attribution == AttributionCategory.SalesPersonAttribution) ? XDocument.Parse(SalesPersonAttributionXML) : XDocument.Parse(SalesPracticeAttributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
             foreach (var item in xlist)
             {
@@ -1591,11 +1512,11 @@ namespace PraticeManagement.Controls.Projects
                 item.Attribute(XName.Get(TempEndDateXname)).Value = item.Attribute(XName.Get(EndDateXname)).Value;
                 item.Attribute(XName.Get(TempPercentageXname)).Value = item.Attribute(XName.Get(PercentageXname)).Value;
             }
-            if (attributionCategory == deliveryPersonAttribution)
+            if (attribution == AttributionCategory.DeliveryPersonAttribution)
                 DeliveryPersonAttributionXML = xdoc.ToString();
-            else if (attributionCategory == deliveryPracticeAttribution)
+            else if (attribution == AttributionCategory.DeliveryPracticeAttribution)
                 DeliveryPracticeAttributionXML = xdoc.ToString();
-            else if (attributionCategory == salesPersonAttribution)
+            else if (attribution == AttributionCategory.SalesPersonAttribution)
                 SalesPersonAttributionXML = xdoc.ToString();
             else
                 SalesPracticeAttributionXML = xdoc.ToString();
@@ -1644,10 +1565,10 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        public void Validate(GridViewRow row, string attributionCategory)
+        public void Validate(GridViewRow row, AttributionCategory attribution)
         {
             XElement item = (XElement)row.DataItem;
-            if (attributionCategory == deliveryPersonAttribution || attributionCategory == salesPersonAttribution)
+            if (attribution == AttributionCategory.DeliveryPersonAttribution || attribution == AttributionCategory.SalesPersonAttribution)
             {
                 RequiredFieldValidator reqPersonName = row.FindControl("reqPersonName") as RequiredFieldValidator;
                 RequiredFieldValidator reqPersonStart = row.FindControl("reqPersonStart") as RequiredFieldValidator;
