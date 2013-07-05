@@ -29,7 +29,7 @@ namespace DataTransferObjects.CompositeObjects
             }
             catch (Exception)
             {
-                _groupedTimeEtnries.Add(entity, new List<TimeEntryRecord> {timeEntry});
+                _groupedTimeEtnries.Add(entity, new List<TimeEntryRecord> { timeEntry });
             }
         }
 
@@ -45,6 +45,6 @@ namespace DataTransferObjects.CompositeObjects
             return GetEnumerator();
         }
 
-        #endregion
+        #endregion Implementation of IEnumerable
     }
 }
