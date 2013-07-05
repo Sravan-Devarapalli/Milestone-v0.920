@@ -2,32 +2,31 @@
 
 namespace DataTransferObjects
 {
- 	/// <summary>
-	/// Determines the list of revenue types.
-	/// </summary>
-	[DataContract]
-	public enum RevenueType
-	{
+    /// <summary>
+    /// Determines the list of revenue types.
+    /// </summary>
+    [DataContract]
+    public enum RevenueType
+    {
         [EnumMember]
         Unknown = 0,
 
-		/// <summary>
+        /// <summary>
         /// New
-		/// </summary>
-		[EnumMember]
-		New = 1,
+        /// </summary>
+        [EnumMember]
+        New = 1,
 
-		/// <summary>
-		/// Old
-		/// </summary>
-		[EnumMember]
-		Old = 2,
+        /// <summary>
+        /// Old
+        /// </summary>
+        [EnumMember]
+        Old = 2,
 
-		/// <summary>
+        /// <summary>
         /// Undefined
-		/// </summary>
-		[EnumMember]
+        /// </summary>
+        [EnumMember]
         Undefined = 3
-	}
+    }
 }
-
