@@ -33,51 +33,35 @@ namespace PraticeManagement.Utils
             {
                 return GetIndicatorClassByStatus("ActiveWithProjectAttached");
             }
-            else
-            {
-                return GetIndicatorClassByStatus(opty.Status.Name);
-            }
-        }
-        public static string GetToolTip(Opportunity opty)
-        {
-            if (opty.Status.Name == "Active")
-            {
-                if (opty.Project != null)
-                    return string.Format("Linked to {0}", opty.Project.ProjectNumber);
-                else
-                    return "Active not Linked to Project";
-            }
-            else
-            {
-                return opty.Status.Name;
-            }
+            return GetIndicatorClassByStatus(opty.Status.Name);
         }
 
-        
+        public static string GetToolTip(Opportunity opty)
+        {
+            return opty.Status.Name == "Active"
+                       ? (opty.Project != null
+                              ? string.Format("Linked to {0}", opty.Project.ProjectNumber)
+                              : "Active not Linked to Project")
+                       : opty.Status.Name;
+        }
 
         #region Summary
 
         #region Constants
 
         private const string PercentageSummaryFormat = "{0} = {1} ({2}%)";
-        private const string ExportPercentageSummaryFormat = "{0} = {1} {2}";
         private const string PercentageFormat = "&nbsp;({0}%)";
         private const string NameFormat = "{0} =";
         private const string ExcelSummaryValuesFormat = "&nbsp; {0}";
         private const string ExcelValueFormat = "&nbsp; {0} = {1}";
         private const string CurrencyDisplayFormat = "$###,###,###,###,###,##0";
         private const string ConstantSpace = "&nbsp;&nbsp;&nbsp;&nbsp;";
-        private const string ViewStateOpportunityList = "ViewStateOppList";
-        private const string ViewStatePriorityTrendList = "ViewStatePriorityTrendList";
-        private const string ViewStateStatusChangesList = "ViewStateStatusChangesList";
         private const string UpKey = "Up";
         private const string DownKey = "Down";
         private const string ActiveKey = "Active";
         private const string InactiveKey = "Inactive";
         private const string LostKey = "Lost";
         private const string WonKey = "Won";
-        private const string ExcelDateFormat = "mso-number-format";
-        private const string ExcelDateFormatStyle = "mm-dd-yyyy";
         private const string BoldFormat = "&nbsp;<span class=\"fontBold\"> {0} </span>";
 
         private const int days = 7;
@@ -94,7 +78,7 @@ namespace PraticeManagement.Utils
 
         private static bool? IsExporting { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Methods
 
@@ -146,7 +130,7 @@ namespace PraticeManagement.Utils
             tableRow.Controls.Add(col3);
             tableRow.Controls.Add(col4);
             tableRow.Controls.Add(col5);
-            summaryTable.Controls.Add(tableRow);         
+            summaryTable.Controls.Add(tableRow);
             summaryTable.CssClass = "WholeWidthImp";
 
             //return summaryTable;
@@ -187,7 +171,7 @@ namespace PraticeManagement.Utils
 
         private static Table ExportSummaryColumn4(Opportunity[] opportunityList, decimal totalEstimateRevenue)
         {
-            var data1 = AddTotalEstimatedRevenueCell(opportunityList, totalEstimateRevenue);
+            var data1 = AddTotalEstimatedRevenueCell(totalEstimateRevenue);
             var data2 = AddEstimateRevenueByPriorityCell(opportunityList, totalEstimateRevenue);
 
             return ExportSummaryColumnWithMultipleRows(data1, data2);
@@ -196,7 +180,7 @@ namespace PraticeManagement.Utils
         private static Table ExportSummaryColumn5(Opportunity[] opportunityList)
         {
             var data1 = AddTotalEstimateRevenueByPractice(opportunityList);
-            var table = ExportSummaryColumnWithMultipleRows(data1);          
+            var table = ExportSummaryColumnWithMultipleRows(data1);
             table.CssClass = "WholeWidthImp";
             return table;
         }
@@ -222,7 +206,7 @@ namespace PraticeManagement.Utils
             var headerRow = new TableRow();
             var td = new TableCell();
             td.Text = headerText;
-            td.CssClass = "fontBold textLeft";           
+            td.CssClass = "fontBold textLeft";
             if (needToOccupyTwoCells)
             {
                 td.ColumnSpan = 2;
@@ -237,7 +221,7 @@ namespace PraticeManagement.Utils
         {
             var dataRow = new TableRow();
             var dataCell = new TableCell();
-            //dataCell.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;            
+            //dataCell.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
             dataCell.CssClass = "textRightImp fontNormal";
 
             if (key2 != null)
@@ -361,7 +345,7 @@ namespace PraticeManagement.Utils
             {
                 if (IsExporting.HasValue && IsExporting.Value)
                 {
-                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat)), false);
+                    AddDataRowWithTwoCells(item.clientName, item.OpportunityCount + item.clientSummary, topClientsTable, string.Format(BoldFormat, item.clientEstimatedRevenue.Value.ToString(CurrencyDisplayFormat)));
                 }
                 else
                 {
@@ -423,7 +407,6 @@ namespace PraticeManagement.Utils
             string headerText = string.Format("Sales Stage Trending (last {0} days)", days);
             AddHeaderRow(headerText, priorityTrendingTable, !(IsExporting.HasValue && IsExporting.Value));
 
-
             TableRow dataRow = new TableRow();
             TableCell dataCell = new TableCell();
             dataCell.CssClass = "TextAlignJustifyImp";
@@ -479,7 +462,7 @@ namespace PraticeManagement.Utils
             var headerRow = new TableRow();
             TableCell headerCell = new TableCell();
             headerCell.Text = "Opportunity Aging";
-            headerCell.CssClass = "fontBold textLeft PaddingLeft0Px"; 
+            headerCell.CssClass = "fontBold textLeft PaddingLeft0Px";
 
             TableRow age1 = new TableRow();
             TableRow age2 = new TableRow();
@@ -488,7 +471,7 @@ namespace PraticeManagement.Utils
             TableCell tblCell1 = new TableCell();
             tblCell1.Text = "00-30 Days =";
             tblCell1.CssClass = "fontNormal textRightImp";
-            
+
             TableCell tblCell2 = new TableCell();
             tblCell2.Text = "31-60 Days =";
             tblCell2.CssClass = "fontNormal textRightImp";
@@ -533,7 +516,6 @@ namespace PraticeManagement.Utils
 
         private static void FillOpportunityPriorityAgeCell(Opportunity[] opportunityList, int? startAge, int? endAge, string[] opportunityPriorities, TableRow tr)
         {
-
             var list = opportunityList.Where(opp => (startAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days >= startAge) && (endAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days <= endAge)
                                                                                 || (!startAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days <= endAge)
                                                                                 || (!endAge.HasValue && DateTime.Now.Subtract(opp.CreateDate).Days >= startAge)
@@ -554,18 +536,10 @@ namespace PraticeManagement.Utils
 
                 var ite = ageLessThan31List.Where(a => a.priority.ToString() == item);
 
-                if (ite.Count() == 0)
-                {
-                    td.Text = ite.Count().ToString("#00");
-                }
-                else
-                {
-                    td.Text = ite.Select(a => a.priorityCount).First().ToString("#00");
-                }
+                td.Text = !ite.Any() ? ite.Count().ToString("#00") : ite.Select(a => a.priorityCount).First().ToString("#00");
                 td.CssClass = "TextAlignCenterImp fontNormal";
                 tr.Controls.Add(td);
             }
-
         }
 
         private static Table AddOpportunityPriorityAgingCellForExport(Opportunity[] opportunityList)
@@ -577,7 +551,7 @@ namespace PraticeManagement.Utils
             headerCell.CssClass = "fontBold textLeft";
 
             TableCell headerLabel = new TableCell();
-            headerLabel.CssClass = "fontBold textLeft";            
+            headerLabel.CssClass = "fontBold textLeft";
 
             TableRow age1 = new TableRow();
             TableRow age2 = new TableRow();
@@ -651,7 +625,7 @@ namespace PraticeManagement.Utils
             {
                 var ite = ageLessThan31List.Where(a => a.priority.ToString() == item);
 
-                if (ite.Count() == 0)
+                if (!ite.Any())
                 {
                     cellText = cellText + ConstantSpace + ite.Count().ToString("#00");
                 }
@@ -663,7 +637,7 @@ namespace PraticeManagement.Utils
             return cellText;
         }
 
-        private static Table AddTotalEstimatedRevenueCell(Opportunity[] opportunityList, decimal totalEstimateRevenue)
+        private static Table AddTotalEstimatedRevenueCell(decimal totalEstimateRevenue)
         {
             Table table = new Table();
             AddHeaderRow("Total Estimated Revenue", table);
@@ -678,7 +652,7 @@ namespace PraticeManagement.Utils
         private static void AddDataRowWithTwoCells(string value, Table table)
         {
             TableRow dataRow = new TableRow();
-            TableCell cell = new TableCell();           
+            TableCell cell = new TableCell();
             cell.Text = string.Format(ExcelSummaryValuesFormat, value);
             cell.ColumnSpan = 2;
             cell.CssClass = "textLeft fontNormal";
@@ -700,7 +674,7 @@ namespace PraticeManagement.Utils
                 dataRow.Controls.Add(cell1);
             }
 
-            TableCell cell = new TableCell();           
+            TableCell cell = new TableCell();
             cell.Text = value2;
             cell.CssClass = "textRightImp vMiddle fontNormal";
             dataRow.Controls.Add(cell);
@@ -708,7 +682,7 @@ namespace PraticeManagement.Utils
             if (!string.IsNullOrEmpty(value3))
             {
                 TableCell cell2 = new TableCell();
-                //cell2.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;               
+                //cell2.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
                 cell2.Text = value3;
                 cell2.CssClass = "vMiddle fontNormal textRightImp";
 
@@ -718,7 +692,7 @@ namespace PraticeManagement.Utils
             if (!string.IsNullOrEmpty(value4))
             {
                 TableCell cell3 = new TableCell();
-                //cell3.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;               
+                //cell3.HorizontalAlign = (IsExporting.HasValue && IsExporting.Value) ? HorizontalAlign.Left : HorizontalAlign.Right;
                 cell3.Text = value4;
                 cell3.CssClass = "vMiddle fontNormal textRightImp";
 
@@ -806,11 +780,10 @@ namespace PraticeManagement.Utils
             table.Controls.Add(dataRow);
         }
 
-        #endregion
+        #endregion Export
 
-        #endregion
+        #endregion Methods
 
-        #endregion
+        #endregion Summary
     }
 }
-
