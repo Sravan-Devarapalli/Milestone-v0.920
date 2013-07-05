@@ -407,7 +407,6 @@
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
     <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
     <Content Include="Controls\Reports\ProjectDetailTabByResource.ascx" />
-    <Content Include="Controls\Reports\ProjectSummaryByMatrix.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryByResource.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryTabByResource.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
@@ -1658,13 +1657,6 @@
     </Compile>
     <Compile Include="Controls\Reports\ProjectDetailTabByResource.ascx.designer.cs">
       <DependentUpon>ProjectDetailTabByResource.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Reports\ProjectSummaryByMatrix.ascx.cs">
-      <DependentUpon>ProjectSummaryByMatrix.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Reports\ProjectSummaryByMatrix.ascx.designer.cs">
-      <DependentUpon>ProjectSummaryByMatrix.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ProjectSummaryByResource.ascx.cs">
       <DependentUpon>ProjectSummaryByResource.ascx</DependentUpon>
