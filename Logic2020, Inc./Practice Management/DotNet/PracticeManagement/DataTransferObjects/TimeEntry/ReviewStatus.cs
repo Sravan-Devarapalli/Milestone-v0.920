@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using System.ComponentModel;
 
 namespace DataTransferObjects.TimeEntry
 {
@@ -22,4 +21,3 @@ namespace DataTransferObjects.TimeEntry
         Declined = 3
     }
 }
-
