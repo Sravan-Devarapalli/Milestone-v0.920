@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects.Reports.HumanCapital
@@ -27,12 +25,10 @@ namespace DataTransferObjects.Reports.HumanCapital
         [DataMember]
         public int NewHiresCountInTheRange { get; set; }
 
-
         public int TerminationsContractorsCountInTheRange
         {
             get
             {
-
                 return Terminations1099HourlyCountInTheRange + Terminations1099PORCountInTheRange;
             }
         }
@@ -83,7 +79,6 @@ namespace DataTransferObjects.Reports.HumanCapital
                 return (double)((decimal)(numerator) / (decimal)denominator);
             }
             return 0d;
-
         }
 
         public int TerminationsCountForSelectedPaytypes
@@ -104,12 +99,15 @@ namespace DataTransferObjects.Reports.HumanCapital
                             case (int)TimescaleType.Hourly:
                                 count += TerminationsW2HourlyCountInTheRange;
                                 break;
+
                             case (int)TimescaleType.Salary:
                                 count += TerminationsW2SalaryCountInTheRange;
                                 break;
+
                             case (int)TimescaleType._1099Ctc:
                                 count += Terminations1099HourlyCountInTheRange;
                                 break;
+
                             case (int)TimescaleType.PercRevenue:
                                 count += Terminations1099PORCountInTheRange;
                                 break;
@@ -137,4 +135,3 @@ namespace DataTransferObjects.Reports.HumanCapital
         }
     }
 }
-
