@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using System.Web;
 
@@ -13,6 +10,7 @@ namespace DataTransferObjects.Reports.ConsultingDemand
     {
         [DataMember]
         public string Skill { get; set; }
+
         public string HtmlEncodedSkill
         {
             get
@@ -20,12 +18,16 @@ namespace DataTransferObjects.Reports.ConsultingDemand
                 return HttpUtility.HtmlEncode(Skill);
             }
         }
+
         [DataMember]
         public string OpportunityNumber { get; set; }
+
         [DataMember]
         public string ProjectNumber { get; set; }
+
         [DataMember]
         public string ProjectDescription { get; set; }
+
         public string HtmlEncodedProjectDescription
         {
             get
@@ -33,12 +35,16 @@ namespace DataTransferObjects.Reports.ConsultingDemand
                 return HttpUtility.HtmlEncode(ProjectDescription);
             }
         }
+
         [DataMember]
         public int? OpportunityId { get; set; }
+
         [DataMember]
         public int? ProjectId { get; set; }
+
         [DataMember]
         public string ProjectName { get; set; }
+
         public string HtmlEncodedProjectName
         {
             get
@@ -46,12 +52,16 @@ namespace DataTransferObjects.Reports.ConsultingDemand
                 return HttpUtility.HtmlEncode(ProjectName);
             }
         }
+
         [DataMember]
         public string SalesStage { get; set; }
+
         [DataMember]
         public int AccountId { get; set; }
+
         [DataMember]
         public string AccountName { get; set; }
+
         public string HtmlEncodedAccountName
         {
             get
@@ -59,10 +69,11 @@ namespace DataTransferObjects.Reports.ConsultingDemand
                 return HttpUtility.HtmlEncode(AccountName);
             }
         }
+
         [DataMember]
         public DateTime ResourceStartDate { get; set; }
+
         [DataMember]
         public int Count { get; set; }
     }
 }
-
