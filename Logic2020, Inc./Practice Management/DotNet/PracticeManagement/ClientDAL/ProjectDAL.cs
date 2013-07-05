@@ -3237,18 +3237,18 @@ namespace DataAccess
                             TargetId = targetId,
                             TargetName = targetName
                         };
-                        if (titleId != -1)
+                    if (titleId != -1)
+                    {
+                        attribution.Title = new Title()
                         {
-                            attribution.Title = new Title()
-                            {
-                                TitleId = titleId,
-                                TitleName = reader.GetString(titleIndex)
-                            };
-                        }
-                        else
-                        {
-                            attribution.Title = null;
-                        }
+                            TitleId = titleId,
+                            TitleName = reader.GetString(titleIndex)
+                        };
+                    }
+                    else
+                    {
+                        attribution.Title = null;
+                    }
                     result.Add(attribution);
                 }
             }
@@ -3274,4 +3274,3 @@ namespace DataAccess
         }
     }
 }
-
