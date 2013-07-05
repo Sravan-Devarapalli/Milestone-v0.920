@@ -12,10 +12,10 @@ namespace PraticeManagement.Utils
     {
         #region Constants
 
-        private static Color DEFAULT_COLOR = Color.Black;
-        private static string OpportuityDemandLegendFormat = "Opportunity with \"{0}\"  Sales Stage";
+        private static readonly Color DEFAULT_COLOR = Color.Black;
+        private const string OpportuityDemandLegendFormat = "Opportunity with \"{0}\"  Sales Stage";
 
-        #endregion
+        #endregion Constants
 
         /// <summary>
         /// Returns color based on utilization value
@@ -47,7 +47,6 @@ namespace PraticeManagement.Utils
             //  Return default color if nothing was foung in config
             return DEFAULT_COLOR;
         }
-
 
         /// <summary>
         /// Returns color based on capacity value
@@ -107,7 +106,7 @@ namespace PraticeManagement.Utils
             ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
             //  Add vacation item
-            legendItems.Add(coloring.VacationColor, coloring.VacationTitle); 
+            legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
         }
 
         public static Color GetColorByConsultingDemand(DataTransferObjects.ConsultantDemandItem item)
@@ -122,7 +121,7 @@ namespace PraticeManagement.Utils
             }
             else if (item.ObjectType == 1 && item.ObjectStatusId == 1) //Opportunity with A priority.
             {
-                return Color.FromArgb(82, 178, 0); // Green. 
+                return Color.FromArgb(82, 178, 0); // Green.
             }
             else if (item.ObjectType == 1 && item.ObjectStatusId == 2) //Opportunity with B priority.
             {
@@ -145,9 +144,9 @@ namespace PraticeManagement.Utils
             legendItems.Add(Color.FromArgb(255, 255, 0), "Project with Projected Status");//Yellow
 
             var salesStages = SettingsHelper.DemandOpportunitySalesStages;
-            if (salesStages != null &&  salesStages.ContainsKey(Constants.OpportunityPriorityIds.PriorityIdOfA))
+            if (salesStages != null && salesStages.ContainsKey(Constants.OpportunityPriorityIds.PriorityIdOfA))
             {
-                legendItems.Add(Color.FromArgb(82, 178, 0), string.Format(OpportuityDemandLegendFormat,  salesStages[Constants.OpportunityPriorityIds.PriorityIdOfA]));//Green
+                legendItems.Add(Color.FromArgb(82, 178, 0), string.Format(OpportuityDemandLegendFormat, salesStages[Constants.OpportunityPriorityIds.PriorityIdOfA]));//Green
             }
             if (salesStages != null && salesStages.ContainsKey(Constants.OpportunityPriorityIds.PriorityIdOfB))
             {
@@ -189,7 +188,7 @@ namespace PraticeManagement.Utils
                 //  Split colors into R, G, B
                 string[] rgb =
                     strColor.Split(
-                        new string[] { separator },
+                        new[] { separator },
                         StringSplitOptions.RemoveEmptyEntries);
 
                 // Init color
@@ -205,4 +204,3 @@ namespace PraticeManagement.Utils
         }
     }
 }
-
