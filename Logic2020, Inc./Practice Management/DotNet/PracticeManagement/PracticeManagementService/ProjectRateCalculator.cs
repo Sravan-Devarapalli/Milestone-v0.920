@@ -444,4 +444,3 @@ namespace PracticeManagementService
         #endregion Methods
     }
 }
-
