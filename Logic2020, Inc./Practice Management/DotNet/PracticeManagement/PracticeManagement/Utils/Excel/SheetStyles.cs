@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using System.Collections;
 
 namespace PraticeManagement.Utils.Excel
 {
     public class SheetStyles
     {
         public IWorkbook parentWorkbook = null;
+
         //index 0 header style index 1 data style
         public RowStyles[] rowStyles;
+
         public bool IsAutoResize = true;
         public bool IsAutoFilter = false;
         public bool IsFreezePane = false;
@@ -33,57 +35,54 @@ namespace PraticeManagement.Utils.Excel
         {
             //IDataValidationHelper dh =  sheet.GetDataValidationHelper();
             // sheet.SheetConditionalFormatting
-            if (rowStyles != null && sheet != null && parentWorkbook != null)
+            if (rowStyles == null || sheet == null || parentWorkbook == null) return;
+            int j = 0;
+            int rowno = 1;
+            IEnumerator rowEnumerator = sheet.GetRowEnumerator();
+            while (rowEnumerator.MoveNext())
             {
-                int j = 0;
-                int rowno = 1;
-                IEnumerator rowEnumerator = sheet.GetRowEnumerator();
-                while (rowEnumerator.MoveNext())
+                if (TopRowNo <= rowno)
                 {
-                    if (TopRowNo <= rowno)
+                    IRow row = (IRow)rowEnumerator.Current;
+                    rowStyles[j].parentWorkbook = parentWorkbook;
+                    rowStyles[j].ApplyRowStyles(row, AllCellStyles, AllDataFormats);
+                    if (j < rowStyles.Length - 1)
                     {
-                        IRow row = (IRow)rowEnumerator.Current;
-                        rowStyles[j].parentWorkbook = parentWorkbook;
-                        rowStyles[j].ApplyRowStyles(row, AllCellStyles, AllDataFormats);
-                        if (j < rowStyles.Length - 1)
-                        {
-                            j++;
-                        }
-                    }
-                    rowno++;
-                }
-                if (MergeRegion.Count > 0)
-                {
-                    foreach (int[] regionCoordinates in MergeRegion)
-                    {
-                        CellRangeAddress region = new CellRangeAddress(regionCoordinates[0], regionCoordinates[1], regionCoordinates[2], regionCoordinates[3]);
-                        sheet.AddMergedRegion(region);
+                        j++;
                     }
                 }
+                rowno++;
+            }
+            if (MergeRegion.Count > 0)
+            {
+                foreach (int[] regionCoordinates in MergeRegion)
+                {
+                    CellRangeAddress region = new CellRangeAddress(regionCoordinates[0], regionCoordinates[1], regionCoordinates[2], regionCoordinates[3]);
+                    sheet.AddMergedRegion(region);
+                }
+            }
 
-                if (IsAutoResize)
+            if (IsAutoResize)
+            {
+                for (int i = 0; i < sheet.GetRow(TopRowNo).Cells.Count; i++)
                 {
-                    for (int i = 0; i < sheet.GetRow(TopRowNo).Cells.Count; i++)
-                    {
-                        sheet.AutoSizeColumn(i, true);
-                    }
+                    sheet.AutoSizeColumn(i, true);
                 }
-                for (int index = 0; index < ColoumnWidths.Count; index++)
-                {
-                    if (ColoumnWidths[index] > 1)
-                        sheet.SetColumnWidth(index, ColoumnWidths[index] * 256);
-                }
+            }
+            for (int index = 0; index < ColoumnWidths.Count; index++)
+            {
+                if (ColoumnWidths[index] > 1)
+                    sheet.SetColumnWidth(index, ColoumnWidths[index] * 256);
+            }
 
-                if (IsAutoFilter)
-                {
-                    //need to implement this SetAutoFilter
-                }
-                if (IsFreezePane)
-                {
-                    sheet.CreateFreezePane(FreezePanColSplit, FreezePanRowSplit);
-                }
+            if (IsAutoFilter)
+            {
+                //need to implement this SetAutoFilter
+            }
+            if (IsFreezePane)
+            {
+                sheet.CreateFreezePane(FreezePanColSplit, FreezePanRowSplit);
             }
         }
     }
 }
-
