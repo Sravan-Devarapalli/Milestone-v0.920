@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using iTextSharp.text;
-using System.IO;
-using iTextSharp.text.pdf;
-using iTextSharp.text.html.simpleparser;
-using System.Collections;
-using iTextSharp.text.html;
 using System.Text.RegularExpressions;
+using iTextSharp.text;
+using iTextSharp.text.html;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
 using PraticeManagement.Configuration;
-
 
 namespace PraticeManagement.Objects
 {
@@ -21,7 +20,6 @@ namespace PraticeManagement.Objects
     /// </summary>
     public class HtmlToPdfBuilder
     {
-
         #region Constants
 
         private const string STYLE_DEFAULT_TYPE = "style";
@@ -33,7 +31,7 @@ namespace PraticeManagement.Objects
         //amazing regular expression magic
         private const string REGEX_GET_STYLES = @"(?<selector>[^\{\s]+\w+(\s\[^\{\s]+)?)\s?\{(?<style>[^\}]*)\}";
 
-        #endregion
+        #endregion Constants
 
         #region Constructors
 
@@ -47,7 +45,7 @@ namespace PraticeManagement.Objects
             this._Styles = new StyleSheet();
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Delegates
 
@@ -61,7 +59,7 @@ namespace PraticeManagement.Objects
         /// </summary>
         public event RenderEvent AfterRender = (writer, document) => { };
 
-        #endregion
+        #endregion Delegates
 
         #region Properties
 
@@ -92,14 +90,14 @@ namespace PraticeManagement.Objects
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Members
 
-        private List<HtmlPdfPage> _Pages;
-        private StyleSheet _Styles;
+        private readonly List<HtmlPdfPage> _Pages;
+        private readonly StyleSheet _Styles;
 
-        #endregion
+        #endregion Members
 
         #region Working With The Document
 
@@ -142,7 +140,6 @@ namespace PraticeManagement.Objects
         /// </summary>
         public void ImportStylesheet(string path)
         {
-
             //load the file
             string content = File.ReadAllText(path);
 
@@ -153,11 +150,9 @@ namespace PraticeManagement.Objects
                 string style = match.Groups[HtmlToPdfBuilder.REGEX_GROUP_STYLE].Value;
                 this.AddTagStyle(selector, style);
             }
-
         }
 
-
-        #endregion
+        #endregion Working With The Document
 
         #region Document Navigation
 
@@ -183,8 +178,7 @@ namespace PraticeManagement.Objects
                 page);
         }
 
-
-        #endregion
+        #endregion Document Navigation
 
         #region Rendering The PDF Document Using  ITextSharp
 
@@ -224,7 +218,6 @@ namespace PraticeManagement.Objects
             }
 
             return _Pdftable;
-
         }
 
         /// <summary>
@@ -232,7 +225,6 @@ namespace PraticeManagement.Objects
         /// </summary>
         public byte[] RenderPdf()
         {
-
             //Document is inbuilt class, available in iTextSharp
             MemoryStream file = new MemoryStream();
             Document document = new Document(this.PageSize);
@@ -240,10 +232,7 @@ namespace PraticeManagement.Objects
             PdfWriter writer = PdfWriter.GetInstance(document, file);
 
             //allow modifications of the document
-            if (this.BeforeRender is RenderEvent)
-            {
-                this.BeforeRender(writer, document);
-            }
+            BeforeRender(writer, document);
 
             document.Open();
 
@@ -274,26 +263,20 @@ namespace PraticeManagement.Objects
                 reader.Dispose();
                 output.Dispose();
                 generate.Dispose();
-
             }
 
             //after rendering
-            if (this.AfterRender is RenderEvent)
-            {
-                this.AfterRender(writer, document);
-            }
+            AfterRender(writer, document);
 
             //return the rendered PDF
             document.Close();
             return file.ToArray();
-
         }
 
-        #endregion
-
+        #endregion Rendering The PDF Document Using  ITextSharp
     }
 
-    #endregion
+    #endregion HtmlToPdfBuilder Class
 
     #region PdfpTable Styles
 
@@ -302,23 +285,28 @@ namespace PraticeManagement.Objects
     {
         public float[] widths;
         public int tableWidth = 100;
+
         //index 0 header style index 1 data style
         public TrStyles[] trStyles;
+
         public string AlternateBackgroundColor = "white";
         public int[] BackgroundColorRGB = { 0, 0, 0 };
         public bool IsColoumBorders = true;
+
         public TableStyles()
         {
-            float t = 1.0f;
+            const float t = 1.0f;
             this.widths = new float[1];
             this.widths[0] = t;
         }
+
         public TableStyles(float[] widths, TrStyles[] trStyles, int tableWidth)
         {
             this.trStyles = trStyles;
             this.widths = widths;
             this.tableWidth = tableWidth;
         }
+
         public TableStyles(float[] widths, TrStyles[] trStyles, int tableWidth, string alternateBackgroundColor)
         {
             this.trStyles = trStyles;
@@ -326,6 +314,7 @@ namespace PraticeManagement.Objects
             this.tableWidth = tableWidth;
             this.AlternateBackgroundColor = alternateBackgroundColor;
         }
+
         public TableStyles(float[] widths, TrStyles[] trStyles, int tableWidth, string alternateBackgroundColor, int[] backgroundColorRGB)
         {
             this.trStyles = trStyles;
@@ -334,13 +323,14 @@ namespace PraticeManagement.Objects
             this.AlternateBackgroundColor = alternateBackgroundColor;
             this.BackgroundColorRGB = backgroundColorRGB;
         }
+
         public PdfPTable ApplyTableStyles(PdfPTable table)
         {
             table.HorizontalAlignment = Element.ALIGN_MIDDLE;
             table.SkipLastFooter = true;
             table.WidthPercentage = tableWidth;
 
-            if (trStyles != null && table != null)
+            if (trStyles != null)
             {
                 int i = 0;
                 int rowno = 0;
@@ -375,10 +365,11 @@ namespace PraticeManagement.Objects
             }
             return table;
         }
-        public PdfPTable ApplyFooterStyle(PdfPTable table, TrStyles trStyles)
+
+        public PdfPTable ApplyFooterStyle(PdfPTable table, TrStyles trStylesLocal)
         {
             PdfPRow lastRow = table.GetRow(table.Rows.Count - 1);
-            trStyles.ApplyRowStyles(lastRow);
+            trStylesLocal.ApplyRowStyles(lastRow);
             return table;
         }
     }
@@ -403,6 +394,7 @@ namespace PraticeManagement.Objects
             this.tdStyles = tdStyles;
             this.BackgroundColor = backGroundColor;
         }
+
         public TrStyles(TdStyles[] tdStyles, string backGroundColor, int[] backgroundColorRGB)
         {
             this.tdStyles = tdStyles;
@@ -428,44 +420,44 @@ namespace PraticeManagement.Objects
                     {
                         if (IsFirstRow)
                         {
-                            tdStyles[i].BorderWidths = new float[] { 1f, 0f, 0.5f, 0f }; //top - right- bottom -left
+                            tdStyles[i].BorderWidths = new[] { 1f, 0f, 0.5f, 0f }; //top - right- bottom -left
                         }
                         else if (IsLastRow)
                         {
-                            tdStyles[i].BorderWidths = new float[] { 0.5f, 0f, 1f, 0f }; //top - right- bottom -left
+                            tdStyles[i].BorderWidths = new[] { 0.5f, 0f, 1f, 0f }; //top - right- bottom -left
                         }
                         else
                         {
-                            tdStyles[i].BorderWidths = new float[] { 0.5f, 0f, 0.5f, 0f }; //top - right- bottom -left
+                            tdStyles[i].BorderWidths = new[] { 0.5f, 0f, 0.5f, 0f }; //top - right- bottom -left
                         }
-                        if (coloumCount == 1) //last coloum 
+                        if (coloumCount == 1) //last coloum
                         {
                             if (IsFirstRow)
                             {
-                                tdStyles[i].BorderWidths = new float[] { 1f, 1f, 0.5f, 0f }; //top - right- bottom -left
+                                tdStyles[i].BorderWidths = new[] { 1f, 1f, 0.5f, 0f }; //top - right- bottom -left
                             }
                             else if (IsLastRow)
                             {
-                                tdStyles[i].BorderWidths = new float[] { 0.5f, 1f, 1f, 0f }; //top - right- bottom -left
+                                tdStyles[i].BorderWidths = new[] { 0.5f, 1f, 1f, 0f }; //top - right- bottom -left
                             }
                             else
                             {
-                                tdStyles[i].BorderWidths = new float[] { 0.5f, 1f, 0.5f, 0f }; //top - right- bottom -left
+                                tdStyles[i].BorderWidths = new[] { 0.5f, 1f, 0.5f, 0f }; //top - right- bottom -left
                             }
                         }
-                        else if (coloumCount == row.GetCells().Count()) //first coloum 
+                        else if (coloumCount == row.GetCells().Count()) //first coloum
                         {
                             if (IsFirstRow)
                             {
-                                tdStyles[i].BorderWidths = new float[] { 1f, 0f, 0.5f, 1f }; //top - right- bottom -left
+                                tdStyles[i].BorderWidths = new[] { 1f, 0f, 0.5f, 1f }; //top - right- bottom -left
                             }
                             else if (IsLastRow)
                             {
-                                tdStyles[i].BorderWidths = new float[] { 0.5f, 0f, 1f, 1f }; //top - right- bottom -left
+                                tdStyles[i].BorderWidths = new[] { 0.5f, 0f, 1f, 1f }; //top - right- bottom -left
                             }
                             else
                             {
-                                tdStyles[i].BorderWidths = new float[] { 0.5f, 0f, 0.5f, 1f }; //top - right- bottom -left
+                                tdStyles[i].BorderWidths = new[] { 0.5f, 0f, 0.5f, 1f }; //top - right- bottom -left
                             }
                         }
                     }
@@ -480,7 +472,6 @@ namespace PraticeManagement.Objects
             }
             return row;
         }
-
     }
 
     [Serializable]
@@ -500,7 +491,6 @@ namespace PraticeManagement.Objects
         public int[] BackgroundColorRGB = { 0, 0, 0 };
         public int[] FontColorRGB = { 0, 0, 0 };
         public float[] BorderWidths = { 0f, 0f, 0f, 0f }; //top - right- bottom -left
-
 
         public TdStyles(String horizontalAlign, bool bold, bool underline, int fontSize, int borderWidth)
         {
@@ -529,26 +519,30 @@ namespace PraticeManagement.Objects
                 case "white":
                     lable.BackgroundColor = iTextSharp.text.BaseColor.WHITE;
                     break;
+
                 case "gray":
                     lable.BackgroundColor = iTextSharp.text.BaseColor.GRAY;
                     break;
+
                 case "light-gray":
                     lable.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
                     break;
+
                 case "custom":
                     iTextSharp.text.BaseColor customColor = new BaseColor(BackgroundColorRGB[0], BackgroundColorRGB[1], BackgroundColorRGB[2]);
                     lable.BackgroundColor = customColor;
                     break;
-
             }
             switch (HorizontalAlign)
             {
                 case "left":
                     lable.HorizontalAlignment = Element.ALIGN_LEFT;
                     break;
+
                 case "right":
                     lable.HorizontalAlignment = Element.ALIGN_RIGHT;
                     break;
+
                 case "center":
                     lable.HorizontalAlignment = Element.ALIGN_CENTER;
                     break;
@@ -561,36 +555,34 @@ namespace PraticeManagement.Objects
                     case "black":
                         lable.Phrase.Font.Color = iTextSharp.text.BaseColor.BLACK;
                         break;
+
                     case "red":
                         lable.Phrase.Font.Color = iTextSharp.text.BaseColor.RED;
                         break;
+
                     case "yellow":
                         lable.Phrase.Font.Color = iTextSharp.text.BaseColor.YELLOW;
                         break;
+
                     case "custom":
                         iTextSharp.text.BaseColor customColor = new BaseColor(FontColorRGB[0], FontColorRGB[1], FontColorRGB[2]);
                         lable.BackgroundColor = customColor;
                         break;
-
                 }
                 if (bold)
                 {
                     lable.Phrase.Font.SetStyle(Font.BOLD);
-
                 }
                 if (underline)
                 {
                     lable.Phrase.Font.SetStyle(Font.UNDERLINE);
                 }
-
-
-
             }
             return lable;
         }
     }
 
-    #endregion
+    #endregion PdfpTable Styles
 
     #region HtmlPdfPage Class
 
@@ -599,7 +591,6 @@ namespace PraticeManagement.Objects
     /// </summary>
     public class HtmlPdfPage
     {
-
         #region Constructors
 
         /// <summary>
@@ -610,14 +601,14 @@ namespace PraticeManagement.Objects
             this._Html = new StringBuilder();
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Fields
 
         //parts for generating the page
         internal StringBuilder _Html;
 
-        #endregion
+        #endregion Fields
 
         #region Working With The Html
 
@@ -629,11 +620,10 @@ namespace PraticeManagement.Objects
             this._Html.AppendFormat(content, values);
         }
 
-        #endregion
-
+        #endregion Working With The Html
     }
 
-    #endregion
+    #endregion HtmlPdfPage Class
 
     #region Rendering Delegate
 
@@ -642,7 +632,7 @@ namespace PraticeManagement.Objects
     /// </summary>
     public delegate void RenderEvent(PdfWriter writer, Document document);
 
-    #endregion
+    #endregion Rendering Delegate
 
     #region PDFHelper Classes
 
@@ -657,7 +647,7 @@ namespace PraticeManagement.Objects
 
             //Styles
             textTable.WidthPercentage = 100;
-            textTable.SetWidths(new float[] { 1f });
+            textTable.SetWidths(new[] { 1f });
             textCell.BorderWidth = 0;
             textCell.HorizontalAlignment = Element.ALIGN_CENTER;
             textCell.PaddingTop = 20f;
@@ -669,7 +659,7 @@ namespace PraticeManagement.Objects
         }
 
         /// <summary>
-        /// Returns the PdfHeader i.e logo 
+        /// Returns the PdfHeader i.e logo
         /// </summary>
         public static PdfPTable GetPdfHeaderLogo()
         {
@@ -709,11 +699,10 @@ namespace PraticeManagement.Objects
             PdfPCell headerText3 = new PdfPCell(new Phrase("Page  ", font2));
             PdfPCell headerText4 = new PdfPCell(new Phrase(pageNo + " of " + pageCount, font1));
 
-
             //Styles
             innerTable.WidthPercentage = headerTable.WidthPercentage = 100;
-            headerTable.SetWidths(new float[] { .8f, .2f });
-            innerTable.SetWidths(new float[] { .6f, .4f });
+            headerTable.SetWidths(new[] { .8f, .2f });
+            innerTable.SetWidths(new[] { .6f, .4f });
             logo.VerticalAlignment = Element.ALIGN_MIDDLE;
             logo.FixedHeight = 40f;
             logo.HorizontalAlignment = iTextSharp.text.Image.ALIGN_LEFT;
@@ -734,7 +723,6 @@ namespace PraticeManagement.Objects
             innerTableCell1.BorderWidth = 0;
             innerTableCell1.Colspan = 2;
 
-
             headerTable.AddCell(logo);
             headerTable.AddCell(innerTableCell);
             headerTable.CompleteRow();
@@ -743,7 +731,6 @@ namespace PraticeManagement.Objects
 
             return headerTable;
         }
-
     }
 
     public class MyPageEventHandler : PdfPageEventHelper
@@ -759,7 +746,5 @@ namespace PraticeManagement.Objects
         }
     }
 
-    #endregion
-
+    #endregion PDFHelper Classes
 }
-
