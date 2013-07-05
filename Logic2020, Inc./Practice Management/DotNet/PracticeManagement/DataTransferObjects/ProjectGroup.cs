@@ -17,7 +17,7 @@ namespace DataTransferObjects
         private bool _inUse;
         private bool _isActive;
 
-        #endregion
+        #endregion Fields
 
         #region Properties
 
@@ -59,7 +59,6 @@ namespace DataTransferObjects
             }
         }
 
-
         /// <summary>
         /// True if client have any project with this group.
         /// </summary>
@@ -86,7 +85,6 @@ namespace DataTransferObjects
         [DataMember]
         public int ClientId { get; set; }
 
-        #endregion
+        #endregion Properties
     }
 }
-
