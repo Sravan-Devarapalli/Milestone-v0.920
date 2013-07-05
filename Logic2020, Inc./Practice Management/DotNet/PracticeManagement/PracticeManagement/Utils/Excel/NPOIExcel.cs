@@ -47,87 +47,74 @@ namespace PraticeManagement.Utils
             {
                 ICellStyle coloumnHeader = hssfworkbook.CreateCellStyle();
                 coloumnHeader.GetFont(hssfworkbook).Boldweight = 200;
-                
+
                 int k = 0;
                 foreach (DataSet dataset in dsInput)
                 {
-                    if (dataset.Tables.Count > 0)
+                    if (dataset.Tables.Count <= 0) continue;
+                    int i = 0;
+                    int tableStartRow = i;
+                    ISheet sheet = hssfworkbook.CreateSheet(dataset.DataSetName);
+                    foreach (DataTable datatable in dataset.Tables)
                     {
-                        int i = 0;
-                        int tableStartRow = i;
-                        int tableNo = 1;
-                        bool isHeaderTableExists = dataset.Tables.Count > 1;
-                        ISheet sheet = hssfworkbook.CreateSheet(dataset.DataSetName);
-                        foreach (DataTable datatable in dataset.Tables)
+                        for (; i < tableStartRow + datatable.Rows.Count + 1; i++)
                         {
-                            for (; i < tableStartRow + datatable.Rows.Count + 1; i++)
+                            int j = 0;
+                            foreach (DataColumn dc in datatable.Columns)
                             {
-                                int j = 0;
-                                foreach (DataColumn dc in datatable.Columns)
+                                if (i == tableStartRow)
                                 {
-                                    if (i == tableStartRow)
-                                    {
-                                        IRow row;
-                                        if (j == 0)
-                                            row = sheet.CreateRow(i);
-                                        else
-                                            row = sheet.GetRow(i);
-                                        ICell cell = row.CreateCell(j);
-                                        cell.CellStyle = coloumnHeader;
-                                        var value = dc.ColumnName;
-                                        bool boolvalue = false;
-                                        double doubleValue;
-                                        DateTime dateTimeValue;
-                                        if (Boolean.TryParse(value, out boolvalue))
-                                            cell.SetCellValue(boolvalue);
-                                        else if (double.TryParse(value, out doubleValue))
-                                            cell.SetCellValue(doubleValue);
-                                        else if (DateTime.TryParse(value, out dateTimeValue))
-                                            cell.SetCellValue(dateTimeValue);
-                                        else
-                                            cell.SetCellValue(value);
-                                    }
+                                    IRow row = j == 0 ? sheet.CreateRow(i) : sheet.GetRow(i);
+                                    ICell cell = row.CreateCell(j);
+                                    cell.CellStyle = coloumnHeader;
+                                    var value = dc.ColumnName;
+                                    bool boolvalue = false;
+                                    double doubleValue;
+                                    DateTime dateTimeValue;
+                                    if (Boolean.TryParse(value, out boolvalue))
+                                        cell.SetCellValue(boolvalue);
+                                    else if (double.TryParse(value, out doubleValue))
+                                        cell.SetCellValue(doubleValue);
+                                    else if (DateTime.TryParse(value, out dateTimeValue))
+                                        cell.SetCellValue(dateTimeValue);
                                     else
-                                    {
-                                        IRow row;
-                                        if (j == 0)
-                                            row = sheet.CreateRow(i);
-                                        else
-                                            row = sheet.GetRow(i);
-                                        ICell cell = row.CreateCell(j);
-                                        var value = datatable.Rows[i - tableStartRow - 1][dc.ColumnName].ToString();
-                                        bool boolvalue = false;
-                                        double doubleValue;
-                                        DateTime dateTimeValue;
-                                        if (Boolean.TryParse(value, out boolvalue))
-                                            cell.SetCellValue(boolvalue);
-                                        else if (double.TryParse(value, out doubleValue))
-                                            cell.SetCellValue(doubleValue);
-                                        else if (DateTime.TryParse(value, out dateTimeValue))
-                                            cell.SetCellValue(dateTimeValue);
-                                        else
-                                            cell.SetCellValue(value);
-                                    }
-                                    j++;
+                                        cell.SetCellValue(value);
                                 }
+                                else
+                                {
+                                    IRow row = j == 0 ? sheet.CreateRow(i) : sheet.GetRow(i);
+                                    ICell cell = row.CreateCell(j);
+                                    var value = datatable.Rows[i - tableStartRow - 1][dc.ColumnName].ToString();
+                                    bool boolvalue = false;
+                                    double doubleValue;
+                                    DateTime dateTimeValue;
+                                    if (Boolean.TryParse(value, out boolvalue))
+                                        cell.SetCellValue(boolvalue);
+                                    else if (double.TryParse(value, out doubleValue))
+                                        cell.SetCellValue(doubleValue);
+                                    else if (DateTime.TryParse(value, out dateTimeValue))
+                                        cell.SetCellValue(dateTimeValue);
+                                    else
+                                        cell.SetCellValue(value);
+                                }
+                                j++;
                             }
-                            sheet.CreateRow(i);
-                            i++;
-                            tableStartRow = i;
-                            tableNo++;
-                            sheetStylesList[k].parentWorkbook = sheet.Workbook;
-                            sheetStylesList[k].ApplySheetStyles(sheet);
-                            if (k < sheetStylesList.Count - 1)
-                            {
-                                k++;
-                            }
+                        }
+                        sheet.CreateRow(i);
+                        i++;
+                        tableStartRow = i;
+                        sheetStylesList[k].parentWorkbook = sheet.Workbook;
+                        sheetStylesList[k].ApplySheetStyles(sheet);
+                        if (k < sheetStylesList.Count - 1)
+                        {
+                            k++;
                         }
                     }
                 }
             }
             if (hssfworkbook.NumberOfSheets == 0)
             {
-                ISheet sheet = hssfworkbook.CreateSheet();
+                hssfworkbook.CreateSheet();
             }
             return hssfworkbook;
         }
