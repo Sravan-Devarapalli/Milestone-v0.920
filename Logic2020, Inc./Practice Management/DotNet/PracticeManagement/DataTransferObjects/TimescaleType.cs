@@ -1,5 +1,5 @@
-﻿using System.Runtime.Serialization;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace DataTransferObjects
 {
@@ -41,4 +41,3 @@ namespace DataTransferObjects
         PercRevenue = 4
     }
 }
-
