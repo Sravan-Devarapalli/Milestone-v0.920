@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects
@@ -10,7 +7,6 @@ namespace DataTransferObjects
     [Serializable]
     public class PersonWorkingHoursDetailsWithinThePeriod
     {
-
         [DataMember]
         public int PersonId
         {
@@ -52,7 +48,5 @@ namespace DataTransferObjects
             get;
             set;
         }
-
     }
 }
-
