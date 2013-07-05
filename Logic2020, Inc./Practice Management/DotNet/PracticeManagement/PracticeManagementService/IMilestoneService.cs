@@ -8,14 +8,13 @@ namespace PracticeManagementService
     [ServiceContract]
     public interface IMilestoneService
     {
-
         /// <summary>
-        /// Saves Default Project-milestone details into DB. Persons not assigned to any Project-Milestone 
+        /// Saves Default Project-milestone details into DB. Persons not assigned to any Project-Milestone
         /// can enter time entery for this default Project Milestone.
         /// </summary>
         /// <param name="clientId"></param>
         /// <param name="projectId"></param>
-        /// <param name="mileStoneId"></param> 
+        /// <param name="mileStoneId"></param>
         [OperationContract]
         void SaveDefaultMilestone(int? clientId, int? projectId, int? milestoneId, int? lowerBound, int? upperBound);
 
@@ -38,6 +37,7 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Milestone> MilestoneListByProjectForTimeEntryByProjectReport(int projectId);
+
         /// <summary>
         /// Reatrives a <see cref="Milestone"/> by a specified ID.
         /// </summary>
@@ -108,7 +108,6 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, DateTime? startDate, DateTime? endDate);
-
 
         [OperationContract]
         bool CanMoveFutureMilestones(int milestoneId, int shiftDays);
@@ -181,4 +180,3 @@ namespace PracticeManagementService
         List<int> GetMilestoneAndCSATCountsByProject(int projectId);
     }
 }
-
