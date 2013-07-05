@@ -28,7 +28,7 @@ namespace PracticeManagementService
         [OperationContract]
         void SetTimeZone(Timezone timezone);
 
-        #endregion
+        #endregion Time Zones
 
         #region Time entries
 
@@ -47,12 +47,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         PersonTimeEntries GetTimeEntriesPerson(TimeEntryPersonReportContext reportContext);
+
         /// <summary>
         /// Get time entries by project grouped by person
         /// </summary>
         [OperationContract]
         GroupedTimeEntries<Person> GetTimeEntriesProject(TimeEntryProjectReportContext reportContext);
-
 
         /// <summary>
         /// Get milestones by person for given time period
@@ -86,7 +86,6 @@ namespace PracticeManagementService
         [OperationContract]
         System.Data.DataSet TimeEntriesByPersonGetExcelSet(TimeEntryPersonReportContext reportContext);
 
-
         //new timetrack methods
         [OperationContract]
         void DeleteTimeEntry(int clientId, int projectId, int personId, int timetypeId, DateTime startDate, DateTime endDate, string userName);
@@ -103,7 +102,7 @@ namespace PracticeManagementService
         [OperationContract]
         void SetPersonTimeEntrySelection(int personId, int clientId, int projectGroupId, int projectId, int timeEntrySectionId, bool isDelete, DateTime startDate, DateTime endDate, string userName);
 
-        #endregion
+        #endregion Time entries
 
         #region Toggling
 
@@ -128,7 +127,7 @@ namespace PracticeManagementService
         [OperationContract]
         void ToggleIsChargeable(TimeEntryRecord timeEntry);
 
-        #endregion
+        #endregion Toggling
 
         #region Time entry filters
 
@@ -160,13 +159,9 @@ namespace PracticeManagementService
         [OperationContract]
         Person[] GetAllTimeEntryPersons(DateTime entryDateFrom, DateTime entryDateTo);
 
-
         [OperationContract]
         List<TimeEntrySection> PersonTimeEntriesByPeriod(int personId, DateTime startDate, DateTime endDate);
 
-        #endregion
-
-
+        #endregion Time entry filters
     }
 }
-
