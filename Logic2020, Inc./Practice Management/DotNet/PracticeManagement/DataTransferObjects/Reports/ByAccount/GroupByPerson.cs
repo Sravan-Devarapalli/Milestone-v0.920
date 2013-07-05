@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects.Reports.ByAccount
@@ -24,7 +23,6 @@ namespace DataTransferObjects.Reports.ByAccount
             set;
         }
 
-
         public double TotalHours
         {
             get
@@ -32,7 +30,5 @@ namespace DataTransferObjects.Reports.ByAccount
                 return BusinessUnitLevelGroupedHoursList != null ? BusinessUnitLevelGroupedHoursList.Sum(bu => bu.TotalHours) : 0d;
             }
         }
-
     }
 }
-
