@@ -4274,6 +4274,7 @@
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SetProjectAttributionValues.proc.sql">
       <SubType>Code</SubType>
+      <AnsiNulls>On</AnsiNulls>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetLatestPayInTheGivenRangeTable.function.sql">
       <SubType>Code</SubType>
