@@ -9,6 +9,7 @@ namespace DataTransferObjects
     public class EmailTemplate
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets an ID of the email template.
         /// </summary>
@@ -75,8 +76,8 @@ namespace DataTransferObjects
         {
             get;
             set;
-        } 
-        #endregion
+        }
+
+        #endregion Properties
     }
 }
-
