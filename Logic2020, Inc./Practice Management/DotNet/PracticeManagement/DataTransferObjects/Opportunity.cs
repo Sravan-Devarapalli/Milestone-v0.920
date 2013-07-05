@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace DataTransferObjects
@@ -19,7 +19,7 @@ namespace DataTransferObjects
         private const string ClientAndGroupFormat = "{0} - {1}";
         private const string ClientOpportunityFormat = "{0} - {1} - {2}";
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
@@ -62,7 +62,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         /// <summary>
         /// Gets or sets an Opportunity Name.
@@ -141,7 +140,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
 
         /// <summary>
         /// Gets or sets a projected start date.
@@ -279,7 +277,6 @@ namespace DataTransferObjects
             {
                 return DateTime.Now.Subtract(CreateDate).TotalMilliseconds;
             }
-
         }
 
         public Double LastChange
@@ -288,7 +285,6 @@ namespace DataTransferObjects
             {
                 return DateTime.Now.Subtract(LastUpdate).TotalMilliseconds;
             }
-
         }
 
         [DataMember]
@@ -305,13 +301,13 @@ namespace DataTransferObjects
             set;
         }
 
-
         [DataMember]
         public List<OpportunityPerson> ProposedPersons
         {
             set;
             get;
         }
+
         [DataMember]
         public string OutSideResources
         {
@@ -329,7 +325,7 @@ namespace DataTransferObjects
         [DataMember]
         public BusinessType BusinessType { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Formatting
 
@@ -359,9 +355,6 @@ namespace DataTransferObjects
             }
         }
 
-
-        #endregion
-
+        #endregion Formatting
     }
 }
-
