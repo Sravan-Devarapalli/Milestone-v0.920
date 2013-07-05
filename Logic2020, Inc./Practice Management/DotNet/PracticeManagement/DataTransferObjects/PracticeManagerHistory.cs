@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects
@@ -10,7 +7,6 @@ namespace DataTransferObjects
     [Serializable]
     public class PracticeManagerHistory
     {
-
         [DataMember]
         public int PracticeId
         {
@@ -38,6 +34,7 @@ namespace DataTransferObjects
             get;
             set;
         }
+
         /// <summary>
         /// Date from which the practice manager owned up the practice.
         /// </summary>
@@ -59,4 +56,3 @@ namespace DataTransferObjects
         }
     }
 }
-
