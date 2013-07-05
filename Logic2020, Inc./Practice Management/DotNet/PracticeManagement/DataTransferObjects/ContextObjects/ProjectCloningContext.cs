@@ -37,4 +37,3 @@ namespace DataTransferObjects.ContextObjects
         public ProjectStatus ProjectStatus { get; set; }
     }
 }
-
