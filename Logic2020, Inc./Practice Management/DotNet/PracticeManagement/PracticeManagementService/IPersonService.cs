@@ -442,7 +442,5 @@ namespace PracticeManagementService
 
         [OperationContract]
         Title GetPersonTitleByRange(int personId, DateTime startDate, DateTime endDate);
- 
     }
 }
-
