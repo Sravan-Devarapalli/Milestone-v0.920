@@ -26,7 +26,6 @@
         /// <param name="entity">Entity instance</param>
         void Remove(TE entity);
 
-
         /// <summary>
         /// Update entity in the database
         /// </summary>
