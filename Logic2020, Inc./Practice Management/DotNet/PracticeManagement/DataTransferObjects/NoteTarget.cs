@@ -11,12 +11,14 @@ namespace DataTransferObjects
     {
         [EnumMember]
         Milestone = 1,
+
         [EnumMember]
         Project = 2,
+
         [EnumMember]
         Person = 3,
+
         [EnumMember]
         Opportunity = 4,
     }
 }
-
