@@ -18,10 +18,7 @@ namespace PraticeManagement.Utils
 
         public static string GetIndicatorClassByStatusId(int statusId)
         {
-            if (!_projectStatuses.ContainsKey((ProjectStatusType)statusId)) 
-                return null;
-
-            return _projectStatuses[(ProjectStatusType)statusId];
+            return !_projectStatuses.ContainsKey((ProjectStatusType)statusId) ? null : _projectStatuses[(ProjectStatusType)statusId];
         }
     }
 }
