@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace DataTransferObjects
@@ -24,7 +24,7 @@ namespace DataTransferObjects
         /// </summary>
         public const int AdminPractice = 4;
 
-        #endregion
+        #endregion Constants
 
         #region Constructors
 
@@ -43,7 +43,7 @@ namespace DataTransferObjects
             Id = id;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Properties
 
@@ -100,7 +100,6 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsActive { get; set; }
 
-       
         [DataMember]
         public bool IsNotesRequiredForTimeEnry { get; set; }
 
@@ -137,7 +136,6 @@ namespace DataTransferObjects
             set;
         }
 
-      
         [DataMember]
         public string PracticeOwnerName { get; set; }
 
@@ -153,8 +151,7 @@ namespace DataTransferObjects
             get { return PracticeOwner.Id.HasValue ? PracticeOwner.Id.Value : -1; }
         }
 
-
-        #endregion
+        #endregion Properties
 
         #region Formatting
 
@@ -169,7 +166,7 @@ namespace DataTransferObjects
             }
         }
 
-        #endregion
+        #endregion Formatting
 
         public bool Equals(Practice other)
         {
@@ -180,4 +177,3 @@ namespace DataTransferObjects
         }
     }
 }
-
