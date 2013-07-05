@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects
@@ -12,14 +9,12 @@ namespace DataTransferObjects
     {
         #region Properties
 
-      
         [DataMember]
         public Decimal W2Salary_Rate
         {
             get;
             set;
         }
-
 
         [DataMember]
         public Decimal W2Hourly_Rate
@@ -55,7 +50,6 @@ namespace DataTransferObjects
             set;
         }
 
-        #endregion
+        #endregion Properties
     }
 }
-
