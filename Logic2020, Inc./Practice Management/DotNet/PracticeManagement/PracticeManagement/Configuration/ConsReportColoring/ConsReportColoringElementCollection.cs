@@ -8,7 +8,7 @@ namespace PraticeManagement.Configuration.ConsReportColoring
         {
             get
             {
-                return base.BaseGet(index) as ConsReportColoringElement;
+                return BaseGet(index) as ConsReportColoringElement;
             }
         }
 
@@ -23,4 +23,3 @@ namespace PraticeManagement.Configuration.ConsReportColoring
         }
     }
 }
-
