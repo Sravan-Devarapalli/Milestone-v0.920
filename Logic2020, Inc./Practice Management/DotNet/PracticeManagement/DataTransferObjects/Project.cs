@@ -428,7 +428,7 @@ namespace DataTransferObjects
 
         [DataMember]
         public List<Attribution> AttributionList { get; set; }
-        
+
         [DataMember]
         public int CSATOwnerId { get; set; }
 
@@ -503,4 +503,3 @@ namespace DataTransferObjects
         #endregion IEquatable<Project> Members
     }
 }
-
