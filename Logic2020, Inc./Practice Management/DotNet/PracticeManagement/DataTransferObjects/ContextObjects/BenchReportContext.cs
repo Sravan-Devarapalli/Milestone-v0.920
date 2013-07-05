@@ -1,6 +1,6 @@
 using System;
-using System.Runtime.Serialization;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace DataTransferObjects.ContextObjects
 {
@@ -25,4 +25,3 @@ namespace DataTransferObjects.ContextObjects
         public string TimeScaleIds { get; set; }
     }
 }
-
