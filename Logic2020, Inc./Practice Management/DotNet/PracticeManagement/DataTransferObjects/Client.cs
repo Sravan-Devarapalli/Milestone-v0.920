@@ -9,29 +9,29 @@ namespace DataTransferObjects
     /// Data Transfer Object for a Client entity
     /// </summary>
     [DataContract]
-	[Serializable]
-	public class Client : IEquatable<Client>
-	{
-		#region Fields
+    [Serializable]
+    public class Client : IEquatable<Client>
+    {
+        #region Fields
 
-		private decimal _defaultDiscount;
+        private decimal _defaultDiscount;
         private int _defaultTerms;
         private bool _inactive;
         private string _name;
 
-		#endregion
+        #endregion Fields
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// System-generated identifier for the client
-		/// </summary>
-		[DataMember]
-		public int? Id
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// System-generated identifier for the client
+        /// </summary>
+        [DataMember]
+        public int? Id
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Clients have a common discount, which can be used to
@@ -48,7 +48,7 @@ namespace DataTransferObjects
         /// Terms are expressed in "net x" where
         /// x is the number of days from the time
         /// the invoice is delivered before payment is expected
-        /// 
+        ///
         /// A client generally has terms for any project, so a
         /// project can start with this value when created
         /// </summary>
@@ -59,14 +59,14 @@ namespace DataTransferObjects
             set { _defaultTerms = value; }
         }
 
-		/// <summary>
+        /// <summary>
         /// A client has a name.
         /// </summary>
         /// <remarks>
         /// A client may have a plethora of other information
         /// we find useful.  Right now, name is the attribute
         /// for display.
-        /// 
+        ///
         /// This is a candidate or candidate key.
         /// </remarks>
         [DataMember]
@@ -78,7 +78,7 @@ namespace DataTransferObjects
 
         public string HtmlEncodedName
         {
-            get 
+            get
             {
                 return HttpUtility.HtmlEncode(Name);
             }
@@ -100,15 +100,15 @@ namespace DataTransferObjects
             set { _inactive = value; }
         }
 
-		/// <summary>
-		/// Gets or sets an ID of the default Salesperson for the client.
-		/// </summary>
-		[DataMember]
-		public int DefaultSalespersonId
-		{
-			get;
-			set;
-		}
+        /// <summary>
+        /// Gets or sets an ID of the default Salesperson for the client.
+        /// </summary>
+        [DataMember]
+        public int DefaultSalespersonId
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets an ID of the default Director for the client.
@@ -142,15 +142,15 @@ namespace DataTransferObjects
         }
 
         /// <summary>
-		/// Gets or sets a list of the groups for the client.
-		/// </summary>
-		/// <remarks>The list is always empty when the object just created.</remarks>
-		[DataMember]
-		public List<ProjectGroup> Groups
-		{
-			get;
-			set;
-		}
+        /// Gets or sets a list of the groups for the client.
+        /// </summary>
+        /// <remarks>The list is always empty when the object just created.</remarks>
+        [DataMember]
+        public List<ProjectGroup> Groups
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Projects for this client are chargeable by default.
@@ -191,10 +191,10 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public string Code 
+        public string Code
         {
-            get; 
-            set; 
+            get;
+            set;
         }
 
         [DataMember]
@@ -204,19 +204,19 @@ namespace DataTransferObjects
             set;
         }
 
-		#endregion
+        #endregion Properties
 
-		#region Construction
+        #region Construction
 
-		/// <summary>
-		/// Creates a new empty instance of the <see cref="Client"/> class.
-		/// </summary>
-		public Client()
-		{
-		    Groups = new List<ProjectGroup>();
-		}
+        /// <summary>
+        /// Creates a new empty instance of the <see cref="Client"/> class.
+        /// </summary>
+        public Client()
+        {
+            Groups = new List<ProjectGroup>();
+        }
 
-		#endregion
+        #endregion Construction
 
         #region IEquatable<Client> members
 
@@ -228,9 +228,6 @@ namespace DataTransferObjects
             return false;
         }
 
-        #endregion
-
-      
+        #endregion IEquatable<Client> members
     }
 }
-
