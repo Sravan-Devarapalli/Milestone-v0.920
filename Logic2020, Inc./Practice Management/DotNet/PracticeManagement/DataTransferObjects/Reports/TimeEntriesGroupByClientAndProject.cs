@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
-using DataTransferObjects.TimeEntry;
 
 namespace DataTransferObjects.Reports
 {
@@ -57,16 +55,13 @@ namespace DataTransferObjects.Reports
             set;
         }
 
-
         public int ProjectTotalHoursPercent
         {
             get
             {
                 return ProjectTotalHoursPercentBillable + ProjectTotalHoursPercentNonBillable;
             }
-
         }
-
 
         public int ProjectTotalHoursPercentBillable
         {
@@ -82,8 +77,7 @@ namespace DataTransferObjects.Reports
             {
                 return Convert.ToInt32((NonBillableHours / GrandTotal) * 100);
             }
-
-        }         
+        }
 
         public double BillableHoursVariance
         {
@@ -92,7 +86,6 @@ namespace DataTransferObjects.Reports
                 return (BillableHoursUntilToday - ProjectedHoursUntilToday);
             }
         }
-
 
         [DataMember]
         public double GrandTotal
@@ -117,8 +110,6 @@ namespace DataTransferObjects.Reports
             }
         }
 
-
-
         public void AddDayTotalHours(TimeEntriesGroupByDate dt)
         {
             if (DayTotalHours.Any(dth => dth.Date == dt.Date))
@@ -131,8 +122,6 @@ namespace DataTransferObjects.Reports
             {
                 DayTotalHours.Add(dt);
             }
-
         }
     }
 }
-
