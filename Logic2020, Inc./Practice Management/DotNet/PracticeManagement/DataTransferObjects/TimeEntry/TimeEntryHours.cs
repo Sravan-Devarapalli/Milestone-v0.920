@@ -30,7 +30,7 @@ namespace DataTransferObjects.TimeEntry
         [DataMember]
         public string Name { get; set; }
 
-        #endregion
+        #endregion Implementation of IIdNameObject
 
         public override string ToString()
         {
