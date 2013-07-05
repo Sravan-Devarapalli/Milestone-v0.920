@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 using System.Web;
 
 namespace DataTransferObjects.TimeEntry
@@ -20,7 +19,7 @@ namespace DataTransferObjects.TimeEntry
         private const int ShortNoteLen = 25;
         private const string NewLineSeparator = "<br/>";
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
@@ -31,7 +30,7 @@ namespace DataTransferObjects.TimeEntry
         public int? ChargeCodeId { get; set; }
 
         /// <summary>
-        /// Date that this time entry is about . 
+        /// Date that this time entry is about .
         /// ChargeCodeDate
         /// </summary>
         [DataMember]
@@ -101,7 +100,7 @@ namespace DataTransferObjects.TimeEntry
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Formatting
 
@@ -140,7 +139,7 @@ namespace DataTransferObjects.TimeEntry
             }
         }
 
-        #endregion
+        #endregion Formatting
 
         #region Implementation of IComparable<TimeEntryRecord>
 
@@ -148,7 +147,7 @@ namespace DataTransferObjects.TimeEntry
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <returns>
-        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>. 
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>.
         /// </returns>
         /// <param name="other">An object to compare with this object.</param>
         public int CompareTo(TimeEntryRecord other)
@@ -156,8 +155,7 @@ namespace DataTransferObjects.TimeEntry
             return ChargeCodeDate.CompareTo(other.ChargeCodeDate);
         }
 
-        #endregion
-
+        #endregion Implementation of IComparable<TimeEntryRecord>
 
         [DataMember]
         public double BillableHours { get; set; }
@@ -171,4 +169,3 @@ namespace DataTransferObjects.TimeEntry
         public Person Person { get; set; }
     }
 }
-
