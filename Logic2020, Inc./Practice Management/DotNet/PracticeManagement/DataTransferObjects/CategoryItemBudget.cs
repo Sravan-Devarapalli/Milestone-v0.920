@@ -13,6 +13,7 @@ namespace DataTransferObjects
             get;
             set;
         }
+
         [DataMember]
         public BudgetCategoryType CategoryTypeId
         {
@@ -33,7 +34,5 @@ namespace DataTransferObjects
             get;
             set;
         }
-
     }
 }
-
