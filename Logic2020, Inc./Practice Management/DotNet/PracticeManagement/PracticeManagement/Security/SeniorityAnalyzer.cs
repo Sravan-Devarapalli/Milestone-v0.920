@@ -6,9 +6,8 @@ namespace PraticeManagement.Security
 {
     public class SeniorityAnalyzer
     {
-        private bool isAdminOrSales;
-        private Person currentPerson;
-        private bool greaterSeniorityExists;
+        private readonly bool isAdminOrSales;
+        private readonly Person currentPerson;
 
         /// <summary>
         /// Init constructor of SeniorityAnalyzer.
@@ -17,20 +16,14 @@ namespace PraticeManagement.Security
         {
             this.currentPerson = currentPerson;
 
-            greaterSeniorityExists = false;
+            GreaterSeniorityExists = false;
 
             isAdminOrSales =
                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ||
                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
         }
 
-        public bool GreaterSeniorityExists
-        {
-            get
-            {
-                return greaterSeniorityExists;
-            }
-        }
+        public bool GreaterSeniorityExists { get; private set; }
 
         public bool OneWithGreaterSeniorityExists(IEnumerable<Person> persons)
         {
@@ -67,7 +60,7 @@ namespace PraticeManagement.Security
 
             bool otherHasGreaterSeniority = currentPerson.Seniority.OtherHasGreaterOrEqualSeniority(otherSeniority);
             if (otherHasGreaterSeniority)
-                greaterSeniorityExists = true;
+                GreaterSeniorityExists = true;
 
             return otherHasGreaterSeniority;
         }
@@ -91,4 +84,3 @@ namespace PraticeManagement.Security
         }
     }
 }
-
