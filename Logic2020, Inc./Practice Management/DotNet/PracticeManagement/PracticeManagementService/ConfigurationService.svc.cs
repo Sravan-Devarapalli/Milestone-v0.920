@@ -89,7 +89,6 @@ namespace PracticeManagementService
             {
                 throw ex;
             }
-
         }
 
         public void SaveMarginInfoDetail(List<Triple<DefaultGoalType, Triple<SettingsType, string, string>, List<ClientMarginColorInfo>>> marginInfoList)
@@ -133,4 +132,3 @@ namespace PracticeManagementService
         }
     }
 }
-
