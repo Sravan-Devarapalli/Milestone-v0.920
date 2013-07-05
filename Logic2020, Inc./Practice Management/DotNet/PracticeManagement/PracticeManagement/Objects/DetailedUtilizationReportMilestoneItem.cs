@@ -1,10 +1,10 @@
 ﻿using System;
-using DataTransferObjects;
 using System.Collections.Generic;
+using DataTransferObjects;
 
 namespace PraticeManagement.Objects
 {
-    class DetailedUtilizationReportMilestoneItem : DetailedUtilizationReportBaseItem
+    internal class DetailedUtilizationReportMilestoneItem : DetailedUtilizationReportBaseItem
     {
         #region Constants
 
@@ -12,14 +12,15 @@ namespace PraticeManagement.Objects
         private const string NotEndDate = "No End Date Specified.";
         private const string DetailsLabelFormat = "{0:F2} h/d - {1}";
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
         public MilestonePersonEntry Entry { get; set; }
+
         public bool IsCapacityMode { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -31,7 +32,7 @@ namespace PraticeManagement.Objects
             IsCapacityMode = isCapacityMode;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Overrides
 
@@ -98,8 +99,7 @@ namespace PraticeManagement.Objects
             }
         }
 
-
-        private string GetProjectManagers(List<Person> list)
+        private static string GetProjectManagers(List<Person> list)
         {
             string names = string.Empty;
             foreach (var person in list)
@@ -123,6 +123,6 @@ namespace PraticeManagement.Objects
             }
         }
 
-        #endregion
+        #endregion Overrides
     }
 }
