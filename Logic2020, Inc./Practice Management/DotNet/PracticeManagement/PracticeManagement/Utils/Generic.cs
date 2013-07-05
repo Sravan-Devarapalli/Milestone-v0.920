@@ -1,24 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Generic.Filtering;
 using ErrorEventArgs = PraticeManagement.Events.ErrorEventArgs;
-using DataTransferObjects;
-using System.Web.Security;
-using System.Web.UI;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PraticeManagement.Utils
 {
     public class Generic
     {
         /// <summary>
-        /// Calculates average value of int array, 
+        /// Calculates average value of int array,
         /// not taking into account negative numbers
         /// </summary>
         /// <param name="arr">Int array</param>
@@ -34,8 +34,7 @@ namespace PraticeManagement.Utils
                     avg += a;
             if (arr.Length == zeros)
                 return 0;
-            else
-                return avg / (arr.Length - zeros);
+            return avg / (arr.Length - zeros);
         }
 
         /// <summary>
@@ -79,7 +78,6 @@ namespace PraticeManagement.Utils
             get
             {
                 Assembly currentAssembly = Assembly.GetExecutingAssembly();
-                AssemblyName assemblyName = AssemblyName.GetAssemblyName(currentAssembly.Location);
                 var fileInfo = new FileInfo(currentAssembly.Location);
                 return HttpUtility.HtmlEncode(fileInfo.CreationTime.ToString("Mdyyyyhhmmss"));
             }
@@ -216,28 +214,17 @@ namespace PraticeManagement.Utils
             }
         }
 
-        public static FormsAuthenticationTicket SetCustomFormsAuthenticationTicket(string userName, bool createPersistentCookie, Page page, string userDate = "",string userData ="")
+        public static FormsAuthenticationTicket SetCustomFormsAuthenticationTicket(string userName, bool createPersistentCookie, Page page, string userDate = "", string userData = "")
         {
-            string cookiestr;
-            HttpCookie ck;
-            FormsAuthenticationTicket tkt;
             var formsAuthenticationTimeOutStr = SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.FormsAuthenticationTimeOutKey);
-            int formsAuthenticationTimeOut;
-            if (!string.IsNullOrEmpty(formsAuthenticationTimeOutStr))
-            {
-                formsAuthenticationTimeOut = int.Parse(formsAuthenticationTimeOutStr);
-            }
-            else
-            {
-                formsAuthenticationTimeOut = 60;
-            }
-            tkt = new FormsAuthenticationTicket(2, userName, DateTime.Now, (DateTime.Now.AddSeconds(3)).AddMinutes(formsAuthenticationTimeOut), createPersistentCookie, userData);
-            cookiestr = FormsAuthentication.Encrypt(tkt);
-            ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr);
+            int formsAuthenticationTimeOut = !string.IsNullOrEmpty(formsAuthenticationTimeOutStr) ? int.Parse(formsAuthenticationTimeOutStr) : 60;
+            FormsAuthenticationTicket tkt = new FormsAuthenticationTicket(2, userName, DateTime.Now, (DateTime.Now.AddSeconds(3)).AddMinutes(formsAuthenticationTimeOut), createPersistentCookie, userData);
+            string cookiestr = FormsAuthentication.Encrypt(tkt);
+            HttpCookie ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr);
             if (createPersistentCookie)
                 ck.Expires = tkt.Expiration;
             ck.Path = FormsAuthentication.FormsCookiePath;
-            if ((page.Response.Cookies != null) && (page.Response.Cookies[FormsAuthentication.FormsCookieName] != null))
+            if (page.Response.Cookies[FormsAuthentication.FormsCookieName] != null)
             {
                 page.Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
             }
@@ -254,7 +241,7 @@ namespace PraticeManagement.Utils
 
             for (var i = 0; i < values.Length; i++)
             {
-                if(!string.IsNullOrEmpty(values[i]))
+                if (!string.IsNullOrEmpty(values[i]))
                     res[i] = Convert.ToInt32(values[i]);
             }
 
@@ -269,11 +256,11 @@ namespace PraticeManagement.Utils
 
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < fileName.Length; i++)
+            foreach (char t in fileName)
             {
-                if (!invalidChars.Any(c => c == fileName[i]))
+                if (invalidChars.All(c => c != t))
                 {
-                    sb.Append(fileName[i]);
+                    sb.Append(t);
                 }
             }
 
@@ -281,4 +268,3 @@ namespace PraticeManagement.Utils
         }
     }
 }
-
