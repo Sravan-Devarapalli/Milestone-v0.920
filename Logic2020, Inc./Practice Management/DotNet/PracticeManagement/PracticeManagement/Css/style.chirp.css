@@ -2140,6 +2140,10 @@ TABLE.Section td
 {
     width: 45%;
 }
+.Width47Percent
+{
+    width: 47%;
+}
 .Width45PercentImp
 {
     width: 45% !important;
@@ -3692,7 +3696,6 @@ div.scrollextLabel Label
     z-index: 20000;
 }
 
-
 .PersonPayTypeScrollingDropDown
 {
     height: 100px;
@@ -4927,7 +4930,7 @@ BenchCosts.ascx*/
 .PersonDetailReportCustomTabStyle td span.bg
 {
     padding-right: 10px !important;
-    padding-bottom : 9px !important;
+    padding-bottom: 9px !important;
 }
 .tableFixed
 {
@@ -5639,9 +5642,7 @@ HyplinkConsultantDetailReport
     border-collapse: collapse;
 }
 
-
 /*ClientDetails*/
-
 
 .PaddingBottomTop15Px
 {
@@ -5734,7 +5735,6 @@ HyplinkConsultantDetailReport
 {
     width: 404px;
 }
-
 
 /*CompanyCalender*/
 .HolidaysDescription
@@ -6101,7 +6101,6 @@ HyplinkConsultantDetailReport
 }
 /* --------- Tabs for person and project details pages ------ */
 
-
 .CustomTabStyleProjectDetail tr
 {
     height: 30px;
@@ -6391,7 +6390,6 @@ table.ProjectDetail-ProjectInfo-Table td
     border-right: 1px solid black;
     border-bottom: 1px solid black;
 }
-
 
 /*ProjectSearch*/
 
@@ -8104,4 +8102,17 @@ table#ctl00_body_login tr td label
     font-size: 14px;
     text-align: center;
 }
-
+.attributionHeader
+{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+.attributionFirstTd
+{
+    width: 47%;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    text-align: center;
+}
