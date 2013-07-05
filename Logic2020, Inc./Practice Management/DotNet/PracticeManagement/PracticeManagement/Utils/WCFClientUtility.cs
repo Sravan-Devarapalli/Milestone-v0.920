@@ -33,7 +33,7 @@ namespace PraticeManagement.MilestonePersonService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("MilestonePersonServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("MilestonePersonServiceClient");
             }
         }
     }
@@ -47,7 +47,7 @@ namespace PraticeManagement.ActivityLogService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ActivityLogServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ActivityLogServiceClient");
             }
         }
     }
@@ -61,7 +61,7 @@ namespace PraticeManagement.CalendarService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("CalendarServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("CalendarServiceClient");
             }
         }
     }
@@ -75,7 +75,7 @@ namespace PraticeManagement.ClientService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ClientServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ClientServiceClient");
             }
         }
     }
@@ -89,7 +89,7 @@ namespace PraticeManagement.ExpenseCategoryService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ExpenseCategoryServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ExpenseCategoryServiceClient");
             }
         }
     }
@@ -103,7 +103,7 @@ namespace PraticeManagement.ExpenseService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ExpenseServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ExpenseServiceClient");
             }
         }
     }
@@ -117,7 +117,7 @@ namespace PraticeManagement.MilestoneService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("MilestoneServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("MilestoneServiceClient");
             }
         }
     }
@@ -131,7 +131,7 @@ namespace PraticeManagement.OpportunityService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("OpportunityServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("OpportunityServiceClient");
             }
         }
     }
@@ -145,7 +145,7 @@ namespace PraticeManagement.OverheadService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("OverheadServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("OverheadServiceClient");
             }
         }
     }
@@ -159,7 +159,7 @@ namespace PraticeManagement.PersonRoleService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonRoleServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonRoleServiceClient");
             }
         }
     }
@@ -173,7 +173,7 @@ namespace PraticeManagement.PersonService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonServiceClient");
             }
         }
     }
@@ -187,7 +187,7 @@ namespace PraticeManagement.PersonStatusService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonStatusServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonStatusServiceClient");
             }
         }
     }
@@ -201,7 +201,7 @@ namespace PraticeManagement.PracticeService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("PracticeServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("PracticeServiceClient");
             }
         }
     }
@@ -215,7 +215,7 @@ namespace PraticeManagement.ProjectGroupService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ProjectGroupServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ProjectGroupServiceClient");
             }
         }
     }
@@ -229,7 +229,7 @@ namespace PraticeManagement.ProjectService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ProjectServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ProjectServiceClient");
             }
         }
     }
@@ -243,7 +243,7 @@ namespace PraticeManagement.ProjectStatusService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ProjectStatusServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ProjectStatusServiceClient");
             }
         }
     }
@@ -257,7 +257,7 @@ namespace PraticeManagement.TimeEntryService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("TimeEntryServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("TimeEntryServiceClient");
             }
         }
     }
@@ -271,7 +271,7 @@ namespace PraticeManagement.TimeTypeService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("TimeTypeServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("TimeTypeServiceClient");
             }
         }
     }
@@ -285,7 +285,7 @@ namespace PraticeManagement.ReportService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ReportServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ReportServiceClient");
             }
         }
     }
@@ -299,7 +299,7 @@ namespace PraticeManagement.TitleService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("TitleServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("TitleServiceClient");
             }
         }
     }
@@ -313,7 +313,7 @@ namespace PraticeManagement.TimescaleService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("TimescaleServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("TimescaleServiceClient");
             }
         }
     }
@@ -327,7 +327,7 @@ namespace PraticeManagement.ConfigurationService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("ConfigurationServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("ConfigurationServiceClient");
             }
         }
     }
@@ -341,7 +341,7 @@ namespace PraticeManagement.PersonSkillService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonSkillServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("PersonSkillServiceClient");
             }
         }
     }
@@ -355,7 +355,7 @@ namespace PraticeManagement.MembershipService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("MembershipServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("MembershipServiceClient");
             }
         }
     }
@@ -369,7 +369,7 @@ namespace PraticeManagement.RoleService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("RoleServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("RoleServiceClient");
             }
         }
     }
@@ -383,7 +383,7 @@ namespace PraticeManagement.AuthService
         {
             if (WCFClientUtility.IsWebAzureRole())
             {
-                this.Endpoint.Address = WCFClientUtility.GetEndpointAddress("AuthServiceClient");
+                Endpoint.Address = WCFClientUtility.GetEndpointAddress("AuthServiceClient");
             }
         }
     }
@@ -393,248 +393,6 @@ namespace PraticeManagement.Utils
 {
     public class WCFClientUtility
     {
-
-        private static MilestonePersonServiceClient GetMilestonePersonServiceClient()
-        {
-            var client = new MilestonePersonServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("MilestonePersonServiceClient");
-            }
-
-            return client;
-        }
-
-        private static CalendarServiceClient GetCalendarServiceClient()
-        {
-            var client = new CalendarServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("CalendarServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ClientServiceClient GetClientServiceClient()
-        {
-            var client = new ClientServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ClientServiceClient");
-            }
-
-            return client;
-        }
-
-        private static MilestoneServiceClient GetMilestoneServiceClient()
-        {
-            var client = new MilestoneServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("MilestoneServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ProjectServiceClient GetProjectServiceClient()
-        {
-            var client = new ProjectServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ProjectServiceClient");
-            }
-
-            return client;
-        }
-
-        private static PersonServiceClient GetPersonServiceClient()
-        {
-            var client = new PersonServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("PersonServiceClient");
-            }
-
-            return client;
-        }
-
-        private static TimescaleServiceClient GetTimescaleServiceClient()
-        {
-            var client = new TimescaleServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("TimescaleServiceClient");
-            }
-
-            return client;
-        }
-
-        private static TimeEntryServiceClient GetTimeEntryServiceClient()
-        {
-            var client = new TimeEntryServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("TimeEntryServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ProjectGroupServiceClient GetProjectGroupServiceClient()
-        {
-            var client = new ProjectGroupServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ProjectGroupServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ExpenseServiceClient GetExpenseServiceClient()
-        {
-            var client = new ExpenseServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ExpenseServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ConfigurationServiceClient GetConfigurationServiceClient()
-        {
-            var client = new ConfigurationServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ConfigurationServiceClient");
-            }
-
-            return client;
-        }
-
-        private static PracticeServiceClient GetPracticeServiceClient()
-        {
-            var client = new PracticeServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("PracticeServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ActivityLogServiceClient GetActivityLogServiceClient()
-        {
-            var client = new ActivityLogServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ActivityLogServiceClient");
-            }
-
-            return client;
-        }
-
-        private static OverheadServiceClient GetOverheadServiceClient()
-        {
-            var client = new OverheadServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("OverheadServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ProjectStatusServiceClient GetProjectStatusServiceClient()
-        {
-            var client = new ProjectStatusServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ProjectStatusServiceClient");
-            }
-
-            return client;
-        }
-
-        private static PersonRoleServiceClient GetPersonRoleServiceClient()
-        {
-            var client = new PersonRoleServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("PersonRoleServiceClient");
-            }
-
-            return client;
-        }
-
-        private static PersonStatusServiceClient GetPersonStatusServiceClient()
-        {
-            var client = new PersonStatusServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("PersonStatusServiceClient");
-            }
-
-            return client;
-        }
-
-        private static ExpenseCategoryServiceClient GetExpenseCategoryServiceClient()
-        {
-            var client = new ExpenseCategoryServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("ExpenseCategoryServiceClient");
-            }
-
-            return client;
-        }
-
-        private static OpportunityServiceClient GetOpportunityServiceClient()
-        {
-            var client = new OpportunityServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("OpportunityServiceClient");
-            }
-
-            return client;
-        }
-
-        private static MembershipServiceClient GetMembershipServiceClient()
-        {
-            var client = new MembershipServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("MembershipServiceClient");
-            }
-
-            return client;
-        }
-
-        private static AuthServiceClient GetAuthServiceClient()
-        {
-            var client = new AuthServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("AuthServiceClient");
-            }
-
-            return client;
-        }
-
-        private static RoleServiceClient GetRoleServiceClient()
-        {
-            var client = new RoleServiceClient();
-            if (WCFClientUtility.IsWebAzureRole())
-            {
-                client.Endpoint.Address = GetEndpointAddress("RoleServiceClient");
-            }
-
-            return client;
-        }
         public static AttachmentService.AttachmentService GetAttachmentService()
         {
             var service = new AttachmentService.AttachmentService();
@@ -660,10 +418,7 @@ namespace PraticeManagement.Utils
         {
             try
             {
-                if (RoleEnvironment.IsAvailable)
-                    return true;
-
-                return false;
+                return RoleEnvironment.IsAvailable;
             }
             catch
             {
@@ -673,15 +428,7 @@ namespace PraticeManagement.Utils
 
         public static string GetConfigValue(string key)
         {
-            if (IsWebAzureRole())
-            {
-                return RoleEnvironment.GetConfigurationSettingValue(key);
-            }
-            else
-            {
-                return ConfigurationManager.AppSettings[key];
-            }
+            return IsWebAzureRole() ? RoleEnvironment.GetConfigurationSettingValue(key) : ConfigurationManager.AppSettings[key];
         }
     }
 }
-
