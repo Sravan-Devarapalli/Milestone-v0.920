@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace DataTransferObjects.TimeEntry
 {
@@ -11,7 +9,6 @@ namespace DataTransferObjects.TimeEntry
     public class ChargeCode
     {
         private const string seperator = " - ";
-
 
         public string ChargeCodeName
         {
@@ -43,7 +40,6 @@ namespace DataTransferObjects.TimeEntry
                     sb.Append(Project.HtmlEncodedName);
                 }
 
-             
                 sb.Append(seperator);
 
                 if (Phase != 0)
@@ -58,9 +54,7 @@ namespace DataTransferObjects.TimeEntry
                 }
 
                 return sb.ToString();
-
             }
-
         }
 
         [DataMember]
@@ -75,7 +69,6 @@ namespace DataTransferObjects.TimeEntry
         {
             get;
             set;
-
         }
 
         [DataMember]
@@ -83,16 +76,13 @@ namespace DataTransferObjects.TimeEntry
         {
             get;
             set;
-
         }
-
 
         [DataMember]
         public ProjectGroup ProjectGroup
         {
             get;
             set;
-
         }
 
         [DataMember]
@@ -114,8 +104,6 @@ namespace DataTransferObjects.TimeEntry
         {
             get;
             set;
-
         }
     }
 }
-
