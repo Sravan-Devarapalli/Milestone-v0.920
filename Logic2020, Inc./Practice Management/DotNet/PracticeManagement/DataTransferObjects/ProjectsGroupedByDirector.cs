@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 using System.Web;
 
@@ -59,7 +57,7 @@ namespace DataTransferObjects
             get;
             set;
         }
-        
+
         [DataMember]
         public ComputedFinancials ComputedFinancials
         {
@@ -139,7 +137,6 @@ namespace DataTransferObjects
             get;
             set;
         }
-
     }
 
     [DataContract]
@@ -174,7 +171,7 @@ namespace DataTransferObjects
             get;
             set;
         }
-        
+
         [DataMember]
         public List<PracticeManagerHistory> PreviousPracticeManagers
         {
@@ -204,4 +201,3 @@ namespace DataTransferObjects
         }
     }
 }
-
