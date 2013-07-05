@@ -65,7 +65,7 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SaveAnnouncement(string text, string richText);
-            
+
         [OperationContract]
         string GetLatestAnnouncement();
 
@@ -73,4 +73,3 @@ namespace PracticeManagementService
         List<string> GetAllDomains();
     }
 }
-
