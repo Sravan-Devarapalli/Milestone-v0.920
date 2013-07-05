@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects.Reports.ByAccount
 {
-
     [DataContract]
     [Serializable]
     public class BusinessUnitLevelGroupedHours
@@ -46,8 +44,6 @@ namespace DataTransferObjects.Reports.ByAccount
             set;
         }
 
-
-
         [DataMember]
         public double ForecastedHours
         {
@@ -72,8 +68,5 @@ namespace DataTransferObjects.Reports.ByAccount
                 return PersonLevelGroupedHoursList != null ? PersonLevelGroupedHoursList.Sum(t => t.TotalHours) : BillableHours + NonBillableHours + BusinessDevelopmentHours;
             }
         }
-
-
     }
 }
-
