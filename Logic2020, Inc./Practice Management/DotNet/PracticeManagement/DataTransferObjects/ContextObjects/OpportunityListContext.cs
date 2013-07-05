@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace DataTransferObjects.ContextObjects
@@ -37,4 +34,3 @@ namespace DataTransferObjects.ContextObjects
         public bool IsDiscussionReview2 { get; set; }
     }
 }
-
