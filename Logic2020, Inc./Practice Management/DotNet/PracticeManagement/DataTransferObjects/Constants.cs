@@ -1,5 +1,4 @@
-﻿
-namespace DataTransferObjects
+﻿namespace DataTransferObjects
 {
     /// <summary>
     /// Determones a common constants
@@ -94,7 +93,7 @@ namespace DataTransferObjects
             public const string PasswordAttemptWindowKey = "PasswordAttemptWindow";
             public const string IsLockOutPolicyEnabledKey = "IsLockOutPolicyEnabled";
             public const string UnlockUserMinituesKey = "UnlockUserMinitues";
-         
+
             #endregion
 
             # region Application
@@ -104,9 +103,6 @@ namespace DataTransferObjects
             public const string DefaultHoursPerYearKey = "DefaultHoursPerYear";
 
             #endregion
-
-
         }
     }
 }
-
