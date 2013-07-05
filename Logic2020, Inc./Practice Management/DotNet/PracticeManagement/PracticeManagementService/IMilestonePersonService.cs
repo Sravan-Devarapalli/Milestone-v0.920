@@ -58,7 +58,6 @@ namespace PracticeManagementService
         bool CheckTimeEntriesForMilestonePerson(int milestonePersonId, DateTime? startDate, DateTime? endDate,
                                                 bool checkStartDateEquality, bool checkEndDateEquality);
 
-
         /// <summary>
         /// Checks whether there are any time entries for a given MilestonepersonId for the given MilestonePersonRoleId.
         /// </summary>
@@ -127,7 +126,5 @@ namespace PracticeManagementService
 
         [OperationContract]
         void MilestoneResourceUpdate(Milestone milestone, MilestoneUpdateObject milestoneUpdateObj, string userName);
-
     }
 }
-
