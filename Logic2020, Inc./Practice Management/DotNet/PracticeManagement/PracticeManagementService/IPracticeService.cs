@@ -86,7 +86,5 @@ namespace PracticeManagementService
         /// <param name="capability"></param>
         [OperationContract]
         void CapabilityInsert(PracticeCapability capability, string userLogin);
-
     }
 }
-
