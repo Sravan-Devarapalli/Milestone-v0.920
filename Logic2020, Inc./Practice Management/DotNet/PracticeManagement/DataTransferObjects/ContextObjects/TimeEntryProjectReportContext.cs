@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DataTransferObjects.ContextObjects
 {
@@ -13,14 +13,17 @@ namespace DataTransferObjects.ContextObjects
     {
         [DataMember]
         public int ProjectId { get; set; }
+
         [DataMember]
         public DateTime? StartDate { get; set; }
+
         [DataMember]
         public DateTime? EndDate { get; set; }
+
         [DataMember]
         public IEnumerable<int> PersonIds { get; set; }
+
         [DataMember]
         public int? MilestoneId { get; set; }
     }
 }
-
