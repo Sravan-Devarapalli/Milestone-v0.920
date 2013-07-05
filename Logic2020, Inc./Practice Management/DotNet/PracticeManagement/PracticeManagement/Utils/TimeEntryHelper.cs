@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.Text;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
@@ -12,7 +13,6 @@ using PraticeManagement.Configuration;
 using PraticeManagement.Controls.TimeEntry;
 using PraticeManagement.MilestoneService;
 using PraticeManagement.TimeEntryService;
-using System.Text;
 
 namespace PraticeManagement.Utils
 {
@@ -21,7 +21,6 @@ namespace PraticeManagement.Utils
     /// </summary>
     public class TimeEntryHelper
     {
-
         public static bool HasTimeEntriesForMilestone(int milestoneId, DateTime startDate, DateTime endDate)
         {
             using (var serv = new TimeEntryServiceClient())
@@ -42,7 +41,7 @@ namespace PraticeManagement.Utils
             ServiceCallers.Custom.TimeType(client => client.AddTimeType(timeType));
         }
 
-        #endregion
+        #endregion Data - Time Types
 
         #region Data - Time Entry General
 
@@ -58,7 +57,6 @@ namespace PraticeManagement.Utils
         {
             return ServiceCallers.Custom.TimeEntry(client => client.GetTimeEntriesForPerson(person, startDate, endDate));
         }
-
 
         public static TimeEntryRecord[]
             GetTimeEntriesMilestonePerson(MilestonePerson mp)
@@ -108,7 +106,6 @@ namespace PraticeManagement.Utils
             return timeEntries;
         }
 
-
         /// <summary>
         /// Returns all person's TEs for given period
         /// </summary>
@@ -124,7 +121,7 @@ namespace PraticeManagement.Utils
             return ServiceCallers.Custom.TimeEntry(client => client.GetTimeEntriesForPerson(person, startDate, endDate));
         }
 
-        #endregion
+        #endregion Data - Time Entry General
 
         #region Toggling
 
@@ -151,8 +148,8 @@ namespace PraticeManagement.Utils
             ToggleTimeEntryProperty(c => c.ToggleIsReviewed(timeEntry));
         }
 
-        #endregion
-        
+        #endregion Toggling
+
         #region Milestones
 
         /// <summary>
@@ -216,7 +213,7 @@ namespace PraticeManagement.Utils
             return defMpe;
         }
 
-        #endregion
+        #endregion Milestones
 
         #region Controls
 
@@ -231,16 +228,14 @@ namespace PraticeManagement.Utils
             foreach (MilestonePersonEntry mpe in milestonePersonEntries)
             {
                 ListItem item = new ListItem(mpe.ParentMilestone.ToString(Milestone.MilestoneFormat.ProjectMilestone), mpe.MilestonePersonId.ToString());
-                if (!listitems.Contains(item))
-                {
-                    listitems.Add(item);
-                    item.Attributes.Add("title", item.Text);
-                    ddlProjectMilestones.Items.Add(item);
-                }
+                if (listitems.Contains(item)) continue;
+                listitems.Add(item);
+                item.Attributes.Add("title", item.Text);
+                ddlProjectMilestones.Items.Add(item);
             }
         }
 
-        #endregion
+        #endregion Controls
 
         #region Adapters
 
@@ -264,7 +259,7 @@ namespace PraticeManagement.Utils
             return res;
         }
 
-        #endregion
+        #endregion Adapters
 
         #region Reviewing
 
@@ -273,7 +268,7 @@ namespace PraticeManagement.Utils
             return Enum.GetNames(typeof(ReviewStatus));
         }
 
-        #endregion
+        #endregion Reviewing
 
         #region Reports
 
@@ -306,37 +301,34 @@ namespace PraticeManagement.Utils
 
             var personTimeEntries = ServiceCallers.Custom.TimeEntry(te => te.GetTimeEntriesPerson(reportContext));
 
-
             if (!(personTimeEntries.GroupedTimeEtnries.Values.Count > 0))
             {
                 personTimeEntries = new PersonTimeEntries();
 
                 var persons = ServiceCallers.Custom.Person(p => p.GetPersonListByPersonIdsAndPayTypeIds(personId + ",", payTypeIds != null ? FormCSV(payTypeIds) : null, practiceIds != null ? FormCSV(practiceIds) : null, startDate.Value, endDate.Value));
 
-
                 foreach (var person in persons)
                 {
-                  return new PersonTimeEntries
-                    {
-                        Person = new Person() { LastName = person.LastName, FirstName = person.FirstName, Id = personId }
-                    };
+                    return new PersonTimeEntries
+                      {
+                          Person = new Person() { LastName = person.LastName, FirstName = person.FirstName, Id = personId }
+                      };
                 }
             }
 
             return personTimeEntries;
-          
         }
-       
+
         private static string FormCSV(IEnumerable<int> IdList)
         {
             StringBuilder sb = new StringBuilder(string.Empty);
             foreach (int Id in IdList)
             {
-                sb.Append("," + Id.ToString());
+                sb.Append("," + Id);
             }
             return sb.ToString();
         }
-        #endregion
+
+        #endregion Reports
     }
 }
-
