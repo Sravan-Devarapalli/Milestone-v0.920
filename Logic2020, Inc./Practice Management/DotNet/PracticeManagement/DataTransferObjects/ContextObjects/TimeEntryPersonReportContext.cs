@@ -1,6 +1,6 @@
 using System;
-using System.Runtime.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DataTransferObjects.ContextObjects
 {
@@ -13,17 +13,20 @@ namespace DataTransferObjects.ContextObjects
     {
         [DataMember]
         public int PersonId { get; set; }
+
         [DataMember]
         public DateTime? StartDate { get; set; }
+
         [DataMember]
         public DateTime? EndDate { get; set; }
+
         [DataMember]
         public List<int> PayTypeIds { get; set; }
+
         [DataMember]
         public List<int> PracticeIds { get; set; }
+
         [DataMember]
         public List<int> PersonIds { get; set; }
-
     }
 }
-
