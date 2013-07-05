@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel.Activation;
+using System.Web;
 using DataAccess;
 using DataTransferObjects;
 using DataTransferObjects.CompositeObjects;
 using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
-using System.Web;
 
 namespace PracticeManagementService
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TimeEntryService : ITimeEntryService
     {
-      
         #region Time Zone
 
         public void SetTimeZone(Timezone timezone)
@@ -46,7 +45,7 @@ namespace PracticeManagementService
             }
         }
 
-        #endregion
+        #endregion Time Zone
 
         #region Time entry
 
@@ -97,8 +96,6 @@ namespace PracticeManagementService
                 throw e;
             }
         }
-
-
 
         /// <summary>
         /// Get milestones by person for given time period
@@ -152,6 +149,7 @@ namespace PracticeManagementService
                 throw e;
             }
         }
+
         /// <summary>
         /// Toggle IsCorrect property
         /// </summary>
@@ -224,7 +222,7 @@ namespace PracticeManagementService
             }
         }
 
-        #endregion
+        #endregion Time entry
 
         #region Event handlers
 
@@ -249,7 +247,7 @@ namespace PracticeManagementService
             return x.PersonLastFirstName.CompareTo(y.PersonLastFirstName);
         }
 
-        #endregion
+        #endregion Event handlers
 
         #region Time entry filters
 
@@ -352,7 +350,7 @@ namespace PracticeManagementService
             }
         }
 
-        #endregion
+        #endregion Time entry filters
 
         public List<TimeEntrySection> PersonTimeEntriesByPeriod(int personId, DateTime startDate, DateTime endDate)
         {
@@ -410,7 +408,7 @@ namespace PracticeManagementService
         {
             try
             {
-                return TimeEntryDAL.GetIsChargeCodeTurnOffByPeriod( personId,  clientId,  groupId,  projectId,  timeTypeId,  startDate,  endDate);
+                return TimeEntryDAL.GetIsChargeCodeTurnOffByPeriod(personId, clientId, groupId, projectId, timeTypeId, startDate, endDate);
             }
             catch (Exception e)
             {
@@ -448,9 +446,6 @@ namespace PracticeManagementService
             }
         }
 
-        #endregion
-
-
+        #endregion TimeTrack Methods
     }
 }
-
