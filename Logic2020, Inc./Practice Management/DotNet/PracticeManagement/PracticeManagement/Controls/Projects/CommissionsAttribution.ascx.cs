@@ -47,7 +47,6 @@ namespace PraticeManagement.Controls.Projects
         public const string TempEndDateXname = "TempEndDate";
         public const string TempPercentageXname = "TempPercentage";
         public const string IsCheckboxCheckedXname = "IsCheckboxChecked";
-        private const string AttributionTypeXname = "AttributionType";
         private const string AttributionXname = "Attribution";
         private const string AttributionRecordTypeXname = "AttributionRecordType";
         private const string AttributionsXmlOpen = "<Attributions>";
@@ -890,9 +889,7 @@ namespace PraticeManagement.Controls.Projects
                 {
                     if (item.Attribute(XName.Get(IsEditModeXname)).Value == false.ToString())
                     {
-                        if (ddlPerson.SelectedValue == item.Attribute(XName.Get(TargetIdXname)).Value &&
-                            item.Attribute(XName.Get(TitleIdXname)).Value ==
-                            (title == null ? string.Empty : title.TitleId.ToString()))
+                        if (ddlPerson.SelectedValue == item.Attribute(XName.Get(TargetIdXname)).Value || (title != null && item.Attribute(XName.Get(TitleIdXname)).Value == title.TitleId.ToString()))
                         {
                             DateTime itemStartDate = Convert.ToDateTime(item.Attribute(XName.Get(StartDateXname)).Value);
                             DateTime itemEndDate = Convert.ToDateTime(item.Attribute(XName.Get(EndDateXname)).Value);
@@ -911,21 +908,10 @@ namespace PraticeManagement.Controls.Projects
             GridViewRow row = custCommissionsPercentage.NamingContainer as GridViewRow;
             GridView gridView = row.NamingContainer as GridView;
             HiddenField attributionType = gridView.HeaderRow.FindControl("hdnAttributionType") as HiddenField;
-            HiddenField hdnEditMode = row.FindControl("hdnEditMode") as HiddenField;
             decimal totalPercentage = 0;
             args.IsValid = true;
-            List<XElement> xlist;
-
-            if (attributionType.Value == "Delivery")
-            {
-                XDocument xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
-                xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-            }
-            else
-            {
-                XDocument xdoc = XDocument.Parse(SalesPracticeAttributionXML);
-                xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
-            }
+            XDocument xdoc = attributionType.Value == "Delivery" ? XDocument.Parse(DeliveryPracticeAttributionXML):XDocument.Parse(SalesPracticeAttributionXML);
+            List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
             foreach (var item in xlist)
             {
                 decimal itemPercentage;
@@ -1567,9 +1553,10 @@ namespace PraticeManagement.Controls.Projects
 
         public void Validate(GridViewRow row, AttributionCategory attribution)
         {
-            XElement item = (XElement)row.DataItem;
             if (attribution == AttributionCategory.DeliveryPersonAttribution || attribution == AttributionCategory.SalesPersonAttribution)
             {
+                DatePicker dpStart = row.FindControl("dpStartDate") as DatePicker;
+                DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
                 RequiredFieldValidator reqPersonName = row.FindControl("reqPersonName") as RequiredFieldValidator;
                 RequiredFieldValidator reqPersonStart = row.FindControl("reqPersonStart") as RequiredFieldValidator;
                 CompareValidator compPersonStartType = row.FindControl("compPersonStartType") as CompareValidator;
@@ -1642,6 +1629,8 @@ namespace PraticeManagement.Controls.Projects
 
         public bool ValidateCommissionsPercentage()
         {
+            if (!SaveRecordsOnFinalSave())
+                return false;
             CustomValidator custCommissionsPercentage = gvDeliveryAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
             CustomValidator custCommissionsPercentageSales = gvSalesAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
             custCommissionsPercentage.ValidationGroup = custCommissionsPercentageSales.ValidationGroup = ValidationGroup;
@@ -1650,6 +1639,81 @@ namespace PraticeManagement.Controls.Projects
             return Page.IsValid;
         }
 
+        public bool SaveRecordsOnFinalSave()
+        {
+            XDocument xdoc;
+            List<XElement> xlist;
+            int j = 0;
+            xdoc = XDocument.Parse(DeliveryPersonAttributionXML);
+            xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+            if (xlist.Any(x => x.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString()))
+            {
+                for (int i = 0; i < gvDeliveryAttributionPerson.Rows.Count; i++)
+                {
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
+                    {
+                        ImageButton imgUpdate =
+                            gvDeliveryAttributionPerson.Rows[i].FindControl("imgDeliveryPersonAttributeUpdate") as
+                            ImageButton;
+                        imgPersonUpdate_Click(imgUpdate, new EventArgs());
+                        j++;
+                    }
+                }
+            }
+            xdoc = XDocument.Parse(SalesPersonAttributionXML);
+            xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+            if (xlist.Any(x => x.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString()))
+            {
+                for (int i = 0; i < gvSalesAttributionPerson.Rows.Count; i++)
+                {
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
+                    {
+                        ImageButton imgUpdate =
+                            gvSalesAttributionPerson.Rows[i].FindControl("imgSalesPersonAttributeUpdate") as
+                            ImageButton;
+                        imgPersonUpdate_Click(imgUpdate, new EventArgs());
+                        j++;
+                    }
+                }
+            }
+            xdoc = XDocument.Parse(DeliveryPracticeAttributionXML);
+            xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+            if (xlist.Any(x => x.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString()))
+            {
+                for (int i = 0; i < gvDeliveryAttributionPractice.Rows.Count; i++)
+                {
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
+                    {
+                        ImageButton imgUpdate =
+                            gvDeliveryAttributionPractice.Rows[i].FindControl("imgDeliveryPracticeAttributeUpdate") as
+                            ImageButton;
+                        imgPracticeUpdate_Click(imgUpdate, new EventArgs());
+                        j++;
+                    }
+                }
+            }
+            xdoc = XDocument.Parse(SalesPracticeAttributionXML);
+            xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+            if (xlist.Any(x => x.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString()))
+            {
+                for (int i = 0; i < gvSalesAttributionPractice.Rows.Count; i++)
+                {
+                    if (xlist[i].Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
+                    {
+                        ImageButton imgUpdate =
+                            gvSalesAttributionPractice.Rows[i].FindControl("imgSalesPracticeAttributeUpdate") as
+                            ImageButton;
+                        imgPracticeUpdate_Click(imgUpdate, new EventArgs());
+                        j++;
+                    }
+                }
+            }
+            if (j != 0)
+                return false;
+            return true;
+        }
+
         #endregion Methods
     }
 }
+
