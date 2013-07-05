@@ -32,7 +32,7 @@ namespace DataTransferObjects
             set;
         }
 
-        #endregion
+        #endregion Properties
 
         #region Methods
 
@@ -43,14 +43,12 @@ namespace DataTransferObjects
 
         public IEnumerable<string> DataHeaders
         {
-            get 
-            {                
+            get
+            {
                 return from DataColumn column in Data.Tables[0].Columns select column.ColumnName;
             }
         }
 
-        #endregion
-
+        #endregion Methods
     }
 }
-
