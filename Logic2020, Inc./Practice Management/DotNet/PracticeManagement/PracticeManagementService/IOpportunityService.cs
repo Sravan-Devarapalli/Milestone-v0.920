@@ -67,7 +67,7 @@ namespace PracticeManagementService
         /// <returns>A list of the <see cref="Opportunity"/> objects.</returns>
         [OperationContract]
         List<Opportunity> OpportunityListAll(OpportunityListContext context);
-        
+
         [OperationContract]
         List<OpportunityPriority> GetOpportunityPrioritiesListAll();
 
@@ -130,7 +130,7 @@ namespace PracticeManagementService
         List<OpportunityPerson> GetOpportunityPersons(int opportunityId);
 
         ///<summary>
-        /// Creates a project from an opportunity. 
+        /// Creates a project from an opportunity.
         ///</summary>
         ///<param name="opportunityId">An ID of the opportunity to be converted</param>
         ///<param name="userName">A Current User</param>
@@ -162,7 +162,6 @@ namespace PracticeManagementService
         [OperationContract]
         void OpportunityDelete(int opportunityId, string userName);
 
-
         ///<summary>
         /// Reads an Opportunity Priority Changes count
         ///</summary>
@@ -185,4 +184,3 @@ namespace PracticeManagementService
         List<Opportunity> OpportunityListWithMinimumDetails(int? clientId, bool? attach);
     }
 }
-
