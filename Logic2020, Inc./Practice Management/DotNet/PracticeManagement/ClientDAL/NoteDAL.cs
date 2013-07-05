@@ -105,8 +105,6 @@ namespace DataAccess
             return result;
         }
 
-
-
         public static void NoteUpdate(Note note)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -141,8 +139,6 @@ namespace DataAccess
             }
         }
 
-        #endregion
-       
+        #endregion Methods
     }
 }
-
