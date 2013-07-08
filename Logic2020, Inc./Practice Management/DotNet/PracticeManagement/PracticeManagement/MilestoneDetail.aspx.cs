@@ -131,6 +131,37 @@ namespace PraticeManagement
             }
         }
 
+        public List<int> MilestoneCSATAttributionCount
+        {
+            get
+            {
+                int? id = MilestoneId;
+                if (id.HasValue)
+                {
+                    if (ViewState["MilestoneCSATAttributionCount"] == null)
+                    {
+                        using (var serviceClient = new MilestoneServiceClient())
+                        {
+                            try
+                            {
+                                ViewState["MilestoneCSATAttributionCount"] =
+                                    serviceClient.GetMilestoneAndCSATCountsByProject(Milestone.Project.Id.Value).ToList();
+                            }
+                            catch (FaultException<ExceptionDetail>)
+                            {
+                                serviceClient.Abort();
+                                throw;
+                            }
+                        }
+                    }
+                    return (List<int>)ViewState["MilestoneCSATAttributionCount"];
+                }
+
+                return null;
+            }
+            set { ViewState["MilestoneCSATAttributionCount"] = value; }
+        }
+
         public DatePicker dtpPeriodToObject
         {
             get
@@ -304,6 +335,23 @@ namespace PraticeManagement
             get
             {
                 return MilestoneId.HasValue;
+            }
+        }
+
+        public bool IsPanelDisplayed
+        {
+            get
+            {
+                if (ViewState["IsPanelDisplayed_Key"] == null)
+                {
+                    ViewState["IsPanelDisplayed_Key"] = false;
+                }
+
+                return (bool)ViewState["IsPanelDisplayed_Key"];
+            }
+            set
+            {
+                ViewState["IsPanelDisplayed_Key"] = value;
             }
         }
 
@@ -570,6 +618,10 @@ namespace PraticeManagement
                 Page.Validate(vsumPopup.ValidationGroup);
                 if (Page.IsValid)
                 {
+                    Page.Validate("AttributionPopup");
+                }
+                if (Page.IsValid)
+                {
                     if (!MilestoneId.HasValue)
                     {
                         int? id = SaveData();
@@ -617,6 +669,20 @@ namespace PraticeManagement
             LoadActiveTabIndex(mvMilestoneDetailTab.ActiveViewIndex);
 
             return result && Page.IsValid;
+        }
+
+        protected void btnOkAttribution_Click(object sender, EventArgs e)
+        {
+            if (hdnIsUpdate.Value == false.ToString())
+                btnDelete_Click(btnDelete, new EventArgs());
+            else
+                btnSave_Click(btnSave, new EventArgs());
+        }
+
+        protected void btnCancelAttribution_Click(object sender, EventArgs e)
+        {
+            IsPanelDisplayed = false;
+            mpeAttribution.Hide();
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
@@ -710,15 +776,46 @@ namespace PraticeManagement
             Page.Validate("MilestoneDelete");
             if (Page.IsValid)
             {
+                Page.Validate("AttributionPopup");
+            }
+            if (Page.IsValid)
+            {
                 try
                 {
                     DeleteRecord();
+                    IsPanelDisplayed = false;
                     ReturnToPreviousPage();
                 }
                 catch (Exception exception)
                 {
                     lblError.ShowErrorMessage("{0}", exception.Message);
                 }
+            }
+        }
+
+        protected void cvAttributionPopup_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            if (IsPanelDisplayed)
+                return;
+            List<Attribution> attributionList;
+            using (var service = new MilestoneServiceClient())
+            {
+                attributionList =
+                    service.IsProjectAttributionConflictsWithMilestoneChanges(MilestoneId.Value,
+                                                                              dtpPeriodFrom
+                                                                                  .DateValue,
+                                                                              dtpPeriodTo.DateValue,
+                                                                              false).ToList();
+            }
+            if (attributionList.Any())
+            {
+                hdnIsUpdate.Value = false.ToString();
+                IsPanelDisplayed = true;
+                mpeAttribution.Show();
+                repPersons.DataSource = attributionList;
+                repPersons.DataBind();
+                e.IsValid = false;
             }
         }
 
@@ -747,35 +844,17 @@ namespace PraticeManagement
 
         protected void custProjectStatus_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
-            using (var service = new MilestoneServiceClient())
-            {
-                List<int> list = service.GetMilestoneAndCSATCountsByProject(Milestone.Project.Id.Value).ToList();
-                if (Project.Status.StatusType == ProjectStatusType.Active && list[0] == 1)
-                {
-                    e.IsValid = false;
-                }
-                else
-                {
-                    e.IsValid = true;
-                }
-            }
+            e.IsValid = (Project.Status.StatusType == ProjectStatusType.Active && MilestoneCSATAttributionCount[0] == 1) ? false : true;
         }
 
         protected void custCSATValidate_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
-            using (var service = new MilestoneServiceClient())
-            {
-                List<int> list = service.GetMilestoneAndCSATCountsByProject(Milestone.Project.Id.Value).ToList();
+            e.IsValid = (MilestoneCSATAttributionCount[0] != 1 || MilestoneCSATAttributionCount[1] <= 0);
+        }
 
-                if (list[0] == 1 && list[1] > 0)
-                {
-                    e.IsValid = false;
-                }
-                else
-                {
-                    e.IsValid = true;
-                }
-            }
+        protected void custAttribution_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = (MilestoneCSATAttributionCount[0] != 1 || MilestoneCSATAttributionCount[2] <= 0);
         }
 
         protected void btnMoveMilestone_Click(object sender, EventArgs e)
@@ -961,6 +1040,10 @@ namespace PraticeManagement
             if (Page.IsValid)
             {
                 Page.Validate(vsumPopup.ValidationGroup);
+                if (Page.IsValid)
+                {
+                    Page.Validate("AttributionPopup");
+                }
                 if (Page.IsValid)
                 {
                     if (!MilestonePersonEntryListControl.isInsertedRowsAreNotsaved)
@@ -1221,6 +1304,8 @@ namespace PraticeManagement
             {
                 try
                 {
+                    IsPanelDisplayed = false;
+                    MilestoneCSATAttributionCount = null;
                     return serviceClient.SaveMilestoneDetail(milestone, User.Identity.Name);
                 }
                 catch (FaultException<ExceptionDetail>)
