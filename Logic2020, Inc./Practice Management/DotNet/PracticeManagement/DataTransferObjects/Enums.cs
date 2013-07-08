@@ -216,6 +216,10 @@ namespace DataTransferObjects
     public enum AttributionTypes
     {
         [EnumMember]
+        [Description("Undefined")]
+        Undefined = 0,
+
+        [EnumMember]
         [Description("Sales")]
         Sales = 1,
 
@@ -227,6 +231,10 @@ namespace DataTransferObjects
     [DataContract]
     public enum AttributionRecordTypes
     {
+        [EnumMember]
+        [Description("Undefined")]
+        Undefined = 0,
+
         [EnumMember]
         [Description("Person")]
         Person = 1,
