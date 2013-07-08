@@ -39,6 +39,19 @@ AS
 		SET EndDate = @EndDate + (7 - DATEPART(dw,@EndDate))
 	FROM [dbo].[PersonTimeEntryRecursiveSelection] PTRS
 	WHERE PTRS.ProjectId = @ProjectId AND PTRS.IsRecursive = 1
+
+	UPDATE A
+		SET A.StartDate = CASE WHEN A.StartDate < @StartDate THEN @StartDate ELSE A.StartDate END,--max startdate
+			A.EndDate = CASE WHEN A.EndDate > @EndDate THEN @EndDate ELSE A.EndDate END--min enddate
+	FROM [dbo].Attribution A
+	INNER JOIN AttributionRecordTypes ART ON A.AttributionRecordTypeId = ART.AttributionRecordId AND ART.IsRangeType = 1
+	WHERE A.ProjectId = @ProjectId AND A.StartDate <= @EndDate AND @StartDate <= A.EndDate
+
+	DELETE A
+	FROM [dbo].Attribution A
+	INNER JOIN AttributionRecordTypes ART ON A.AttributionRecordTypeId = ART.AttributionRecordId AND ART.IsRangeType = 1
+	WHERE A.ProjectId = @ProjectId AND (A.StartDate > @EndDate OR @StartDate > A.EndDate)
+
 	
 	IF  ( SELECT UserLogin
 			FROM SessionLogData
