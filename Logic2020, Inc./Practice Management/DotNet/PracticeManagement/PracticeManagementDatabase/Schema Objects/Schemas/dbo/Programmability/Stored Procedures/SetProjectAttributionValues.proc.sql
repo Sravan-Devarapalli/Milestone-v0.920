@@ -7,6 +7,7 @@
 AS
 BEGIN
 	SET ANSI_NULLS ON;
+	SET NOCOUNT ON;
 	/*
 	<Attributions>
 		<AttributionType AttributionTypeId="">
