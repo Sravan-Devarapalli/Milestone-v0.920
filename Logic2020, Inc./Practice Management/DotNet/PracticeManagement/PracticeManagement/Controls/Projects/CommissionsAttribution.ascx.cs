@@ -1591,11 +1591,20 @@ namespace PraticeManagement.Controls.Projects
         {
             if (!SaveRecordsOnFinalSave())
                 return false;
-            CustomValidator custCommissionsPercentage = gvDeliveryAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
-            CustomValidator custCommissionsPercentageSales = gvSalesAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
-            custCommissionsPercentage.ValidationGroup = custCommissionsPercentageSales.ValidationGroup = ValidationGroup;
-            custCommissionsPercentage.Validate();
-            custCommissionsPercentageSales.Validate();
+            if (gvDeliveryAttributionPractice.HeaderRow != null)
+            {
+                CustomValidator custCommissionsPercentage =
+                    gvDeliveryAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
+                custCommissionsPercentage.ValidationGroup = ValidationGroup;
+                custCommissionsPercentage.Validate();
+            }
+            if (gvSalesAttributionPractice.HeaderRow != null)
+            {
+                CustomValidator custCommissionsPercentageSales =
+                    gvSalesAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
+                custCommissionsPercentageSales.ValidationGroup = ValidationGroup;
+                custCommissionsPercentageSales.Validate();
+            }
             return Page.IsValid;
         }
 
