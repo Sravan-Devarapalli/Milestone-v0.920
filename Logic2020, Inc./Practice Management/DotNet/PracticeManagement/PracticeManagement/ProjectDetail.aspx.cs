@@ -1249,9 +1249,10 @@ namespace PraticeManagement
         {
             bool result = false;
             Page.Validate(vsumProject.ValidationGroup);
-            if (Page.IsValid && ValidateProjectTimeTypesTab() &&
-                    (CompletedStatus || ValidateCompleStatusPopup()) && (!ProjectId.HasValue || projectAttribution.ValidateCommissionsPercentage())
-                 )
+            if (Page.IsValid && ValidateProjectTimeTypesTab() && (CompletedStatus || ValidateCompleStatusPopup()) &&
+                (!ProjectId.HasValue || Project == null || Project.Milestones == null || Project.Milestones.Count <= 0 ||
+                 projectAttribution.ValidateCommissionsPercentage())
+                )
             {
                 cvCompletedStatus.IsValid = true;
                 int? id = SaveData();
