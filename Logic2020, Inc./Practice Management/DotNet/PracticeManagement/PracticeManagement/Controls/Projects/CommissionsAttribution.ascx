@@ -364,7 +364,7 @@
                 </tr>
                 <tr style="height: 25%">
                     <td class="Width47Percent vTop border_blackExceptTop">
-                        <asp:GridView ID="gvDeliveryAttributionPractice" runat="server" AutoGenerateColumns="False" 
+                        <asp:GridView ID="gvDeliveryAttributionPractice" runat="server" AutoGenerateColumns="False"
                             Attribution="3" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
                             OnRowDataBound="gvDeliveryAttributionPractice_RowDataBound" EmptyDataText="No practices were assigned to this attribution."
                             RowStyle-Wrap="false" HeaderStyle-Wrap="false" GridLines="None" BackColor="White">
