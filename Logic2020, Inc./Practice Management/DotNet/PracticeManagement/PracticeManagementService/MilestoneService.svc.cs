@@ -271,6 +271,11 @@ namespace PracticeManagementService
             return MilestoneDAL.GetMilestoneAndCSATCountsByProject(projectId);
         }
 
+        public List<Attribution> IsProjectAttributionConflictsWithMilestoneChanges(int milestoneId, DateTime startDate, DateTime endDate, bool isUpdate)
+        {
+            return MilestoneDAL.IsProjectAttributionConflictsWithMilestoneChanges(milestoneId, startDate, endDate, isUpdate);
+        }
+
         #endregion Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
     }
 }
