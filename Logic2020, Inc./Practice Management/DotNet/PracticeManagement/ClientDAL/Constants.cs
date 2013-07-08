@@ -454,6 +454,9 @@
             public static string SeniorManagerName = "SeniorManagerName";
             public static string IsSeniorManagerUnassigned = "IsSeniorManagerUnassigned";
             public static string PONumber = "PONumber";
+            public const string MilestoneCountColumn = "MilestoneCount";
+            public const string CSATCountColumn = "CSATCount";
+            public const string AttributionCount = "AttributionCount";
         }
 
         #endregion Nested type: ColumnNames
@@ -473,6 +476,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IsUpdate = "@IsUpdate";
             public static string DivisionId = "@DivisionId";
             public static string AttributionXML = "@AttributionXML";
             public static string IsSummaryCache = "@IsSummaryCache";
@@ -1249,6 +1253,7 @@
                 public const string MilestonePersonEntryWithFinancials = "dbo.MilestonePersonEntryWithFinancials";
                 public const string UpdateMilestonePersonEntry = "dbo.UpdateMilestonePersonEntry";
                 public const string MilestoneResourceUpdateProcedure = "dbo.MilestoneResourceUpdate";
+                public const string IsProjectAttributionConflictsWithMilestoneChanges = "dbo.IsProjectAttributionConflictsWithMilestoneChanges";
             }
 
             #endregion Nested type: MilestonePerson
