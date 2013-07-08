@@ -282,7 +282,6 @@ namespace PraticeManagement.Controls.Projects
                     ddlPractice.Items.Add(selectedPractice);
                 }
                 ddlPractice.SelectedValue = selectedPractice.Value;
-            
             }
             else
             {
@@ -1606,8 +1605,7 @@ namespace PraticeManagement.Controls.Projects
 
         public bool ValidateCommissionsPercentage()
         {
-            if (!SaveRecordsOnFinalSave())
-                return false;
+            SaveRecordsOnFinalSave();
             if (gvDeliveryAttributionPractice.HeaderRow != null)
             {
                 CustomValidator custCommissionsPercentage =
@@ -1690,4 +1688,3 @@ namespace PraticeManagement.Controls.Projects
         #endregion Methods
     }
 }
-
