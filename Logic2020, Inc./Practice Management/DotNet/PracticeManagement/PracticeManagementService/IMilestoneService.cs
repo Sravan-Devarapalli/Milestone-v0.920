@@ -178,5 +178,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<int> GetMilestoneAndCSATCountsByProject(int projectId);
+
+        [OperationContract]
+        List<Attribution> IsProjectAttributionConflictsWithMilestoneChanges(int milestoneId, DateTime startDate, DateTime endDate, bool isUpdate);
     }
 }
+
