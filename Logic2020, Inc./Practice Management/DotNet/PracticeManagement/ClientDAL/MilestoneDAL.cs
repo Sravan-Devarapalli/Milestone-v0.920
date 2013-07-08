@@ -40,7 +40,10 @@ namespace DataAccess
         #region Stored Procedures
 
         private const string MilestoneListByProjectProcedure = "dbo.MilestoneListByProject";
-        private const string MilestoneListByProjectForTimeEntryByProjectReportProcedure = "dbo.MilestoneListByProjectForTimeEntryByProjectReport";
+
+        private const string MilestoneListByProjectForTimeEntryByProjectReportProcedure =
+            "dbo.MilestoneListByProjectForTimeEntryByProjectReport";
+
         private const string MilestoneGetByIdProcedure = "dbo.MilestoneGetById";
         private const string MilestoneInsertProcedure = "dbo.MilestoneInsert";
         private const string MilestoneUpdateProcedure = "dbo.MilestoneUpdate";
@@ -52,16 +55,19 @@ namespace DataAccess
         private const string GetMilestoneAndCSATCountsByProjectProcedure = "GetMilestoneAndCSATCountsByProject";
         private const string DefaultMileStoneInsertProcedure = "dbo.DefaultMilestoneSettingInsert";
         private const string DefaultMileStoneGetProcedure = "dbo.GetDefaultMilestoneSetting";
-        public const string GetPersonMilestonesAfterTerminationDateProcedure = "dbo.GetPersonMilestonesAfterTerminationDate";
-        public const string CheckIfExpensesExistsForMilestonePeriodProcedure = "dbo.CheckIfExpensesExistsForMilestonePeriod";
+
+        public const string GetPersonMilestonesAfterTerminationDateProcedure =
+            "dbo.GetPersonMilestonesAfterTerminationDate";
+
+        public const string CheckIfExpensesExistsForMilestonePeriodProcedure =
+            "dbo.CheckIfExpensesExistsForMilestonePeriod";
+
         public const string CanMoveFutureMilestonesProcedure = "dbo.CanMoveFutureMilestones";
 
         #endregion Stored Procedures
 
         #region Columns
 
-        private const string MilestoneCountColumn = "MilestoneCount";
-        private const string CSATCountColumn = "CSATCount";
         private const string ProjectStartDateColumn = "ProjectStartDate";
         private const string ProjectEndDateColumn = "ProjectEndDate";
         private const string IsHourlyAmountColumn = "IsHourlyAmount";
@@ -87,7 +93,8 @@ namespace DataAccess
         /// <param name="clientId"></param>
         /// <param name="ProjectId"></param>
         /// <param name="MileStoneId"></param>
-        public static void SaveDefaultMilestone(int? clientId, int? ProjectId, int? MilestoneId, int? lowerBound, int? upperBound)
+        public static void SaveDefaultMilestone(int? clientId, int? ProjectId, int? MilestoneId, int? lowerBound,
+                                                int? upperBound)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(DefaultMileStoneInsertProcedure, connection))
@@ -158,7 +165,9 @@ namespace DataAccess
         public static List<Milestone> MilestoneListByProjectForTimeEntryByProjectReport(int projectId)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (SqlCommand command = new SqlCommand(MilestoneListByProjectForTimeEntryByProjectReportProcedure, connection))
+            using (
+                SqlCommand command = new SqlCommand(MilestoneListByProjectForTimeEntryByProjectReportProcedure,
+                                                    connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -267,17 +276,27 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(ProjectIdParam, (milestone.Project != null && milestone.Project.Id.HasValue) ?
-                                                                        (object)milestone.Project.Id.Value : DBNull.Value
-                                               );
-                command.Parameters.AddWithValue(DescriptionParam, !string.IsNullOrEmpty(milestone.Description) ? (object)milestone.Description : DBNull.Value);
-                command.Parameters.AddWithValue(AmountParam, milestone.Amount.HasValue ? (object)milestone.Amount.Value.Value : DBNull.Value);
+                command.Parameters.AddWithValue(ProjectIdParam,
+                                                (milestone.Project != null && milestone.Project.Id.HasValue)
+                                                    ? (object)milestone.Project.Id.Value
+                                                    : DBNull.Value
+                    );
+                command.Parameters.AddWithValue(DescriptionParam,
+                                                !string.IsNullOrEmpty(milestone.Description)
+                                                    ? (object)milestone.Description
+                                                    : DBNull.Value);
+                command.Parameters.AddWithValue(AmountParam,
+                                                milestone.Amount.HasValue
+                                                    ? (object)milestone.Amount.Value.Value
+                                                    : DBNull.Value);
                 command.Parameters.AddWithValue(StartDateParam, milestone.StartDate);
                 command.Parameters.AddWithValue(ProjectedDeliveryDateParam, milestone.ProjectedDeliveryDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, milestone.IsChargeable);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ConsultantsCanAdjust, milestone.ConsultantsCanAdjust);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ConsultantsCanAdjust,
+                                                milestone.ConsultantsCanAdjust);
                 command.Parameters.AddWithValue(IsHourlyAmountParam, milestone.IsHourlyAmount);
-                command.Parameters.AddWithValue(UserLoginParam, !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+                command.Parameters.AddWithValue(UserLoginParam,
+                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 SqlParameter milestoneIdParam = new SqlParameter(MilestoneIdParam, SqlDbType.Int)
                     {
@@ -312,21 +331,26 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(MilestoneIdParam, milestone.Id.Value);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ConsultantsCanAdjust, milestone.ConsultantsCanAdjust);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ConsultantsCanAdjust,
+                                                milestone.ConsultantsCanAdjust);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsChargeable, milestone.IsChargeable);
                 command.Parameters.AddWithValue(ProjectIdParam,
-                    milestone.Project != null && milestone.Project.Id.HasValue ?
-                    (object)milestone.Project.Id.Value : DBNull.Value);
+                                                milestone.Project != null && milestone.Project.Id.HasValue
+                                                    ? (object)milestone.Project.Id.Value
+                                                    : DBNull.Value);
                 command.Parameters.AddWithValue(DescriptionParam,
-                    !string.IsNullOrEmpty(milestone.Description) ?
-                    (object)milestone.Description : DBNull.Value);
+                                                !string.IsNullOrEmpty(milestone.Description)
+                                                    ? (object)milestone.Description
+                                                    : DBNull.Value);
                 command.Parameters.AddWithValue(AmountParam,
-                    milestone.Amount.HasValue ? (object)milestone.Amount.Value.Value : DBNull.Value);
+                                                milestone.Amount.HasValue
+                                                    ? (object)milestone.Amount.Value.Value
+                                                    : DBNull.Value);
                 command.Parameters.AddWithValue(StartDateParam, milestone.StartDate);
                 command.Parameters.AddWithValue(ProjectedDeliveryDateParam, milestone.ProjectedDeliveryDate);
                 command.Parameters.AddWithValue(IsHourlyAmountParam, milestone.IsHourlyAmount);
                 command.Parameters.AddWithValue(UserLoginParam,
-                    !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 connection.Open();
 
@@ -349,10 +373,11 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(MilestoneIdParam, milestone.Id.Value);
                 command.Parameters.AddWithValue(DescriptionParam,
-                    !string.IsNullOrEmpty(milestone.Description) ?
-                    (object)milestone.Description : DBNull.Value);
+                                                !string.IsNullOrEmpty(milestone.Description)
+                                                    ? (object)milestone.Description
+                                                    : DBNull.Value);
                 command.Parameters.AddWithValue(UserLoginParam,
-                    !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 connection.Open();
 
@@ -375,7 +400,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(MilestoneIdParam, milestone.Id.Value);
                 command.Parameters.AddWithValue(UserLoginParam,
-                    !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
+                                                !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -488,19 +513,22 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader(CommandBehavior.SingleRow))
                 {
-                    int milestoneCountIndex = reader.GetOrdinal(MilestoneCountColumn);
-                    int csatCountIndex = reader.GetOrdinal(CSATCountColumn);
+                    int milestoneCountIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneCountColumn);
+                    int csatCountIndex = reader.GetOrdinal(Constants.ColumnNames.CSATCountColumn);
+                    int attributionCountIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionCount);
                     while (reader.Read())
                     {
                         result.Add(reader.GetInt32(milestoneCountIndex));
                         result.Add(reader.GetInt32(csatCountIndex));
+                        result.Add(reader.GetInt32(attributionCountIndex));
                     }
                 }
             }
             return result;
         }
 
-        public static bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, DateTime? startDate, DateTime? EndDate)
+        public static bool CheckIfExpensesExistsForMilestonePeriod(int milestoneId, DateTime? startDate,
+                                                                   DateTime? EndDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(CheckIfExpensesExistsForMilestonePeriodProcedure, connection))
@@ -630,7 +658,8 @@ namespace DataAccess
                 {
                     try
                     {
-                        milestone.Project.Client.IsMarginColorInfoEnabled = reader.GetBoolean(isMarginColorInfoEnabledIndex);
+                        milestone.Project.Client.IsMarginColorInfoEnabled =
+                            reader.GetBoolean(isMarginColorInfoEnabledIndex);
                     }
                     catch
                     {
@@ -687,6 +716,66 @@ namespace DataAccess
             }
             return defaultMilestone;
         }
+
+        public static List<Attribution> IsProjectAttributionConflictsWithMilestoneChanges(int milestoneId, DateTime startDate, DateTime endDate, bool isUpdate)
+        {
+            var result = new List<Attribution>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (
+                    var command =
+                        new SqlCommand(
+                            Constants.ProcedureNames.MilestonePerson.IsProjectAttributionConflictsWithMilestoneChanges,
+                            connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsUpdate, isUpdate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        ReadProjectAttributionValues(reader, result);
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static void ReadProjectAttributionValues(SqlDataReader reader, List<Attribution> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int attributionIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionId);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                int targetIdIndex = reader.GetOrdinal(Constants.ColumnNames.TargetId);
+                int targetNameIndex = reader.GetOrdinal(Constants.ColumnNames.TargetName);
+
+                while (reader.Read())
+                {
+                    int targetId = reader.GetInt32(targetIdIndex);
+                    string targetName = reader.GetString(targetNameIndex);
+                    var attribution = new Attribution()
+                    {
+                        Id = reader.GetInt32(attributionIdIndex),
+                        EndDate = reader.GetDateTime(endDateIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        TargetId = targetId,
+                        TargetName = targetName
+                    };
+                    result.Add(attribution);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
 
