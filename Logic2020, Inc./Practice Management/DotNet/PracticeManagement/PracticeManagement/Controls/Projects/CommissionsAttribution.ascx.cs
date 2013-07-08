@@ -265,14 +265,24 @@ namespace PraticeManagement.Controls.Projects
             DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select a Practice Area--");
             if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True")
             {
-                ListItem selectedPractice = null;
-                selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
+                List<int> practices = AvailablePractices(SalesPracticeAttributionXML);
+                if (practices.Count > 0)
+                {
+                    foreach (var i in practices)
+                    {
+                        ListItem selectedPractce = ddlPractice.Items.FindByValue(i.ToString());
+                        ddlPractice.Items.Remove(selectedPractce);
+                    }
+                }
+
+                ListItem selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
                 if (selectedPractice == null)
                 {
                     selectedPractice = new ListItem(lblPractice.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
                     ddlPractice.Items.Add(selectedPractice);
                 }
                 ddlPractice.SelectedValue = selectedPractice.Value;
+            
             }
             else
             {
@@ -282,8 +292,7 @@ namespace PraticeManagement.Controls.Projects
                 {
                     foreach (var i in practices)
                     {
-                        ListItem selectedPractice = null;
-                        selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
+                        ListItem selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
                         ddlPractice.Items.Remove(selectedPractice);
                     }
                 }
@@ -388,8 +397,17 @@ namespace PraticeManagement.Controls.Projects
             DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select a Practice Area--");
             if (item.Attribute(XName.Get(IsNewEntryXname)).Value != "True")
             {
-                ListItem selectedPractice = null;
-                selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
+                List<int> practices = AvailablePractices(SalesPracticeAttributionXML);
+                if (practices.Count > 0)
+                {
+                    foreach (var i in practices)
+                    {
+                        ListItem selectedPractce = ddlPractice.Items.FindByValue(i.ToString());
+                        ddlPractice.Items.Remove(selectedPractce);
+                    }
+                }
+
+                ListItem selectedPractice = ddlPractice.Items.FindByValue(item.Attribute(XName.Get(TargetIdXname)).Value);
                 if (selectedPractice == null)
                 {
                     selectedPractice = new ListItem(lblPractice.Text, item.Attribute(XName.Get(TargetIdXname)).Value);
@@ -405,8 +423,7 @@ namespace PraticeManagement.Controls.Projects
                 {
                     foreach (var i in practices)
                     {
-                        ListItem selectedPractice = null;
-                        selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
+                        ListItem selectedPractice = ddlPractice.Items.FindByValue(i.ToString());
                         ddlPractice.Items.Remove(selectedPractice);
                     }
                 }
@@ -1673,3 +1690,4 @@ namespace PraticeManagement.Controls.Projects
         #endregion Methods
     }
 }
+
