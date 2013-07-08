@@ -16,13 +16,13 @@
                     </td>
                 </tr>
                 <tr style="height: 10%">
-                    <td class="Width47Percent AlignRight PaddingBottom2 borderLeftRight_black">
+                    <td class="Width47Percent AlignRight PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddDeliveryAttributionResource" runat="server" Text="Add Resource"
                             Attribution="1" OnClick="btnAddRecord_Click" />
                     </td>
                     <td class="Width6PercentImp">
                     </td>
-                    <td class="Width47Percent AlignRight PaddingBottom2 borderLeftRight_black">
+                    <td class="Width47Percent AlignRight PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddSalesAttributionResource" runat="server" Text="Add Resource"
                             Attribution="2" OnClick="btnAddRecord_Click" />
                     </td>
@@ -31,7 +31,7 @@
                     <td class="Width47Percent vTop borderLeftRight_black">
                         <asp:GridView ID="gvDeliveryAttributionPerson" runat="server" AutoGenerateColumns="False"
                             Attribution="1" OnRowDataBound="gvDeliveryAttributionPerson_RowDataBound" CssClass="CompPerfTable MileStoneDetailPageResourcesTab"
-                            EditRowStyle-Wrap="false" RowStyle-Wrap="false" HeaderStyle-Wrap="false" EmptyDataText="No persons were assigned to this attribution."
+                            EditRowStyle-Wrap="false" RowStyle-Wrap="false" HeaderStyle-Wrap="false" EmptyDataText="No persons are assigned to this attribution."
                             GridLines="None" BackColor="White">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
@@ -87,7 +87,7 @@
                                         <asp:HiddenField ID="hdnPersonId" runat="server" />
                                         <asp:HiddenField ID="hdnEditMode" runat="server" />
                                         <asp:Label ID="lblPersonName" runat="server" CssClass="padLeft8"></asp:Label>
-                                        <asp:DropDownList ID="ddlPerson" runat="server" Visible="false" CssClass="WholeWidth">
+                                        <asp:DropDownList ID="ddlPerson" runat="server" Visible="false" CssClass="Width96Per">
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
                                             ErrorMessage="The person name is required." ToolTip="The person name is required."
@@ -177,34 +177,34 @@
                             </Columns>
                         </asp:GridView>
                     </td>
-                    <td class="Width6PercentImp">
-                        <table class="WholeWidth alignCenter">
-                            <tr>
-                                <td>
-                                    <asp:Button ID="btnCopyAlltoRight" runat="server" Text=">>" OnClick="btnCopyAlltoRight_Click" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <asp:Button ID="btnCopySelectedItemstoRight" runat="server" Text=">" OnClick="btnCopySelectedItemstoRight_Click" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <asp:Button ID="btnCopyAlltoLeft" runat="server" Text="<<" OnClick="btnCopyAlltoLeft_Click" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <asp:Button ID="btnCopySelectedItemstoLeft" runat="server" Text="<" OnClick="btnCopySelectedItemstoLeft_Click" />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
+                   <td class="Width6PercentImp">
+                <table class="WholeWidth alignCenter">
+                    <tr>
+                        <td class="paddingBottom5px">
+                            <asp:Button ID="btnCopyAlltoRight" runat="server" Text=">>" OnClick="btnCopyAlltoRight_Click" CssClass="width30P"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="paddingBottom5px">
+                            <asp:Button ID="btnCopySelectedItemstoRight" runat="server" Text=">" OnClick="btnCopySelectedItemstoRight_Click" CssClass="width30P"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="paddingBottom5px">
+                            <asp:Button ID="btnCopyAlltoLeft" runat="server" Text="<<" OnClick="btnCopyAlltoLeft_Click" CssClass="width30P"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="paddingBottom5px">
+                            <asp:Button ID="btnCopySelectedItemstoLeft" runat="server" Text="<" OnClick="btnCopySelectedItemstoLeft_Click" CssClass="width30P"/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
                     <td class="Width47Percent vTop borderLeftRight_black">
                         <asp:GridView ID="gvSalesAttributionPerson" runat="server" AutoGenerateColumns="False"
                             Attribution="2" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
-                            EmptyDataText="No persons were assigned to this attribution." RowStyle-Wrap="false"
+                            EmptyDataText="No persons are assigned to this attribution." RowStyle-Wrap="false"
                             HeaderStyle-Wrap="false" GridLines="None" BackColor="White" OnRowDataBound="gvSalesAttributionPerson_RowDataBound">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
@@ -259,7 +259,7 @@
                                         <asp:HiddenField ID="hdnPersonId" runat="server" />
                                         <asp:HiddenField ID="hdnEditMode" runat="server" />
                                         <asp:Label ID="lblPersonName" runat="server" CssClass="padLeft8"></asp:Label>
-                                        <asp:DropDownList ID="ddlPerson" runat="server" Visible="false" CssClass="WholeWidth">
+                                        <asp:DropDownList ID="ddlPerson" runat="server" Visible="false" CssClass="Width96Per">
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
                                             ErrorMessage="The person Name is required." ToolTip="The Person Name is required."
@@ -351,13 +351,13 @@
                     </td>
                 </tr>
                 <tr style="height: 10%">
-                    <td class="Width47Percent AlignRight PaddingTop6 PaddingBottom2 borderLeftRight_black">
+                    <td class="Width47Percent AlignRight PaddingTop6 PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddDeliveryAttributionPractice" runat="server" Text="Add Practice"
                             Attribution="3" OnClick="btnAddRecord_Click" />
                     </td>
                     <td class="Width6PercentImp">
                     </td>
-                    <td class="Width47Percent AlignRight PaddingTop6 PaddingBottom2 borderLeftRight_black">
+                    <td class="Width47Percent AlignRight PaddingTop6 PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddSalesAttributionPractice" runat="server" Text="Add Practice"
                             Attribution="4" OnClick="btnAddRecord_Click" />
                     </td>
@@ -366,7 +366,7 @@
                     <td class="Width47Percent vTop border_blackExceptTop">
                         <asp:GridView ID="gvDeliveryAttributionPractice" runat="server" AutoGenerateColumns="False"
                             Attribution="3" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
-                            OnRowDataBound="gvDeliveryAttributionPractice_RowDataBound" EmptyDataText="No practices were assigned to this attribution."
+                            OnRowDataBound="gvDeliveryAttributionPractice_RowDataBound" EmptyDataText="No practices are assigned to this attribution."
                             RowStyle-Wrap="false" HeaderStyle-Wrap="false" GridLines="None" BackColor="White">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
@@ -378,7 +378,7 @@
                                             &nbsp;
                                         </div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width4Percent" />
+                                    <ItemStyle CssClass="Width6Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgDeliveryPracticeAttributeEdit" ToolTip="Edit" runat="server"
                                             OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
@@ -394,11 +394,11 @@
                                             Practice
                                         </div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width80Percent textLeft WS-Normal" />
+                                    <ItemStyle CssClass="Width78Percent textLeft WS-Normal" />
                                     <ItemTemplate>
                                         <asp:HiddenField ID="hdnPracticeId" runat="server" />
                                         <asp:HiddenField ID="hdnEditMode" runat="server" />
-                                        <asp:Label ID="lblPractice" runat="server" CssClass="padLeft8"></asp:Label>
+                                        <asp:Label ID="lblPractice" runat="server" CssClass="padLeft8"></asp:Label>&nbsp;&nbsp;
                                         <asp:DropDownList ID="ddlPractice" runat="server" Visible="false">
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="reqPractice" runat="server" ControlToValidate="ddlPractice"
@@ -446,7 +446,7 @@
                     <td class="Width47Percent vTop border_blackExceptTop">
                         <asp:GridView ID="gvSalesAttributionPractice" runat="server" AutoGenerateColumns="False"
                             Attribution="4" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
-                            EmptyDataText="No practices were assigned to this attribution." RowStyle-Wrap="false"
+                            EmptyDataText="No practices are assigned to this attribution." RowStyle-Wrap="false"
                             HeaderStyle-Wrap="false" GridLines="None" BackColor="White" OnRowDataBound="gvSalesAttributionPractice_RowDataBound">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
@@ -458,7 +458,7 @@
                                             &nbsp;
                                         </div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width4Percent" />
+                                    <ItemStyle CssClass="Width6Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgSalesPracticeAttributeEdit" ToolTip="Edit" runat="server"
                                             OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
@@ -473,11 +473,11 @@
                                         <div class="ie-bg no-wrap">
                                             Practice</div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width80Percent textLeft WS-Normal" />
+                                    <ItemStyle CssClass="Width78Percent textLeft WS-Normal" />
                                     <ItemTemplate>
                                         <asp:HiddenField ID="hdnPracticeId" runat="server" />
                                         <asp:HiddenField ID="hdnEditMode" runat="server" />
-                                        <asp:Label ID="lblPractice" runat="server" CssClass="padLeft8"></asp:Label>
+                                        <asp:Label ID="lblPractice" runat="server" CssClass="padLeft8"></asp:Label>&nbsp;&nbsp;
                                         <asp:DropDownList ID="ddlPractice" runat="server" Visible="false">
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="reqPractice" runat="server" ControlToValidate="ddlPractice"
@@ -525,3 +525,4 @@
         </asp:Panel>
     </ContentTemplate>
 </asp:UpdatePanel>
+
