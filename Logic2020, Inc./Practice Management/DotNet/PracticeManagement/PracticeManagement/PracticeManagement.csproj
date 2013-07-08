@@ -681,6 +681,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
+    <None Include="Service References\MilestoneService\MilestoneService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MilestoneService\MilestoneService4.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -940,7 +943,6 @@
     </Content>
     <Content Include="Scripts\jquery.tablesorter.yui.js" />
     <None Include="Service References\TimeTypeService\TimeTypeService14.disco" />
-    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\OpportunityService\OpportunityService1.disco" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
@@ -974,6 +976,7 @@
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <None Include="Service References\ClientService\ClientService1.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\NPOI.dll" />
     <Content Include="TimEntry_New.xml">
