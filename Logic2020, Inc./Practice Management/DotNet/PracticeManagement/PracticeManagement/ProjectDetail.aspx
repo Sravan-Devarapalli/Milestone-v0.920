@@ -1218,7 +1218,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" colspan="3">
+                    <td align="center" colspan="3"  class="PaddingTop5">
                         <asp:HiddenField ID="hdnProjectId" runat="server" />
                         <asp:HiddenField ID="hdnProjectDelete" runat="server" />
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Project" OnClick="btnDelete_Click"
@@ -1495,3 +1495,4 @@
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
+
