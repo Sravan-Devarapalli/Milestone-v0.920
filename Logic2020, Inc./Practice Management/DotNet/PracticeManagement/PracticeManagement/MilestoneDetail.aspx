@@ -690,8 +690,7 @@
                             <ContentTemplate>
                                 <% if (IsShowResources)
                                    { %>
-                                <uc:MilestonePersonList runat="server" ID="MilestonePersonEntryListControl">
-                                </uc:MilestonePersonList>
+                                <uc:MilestonePersonList runat="server" ID="MilestonePersonEntryListControl"></uc:MilestonePersonList>
                                 <% } %>
                             </ContentTemplate>
                         </asp:UpdatePanel>
@@ -906,7 +905,10 @@
                             OnServerValidate="custProjectStatus_OnServerValidate" Display="Dynamic"></asp:CustomValidator><br />
                         <asp:CustomValidator ID="custCSATValidate" ValidationGroup="MilestoneDelete" runat="server"
                             ErrorMessage="Milestone cannot be deleted as project has CSAT data added to it."
-                            OnServerValidate="custCSATValidate_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
+                            OnServerValidate="custCSATValidate_OnServerValidate" Display="Dynamic"></asp:CustomValidator><br />
+                        <asp:CustomValidator ID="custAttribution" ValidationGroup="MilestoneDelete" runat="server"
+                            ErrorMessage="Milestone cannot be deleted as project has Attribution data added to it."
+                            OnServerValidate="custAttribution_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
                         <asp:ValidationSummary ID="vsumShiftDays" runat="server" EnableClientScript="false"
                             ValidationGroup="ShiftDays" />
                         <asp:ValidationSummary ID="vsumClone" runat="server" EnableClientScript="false" ValidationGroup="Clone" />
@@ -926,11 +928,11 @@
                             }
                         </script>
                         <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
-                            <animations>
+                            <Animations>
 					            <OnClick>
 					                <ScriptAction Script="disableSaveButton();" />
 					            </OnClick>
-                            </animations>
+                            </Animations>
                         </AjaxControlToolkit:AnimationExtender>
                     </td>
                 </tr>
@@ -1045,6 +1047,56 @@
                                     </td>
                                 </tr>
                             </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:CustomValidator runat="server" ID="cvAttributionPopup" OnServerValidate="cvAttributionPopup_ServerValidate"
+                ValidationGroup="AttributionPopup"></asp:CustomValidator>
+            <asp:HiddenField ID="hdnAttribution" Value="false" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeAttribution" runat="server" TargetControlID="hdnAttribution"
+                BehaviorID="mpeAttributionBehaviourId" BackgroundCssClass="modalBackground" PopupControlID="pnlAttribution"
+                DropShadow="false" />
+            <asp:Panel ID="pnlAttribution" runat="server" CssClass="popUp" Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th colspan="2">
+                            Attention!
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            This action cannot be done as the following attribution records has the person start
+                            date
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            and end date out of the project's start date and project's end date in commissions
+                            tab.
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Repeater runat="server" ID="repPersons">
+                                <ItemTemplate>
+                                    <b>
+                                        <%# Eval("TargetName") %></b>&nbsp;has&nbsp;startdate&nbsp;<b><%# ((DateTime)Eval("StartDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>'</b>&nbsp;and
+                                    enddate&nbsp;<b><%# ((DateTime)Eval("EndDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat) %></b>.
+                                </ItemTemplate>
+                            </asp:Repeater>
+                            <asp:HiddenField runat="server" ID="hdnIsUpdate" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="">
+                            <asp:Button ID="btnOkAttribution" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp"
+                                OnClick="btnOkAttribution_Click" />
+                        </td>
+                        <td>
+                            <asp:Button ID="btnCancelAttribution" runat="server" ToolTip="Cancel" Text="Cancel"
+                                OnClick="btnCancelAttribution_Click" CssClass="Width100PxImp" />
                         </td>
                     </tr>
                 </table>
