@@ -34,21 +34,21 @@ BEGIN
 	BEGIN
 	
 		INSERT INTO dbo.Attribution(ProjectId,AttributionRecordTypeId,AttributionTypeId,TargetId,StartDate,EndDate,Percentage)
-		SELECT P.ProjectId,1,2,P.DirectorId,P.StartDate,P.EndDate,100
+		SELECT P.ProjectId,AR.AttributionRecordId,2 AS AttributionRecordTypeId,P.DirectorId,P.StartDate,P.EndDate,100 AS Percentage
 		FROM dbo.Project P 
-		WHERE P.ProjectId = @ProjectId AND P.DirectorId IS NOT NULL 
-
-		INSERT INTO dbo.Attribution(ProjectId,AttributionRecordTypeId,AttributionTypeId,TargetId,StartDate,EndDate,Percentage)
-		SELECT P.ProjectId,1,2,P.SeniorManagerId,P.StartDate,P.EndDate,100
+		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
+		WHERE P.DirectorId IS NOT NULL 
+		UNION ALL
+		SELECT P.ProjectId,AR.AttributionRecordId,2,P.SeniorManagerId,P.StartDate,P.EndDate,100
 		FROM dbo.Project P 
-		WHERE P.ProjectId = @ProjectId AND P.SeniorManagerId IS NOT NULL
-
-		INSERT INTO dbo.Attribution(ProjectId,AttributionRecordTypeId,AttributionTypeId,TargetId,StartDate,EndDate,Percentage)
-		SELECT P.ProjectId,1,1,P.SalesPersonId,P.StartDate,P.EndDate,100
+		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
+		WHERE P.SeniorManagerId IS NOT NULL
+		UNION ALL
+		SELECT P.ProjectId,AR.AttributionRecordId,1,P.SalesPersonId,P.StartDate,P.EndDate,100
 		FROM dbo.Project P
-		WHERE P.ProjectId = @ProjectId AND P.SalesPersonId IS NOT NULL
-		
-		INSERT INTO dbo.Attribution(ProjectId,AttributionRecordTypeId,AttributionTypeId,TargetId,StartDate,EndDate,Percentage)
+		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
+		WHERE P.SalesPersonId IS NOT NULL
+		UNION ALL
 		SELECT P.ProjectId,AR.AttributionRecordId,AT.AttributionTypeId,P.PracticeId,NULL,NULL,100
 		FROM dbo.Project P
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsPercentageType = 1 AND P.ProjectId = @ProjectId
