@@ -618,6 +618,7 @@ namespace PraticeManagement
                 Page.Validate(vsumPopup.ValidationGroup);
                 if (Page.IsValid)
                 {
+                    hdnIsUpdate.Value = true.ToString();
                     Page.Validate("AttributionPopup");
                 }
                 if (Page.IsValid)
@@ -776,6 +777,7 @@ namespace PraticeManagement
             Page.Validate("MilestoneDelete");
             if (Page.IsValid)
             {
+                hdnIsUpdate.Value = false.ToString();
                 Page.Validate("AttributionPopup");
             }
             if (Page.IsValid)
@@ -806,11 +808,10 @@ namespace PraticeManagement
                                                                               dtpPeriodFrom
                                                                                   .DateValue,
                                                                               dtpPeriodTo.DateValue,
-                                                                              false).ToList();
+                                                                              hdnIsUpdate.Value == true.ToString()).ToList();
             }
             if (attributionList.Any())
             {
-                hdnIsUpdate.Value = false.ToString();
                 IsPanelDisplayed = true;
                 mpeAttribution.Show();
                 repPersons.DataSource = attributionList;
@@ -1042,6 +1043,7 @@ namespace PraticeManagement
                 Page.Validate(vsumPopup.ValidationGroup);
                 if (Page.IsValid)
                 {
+                    hdnIsUpdate.Value = true.ToString();
                     Page.Validate("AttributionPopup");
                 }
                 if (Page.IsValid)
