@@ -690,7 +690,8 @@
                             <ContentTemplate>
                                 <% if (IsShowResources)
                                    { %>
-                                <uc:MilestonePersonList runat="server" ID="MilestonePersonEntryListControl"></uc:MilestonePersonList>
+                                <uc:MilestonePersonList runat="server" ID="MilestonePersonEntryListControl">
+                                </uc:MilestonePersonList>
                                 <% } %>
                             </ContentTemplate>
                         </asp:UpdatePanel>
@@ -928,11 +929,11 @@
                             }
                         </script>
                         <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
-                            <Animations>
+                            <animations>
 					            <OnClick>
 					                <ScriptAction Script="disableSaveButton();" />
 					            </OnClick>
-                            </Animations>
+                            </animations>
                         </AjaxControlToolkit:AnimationExtender>
                     </td>
                 </tr>
@@ -1066,35 +1067,54 @@
                     </tr>
                     <tr>
                         <td>
-                            This action cannot be done as the following attribution records has the person start
-                            date
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            and end date out of the project's start date and project's end date in commissions
-                            tab.
+                            <p>
+                                &nbsp;&nbsp;&nbsp; This action cannot be done as the following attribution records
+                                has the person start date and end date out of the project's start date and project's
+                                end date in commissions tab.</p>
                             <br />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:Repeater runat="server" ID="repPersons">
+                            <asp:Repeater runat="server" ID="repDeliveryPersons">
+                                <HeaderTemplate>
+                                    &nbsp;&nbsp;Delivery Attribution:
+                                    <br />
+                                </HeaderTemplate>
                                 <ItemTemplate>
-                                    <b>
-                                        <%# Eval("TargetName") %></b>&nbsp;has&nbsp;startdate&nbsp;<b><%# ((DateTime)Eval("StartDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%>'</b>&nbsp;and
+                                    &nbsp;&nbsp;&nbsp;&nbsp; <b>
+                                        <%# Eval("TargetName") %></b>&nbsp;has&nbsp;startdate&nbsp;<b><%# ((DateTime)Eval("StartDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%></b>&nbsp;and
                                     enddate&nbsp;<b><%# ((DateTime)Eval("EndDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat) %></b>.
                                 </ItemTemplate>
+                                <FooterTemplate>
+                                    <br />
+                                </FooterTemplate>
                             </asp:Repeater>
                             <asp:HiddenField runat="server" ID="hdnIsUpdate" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="">
+                        <td>
+                            <asp:Repeater runat="server" ID="repSalesPersons">
+                                <HeaderTemplate>
+                                    &nbsp;&nbsp;Sales Attribution:<br />
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    &nbsp;&nbsp;&nbsp;&nbsp; <b>
+                                        <%# Eval("TargetName") %></b>&nbsp;has&nbsp;startdate&nbsp;<b><%# ((DateTime)Eval("StartDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%></b>&nbsp;and
+                                    enddate&nbsp;<b><%# ((DateTime)Eval("EndDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat) %></b>.
+                                </ItemTemplate>
+                                <FooterTemplate>
+                                    <br />
+                                </FooterTemplate>
+                            </asp:Repeater>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="textCenter">
                             <asp:Button ID="btnOkAttribution" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp"
                                 OnClick="btnOkAttribution_Click" />
-                        </td>
-                        <td>
+                            &nbsp;&nbsp;
                             <asp:Button ID="btnCancelAttribution" runat="server" ToolTip="Cancel" Text="Cancel"
                                 OnClick="btnCancelAttribution_Click" CssClass="Width100PxImp" />
                         </td>
