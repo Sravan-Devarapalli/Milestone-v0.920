@@ -1417,13 +1417,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlAttribution;
         
         /// <summary>
-        /// repPersons control.
+        /// repDeliveryPersons control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repPersons;
+        protected global::System.Web.UI.WebControls.Repeater repDeliveryPersons;
         
         /// <summary>
         /// hdnIsUpdate control.
@@ -1433,6 +1433,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnIsUpdate;
+        
+        /// <summary>
+        /// repSalesPersons control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repSalesPersons;
         
         /// <summary>
         /// btnOkAttribution control.
