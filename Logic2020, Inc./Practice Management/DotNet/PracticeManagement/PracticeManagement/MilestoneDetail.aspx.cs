@@ -92,6 +92,12 @@ namespace PraticeManagement
             set;
         }
 
+        private MilestoneUpdateObject MilestoneUpdate
+        {
+            get { return ViewState["MilestoneUpdate_Key"] as MilestoneUpdateObject; }
+            set { ViewState["MilestoneUpdate_Key"] = value; }
+        }
+
         public bool ValidateNewEntry { get; set; }
 
         private bool? IsUserHasPermissionOnProject
@@ -338,20 +344,20 @@ namespace PraticeManagement
             }
         }
 
-        public bool IsPanelDisplayed
+        public bool IsAttributionPanelDisplayed
         {
             get
             {
-                if (ViewState["IsPanelDisplayed_Key"] == null)
+                if (ViewState["IsAttributionPanelDisplayed_Key"] == null)
                 {
-                    ViewState["IsPanelDisplayed_Key"] = false;
+                    ViewState["IsAttributionPanelDisplayed_Key"] = false;
                 }
 
-                return (bool)ViewState["IsPanelDisplayed_Key"];
+                return (bool)ViewState["IsAttributionPanelDisplayed_Key"];
             }
             set
             {
-                ViewState["IsPanelDisplayed_Key"] = value;
+                ViewState["IsAttributionPanelDisplayed_Key"] = value;
             }
         }
 
@@ -682,7 +688,9 @@ namespace PraticeManagement
 
         protected void btnCancelAttribution_Click(object sender, EventArgs e)
         {
-            IsPanelDisplayed = false;
+            IsAttributionPanelDisplayed = false;
+            if (hdnCanShowPopup.Value == "false")
+                btnCancel_OnClick(btnCancelSaving, new EventArgs());
             mpeAttribution.Hide();
         }
 
@@ -707,7 +715,7 @@ namespace PraticeManagement
                         milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
                     }
 
-                    OnSaveClick(milestoneUpdateObj);
+                    OnSaveClick(MilestoneUpdate == null ? milestoneUpdateObj : MilestoneUpdate);
                 }
                 else
                 {
@@ -746,9 +754,9 @@ namespace PraticeManagement
             }
 
             hdnCanShowPopup.Value = "false";
-
+            MilestoneUpdate = milestoneUpdateObj;
             var result = OnSaveClick(milestoneUpdateObj);
-            hdnCanShowPopup.Value = result ? "false" : "true";
+            hdnCanShowPopup.Value = !result && IsAttributionPanelDisplayed ? "false" : "true";
 
             if (result)
             {
@@ -785,7 +793,7 @@ namespace PraticeManagement
                 try
                 {
                     DeleteRecord();
-                    IsPanelDisplayed = false;
+                    IsAttributionPanelDisplayed = false;
                     ReturnToPreviousPage();
                 }
                 catch (Exception exception)
@@ -795,27 +803,39 @@ namespace PraticeManagement
             }
         }
 
+    
         protected void cvAttributionPopup_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            if (IsPanelDisplayed)
+            if (IsAttributionPanelDisplayed)
                 return;
-            List<Attribution> attributionList;
+            List<Attribution> attributionList = new List<Attribution>();
             using (var service = new MilestoneServiceClient())
             {
-                attributionList =
-                    service.IsProjectAttributionConflictsWithMilestoneChanges(MilestoneId.Value,
-                                                                              dtpPeriodFrom
-                                                                                  .DateValue,
-                                                                              dtpPeriodTo.DateValue,
-                                                                              hdnIsUpdate.Value == true.ToString()).ToList();
+                if (MilestoneId != null)
+                    attributionList =
+                        service.IsProjectAttributionConflictsWithMilestoneChanges(MilestoneId.Value,
+                                                                                  dtpPeriodFrom
+                                                                                      .DateValue,
+                                                                                  dtpPeriodTo.DateValue,
+                                                                                  hdnIsUpdate.Value == true.ToString()).ToList();
             }
             if (attributionList.Any())
             {
-                IsPanelDisplayed = true;
+                IsAttributionPanelDisplayed = true;
                 mpeAttribution.Show();
-                repPersons.DataSource = attributionList;
-                repPersons.DataBind();
+                if (attributionList.Any(x => x.AttributionType == AttributionTypes.Delivery))
+                {
+                    repDeliveryPersons.DataSource =
+                        attributionList.Where(x => x.AttributionType == AttributionTypes.Delivery);
+                    repDeliveryPersons.DataBind();
+                }
+                if (attributionList.Any(x => x.AttributionType == AttributionTypes.Sales))
+                {
+                    repSalesPersons.DataSource =
+                        attributionList.Where(x => x.AttributionType == AttributionTypes.Sales);
+                    repSalesPersons.DataBind();
+                }
                 e.IsValid = false;
             }
         }
@@ -1306,9 +1326,10 @@ namespace PraticeManagement
             {
                 try
                 {
-                    IsPanelDisplayed = false;
+                    IsAttributionPanelDisplayed = false;
                     MilestoneCSATAttributionCount = null;
                     return serviceClient.SaveMilestoneDetail(milestone, User.Identity.Name);
+                    MilestoneUpdate = null;
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -1756,3 +1777,4 @@ namespace PraticeManagement
         #endregion Implementation of IPostBackEventHandler
     }
 }
+
