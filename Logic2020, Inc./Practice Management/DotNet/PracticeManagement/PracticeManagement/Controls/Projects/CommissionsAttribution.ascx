@@ -1,7 +1,7 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="CommissionsAttribution.ascx.cs"
     Inherits="PraticeManagement.Controls.Projects.CommissionsAttribution" %>
 <%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc2" %>
-<asp:UpdatePanel runat="server">
+<asp:UpdatePanel runat="server" ID="upCommissionAttribution">
     <ContentTemplate>
         <asp:Panel ID="pnlCommissions" runat="server" CssClass="tab-pane">
             <table class="WholeWidth">
@@ -18,17 +18,17 @@
                 <tr style="height: 10%">
                     <td class="Width47Percent AlignRight PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddDeliveryAttributionResource" runat="server" Text="Add Resource"
-                            Attribution="1" OnClick="btnAddRecord_Click" />
+                            OnClientClick="setDirty();" Attribution="1" OnClick="btnAddRecord_Click" />
                     </td>
                     <td class="Width6PercentImp">
                     </td>
                     <td class="Width47Percent AlignRight PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddSalesAttributionResource" runat="server" Text="Add Resource"
-                            Attribution="2" OnClick="btnAddRecord_Click" />
+                            OnClientClick="setDirty();" Attribution="2" OnClick="btnAddRecord_Click" />
                     </td>
                 </tr>
                 <tr style="height: 45%">
-                    <td class="Width47Percent vTop borderLeftRight_black">
+                    <td class="Width47Percent vTop borderLeftRight_black padRight2">
                         <asp:GridView ID="gvDeliveryAttributionPerson" runat="server" AutoGenerateColumns="False"
                             Attribution="1" OnRowDataBound="gvDeliveryAttributionPerson_RowDataBound" CssClass="CompPerfTable MileStoneDetailPageResourcesTab"
                             EditRowStyle-Wrap="false" RowStyle-Wrap="false" HeaderStyle-Wrap="false" EmptyDataText="No persons are assigned to this attribution."
@@ -45,8 +45,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
-                                        <asp:CheckBox ID="chbDeliveryAttributes" runat="server" OnCheckedChanged="chbDeliveryAttributes_CheckedChanged"
-                                            AutoPostBack="true" />
+                                        <asp:CheckBox ID="chbAttribution" runat="server"/>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -58,7 +57,7 @@
                                     <ItemStyle CssClass="Width4Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgDeliveryPersonAttributeEdit" ToolTip="Edit" runat="server"
-                                            OnClick="imgPersonEdit_Click" ImageUrl="~/Images/icon-edit.png" />
+                                            OnClientClick="setDirty();" OnClick="imgPersonEdit_Click" ImageUrl="~/Images/icon-edit.png" />
                                         <asp:ImageButton ID="imgDeliveryPersonAttributeUpdate" ToolTip="Update" runat="server"
                                             OnClick="imgPersonUpdate_Click" Visible="false" ImageUrl="~/Images/icon-check.png" />
                                         <asp:ImageButton ID="imgDeliveryPersonAttributeCancel" ToolTip="Cancel" runat="server"
@@ -74,7 +73,8 @@
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgDeliveryAttributionAdditionalAllocationOfResource" runat="server"
-                                            ToolTip="Extend" OnClick="imgAdditionalAllocationOfResource_Click" ImageUrl="~/Images/add_16.png" />
+                                            OnClientClick="setDirty();" ToolTip="Extend" OnClick="imgAdditionalAllocationOfResource_Click"
+                                            ImageUrl="~/Images/add_16.png" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -167,9 +167,9 @@
                                     <ItemStyle CssClass="Width4Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgDeliveryAttributionPersonDelete" ToolTip="Delete" runat="server"
-                                            OnClick="imgPersonDelete_Click" ImageUrl="~/Images/cross_icon.png" />
-                                        <asp:CustomValidator ID="custPersonDatesOverlapping" runat="server" ErrorMessage="For a person the startDate and endDate with a title should not overlap with the another record of startDate and endDate for the same title of the same person."
-                                            ToolTip="For a person the startDate and endDate with a title should not overlap with the another record of startDate and endDate for the same title of the same person."
+                                            OnClientClick="setDirty();" OnClick="imgPersonDelete_Click" ImageUrl="~/Images/cross_icon.png" />
+                                        <asp:CustomValidator ID="custPersonDatesOverlapping" runat="server" ErrorMessage="The start date and end date of two persons with same title cannot overlap."
+                                            ToolTip="The start date and end date of two persons with same title cannot overlap."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             OnServerValidate="custPersonDatesOverlapping_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
@@ -177,31 +177,35 @@
                             </Columns>
                         </asp:GridView>
                     </td>
-                   <td class="Width6PercentImp">
-                <table class="WholeWidth alignCenter">
-                    <tr>
-                        <td class="paddingBottom5px">
-                            <asp:Button ID="btnCopyAlltoRight" runat="server" Text=">>" OnClick="btnCopyAlltoRight_Click" CssClass="width30P"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="paddingBottom5px">
-                            <asp:Button ID="btnCopySelectedItemstoRight" runat="server" Text=">" OnClick="btnCopySelectedItemstoRight_Click" CssClass="width30P"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="paddingBottom5px">
-                            <asp:Button ID="btnCopyAlltoLeft" runat="server" Text="<<" OnClick="btnCopyAlltoLeft_Click" CssClass="width30P"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="paddingBottom5px">
-                            <asp:Button ID="btnCopySelectedItemstoLeft" runat="server" Text="<" OnClick="btnCopySelectedItemstoLeft_Click" CssClass="width30P"/>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-                    <td class="Width47Percent vTop borderLeftRight_black">
+                    <td class="Width6PercentImp">
+                        <table class="WholeWidth alignCenter">
+                            <tr>
+                                <td class="paddingBottom5px">
+                                    <asp:Button ID="btnCopyAlltoRight" runat="server" Text=">>" OnClick="btnCopyAlltoRight_Click" OnClientClick="setDirty();"
+                                        CssClass="Width30Px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="paddingBottom5px">
+                                    <asp:Button ID="btnCopySelectedItemstoRight" runat="server" Text=">" OnClick="btnCopySelectedItemstoRight_Click" OnClientClick="setDirty();"
+                                        CssClass="Width30Px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="paddingBottom5px">
+                                    <asp:Button ID="btnCopyAlltoLeft" runat="server" Text="<<" OnClick="btnCopyAlltoLeft_Click" OnClientClick="setDirty();"
+                                        CssClass="Width30Px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="paddingBottom5px">
+                                    <asp:Button ID="btnCopySelectedItemstoLeft" runat="server" Text="<" OnClick="btnCopySelectedItemstoLeft_Click" OnClientClick="setDirty();"
+                                        CssClass="Width30Px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="Width47Percent vTop borderLeftRight_black padRight2">
                         <asp:GridView ID="gvSalesAttributionPerson" runat="server" AutoGenerateColumns="False"
                             Attribution="2" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
                             EmptyDataText="No persons are assigned to this attribution." RowStyle-Wrap="false"
@@ -218,7 +222,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
-                                        <asp:CheckBox ID="chbSalesAttributes" runat="server" OnCheckedChanged="chbSalesAttributes_CheckedChanged" />
+                                        <asp:CheckBox ID="chbAttribution" runat="server"/>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -230,7 +234,7 @@
                                     <ItemStyle CssClass="Width4Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgSalesPersonAttributeEdit" ToolTip="Edit" runat="server" OnClick="imgPersonEdit_Click"
-                                            ImageUrl="~/Images/icon-edit.png" />
+                                            OnClientClick="setDirty();" ImageUrl="~/Images/icon-edit.png" />
                                         <asp:ImageButton ID="imgSalesPersonAttributeUpdate" ToolTip="Update" runat="server"
                                             Visible="false" OnClick="imgPersonUpdate_Click" ImageUrl="~/Images/icon-check.png" />
                                         <asp:ImageButton ID="imgSalesPersonAttributeCancel" ToolTip="Cancel" runat="server"
@@ -246,7 +250,8 @@
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgSalesAttributionAdditionalAllocationOfResource" runat="server"
-                                            ToolTip="Extend" OnClick="imgAdditionalAllocationOfResource_Click" ImageUrl="~/Images/add_16.png" />
+                                            OnClientClick="setDirty();" ToolTip="Extend" OnClick="imgAdditionalAllocationOfResource_Click"
+                                            ImageUrl="~/Images/add_16.png" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -254,7 +259,7 @@
                                         <div class="ie-bg no-wrap">
                                             Person</div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width25Percent textLeft WS-Normal" />
+                                    <ItemStyle CssClass="Width24Percent textLeft WS-Normal" />
                                     <ItemTemplate>
                                         <asp:HiddenField ID="hdnPersonId" runat="server" />
                                         <asp:HiddenField ID="hdnEditMode" runat="server" />
@@ -271,7 +276,7 @@
                                         <div class="ie-bg no-wrap">
                                             Title</div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width25Percent textCenter WS-Normal" />
+                                    <ItemStyle CssClass="Width24Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:Label ID="lblTitleName" runat="server" CssClass="WholeWidth"></asp:Label>
                                     </ItemTemplate>
@@ -281,7 +286,7 @@
                                         <div class="ie-bg no-wrap">
                                             StartDate</div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width19Percent textCenter WS-Normal" />
+                                    <ItemStyle CssClass="Width20Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:Label ID="lblStartDate" runat="server"></asp:Label>
                                         <uc2:DatePicker ID="dpStartDate" runat="server" SetDirty="false" Visible="false"
@@ -306,7 +311,7 @@
                                         <div class="ie-bg no-wrap">
                                             EndDate</div>
                                     </HeaderTemplate>
-                                    <ItemStyle CssClass="Width19Percent textCenter WS-Normal" />
+                                    <ItemStyle CssClass="Width20Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:Label ID="lblEndDate" runat="server"></asp:Label>
                                         <uc2:DatePicker ID="dpEndDate" runat="server" SetDirty="false" Visible="false" TextBoxWidth="90%"
@@ -339,9 +344,9 @@
                                     <ItemStyle CssClass="Width4Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgSalesAttributionPersonDelete" ToolTip="Delete" runat="server"
-                                            OnClick="imgPersonDelete_Click" ImageUrl="~/Images/cross_icon.png" />
-                                        <asp:CustomValidator ID="custPersonDatesOverlapping" runat="server" ErrorMessage="For a person the startDate and endDate with a title should not overlap with the another record of startDate and endDate for the same title of the same person."
-                                            ToolTip="For a person the startDate and endDate with a title should not overlap with the another record of startDate and endDate for the same title of the same person."
+                                            OnClientClick="setDirty();" OnClick="imgPersonDelete_Click" ImageUrl="~/Images/cross_icon.png" />
+                                        <asp:CustomValidator ID="custPersonDatesOverlapping" runat="server" ErrorMessage="The start date and end date of two persons with same title cannot overlap."
+                                            ToolTip="The start date and end date of two persons with same title cannot overlap."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             OnServerValidate="custPersonDatesOverlapping_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
@@ -353,17 +358,17 @@
                 <tr style="height: 10%">
                     <td class="Width47Percent AlignRight PaddingTop6 PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddDeliveryAttributionPractice" runat="server" Text="Add Practice"
-                            Attribution="3" OnClick="btnAddRecord_Click" />
+                            OnClientClick="setDirty();" Attribution="3" OnClick="btnAddRecord_Click" />
                     </td>
                     <td class="Width6PercentImp">
                     </td>
                     <td class="Width47Percent AlignRight PaddingTop6 PaddingBottom2 borderLeftRight_black padRight5">
                         <asp:Button ID="btnAddSalesAttributionPractice" runat="server" Text="Add Practice"
-                            Attribution="4" OnClick="btnAddRecord_Click" />
+                            OnClientClick="setDirty();" Attribution="4" OnClick="btnAddRecord_Click" />
                     </td>
                 </tr>
                 <tr style="height: 25%">
-                    <td class="Width47Percent vTop border_blackExceptTop">
+                    <td class="Width47Percent vTop border_blackExceptTop padRight2">
                         <asp:GridView ID="gvDeliveryAttributionPractice" runat="server" AutoGenerateColumns="False"
                             Attribution="3" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
                             OnRowDataBound="gvDeliveryAttributionPractice_RowDataBound" EmptyDataText="No practices are assigned to this attribution."
@@ -381,7 +386,7 @@
                                     <ItemStyle CssClass="Width6Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgDeliveryPracticeAttributeEdit" ToolTip="Edit" runat="server"
-                                            OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
+                                            OnClientClick="setDirty();" OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
                                         <asp:ImageButton ID="imgDeliveryPracticeAttributeUpdate" ToolTip="Update" runat="server"
                                             OnClick="imgPracticeUpdate_Click" Visible="false" ImageUrl="~/Images/icon-check.png" />
                                         <asp:ImageButton ID="imgDeliveryPracticeAttributeCancel" ToolTip="Cancel" runat="server"
@@ -417,10 +422,14 @@
                                     <ItemStyle CssClass="Width12Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:Label ID="lblCommisssionPercentage" runat="server"></asp:Label>
-                                        <asp:TextBox ID="txtCommisssionPercentage" runat="server" Visible="false"></asp:TextBox>
+                                        <asp:TextBox ID="txtCommisssionPercentage" runat="server" Visible="false" CssClass="Width85Percent"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="reqCommisssionPercentage" runat="server" ControlToValidate="txtCommisssionPercentage"
                                             ErrorMessage="The commisssion percentage is required." ToolTip="The commisssion percentage is required."
                                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                        <asp:CompareValidator runat="server" ID="compCommissionPercentage" Operator="NotEqual"
+                                            ControlToValidate="txtCommisssionPercentage" ValueToCompare="0" Type="Double"
+                                            ErrorMessage="The percentage of commission for a practice area should not be 0."
+                                            Text="*" ToolTip="The percentage of commission for a practice area should not be 0."></asp:CompareValidator>
                                         <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtPercentage" runat="server"
                                             TargetControlID="txtCommisssionPercentage" FilterMode="ValidChars" FilterType="Custom,Numbers"
                                             ValidChars=".">
@@ -435,7 +444,7 @@
                                     <ItemStyle CssClass="Width4Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgDeliveryAttributionPracticeDelete" ToolTip="Delete" runat="server"
-                                            OnClick="imgPracticeDelete_Click" ImageUrl="~/Images/cross_icon.png" />
+                                            OnClientClick="setDirty();" OnClick="imgPracticeDelete_Click" ImageUrl="~/Images/cross_icon.png" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
@@ -443,7 +452,7 @@
                     </td>
                     <td class="Width6PercentImp">
                     </td>
-                    <td class="Width47Percent vTop border_blackExceptTop">
+                    <td class="Width47Percent vTop border_blackExceptTop padRight2">
                         <asp:GridView ID="gvSalesAttributionPractice" runat="server" AutoGenerateColumns="False"
                             Attribution="4" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
                             EmptyDataText="No practices are assigned to this attribution." RowStyle-Wrap="false"
@@ -461,7 +470,7 @@
                                     <ItemStyle CssClass="Width6Percent" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgSalesPracticeAttributeEdit" ToolTip="Edit" runat="server"
-                                            OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
+                                            OnClientClick="setDirty();" OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
                                         <asp:ImageButton ID="imgSalesPracticeAttributeUpdate" ToolTip="Update" runat="server"
                                             OnClick="imgPracticeUpdate_Click" Visible="false" ImageUrl="~/Images/icon-check.png" />
                                         <asp:ImageButton ID="imgSalesPracticeAttributeCancel" ToolTip="Cancel" runat="server"
@@ -496,10 +505,14 @@
                                     <ItemStyle CssClass="Width12Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:Label ID="lblCommisssionPercentage" runat="server"></asp:Label>
-                                        <asp:TextBox ID="txtCommisssionPercentage" runat="server" Visible="false"></asp:TextBox>
+                                        <asp:TextBox ID="txtCommisssionPercentage" runat="server" Visible="false" CssClass="Width85Percent"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="reqCommisssionPercentage" runat="server" ControlToValidate="txtCommisssionPercentage"
                                             ErrorMessage="The commisssion percentage is required." ToolTip="The commisssion percentage is required."
                                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                        <asp:CompareValidator runat="server" ID="compCommissionPercentage" Operator="NotEqual"
+                                            ControlToValidate="txtCommisssionPercentage" ValueToCompare="0" Type="Double"
+                                            ErrorMessage="The percentage of commission for a practice area should not be 0."
+                                            Text="*" ToolTip="The percentage of commission for a practice area should not be 0."></asp:CompareValidator>
                                         <AjaxControlToolkit:FilteredTextBoxExtender ID="ftetxtPercentage" runat="server"
                                             TargetControlID="txtCommisssionPercentage" FilterMode="ValidChars" FilterType="Custom,Numbers"
                                             ValidChars=".">
@@ -514,7 +527,7 @@
                                     <ItemStyle CssClass="Width4Percent textCenter WS-Normal" />
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgSalesAttributionPracticeDelete" ToolTip="Delete" runat="server"
-                                            OnClick="imgPracticeDelete_Click" ImageUrl="~/Images/cross_icon.png" />
+                                            OnClientClick="setDirty();" OnClick="imgPracticeDelete_Click" ImageUrl="~/Images/cross_icon.png" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
@@ -523,6 +536,9 @@
                 </tr>
             </table>
         </asp:Panel>
+        <asp:CustomValidator runat="server" ID="custTitleValidation" Display="Dynamic" ErrorMessage="The start date and end date of two persons with same title cannot overlap."
+            ToolTip="The start date and end date of two persons with same title cannot overlap." OnServerValidate="custTitleValidation_ServerValidate"
+            Text="*"></asp:CustomValidator>
     </ContentTemplate>
 </asp:UpdatePanel>
 
