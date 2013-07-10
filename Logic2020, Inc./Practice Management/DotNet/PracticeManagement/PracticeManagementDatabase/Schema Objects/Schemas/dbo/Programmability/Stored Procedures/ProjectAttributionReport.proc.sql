@@ -32,6 +32,6 @@ BEGIN
 	LEFT JOIN dbo.Person AS person ON person.PersonId = A.TargetId
 	LEFT JOIN dbo.Title AS title ON title.TitleId = person.TitleId
 	LEFT JOIN dbo.Practice AS practice ON practice.PracticeId = A.TargetId
-	WHERE (@StartDate <= A.EndDate AND A.StartDate <= @EndDate) OR (ART.IsRangeType = 0 AND @StartDate<=P.EndDate AND P.StartDate <= @EndDate) AND P.ProjectStatusId IN (2,3,4)
+	WHERE ((@StartDate <= A.EndDate AND A.StartDate <= @EndDate) OR (ART.IsRangeType = 0 AND @StartDate<=P.EndDate AND P.StartDate <= @EndDate)) AND P.ProjectStatusId IN (2,3,4)
 END
 
