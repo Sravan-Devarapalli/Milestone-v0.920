@@ -475,7 +475,7 @@ namespace PraticeManagement
 
             if (!IsPostBack && !string.IsNullOrEmpty(CSAT) && CSAT == "true" && cellProjectCSAT.Visible)
             {
-                btnView_Command(btnProjectCSAT, new CommandEventArgs("", "8"));
+                btnView_Command(btnProjectCSAT, new CommandEventArgs("", "9"));
             }
         }
 
@@ -561,6 +561,7 @@ namespace PraticeManagement
             }
 
             #endregion Security
+
             try
             {
                 if (!Page.IsValid)
@@ -568,7 +569,6 @@ namespace PraticeManagement
             }
             catch
             {
-
             }
             if (IsErrorPanelDisplay && !IsOtherPanelDisplay)
             {
@@ -1377,7 +1377,6 @@ namespace PraticeManagement
                 ViewState.Remove(ProjectAttachmentsKey);
             }
             return result;
-
         }
 
         protected override void Display()
