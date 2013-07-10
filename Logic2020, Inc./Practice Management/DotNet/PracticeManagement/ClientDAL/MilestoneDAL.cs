@@ -750,6 +750,7 @@ namespace DataAccess
             {
                 if (!reader.HasRows) return;
                 int attributionIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionId);
+                int attributionTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionTypeId);
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
                 int targetIdIndex = reader.GetOrdinal(Constants.ColumnNames.TargetId);
@@ -762,6 +763,7 @@ namespace DataAccess
                     var attribution = new Attribution()
                     {
                         Id = reader.GetInt32(attributionIdIndex),
+                        AttributionType = (AttributionTypes)reader.GetInt32(attributionTypeIdIndex),
                         EndDate = reader.GetDateTime(endDateIndex),
                         StartDate = reader.GetDateTime(startDateIndex),
                         TargetId = targetId,
@@ -775,7 +777,6 @@ namespace DataAccess
                 throw ex;
             }
         }
-
     }
 }
 
