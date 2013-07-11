@@ -5,33 +5,59 @@
 	)
 AS
 BEGIN
+	
+	;WITH ProjectAttributionDetail
+	AS
+	(
+	    SELECT	A.AttributionTypeId,--sales/delivery
+				A.AttributionRecordTypeId,--person/practice
+				ISNULL(A.StartDate,P.StartDate) AS StartDate,
+				ISNULL(A.EndDate,P.EndDate) AS EndDate,
+				A.TargetId,
+				ISNULL(Per.LastName+', '+Per.FirstName,Pr.Name) AS TargetName,
+				A.Percentage,
+				A.AttributionId,
+				pay.TitleId,
+				title.Title,
+				RANK() OVER (PARTITION BY pay.Person,A.StartDate,A.EndDate ORDER BY pay.StartDate DESC) AS [Rank],
+				P.ProjectNumber,
+				P.Name,
+				P.BusinessTypeId,
+				P.ProjectStatusId,
+				P.ClientId,
+				P.GroupId
+		FROM dbo.Attribution AS A
+		INNER JOIN dbo.Project AS P ON P.ProjectId = A.ProjectId AND  P.ProjectStatusId IN (2,3,4) AND @StartDate <= ISNULL(A.EndDate,P.EndDate) AND ISNULL(A.StartDate,P.StartDate) <= @EndDate
+		LEFT JOIN dbo.Person AS Per ON A.AttributionRecordTypeId = 1 AND Per.PersonId = A.TargetId
+		LEFT JOIN dbo.Practice AS Pr ON A.AttributionRecordTypeId = 2 AND Pr.PracticeId= A.TargetId
+		LEFT JOIN dbo.Pay AS pay ON A.AttributionRecordTypeId = 1 AND pay.Person = Per.PersonId AND A.StartDate <= pay.EndDate-1 AND pay.StartDate <= A.EndDate
+		LEFT JOIN dbo.Title AS title ON A.AttributionRecordTypeId = 1 AND title.TitleId = pay.TitleId
+	)
 	SELECT	ART.Name AS RecordType,
 			AT.Name AS AttributionType,
 			PS.Name AS ProjectStatus,
-			P.ProjectNumber,
+			Pro.ProjectNumber,
 			C.Name AS Account,
 			BG.Name AS BusinessGroup,
 			PG.Name AS BusinessUnit,
-			P.Name AS ProjectName,
+			Pro.Name AS ProjectName,
 			BT.Name AS NewBusinessOrExtension,
-		   CASE WHEN ART.IsRangeType = 1 THEN person.LastName+', '+person.FirstName ELSE practice.Name END AS Name,
-		   CASE WHEN ART.IsRangeType = 1 THEN title.Title ELSE '' END AS Title,
-		   ISNULL(A.StartDate,P.StartDate) AS StartDate,
-		   ISNULL(A.EndDate,P.EndDate) AS EndDate,
-		   A.Percentage AS CommissionPercentage,
-		   P.BusinessTypeId AS NewOrExtension
-	FROM dbo.Attribution AS A
-	INNER JOIN dbo.Project AS P ON P.ProjectId = A.ProjectId 
-	INNER JOIN dbo.AttributionTypes AS AT ON AT.AttributionTypeId = A.AttributionTypeId
-	INNER JOIN dbo.AttributionRecordTypes AS ART ON ART.AttributionRecordId = A.AttributionRecordTypeId
-	INNER JOIN dbo.ProjectStatus AS PS ON PS.ProjectStatusId = P.ProjectStatusId
-	INNER JOIN dbo.Client AS C ON C.ClientId = P.ClientId
-	INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = P.GroupId
+		    Pro.TargetName AS Name,
+		    ISNULL(Pro.Title,'') AS Title,
+			Pro.StartDate,
+			Pro.EndDate,
+			Pro.Percentage AS CommissionPercentage,
+			Pro.BusinessTypeId AS NewOrExtension
+	FROM ProjectAttributionDetail Pro 
+	INNER JOIN dbo.AttributionTypes AS AT ON AT.AttributionTypeId = Pro.AttributionTypeId
+	INNER JOIN dbo.AttributionRecordTypes AS ART ON ART.AttributionRecordId = Pro.AttributionRecordTypeId
+	INNER JOIN dbo.ProjectStatus AS PS ON PS.ProjectStatusId = Pro.ProjectStatusId
+	INNER JOIN dbo.Client AS C ON C.ClientId = Pro.ClientId
+	INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = Pro.GroupId
 	INNER JOIN dbo.BusinessGroup AS BG ON BG.BusinessGroupId = PG.BusinessGroupId
-	LEFT JOIN dbo.BusinessType AS BT ON BT.BusinessTypeId = P.BusinessTypeId 
-	LEFT JOIN dbo.Person AS person ON person.PersonId = A.TargetId
-	LEFT JOIN dbo.Title AS title ON title.TitleId = person.TitleId
-	LEFT JOIN dbo.Practice AS practice ON practice.PracticeId = A.TargetId
-	WHERE ((@StartDate <= A.EndDate AND A.StartDate <= @EndDate) OR (ART.IsRangeType = 0 AND @StartDate<=P.EndDate AND P.StartDate <= @EndDate)) AND P.ProjectStatusId IN (2,3,4)
+	LEFT JOIN dbo.BusinessType AS BT ON BT.BusinessTypeId = Pro.BusinessTypeId 
+	WHERE Pro.[Rank] = 1
+	ORDER BY Pro.ProjectNumber,ART.Name,AT.Name,Pro.TargetName,Pro.StartDate,Pro.Percentage
+
 END
 
