@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.Security;
 using DataTransferObjects;
 
 namespace PraticeManagement.Controls.Projects
@@ -130,7 +130,6 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-
         protected void btnReviewStartDate_Command(object sender, CommandEventArgs e)
         {
             if (HostingPage.ValidateAndSaveFromOtherChildControls())
@@ -181,13 +180,13 @@ namespace PraticeManagement.Controls.Projects
                 DropDownList ddlScore = (DropDownList)row.FindControl("ddlScore");
 
                 DataTransferObjects.ProjectCSAT pCSAT = tmp.First(g => g.Id == cSATId);
-                    pCSAT.ReferralScore = int.Parse(ddlScore.SelectedValue);
-                    pCSAT.ReviewStartDate = dpReviewStartDate.DateValue;
-                    pCSAT.ReviewEndDate = dpReviewEndDate.DateValue;
-                    pCSAT.CompletionDate = dpCompletionDate.DateValue;
-                    pCSAT.ReviewerId = int.Parse(ddlReviewer.SelectedValue);
+                pCSAT.ReferralScore = int.Parse(ddlScore.SelectedValue);
+                pCSAT.ReviewStartDate = dpReviewStartDate.DateValue;
+                pCSAT.ReviewEndDate = dpReviewEndDate.DateValue;
+                pCSAT.CompletionDate = dpCompletionDate.DateValue;
+                pCSAT.ReviewerId = int.Parse(ddlReviewer.SelectedValue);
 
-                    ServiceCallers.Custom.Project(p => p.CSATUpdate(pCSAT, DataHelper.CurrentPerson.Alias));
+                ServiceCallers.Custom.Project(p => p.CSATUpdate(pCSAT, DataHelper.CurrentPerson.Alias));
                 HostingPage.mlConfirmationControl.ShowInfoMessage("CSAT successfully updated.");
                 ProjectCSATList = null;
                 tmp = ProjectCSATList;
@@ -227,7 +226,5 @@ namespace PraticeManagement.Controls.Projects
                 ddlScore.Items.Add(new ListItem(i.ToString(), i.ToString()));
             }
         }
-
     }
 }
-
