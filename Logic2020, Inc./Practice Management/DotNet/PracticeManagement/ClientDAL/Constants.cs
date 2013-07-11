@@ -881,6 +881,7 @@
 
             public class Person
             {
+                public const string CheckIfCommissionsExistsAfterTermination = "dbo.CheckIfCommissionsExistsAfterTermination";
                 public const string GetActivePersonsListShortByDivision = "dbo.GetActivePersonsListShortByDivision";
                 public const string IsPersonAlreadyHavingStatus = "dbo.IsPersonAlreadyHavingStatus";
                 public const string SetDefaultManager = "dbo.PersonSetDefaultManager";
@@ -1374,3 +1375,4 @@
         }
     }
 }
+
