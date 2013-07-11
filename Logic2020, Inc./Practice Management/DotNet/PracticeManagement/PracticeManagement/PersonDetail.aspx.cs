@@ -36,6 +36,7 @@ namespace PraticeManagement
         private const string lblTerminationDateErrorFormat = "Unable to set Termination Date for {0} due to the following:";
         private const string lblOwnerProjectsExistFormat = "{0} is designated as the Owner for the following project(s):";
         private const string lblOwnerOpportunitiesFormat = "{0} is designated as the Owner for the following Opportunities:";
+        private const string lblCommissionsFormat = "{0} is assigned for commission attributions for the following Projects:";
         private const string TerminationReasonFirstItem = "- - Select Termination Reason - -";
         private const string CloseAnActiveCompensation = "This person still has an active compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
         private const string CloseAnOpenEndedCompensation = "This person still has an open compensation record. Click OK to close their compensation record as of their termination date, or click Cancel to exit without saving changes.";
@@ -1335,22 +1336,24 @@ namespace PraticeManagement
             List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
             List<Project> ownerProjects = new List<Project>();
             List<Opportunity> ownerOpportunities = new List<Opportunity>();
+            List<Project> commissionsAfterTermination = new List<Project>();
 
             using (PersonServiceClient serviceClient = new PersonServiceClient())
             {
-                if (this.PersonId.HasValue && terminationDate.HasValue)
+                if (PersonId.HasValue && terminationDate.HasValue)
                 {
-                    TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(this.PersonId.Value, terminationDate.Value);
-                    milestonesAfterTerminationDate.AddRange(serviceClient.GetPersonMilestonesAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1)));
-                    ownerProjects.AddRange(serviceClient.GetOwnerProjectsAfterTerminationDate(this.PersonId.Value, terminationDate.Value.AddDays(1)));
-                    ownerOpportunities.AddRange(serviceClient.GetActiveOpportunitiesByOwnerId(this.PersonId.Value));
+                    TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(PersonId.Value, terminationDate.Value);
+                    milestonesAfterTerminationDate.AddRange(serviceClient.GetPersonMilestonesAfterTerminationDate(PersonId.Value, terminationDate.Value.AddDays(1)));
+                    ownerProjects.AddRange(serviceClient.GetOwnerProjectsAfterTerminationDate(PersonId.Value, terminationDate.Value.AddDays(1)));
+                    ownerOpportunities.AddRange(serviceClient.GetActiveOpportunitiesByOwnerId(PersonId.Value));
+                    commissionsAfterTermination.AddRange(serviceClient.CheckIfCommissionsExistsAfterTermination(PersonId.Value,terminationDate.Value));
                 }
             }
-            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any<Milestone>() || ownerProjects.Any<Project>() || ownerOpportunities.Any<Opportunity>())
+            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any() || ownerProjects.Any() || ownerOpportunities.Any() || commissionsAfterTermination.Any())
             {
-                this.dvTerminationDateErrors.Visible = true;
+                dvTerminationDateErrors.Visible = true;
 
-                var person = DataHelper.GetPerson(this.PersonId.Value);
+                var person = DataHelper.GetPerson(PersonId.Value);
                 lblTerminationDateError.Text = string.Format(lblTerminationDateErrorFormat, person.Name);
 
                 mpeViewTerminationDateErrors.Show();
@@ -1358,47 +1361,59 @@ namespace PraticeManagement
 
                 if (TEsExistsAfterTerminationDate)
                 {
-                    this.lblTimeEntriesExist.Visible = true;
-                    this.lblTimeEntriesExist.Text = string.Format(lblTimeEntriesExistFormat, terminationDate.Value.ToString("MM/dd/yyy"));
+                    lblTimeEntriesExist.Visible = true;
+                    lblTimeEntriesExist.Text = string.Format(lblTimeEntriesExistFormat, terminationDate.Value.ToString("MM/dd/yyy"));
                 }
                 else
                 {
-                    this.lblTimeEntriesExist.Visible = false;
+                    lblTimeEntriesExist.Visible = false;
                 }
-                if (milestonesAfterTerminationDate.Any<Milestone>())
+                if (milestonesAfterTerminationDate.Any())
                 {
-                    this.dvProjectMilestomesExist.Visible = true;
-                    this.lblProjectMilestomesExist.Text = string.Format(lblProjectMilestomesExistFormat, person.Name, terminationDate.Value.ToString("MM/dd/yyy"));
-                    this.dtlProjectMilestones.DataSource = milestonesAfterTerminationDate;
-                    this.dtlProjectMilestones.DataBind();
+                    dvProjectMilestomesExist.Visible = true;
+                    lblProjectMilestomesExist.Text = string.Format(lblProjectMilestomesExistFormat, person.Name, terminationDate.Value.ToString("MM/dd/yyy"));
+                    dtlProjectMilestones.DataSource = milestonesAfterTerminationDate;
+                    dtlProjectMilestones.DataBind();
                 }
                 else
                 {
-                    this.dvProjectMilestomesExist.Visible = false;
+                    dvProjectMilestomesExist.Visible = false;
                 }
 
-                if (ownerProjects.Any<Project>())
+                if (ownerProjects.Any())
                 {
-                    this.divOwnerProjectsExist.Visible = true;
-                    this.lblOwnerProjectsExist.Text = string.Format(lblOwnerProjectsExistFormat, person.Name);
-                    this.dtlOwnerProjects.DataSource = ownerProjects;
-                    this.dtlOwnerProjects.DataBind();
+                    divOwnerProjectsExist.Visible = true;
+                    lblOwnerProjectsExist.Text = string.Format(lblOwnerProjectsExistFormat, person.Name);
+                    dtlOwnerProjects.DataSource = ownerProjects;
+                    dtlOwnerProjects.DataBind();
                 }
                 else
                 {
-                    this.divOwnerProjectsExist.Visible = false;
+                    divOwnerProjectsExist.Visible = false;
                 }
 
-                if (ownerOpportunities.Any<Opportunity>())
+                if (ownerOpportunities.Any())
                 {
-                    this.divOwnerOpportunitiesExist.Visible = true;
-                    this.lblOwnerOpportunities.Text = string.Format(lblOwnerOpportunitiesFormat, person.Name);
-                    this.dtlOwnerOpportunities.DataSource = ownerOpportunities;
-                    this.dtlOwnerOpportunities.DataBind();
+                    divOwnerOpportunitiesExist.Visible = true;
+                    lblOwnerOpportunities.Text = string.Format(lblOwnerOpportunitiesFormat, person.Name);
+                    dtlOwnerOpportunities.DataSource = ownerOpportunities;
+                    dtlOwnerOpportunities.DataBind();
                 }
                 else
                 {
-                    this.divOwnerOpportunitiesExist.Visible = false;
+                    divOwnerOpportunitiesExist.Visible = false;
+                }
+
+                if (commissionsAfterTermination.Any())
+                {
+                    dvCommissionsExit.Visible = true;
+                    lblCommissions.Text = string.Format(lblCommissionsFormat, person.Name);
+                    dlCommissions.DataSource = commissionsAfterTermination;
+                    dlCommissions.DataBind();
+                }
+                else
+                {
+                    dvCommissionsExit.Visible = false;
                 }
 
                 //this.dtpTerminationDate.DateValue = terminationDate.Value;
@@ -3260,3 +3275,4 @@ namespace PraticeManagement
         #endregion Methods
     }
 }
+
