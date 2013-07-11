@@ -4289,6 +4289,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CheckIfCommissionsExistsAfterTermination.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CheckIfRangeWithinHireAndTermination.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4338,4 +4341,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
