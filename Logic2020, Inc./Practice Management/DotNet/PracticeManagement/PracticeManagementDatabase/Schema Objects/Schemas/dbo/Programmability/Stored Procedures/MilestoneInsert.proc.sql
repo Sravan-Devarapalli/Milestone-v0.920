@@ -38,17 +38,17 @@ BEGIN
 		FROM dbo.Project P 
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
 		WHERE P.DirectorId IS NOT NULL 
-		UNION ALL
+		UNION 
 		SELECT P.ProjectId,AR.AttributionRecordId,2,P.SeniorManagerId,P.StartDate,P.EndDate,100
 		FROM dbo.Project P 
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
 		WHERE P.SeniorManagerId IS NOT NULL
-		UNION ALL
+		UNION 
 		SELECT P.ProjectId,AR.AttributionRecordId,1,P.SalesPersonId,P.StartDate,P.EndDate,100
 		FROM dbo.Project P
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
 		WHERE P.SalesPersonId IS NOT NULL
-		UNION ALL
+		UNION 
 		SELECT P.ProjectId,AR.AttributionRecordId,AT.AttributionTypeId,P.PracticeId,NULL,NULL,100
 		FROM dbo.Project P
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsPercentageType = 1 AND P.ProjectId = @ProjectId
@@ -60,3 +60,4 @@ BEGIN
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
+
