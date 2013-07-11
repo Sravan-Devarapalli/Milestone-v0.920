@@ -45,7 +45,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
-                                        <asp:CheckBox ID="chbAttribution" runat="server"/>
+                                        <asp:CheckBox ID="chbAttribution" runat="server" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -97,7 +97,11 @@
                                 <asp:TemplateField>
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
-                                            Title</div>
+                                            Title
+                                            <asp:CustomValidator runat="server" ID="custTitleValidation" Display="Dynamic" ErrorMessage="The start date and end date of two persons with same title cannot overlap."
+                                                ToolTip="The start date and end date of two persons with same title cannot overlap."
+                                                Text="*" OnServerValidate="custTitleValidation_ServerValidate"></asp:CustomValidator>
+                                        </div>
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width25Percent textCenter WS-Normal" />
                                     <ItemTemplate>
@@ -181,26 +185,26 @@
                         <table class="WholeWidth alignCenter">
                             <tr>
                                 <td class="paddingBottom5px">
-                                    <asp:Button ID="btnCopyAlltoRight" runat="server" Text=">>" OnClick="btnCopyAlltoRight_Click" OnClientClick="setDirty();"
-                                        CssClass="Width30Px" />
+                                    <asp:Button ID="btnCopyAlltoRight" runat="server" Text=">>" OnClick="btnCopyAlltoRight_Click"
+                                        OnClientClick="setDirty();" CssClass="Width30Px" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="paddingBottom5px">
-                                    <asp:Button ID="btnCopySelectedItemstoRight" runat="server" Text=">" OnClick="btnCopySelectedItemstoRight_Click" OnClientClick="setDirty();"
-                                        CssClass="Width30Px" />
+                                    <asp:Button ID="btnCopySelectedItemstoRight" runat="server" Text=">" OnClick="btnCopySelectedItemstoRight_Click"
+                                        OnClientClick="setDirty();" CssClass="Width30Px" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="paddingBottom5px">
-                                    <asp:Button ID="btnCopyAlltoLeft" runat="server" Text="<<" OnClick="btnCopyAlltoLeft_Click" OnClientClick="setDirty();"
-                                        CssClass="Width30Px" />
+                                    <asp:Button ID="btnCopyAlltoLeft" runat="server" Text="<<" OnClick="btnCopyAlltoLeft_Click"
+                                        OnClientClick="setDirty();" CssClass="Width30Px" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="paddingBottom5px">
-                                    <asp:Button ID="btnCopySelectedItemstoLeft" runat="server" Text="<" OnClick="btnCopySelectedItemstoLeft_Click" OnClientClick="setDirty();"
-                                        CssClass="Width30Px" />
+                                    <asp:Button ID="btnCopySelectedItemstoLeft" runat="server" Text="<" OnClick="btnCopySelectedItemstoLeft_Click"
+                                        OnClientClick="setDirty();" CssClass="Width30Px" />
                                 </td>
                             </tr>
                         </table>
@@ -222,7 +226,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
-                                        <asp:CheckBox ID="chbAttribution" runat="server"/>
+                                        <asp:CheckBox ID="chbAttribution" runat="server" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -274,7 +278,11 @@
                                 <asp:TemplateField>
                                     <HeaderTemplate>
                                         <div class="ie-bg no-wrap">
-                                            Title</div>
+                                            Title
+                                            <asp:CustomValidator runat="server" ID="custTitleValidation" Display="Dynamic" ErrorMessage="The start date and end date of two persons with same title cannot overlap."
+                                                ToolTip="The start date and end date of two persons with same title cannot overlap."
+                                                Text="*" OnServerValidate="custTitleValidation_ServerValidate"></asp:CustomValidator>
+                                        </div>
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width24Percent textCenter WS-Normal" />
                                     <ItemTemplate>
@@ -536,9 +544,5 @@
                 </tr>
             </table>
         </asp:Panel>
-        <asp:CustomValidator runat="server" ID="custTitleValidation" Display="Dynamic" ErrorMessage="The start date and end date of two persons with same title cannot overlap."
-            ToolTip="The start date and end date of two persons with same title cannot overlap." OnServerValidate="custTitleValidation_ServerValidate"
-            Text="*"></asp:CustomValidator>
     </ContentTemplate>
 </asp:UpdatePanel>
-
