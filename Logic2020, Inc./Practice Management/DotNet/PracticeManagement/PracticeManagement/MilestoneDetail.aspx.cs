@@ -827,13 +827,13 @@ namespace PraticeManagement
                 if (attributionList.Any(x => x.AttributionType == AttributionTypes.Delivery))
                 {
                     repDeliveryPersons.DataSource =
-                        attributionList.Where(x => x.AttributionType == AttributionTypes.Delivery);
+                        attributionList.Where(x => x.AttributionType == AttributionTypes.Delivery).OrderBy(x=>x.TargetName).ThenBy(x=>x.StartDate);
                     repDeliveryPersons.DataBind();
                 }
                 if (attributionList.Any(x => x.AttributionType == AttributionTypes.Sales))
                 {
                     repSalesPersons.DataSource =
-                        attributionList.Where(x => x.AttributionType == AttributionTypes.Sales);
+                        attributionList.Where(x => x.AttributionType == AttributionTypes.Sales).OrderBy(x => x.TargetName).ThenBy(x => x.StartDate);
                     repSalesPersons.DataBind();
                 }
                 e.IsValid = false;
