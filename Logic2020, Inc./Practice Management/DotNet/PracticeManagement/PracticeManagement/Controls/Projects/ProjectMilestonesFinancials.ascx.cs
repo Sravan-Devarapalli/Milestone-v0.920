@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Security;
 using PraticeManagement.Utils;
-using System.Web;
 
 namespace PraticeManagement.Controls.Projects
 {
@@ -16,7 +16,7 @@ namespace PraticeManagement.Controls.Projects
 
         public delegate bool ValidateAndSaveDelegate();
 
-        #endregion
+        #endregion Delegates
 
         #region Constants
 
@@ -33,7 +33,7 @@ namespace PraticeManagement.Controls.Projects
 
         private const string WordBreak = "<wbr />";
 
-        #endregion
+        #endregion Constants
 
         private SeniorityAnalyzer milestonesSeniorityAnalyzer;
 
@@ -84,7 +84,9 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        #endregion
+        public string ValidationGroup { get; set; }
+
+        #endregion Properties
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -103,15 +105,19 @@ namespace PraticeManagement.Controls.Projects
             GridViewRow row = imgEdit.NamingContainer as GridViewRow;
             var tbMilesonename = row.FindControl("tbMilestoneName") as TextBox;
             var rfvMilestoneName = row.FindControl("rfvMilestoneName") as RequiredFieldValidator;
+            rfvMilestoneName.ValidationGroup = ValidationGroup;
             rfvMilestoneName.Validate();
-            if(rfvMilestoneName.IsValid)
+            if (rfvMilestoneName.IsValid)
             {
-            var milestone = new Milestone{ Id = Convert.ToInt32(tbMilesonename.Attributes["MilestoneId"]),
-                                            Description = tbMilesonename.Text};
+                var milestone = new Milestone
+                {
+                    Id = Convert.ToInt32(tbMilesonename.Attributes["MilestoneId"]),
+                    Description = tbMilesonename.Text
+                };
 
-            //Save Milestone Name.
-            ServiceCallers.Custom.Milestone(m => m.MilestoneUpdateShortDetails(milestone, HttpContext.Current.User.Identity.Name));
-            gvRevenueMilestones.EditIndex = -1;
+                //Save Milestone Name.
+                ServiceCallers.Custom.Milestone(m => m.MilestoneUpdateShortDetails(milestone, HttpContext.Current.User.Identity.Name));
+                gvRevenueMilestones.EditIndex = -1;
             }
         }
 
@@ -191,7 +197,6 @@ namespace PraticeManagement.Controls.Projects
 
         protected void gvRevenueMilestones_Sorting(object sender, GridViewSortEventArgs e)
         {
-
             string newExpression = e.SortExpression;
             if (newExpression == PreviousSortExpression)
             {
@@ -214,4 +219,3 @@ namespace PraticeManagement.Controls.Projects
         }
     }
 }
-
