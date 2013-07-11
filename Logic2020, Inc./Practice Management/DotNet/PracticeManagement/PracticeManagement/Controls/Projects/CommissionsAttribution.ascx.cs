@@ -123,10 +123,8 @@ namespace PraticeManagement.Controls.Projects
         {
             if (IsPostBack) return;
             if (!HostingPage.ProjectId.HasValue) return;
-            GetProjectAttributionValues();
             if (HostingPage.ValidateAndSaveFromOtherChildControls())
                 BindAttributions();
-            custTitleValidation.ValidationGroup = ValidationGroup;
         }
 
         protected void gvDeliveryAttributionPerson_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -893,11 +891,13 @@ namespace PraticeManagement.Controls.Projects
 
         protected void custTitleValidation_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            XDocument xdocDelviery = XDocument.Parse(DeliveryPersonAttributionXML);
-            XDocument xdocSales = XDocument.Parse(SalesPersonAttributionXML);
-            List<XElement> xlistDelivery = xdocDelviery.Descendants(XName.Get(AttributionXname)).ToList();
-            List<XElement> xlistSales = xdocSales.Descendants(XName.Get(AttributionXname)).ToList();
-            args.IsValid = ValidateTitle(xlistDelivery) && ValidateTitle(xlistSales);
+            CustomValidator custTitleValidation = source as CustomValidator;
+            GridViewRow row = custTitleValidation.NamingContainer as GridViewRow;
+            GridView gridView = row.NamingContainer as GridView;
+            HiddenField attributionType = gridView.HeaderRow.FindControl("hdnAttributionType") as HiddenField;
+            XDocument xdoc = attributionType.Value == "Delivery" ? XDocument.Parse(DeliveryPersonAttributionXML) : XDocument.Parse(SalesPersonAttributionXML);
+            List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
+            args.IsValid = ValidateTitle(xlist);
         }
 
         #endregion Events
@@ -1090,12 +1090,6 @@ namespace PraticeManagement.Controls.Projects
             return xdoc;
         }
 
-        public void GetProjectAttributionValues()
-        {
-            ProjectId = HostingPage.ProjectId.Value;
-            ProjectAttribution = ServiceCallers.Custom.Project(p => p.GetProjectAttributionValues(ProjectId)).ToList();
-        }
-
         private XDocument PrePareXmlForAttributionsFromData(string attributionCategory)
         {
             StringBuilder xml = new StringBuilder();
@@ -1160,6 +1154,8 @@ namespace PraticeManagement.Controls.Projects
 
         private void BindAttributions()
         {
+            ProjectId = HostingPage.ProjectId.Value;
+            ProjectAttribution = ServiceCallers.Custom.Project(p => p.GetProjectAttributionValues(ProjectId)).ToList();
             //for Delivery Person Attributions
             var deliveryPersonAttributions = ProjectAttribution.FindAll(a => a.AttributionType == (AttributionTypes)2 && a.AttributionRecordType == (AttributionRecordTypes)1).ToList();
             DeliveryPersonAttribution = deliveryPersonAttributions;//.OrderBy(x => x.TargetName).ThenBy(x => x.StartDate).ToList();
@@ -1187,7 +1183,6 @@ namespace PraticeManagement.Controls.Projects
             var salesPracticeAttributionsXml = PrePareXmlForAttributionsFromData(salesPracticeAttribution);
             SalesPracticeAttributionXML = salesPracticeAttributionsXml.ToString();
             DatabindGridView(gvSalesAttributionPractice, salesPracticeAttributionsXml.Descendants(XName.Get(AttributionXname)).ToList());
-            HostingPage.IsDirty = false;
         }
 
         public XDocument AddEmptyRow(int attributionType, int attributionRecordType, XDocument xdoc, Attribution attr = null)
@@ -1598,31 +1593,37 @@ namespace PraticeManagement.Controls.Projects
 
         public void FinalSave()
         {
-            if (!ValidateCommissionsPercentage()) return;
             string attributionXml = FinalXml();
             ProjectId = HostingPage.ProjectId.Value;
             ServiceCallers.Custom.Project(
                 p => p.SetProjectAttributionValues(ProjectId, attributionXml, Context.User.Identity.Name));
+            BindAttributions();
         }
 
-        public bool ValidateCommissionsPercentage()
+        public bool ValidateCommissionsTab()
         {
             SaveRecordsOnFinalSave();
             if (gvDeliveryAttributionPractice.HeaderRow != null)
             {
                 CustomValidator custCommissionsPercentage =
                     gvDeliveryAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
-                custCommissionsPercentage.ValidationGroup = ValidationGroup;
+                CustomValidator custTitleValidation =
+                    gvDeliveryAttributionPerson.HeaderRow.FindControl("custTitleValidation") as CustomValidator;
+                custCommissionsPercentage.ValidationGroup = custTitleValidation.ValidationGroup = ValidationGroup;
                 custCommissionsPercentage.Validate();
+                custTitleValidation.Validate();
             }
             if (gvSalesAttributionPractice.HeaderRow != null)
             {
                 CustomValidator custCommissionsPercentageSales =
                     gvSalesAttributionPractice.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
-                custCommissionsPercentageSales.ValidationGroup = ValidationGroup;
+                CustomValidator custTitleValidation =
+                    gvSalesAttributionPerson.HeaderRow.FindControl("custTitleValidation") as CustomValidator;
+                custCommissionsPercentageSales.ValidationGroup = custTitleValidation.ValidationGroup = ValidationGroup;
                 custCommissionsPercentageSales.Validate();
+                custTitleValidation.Validate();
             }
-            custTitleValidation.Validate();
+           
             return Page.IsValid;
         }
 
