@@ -3504,5 +3504,43 @@ namespace DataAccess
             }
             return null;
         }
+
+        public static List<Project> CheckIfCommissionsExistsAfterTermination(int personId, DateTime terminationDate)
+        {
+            List<Project> result = new List<Project>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfCommissionsExistsAfterTermination, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadCommissions(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadCommissions(SqlDataReader reader, List<Project> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                while (reader.Read())
+                {
+                    Project project = new Project()
+                      {
+                          ProjectNumber = reader.GetString(projectNumberIndex),
+                          Name = reader.GetString(projectNameIndex)
+                      };
+                    result.Add(project);
+                }
+            }
+        }
     }
 }
