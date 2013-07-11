@@ -45,7 +45,11 @@ AS
 			A.EndDate = CASE WHEN A.EndDate > @EndDate THEN @EndDate ELSE A.EndDate END--min enddate
 	FROM [dbo].Attribution A
 	INNER JOIN AttributionRecordTypes ART ON A.AttributionRecordTypeId = ART.AttributionRecordId AND ART.IsRangeType = 1
-	WHERE A.ProjectId = @ProjectId AND A.StartDate <= @EndDate AND @StartDate <= A.EndDate
+	WHERE A.ProjectId = @ProjectId AND A.StartDate <= @EndDate AND @StartDate <= A.EndDate AND 
+			(
+			 A.StartDate <> CASE WHEN A.StartDate < @StartDate THEN @StartDate ELSE A.StartDate END
+				OR A.EndDate <> CASE WHEN A.EndDate > @EndDate THEN @EndDate ELSE A.EndDate END
+			)
 
 	DELETE A
 	FROM [dbo].Attribution A
@@ -53,10 +57,7 @@ AS
 	WHERE A.ProjectId = @ProjectId AND (A.StartDate > @EndDate OR @StartDate > A.EndDate)
 
 	
-	IF  ( SELECT UserLogin
-			FROM SessionLogData
-			WHERE SessionID = @@SPID
-		) IS NULL
+	IF  ( SELECT UserLogin FROM SessionLogData WHERE SessionID = @@SPID) IS NULL
 	BEGIN
 		EXEC SessionLogPrepare @UserLogin = @UserLogin
 	END
