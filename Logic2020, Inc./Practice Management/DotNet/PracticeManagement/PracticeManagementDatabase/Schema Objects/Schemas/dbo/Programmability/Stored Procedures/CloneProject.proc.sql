@@ -8,7 +8,7 @@ AS
     BEGIN
         SET NOCOUNT ON ;
 
-        BEGIN TRANSACTION
+        BEGIN TRANSACTION TR_CloneProject
 
 		-- Generating Project Number
         DECLARE @ProjectNumber NVARCHAR(12),@IsInternal BIT 
@@ -37,7 +37,9 @@ AS
 				 IsInternal,
 				 IsNoteRequired,
 				 ProjectOwnerId,
-				 SalesPersonId)
+				 SalesPersonId,
+				 PONumber,
+				 SeniorManagerId)
                 SELECT  p.ClientId,
                         p.Discount,
                         p.Terms,
@@ -59,7 +61,9 @@ AS
 						p.IsInternal,
 						p.IsNoteRequired,
 						p.ProjectOwnerId,
-						p.SalesPersonId
+						p.SalesPersonId,
+						p.PONumber,
+						p.SeniorManagerId
                 FROM    dbo.Project AS p
                 WHERE   p.ProjectId = @projectId
                 
@@ -105,15 +109,23 @@ AS
                 DEALLOCATE projectMilestone
             END 
             
-        IF @CloneCommissions = 1
+        IF @CloneCommissions = 1 AND @CloneMilestones = 1 
             BEGIN
-
-			--need to clone new tables Attribution
-         	SELECT 1
+			
+			INSERT INTO dbo.Attribution(AttributionRecordTypeId,AttributionTypeId,ProjectId,TargetId,StartDate,EndDate,Percentage)
+			SELECT	A.AttributionRecordTypeId,
+					A.AttributionTypeId,
+					@ClonedProjectId,
+					A.TargetId,
+					A.StartDate,
+					A.EndDate,
+					A.Percentage
+			FROM	dbo.Attribution A
+			WHERE	A.ProjectId = @projectId
          	
             END
 
-        COMMIT
+        COMMIT TRANSACTION TR_CloneProject
 
     END
 
