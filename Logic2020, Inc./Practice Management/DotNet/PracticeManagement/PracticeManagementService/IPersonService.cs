@@ -445,5 +445,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Project> CheckIfCommissionsExistsAfterTermination(int personId, DateTime terminationDate);
+
+        [OperationContract]
+        bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate);
     }
 }
+
