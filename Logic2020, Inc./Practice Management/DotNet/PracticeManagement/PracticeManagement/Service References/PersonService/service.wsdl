@@ -68,6 +68,12 @@
   <wsdl:message name="IPersonService_CheckIfCommissionsExistsAfterTermination_OutputMessage">
     <wsdl:part name="parameters" element="tns:CheckIfCommissionsExistsAfterTerminationResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfRangeWithinHireAndTermination_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfRangeWithinHireAndTermination" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfRangeWithinHireAndTermination_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfRangeWithinHireAndTerminationResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -540,6 +546,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTermination" message="tns:IPersonService_CheckIfCommissionsExistsAfterTermination_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTerminationResponse" message="tns:IPersonService_CheckIfCommissionsExistsAfterTermination_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="CheckIfRangeWithinHireAndTermination">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTermination" message="tns:IPersonService_CheckIfRangeWithinHireAndTermination_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTerminationResponse" message="tns:IPersonService_CheckIfRangeWithinHireAndTermination_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -906,6 +916,15 @@
     </wsdl:operation>
     <wsdl:operation name="CheckIfCommissionsExistsAfterTermination">
       <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTermination" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfRangeWithinHireAndTermination">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTermination" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
