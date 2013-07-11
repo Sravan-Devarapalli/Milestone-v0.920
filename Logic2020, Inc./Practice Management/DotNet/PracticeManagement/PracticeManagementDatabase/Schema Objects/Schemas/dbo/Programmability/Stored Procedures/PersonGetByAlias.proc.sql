@@ -31,7 +31,9 @@ AS
 	       p.ManagerLastName,
 	       p.PracticeOwnedId,
 	       p.PracticeOwnedName,
-	       p.TelephoneNumber
+	       p.TelephoneNumber,
+		   p.Title,
+		   p.TitleId
 	  FROM dbo.v_Person AS p
 	 WHERE p.Alias = @Alias
 
