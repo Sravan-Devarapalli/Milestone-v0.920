@@ -50,8 +50,8 @@
                 </ItemTemplate>
                 <EditItemTemplate>
                     <span class="Width85Percent">
-                        <uc2:DatePicker ID="dpReviewStartDate" ValidationGroup="CSATUpdate" runat="server" SetDirty="false"
-                            TextBoxWidth="90%" AutoPostBack="false" />
+                        <uc2:DatePicker ID="dpReviewStartDate" ValidationGroup="CSATUpdate" runat="server"
+                            SetDirty="false" TextBoxWidth="90%" AutoPostBack="false" />
                     </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqStartDate" runat="server" ControlToValidate="dpReviewStartDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Review Start Date is required."
@@ -77,8 +77,8 @@
                 </ItemTemplate>
                 <EditItemTemplate>
                     <span class="Width85Percent">
-                        <uc2:DatePicker ID="dpReviewEndDate" ValidationGroup="CSATUpdate" runat="server" SetDirty="false"
-                            TextBoxWidth="90%" AutoPostBack="false" />
+                        <uc2:DatePicker ID="dpReviewEndDate" ValidationGroup="CSATUpdate" runat="server"
+                            SetDirty="false" TextBoxWidth="90%" AutoPostBack="false" />
                     </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqEndDate" runat="server" ControlToValidate="dpReviewEndDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Review End Date is required."
@@ -96,9 +96,9 @@
                             Operator="GreaterThanEqual" Type="Date" ValidationGroup="CSATUpdate"></asp:CompareValidator>
                         <asp:CompareValidator ID="compEnddateLesser" runat="server" ControlToValidate="dpReviewEndDate"
                             ControlToCompare="dpCompletionDate" ErrorMessage="The Review Period End Date must be less than Completion Date."
-                            ToolTip="The Review Period End Date must be less than Completion Date."
-                            Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                            Operator="LessThan" Type="Date" ValidationGroup="CSATUpdate"></asp:CompareValidator>
+                            ToolTip="The Review Period End Date must be less than Completion Date." Text="*"
+                            EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="LessThan"
+                            Type="Date" ValidationGroup="CSATUpdate"></asp:CompareValidator>
                         <asp:CustomValidator ID="custCSATEndDateInGridView" runat="server" ControlToValidate="dpReviewEndDate"
                             ErrorMessage="The Review End Date can not be greater than the date on which project status was set to 'Completed'."
                             ToolTip="The Review End Date can not be greater than the date on which project status was set to 'Completed'."
@@ -119,8 +119,8 @@
                 <ItemStyle CssClass="textCenter" />
                 <EditItemTemplate>
                     <span class="Width85Percent">
-                        <uc2:DatePicker ID="dpCompletionDate" ValidationGroup="CSATUpdate" runat="server"  SetDirty="false"
-                            TextBoxWidth="90%" AutoPostBack="false" />
+                        <uc2:DatePicker ID="dpCompletionDate" ValidationGroup="CSATUpdate" runat="server"
+                            SetDirty="false" TextBoxWidth="90%" AutoPostBack="false" />
                     </span><span class="Width15Percent vTop">
                         <asp:RequiredFieldValidator ID="reqCompletionDate" runat="server" ControlToValidate="dpCompletionDate"
                             ValidationGroup="CSATUpdate" ErrorMessage="The Completion Date is required."
@@ -199,5 +199,3 @@
         </Columns>
     </asp:GridView>
 </asp:Panel>
-<asp:ValidationSummary ID="valSumCSATUpdate" runat="server" ValidationGroup="CSATUpdate" />
-
