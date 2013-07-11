@@ -62,6 +62,12 @@
   <wsdl:message name="IPersonService_GetPersonTitleByRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonTitleByRangeResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfCommissionsExistsAfterTermination_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfCommissionsExistsAfterTermination" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfCommissionsExistsAfterTermination_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfCommissionsExistsAfterTerminationResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -530,6 +536,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonTitleByRange" message="tns:IPersonService_GetPersonTitleByRange_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonTitleByRangeResponse" message="tns:IPersonService_GetPersonTitleByRange_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="CheckIfCommissionsExistsAfterTermination">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTermination" message="tns:IPersonService_CheckIfCommissionsExistsAfterTermination_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTerminationResponse" message="tns:IPersonService_CheckIfCommissionsExistsAfterTermination_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -887,6 +897,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonTitleByRange">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonTitleByRange" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfCommissionsExistsAfterTermination">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTermination" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
