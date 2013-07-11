@@ -3542,5 +3542,21 @@ namespace DataAccess
                 }
             }
         }
+        public static bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfRangeWithinHireAndTermination, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                connection.Open();
+                return ((bool)command.ExecuteScalar());
+            }
+        }
     }
 }
+
