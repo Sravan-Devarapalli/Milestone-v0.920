@@ -34,6 +34,11 @@ AS
 	       EndDate = @EndDate
 	FROM Project P
 	WHERE P.ProjectId = @ProjectId
+	
+	IF  ( SELECT UserLogin FROM SessionLogData WHERE SessionID = @@SPID) IS NULL
+	BEGIN
+		EXEC SessionLogPrepare @UserLogin = @UserLogin
+	END
 
 	UPDATE PTRS
 		SET EndDate = @EndDate + (7 - DATEPART(dw,@EndDate))
