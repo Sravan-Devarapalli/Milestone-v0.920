@@ -342,108 +342,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
-  <xs:simpleType name="BudgetCategoryType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="ClientDirector">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="PracticeArea">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="BusinessDevelopmentManager">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="BudgetCategoryType" nillable="true" type="tns:BudgetCategoryType" />
-  <xs:complexType name="ArrayOfMilestone">
+  <xs:complexType name="ArrayOfProject">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Milestone" nillable="true" type="tns:Milestone" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfMilestone" nillable="true" type="tns:ArrayOfMilestone" />
-  <xs:complexType name="Milestone">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" nillable="true" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
-      <xs:element minOccurs="0" name="ConsultantsCanAdjust" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ExpectedHours" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsHourlyAmount" type="xs:boolean" />
-      <xs:element minOccurs="0" name="MilestonePersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
-      <xs:element minOccurs="0" name="PersonCount" type="xs:int" />
-      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
-      <xs:element minOccurs="0" name="ProjectedDeliveryDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ProjectedDuration" type="xs:int" />
-      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Milestone" nillable="true" type="tns:Milestone" />
-  <xs:complexType name="ArrayOfMilestonePerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="MilestonePerson" nillable="true" type="tns:MilestonePerson" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfMilestonePerson" nillable="true" type="tns:ArrayOfMilestonePerson" />
-  <xs:complexType name="MilestonePerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
-      <xs:element minOccurs="0" name="Entries" nillable="true" type="tns:ArrayOfMilestonePersonEntry" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Milestone" nillable="true" type="tns:Milestone" />
-      <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="PracticeList" nillable="true" type="tns:ArrayOfPractice" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="MilestonePerson" nillable="true" type="tns:MilestonePerson" />
-  <xs:complexType name="ArrayOfMilestonePersonEntry">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="MilestonePersonEntry" nillable="true" type="tns:MilestonePersonEntry" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfMilestonePersonEntry" nillable="true" type="tns:ArrayOfMilestonePersonEntry" />
-  <xs:complexType name="MilestonePersonEntry">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
-      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="EstimatedClientDiscount" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="HasTimeEntries" type="xs:boolean" />
-      <xs:element minOccurs="0" name="HourlyAmount" nillable="true" type="tns:PracticeManagementCurrency" />
-      <xs:element minOccurs="0" name="HoursPerDay" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MilestonePersonId" type="xs:int" />
-      <xs:element minOccurs="0" name="ParentMilestone" nillable="true" type="tns:Milestone" />
-      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PersonTimeOffList" nillable="true" type="q13:ArrayOfKeyValueOfdateTimedecimal" />
-      <xs:element minOccurs="0" name="ProjectedWorkloadWithVacation" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Role" nillable="true" type="tns:PersonRole" />
-      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ThisPerson" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="VacationDays" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="MilestonePersonEntry" nillable="true" type="tns:MilestonePersonEntry" />
-  <xs:complexType name="PersonRole">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="PersonRole" nillable="true" type="tns:PersonRole" />
+  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
   <xs:complexType name="Project">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
@@ -494,8 +398,8 @@
       <xs:element minOccurs="0" name="ProjectOwner" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="ProjectPersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
       <xs:element minOccurs="0" name="ProjectWorkTypesList" nillable="true" type="xs:string" />
-      <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q14:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
-      <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByRange" nillable="true" type="q15:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
+      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q13:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByRange" nillable="true" type="q14:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
       <xs:element minOccurs="0" name="RecentCompletedStatusDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="SalesPersonId" type="xs:int" />
       <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
@@ -564,39 +468,17 @@
   <xs:element name="Attribution" nillable="true" type="tns:Attribution" />
   <xs:simpleType name="AttributionRecordTypes">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Person">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Practice">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Person" />
+      <xs:enumeration value="Practice" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AttributionRecordTypes" nillable="true" type="tns:AttributionRecordTypes" />
   <xs:simpleType name="AttributionTypes">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Sales">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Delivery">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Sales" />
+      <xs:enumeration value="Delivery" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AttributionTypes" nillable="true" type="tns:AttributionTypes" />
@@ -703,6 +585,82 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
+  <xs:complexType name="ArrayOfMilestone">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Milestone" nillable="true" type="tns:Milestone" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMilestone" nillable="true" type="tns:ArrayOfMilestone" />
+  <xs:complexType name="Milestone">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" nillable="true" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
+      <xs:element minOccurs="0" name="ConsultantsCanAdjust" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExpectedHours" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsHourlyAmount" type="xs:boolean" />
+      <xs:element minOccurs="0" name="MilestonePersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
+      <xs:element minOccurs="0" name="PersonCount" type="xs:int" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
+      <xs:element minOccurs="0" name="ProjectedDeliveryDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ProjectedDuration" type="xs:int" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Milestone" nillable="true" type="tns:Milestone" />
+  <xs:complexType name="ArrayOfMilestonePerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MilestonePerson" nillable="true" type="tns:MilestonePerson" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMilestonePerson" nillable="true" type="tns:ArrayOfMilestonePerson" />
+  <xs:complexType name="MilestonePerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
+      <xs:element minOccurs="0" name="Entries" nillable="true" type="tns:ArrayOfMilestonePersonEntry" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Milestone" nillable="true" type="tns:Milestone" />
+      <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="PracticeList" nillable="true" type="tns:ArrayOfPractice" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MilestonePerson" nillable="true" type="tns:MilestonePerson" />
+  <xs:complexType name="ArrayOfMilestonePersonEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MilestonePersonEntry" nillable="true" type="tns:MilestonePersonEntry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMilestonePersonEntry" nillable="true" type="tns:ArrayOfMilestonePersonEntry" />
+  <xs:complexType name="MilestonePersonEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="EstimatedClientDiscount" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="HasTimeEntries" type="xs:boolean" />
+      <xs:element minOccurs="0" name="HourlyAmount" nillable="true" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="HoursPerDay" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Location" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MilestonePersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="ParentMilestone" nillable="true" type="tns:Milestone" />
+      <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PersonTimeOffList" nillable="true" type="q15:ArrayOfKeyValueOfdateTimedecimal" />
+      <xs:element minOccurs="0" name="ProjectedWorkloadWithVacation" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Role" nillable="true" type="tns:PersonRole" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ThisPerson" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="VacationDays" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MilestonePersonEntry" nillable="true" type="tns:MilestonePersonEntry" />
+  <xs:complexType name="PersonRole">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonRole" nillable="true" type="tns:PersonRole" />
   <xs:complexType name="PricingList">
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientId" type="xs:int" />
@@ -721,6 +679,32 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
+  <xs:simpleType name="BudgetCategoryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ClientDirector">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PracticeArea">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BusinessDevelopmentManager">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BudgetCategoryType" nillable="true" type="tns:BudgetCategoryType" />
   <xs:complexType name="ArrayOfUserPasswordsHistory">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="UserPasswordsHistory" nillable="true" type="tns:UserPasswordsHistory" />
@@ -734,12 +718,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserPasswordsHistory" nillable="true" type="tns:UserPasswordsHistory" />
-  <xs:complexType name="ArrayOfProject">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
   <xs:complexType name="ArrayOfOpportunity">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Opportunity" nillable="true" type="tns:Opportunity" />
