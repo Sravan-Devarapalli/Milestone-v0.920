@@ -443,7 +443,7 @@
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
-        <contenttemplate>
+        <ContentTemplate>
             <table class="PersonForm">
                 <tr>
                     <td>
@@ -642,7 +642,8 @@
                                         ToolTip="The Email Address is not valid." Text="*" EnableClientScript="False"
                                         ValidationExpression="\w+([-+.']\w+)*"></asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="custEmailAddress" runat="server" ControlToValidate="txtEmailAddress"
-                                        ErrorMessage="A user with the same email address already exists in the system. Please enter another email address." ToolTip="A user with the same email address already exists in the system. Please enter another email address."
+                                        ErrorMessage="A user with the same email address already exists in the system. Please enter another email address."
+                                        ToolTip="A user with the same email address already exists in the system. Please enter another email address."
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic" OnServerValidate="custEmailAddress_ServerValidate"></asp:CustomValidator>
                                     <asp:CustomValidator ID="custUserName" runat="server" ControlToValidate="txtEmailAddress"
@@ -717,11 +718,10 @@
                                     <asp:RequiredFieldValidator ID="rfvRecruiter" runat="server" ErrorMessage="The Recruiter is required."
                                         ControlToValidate="ddlRecruiter" ToolTip="The Recruiter is required." ValidationGroup="Person"
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
-                                        <asp:CustomValidator ID="custRecruiter" runat="server" ControlToValidate="ddlRecruiter"
-                                        ErrorMessage="Cannot set a other person as recruiter."
-                                        ToolTip="Cannot set a other person as recruiter." ValidationGroup="Person"
-                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                        OnServerValidate="custRecruiter_ServerValidate"></asp:CustomValidator>&nbsp;
+                                    <asp:CustomValidator ID="custRecruiter" runat="server" ControlToValidate="ddlRecruiter"
+                                        ErrorMessage="Cannot set a other person as recruiter." ToolTip="Cannot set a other person as recruiter."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic" OnServerValidate="custRecruiter_ServerValidate"></asp:CustomValidator>&nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -1116,8 +1116,9 @@
                                                         <asp:Label ID="lblTitle" runat="server" Text=' <%# Eval("HtmlEncodedTitleName") %>'></asp:Label>
                                                     </ItemTemplate>
                                                     <EditItemTemplate>
-                                                        <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server" AutoPostBack="true"
-                                                            OnSelectedIndexChanged="ddlTitle_OnSelectedIndexChanged" CssClass="Width80Percent">
+                                                        <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server"
+                                                            AutoPostBack="true" OnSelectedIndexChanged="ddlTitle_OnSelectedIndexChanged"
+                                                            CssClass="Width80Percent">
                                                         </pmc:CustomDropDown>
                                                         <asp:CustomValidator ID="custValTitle" runat="server" ToolTip="Please select title"
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select title"
@@ -1125,8 +1126,9 @@
                                                         </asp:CustomValidator>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
-                                                        <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server" AutoPostBack="true"
-                                                            OnSelectedIndexChanged="ddlTitle_OnSelectedIndexChanged" CssClass="Width80Percent">
+                                                        <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server"
+                                                            AutoPostBack="true" OnSelectedIndexChanged="ddlTitle_OnSelectedIndexChanged"
+                                                            CssClass="Width80Percent">
                                                         </pmc:CustomDropDown>
                                                         <asp:CustomValidator ID="custValTitle" runat="server" ToolTip="Please select title"
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select title"
@@ -1198,8 +1200,7 @@
                                                             <asp:CompareValidator ID="cmpAmount" runat="server" ControlToValidate="txtAmount"
                                                                 Operator="GreaterThan" Display="Dynamic" Type="Double" SetFocusOnError="true"
                                                                 ValueToCompare="0" EnableClientScript="false" Text="*" ValidationGroup="CompensationUpdate"
-                                                                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
-                                                                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
+                                                                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
                                                             </asp:CompareValidator>
                                                         </span>
                                                     </EditItemTemplate>
@@ -1227,8 +1228,7 @@
                                                             <asp:CompareValidator ID="cmpAmount" runat="server" ControlToValidate="txtAmount"
                                                                 Operator="GreaterThan" Display="Dynamic" Type="Double" SetFocusOnError="true"
                                                                 ValueToCompare="0" EnableClientScript="false" Text="*" ValidationGroup="CompensationUpdate"
-                                                                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
-                                                                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
+                                                                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
                                                             </asp:CompareValidator>
                                                         </span>
                                                     </FooterTemplate>
@@ -1312,8 +1312,8 @@
                                         </asp:GridView>
                                     </div>
                                     <div id="divCompensation" runat="server">
-                                        <uc:PersonnelCompensation ID="personnelCompensation" runat="server" ValidationGroup="Person" OnSaveDetails="personnelCompensation_SaveDetails"
-                                            StartDateReadOnly="true" OnTitleChanged="personnelCompensation_OnTitleChanged"
+                                        <uc:PersonnelCompensation ID="personnelCompensation" runat="server" ValidationGroup="Person"
+                                            OnSaveDetails="personnelCompensation_SaveDetails" StartDateReadOnly="true" OnTitleChanged="personnelCompensation_OnTitleChanged"
                                             OnPracticeChanged="personnelCompensation_OnPracticeChanged" rfvTitleValidationMessage="The Compensation Title is required."
                                             rfvPracticeValidationMessage="The Compensation Practice Area is required." />
                                         <asp:CustomValidator ID="custActiveCompensation" runat="server" ValidationGroup="Person"
@@ -1452,6 +1452,17 @@
                                     <asp:DataList ID="dtlOwnerOpportunities" runat="server" CssClass="WS-Normal">
                                         <ItemTemplate>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).OpportunityNumber) + " - " + HttpUtility.HtmlEncode(((DataTransferObjects.Opportunity)Container.DataItem).Name) %>
+                                        </ItemTemplate>
+                                    </asp:DataList>
+                                </div>
+                                <div id="dvCommissionsExit" class="PaddingTop10" runat="server">
+                                    <asp:Label ID="lblCommissions" runat="server">
+                                    </asp:Label><br />
+                                    <asp:DataList ID="dlCommissions" runat="server" CssClass="WS-Normal">
+                                        <ItemTemplate>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>
+                                            -
+                                            <%# Eval("Name") %>
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
@@ -1875,14 +1886,14 @@
                     </tr>
                 </table>
             </asp:Panel>
-        </contenttemplate>
-        <triggers>
+        </ContentTemplate>
+        <Triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
             <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" />
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
             <asp:PostBackTrigger ControlID="bntEndCompensationOk" />
             <asp:PostBackTrigger ControlID="btnTerminationProcessOK" />
             <asp:PostBackTrigger ControlID="btnSave" />
-        </triggers>
+        </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
