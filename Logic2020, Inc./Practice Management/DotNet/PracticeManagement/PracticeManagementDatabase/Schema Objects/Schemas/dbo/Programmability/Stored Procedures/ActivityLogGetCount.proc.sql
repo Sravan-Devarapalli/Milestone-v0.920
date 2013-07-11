@@ -30,7 +30,7 @@ AS
 	SELECT COUNT(*) AS NUM
 	  FROM dbo.UserActivityLog AS a
 	       INNER JOIN dbo.UserActivityType AS t ON a.ActivityTypeID = t.ActivityTypeID
-    WHERE CONVERT(DATE,a.LogDate) BETWEEN CONVERT(DATE,@StartDate) AND Convert(DATE,@EndDate)
+    WHERE CONVERT(DATE,a.LogDate) BETWEEN CONVERT(DATE,@StartDate) AND CONVERT(DATE,@EndDate)
 				  AND(
 				  ((@EventSource = 'Error' OR @EventSource = 'All' )AND a.LogData.exist('/Error') = 1)
 				  OR ((@EventSource = 'AddedPersons' OR @EventSource = 'All' ) AND a.LogData.exist('/Person') = 1 AND t.ActivityName = 'Added')
@@ -38,9 +38,9 @@ AS
 				  OR ((@EventSource = 'AddedOpportunities' OR @EventSource = 'All' ) AND a.LogData.exist('/Opportunity') = 1 AND t.ActivityName = 'Added')
 				  OR ((@EventSource = 'ChangedOpportunities' OR @EventSource = 'All' ) AND a.LogData.exist('/Opportunity') = 1 AND t.ActivityName = 'Changed')
 				  OR ((@EventSource = 'DeletedOpportunities' OR @EventSource = 'All' ) AND a.LogData.exist('/Opportunity') = 1 AND t.ActivityName = 'Deleted')
-				  OR ((@EventSource = 'AddedProjects' OR @EventSource = 'All' ) AND a.LogData.exist('/Project') = 1 AND t.ActivityName = 'Added')
-				  OR ((@EventSource = 'ChangedProjects' OR @EventSource = 'All' ) AND a.LogData.exist('/Project') = 1 AND t.ActivityName = 'Changed')
-				  OR ((@EventSource = 'DeletedProjects' OR @EventSource = 'All' ) AND a.LogData.exist('/Project') = 1 AND t.ActivityName = 'Deleted')
+				  OR ((@EventSource = 'AddedProjects' OR @EventSource = 'All' ) AND (a.LogData.exist('/Project') = 1 OR a.LogData.exist('/Attribution') = 1)  AND t.ActivityName = 'Added')
+				  OR ((@EventSource = 'ChangedProjects' OR @EventSource = 'All' ) AND (a.LogData.exist('/Project') = 1 OR a.LogData.exist('/Attribution') = 1)  AND t.ActivityName = 'Changed')
+				  OR ((@EventSource = 'DeletedProjects' OR @EventSource = 'All' ) AND (a.LogData.exist('/Project') = 1 OR a.LogData.exist('/Attribution') = 1)  AND t.ActivityName = 'Deleted')
 				  OR ((@EventSource = 'AddedMilestones' OR @EventSource = 'All' ) AND a.LogData.exist('/Milestone') = 1 AND t.ActivityName = 'Added')
 				  OR ((@EventSource = 'ChangedMilestones' OR @EventSource = 'All' ) AND a.LogData.exist('/Milestone') = 1 AND t.ActivityName = 'Changed')
 				  OR ((@EventSource = 'DeletedMilestones' OR @EventSource = 'All' ) AND a.LogData.exist('/Milestone') = 1 AND t.ActivityName = 'Deleted')
@@ -78,11 +78,16 @@ AS
 						((@EventSource = 'Project'  OR @EventSource = 'All') 
 							AND (a.LogData.exist('/Project') = 1 
 								OR a.LogData.exist('/ProjectAttachment') = 1
+								OR a.LogData.exist('/Attribution') = 1
 								 )
 						)
 						AND 
 						(@ProjectId IS NULL 
-						 OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/Attribution/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
 						 )
 					 )
 					 
@@ -91,9 +96,9 @@ AS
 							AND (a.LogData.exist('/Opportunity') = 1 
 								OR a.LogData.exist('/OpportunityTransition') = 1 
 								)
-							AND (@OpportunityId IS NULL OR 
-								a.LogData.value('(/Opportunity/NEW_VALUES/@OpportunityId)[1]', 'int') = @OpportunityId OR 
-								a.LogData.value('(/OpportunityTransition/NEW_VALUES/@OpportunityId)[1]', 'int') = @OpportunityId 
+							AND (	@OpportunityId IS NULL 
+									OR a.LogData.value('(/Opportunity/NEW_VALUES/@OpportunityId)[1]', 'int') = @OpportunityId 
+									OR a.LogData.value('(/OpportunityTransition/NEW_VALUES/@OpportunityId)[1]', 'int') = @OpportunityId 
 								)
 					 ) 
 				  OR ((@EventSource = 'Milestone' OR @EventSource = 'All')  
@@ -110,6 +115,8 @@ AS
 															OR a.LogData.value('(/*/*/@PracticeManagerId)[1]', 'int') = @PersonId
 															OR a.PersonID = @PersonId
 															OR a.LogData.value('(/Note/NEW_VALUES/@TargetId)[1]', 'int') = @PersonId
+															OR (a.LogData.value('(/Attribution/NEW_VALUES/@TargetId)[1]', 'int') = @PersonId AND a.LogData.value('(/Attribution/NEW_VALUES/@AttributionRecordTypeId)[1]', 'int') = 1) --Person Type
+															OR (a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@TargetId)[1]', 'int') = @PersonId AND a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@AttributionRecordTypeId)[1]', 'int') = 1) --Person Type
 														  )
 					 )
 				  OR ( (@EventSource = 'Logon' OR @EventSource = 'All') AND (a.LogData.exist('/Login') = 1 OR a.LogData.exist('/BecomeUser') = 1) AND a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') NOT LIKE '%locked out%'
@@ -123,7 +130,7 @@ AS
 				  OR ( (@EventSource = 'AccountLockouts' OR @EventSource = 'All') AND (a.LogData.value('(/Login/NEW_VALUES/@Result)[1]', 'NVARCHAR(100)') LIKE '%locked out%')
 					 )
 				  OR ( (@EventSource = 'PasswordResetRequests' OR @EventSource = 'All') AND t.ActivityName = 'changed' AND a.LogData.exist('(/Membership)') = 1  AND 
-					  ( 
+				  ( 
 				  
 					  (CASE WHEN  a.LogData.exist('(/Membership)') = 1 
 						THEN
@@ -192,8 +199,7 @@ AS
 					 )
 				  OR ( (@EventSource = 'DeletedTitle' OR @EventSource = 'All') AND a.LogData.exist('/Title') = 1 AND t.ActivityName = 'Deleted'
 					 )
-					 )
-	
+					)
 					AND (@ProjectId IS NULL 
 						 OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
 						 OR a.LogData.value('(/Milestone/NEW_VALUES/@MilestoneProjectId)[1]', 'int') = @ProjectId
@@ -202,6 +208,9 @@ AS
 						 OR a.LogData.value('(/Note/NEW_VALUES/@ParentTargetId)[1]', 'int') = @ProjectId
 						 OR a.LogData.value('(/TimeEntry/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
 						 OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/Attribution/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+						OR a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
 							)
 					AND (@PersonId IS NULL 
 						OR a.PersonId = @PersonId
@@ -211,8 +220,9 @@ AS
 						OR a.LogData.value('(/*/*/*/@PersonId)[1]', 'int') = @PersonId
 						OR a.LogData.value('(/*/*/@MilestonePersonId)[1]', 'int') = @PersonId
 						OR a.LogData.value('(/*/*/@PracticeManagerId)[1]', 'int') = @PersonId
-						OR (a.LogData.value('(/Note/NEW_VALUES/@TargetId)[1]', 'int') = @PersonId
-							AND a.LogData.value('(/Note/NEW_VALUES/@NoteTargetId)[1]', 'int') = 3)
+						OR (a.LogData.value('(/Note/NEW_VALUES/@TargetId)[1]', 'int') = @PersonId AND a.LogData.value('(/Note/NEW_VALUES/@NoteTargetId)[1]', 'int') = 3)
 						OR a.LogData.value('(/Export/NEW_VALUES/@User)[1]','NVARCHAR(85)') = @PersonLastFirstName
+						OR (a.LogData.value('(/Attribution/NEW_VALUES/@TargetId)[1]', 'int') = @PersonId AND a.LogData.value('(/Attribution/NEW_VALUES/@AttributionRecordTypeId)[1]', 'int') = 1) --Person Type
+						OR (a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@TargetId)[1]', 'int') = @PersonId AND a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@AttributionRecordTypeId)[1]', 'int') = 1) --Person Type
 						)
 
