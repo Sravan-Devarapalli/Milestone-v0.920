@@ -1097,6 +1097,12 @@ namespace PracticeManagementService
             return PersonDAL.CheckIfCommissionsExistsAfterTermination(personId, terminationDate);
         }
 
+        public bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.CheckIfRangeWithinHireAndTermination(personId, startDate, endDate);
+        }
+
         #endregion IPersonService Members
     }
 }
+
