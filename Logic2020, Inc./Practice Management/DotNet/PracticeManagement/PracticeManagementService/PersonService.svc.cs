@@ -1092,6 +1092,11 @@ namespace PracticeManagementService
             return PersonDAL.GetPersonTitleByRange(personId, startDate, endDate);
         }
 
+        public List<Project> CheckIfCommissionsExistsAfterTermination(int personId, DateTime terminationDate)
+        {
+            return PersonDAL.CheckIfCommissionsExistsAfterTermination(personId, terminationDate);
+        }
+
         #endregion IPersonService Members
     }
 }
