@@ -454,7 +454,7 @@ namespace PraticeManagement
             if (ProjectId.HasValue && Project != null && Project.Milestones != null && Project.Milestones.Count > 0)
             {
                 cellExpenses.Visible = true;
-                cellCommissions.Visible = true;
+                cellCommissions.Visible = DataHelper.CurrentPerson.Title.TitleName == "Senior Manager" || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
             }
             else
             {
@@ -1237,11 +1237,31 @@ namespace PraticeManagement
             {
                 ucProjectTimeTypes.PopulateControls();
             }
+            int viewIndex = mvProjectDetailTab.ActiveViewIndex;
+            btnView_Command(btnProjectTimeTypes, new CommandEventArgs("", "1"));
             Page.Validate(vsumProject.ValidationGroup);
             if (!Page.IsValid)
             {
                 isValid = false;
             }
+            btnView_Command(rowSwitcher.Cells[viewIndex].Controls[0], new CommandEventArgs("", viewIndex.ToString()));
+            return isValid;
+        }
+
+        private bool ValidateCommissionsTab()
+        {
+            bool isValid = true;
+            if (!ProjectId.HasValue || Project == null || Project.Milestones == null || Project.Milestones.Count <= 0)
+                return isValid;
+            int viewIndex = mvProjectDetailTab.ActiveViewIndex;
+            btnView_Command(btnCommissions, new CommandEventArgs("", "4"));
+            projectAttribution.ValidateCommissionsTab();
+            if (!Page.IsValid)
+            {
+                isValid = false;
+            }
+            btnView_Command(rowSwitcher.Cells[viewIndex].Controls[0], new CommandEventArgs("", viewIndex.ToString()));
+
             return isValid;
         }
 
@@ -1249,10 +1269,7 @@ namespace PraticeManagement
         {
             bool result = false;
             Page.Validate(vsumProject.ValidationGroup);
-            if (Page.IsValid && ValidateProjectTimeTypesTab() && (CompletedStatus || ValidateCompleStatusPopup()) &&
-                (!ProjectId.HasValue || Project == null || Project.Milestones == null || Project.Milestones.Count <= 0 ||
-                 projectAttribution.ValidateCommissionsPercentage())
-                )
+            if (Page.IsValid && ValidateProjectTimeTypesTab() && (CompletedStatus || ValidateCompleStatusPopup()) && ValidateCommissionsTab())
             {
                 cvCompletedStatus.IsValid = true;
                 int? id = SaveData();
