@@ -442,5 +442,8 @@ namespace PracticeManagementService
 
         [OperationContract]
         Title GetPersonTitleByRange(int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<Project> CheckIfCommissionsExistsAfterTermination(int personId, DateTime terminationDate);
     }
 }
