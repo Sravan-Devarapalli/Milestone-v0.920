@@ -881,6 +881,7 @@
 
             public class Person
             {
+                public const string CheckIfRangeWithinHireAndTermination = "dbo.CheckIfRangeWithinHireAndTermination";
                 public const string CheckIfCommissionsExistsAfterTermination = "dbo.CheckIfCommissionsExistsAfterTermination";
                 public const string GetActivePersonsListShortByDivision = "dbo.GetActivePersonsListShortByDivision";
                 public const string IsPersonAlreadyHavingStatus = "dbo.IsPersonAlreadyHavingStatus";
