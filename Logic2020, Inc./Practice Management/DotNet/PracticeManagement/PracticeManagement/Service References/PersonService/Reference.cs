@@ -45,6 +45,9 @@ namespace PraticeManagement.PersonService
             "e")]
         DataTransferObjects.Project[] CheckIfCommissionsExistsAfterTermination(int personId, System.DateTime terminationDate);
 
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTermination", ReplyAction = "http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTerminationResponse")]
+        bool CheckIfRangeWithinHireAndTermination(int personId, System.DateTime startDate, System.DateTime endDate);
+
         [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction = "http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
 
@@ -364,6 +367,11 @@ namespace PraticeManagement.PersonService
         public DataTransferObjects.Project[] CheckIfCommissionsExistsAfterTermination(int personId, System.DateTime terminationDate)
         {
             return base.Channel.CheckIfCommissionsExistsAfterTermination(personId, terminationDate);
+        }
+
+        public bool CheckIfRangeWithinHireAndTermination(int personId, System.DateTime startDate, System.DateTime endDate)
+        {
+            return base.Channel.CheckIfRangeWithinHireAndTermination(personId, startDate, endDate);
         }
 
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl)
