@@ -900,6 +900,25 @@ namespace PraticeManagement.Controls.Projects
             args.IsValid = ValidateTitle(xlist);
         }
 
+        protected void custValidRange_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+             args.IsValid = true;
+            CustomValidator custValidRang = source as CustomValidator;
+            GridViewRow row = custValidRang.NamingContainer as GridViewRow;
+            DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
+            DatePicker dpStartDate = row.FindControl("dpStartDate") as DatePicker;
+            DropDownList ddlPerson = row.FindControl("ddlPerson") as DropDownList;
+            DateTime startDate;
+            DateTime endDate;
+            int personId;
+            if (int.TryParse(ddlPerson.SelectedValue,out personId))
+            {
+                DateTime.TryParse(dpStartDate.DateValue.ToShortDateString(), out startDate);
+                DateTime.TryParse(dpEndDate.DateValue.ToShortDateString(), out endDate);
+                args.IsValid = ServiceCallers.Custom.Person(p => p.CheckIfRangeWithinHireAndTermination(personId, startDate, endDate));
+            }
+        }
+
         #endregion Events
 
         #region Methods
@@ -1486,6 +1505,7 @@ namespace PraticeManagement.Controls.Projects
         public void EnableDisableValidators(GridViewRow row, string attributionCategory)
         {
             XElement item = (XElement)row.DataItem;
+            GridView gridView = row.NamingContainer as GridView;
             if (attributionCategory == deliveryPersonAttribution || attributionCategory == salesPersonAttribution)
             {
                 RequiredFieldValidator reqPersonName = row.FindControl("reqPersonName") as RequiredFieldValidator;
@@ -1495,23 +1515,25 @@ namespace PraticeManagement.Controls.Projects
                 RequiredFieldValidator reqPersonEnd = row.FindControl("reqPersonEnd") as RequiredFieldValidator;
                 CompareValidator compPersonEndType = row.FindControl("compPersonEndType") as CompareValidator;
                 CompareValidator compPersonEnd = row.FindControl("compPersonEnd") as CompareValidator;
+                CustomValidator custValidRange = row.FindControl("custValidRange") as CustomValidator;
                 CustomValidator custPersonEnd = row.FindControl("custPersonEnd") as CustomValidator;
+                CustomValidator custTitleValidation = gridView.HeaderRow.FindControl("custTitleValidation") as CustomValidator;
                 CustomValidator custPersonDatesOverlapping = row.FindControl("custPersonDatesOverlapping") as CustomValidator;
-                reqPersonName.ValidationGroup = reqPersonStart.ValidationGroup = compPersonStartType.ValidationGroup = custPersonStart.ValidationGroup = reqPersonEnd.ValidationGroup = compPersonEndType.ValidationGroup = custPersonEnd.ValidationGroup = compPersonEnd.ValidationGroup = custPersonDatesOverlapping.ValidationGroup = ValidationGroup;
+                reqPersonName.ValidationGroup = reqPersonStart.ValidationGroup = compPersonStartType.ValidationGroup = custPersonStart.ValidationGroup = custTitleValidation.ValidationGroup = custValidRange.ValidationGroup = reqPersonEnd.ValidationGroup = compPersonEndType.ValidationGroup = custPersonEnd.ValidationGroup = compPersonEnd.ValidationGroup = custPersonDatesOverlapping.ValidationGroup = ValidationGroup;
                 if (item.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
                 {
-                    reqPersonName.Enabled = reqPersonStart.Enabled = compPersonStartType.Enabled = custPersonStart.Enabled = reqPersonEnd.Enabled = compPersonEndType.Enabled = custPersonEnd.Enabled = compPersonEnd.Enabled = custPersonDatesOverlapping.Enabled = true;
+                    reqPersonName.Enabled = reqPersonStart.Enabled = custValidRange.Enabled = compPersonStartType.Enabled = custPersonStart.Enabled = reqPersonEnd.Enabled = compPersonEndType.Enabled = custPersonEnd.Enabled = compPersonEnd.Enabled = custPersonDatesOverlapping.Enabled = true;
                 }
                 else
                 {
-                    reqPersonName.Enabled = reqPersonStart.Enabled = compPersonStartType.Enabled = custPersonStart.Enabled = reqPersonEnd.Enabled = compPersonEndType.Enabled = custPersonEnd.Enabled = compPersonEnd.Enabled = custPersonDatesOverlapping.Enabled = false;
+                    reqPersonName.Enabled = reqPersonStart.Enabled = custValidRange.Enabled = compPersonStartType.Enabled = custPersonStart.Enabled = reqPersonEnd.Enabled = compPersonEndType.Enabled = custPersonEnd.Enabled = compPersonEnd.Enabled = custPersonDatesOverlapping.Enabled = false;
                 }
+                custTitleValidation.Enabled = true;
             }
             else
             {
                 RequiredFieldValidator reqPractice = row.FindControl("reqPractice") as RequiredFieldValidator;
                 RequiredFieldValidator reqCommisssionPercentage = row.FindControl("reqCommisssionPercentage") as RequiredFieldValidator;
-                GridView gridView = row.NamingContainer as GridView;
                 CustomValidator custCommissionsPercentage = gridView.HeaderRow.FindControl("custCommissionsPercentage") as CustomValidator;
                 CompareValidator compCommissionPercentage = row.FindControl("compCommissionPercentage") as CompareValidator;
                 reqPractice.ValidationGroup = reqCommisssionPercentage.ValidationGroup = custCommissionsPercentage.ValidationGroup = compCommissionPercentage.ValidationGroup = ValidationGroup;
@@ -1538,6 +1560,7 @@ namespace PraticeManagement.Controls.Projects
                 RequiredFieldValidator reqPersonEnd = row.FindControl("reqPersonEnd") as RequiredFieldValidator;
                 CompareValidator compPersonEndType = row.FindControl("compPersonEndType") as CompareValidator;
                 CustomValidator custPersonEnd = row.FindControl("custPersonEnd") as CustomValidator;
+                CustomValidator custValidRange = row.FindControl("custValidRange") as CustomValidator;
                 CompareValidator compPersonEnd = row.FindControl("compPersonEnd") as CompareValidator;
                 CustomValidator custPersonDatesOverlapping = row.FindControl("custPersonDatesOverlapping") as CustomValidator;
                 reqPersonName.Validate();
@@ -1548,6 +1571,7 @@ namespace PraticeManagement.Controls.Projects
                 compPersonEndType.Validate();
                 custPersonEnd.Validate();
                 compPersonEnd.Validate();
+                custValidRange.Validate();
                 if (reqPersonName.IsValid && reqPersonStart.IsValid && compPersonStartType.IsValid && custPersonStart.IsValid && reqPersonEnd.IsValid && compPersonEndType.IsValid && custPersonEnd.IsValid && compPersonEnd.IsValid)
                     custPersonDatesOverlapping.Validate();
             }
