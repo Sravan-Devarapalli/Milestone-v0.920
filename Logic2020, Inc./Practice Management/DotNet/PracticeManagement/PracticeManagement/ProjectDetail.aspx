@@ -1045,7 +1045,7 @@
                                             OnClick="btnAddMilistone_Click" CssClass="add-btn" OnClientClick="if (!confirmSaveDirty()) return false;"
                                             Text="Add Milestone" />
                                     </div>
-                                    <uc:ProjectMilestonesFinancials ID="milestones" runat="server" />
+                                    <uc:ProjectMilestonesFinancials ID="milestones" runat="server" ValidationGroup="MilestoneTab" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="View1" runat="server">
@@ -1218,7 +1218,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" colspan="3"  class="PaddingTop5">
+                    <td align="center" colspan="3" class="PaddingTop5">
                         <asp:HiddenField ID="hdnProjectId" runat="server" />
                         <asp:HiddenField ID="hdnProjectDelete" runat="server" />
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Project" OnClick="btnDelete_Click"
@@ -1356,6 +1356,9 @@
                             <asp:ValidationSummary ID="vsumAttribution" runat="server" DisplayMode="BulletList"
                                 CssClass="ApplyStyleForDashBoardLists" ValidationGroup="AttributionGroup" ShowMessageBox="false"
                                 ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving the attribution details." />
+                            <asp:ValidationSummary ID="vsumMilestone" runat="server" DisplayMode="BulletList"
+                                CssClass="ApplyStyleForDashBoardLists" ValidationGroup="MilestoneTab" ShowMessageBox="false"
+                                ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving the milestone details." />
                         </td>
                     </tr>
                     <tr>
@@ -1495,4 +1498,3 @@
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
-
