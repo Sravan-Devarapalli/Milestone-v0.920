@@ -13,8 +13,9 @@ BEGIN
 	-- Ensure the temporary table exists
 	EXEC SessionLogPrepare @UserLogin = NULL
 	
-	DECLARE @CurrentPMTime DATETIME 
+	DECLARE @CurrentPMTime DATETIME ,@UserLogin NVARCHAR(50)
 	SET @CurrentPMTime = dbo.InsertingTime()
+	SELECT @UserLogin = UserLogin FROM SessionLogData WHERE SessionID = @@SPID
 
 	;WITH NEW_VALUES AS
 	(
@@ -105,12 +106,10 @@ BEGIN
 	    OR i.ProjectedDeliveryDate <> d.ProjectedDeliveryDate
 	    OR i.IsHourlyAmount <> d.IsHourlyAmount
 
-	-- End logging session
-	EXEC dbo.SessionLogUnprepare
-
+		IF  ( SELECT UserLogin FROM SessionLogData WHERE SessionID = @@SPID ) IS NULL
+		BEGIN
+			EXEC SessionLogPrepare @UserLogin = @UserLogin
+		END
 END
-
-GO
-
 
 
