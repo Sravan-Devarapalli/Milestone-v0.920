@@ -92,6 +92,9 @@
                                         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
                                             ErrorMessage="The person name is required." ToolTip="The person name is required."
                                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                        <asp:CustomValidator runat="server" ID="custValidRange" Display="Dynamic" ErrorMessage="The start date and end date of the person is not within the hire date and termination range."
+                                            ToolTip="The start date and end date of the person is not within the hire date and termination range."
+                                            OnServerValidate="custValidRange_ServerValidate" Text="*"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -273,6 +276,9 @@
                                         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
                                             ErrorMessage="The person Name is required." ToolTip="The Person Name is required."
                                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                        <asp:CustomValidator runat="server" ID="custValidRange" Display="Dynamic" ErrorMessage="The start date and end date of the person is not within the hire date and termination range."
+                                            ToolTip="The start date and end date of the person is not within the hire date and termination range."
+                                            OnServerValidate="custValidRange_ServerValidate" Text="*"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -376,7 +382,7 @@
                     </td>
                 </tr>
                 <tr style="height: 25%">
-                    <td class="Width47Percent vTop border_blackExceptTop padRight2">
+                    <td class="Width47Percent vTop border_blackExceptTop padRight2 paddingBottom10px">
                         <asp:GridView ID="gvDeliveryAttributionPractice" runat="server" AutoGenerateColumns="False"
                             Attribution="3" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
                             OnRowDataBound="gvDeliveryAttributionPractice_RowDataBound" EmptyDataText="No practices are assigned to this attribution."
@@ -460,7 +466,7 @@
                     </td>
                     <td class="Width6PercentImp">
                     </td>
-                    <td class="Width47Percent vTop border_blackExceptTop padRight2">
+                    <td class="Width47Percent vTop border_blackExceptTop padRight2 paddingBottom10px">
                         <asp:GridView ID="gvSalesAttributionPractice" runat="server" AutoGenerateColumns="False"
                             Attribution="4" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
                             EmptyDataText="No practices are assigned to this attribution." RowStyle-Wrap="false"
@@ -546,3 +552,4 @@
         </asp:Panel>
     </ContentTemplate>
 </asp:UpdatePanel>
+
