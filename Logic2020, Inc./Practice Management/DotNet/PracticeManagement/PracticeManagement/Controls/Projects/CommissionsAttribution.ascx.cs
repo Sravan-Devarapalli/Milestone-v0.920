@@ -1789,7 +1789,7 @@ namespace PraticeManagement.Controls.Projects
                 XElement xElement = xlist.First(x => x.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString());
                 for (int i = 0; i < gvSalesAttributionPractice.Rows.Count; i++)
                 {  HiddenField hdnAttributionId =
-                      gvDeliveryAttributionPractice.Rows[i].FindControl("hdnAttributionId") as
+                      gvSalesAttributionPractice.Rows[i].FindControl("hdnAttributionId") as
                       HiddenField;
                     if (hdnAttributionId.Value == xElement.Attribute(XName.Get(AttributionIdXname)).Value)
                     {
