@@ -508,7 +508,7 @@
                                             </td>
                                             <td class="width60P">
                                                 <asp:DropDownList ID="ddlClientName" runat="server" OnSelectedIndexChanged="ddlClientName_SelectedIndexChanged"
-                                                    CssClass="Width95Per" AutoPostBack="True" onchange="setDirty();">
+                                                    CssClass="Width94Per" AutoPostBack="True" onchange="setDirty();">
                                                 </asp:DropDownList>
                                             </td>
                                             <td class="Width10Percent">
@@ -587,7 +587,7 @@
                                                 Business Unit
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width95Per" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
+                                                <asp:DropDownList ID="ddlProjectGroup" runat="server" CssClass="Width94Per" OnSelectedIndexChanged="ddlProjectGroup_SelectedIndexChanged"
                                                     AutoPostBack="true" onchange="setDirty();">
                                                     <asp:ListItem Text="-- Select Business Unit --" Value="" Selected="True"></asp:ListItem>
                                                 </asp:DropDownList>
@@ -726,7 +726,7 @@
                                                 Practice Area
                                             </td>
                                             <td class="width60P">
-                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="Width95Per"
+                                                <asp:DropDownList ID="ddlPractice" runat="server" onchange="setDirty();" CssClass="Width94Per"
                                                     AutoPostBack="True" OnSelectedIndexChanged="DropDown_SelectedIndexChanged">
                                                 </asp:DropDownList>
                                             </td>
@@ -1498,3 +1498,4 @@
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
+
