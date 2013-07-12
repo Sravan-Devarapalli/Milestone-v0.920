@@ -31,8 +31,8 @@
                     <td class="Width47Percent vTop borderLeftRight_black padRight2">
                         <asp:GridView ID="gvDeliveryAttributionPerson" runat="server" AutoGenerateColumns="False"
                             Attribution="1" OnRowDataBound="gvDeliveryAttributionPerson_RowDataBound" CssClass="CompPerfTable MileStoneDetailPageResourcesTab"
-                            EditRowStyle-Wrap="false" RowStyle-Wrap="false" HeaderStyle-Wrap="false" EmptyDataText="No persons are assigned to this attribution." AttributionId = "0"
-                            GridLines="None" BackColor="White">
+                            EditRowStyle-Wrap="false" RowStyle-Wrap="false" HeaderStyle-Wrap="false" EmptyDataText="No persons are assigned to this attribution."
+                            AttributionId="0" GridLines="None" BackColor="White">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
                             <Columns>
@@ -45,7 +45,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
-                                        <asp:HiddenField runat="server" ID="hdnAttributionId"/>
+                                        <asp:HiddenField runat="server" ID="hdnAttributionId" />
                                         <asp:CheckBox ID="chbAttribution" runat="server" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -216,8 +216,9 @@
                     <td class="Width47Percent vTop borderLeftRight_black padRight2">
                         <asp:GridView ID="gvSalesAttributionPerson" runat="server" AutoGenerateColumns="False"
                             Attribution="2" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
-                            EmptyDataText="No persons are assigned to this attribution." RowStyle-Wrap="false"  AttributionId = "0"
-                            HeaderStyle-Wrap="false" GridLines="None" BackColor="White" OnRowDataBound="gvSalesAttributionPerson_RowDataBound">
+                            EmptyDataText="No persons are assigned to this attribution." RowStyle-Wrap="false"
+                            AttributionId="0" HeaderStyle-Wrap="false" GridLines="None" BackColor="White"
+                            OnRowDataBound="gvSalesAttributionPerson_RowDataBound">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
                             <Columns>
@@ -230,7 +231,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width2Percent" />
                                     <ItemTemplate>
-                                          <asp:HiddenField runat="server" ID="hdnAttributionId"/>
+                                        <asp:HiddenField runat="server" ID="hdnAttributionId" />
                                         <asp:CheckBox ID="chbAttribution" runat="server" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -386,9 +387,10 @@
                 <tr style="height: 25%">
                     <td class="Width47Percent vTop border_blackExceptTop padRight2 paddingBottom10px">
                         <asp:GridView ID="gvDeliveryAttributionPractice" runat="server" AutoGenerateColumns="False"
-                            Attribution="3" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"  AttributionId = "0"
-                            OnRowDataBound="gvDeliveryAttributionPractice_RowDataBound" EmptyDataText="No practices are assigned to this attribution."
-                            RowStyle-Wrap="false" HeaderStyle-Wrap="false" GridLines="None" BackColor="White">
+                            Attribution="3" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
+                            AttributionId="0" OnRowDataBound="gvDeliveryAttributionPractice_RowDataBound"
+                            EmptyDataText="No practices are assigned to this attribution." RowStyle-Wrap="false"
+                            HeaderStyle-Wrap="false" GridLines="None" BackColor="White">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
                             <Columns>
@@ -401,7 +403,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width6Percent" />
                                     <ItemTemplate>
-                                         <asp:HiddenField runat="server" ID="hdnAttributionId"/>
+                                        <asp:HiddenField runat="server" ID="hdnAttributionId" />
                                         <asp:ImageButton ID="imgDeliveryPracticeAttributeEdit" ToolTip="Edit" runat="server"
                                             OnClientClick="setDirty();" OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
                                         <asp:ImageButton ID="imgDeliveryPracticeAttributeUpdate" ToolTip="Update" runat="server"
@@ -471,9 +473,10 @@
                     </td>
                     <td class="Width47Percent vTop border_blackExceptTop padRight2 paddingBottom10px">
                         <asp:GridView ID="gvSalesAttributionPractice" runat="server" AutoGenerateColumns="False"
-                            Attribution="4" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false" AttributionId = "0"
-                            EmptyDataText="No practices are assigned to this attribution." RowStyle-Wrap="false"
-                            HeaderStyle-Wrap="false" GridLines="None" BackColor="White" OnRowDataBound="gvSalesAttributionPractice_RowDataBound">
+                            Attribution="4" CssClass="CompPerfTable MileStoneDetailPageResourcesTab" EditRowStyle-Wrap="false"
+                            AttributionId="0" EmptyDataText="No practices are assigned to this attribution."
+                            RowStyle-Wrap="false" HeaderStyle-Wrap="false" GridLines="None" BackColor="White"
+                            OnRowDataBound="gvSalesAttributionPractice_RowDataBound">
                             <AlternatingRowStyle CssClass="alterrow" />
                             <HeaderStyle CssClass="textCenter" />
                             <Columns>
@@ -486,7 +489,7 @@
                                     </HeaderTemplate>
                                     <ItemStyle CssClass="Width6Percent" />
                                     <ItemTemplate>
-                                        <asp:HiddenField runat="server" ID="hdnAttributionId"/>
+                                        <asp:HiddenField runat="server" ID="hdnAttributionId" />
                                         <asp:ImageButton ID="imgSalesPracticeAttributeEdit" ToolTip="Edit" runat="server"
                                             OnClientClick="setDirty();" OnClick="imgPracticeEdit_Click" ImageUrl="~/Images/icon-edit.png" />
                                         <asp:ImageButton ID="imgSalesPracticeAttributeUpdate" ToolTip="Update" runat="server"
@@ -556,4 +559,3 @@
         </asp:Panel>
     </ContentTemplate>
 </asp:UpdatePanel>
-
