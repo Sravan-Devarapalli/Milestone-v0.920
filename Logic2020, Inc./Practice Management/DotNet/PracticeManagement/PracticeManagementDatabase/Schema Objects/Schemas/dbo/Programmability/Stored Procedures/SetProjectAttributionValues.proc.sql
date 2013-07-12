@@ -75,7 +75,7 @@ BEGIN
 					AV.EndDate,
 					AV.Percentage
 			FROM @AttributionValues AS AV
-			WHERE AV.AttributionId = 0
+			WHERE AV.AttributionId < 0
 
 			
 
@@ -92,3 +92,4 @@ BEGIN
 		RAISERROR(@ErrorMessage, 16, 1)
 	END CATCH
 END
+
