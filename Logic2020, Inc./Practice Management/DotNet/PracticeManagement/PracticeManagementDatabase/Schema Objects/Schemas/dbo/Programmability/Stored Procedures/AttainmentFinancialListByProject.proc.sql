@@ -27,13 +27,14 @@ BEGIN
 			@CurrentYearEndDate DATETIME,
 			@RefinedStarDate DATETIME,
 			@RefinedEndDate DATETIME,
-			@CurrentQuartersEndDate DATETIME,
 			@Today DATETIME, 
 			@CurrentMonthStartDate DATETIME,
-			@InsertingTime DATETIME
+			@InsertingTime DATETIME,
+			@CurrentMonthEndDate DATETIME
 
 	SELECT @Today = CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE())),@InsertingTime = dbo.InsertingTime()
-	SELECT @CurrentMonthStartDate = C.MonthStartDate
+	SELECT @CurrentMonthStartDate = C.MonthStartDate,
+		   @CurrentMonthEndDate = C.MonthEndDate
 	FROM dbo.Calendar C
 	WHERE C.Date = @Today
 
@@ -41,8 +42,7 @@ BEGIN
 		   @StartDateLocal=@StartDate ,
 		   @EndDateLocal=@EndDate,
 		   @CurrentYearStartDate = DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()), 0),
-		   @CurrentYearEndDate = DATEADD(MILLISECOND, -3,DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()) + 1, 0)),
-		   @CurrentQuartersEndDate = DATEADD(d, -1, DATEADD(qq, 1, DATEADD(qq, DATEDIFF(qq, 0, @Today), 0)))
+		   @CurrentYearEndDate = DATEADD(MILLISECOND, -3,DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()) + 1, 0))
 
 	IF @IsSummaryCache = 1
 	BEGIN
@@ -97,7 +97,7 @@ BEGIN
 		IF @StartDateLocal <= @CurrentYearEndDate AND @CurrentYearStartDate <= @EndDateLocal
 		BEGIN
 			INSERT INTO @Ranges 
-			SELECT @RefinedStarDate ,@CurrentQuartersEndDate,'YTD',17
+			SELECT @RefinedStarDate ,@CurrentMonthEndDate,'YTD',17
 		END
 		ELSE 
 		BEGIN
@@ -109,7 +109,7 @@ BEGIN
 	BEGIN 
 		INSERT INTO @Ranges 
 		SELECT CONVERT(NVARCHAR(4),C.Year) + '0101' AS QuarterStartDate,
-		CASE WHEN C.Year = YEAR(@Today) THEN @CurrentQuartersEndDate ELSE CONVERT(NVARCHAR(4),C.Year) + '1231' END QuarterEndDate ,'YTD',17
+		CASE WHEN C.Year = YEAR(@Today) THEN @CurrentMonthEndDate ELSE CONVERT(NVARCHAR(4),C.Year) + '1231' END QuarterEndDate ,'YTD',17
 		FROM dbo.Calendar C
 		WHERE C.DATE between @RefinedStarDate and @RefinedEndDate 
 		GROUP BY C.Year
