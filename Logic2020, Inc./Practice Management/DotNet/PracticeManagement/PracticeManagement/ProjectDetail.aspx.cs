@@ -656,12 +656,14 @@ namespace PraticeManagement
         protected void btnUpdateProjectName_OnClick(object sender, EventArgs e)
         {
             Page.Validate("ProjectName");
+           
             if (Page.IsValid)
             {
                 lblProjectNameLinkPopUp.Text = lblProjectName.Text = ProjectId.HasValue ? HttpUtility.HtmlEncode(txtProjectName.Text) : HttpUtility.HtmlEncode(txtProjectNameFirstTime.Text);
             }
             else
             {
+                IsOtherPanelDisplay = true;
                 mpeEditProjectName.Show();
             }
         }
@@ -1921,6 +1923,11 @@ namespace PraticeManagement
                 Request.Url.AbsoluteUri,
                 Response
                 );
+        }
+
+        protected void chbCloneMilestones_CheckedChanged(object sender, EventArgs e)
+        {
+            chbCloneCommissions.Checked = chbCloneCommissions.Enabled = chbCloneMilestones.Checked;
         }
 
         public string GetWrappedText(string name)
