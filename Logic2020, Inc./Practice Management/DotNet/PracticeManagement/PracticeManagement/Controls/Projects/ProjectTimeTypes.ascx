@@ -24,12 +24,12 @@
         <td class="textLeft ValignMiddleImp Width75Percent">
             <table class="WholeWidth">
                 <tr class="PaddingTop2Px">
-                    <td class="TdAssignedWorkTypesText vTop">
+                    <td class="TdAssignedWorkTypesText vTop paddingBottom5px">
                         <b>Work Types Not Assigned to Project</b>
                     </td>
                     <td class="TextAlignCenterImp vMiddle Width8Percent">
                     </td>
-                    <td class="TdAssignedWorkTypesText">
+                    <td class="TdAssignedWorkTypesText paddingBottom5px">
                         <b>Work Types Assigned to Project</b>
                         <asp:CustomValidator ID="CustomValidator1" runat="server" ValidationGroup="Project"
                             OnServerValidate="cvTimetype_OnServerValidate" Display="Dynamic" ErrorMessage="Atleast one WorkType should be assigned to the project."
@@ -74,7 +74,7 @@
                                                         title='<%# Eval("Name") %>' runat="server" class="padLeft25">
                                                         <%# Eval("Name") %>
                                                     </label>
-                                                    <input type="image" id="imgDeleteWorkType" alt="Delete Work Type" class="PaddingTop2Px VisibilityHidden"
+                                                    <input type="image" id="imgDeleteWorkType" alt="Delete Work Type" class="PaddingTop2Px VisibilityHidden padRight2"
                                                         runat="server" src="~/Images/close_16.png" title="Delete Work Type" timetypeid='<%# Eval("Id") %>' />
                                                     <input type="checkbox" class="Height16Px" id="cbTimeTypesNotAssignedToProject" runat="server" />
                                                 </td>
@@ -97,8 +97,8 @@
                                                         <%# Eval("Name") %>
                                                     </label>
                                                     <input type="image" id="imgDeleteWorkType" runat="server" alt="Delete Work Type"
-                                                        class="PaddingTop2Px" src="~/Images/close_16.png" title="Delete Work Type" timetypeid='<%# Eval("Id") %>'
-                                                        onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                        class="PaddingTop2Px padRight2" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
                                                     <input type="checkbox" class="Height16Px" id="cbTimeTypesNotAssignedToProject" runat="server" />
                                                 </td>
                                             </tr>
@@ -109,18 +109,33 @@
                         </div>
                     </td>
                     <td class="TextAlignCenterImp vMiddle Width8Percent">
-                        <asp:Button ID="btnAssignAll" UseSubmitBehavior="false" Text=">>" ToolTip="Add All" OnClientClick="setDirty();"
-                            OnClick="btnAssignAll_OnClick" runat="server" />
-                        <br />
-                        <asp:Button ID="btnAssign" UseSubmitBehavior="false" Text=">" ToolTip="Add Selected" OnClientClick="setDirty();"
-                            OnClick="btnAssign_OnClick" runat="server" />
-                        <br />
-                        <br />
-                        <asp:Button ID="btnUnAssign" UseSubmitBehavior="false" Text="<" ToolTip="Remove Selected" OnClientClick="setDirty();"
-                            OnClick="btnUnAssign_OnClick" runat="server" />
-                        <br />
-                        <asp:Button ID="btnUnAssignAll" UseSubmitBehavior="false" Text="<<" ToolTip="Remove All" OnClientClick="setDirty();"
-                            OnClick="btnUnAssignAll_OnClick" runat="server" />
+                        <table class="WholeWidth">
+                            <tr>
+                                <td class="paddingBottom5px WholeWidth">
+                                    <asp:Button ID="btnAssignAll" UseSubmitBehavior="false" Text=">>" ToolTip="Add All"
+                                        OnClientClick="setDirty();" OnClick="btnAssignAll_OnClick" runat="server" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="paddingBottom5px">
+                                    <asp:Button ID="btnAssign" UseSubmitBehavior="false" Text=">" ToolTip="Add Selected"
+                                        OnClientClick="setDirty();" OnClick="btnAssign_OnClick" runat="server" />
+                                    <br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="paddingBottom5px">
+                                    <asp:Button ID="btnUnAssign" UseSubmitBehavior="false" Text="<" ToolTip="Remove Selected"
+                                        OnClientClick="setDirty();" OnClick="btnUnAssign_OnClick" runat="server" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="paddingBottom5px">
+                                    <asp:Button ID="btnUnAssignAll" UseSubmitBehavior="false" Text="<<" ToolTip="Remove All"
+                                        OnClientClick="setDirty();" OnClick="btnUnAssignAll_OnClick" runat="server" />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td class="TdTimeTypesAssignedToProject">
                         <div id="divTimeTypesAssignedToProject" runat="server" class="cbfloatRight DivTimeTypes LineHeight19Px ValignMiddleImp">
@@ -137,11 +152,11 @@
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>' class="Height0pxImp">
                                                 <td class="PaddingTop2PxImp PaddingBottom0pxImp">
-                                                    <label id="Label1" for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server"
-                                                        class="padLeft25">
+                                                    <label id="Label1" for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>'
+                                                        runat="server" class="padLeft25">
                                                         <%# Eval("Name") %>
                                                     </label>
-                                                    <input type="image" id="imgDeleteWorkType" alt="Delete Work Type" class="PaddingTop2Px VisibilityHidden"
+                                                    <input type="image" id="imgDeleteWorkType" alt="Delete Work Type" class="PaddingTop2Px VisibilityHidden padRight2"
                                                         runat="server" src="~/Images/close_16.png" title="Delete Work Type" timetypeid='<%# Eval("Id") %>' />
                                                     <input id="cbTimeTypesAssignedToProject" class="Height16Px" type="checkbox" runat="server" />
                                                 </td>
@@ -159,13 +174,13 @@
                                         <ItemTemplate>
                                             <tr timetypename='<%# Eval("Name") %>' class="Height0pxImp">
                                                 <td class="PaddingTop2PxImp PaddingBottom0pxImp">
-                                                    <label id="Label2" for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>' runat="server"
-                                                        class="padLeft25">
+                                                    <label id="Label2" for="cbTimeTypesAssignedToProject" title='<%# Eval("Name") %>'
+                                                        runat="server" class="padLeft25">
                                                         <%# Eval("Name") %>
                                                     </label>
                                                     <input id="imgDeleteWorkType" type="image" runat="server" alt="Delete Work Type"
-                                                        class="PaddingTop2Px" src="~/Images/close_16.png" title="Delete Work Type" timetypeid='<%# Eval("Id") %>'
-                                                        onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
+                                                        class="PaddingTop2Px padRight2" src="~/Images/close_16.png" title="Delete Work Type"
+                                                        timetypeid='<%# Eval("Id") %>' onclick="return DeleteWorkType(this.getAttribute('timetypeid'));" />
                                                     <input id="cbTimeTypesAssignedToProject" class="Height16Px" type="checkbox" runat="server" />
                                                 </td>
                                             </tr>
@@ -182,8 +197,7 @@
         </td>
     </tr>
 </table>
-<asp:Panel ID="pnlAddNewTimeType" runat="server"
-    Style="display: none;" CssClass="Width375Px PanelPerson">
+<asp:Panel ID="pnlAddNewTimeType" runat="server" Style="display: none;" CssClass="Width375Px PanelPerson">
     <table class="Width100Per Padding5 projectTimeTypes">
         <tr class="BackGroundColorGray height20P">
             <th class="TdTextAddWorkType">
@@ -249,8 +263,7 @@
     BehaviorID="mpeTimetypeAlertMessage" TargetControlID="hdTimetypeAlertMessage"
     BackgroundCssClass="modalBackground" PopupControlID="pnlTimetypeAlertMessage"
     DropShadow="false" CancelControlID="btnClose" />
-<asp:Panel ID="pnlTimetypeAlertMessage" runat="server"
-    Style="display: none" CssClass="PanelPerson Width380px">
+<asp:Panel ID="pnlTimetypeAlertMessage" runat="server" Style="display: none" CssClass="PanelPerson Width380px">
     <table class="Width100Per Padding5">
         <tr>
             <th class="TextAlignCenterImp BackGroundColorGray vBottom">
