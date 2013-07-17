@@ -1166,7 +1166,7 @@ table.ProjectDetail-ProjectInfo-Table td{padding-left:4px}
 .Width92PerImp{width:92%!important}
 .wrapMilestoneName{word-wrap:break-word!important;word-break:break-all;white-space:normal}
 .BtnAddTimeType{padding-top:5px!important;width:100%;text-align:right}
-.TdAssignedWorkTypesText{padding:2px 6px 0 6px!important;text-align:center!important;width:44%!important}
+.TdAssignedWorkTypesText{padding:2px 6px 5px 6px!important;text-align:center!important;width:44%!important}
 .HeightAuto{height:auto!important}
 .TdTimeTypesNotAssignedToProject{padding:0 6px 0 6px!important;width:44%;margin:auto;vertical-align:middle}
 .TbTimeTypesNotAssignedToProject{border:1px solid black;padding-left:1px!important;padding-right:1px!important;width:100%!important}
@@ -1503,5 +1503,5 @@ table#ctl00_body_login tr td label{float:left}
 .tblPanelNetCSATScore td{width:30%;white-space:normal;text-align:center}
 .tblCSATHeader{width:100%;table-layout:fixed;font-weight:bold}
 .tblCSATHeader td{width:25%;vertical-align:top;font-size:14px;text-align:center}
-.attributionHeader{font-size:20px;font-weight:bold;text-align:center}
-.attributionFirstTd{width:47%;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;text-align:center}
+.attributionHeader{font-size:16px;font-weight:bold;text-align:center}
+.attributionFirstTd{width:47%;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;text-align:right;padding-bottom:5px;padding-right:5px;padding-top:5px}
