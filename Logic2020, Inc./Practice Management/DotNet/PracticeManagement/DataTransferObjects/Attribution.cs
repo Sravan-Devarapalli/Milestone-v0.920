@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using System.Web;
 
 namespace DataTransferObjects
 {
@@ -85,6 +86,13 @@ namespace DataTransferObjects
         {
             get;
             set;
+        }
+
+        public string HtmlEncodedTargetName
+        {
+            get { return HttpUtility.HtmlEncode(TargetName);
+            }
+            set { TargetName = HttpUtility.HtmlDecode(value); }
         }
 
         public bool IsEditMode { get; set; }
