@@ -5,6 +5,7 @@ BEGIN
 			@CurrentQuartersStartDate DATETIME,
 			@CurrentQuartersEndDate DATETIME,
 			@CurrentYearStartDate DATETIME,
+			@CurrentMonthEndDate DATETIME,
 			@Today DATETIME
 
 	SELECT	@Today = CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE())),
@@ -12,10 +13,14 @@ BEGIN
 			@CurrentQuartersStartDate = DATEADD(qq, DATEDIFF(qq, 0, @Today), 0),
 			@CurrentQuartersEndDate = DATEADD(d, -1, DATEADD(qq, 1, DATEADD(qq, DATEDIFF(qq, 0, @Today), 0))),
 			@CurrentYearStartDate =  DATEADD(YEAR, DATEDIFF(YEAR, 0, GETUTCDATE()), 0)
+	SELECT  @CurrentMonthEndDate = C.MonthEndDate
+	FROM dbo.Calendar C
+	WHERE C.Date = @Today
 
 	--To Update the Current quarter value actual values 
 	;WITH CTE
 	AS
+
 	(
 		SELECT projectid,SUM(ActualRevenue) AS ActualRevenue,SUM(ActualGrossMargin) AS ActualGrossMargin
 		FROM ProjectSummaryCache
@@ -43,7 +48,7 @@ BEGIN
 		FROM ProjectSummaryCache
 		Where CacheDate = CONVERT(DATE ,@InsertingTime) 
 			  AND [RangeType] LIKE 'M%' 
-			  AND [MonthStartDate] BETWEEN @CurrentYearStartDate AND @CurrentQuartersEndDate		  
+			  AND [MonthStartDate] BETWEEN @CurrentYearStartDate AND @CurrentMonthEndDate		  
 		GROUP BY projectid
 	)
 	UPDATE qrt
@@ -55,6 +60,5 @@ BEGIN
 	WHERE qrt.CacheDate = CONVERT(DATE ,@InsertingTime) 
 		  AND qrt.[RangeType] = 'YTD' 
 		  AND qrt.[MonthStartDate] = @CurrentYearStartDate
-		  AND qrt.[MonthEndDate] = @CurrentQuartersEndDate
-
+		  AND qrt.[MonthEndDate] = @CurrentMonthEndDate
 END
