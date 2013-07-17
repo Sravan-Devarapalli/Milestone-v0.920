@@ -1182,7 +1182,7 @@
                                             <td>
                                                 <ul class="ListStyleNone">
                                                     <li>
-                                                        <asp:CheckBox ID="chbCloneMilestones" runat="server" Checked="true" Text="Clone milestones and milestone person details" /></li>
+                                                        <asp:CheckBox ID="chbCloneMilestones" OnCheckedChanged="chbCloneMilestones_CheckedChanged"  runat="server" Checked="true" AutoPostBack="True" Text="Clone milestones and milestone person details" /></li>
                                                     <li>
                                                         <asp:CheckBox ID="chbCloneCommissions" runat="server" Checked="true" Text="Clone commissions" /></li>
                                                     <li>Clone status
