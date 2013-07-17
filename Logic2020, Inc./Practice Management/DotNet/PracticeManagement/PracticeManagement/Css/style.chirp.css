@@ -6188,7 +6188,7 @@ table.ProjectDetail-ProjectInfo-Table td
 }
 .TdAssignedWorkTypesText
 {
-    padding: 2px 6px 0px 6px !important;
+    padding: 2px 6px 5px 6px !important;
     text-align: center !important;
     width: 44% !important;
 }
@@ -8108,7 +8108,7 @@ table#ctl00_body_login tr td label
 }
 .attributionHeader
 {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
 }
@@ -8118,5 +8118,9 @@ table#ctl00_body_login tr td label
     border-left: 1px solid black;
     border-right: 1px solid black;
     border-top: 1px solid black;
-    text-align: center;
+    text-align: right;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
 }
+
