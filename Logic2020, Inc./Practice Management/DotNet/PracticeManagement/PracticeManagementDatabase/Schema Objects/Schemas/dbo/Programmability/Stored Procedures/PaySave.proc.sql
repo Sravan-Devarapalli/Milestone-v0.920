@@ -420,9 +420,9 @@ BEGIN
 	4.Re-hire the person with hire date as salary type compensation start date.
 	*/
 
-	DECLARE @TerminationReasonId INT,@HireDate DATETIME,@PreviousTerminationDate DATETIME,@FirstSalaryCompensationStartDate DATETIME
-	SELECT @TerminationReasonId = TR.TerminationReasonId FROM dbo.TerminationReasons TR WHERE TR.TerminationReason = 'Voluntary - 1099 Contract Ended'
-	SELECT @PreviousTerminationDate = TerminationDate FROM dbo.Person AS P WHERE P.PersonId = @PersonId
+	DECLARE @RehireTerminationReasonId INT,@HireDate DATETIME,@RehireTerminationDate DATETIME,@FirstSalaryCompensationStartDate DATETIME
+	SELECT @RehireTerminationReasonId = TR.TerminationReasonId FROM dbo.TerminationReasons TR WHERE TR.TerminationReason = 'Voluntary - 1099 Contract Ended'
+	
 
 	SELECT @FirstCompensationStartDate = MIN(pay.StartDate)
 	FROM dbo.Pay pay WITH(NOLOCK)
@@ -464,30 +464,29 @@ BEGIN
 		BEGIN
 				
 	--3.If Yes Terminate the person with latest compensation end date  with contract type.
-			SELECT @TerminationDate = MAX(pay.EndDate) -1 
+			SELECT @RehireTerminationDate = MAX(pay.EndDate) -1 
 			FROM dbo.Pay pay WITH(NOLOCK)
 			INNER JOIN dbo.Timescale T ON T.TimescaleId = pay.Timescale
 			WHERE pay.Person = @PersonId AND pay.StartDate >= @FirstCompensationStartDate AND T.IsContractType = 1 AND pay.StartDate < @Today
 				
-			EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1,@UserLogin=@UserLogin -- terminating the person
+			EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @RehireTerminationDate , @PersonStatusId = 2 , @FromPaySaveSproc = 1,@UserLogin=@UserLogin -- terminating the person
 
 				
 			-- Ensure the temporary table exists
 			EXEC SessionLogPrepare @UserLogin = @UserLogin
 
 			UPDATE dbo.Person
-				SET TerminationDate = @TerminationDate,
+				SET TerminationDate = @RehireTerminationDate,
 					PersonStatusId = 2,
 					TitleId = @TitleId,
 					PracticeOwnedId = @PracticeId,
-					TerminationReasonId = @TerminationReasonId
+					TerminationReasonId = @RehireTerminationReasonId
 				WHERE PersonId = @PersonId
 
 			EXEC dbo.PersonStatusHistoryUpdate
 				@PersonId = @PersonId,
 				@PersonStatusId = 2
 
-			EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @PreviousTerminationDate,@UserLogin = @UserLogin	
 
 	--4.Re-hire the person with hire date as salary type compensation start date.
 			SELECT @HireDate = MIN(pay.StartDate),
@@ -511,7 +510,7 @@ BEGIN
 				@PersonId = @PersonId,
 				@PersonStatusId = 1
 
-			EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @TerminationDate,@UserLogin = @UserLogin	
+			EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = NULL, @PreviousTerminationDate = @RehireTerminationDate,@UserLogin = @UserLogin	
 
 		END			
 	END
