@@ -1593,7 +1593,7 @@ namespace PraticeManagement
         {
             if (Project != null && Project.Id.HasValue)
             {
-                return string.Format(ProjectAttachmentHandlerUrl, Project.Id.ToString(), attachmentFileName, attachmentId);
+                return string.Format(ProjectAttachmentHandlerUrl, Project.Id.ToString(), System.Web.HttpUtility.UrlEncode(attachmentFileName), attachmentId);
             }
             return string.Empty;
         }
