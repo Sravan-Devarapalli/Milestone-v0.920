@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.IO;
 
@@ -25,8 +26,21 @@ namespace PraticeManagement.Controls.Projects
                      
             context.Response.ContentType = "application/octet-stream";            
 
+            FileName = FileName.Replace(' ', '_');
+            FileName = String.Concat(Encoding.UTF8.GetBytes(FileName).Select(b =>
+             {
+                 if ((b >= 48 && b <= 57) || (b >= 65 && b <= 90) || (b >= 97 && b <= 122))
+                 {
+                     return new String((char)b, 1);
+                 }
+                 else
+                 {
+                     return String.Format("%{0:x2}", b);
+                 }
+             }).ToArray());
+
             context.Response.AddHeader(
-                "content-disposition", string.Format("attachment; filename={0}", System.Web.HttpUtility.UrlEncode(FileName.Replace(' ', '_'))));
+                "content-disposition", string.Format("attachment; filename*=UTF-8''{0}", FileName));
 
             int len = attachmentData.Length;
             int bytes;
