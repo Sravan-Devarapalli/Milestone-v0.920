@@ -1131,7 +1131,7 @@
                                                     <asp:Label ID="lblAttachmentSize" runat="server" Text='<%# string.Format("{0}Kb", (int)Eval("AttachmentSize")/1024)  %>'></asp:Label>
                                                 </td>
                                                 <td class="textCenter">
-                                                    <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format("{0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("yyyy/MM/dd")) : string.Empty %>'></asp:Label>
+                                                    <asp:Label ID="lblUploadedDate" runat="server" Text='<%# ((DateTime?)Eval("UploadedDate")).HasValue ? string.Format("{0}", ((DateTime?)Eval("UploadedDate")).Value.ToString("MM/dd/yyyy")) : string.Empty %>'></asp:Label>
                                                 </td>
                                                 <td class="textCenter">
                                                     <asp:Label ID="lblUploader" runat="server" Text='<%# Eval("Uploader") %>'></asp:Label>
@@ -1182,7 +1182,8 @@
                                             <td>
                                                 <ul class="ListStyleNone">
                                                     <li>
-                                                        <asp:CheckBox ID="chbCloneMilestones" OnCheckedChanged="chbCloneMilestones_CheckedChanged"  runat="server" Checked="true" AutoPostBack="True" Text="Clone milestones and milestone person details" /></li>
+                                                        <asp:CheckBox ID="chbCloneMilestones" OnCheckedChanged="chbCloneMilestones_CheckedChanged"
+                                                            runat="server" Checked="true" AutoPostBack="True" Text="Clone milestones and milestone person details" /></li>
                                                     <li>
                                                         <asp:CheckBox ID="chbCloneCommissions" runat="server" Checked="true" Text="Clone commissions" /></li>
                                                     <li>Clone status
