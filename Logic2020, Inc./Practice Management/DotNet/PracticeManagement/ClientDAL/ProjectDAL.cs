@@ -3272,5 +3272,76 @@ namespace DataAccess
                 command.ExecuteNonQuery();
             }
         }
+
+        public static List<Project> GetAttributionForGivenIds(string attributionIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetAttributionForGivenIds, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.AttributionIds, attributionIds);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<Project> result = new List<Project>();
+                    ReadAttributionForGivenIds(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadAttributionForGivenIds(SqlDataReader reader, List<Project> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int attributionIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionId);
+                int attributionTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionTypeId);
+                int attributionRecordIdIndex = reader.GetOrdinal(Constants.ColumnNames.AttributionRecordTypeId);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                int targetIdIndex = reader.GetOrdinal(Constants.ColumnNames.TargetId);
+                while (reader.Read())
+                {
+                    Project project;
+                    string projectNumber = reader.GetString(projectNumberIndex);
+                    if (result.Any(p => p.ProjectNumber == projectNumber))
+                    {
+                        project = result.First(p => p.ProjectNumber == projectNumber);
+                    }
+                    else
+                    {
+                        project = new Project()
+                    {
+                        ProjectNumber = projectNumber,
+                        Name = reader.GetString(projectNameIndex)
+                    };
+                        project.AttributionList = new List<Attribution>();
+                        result.Add(project);
+                    }
+                    int targetId = reader.GetInt32(targetIdIndex);
+                    AttributionTypes attributionType = (AttributionTypes)reader.GetInt32(attributionTypeIdIndex);
+                    AttributionRecordTypes attributionRecordType = (AttributionRecordTypes)reader.GetInt32(attributionRecordIdIndex);
+                    Attribution attribution = new Attribution()
+                    {
+                        Id = reader.GetInt32(attributionIdIndex),
+                        AttributionType = attributionType,
+                        AttributionRecordType = attributionRecordType,
+                        EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                        StartDate = !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                        TargetId = targetId
+                    };
+                    project.AttributionList.Add(attribution);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
