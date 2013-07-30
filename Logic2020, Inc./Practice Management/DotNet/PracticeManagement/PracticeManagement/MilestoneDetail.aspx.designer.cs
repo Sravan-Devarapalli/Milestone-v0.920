@@ -1417,6 +1417,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Panel pnlAttribution;
         
         /// <summary>
+        /// trAttributionRecord control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trAttributionRecord;
+        
+        /// <summary>
         /// repDeliveryPersons control.
         /// </summary>
         /// <remarks>
@@ -1442,6 +1451,42 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repSalesPersons;
+        
+        /// <summary>
+        /// trCommissionsStartDateExtend control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trCommissionsStartDateExtend;
+        
+        /// <summary>
+        /// lblCommissionsStartDateExtendMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCommissionsStartDateExtendMessage;
+        
+        /// <summary>
+        /// trCommissionsEndDateExtend control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trCommissionsEndDateExtend;
+        
+        /// <summary>
+        /// lblCommissionsEndDateExtendMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCommissionsEndDateExtendMessage;
         
         /// <summary>
         /// btnOkAttribution control.
