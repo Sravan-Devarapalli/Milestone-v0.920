@@ -1455,17 +1455,7 @@
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                                <div id="dvCommissionsExit" class="PaddingTop10" runat="server">
-                                    <asp:Label ID="lblCommissions" runat="server">
-                                    </asp:Label><br />
-                                    <asp:DataList ID="dlCommissions" runat="server" CssClass="WS-Normal">
-                                        <ItemTemplate>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>
-                                            -
-                                            <%# Eval("Name") %>
-                                        </ItemTemplate>
-                                    </asp:DataList>
-                                </div>
+                            
                             </div>
                         </td>
                     </tr>
@@ -1707,6 +1697,83 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:HiddenField ID="hdnConsultantToContract" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeConsultantToContract" runat="server"
+                TargetControlID="hdnConsultantToContract" PopupControlID="pnlConsultantToContract"
+                BackgroundCssClass="modalBackground" DropShadow="false">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnlConsultantToContract" runat="server" Style="display: none;" CssClass="popUpAttrition">
+                <table>
+                    <tr>
+                        <td>
+                            <p>
+                                <asp:Label ID="lblPerson" runat="server"></asp:Label>
+                                has following Attribution record(s). The records will update/delete accordingly.
+                                Click "OK" to proceed with this change.
+                            </p>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr><td>
+                        <asp:DataList ID="dlAttributions" runat="server" CssClass="WS-Normal">
+                            <ItemTemplate>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>-
+                                <%# Eval("Name") %>
+                            </ItemTemplate>
+                        </asp:DataList></td></tr>
+                    <tr>
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="btnOkConsultantToContract" runat="server" Text="Ok" UseSubmitBehavior="false" CssClass="Width60Px"
+                                OnClick="btnOkConsultantToContract_Click" />
+                            &nbsp;
+                            <asp:Button ID="btnCloseConsultantToContract" runat="server" Text="Cancel" UseSubmitBehavior="false" CssClass="Width60Px"
+                                OnClick="btnCloseConsultantToContract_Click" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnDivisionChange" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeDivisionChange" runat="server" TargetControlID="hdnDivisionChange"
+                PopupControlID="pnlDivisionChange" BackgroundCssClass="modalBackground" DropShadow="false">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnlDivisionChange" runat="server" Style="display: none;" CssClass="popUpAttrition">
+                <table>
+                    <tr>
+                        <td>
+                            <asp:CustomValidator ID="cvDivisionChange" runat="server" Text="" ErrorMessage=""
+                                ForeColor="Black" ToolTip="" OnServerValidate="cvDivisionChange_ServerValidate"
+                                ValidationGroup="DivisionChange" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <asp:Label runat="server" ID="lblPersonName"></asp:Label>
+                                 has following Attribution record(s). The records will update/delete accordingly.
+                                Click "OK" to proceed with this change.
+                            <br />
+                        </td>
+                    </tr>
+                       <tr>
+                           <td>
+                        <asp:DataList ID="dlCommissionAttribution" runat="server" CssClass="WS-Normal">
+                            <ItemTemplate>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>-
+                                <%# Eval("Name") %>
+                            </ItemTemplate>
+                        </asp:DataList></td>
+                       </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="btnDivisionChageOk" runat="server" Text="Ok" OnClick="btnDivisionChageOk_Click" CssClass="Width60Px"
+                                UseSubmitBehavior="false" />
+                            &nbsp;
+                            <asp:Button ID="btnDivisionChangeCancel" runat="server" Text="Cancel" OnClick="btnDivisionChangeCancel_Click" CssClass="Width60Px"
+                                UseSubmitBehavior="false" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <asp:HiddenField ID="hdRehireConfirmation" runat="server" Value="change" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeRehireConfirmation" runat="server"
                 TargetControlID="hdRehireConfirmation" PopupControlID="pnlRehireConfirmation"
@@ -1897,3 +1964,4 @@
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
+
