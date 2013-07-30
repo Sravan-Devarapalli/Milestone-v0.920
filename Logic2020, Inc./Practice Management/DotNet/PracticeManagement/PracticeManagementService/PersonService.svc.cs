@@ -1082,9 +1082,9 @@ namespace PracticeManagementService
             return PayDAL.GetCurrentByPerson(personId);
         }
 
-        public List<Person> GetActivePersonsListShortByDivision(int divisionId)
+        public List<Person> GetActivePersonsByProjectId(int projectId)
         {
-            return PersonDAL.GetActivePersonsListShortByDivision(divisionId);
+            return PersonDAL.GetActivePersonsByProjectId(projectId);
         }
 
         public Title GetPersonTitleByRange(int personId, DateTime startDate, DateTime endDate)
@@ -1092,14 +1092,26 @@ namespace PracticeManagementService
             return PersonDAL.GetPersonTitleByRange(personId, startDate, endDate);
         }
 
-        public List<Project> CheckIfCommissionsExistsAfterTermination(int personId, DateTime terminationDate)
-        {
-            return PersonDAL.CheckIfCommissionsExistsAfterTermination(personId, terminationDate);
-        }
-
         public bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate)
         {
             return PersonDAL.CheckIfRangeWithinHireAndTermination(personId, startDate, endDate);
+        }
+
+        public bool CheckIfPersonConsultantTypeInAPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.CheckIfPersonConsultantTypeInAPeriod(personId, startDate, endDate);
+        }
+        
+        public List<Project> GetCommissionsValidationByPersonId(int personId, DateTime hireDate,
+                                                                       DateTime? terminationDate, int personStatusId,
+                                                                       int divisionId, bool IsReHire)
+        {
+            return PersonDAL.GetCommissionsValidationByPersonId(personId, hireDate, terminationDate, personStatusId,divisionId, IsReHire);
+        }
+
+        public bool CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.CheckIfValidDivision(personId, startDate, endDate);
         }
 
         #endregion IPersonService Members
