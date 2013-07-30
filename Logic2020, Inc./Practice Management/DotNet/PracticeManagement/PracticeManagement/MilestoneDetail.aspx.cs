@@ -56,6 +56,7 @@ namespace PraticeManagement
                                                                     @"Select Cancel to select another end date or to manually update Resource(s) attached to this milestone.</p>" + "<br/>";
 
         private const string format = "{0} {1} ({2})";
+        private const string lblCommissionsMessage = "Attribution {0} date will change based on the change to the project milestone.";
 
         #endregion Constants
 
@@ -810,34 +811,102 @@ namespace PraticeManagement
             if (IsAttributionPanelDisplayed)
                 return;
             List<Attribution> attributionList = new List<Attribution>();
+            List<bool> extendAttributionDates = new List<bool>();
             using (var service = new MilestoneServiceClient())
             {
                 if (MilestoneId != null)
+                {
                     attributionList =
                         service.IsProjectAttributionConflictsWithMilestoneChanges(MilestoneId.Value,
                                                                                   dtpPeriodFrom
                                                                                       .DateValue,
                                                                                   dtpPeriodTo.DateValue,
-                                                                                  hdnIsUpdate.Value == true.ToString()).ToList();
+                                                                                  hdnIsUpdate.Value == true.ToString())
+                               .ToList();
+             
+                }
+
             }
             if (attributionList.Any())
             {
+                trAttributionRecord.Visible = true;
                 IsAttributionPanelDisplayed = true;
                 mpeAttribution.Show();
                 if (attributionList.Any(x => x.AttributionType == AttributionTypes.Delivery))
                 {
                     repDeliveryPersons.DataSource =
-                        attributionList.Where(x => x.AttributionType == AttributionTypes.Delivery).OrderBy(x=>x.TargetName).ThenBy(x=>x.StartDate);
+                        attributionList.Where(x => x.AttributionType == AttributionTypes.Delivery)
+                                       .OrderBy(x => x.TargetName)
+                                       .ThenBy(x => x.StartDate);
                     repDeliveryPersons.DataBind();
                 }
                 if (attributionList.Any(x => x.AttributionType == AttributionTypes.Sales))
                 {
                     repSalesPersons.DataSource =
-                        attributionList.Where(x => x.AttributionType == AttributionTypes.Sales).OrderBy(x => x.TargetName).ThenBy(x => x.StartDate);
+                        attributionList.Where(x => x.AttributionType == AttributionTypes.Sales)
+                                       .OrderBy(x => x.TargetName)
+                                       .ThenBy(x => x.StartDate);
                     repSalesPersons.DataBind();
                 }
                 e.IsValid = false;
             }
+            else
+                trAttributionRecord.Visible = false;
+
+            if (hdnIsUpdate.Value == true.ToString())
+            {
+                using (var service = new MilestoneServiceClient())
+                {
+                    if (SelectedProjectId != null)
+                        extendAttributionDates =
+                            service.ShouldAttributionDateExtend(SelectedProjectId.Value,
+                                                                dtpPeriodFrom
+                                                                    .DateValue,
+                                                                dtpPeriodTo.DateValue)
+                                   .ToList();
+                }
+                if (MilestoneId !=null && SelectedProjectId != null && (extendAttributionDates[0] || extendAttributionDates[1]))
+                {
+                    DateTime PeriodFrom = hdnPeriodFrom.Value == string.Empty
+                                              ? Project.StartDate.Value
+                                              : Convert.ToDateTime(hdnPeriodFrom.Value);
+                    DateTime PeriodTo = hdnPeriodFrom.Value == string.Empty
+                                            ? Project.EndDate.Value
+                                            : Convert.ToDateTime(hdnPeriodTo.Value);
+                    IsAttributionPanelDisplayed = true;
+                    mpeAttribution.Show();
+                    if (extendAttributionDates[0])
+                    {
+                        trCommissionsStartDateExtend.Visible = true;
+                        lblCommissionsStartDateExtendMessage.Text = string.Format(lblCommissionsMessage, "start date");
+                    }
+                    else
+                    {
+                        trCommissionsStartDateExtend.Visible = false;
+                    }
+                    if (extendAttributionDates[1])
+                    {
+                        trCommissionsEndDateExtend.Visible = true;
+                        lblCommissionsEndDateExtendMessage.Text = string.Format(lblCommissionsMessage, "end date");
+                    }
+                    else
+                    {
+                        trCommissionsEndDateExtend.Visible = false;
+                    }
+                    e.IsValid = false;
+                }
+                else
+                {
+                    trCommissionsStartDateExtend.Visible = false;
+                    trCommissionsEndDateExtend.Visible = false;
+                }
+            }
+            else
+            {
+                trCommissionsStartDateExtend.Visible = false;
+                trCommissionsEndDateExtend.Visible = false;  
+            }
+
         }
 
         protected void custExpenseValidate_OnServerValidate(object sender, ServerValidateEventArgs e)
