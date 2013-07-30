@@ -156,6 +156,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(BonusHoursToCollectParam,
                     pay.BonusHoursToCollect.HasValue ? (object)pay.BonusHoursToCollect.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, pay.StartDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ValidateAttribution, pay.ValidateAttribution);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam,
                     pay.EndDate.HasValue ? (object)pay.EndDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(OldStartDateParam,
