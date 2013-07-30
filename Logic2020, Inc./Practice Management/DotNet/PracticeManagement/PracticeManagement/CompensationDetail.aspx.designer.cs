@@ -229,6 +229,69 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnRehireConfirmationCancel;
         
         /// <summary>
+        /// hdnConsultantToContract control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnConsultantToContract;
+        
+        /// <summary>
+        /// mpeConsultantToContract control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeConsultantToContract;
+        
+        /// <summary>
+        /// pnlConsultantToContract control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlConsultantToContract;
+        
+        /// <summary>
+        /// lblPersonName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPersonName;
+        
+        /// <summary>
+        /// dlCommissions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataList dlCommissions;
+        
+        /// <summary>
+        /// btnOkConsultantToContract control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOkConsultantToContract;
+        
+        /// <summary>
+        /// btnCloseConsultantToContract control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCloseConsultantToContract;
+        
+        /// <summary>
         /// btnCancelAndReturn control.
         /// </summary>
         /// <remarks>
