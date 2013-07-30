@@ -9,6 +9,9 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string AttributionRecordTypeId = "AttributionRecordTypeId";
+            public const string ExtendAttributionStartDate = "ExtendAttributionStartDate";
+            public const string ExtendAttributionEndDate = "ExtendAttributionEndDate";
             public const string Percentage = "Percentage";
             public const string TargetName = "TargetName";
             public const string AttributionRecordId = "AttributionRecordId";
@@ -476,6 +479,12 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IsReHire = "@IsReHire";
+            public static string ValidateAttribution = "@ValidateAttribution";
+            public static string AttributionIds = "@AttributionIds";
+            public static string PersonStatusId = "@PersonStatusId";
+            public static string HireDate = "@HireDate";
+            public static string NewHireDate = "@NewHireDate";
             public static string IsUpdate = "@IsUpdate";
             public static string DivisionId = "@DivisionId";
             public static string AttributionXML = "@AttributionXML";
@@ -881,9 +890,11 @@
 
             public class Person
             {
+                public const string CheckIfValidDivision = "dbo.CheckIfValidDivision";
+                public const string GetCommissionsValidationByPersonId = "dbo.GetCommissionsValidationByPersonId";
+                public const string CheckIfPersonConsultantTypeInAPeriod = "dbo.CheckIfPersonConsultantTypeInAPeriod";
                 public const string CheckIfRangeWithinHireAndTermination = "dbo.CheckIfRangeWithinHireAndTermination";
-                public const string CheckIfCommissionsExistsAfterTermination = "dbo.CheckIfCommissionsExistsAfterTermination";
-                public const string GetActivePersonsListShortByDivision = "dbo.GetActivePersonsListShortByDivision";
+                public const string GetActivePersonsByProjectId = "dbo.GetActivePersonsByProjectId";
                 public const string IsPersonAlreadyHavingStatus = "dbo.IsPersonAlreadyHavingStatus";
                 public const string SetDefaultManager = "dbo.PersonSetDefaultManager";
                 public const string PersonListByCategoryTypeAndPeriod = "[dbo].[PersonListByCategoryTypeAndPeriod]";
@@ -1173,6 +1184,7 @@
 
             public class Project
             {
+                public const string GetAttributionForGivenIds = "dbo.GetAttributionForGivenIds";
                 public const string SetProjectAttributionValues = "dbo.SetProjectAttributionValues";
                 public const string GetProjectAttributionValues = "dbo.GetProjectAttributionValues";
                 public const string GetProjectLastChangeDateFortheGivenStatus = "dbo.GetProjectLastChangeDateFortheGivenStatus";
@@ -1235,6 +1247,7 @@
 
             public class MilestonePerson
             {
+                public const string ShouldAttributionDateExtend = "dbo.ShouldAttributionDateExtend";
                 public const string ConsultantMilestones = "dbo.ConsultantMilestones";
                 public const string MilestonePersonListByProject = "dbo.MilestonePersonListByProject";
                 public const string MilestonePersonListByProjectShort = "dbo.MilestonePersonListByProjectShort";
