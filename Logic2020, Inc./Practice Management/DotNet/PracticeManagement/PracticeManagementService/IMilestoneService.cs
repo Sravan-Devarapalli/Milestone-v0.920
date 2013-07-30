@@ -181,6 +181,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Attribution> IsProjectAttributionConflictsWithMilestoneChanges(int milestoneId, DateTime startDate, DateTime endDate, bool isUpdate);
+
+         [OperationContract]
+        List<bool> ShouldAttributionDateExtend(int milestoneId, DateTime startDate, DateTime endDate);
     }
 }
 
