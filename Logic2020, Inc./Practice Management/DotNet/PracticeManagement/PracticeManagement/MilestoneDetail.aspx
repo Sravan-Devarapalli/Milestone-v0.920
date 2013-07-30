@@ -1064,7 +1064,7 @@
                             Attention!
                         </th>
                     </tr>
-                    <tr>
+                    <tr id="trAttributionRecord" runat="server">
                         <td>
                             <p>
                                &nbsp;&nbsp;&nbsp; This action cannot be done as the following attribution records have the person start
@@ -1103,6 +1103,27 @@
                             </asp:Repeater>
                         </td>
                     </tr>
+                        <tr id="trCommissionsStartDateExtend" runat="server">
+                        <td>
+                            <p>
+                               &nbsp;&nbsp;&nbsp; <asp:Label runat="server" ID="lblCommissionsStartDateExtendMessage"></asp:Label> </p>
+                            <br/>
+                        </td>
+                    </tr>
+                    <tr id="trCommissionsEndDateExtend" runat="server">
+                        <td>
+                            <p>
+                               &nbsp;&nbsp;&nbsp; <asp:Label runat="server" ID="lblCommissionsEndDateExtendMessage"></asp:Label> </p>
+                            <br/>
+                        </td>
+                    </tr>
+                         <tr>
+                        <td>
+                            <p>
+                               &nbsp;&nbsp;&nbsp; Please Click "OK" to accept the change. </p>
+                            <br/>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="textCenter">
                             <asp:Button ID="btnOkAttribution" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp"
@@ -1113,6 +1134,7 @@
                     </tr>
                 </table>
             </asp:Panel>
+
             <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
