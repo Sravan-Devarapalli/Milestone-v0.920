@@ -57,6 +57,20 @@ namespace PraticeManagement
             }
         }
 
+        public bool ValidateAttribution
+        {
+            get
+            {
+                if (ViewState["ValidateAttribution_Key"] == null)
+                    ViewState["ValidateAttribution_Key"] = true;
+                return (bool)ViewState["ValidateAttribution_Key"];
+            }
+            set
+            {
+                ViewState["ValidateAttribution_Key"] = value;
+            }
+        }
+
         protected Person PersonDetailData
         {
             get
@@ -256,7 +270,7 @@ namespace PraticeManagement
             {
                 Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
                 Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-                SetSaveButtonVisibility(person, pay); 
+                SetSaveButtonVisibility(person, pay);
                 PopulateControls(pay);
             }
             cvRehireConfirmation.Enabled = true;
@@ -264,6 +278,18 @@ namespace PraticeManagement
         }
 
         #endregion
+        protected void btnOkConsultantToContract_Click(object sender, EventArgs e)
+        {
+            ValidateAttribution = false;
+            btnSave_Click(btnSave, new EventArgs());
+            mpeConsultantToContract.Hide();
+        }
+
+        protected void btnCloseConsultantToContract_Click(object sender, EventArgs e)
+        {
+            mpeConsultantToContract.Hide();
+        }
+
 
         #region personnelCompensation Events
 
@@ -298,7 +324,7 @@ namespace PraticeManagement
         {
             if (SelectedStartDate.HasValue)
             {
-               
+
                 Person person = ServiceCallers.Custom.Person(p => p.GetPersonDetail(SelectedId.Value));
                 Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
                 SetSaveButtonVisibility(person, pay);
@@ -357,6 +383,17 @@ namespace PraticeManagement
                                 mlConfirmation.ShowErrorMessage("Compensation for the same period already exists.");
                                 IsErrorPanelDisplay = true;
                             }
+                            else if (data.Contains("Attribution Error:"))
+                            {
+                                mpeConsultantToContract.Show();
+                                IsOtherPanelDisplay = true;
+                                lblPersonName.Text = personInfo.LastName + ", " + personInfo.FirstName;
+                                int length = "Attribution Error:".Length;
+                                string attributionIds = innerexceptionMessage.Substring(length);
+                                dlCommissions.DataSource =
+                                    ServiceCallers.Custom.Project(p => p.GetAttributionForGivenIds(attributionIds));
+                                dlCommissions.DataBind();
+                            }
                             else if (innerexceptionMessage == PersonDetail.StartDateIncorrect || innerexceptionMessage == PersonDetail.EndDateIncorrect || innerexceptionMessage == PersonDetail.PeriodIncorrect || innerexceptionMessage == PersonDetail.HireDateInCorrect || innerexceptionMessage == PersonDetail.SalaryToContractException)
                             {
                                 if (innerexceptionMessage == PersonDetail.SalaryToContractException)
@@ -375,7 +412,7 @@ namespace PraticeManagement
 
         #region Methods
 
-        private void SetSaveButtonVisibility(Person person,Pay pay)
+        private void SetSaveButtonVisibility(Person person, Pay pay)
         {
             var now = Utils.Generic.GetNowWithTimeZone();
             DateTime? _editablePayStartDate = null;
@@ -410,7 +447,7 @@ namespace PraticeManagement
                     if (SelectedStartDate.HasValue)
                     {
                         Pay pay = person.PaymentHistory.First(pa => pa.StartDate.Date == SelectedStartDate.Value.Date);
-                        SetSaveButtonVisibility(person, pay); 
+                        SetSaveButtonVisibility(person, pay);
                         PopulateControls(pay);
                     }
                     else
@@ -489,7 +526,7 @@ namespace PraticeManagement
         {
             Pay pay = personnelCompensation.Pay;
             pay.PersonId = SelectedId.Value;
-
+            pay.ValidateAttribution = ValidateAttribution;
             using (PersonServiceClient serviceClient = new PersonServiceClient())
             {
                 try
@@ -540,6 +577,7 @@ namespace PraticeManagement
                         {
                             serviceClient.SavePay(pay, LoginPageUrl, HttpContext.Current.User.Identity.Name);
                         }
+                        ValidateAttribution = true;
                         personnelCompensation.StartDate = personnelCompensation.StartDate;
                         personnelCompensation.EndDate = personnelCompensation.EndDate;
                     }
@@ -551,7 +589,7 @@ namespace PraticeManagement
                     string data = internalException.ToString();
                     serviceClient.Abort();
                     string exceptionMessage = internalException.InnerException != null ? internalException.InnerException.Message : string.Empty;
-                    if (!(data.Contains("CK_Pay_DateRange") || exceptionMessage == PersonDetail.StartDateIncorrect || exceptionMessage == PersonDetail.EndDateIncorrect || exceptionMessage == PersonDetail.PeriodIncorrect || exceptionMessage == PersonDetail.HireDateInCorrect || exceptionMessage == PersonDetail.SalaryToContractException))
+                    if (!(data.Contains("CK_Pay_DateRange") || exceptionMessage == PersonDetail.StartDateIncorrect || exceptionMessage == PersonDetail.EndDateIncorrect || exceptionMessage == PersonDetail.PeriodIncorrect || exceptionMessage == PersonDetail.HireDateInCorrect || exceptionMessage == PersonDetail.SalaryToContractException || exceptionMessage.Contains("Attribution Error:")))
                     {
                         Logging.LogErrorMessage(
                             ex.Message,
