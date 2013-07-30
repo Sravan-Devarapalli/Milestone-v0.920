@@ -276,6 +276,11 @@ namespace PracticeManagementService
             return MilestoneDAL.IsProjectAttributionConflictsWithMilestoneChanges(milestoneId, startDate, endDate, isUpdate);
         }
 
+        public List<bool> ShouldAttributionDateExtend(int milestoneId, DateTime startDate, DateTime endDate)
+        {
+            return MilestoneDAL.ShouldAttributionDateExtend(milestoneId, startDate, endDate);
+        }
+
         #endregion Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
     }
 }
