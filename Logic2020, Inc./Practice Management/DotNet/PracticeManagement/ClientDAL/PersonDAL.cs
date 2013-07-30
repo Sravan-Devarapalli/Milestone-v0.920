@@ -3444,15 +3444,15 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> GetActivePersonsListShortByDivision(int divisionId)
+        public static List<Person> GetActivePersonsByProjectId(int projectId)
         {
             var result = new List<Person>();
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetActivePersonsListShortByDivision, connection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetActivePersonsByProjectId, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, divisionId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -3505,25 +3505,7 @@ namespace DataAccess
             return null;
         }
 
-        public static List<Project> CheckIfCommissionsExistsAfterTermination(int personId, DateTime terminationDate)
-        {
-            List<Project> result = new List<Project>();
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfCommissionsExistsAfterTermination, connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandTimeout = connection.ConnectionTimeout;
-                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate);
-
-                connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    ReadCommissions(reader, result);
-                }
-            }
-            return result;
-        }
+     
 
         private static void ReadCommissions(SqlDataReader reader, List<Project> result)
         {
@@ -3546,6 +3528,66 @@ namespace DataAccess
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfRangeWithinHireAndTermination, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                connection.Open();
+                return ((bool)command.ExecuteScalar());
+            }
+        }
+
+        public static bool CheckIfPersonConsultantTypeInAPeriod(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (
+                SqlCommand command = new SqlCommand(
+                    Constants.ProcedureNames.Person.CheckIfPersonConsultantTypeInAPeriod, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                connection.Open();
+                return ((bool)command.ExecuteScalar());
+            }
+        } 
+
+        public static List<Project> GetCommissionsValidationByPersonId(int personId, DateTime hireDate, DateTime? terminationDate, int personStatusId, int divisionId,bool IsReHire)
+        {
+            List<Project> result = new List<Project>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.GetCommissionsValidationByPersonId, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.HireDate, hireDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate.HasValue ? (object)terminationDate.Value:DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusId, personStatusId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, divisionId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsReHire, IsReHire);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadCommissions(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static bool CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (
+                SqlCommand command = new SqlCommand(
+                    Constants.ProcedureNames.Person.CheckIfValidDivision, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
