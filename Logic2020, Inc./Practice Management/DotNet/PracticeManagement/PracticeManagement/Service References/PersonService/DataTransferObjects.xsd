@@ -33,6 +33,7 @@
       <xs:element minOccurs="0" name="TitleId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="VacationDays" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ValidateAttribution" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Pay" nillable="true" type="tns:Pay" />
