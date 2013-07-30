@@ -21,8 +21,7 @@ BEGIN
 		4.Close a current compensation for the terminated persons
 		5.Delete all the Compensation records later @TerminationDate
 		6.Delete all the Recursive records later @TerminationDate
-		7.(Delete if commission records are above the person termination date  as per #3160)
-		8.(Update if person termination date is in between commission records)
+		
 	*/
 
 	DECLARE @ErrorMessage NVARCHAR(2048),@FutureDate DATETIME,
@@ -108,16 +107,6 @@ BEGIN
 	FROM dbo.PersonTimeEntryRecursiveSelection AS PTRS
 	WHERE @WeekDayOfTerminationDate BETWEEN PTRS.StartDate AND ISNULL(PTRS.EndDate,@FutureDate) AND PTRS.PersonId = @PersonId
 
-	--7.(Delete if commission records are above the person termination date  as per #3160)
-	DELETE A 
-	FROM dbo.Attribution A
-	WHERE A.AttributionRecordTypeId = 1 AND A.TargetId = @PersonId AND (A.StartDate > @TerminationDate)
-
-	--8.(Update if person termination date is in between commission records)
-	UPDATE A
-	SET A.EndDate = @TerminationDate
-	FROM dbo.Attribution A
-	WHERE A.AttributionRecordTypeId = 1 AND A.TargetId = @PersonId AND A.StartDate <= @TerminationDate AND A.EndDate > @TerminationDate 
 
 	END TRY
 	BEGIN CATCH
