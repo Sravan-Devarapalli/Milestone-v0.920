@@ -737,11 +737,35 @@ namespace DataAccess
                     connection.Open();
                     using (var reader = command.ExecuteReader())
                     {
-                        ReadProjectAttributionValues(reader, result);
+                        ReadProjectAttributionValues(reader,result);
                     }
                 }
             }
             return result;
+        }
+
+        public static List<bool> ShouldAttributionDateExtend(int projectId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (
+                    var command =
+                        new SqlCommand(
+                            Constants.ProcedureNames.MilestonePerson.ShouldAttributionDateExtend,
+                            connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        return ReadShouldExtendAttributions(reader);
+                    }
+                }
+            }
         }
 
         public static void ReadProjectAttributionValues(SqlDataReader reader, List<Attribution> result)
@@ -776,6 +800,31 @@ namespace DataAccess
             {
                 throw ex;
             }
+        }
+
+        public static List<bool> ReadShouldExtendAttributions(SqlDataReader reader)
+        {
+            List<bool> extendAttributionList = new List<bool>();
+            try
+            {
+                if (reader.HasRows)
+                {
+                    int extendAttributionStartDateIndex =
+                        reader.GetOrdinal(Constants.ColumnNames.ExtendAttributionStartDate);
+                    int extendAttributionEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ExtendAttributionEndDate);
+
+                    while (reader.Read())
+                    {
+                        extendAttributionList.Add(reader.GetBoolean(extendAttributionStartDateIndex));
+                        extendAttributionList.Add(reader.GetBoolean(extendAttributionEndDateIndex));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return extendAttributionList;
         }
     }
 }
