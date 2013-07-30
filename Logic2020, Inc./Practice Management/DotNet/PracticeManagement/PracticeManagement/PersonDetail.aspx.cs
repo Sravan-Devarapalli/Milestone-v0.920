@@ -103,6 +103,20 @@ namespace PraticeManagement
             }
         }
 
+        public bool ValidateAttribution
+        {
+            get
+            {
+                if (ViewState["ValidateAttribution_Key"] == null)
+                    ViewState["ValidateAttribution_Key"] = true;
+                return (bool)ViewState["ValidateAttribution_Key"];
+            }
+            set
+            {
+                ViewState["ValidateAttribution_Key"] = value;
+            }
+        }
+
         private PersonStatusType? PopupStatus
         {
             get
@@ -550,6 +564,48 @@ namespace PraticeManagement
 
         #endregion mpeHireDateChange Events
 
+        protected void btnDivisionChageOk_Click(object sender, EventArgs e)
+        {
+            cvDivisionChange.Enabled = false;
+            mpeDivisionChange.Hide();
+            Save_Click(sender, e);
+        }
+
+        protected void btnDivisionChangeCancel_Click(object source, EventArgs args)
+        {
+            ResetToPreviousData();
+            mpeDivisionChange.Hide();
+        }
+
+        protected void btnCloseConsultantToContract_Click(object source, EventArgs args)
+        {
+            mpeConsultantToContract.Hide();
+        }
+
+        protected void btnOkConsultantToContract_Click(object source, EventArgs args)
+        {
+            ValidateAttribution = false;
+            GridViewRow gvRow = null;
+            if (gvCompensationHistory.EditIndex != -1)
+            {
+                gvRow = gvCompensationHistory.Rows[gvCompensationHistory.EditIndex];
+            }
+            else
+            {
+                if (gvCompensationHistory.ShowFooter)
+                {
+                    gvRow = gvCompensationHistory.FooterRow;
+                }
+            }
+            if (gvRow != null)
+            {
+                var imgUpdate = gvRow.FindControl("imgUpdateCompensation") as ImageButton;
+                imgUpdateCompensation_OnClick(imgUpdate, new EventArgs());
+            }
+            mpeConsultantToContract.Hide();
+        }
+        
+
         #region mpeRehireConfirmation Events
 
         protected void btnRehireConfirmationOk_Click(object sender, EventArgs e)
@@ -612,7 +668,7 @@ namespace PraticeManagement
                 IsStatusChangeClicked = true;
                 _disableValidatecustTerminateDateTE = false;
                 custCompensationCoversMilestone.Enabled = false;
-                cvEndCompensation.Enabled = cvHireDateChange.Enabled = custCancelTermination.Enabled = true;
+                cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = true;
 
                 var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnTerminate.Checked ? PersonStatusType.TerminationPending : PopupStatus.Value;
 
@@ -795,7 +851,7 @@ namespace PraticeManagement
         protected void btnSave_Click(object sender, EventArgs e)
         {
             var updatePersonStatusDropdown = true;
-            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = !IsStatusChangeClicked;
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = !IsStatusChangeClicked;
             custCancelTermination.Enabled = true;
 
             if (PersonId.HasValue)
@@ -1313,6 +1369,35 @@ namespace PraticeManagement
             validator.Text = validator.ToolTip = validator.ErrorMessage;
         }
 
+        protected void cvDivisionChange_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            string selectedDivisionId = ddlDivision.SelectedValue;
+            int divisionId;
+            int.TryParse(selectedDivisionId, out divisionId);
+            List<Project> projectList=new List<Project>();
+            if (PersonId.HasValue)
+            {
+                projectList =
+                    (ServiceCallers.Custom.Person(
+                        p =>
+                        p.GetCommissionsValidationByPersonId(PersonId.Value, HireDate.Value,
+                                                             TerminationDate.HasValue
+                                                                 ? TerminationDate.Value
+                                                                 : (DateTime?) null, (int) PersonStatusId.Value,
+                                                             divisionId, IsRehire))).ToList();
+            }
+            e.IsValid = !(projectList.Count > 0);
+            if (!e.IsValid)
+            {
+                IsOtherPanelDisplay = true;
+                mpeDivisionChange.Show();
+                lblPersonName.Text = txtLastName.Text + "," + txtFirstName.Text;
+                dlCommissionAttribution.DataSource = projectList;
+                dlCommissionAttribution.DataBind();
+            }
+        }
+
         protected void custTerminationDateTE_ServerValidate(object source, ServerValidateEventArgs args)
         {
             Pay latestPay = null;
@@ -1336,20 +1421,21 @@ namespace PraticeManagement
             List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
             List<Project> ownerProjects = new List<Project>();
             List<Opportunity> ownerOpportunities = new List<Opportunity>();
-            List<Project> commissionsAfterTermination = new List<Project>();
+          
 
             using (PersonServiceClient serviceClient = new PersonServiceClient())
             {
                 if (PersonId.HasValue && terminationDate.HasValue)
                 {
+                    int divisionId;
+                    int.TryParse(ddlDivision.SelectedValue, out divisionId);
                     TEsExistsAfterTerminationDate = serviceClient.CheckPersonTimeEntriesAfterTerminationDate(PersonId.Value, terminationDate.Value);
                     milestonesAfterTerminationDate.AddRange(serviceClient.GetPersonMilestonesAfterTerminationDate(PersonId.Value, terminationDate.Value.AddDays(1)));
                     ownerProjects.AddRange(serviceClient.GetOwnerProjectsAfterTerminationDate(PersonId.Value, terminationDate.Value.AddDays(1)));
                     ownerOpportunities.AddRange(serviceClient.GetActiveOpportunitiesByOwnerId(PersonId.Value));
-                    commissionsAfterTermination.AddRange(serviceClient.CheckIfCommissionsExistsAfterTermination(PersonId.Value,terminationDate.Value));
                 }
             }
-            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any() || ownerProjects.Any() || ownerOpportunities.Any() || commissionsAfterTermination.Any())
+            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any() || ownerProjects.Any() || ownerOpportunities.Any() )
             {
                 dvTerminationDateErrors.Visible = true;
 
@@ -1402,18 +1488,6 @@ namespace PraticeManagement
                 else
                 {
                     divOwnerOpportunitiesExist.Visible = false;
-                }
-
-                if (commissionsAfterTermination.Any())
-                {
-                    dvCommissionsExit.Visible = true;
-                    lblCommissions.Text = string.Format(lblCommissionsFormat, person.Name);
-                    dlCommissions.DataSource = commissionsAfterTermination;
-                    dlCommissions.DataBind();
-                }
-                else
-                {
-                    dvCommissionsExit.Visible = false;
                 }
 
                 //this.dtpTerminationDate.DateValue = terminationDate.Value;
@@ -1957,6 +2031,7 @@ namespace PraticeManagement
                 custTerminateDateTE.Validate();
             }
             Pay pay = new Pay();
+            pay.ValidateAttribution = ValidateAttribution;
             if (Page.IsValid)
             {
                 var operation = Convert.ToString(imgUpdate.Attributes["operation"]);
@@ -2035,6 +2110,7 @@ namespace PraticeManagement
                     try
                     {
                         serviceClient.SavePay(pay, LoginPageUrl, HttpContext.Current.User.Identity.Name);
+                        ValidateAttribution = true;
                     }
                     catch (FaultException<ExceptionDetail> ex)
                     {
@@ -2048,6 +2124,17 @@ namespace PraticeManagement
                             CustomValidator cVSalaryToContractVoilation = row.FindControl("cvSalaryToContractVoilation") as CustomValidator;
                             if (cVSalaryToContractVoilation != null)
                                 cVSalaryToContractVoilation.IsValid = false;
+                        }
+                        else if (exceptionMessage.Contains("Attribution Error:"))
+                        {
+                            mpeConsultantToContract.Show();
+                            IsOtherPanelDisplay = true;
+                            lblPerson.Text = txtLastName.Text+", "+txtFirstName.Text;
+                            int length = "Attribution Error:".Length;
+                            string attributionIds = exceptionMessage.Substring(length);
+                            dlAttributions.DataSource =
+                                ServiceCallers.Custom.Project(p => p.GetAttributionForGivenIds(attributionIds));
+                            dlAttributions.DataBind();
                         }
                         else if (!(data.Contains("CK_Pay_DateRange") || exceptionMessage == StartDateIncorrect || exceptionMessage == EndDateIncorrect || exceptionMessage == PeriodIncorrect || exceptionMessage == HireDateInCorrect))
                         {
@@ -2249,7 +2336,7 @@ namespace PraticeManagement
 
         public void RaisePostBackEvent(string eventArgument)
         {
-            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = custCancelTermination.Enabled = true;
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = true;
             bool result = ValidateAndSavePersonDetails();
             if (result)
             {
@@ -2636,7 +2723,11 @@ namespace PraticeManagement
                 cvHireDateChange.Validate();
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
-
+            if (cvDivisionChange.Enabled && Page.IsValid)
+            {
+                cvDivisionChange.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
             if (custCancelTermination.Enabled && Page.IsValid)
             {
                 custCancelTermination.Validate();
@@ -3073,6 +3164,7 @@ namespace PraticeManagement
                 if (activeWizardsArray.Any(a => mvPerson.Views[a] == vwCompensation))
                 {
                     person.CurrentPay = personnelCompensation.Pay;
+                    person.CurrentPay.ValidateAttribution = ValidateAttribution;
                 }
             }
             else
@@ -3081,6 +3173,7 @@ namespace PraticeManagement
                 person.CurrentPay = PayHistory.FirstOrDefault(c => today >= c.StartDate && (!c.EndDate.HasValue || today < c.EndDate)) ?? PayHistory.FirstOrDefault(c => today < c.StartDate);
                 person.SLTApproval = person.CurrentPay != null && person.CurrentPay.Timescale == TimescaleType.Salary && bool.Parse(hdcvSLTApproval.Value);
                 person.SLTPTOApproval = person.CurrentPay != null && person.CurrentPay.Timescale == TimescaleType.Salary && bool.Parse(hdcvSLTPTOApproval.Value);
+                if (person.CurrentPay != null) person.CurrentPay.ValidateAttribution = ValidateAttribution;
             }
         }
 
@@ -3131,6 +3224,8 @@ namespace PraticeManagement
                     }
 
                     SavePersonsPermissions(person, serviceClient);
+
+                    ValidateAttribution = true;
 
                     IsDirty = IsStatusChangeClicked = false;
                     return personId;
