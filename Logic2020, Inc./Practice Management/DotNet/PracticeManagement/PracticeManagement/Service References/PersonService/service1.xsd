@@ -90,17 +90,17 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetActivePersonsListShortByDivision">
+  <xs:element name="GetActivePersonsByProjectId">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="divisionId" type="xs:int" />
+        <xs:element minOccurs="0" name="projectId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetActivePersonsListShortByDivisionResponse">
+  <xs:element name="GetActivePersonsByProjectIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetActivePersonsListShortByDivisionResult" nillable="true" type="q4:ArrayOfPerson" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetActivePersonsByProjectIdResult" nillable="true" type="q4:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -120,21 +120,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CheckIfCommissionsExistsAfterTermination">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="personId" type="xs:int" />
-        <xs:element minOccurs="0" name="terminationDate" type="xs:dateTime" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CheckIfCommissionsExistsAfterTerminationResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="CheckIfCommissionsExistsAfterTerminationResult" nillable="true" type="q6:ArrayOfProject" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="CheckIfRangeWithinHireAndTermination">
     <xs:complexType>
       <xs:sequence>
@@ -148,6 +133,57 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="CheckIfRangeWithinHireAndTerminationResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckIfPersonConsultantTypeInAPeriod">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckIfPersonConsultantTypeInAPeriodResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CheckIfPersonConsultantTypeInAPeriodResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCommissionsValidationByPersonId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="hireDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="terminationDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="personStatusId" type="xs:int" />
+        <xs:element minOccurs="0" name="divisionId" type="xs:int" />
+        <xs:element minOccurs="0" name="IsReHire" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCommissionsValidationByPersonIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetCommissionsValidationByPersonIdResult" nillable="true" type="q6:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckIfValidDivision">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckIfValidDivisionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CheckIfValidDivisionResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
