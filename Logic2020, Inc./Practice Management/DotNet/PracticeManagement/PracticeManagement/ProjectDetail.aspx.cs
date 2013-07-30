@@ -1020,18 +1020,27 @@ namespace PraticeManagement
             {
                 excludingPersons.Add(Convert.ToInt32(ddlCSATOwner.SelectedValue));
             }
-            int selectedItem = -1;
+            int selectedValue = -1;
+            string selectedText = "";
             if (ddlDirector.SelectedValue != "")
             {
                 if (!excludingPersons.Any(id => id == Convert.ToInt32(ddlDirector.SelectedValue)))
                 {
-                    selectedItem = Convert.ToInt32(ddlDirector.SelectedValue);
+                    selectedValue = Convert.ToInt32(ddlDirector.SelectedValue);
+                    selectedText = ddlDirector.SelectedItem.Text;
                 }
             }
             DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --", excludingPersons);
-            if (selectedItem != -1)
+            if (selectedValue != -1)
             {
-                ddlDirector.SelectedValue = selectedItem.ToString();
+                ListItem selectedDirector = ddlDirector.Items.FindByValue(selectedValue.ToString());
+                if (selectedDirector == null)
+                {
+                    selectedDirector = new ListItem(selectedText, selectedValue.ToString());
+                    ddlDirector.Items.Add(selectedDirector);
+                    ddlDirector.SortByText();
+                }
+                ddlDirector.SelectedValue = selectedValue.ToString();
             }
         }
 
