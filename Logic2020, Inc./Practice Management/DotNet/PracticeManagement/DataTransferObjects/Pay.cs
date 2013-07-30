@@ -219,6 +219,13 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public bool ValidateAttribution
+        {
+            set;
+            get;
+        }
+        
+        [DataMember]
         public bool SLTApproval
         {
             set;
