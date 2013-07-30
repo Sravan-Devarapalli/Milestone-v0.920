@@ -12,7 +12,7 @@ BEGIN
 	IF EXISTS(
 				SELECT	1
 				FROM	v_PersonHistory PH 
-				WHERE	PH.PersonId = @PersonId AND PH.HireDate <= @StartDate AND (PH.TerminationDate IS NULL OR PH.TerminationDate >= @EndDate)  
+				WHERE	PH.PersonId = @PersonId AND (PH.HireDate <= @StartDate AND (PH.TerminationDate IS NULL OR PH.TerminationDate >= @EndDate OR PH.PersonStatusId <> 2))
 			)
 		SET @ValidRange  = 1
 	ELSE
