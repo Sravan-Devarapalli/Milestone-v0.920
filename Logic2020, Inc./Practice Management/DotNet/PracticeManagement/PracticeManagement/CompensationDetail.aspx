@@ -111,6 +111,39 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:HiddenField ID="hdnConsultantToContract" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeConsultantToContract" runat="server"
+                TargetControlID="hdnConsultantToContract" PopupControlID="pnlConsultantToContract"
+                BackgroundCssClass="modalBackground" DropShadow="false">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnlConsultantToContract" runat="server" Style="display: none;" CssClass="popUpAttrition">
+                <table>
+                    <tr>
+                        <td>
+                            <p>
+                                <asp:Label ID="lblPersonName" runat="server"></asp:Label> has following Attribution record(s). The records will update/delete accordingly. Click "OK" to proceed with this change.
+                            </p>
+                            <br />
+                               
+                        </td>
+                    </tr>
+                    <tr><td><asp:DataList ID="dlCommissions" runat="server" CssClass="WS-Normal">
+                                        <ItemTemplate>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>-
+                                            <%# Eval("Name") %>
+                                        </ItemTemplate>
+                                    </asp:DataList></td> </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="btnOkConsultantToContract" runat="server" Text="Ok" UseSubmitBehavior="false" CssClass="Width60Px"
+                                OnClick="btnOkConsultantToContract_Click" />
+                            &nbsp;
+                            <asp:Button ID="btnCloseConsultantToContract" runat="server" Text="Cancel" UseSubmitBehavior="false" CssClass="Width60Px"
+                                OnClick="btnCloseConsultantToContract_Click" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <div class="buttons-block">
                 <cc:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" CssClass="Width150pxImp" />&nbsp;
                 <asp:Button ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" CssClass="Width150pxImp" />
