@@ -681,9 +681,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
-    <None Include="Service References\MilestoneService\MilestoneService10.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\MilestoneService\MilestoneService4.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -694,6 +691,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService8.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService9.xsd">
@@ -819,7 +819,7 @@
     <None Include="Service References\ProjectService\ProjectService22.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ProjectService\ProjectService24.xsd">
+    <None Include="Service References\ProjectService\ProjectService23.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService.wsdl" />
@@ -975,8 +975,8 @@
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <None Include="Service References\ClientService\ClientService1.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\NPOI.dll" />
     <Content Include="TimEntry_New.xml">
@@ -3216,7 +3216,9 @@
     <Content Include="Reports\CommissionsAndRates.aspx" />
     <Content Include="Reports\PersonStats.aspx" />
     <Content Include="Reports\UtilizationTimeline.aspx" />
-    <Content Include="Reports\Xslt\ActivityLogChanges.xslt" />
+    <Content Include="Reports\Xslt\ActivityLogChanges.xslt">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Reports\Xslt\ActivityLogItem.xslt" />
     <Content Include="Reports\Xslt\MonthMiniReport.xslt" />
     <Content Include="PracticeManagementMain.Master" />
