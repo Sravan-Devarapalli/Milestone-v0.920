@@ -1037,23 +1037,6 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillPersonListByDivisionId(ListControl control, string firstItemText, int divisionId)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    Person[] persons = serviceClient.GetActivePersonsListShortByDivision(divisionId);
-                    FillPersonList(control, firstItemText, persons, string.Empty);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
         public static void FillPersonList(ListControl control, string firstItemText, Person[] persons, string firstItemValue, bool fillWithPersonFirstLastName = false)
         {
             control.Items.Clear();
