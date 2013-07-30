@@ -350,5 +350,8 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SetProjectAttributionValues(int projectId, string attributionXML, string userLogin);
+
+        [OperationContract]
+        List<Project> GetAttributionForGivenIds(string attributionIds);
     }
 }
