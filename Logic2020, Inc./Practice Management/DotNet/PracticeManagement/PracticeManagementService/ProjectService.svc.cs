@@ -992,6 +992,11 @@ namespace PracticeManagementService
             }
         }
 
+        public List<Project> GetAttributionForGivenIds(string attributionIds)
+        {
+            return ProjectDAL.GetAttributionForGivenIds(attributionIds);
+        }
+
         #endregion IProjectService Members
     }
 }
