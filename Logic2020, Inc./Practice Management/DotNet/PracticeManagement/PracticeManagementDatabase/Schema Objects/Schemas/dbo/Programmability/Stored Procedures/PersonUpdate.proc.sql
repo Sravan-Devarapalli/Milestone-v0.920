@@ -223,7 +223,7 @@ BEGIN TRY
 	END
 		
 	EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @PreviousTerminationDate,@UserLogin = @UserLogin		
-		
+	EXEC [dbo].[SetCommissionsAttributions] @PersonId = @PersonId
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END TRY
