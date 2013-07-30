@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PersonService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PersonService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
@@ -50,11 +50,11 @@
   <wsdl:message name="IPersonService_SendAdministratorAddedEmail_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendAdministratorAddedEmailResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetActivePersonsListShortByDivision_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetActivePersonsListShortByDivision" />
+  <wsdl:message name="IPersonService_GetActivePersonsByProjectId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetActivePersonsByProjectId" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_GetActivePersonsListShortByDivision_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetActivePersonsListShortByDivisionResponse" />
+  <wsdl:message name="IPersonService_GetActivePersonsByProjectId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetActivePersonsByProjectIdResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonTitleByRange_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonTitleByRange" />
@@ -62,17 +62,29 @@
   <wsdl:message name="IPersonService_GetPersonTitleByRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonTitleByRangeResponse" />
   </wsdl:message>
-  <wsdl:message name="IPersonService_CheckIfCommissionsExistsAfterTermination_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckIfCommissionsExistsAfterTermination" />
-  </wsdl:message>
-  <wsdl:message name="IPersonService_CheckIfCommissionsExistsAfterTermination_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckIfCommissionsExistsAfterTerminationResponse" />
-  </wsdl:message>
   <wsdl:message name="IPersonService_CheckIfRangeWithinHireAndTermination_InputMessage">
     <wsdl:part name="parameters" element="tns:CheckIfRangeWithinHireAndTermination" />
   </wsdl:message>
   <wsdl:message name="IPersonService_CheckIfRangeWithinHireAndTermination_OutputMessage">
     <wsdl:part name="parameters" element="tns:CheckIfRangeWithinHireAndTerminationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonConsultantTypeInAPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonConsultantTypeInAPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonConsultantTypeInAPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonConsultantTypeInAPeriodResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetCommissionsValidationByPersonId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCommissionsValidationByPersonId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetCommissionsValidationByPersonId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCommissionsValidationByPersonIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfValidDivision_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfValidDivision" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfValidDivision_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfValidDivisionResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
@@ -534,21 +546,29 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SendAdministratorAddedEmail" message="tns:IPersonService_SendAdministratorAddedEmail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SendAdministratorAddedEmailResponse" message="tns:IPersonService_SendAdministratorAddedEmail_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetActivePersonsListShortByDivision">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetActivePersonsListShortByDivision" message="tns:IPersonService_GetActivePersonsListShortByDivision_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetActivePersonsListShortByDivisionResponse" message="tns:IPersonService_GetActivePersonsListShortByDivision_OutputMessage" />
+    <wsdl:operation name="GetActivePersonsByProjectId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetActivePersonsByProjectId" message="tns:IPersonService_GetActivePersonsByProjectId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetActivePersonsByProjectIdResponse" message="tns:IPersonService_GetActivePersonsByProjectId_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPersonTitleByRange">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonTitleByRange" message="tns:IPersonService_GetPersonTitleByRange_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonTitleByRangeResponse" message="tns:IPersonService_GetPersonTitleByRange_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CheckIfCommissionsExistsAfterTermination">
-      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTermination" message="tns:IPersonService_CheckIfCommissionsExistsAfterTermination_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTerminationResponse" message="tns:IPersonService_CheckIfCommissionsExistsAfterTermination_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="CheckIfRangeWithinHireAndTermination">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTermination" message="tns:IPersonService_CheckIfRangeWithinHireAndTermination_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTerminationResponse" message="tns:IPersonService_CheckIfRangeWithinHireAndTermination_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonConsultantTypeInAPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonConsultantTypeInAPeriod" message="tns:IPersonService_CheckIfPersonConsultantTypeInAPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonConsultantTypeInAPeriodResponse" message="tns:IPersonService_CheckIfPersonConsultantTypeInAPeriod_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCommissionsValidationByPersonId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetCommissionsValidationByPersonId" message="tns:IPersonService_GetCommissionsValidationByPersonId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetCommissionsValidationByPersonIdResponse" message="tns:IPersonService_GetCommissionsValidationByPersonId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfValidDivision">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfValidDivision" message="tns:IPersonService_CheckIfValidDivision_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfValidDivisionResponse" message="tns:IPersonService_CheckIfValidDivision_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
@@ -896,8 +916,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetActivePersonsListShortByDivision">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/GetActivePersonsListShortByDivision" style="document" />
+    <wsdl:operation name="GetActivePersonsByProjectId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetActivePersonsByProjectId" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -914,8 +934,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CheckIfCommissionsExistsAfterTermination">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfCommissionsExistsAfterTermination" style="document" />
+    <wsdl:operation name="CheckIfRangeWithinHireAndTermination">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTermination" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -923,8 +943,26 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CheckIfRangeWithinHireAndTermination">
-      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfRangeWithinHireAndTermination" style="document" />
+    <wsdl:operation name="CheckIfPersonConsultantTypeInAPeriod">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfPersonConsultantTypeInAPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCommissionsValidationByPersonId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetCommissionsValidationByPersonId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfValidDivision">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfValidDivision" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1586,7 +1624,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://system80.ggk.com/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://system64.ggk.com/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
