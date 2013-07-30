@@ -438,16 +438,24 @@ namespace PracticeManagementService
         void SendAdministratorAddedEmail(Person person, Person oldPerson);
 
         [OperationContract]
-        List<Person> GetActivePersonsListShortByDivision(int divisionId);
+        List<Person> GetActivePersonsByProjectId(int projectId);
 
         [OperationContract]
         Title GetPersonTitleByRange(int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<Project> CheckIfCommissionsExistsAfterTermination(int personId, DateTime terminationDate);
+        bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate);
+       
+        [OperationContract]
+        bool CheckIfPersonConsultantTypeInAPeriod(int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate);
+        List<Project> GetCommissionsValidationByPersonId(int personId, DateTime hireDate,
+                                                                DateTime? terminationDate, int personStatusId,
+                                                                int divisionId, bool IsReHire);
+
+        [OperationContract]
+        bool CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate);
     }
 }
 
