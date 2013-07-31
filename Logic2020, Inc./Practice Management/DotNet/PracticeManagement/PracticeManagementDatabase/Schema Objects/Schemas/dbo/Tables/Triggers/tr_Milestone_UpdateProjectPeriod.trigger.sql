@@ -73,57 +73,31 @@ AS
 	--Extending dates If there is any overlapping of new and old project dates.
 	IF @NewProjectStartDate <= @OldProjectEndDate AND @OldProjectStartDate <= @NewProjectEndDate    
 	BEGIN
-			--Extend the attribution Start date if the project start date is extended as per the person pay history
+			--Extend the attribution Start date if the project start date is extended as per the person pay/division/employment history
 			UPDATE A 
 			SET A.StartDate = CASE WHEN @NewProjectStartDate > pay.StartDate THEN @NewProjectStartDate ELSE pay.StartDate END
 			FROM dbo.Attribution A
-			INNER JOIN dbo.[v_PayTimescaleHistory] pay ON pay.PersonId = A.TargetId 
+			INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = A.TargetId 
 			WHERE A.ProjectId = @ProjectId 
 				AND A.AttributionRecordTypeId = 1 
-				AND pay.Timescale IN (@W2SalaryTimescaleId,@W2HourlyTimescaleId) 
-				AND A.StartDate < pay.EndDate 
+				AND A.StartDate <= pay.EndDate 
 				AND pay.StartDate <= A.EndDate
 				AND @NewProjectStartDate < @OldProjectStartDate 
 				AND A.StartDate = @OldProjectStartDate
 
-			--Extend the attribution end date if the project end date is extended as per the person pay history
+			--Extend the attribution end date if the project end date is extended as per the person pay/division/employment  history
 			UPDATE A
 			SET A.EndDate = CASE WHEN @NewProjectEndDate < pay.EndDate  THEN @NewProjectEndDate ELSE DATEADD(dd,-1,pay.EndDate) END
 			FROM dbo.Attribution A
-			INNER JOIN dbo.[v_PayTimescaleHistory] pay ON pay.PersonId = A.TargetId 
+			INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = A.TargetId 
 			WHERE A.ProjectId = @ProjectId 
 				AND A.AttributionRecordTypeId = 1 
-				AND pay.Timescale IN (@W2SalaryTimescaleId,@W2HourlyTimescaleId) 
-				AND (A.StartDate < pay.EndDate) 
+				AND (A.StartDate <= pay.EndDate) 
 				AND (pay.StartDate <= A.EndDate) 
 				AND @NewProjectEndDate > @OldProjectEndDate 
 				AND A.EndDate = @OldProjectEndDate  
 
-			----Extend the attribution Start date if the project start date is extended as per the division history
-			--UPDATE A 
-			--SET A.StartDate = CASE WHEN @NewProjectStartDate > dh.StartDate THEN @NewProjectStartDate ELSE dh.StartDate END
-			--FROM dbo.Attribution A
-			--INNER JOIN dbo.v_DivisionHistory dh ON dh.PersonId = A.TargetId 
-			--WHERE A.ProjectId = @ProjectId 
-			--	AND A.AttributionRecordTypeId = 1 
-			--	AND dh.DivisionId IN (@ConsultingDivId,@BusinessDevelopmentDivId) 
-			--	AND A.StartDate < dh.EndDate 
-			--	AND dh.StartDate <= A.EndDate
-			--	AND @NewProjectStartDate < @OldProjectStartDate 
-			--	AND A.StartDate = @OldProjectStartDate
 
-			----Extend the attribution end date if the project end date is extended as per the division history
-			--UPDATE A
-			--SET A.EndDate = CASE WHEN @NewProjectEndDate < dh.EndDate  THEN @NewProjectEndDate ELSE DATEADD(dd,-1,dh.EndDate) END
-			--FROM dbo.Attribution A
-			--INNER JOIN dbo.v_DivisionHistory dh ON dh.PersonId = A.TargetId 
-			--WHERE A.ProjectId = @ProjectId 
-			--	AND A.AttributionRecordTypeId = 1 
-			--	AND dh.DivisionId IN (@ConsultingDivId,@BusinessDevelopmentDivId) 
-			--	AND (A.StartDate < dh.EndDate) 
-			--	AND (dh.StartDate <= A.EndDate) 
-			--	AND @NewProjectEndDate > @OldProjectEndDate 
-			--	AND A.EndDate = @OldProjectEndDate  
 
 			DELETE A
 			FROM [dbo].Attribution A
@@ -147,11 +121,11 @@ AS
 			INSERT INTO Attribution(ProjectId,AttributionRecordTypeId,AttributionTypeId,TargetId,StartDate,EndDate,Percentage)
 			SELECT @ProjectId,AR.AttributionRecordId,A.AType,A.Id,
 					 CASE WHEN @NewProjectStartDate > pay.StartDate THEN @NewProjectStartDate ELSE pay.StartDate END,
-					 CASE WHEN @NewProjectEndDate < pay.EndDate  THEN @NewProjectEndDate ELSE DATEADD(dd,-1,pay.EndDate) END,100 AS Percentage
+					 CASE WHEN @NewProjectEndDate < pay.EndDate  THEN @NewProjectEndDate ELSE pay.EndDate END,100 AS Percentage
 			FROM @Attributions A
 			INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1
-			INNER JOIN v_Pay pay ON pay.PersonId = A.Id  
-			WHERE (@NewProjectStartDate < pay.EndDate) AND (pay.StartDate <= @NewProjectEndDate) AND pay.Timescale IN (@W2SalaryTimescaleId,@W2HourlyTimescaleId)
+			INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = A.Id  
+			WHERE (@NewProjectStartDate < pay.EndDate) AND (pay.StartDate <= @NewProjectEndDate)
 
 	END
 	
