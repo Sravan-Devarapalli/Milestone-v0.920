@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Threading;
+using System.Timers;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using DataAccess;
+using DataTransferObjects;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
-using System.Timers;
-using System.Data;
-using System.Data.SqlClient;
-using System.Net.Mail;
-using DataTransferObjects;
-using DataAccess;
-using System.Text;
-using System.IO;
-using System.Web.UI.WebControls;
-using System.Web.UI;
 
 namespace UpdatePracticeAndSeniority
 {
@@ -27,11 +27,13 @@ namespace UpdatePracticeAndSeniority
 
         //Settings Keys
         public const string applicationSettingsType = "Application";
+
         public const string timeZoneKey = "TimeZone";
         public const string IsDayLightSavingsKey = "IsDayLightSavingsTimeEffect";
 
         //Configuration Keys
         public const string Environment_ConfigKey = "Environment";
+
         public const string DisableAllMails_ConfigKey = "DisableAllMails";
         public const string RunSchedularDailyAtTime_ConfigKey = "RunSchedularDailyAtTime";
         public const string UPDATED_PROFILES_LIST_EMAIL_RECIEVER_ConfigKey = "UpdatedProfilesListEmailReciever";
@@ -46,6 +48,7 @@ namespace UpdatePracticeAndSeniority
 
         //Formats
         public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
+
         public const string PayRollDistributionReportEmailSubjectFormat = "Payroll Distribution Report for the period {0}.";
         public const string PayRollDistributionReportEmailBodyFormat = "Please find the Payroll Distribution report for the period {0} in the attachments.";
         public const string PayrollDistributionReportFailedFormat = "Failed to send an email of Payroll Distribution Report due to: {0}";
@@ -60,10 +63,12 @@ namespace UpdatePracticeAndSeniority
 
         //Log Status
         public const string SuccessStatus = "Success";
+
         public const string FailedStatus = "Failed";
 
         //Log Messages
         public const string M_SchedularStarted = "Started Schedular.";
+
         public const string M_PayrollDistributionReportStartedProcess = "Started Process of emailing Payroll Distribution Report.";
         public const string M_PayrollDistributionReportStartedReadingData = "Started reading data Payroll Distribution Report.";
         public const string M_PayrollDistributionReportReadDataSuccess = "Read the Payroll Distribution Report data.";
@@ -78,23 +83,27 @@ namespace UpdatePracticeAndSeniority
 
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
+
         public const string SP_PersonPasswordInsert = "dbo.PersonPasswordInsert";
         public const string SP_GetPersonsByTodayHireDate = "dbo.GetPersonsByTodayHireDate";
         public const string SP_InsertProjectSummaryCacheValue = "dbo.InsertProjectSummaryCacheValue";
         public const string SP_DatabaseCleanUpObjects = "dbo.DatabaseCleanUp";
+        public const string SP_ReBuildIndexes = "dbo.ReBuildIndexes";
 
         //Parameters
         public const string NextRun = "@NextRun";
+
         public const string LastRun = "@LastRun";
         public const string CurrentDateParam = "@CurrentDate";
 
         //Email Templates
         public const string DeActivateAccountTemplate = "DeActivateAccountTemplate";
+
         public const string ActivateAccountTemplate = "ActivateAccountTemplate";
         public const string WelcomeEmailTemplate = "WelcomeEmailTemplate";
         public const string AdministratorAddedTemplate = "AdministratorAddedTemplate";
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
@@ -115,8 +124,6 @@ namespace UpdatePracticeAndSeniority
                 return (disableAllMails == "yes");
             }
         }
-
-        
 
         public static string UpdatedProfilesListEmailReciever
         {
@@ -215,13 +222,13 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Override Methods
 
         public override bool OnStart()
         {
-            // Set the maximum number of concurrent connections 
+            // Set the maximum number of concurrent connections
             ServicePointManager.DefaultConnectionLimit = 12;
 
             // For information on handling configuration changes
@@ -275,14 +282,14 @@ namespace UpdatePracticeAndSeniority
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WorkerRole.SaveSchedularLog(DateTime.UtcNow, FailedStatus, "Schedular error: " + ex.Message, DateTime.UtcNow);
                 throw ex;
             }
         }
 
-        #endregion
+        #endregion Override Methods
 
         #region Private Methods
 
@@ -330,7 +337,6 @@ namespace UpdatePracticeAndSeniority
             }
 
             return dateTimeWithTimeZone;
-
         }
 
         /// <summary>
@@ -343,6 +349,7 @@ namespace UpdatePracticeAndSeniority
             WorkerRole.StartAutomaticUpdation(currentWithTimeZone, nextRun);
             WorkerRole.EmailUpdatedProfilesList(currentWithTimeZone, nextRun);
             WorkerRole.RunDatabaseCleanUp(currentWithTimeZone);
+            WorkerRole.RunReBuildIndexes(currentWithTimeZone);
         }
 
         /// <summary>
@@ -352,8 +359,8 @@ namespace UpdatePracticeAndSeniority
         public static void RunPayrollDistributionReport(DateTime currentDateTimeWithTimeZone)
         {
             if (
-                ((currentDateTimeWithTimeZone.Day == 3 || currentDateTimeWithTimeZone.Day == 18) && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime) 
-                || (currentDateTimeWithTimeZone.Date == new DateTime(2013,6,4).Date && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime) //Added For the sake of defect #3151 . need to remove in next update.
+                ((currentDateTimeWithTimeZone.Day == 3 || currentDateTimeWithTimeZone.Day == 18) && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime)
+                || (currentDateTimeWithTimeZone.Date == new DateTime(2013, 6, 4).Date && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime) //Added For the sake of defect #3151 . need to remove in next update.
                 )
             {
                 var sleeptime = PayrollDistributionReportScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
@@ -398,6 +405,42 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static void RunReBuildIndexes(DateTime currentDateTimeWithTimeZone)
+        {
+            if (currentDateTimeWithTimeZone.DayOfWeek == DayOfWeek.Sunday)
+            {
+                DateTime nextRun = currentDateTimeWithTimeZone.AddDays(6);
+                SqlConnection connection = null;
+                try
+                {
+                    var connectionString = WorkerRole.GetConnectionString();
+
+                    if (string.IsNullOrEmpty(connectionString))
+                        return;
+
+                    connection = new SqlConnection(connectionString);
+                    SqlCommand cmd = new SqlCommand(SP_ReBuildIndexes, connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+
+                    WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_ReBuildIndexes), nextRun);
+                }
+                catch (Exception ex)
+                {
+                    WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, FailedStatus, string.Format(FailedRunningProcedureFormat, SP_ReBuildIndexes, ex.Message), nextRun);
+                }
+                finally
+                {
+                    if (connection != null && connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Runs WelcomeEmail Task For NewHires as per the time reaches( Every day at 07:00:00).
         /// </summary>
@@ -416,7 +459,7 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
-         /// <summary>
+        /// <summary>
         /// Cache Project Summary Values Task as per the time reaches( Every day at 02:00:00).
         /// </summary>
         /// <param name="currentDateTimeWithTimeZone"></param>
@@ -802,7 +845,6 @@ namespace UpdatePracticeAndSeniority
                 result = int.Parse(GetConfigValue("SleepTimeInMin"));
 
                 result = result * 60 * 1000;
-
             }
             catch
             {
@@ -909,9 +951,9 @@ namespace UpdatePracticeAndSeniority
                 }
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Finished emailing updated profiles list.", nextRun);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, "Failed to send an email of updated profiles list due to: " + ex.Message , nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, "Failed to send an email of updated profiles list due to: " + ex.Message, nextRun);
             }
         }
 
@@ -924,7 +966,7 @@ namespace UpdatePracticeAndSeniority
         /// <param name="commaSeperatedToAddresses"></param>
         /// <param name="commaSeperatedBccAddresses"></param>
         /// <param name="attachments"></param>
-        public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, List<Attachment> attachments,bool isHighPriority = false)
+        public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, List<Attachment> attachments, bool isHighPriority = false)
         {
             if (!IsUATEnvironment || !DisableAllMails)
             {
@@ -1020,7 +1062,7 @@ namespace UpdatePracticeAndSeniority
                 }
                 connection.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 connection.Close();
                 throw ex;
@@ -1041,7 +1083,7 @@ namespace UpdatePracticeAndSeniority
 
             return client;
         }
-        
+
         /// <summary>
         /// Gives the SMTP settings object.
         /// </summary>
@@ -1125,7 +1167,6 @@ namespace UpdatePracticeAndSeniority
                     connection.Close();
                 }
             }
-
         }
 
         /// <summary>
@@ -1154,19 +1195,17 @@ namespace UpdatePracticeAndSeniority
                 }
 
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FinishedWelcomeEmails, nextRun);
-
             }
             catch (Exception ex)
             {
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(WelcomeEmailFailedFormat, ex.Message), nextRun);
             }
-
         }
 
         /// <summary>
         /// Sends activated and deactivated account emails.
         /// </summary>
-        /// <param name="terminatedPersons">Persons,who have terminated due to pay or due to termination date.</param>      
+        /// <param name="terminatedPersons">Persons,who have terminated due to pay or due to termination date.</param>
         private static void SendActivateAndDeactivateAccountEmails(List<Person> terminatedPersons, DateTime currentWithTimeZone, DateTime nextRun)
         {
             try
@@ -1188,11 +1227,9 @@ namespace UpdatePracticeAndSeniority
                         if (person.IsAdmin)
                         {
                             var administartorAddedEmail = string.Format(administratorAddedEmailTemplate.Body, person.FirstName, person.LastName);
-                            Email(administratorAddedEmailTemplate.Subject, administartorAddedEmail, true, administratorAddedEmailTemplate.EmailTemplateTo, string.Empty, null,true);
+                            Email(administratorAddedEmailTemplate.Subject, administartorAddedEmail, true, administratorAddedEmailTemplate.EmailTemplateTo, string.Empty, null, true);
                         }
-
                     }
-
                 }
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FinishedActivateDeactivateEmails, nextRun);
             }
@@ -1200,7 +1237,6 @@ namespace UpdatePracticeAndSeniority
             {
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(ActivateDeactivateEmailsFailedFormat, ex.Message), nextRun);
             }
-
         }
 
         /// <summary>
@@ -1227,7 +1263,6 @@ namespace UpdatePracticeAndSeniority
                 connection.Close();
                 throw ex;
             }
-
         }
 
         /// <summary>
@@ -1251,7 +1286,6 @@ namespace UpdatePracticeAndSeniority
                 connection.Close();
                 throw ex;
             }
-
         }
 
         /// <summary>
@@ -1261,7 +1295,6 @@ namespace UpdatePracticeAndSeniority
         /// <param name="persons"></param>
         private static void ReadPersons(SqlDataReader reader, List<Person> persons)
         {
-
             if (reader.HasRows)
             {
                 int personFirstNameIndex = reader.GetOrdinal("FirstName");
@@ -1279,7 +1312,6 @@ namespace UpdatePracticeAndSeniority
                 try
                 {
                     personIdIndex = reader.GetOrdinal("PersonId");
-
                 }
                 catch
                 {
@@ -1288,7 +1320,6 @@ namespace UpdatePracticeAndSeniority
                 try
                 {
                     personLastNameIndex = reader.GetOrdinal("LastName");
-
                 }
                 catch
                 {
@@ -1313,7 +1344,6 @@ namespace UpdatePracticeAndSeniority
                 try
                 {
                     personTerminatedDueToPayIndex = reader.GetOrdinal("IsTerminatedDueToPay");
-
                 }
                 catch
                 {
@@ -1323,7 +1353,6 @@ namespace UpdatePracticeAndSeniority
                 try
                 {
                     personReHireDateIndex = reader.GetOrdinal("ReHiredate");
-
                 }
                 catch
                 {
@@ -1332,7 +1361,6 @@ namespace UpdatePracticeAndSeniority
                 try
                 {
                     personTelephoneNumberIndex = reader.GetOrdinal("TelephoneNumber");
-
                 }
                 catch
                 {
@@ -1341,7 +1369,6 @@ namespace UpdatePracticeAndSeniority
                 try
                 {
                     personTimeScaleNameIndex = reader.GetOrdinal("TimeScaleName");
-
                 }
                 catch
                 {
@@ -1350,7 +1377,6 @@ namespace UpdatePracticeAndSeniority
                 try
                 {
                     personTitleNameIndex = reader.GetOrdinal("TitleName");
-
                 }
                 catch
                 {
@@ -1408,7 +1434,6 @@ namespace UpdatePracticeAndSeniority
                         {
                             TimescaleName = reader.IsDBNull(personTimeScaleNameIndex) ? null : reader.GetString(personTimeScaleNameIndex)
                         };
-
                     }
                     if (personTitleNameIndex != -1)
                     {
@@ -1421,7 +1446,6 @@ namespace UpdatePracticeAndSeniority
                     {
                         person.IsAdmin = reader.GetInt32(isAdministratorIndex) == 1;
                     }
-
 
                     persons.Add(person);
                 }
@@ -1462,9 +1486,7 @@ namespace UpdatePracticeAndSeniority
                                 Body = reader.GetString(emailTemplateBodyIndex)
                             };
                         }
-
                     }
-
                 }
                 connection.Close();
             }
@@ -1474,7 +1496,6 @@ namespace UpdatePracticeAndSeniority
                 throw ex;
             }
             return emailTemplate;
-
         }
 
         /// <summary>
@@ -1498,14 +1519,12 @@ namespace UpdatePracticeAndSeniority
                 cmnd.Parameters.Add(encodedPasswordParam);
                 cmnd.ExecuteNonQuery();
                 connection.Close();
-
             }
             catch (Exception ex)
             {
                 connection.Close();
                 throw ex;
             }
-
         }
 
         /// <summary>
@@ -1554,7 +1573,7 @@ namespace UpdatePracticeAndSeniority
             return randomPassword;
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }
 
