@@ -87,7 +87,7 @@ AS
 
 			--Extend the attribution end date if the project end date is extended as per the person pay/division/employment  history
 			UPDATE A
-			SET A.EndDate = CASE WHEN @NewProjectEndDate < pay.EndDate  THEN @NewProjectEndDate ELSE DATEADD(dd,-1,pay.EndDate) END
+			SET A.EndDate = CASE WHEN @NewProjectEndDate < pay.EndDate  THEN @NewProjectEndDate ELSE pay.EndDate END
 			FROM dbo.Attribution A
 			INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = A.TargetId 
 			WHERE A.ProjectId = @ProjectId 
