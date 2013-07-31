@@ -535,35 +535,7 @@ BEGIN
 		END
 	END
 
-	DELETE A
-	FROM dbo.Attribution A
-	LEFT JOIN dbo.[v_PayTimescaleHistory] pay ON pay.PersonId = A.TargetId AND (A.StartDate < pay.EndDate) AND (pay.StartDate <= A.EndDate) AND pay.Timescale IN (@W2SalaryId,@W2HourlyId)
-	WHERE A.AttributionRecordTypeId = 1 AND pay.PersonId IS NULL AND A.TargetId = @PersonId
-
-	;WITH UpdatableAttributions
-	AS
-		(
-		SELECT	A.AttributionId,	
-				A.StartDate AS AStartDate,
-				A.EndDate AS AEndDate,
-				PH.StartDate AS payStartDate,
-				PH.EndDate AS payEndDate,
-				RANK() over (PARTITION	by A.AttributionId order by PH.StartDate) as Rank
-		FROM	dbo.Attribution A
-		INNER JOIN dbo.[v_PayTimescaleHistory] PH ON PH.PersonId = A.TargetId AND (A.StartDate < PH.EndDate) AND (PH.StartDate <= A.EndDate) AND PH.Timescale IN (@W2SalaryId,@W2HourlyId)
-		WHERE A.AttributionRecordTypeId = 1 AND A.TargetId = @PersonId
-		)
-	UPDATE A
-	SET A.StartDate = CASE WHEN A.StartDate > UA.payStartDate THEN A.StartDate ELSE UA.payStartDate END,
-		A.EndDate = CASE WHEN A.EndDate < DATEADD(dd,-1,UA.payEndDate)  THEN A.EndDate ELSE DATEADD(dd,-1,UA.payEndDate) END
-	FROM UpdatableAttributions UA
-	INNER JOIN dbo.Attribution A ON A.AttributionId = UA.AttributionId 
-	WHERE UA.Rank = 1 AND
-						(
-							A.StartDate <> CASE WHEN A.StartDate > UA.payStartDate THEN A.StartDate ELSE UA.payStartDate END
-							OR
-							A.EndDate <> CASE WHEN A.EndDate < DATEADD(dd,-1,UA.payEndDate) THEN A.EndDate ELSE DATEADD(dd,-1,UA.payEndDate) END
-						)
+	EXEC [dbo].[SetCommissionsAttributions] @PersonId = @PersonId
 
 	COMMIT TRAN Tran_PaySave
 
