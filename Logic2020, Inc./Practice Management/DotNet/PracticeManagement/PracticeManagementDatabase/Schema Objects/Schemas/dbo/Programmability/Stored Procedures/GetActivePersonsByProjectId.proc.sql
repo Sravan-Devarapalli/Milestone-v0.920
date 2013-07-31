@@ -23,7 +23,7 @@ BEGIN
 			P.LastName
   FROM		dbo.Person P 
   INNER JOIN v_Pay pay ON pay.PersonId = P.PersonId AND  (@ProjectStartDate < pay.EndDateOrig) AND (pay.StartDate <= @ProjectEndDate)
-  INNER JOIN v_DivisionHistory DH ON DH.PersonId = P.PersonId AND (DH.EndDate IS NULL OR @ProjectStartDate < DH.EndDate) AND (DH.StartDate <= @ProjectEndDate) AND DH.DivisionId IN (@ConsultingDivId,@BusinessDevelopmentDivId)
+  INNER JOIN v_DivisionHistory DH ON DH.PersonId = P.PersonId AND (DH.EndDate IS NULL OR @ProjectStartDate < DH.EndDate) AND (DH.StartDate <= @ProjectEndDate) AND ISNULL(DH.DivisionId,0) IN (@ConsultingDivId,@BusinessDevelopmentDivId)
   WHERE	    P.IsStrawman = 0 --Active and Terminated Status
 			AND pay.Timescale IN (@W2SalaryId,@W2HourlyId) 
 END
