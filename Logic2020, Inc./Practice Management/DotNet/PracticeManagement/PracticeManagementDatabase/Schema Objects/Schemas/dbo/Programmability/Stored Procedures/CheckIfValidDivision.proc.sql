@@ -17,7 +17,7 @@ BEGIN
 	IF EXISTS(
 				SELECT	1
 				FROM	v_DivisionHistory DH 
-				WHERE	DH.PersonId = @PersonId AND DH.StartDate <= @EndDate AND (DH.EndDate IS NULL OR @StartDate < DH.EndDate) AND DH.DivisionId NOT IN (@ConsultingDivId,@BusinessDevelopmentDivId)
+				WHERE	DH.PersonId = @PersonId AND DH.StartDate <= @EndDate AND (DH.EndDate IS NULL OR @StartDate < DH.EndDate) AND ISNULL(DH.DivisionId,0) NOT IN (@ConsultingDivId,@BusinessDevelopmentDivId)
 			)
 		SET @NotValidPerson  = 1
 	ELSE
