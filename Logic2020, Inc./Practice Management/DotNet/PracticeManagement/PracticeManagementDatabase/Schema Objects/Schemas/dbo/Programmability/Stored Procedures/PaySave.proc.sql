@@ -525,7 +525,7 @@ BEGIN
 		SELECT	@AttributionIds = @AttributionIds + CONVERT(NVARCHAR(10),A.AttributionId) + ','
 		FROM	dbo.Attribution A
 		INNER JOIN dbo.Project P ON A.ProjectId = P.ProjectId
-		LEFT JOIN dbo.[v_PayTimescaleHistory] pay ON pay.PersonId = A.TargetId AND (A.StartDate >= pay.StartDate) AND (A.EndDate < Pay.EndDate) AND pay.Timescale IN (@W2SalaryId,@W2HourlyId)
+		LEFT JOIN dbo.[v_PayTimescaleHistory] pay ON pay.PersonId = A.TargetId AND (A.StartDate >= pay.StartDate) AND (A.EndDate <= Pay.EndDate) AND pay.Timescale IN (@W2SalaryId,@W2HourlyId)
 		WHERE A.AttributionRecordTypeId = 1 AND pay.PersonId IS NULL AND A.TargetId = @PersonId
 		IF @AttributionIds != ''
 		BEGIN
