@@ -1057,7 +1057,7 @@
             <AjaxControlToolkit:ModalPopupExtender ID="mpeAttribution" runat="server" TargetControlID="hdnAttribution"
                 BehaviorID="mpeAttributionBehaviourId" BackgroundCssClass="modalBackground" PopupControlID="pnlAttribution"
                 DropShadow="false" />
-            <asp:Panel ID="pnlAttribution" runat="server" CssClass="popUp" Style="display: none;">
+            <asp:Panel ID="pnlAttribution" runat="server" CssClass="popUp yScrollAuto" Style="display: none;">
                 <table class="WholeWidth">
                     <tr class="PopUpHeader">
                         <th colspan="2">
