@@ -41,27 +41,27 @@ BEGIN
 		INSERT INTO dbo.Attribution(ProjectId,AttributionRecordTypeId,AttributionTypeId,TargetId,StartDate,EndDate,Percentage)
 		SELECT P.ProjectId,AR.AttributionRecordId,2 AS AttributionRecordTypeId,P.DirectorId,
 					 CASE WHEN P.StartDate > pay.StartDate THEN P.StartDate ELSE pay.StartDate END,
-					 CASE WHEN P.EndDate < pay.EndDateOrig  THEN P.EndDate ELSE pay.EndDateOrig-1 END,100 AS Percentage
+					 CASE WHEN P.EndDate < pay.Enddate  THEN P.EndDate ELSE pay.Enddate END,100 AS Percentage
 		FROM dbo.Project P 
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
-		INNER JOIN v_Pay pay ON pay.PersonId = P.DirectorId 
-		WHERE P.DirectorId IS NOT NULL AND  (P.StartDate < pay.EndDateOrig) AND (pay.StartDate <= P.EndDate) AND pay.Timescale IN (@W2SalaryTimescaleId,@W2HourlyTimescaleId)
+		INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = P.DirectorId 
+		WHERE P.DirectorId IS NOT NULL AND  (P.StartDate <= pay.Enddate) AND (pay.StartDate <= P.EndDate)
 		UNION 
 		SELECT  P.ProjectId,AR.AttributionRecordId,2,P.SeniorManagerId,
 					 CASE WHEN P.StartDate > pay.StartDate THEN P.StartDate ELSE pay.StartDate END,
-					 CASE WHEN P.EndDate < pay.EndDateOrig  THEN P.EndDate ELSE pay.EndDateOrig-1 END,100 AS Percentage
+					 CASE WHEN P.EndDate < pay.EndDate  THEN P.EndDate ELSE pay.EndDate END,100 AS Percentage
 		FROM dbo.Project P 
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
-		INNER JOIN v_Pay pay ON pay.PersonId =  P.SeniorManagerId AND  (P.StartDate <= pay.EndDateOrig) AND (pay.StartDate <= P.EndDate)
-		WHERE P.SeniorManagerId IS NOT NULL AND  (P.StartDate < pay.EndDateOrig) AND (pay.StartDate <= P.EndDate) AND pay.Timescale IN (@W2SalaryTimescaleId,@W2HourlyTimescaleId)
+		INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId =  P.SeniorManagerId 
+		WHERE P.SeniorManagerId IS NOT NULL AND  (P.StartDate <= pay.EndDate) AND (pay.StartDate <= P.EndDate)
 		UNION
 		SELECT  P.ProjectId,AR.AttributionRecordId,1,P.SalesPersonId,
 					 CASE WHEN P.StartDate > pay.StartDate THEN P.StartDate ELSE pay.StartDate END,
-					 CASE WHEN P.EndDate < pay.EndDateOrig  THEN P.EndDate ELSE pay.EndDateOrig-1 END,100 AS Percentage
+					 CASE WHEN P.EndDate < pay.EndDate  THEN P.EndDate ELSE pay.EndDate END,100 AS Percentage
 		FROM dbo.Project P
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
-		INNER JOIN v_Pay pay ON pay.PersonId = P.SalesPersonId AND  (P.StartDate <= pay.EndDateOrig) AND (pay.StartDate <= P.EndDate)
-		WHERE P.SalesPersonId IS NOT NULL AND  (P.StartDate < pay.EndDateOrig) AND (pay.StartDate <= P.EndDate) AND pay.Timescale IN (@W2SalaryTimescaleId,@W2HourlyTimescaleId)
+		INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = P.SalesPersonId 
+		WHERE P.SalesPersonId IS NOT NULL AND  (P.StartDate <= pay.EndDate) AND (pay.StartDate <= P.EndDate)
 		UNION
 		SELECT P.ProjectId,AR.AttributionRecordId,AT.AttributionTypeId,P.PracticeId,NULL,NULL,100
 		FROM dbo.Project P
