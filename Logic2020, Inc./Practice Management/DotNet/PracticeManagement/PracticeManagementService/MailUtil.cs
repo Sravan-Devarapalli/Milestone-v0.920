@@ -41,6 +41,21 @@ namespace PracticeManagementService
             }
         }
 
+        private static bool IsMailsEnable
+        {
+            get
+            {
+                try
+                {
+                    return ConfigurationManager.AppSettings["IsMailsEnable"] == "1";
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
         /// <summary>
         /// Sends a notification to user with his/her credentials.
         /// </summary>
@@ -172,6 +187,8 @@ namespace PracticeManagementService
         /// <param name="attachments"></param>
         public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, List<Attachment> attachments, bool isHighPriority = false, string commaSeperatedToAddressesDisplayNames = "", string commaSeperatedCCAddresses = "")
         {
+            if (!IsMailsEnable && IsUAT)
+                return;
             var smtpSettings = SettingsHelper.GetSMTPSettings();
 
             MailMessage message = new MailMessage { Priority = isHighPriority ? MailPriority.High : MailPriority.Normal };
@@ -240,3 +257,4 @@ namespace PracticeManagementService
         #endregion Methods
     }
 }
+
