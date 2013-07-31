@@ -116,7 +116,7 @@
                 TargetControlID="hdnConsultantToContract" PopupControlID="pnlConsultantToContract"
                 BackgroundCssClass="modalBackground" DropShadow="false">
             </AjaxControlToolkit:ModalPopupExtender>
-            <asp:Panel ID="pnlConsultantToContract" runat="server" Style="display: none;" CssClass="popUpAttrition">
+            <asp:Panel ID="pnlConsultantToContract" runat="server" Style="display: none;" CssClass="popUpAttrition yScrollAuto">
                 <table>
                     <tr>
                         <td>
