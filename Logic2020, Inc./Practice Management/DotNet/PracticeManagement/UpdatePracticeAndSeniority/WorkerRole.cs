@@ -385,6 +385,7 @@ namespace UpdatePracticeAndSeniority
                     connection = new SqlConnection(connectionString);
                     SqlCommand cmd = new SqlCommand(SP_DatabaseCleanUpObjects, connection);
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 1000;
                     connection.Open();
                     cmd.ExecuteNonQuery();
                     connection.Close();
@@ -421,6 +422,7 @@ namespace UpdatePracticeAndSeniority
                     connection = new SqlConnection(connectionString);
                     SqlCommand cmd = new SqlCommand(SP_ReBuildIndexes, connection);
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandTimeout = 1000;
                     connection.Open();
                     cmd.ExecuteNonQuery();
                     connection.Close();
