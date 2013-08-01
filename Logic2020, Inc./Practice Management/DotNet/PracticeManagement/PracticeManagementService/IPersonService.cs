@@ -455,7 +455,7 @@ namespace PracticeManagementService
                                                                 int divisionId, bool IsReHire);
 
         [OperationContract]
-        bool CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate);
+        Person CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate);
     }
 }
 
