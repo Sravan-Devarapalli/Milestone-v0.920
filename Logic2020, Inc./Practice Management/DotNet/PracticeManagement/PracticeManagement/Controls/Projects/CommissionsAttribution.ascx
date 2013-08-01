@@ -80,15 +80,14 @@
                                         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
                                             ErrorMessage="Delivery Attribution: The person name is required." ToolTip="The person name is required."
                                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                        <asp:CustomValidator runat="server" ID="custValidRange" Display="Dynamic" ErrorMessage="Delivery Attribution: The start date and end date of the person is not within the hire date and termination range."
-                                            ToolTip="The start date and end date of the person is not within the hire date and termination range."
+                                        <asp:CustomValidator runat="server" ID="custValidRange" Display="Dynamic" ErrorMessage="Delivery Attribution: The start date and end date of the person is not within the individual's hire date and termination range."
+                                            ToolTip="The start date and end date of the person is not within the individual's hire date and termination range."
                                             OnServerValidate="custValidRange_ServerValidate" Text="*"></asp:CustomValidator>
                                         <asp:CustomValidator runat="server" ID="custPaytypeValidation" Display="Dynamic"
                                             ErrorMessage="Delivery Attribution: The person is not a 'W2-Hourly/W2-Salary' during the period."
                                             ToolTip="The person is not a 'W2-Hourly/W2-Salary' during the period." Text="*"
                                             OnServerValidate="custPaytypeValidation_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic" ErrorMessage="Delivery Attribution: The person is not a 'Consulting/Business Developement' division during the period."
-                                            ToolTip=" The person is not a 'Consulting/Business Developement' division during the period."
+                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic" 
                                             Text="*" OnServerValidate="custDivision_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -261,15 +260,14 @@
                                         <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
                                             ErrorMessage="Sales Attribution: The person Name is required." ToolTip="The Person Name is required."
                                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                        <asp:CustomValidator runat="server" ID="custValidRange" Display="Dynamic" ErrorMessage="Sales Attribution: The start date and end date of the person is not within the hire date and termination range."
-                                            ToolTip="The start date and end date of the person is not within the hire date and termination range."
+                                        <asp:CustomValidator runat="server" ID="custValidRange" Display="Dynamic" ErrorMessage="Sales Attribution: The start date and end date of the person is not within the individual's hire date and termination range."
+                                            ToolTip="The start date and end date of the person is not within the individual's hire date and termination range."
                                             OnServerValidate="custValidRange_ServerValidate" Text="*"></asp:CustomValidator>
                                         <asp:CustomValidator runat="server" ID="custPaytypeValidation" Display="Dynamic"
                                             ErrorMessage="Sales Attribution: The person is not a 'W2-Hourly/W2-Salary' during the period."
                                             ToolTip="The person is not a 'W2-Hourly/W2-Salary' during the period." Text="*"
                                             OnServerValidate="custPaytypeValidation_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic" ErrorMessage="Sales Attribution: The person is not a 'Consulting/Business Developement' division during the period."
-                                            ToolTip=" The person is not a 'Consulting/Business Developement' division during the period."
+                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic"
                                             Text="*" OnServerValidate="custDivision_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
