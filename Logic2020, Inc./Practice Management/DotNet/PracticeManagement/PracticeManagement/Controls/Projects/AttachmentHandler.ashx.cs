@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
-using System.IO;
 
 namespace PraticeManagement.Controls.Projects
 {
@@ -12,7 +12,6 @@ namespace PraticeManagement.Controls.Projects
     /// </summary>
     public class ProjectAttachmentHandler : IHttpHandler
     {
-
         public void ProcessRequest(HttpContext context)
         {
             int projectId = Convert.ToInt32(context.Request.QueryString["ProjectId"]);
@@ -23,13 +22,13 @@ namespace PraticeManagement.Controls.Projects
             AttachmentService.AttachmentService svc = Utils.WCFClientUtility.GetAttachmentService();
 
             attachmentData = svc.GetProjectAttachmentData(projectId, attachmentId);
-                     
-            context.Response.ContentType = "application/octet-stream";            
+
+            context.Response.ContentType = "application/octet-stream";
 
             FileName = FileName.Replace(' ', '_');
             FileName = String.Concat(Encoding.UTF8.GetBytes(FileName).Select(b =>
              {
-                 if ((b >= 48 && b <= 57) || (b >= 65 && b <= 90) || (b >= 97 && b <= 122))
+                 if ((b >= 48 && b <= 57) || (b >= 65 && b <= 90) || (b >= 97 && b <= 122) || b == 46)
                  {
                      return new String((char)b, 1);
                  }
@@ -57,6 +56,7 @@ namespace PraticeManagement.Controls.Projects
                 }
             }
         }
+
         public bool IsReusable
         {
             get
