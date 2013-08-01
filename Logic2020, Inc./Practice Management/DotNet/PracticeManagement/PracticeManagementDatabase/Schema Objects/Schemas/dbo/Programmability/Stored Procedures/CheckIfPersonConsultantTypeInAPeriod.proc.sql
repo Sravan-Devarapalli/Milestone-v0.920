@@ -15,13 +15,13 @@ BEGIN
 	SELECT	@W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
 	
 	IF EXISTS(
-				SELECT	1
-				FROM	v_Pay P 
-				WHERE	P.PersonId = @PersonId AND P.StartDate <= @EndDate AND (@StartDate < P.EndDateOrig) AND P.Timescale NOT IN (@W2SalaryId,@W2HourlyId)
+				SELECT	*
+				FROM	v_PayTimescaleHistory P 
+				WHERE	P.PersonId = @PersonId AND P.StartDate <= @StartDate  AND (@EndDate <=  P.EndDate) AND P.Timescale IN (@W2SalaryId,@W2HourlyId)
 			)
-		SET @NotValidPerson  = 1
+		SET @NotValidPerson  = 0
 	ELSE
-		SET @NotValidPerson = 0
+		SET @NotValidPerson = 1
 
 	SELECT @NotValidPerson
 
