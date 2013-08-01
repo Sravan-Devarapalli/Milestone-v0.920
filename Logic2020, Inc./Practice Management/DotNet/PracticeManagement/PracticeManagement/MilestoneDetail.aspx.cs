@@ -56,7 +56,7 @@ namespace PraticeManagement
                                                                     @"Select Cancel to select another end date or to manually update Resource(s) attached to this milestone.</p>" + "<br/>";
 
         private const string format = "{0} {1} ({2})";
-        private const string lblCommissionsMessage = "Attribution {0} date will change based on the change to the project milestone.";
+        private const string lblCommissionsMessage = "Attribution {0} date will change from {1} to {2} based on the change to the project milestone.";
 
         #endregion Constants
 
@@ -865,20 +865,14 @@ namespace PraticeManagement
                                                                 dtpPeriodTo.DateValue)
                                    .ToList();
                 }
-                if (MilestoneId !=null && SelectedProjectId != null && (extendAttributionDates[0] || extendAttributionDates[1]))
+                if (SelectedProjectId != null && (extendAttributionDates[0] || extendAttributionDates[1]))
                 {
-                    DateTime PeriodFrom = hdnPeriodFrom.Value == string.Empty
-                                              ? Project.StartDate.Value
-                                              : Convert.ToDateTime(hdnPeriodFrom.Value);
-                    DateTime PeriodTo = hdnPeriodFrom.Value == string.Empty
-                                            ? Project.EndDate.Value
-                                            : Convert.ToDateTime(hdnPeriodTo.Value);
                     IsAttributionPanelDisplayed = true;
                     mpeAttribution.Show();
                     if (extendAttributionDates[0])
                     {
                         trCommissionsStartDateExtend.Visible = true;
-                        lblCommissionsStartDateExtendMessage.Text = string.Format(lblCommissionsMessage, "start date");
+                        lblCommissionsStartDateExtendMessage.Text = string.Format(lblCommissionsMessage, "start date", Project.StartDate.Value.ToShortDateString(), dtpPeriodFrom.DateValue.ToShortDateString());
                     }
                     else
                     {
@@ -887,7 +881,7 @@ namespace PraticeManagement
                     if (extendAttributionDates[1])
                     {
                         trCommissionsEndDateExtend.Visible = true;
-                        lblCommissionsEndDateExtendMessage.Text = string.Format(lblCommissionsMessage, "end date");
+                        lblCommissionsEndDateExtendMessage.Text = string.Format(lblCommissionsMessage, "end date",Project.EndDate.Value.ToShortDateString(),dtpPeriodTo.DateValue.ToShortDateString());
                     }
                     else
                     {
