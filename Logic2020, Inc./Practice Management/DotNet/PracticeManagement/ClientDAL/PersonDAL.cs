@@ -3582,7 +3582,7 @@ namespace DataAccess
             return result;
         }
 
-        public static bool CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate)
+        public static Person CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (
@@ -3596,8 +3596,34 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
                 connection.Open();
-                return ((bool)command.ExecuteScalar());
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                   return ReadDivision(reader);
+                }
             }
+        }
+
+        private static Person ReadDivision(SqlDataReader reader)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+                while (reader.Read())
+                {
+                    Person person = new Person()
+                      {
+                          Id = reader.GetInt32(personIdIndex),
+                          HireDate = reader.GetDateTime(startDateIndex),
+                          TerminationDate = reader.IsDBNull(endDateIndex) ? (DateTime?)null : reader.GetDateTime(endDateIndex),
+                          DivisionType = (PersonDivisionType)(reader.IsDBNull(divisionIdIndex)?0:reader.GetInt32(divisionIdIndex))
+                      };
+                    return person;
+                }
+            }
+            return null;
         }
     }
 }
