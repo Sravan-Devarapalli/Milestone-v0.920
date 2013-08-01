@@ -24,6 +24,7 @@ namespace PraticeManagement.Controls.Projects
         private const string deliveryPracticeAttribution = "DeliveryPractice";
         private const string salesPersonAttribution = "SalesPerson";
         private const string salesPracticeAttribution = "SalesPractice";
+        private const string divisionChangeMessage = "{0} Attribution: The individual's division is {1} from {2}";
 
         #endregion Constants
 
@@ -998,17 +999,32 @@ namespace PraticeManagement.Controls.Projects
             args.IsValid = true;
             CustomValidator custValidRang = source as CustomValidator;
             GridViewRow row = custValidRang.NamingContainer as GridViewRow;
+            GridView gridView = row.NamingContainer as GridView;
             DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
             DatePicker dpStartDate = row.FindControl("dpStartDate") as DatePicker;
             DropDownList ddlPerson = row.FindControl("ddlPerson") as DropDownList;
             DateTime startDate;
             DateTime endDate;
             int personId;
+            int attribution;
+            int.TryParse(gridView.Attributes["Attribution"], out attribution);
             if (int.TryParse(ddlPerson.SelectedValue, out personId))
             {
                 DateTime.TryParse(dpStartDate.DateValue.ToShortDateString(), out startDate);
                 DateTime.TryParse(dpEndDate.DateValue.ToShortDateString(), out endDate);
-                args.IsValid = !(ServiceCallers.Custom.Person(p => p.CheckIfValidDivision(personId, startDate, endDate)));
+                Person person = ServiceCallers.Custom.Person(p => p.CheckIfValidDivision(personId, startDate, endDate));
+                if (person !=null)
+                {
+                    custValidRang.ErrorMessage =
+                        custValidRang.ToolTip =
+                        string.Format(divisionChangeMessage, attribution == 1 ? "Delivery" : "Sales",
+                                      person.DivisionType.ToString(),
+                                      person.TerminationDate.HasValue
+                                          ? person.HireDate.ToShortDateString() + " to " +
+                                            person.TerminationDate.Value.ToShortDateString() + "."
+                                          : person.HireDate.ToShortDateString());
+                }
+                args.IsValid = person == null;
             }
         }
 
