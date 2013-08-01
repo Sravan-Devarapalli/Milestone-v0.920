@@ -28,20 +28,21 @@ if (navigator.plugins != null && navigator.plugins.length > 0) {
         var versionMinor = tempArrayMajor[1];
         var versionRevision = descArray[3];
         if (versionRevision == "") {
-            versionRevision = descArray[4]
+            versionRevision = descArray[4];
         }
         if (versionRevision[0] == "d") {
-            versionRevision = versionRevision.substring(1)
+            versionRevision = versionRevision.substring(1);
         }
         else {
             if (versionRevision[0] == "r") {
                 ersionRevision = versionRevision.substring(1);
                 if (versionRevision.indexOf("d") > 0) {
-                    versionRevision = versionRevision.substring(0, versionRevision.indexOf("d"))
+                    versionRevision = versionRevision.substring(0, versionRevision.indexOf("d"));
                 }
             }
         }
-        var flashVer = versionMajor + "." + versionMinor + "." + versionRevision
+        var flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
+        flashVer = flashVer.split(".")[0];
     }
 }
 else {
@@ -51,13 +52,14 @@ else {
         var e;
         try {
             axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
-            version = axo.GetVariable("$version")
+            version = axo.GetVariable("$version");
+            flashVer = version.replace("WIN ", "").replace(",", ".");
+            flashVer = flashVer.split(".")[0];
         }
         catch (e) { }
-        flashVer = version.replace("WIN ", "").replace(",", ".")
     }
 }
-flashVer = flashVer.split(".")[0];
+
 if (jQuery) {
     (function (a) {
         a.extend(a.fn, {
