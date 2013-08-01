@@ -1109,7 +1109,7 @@ namespace PracticeManagementService
             return PersonDAL.GetCommissionsValidationByPersonId(personId, hireDate, terminationDate, personStatusId,divisionId, IsReHire);
         }
 
-        public bool CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate)
+        public Person CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate)
         {
             return PersonDAL.CheckIfValidDivision(personId, startDate, endDate);
         }
