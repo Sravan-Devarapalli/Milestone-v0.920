@@ -15,12 +15,16 @@ BEGIN
 				@ConsultingDivId	INT,
 				@BusinessDevelopmentDivId INT,
 				@ProjectStartDate	DATETIME,
-				@ProjectEndDate		DATETIME
+				@ProjectEndDate		DATETIME,
+				@CurrentDate		DATETIME
 
 	  SELECT	@W2SalaryId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
 	  SELECT	@W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
 	  SELECT    @ConsultingDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Consulting'
 	  SELECT    @BusinessDevelopmentDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Business Development'
+	  SELECT	@CurrentDate = dbo.GettingPMTime(GETUTCDATE())
+
+	  SET	@TerminationDate = CASE WHEN @TerminationDate < @CurrentDate THEN @TerminationDate ELSE NULL END
 
 	  ;WITH PersonDivisionCTE
 	  AS
@@ -58,7 +62,7 @@ BEGIN
 		( 
 		@IsReHire = 0 AND (ph.personrank = 1 OR ((PH.PersonStatusId <> 2 OR PH.TerminationDate IS NULL OR PH.TerminationDate >= A.EndDate) AND PH.HireDate <= A.StartDate))
 		AND
-		(ph.personrank <> 1 OR ((@PersonStatusId <> 2 OR @TerminationDate IS NULL OR @TerminationDate >= A.EndDate) AND @HireDate <= A.StartDate))
+		(ph.personrank <> 1 OR ((@TerminationDate IS NULL OR @TerminationDate >= A.EndDate) AND @HireDate <= A.StartDate))
 		)
 	OR 
 	(
