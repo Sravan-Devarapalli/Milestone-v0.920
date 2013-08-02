@@ -5,9 +5,9 @@
 	(
 	SELECT ph.PersonId,
 	  CASE WHEN ph.HireDate < pay.StartDate THEN pay.StartDate ELSE ph.HireDate END AS Startdate,
-	  CASE WHEN ph.TerminationDate IS NOT NULL AND ph.TerminationDate < pay.EndDate THEN ph.TerminationDate ELSE pay.EndDate END AS Enddate
+	  CASE WHEN ph.PersonStatusId = 2 AND ph.TerminationDate < pay.EndDate THEN ph.TerminationDate ELSE pay.EndDate END AS Enddate
 	FROM v_PersonHistory ph
-	INNER JOIN v_paytimescalehistory pay ON ph.PersonId = pay.personid AND ph.HireDate <= pay.EndDate AND (ph.TerminationDate IS NULL OR  pay.StartDate <= ph.TerminationDate)
+	INNER JOIN v_paytimescalehistory pay ON ph.PersonId = pay.personid AND ph.HireDate <= pay.EndDate AND (ph.PersonStatusId <> 2 OR ph.TerminationDate IS NULL OR  pay.StartDate <= ph.TerminationDate)
 	WHERE pay.Timescale IN (1,2) --W2Salary,W2Hourly
 	)
 	SELECT ph.PersonId,
