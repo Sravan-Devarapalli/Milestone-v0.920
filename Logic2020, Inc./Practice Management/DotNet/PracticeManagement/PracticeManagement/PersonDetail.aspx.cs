@@ -3035,10 +3035,12 @@ namespace PraticeManagement
             txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
             ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
             txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
-            if ((int)person.DivisionType != 0)
+            if ((int) person.DivisionType != 0)
             {
-                ddlDivision.SelectedValue = ((int)person.DivisionType).ToString();
+                ddlDivision.SelectedValue = ((int) person.DivisionType).ToString();
             }
+            else
+                ddlDivision.SelectedValue = string.Empty;
 
             PopulatePracticeDropDown(person);
             PopulateRecruiterDropDown(person);
