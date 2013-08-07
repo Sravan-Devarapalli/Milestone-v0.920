@@ -354,7 +354,7 @@ namespace PraticeManagement.Controls.TimeEntry
 
             if (selectedVal != string.Empty)
             {
-                imgNote.ToolTip = tbNotes.Text + " Approved By " + ddlApprovedManagers.SelectedItem.Text + ".";
+                imgNote.ToolTip = tbNotes.Text + (selectedVal == HostingPage.SelectedPerson.Id.Value.ToString() ? " Entered By " : " Approved By ") + ddlApprovedManagers.SelectedItem.Text + ".";
             }
             else
             {
@@ -416,7 +416,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     tbActualHours.Attributes["readonly"] = "readonly";
                     tbActualHours.Attributes["class"] = "bgColorWhiteImp";
-                    
+
                 }
                 else
                 {
@@ -460,8 +460,11 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.Attribute(XName.Get("ActualHours")).Value = tbActualHours.Text;
                 element.Attribute(XName.Get("Note")).Value = tbNotes.Text;
                 element.Attribute(XName.Get("IsDirty")).Value = hfDirtyHours.Value;
-                element.Attribute(XName.Get("ApprovedById")).Value = isORT ? ddlApprovedManagers.SelectedValue : string.Empty;
-                element.Attribute(XName.Get("ApprovedByName")).Value = isORT ? ddlApprovedManagers.SelectedItem.Text : string.Empty;
+                if (isORT)
+                {
+                    element.Attribute(XName.Get("ApprovedById")).Value = ddlApprovedManagers.SelectedValue;
+                    element.Attribute(XName.Get("ApprovedByName")).Value = ddlApprovedManagers.SelectedItem.Text;
+                }
             }
             else
             {
@@ -470,8 +473,11 @@ namespace PraticeManagement.Controls.TimeEntry
                 element.SetAttributeValue(XName.Get("Note"), tbNotes.Text);
                 element.SetAttributeValue(XName.Get("EntryDate"), time.ToString(Constants.Formatting.EntryDateFormat));
                 element.SetAttributeValue(XName.Get("IsDirty"), hfDirtyHours.Value);
-                element.SetAttributeValue(XName.Get("ApprovedById"), isORT ? ddlApprovedManagers.SelectedValue : string.Empty);
-                element.SetAttributeValue(XName.Get("ApprovedByName"), isORT ? ddlApprovedManagers.SelectedItem.Text : string.Empty);
+                if (isORT)
+                {
+                    element.SetAttributeValue(XName.Get("ApprovedById"), ddlApprovedManagers.SelectedValue);
+                    element.SetAttributeValue(XName.Get("ApprovedByName"), ddlApprovedManagers.SelectedItem.Text);
+                }
             }
         }
 
