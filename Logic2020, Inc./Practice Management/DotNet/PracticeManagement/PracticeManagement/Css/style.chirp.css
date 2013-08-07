@@ -7770,6 +7770,10 @@ table#ctl00_body_login tr td label
 {
     float: right;
 }
+.fileUploadQueueItem .cancel, .WarningFile .cancel
+{
+    float: right;
+}
 .fileUploadProgress
 {
     background-color: #FFFFFF;
@@ -7798,6 +7802,14 @@ table#ctl00_body_login tr td label
     font: 11px Verdana, Geneva, sans-serif;
     background-color: #FDE5DD;
     border: 3px solid #FBCBBC;
+    margin-top: 5px;
+    padding: 10px;
+}
+.WarningFile
+{
+    font: 11px Verdana, Geneva, sans-serif;
+    background-color: #FFFFAA;
+    border: 3px solid #FFFFD9;
     margin-top: 5px;
     padding: 10px;
 }
