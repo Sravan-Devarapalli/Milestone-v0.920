@@ -78,9 +78,9 @@ namespace PracticeManagementService
             return CalendarDAL.GetRecurringHolidaysInWeek(date, personId);
         }
 
-        public void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy, DateTime? OldSeriesStartDate)
+        public void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy, DateTime? OldSeriesStartDate,bool isFromAddTimeOffBtn)
         {
-            CalendarDAL.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin, approvedBy, OldSeriesStartDate);
+            CalendarDAL.SaveTimeOff(startDate, endDate, dayOff, personId, actualHours, timeTypeId, userLogin, approvedBy, OldSeriesStartDate, isFromAddTimeOffBtn);
         }
 
         public Quadruple<DateTime, DateTime, int?, string> GetTimeOffSeriesPeriod(int personId, DateTime date)
