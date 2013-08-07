@@ -14,6 +14,8 @@ BEGIN
 
 	 -- IF Delete Fires 
    
+   EXEC SessionLogPrepare @UserLogin = NULL
+
    IF NOT EXISTS (SELECT 1 FROM INSERTED)
    BEGIN
     
@@ -126,6 +128,7 @@ BEGIN
 																AND pc.Date BETWEEN Tpc.SeriesStartDate AND TPC.SeriesEndDate
 
 	END 
-
+	-- End logging session
+	 EXEC dbo.SessionLogUnprepare
 END
 
