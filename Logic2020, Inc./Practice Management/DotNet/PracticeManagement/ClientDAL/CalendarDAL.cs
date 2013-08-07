@@ -489,7 +489,7 @@ namespace DataAccess
             }
         }
 
-        public static void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy, DateTime? OldSeriesStartDate)
+        public static void SaveTimeOff(DateTime startDate, DateTime endDate, bool dayOff, int personId, double? actualHours, int timeTypeId, string userLogin, int? approvedBy, DateTime? OldSeriesStartDate,bool isFromAddTimeOffBtn)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Calendar.SaveTimeOffProcedure, connection))
@@ -506,7 +506,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ApprovedByParam, approvedBy.HasValue ? (object)approvedBy : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.OldStartDate, OldSeriesStartDate.HasValue ? (object)OldSeriesStartDate.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsFromAddTimeOffButton, isFromAddTimeOffBtn);
                 connection.Open();
                 command.ExecuteNonQuery();
             }
@@ -614,3 +614,4 @@ namespace DataAccess
         #endregion Methods
     }
 }
+
