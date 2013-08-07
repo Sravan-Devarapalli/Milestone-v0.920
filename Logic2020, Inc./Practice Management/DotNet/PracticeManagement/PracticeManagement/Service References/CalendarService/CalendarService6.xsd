@@ -142,6 +142,7 @@
         <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="approvedBy" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="OldSeriesStartDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="isFromAddTimeOffBtn" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
