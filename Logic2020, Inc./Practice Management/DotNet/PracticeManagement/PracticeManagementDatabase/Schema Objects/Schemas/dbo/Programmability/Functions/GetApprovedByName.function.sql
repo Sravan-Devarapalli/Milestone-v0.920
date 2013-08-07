@@ -17,8 +17,7 @@ AS
         DECLARE @ApprovedBy NVARCHAR(1000)
         SET @ApprovedBy = ''
 
-        SELECT  @ApprovedBy = ' Approved by ' + P.FirstName + ' ' + p.LastName
-                + '.'
+        SELECT  @ApprovedBy = CASE WHEN  PC.ApprovedBy = Pc.PersonId THEN ' Entered by ' ELSE  ' Approved by ' END + P.FirstName + ' ' + p.LastName + '.'
         FROM    dbo.PersonCalendar AS PC
                 INNER JOIN dbo.Person AS P ON P.PersonId = PC.ApprovedBy
         WHERE   PC.Date = @Date
