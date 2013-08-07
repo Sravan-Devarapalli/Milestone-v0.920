@@ -36,7 +36,7 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
     <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="Scripts/FilterTable.min.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.uploadify.min.js?Id=20" type="text/javascript"></script>
+    <script src="Scripts/jquery.uploadify.min.js?Id=21" type="text/javascript"></script>
     <uc:LoadingProgress ID="loadingProgress" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
@@ -47,7 +47,7 @@
 
                     document.onkeypress = enterPressed;
                     $("#<%=fuAttachmentsUpload.ClientID%>").fileUpload({
-                        'uploader': 'Scripts/uploaderRemovedFolder.swf',
+                        'uploader': 'Scripts/uploaderRemovedFolder1.swf',
                         'cancelImg': 'Images/close_16.png',
                         'buttonText': 'Browse File(s)',
                         'script': 'Controls/Projects/AttachmentUpload.ashx',
@@ -55,6 +55,8 @@
                         'fileDesc': 'Excel;Word doc;PDF;PowerPoint;MS Project;Visio;Exchange;ZIP;RAR;OneNote',
                         'multi': true,
                         'auto': false,
+                        'allowSpecialChars': false,
+                        'ValidChars': '._',
                         'sizeLimit': 4294656, //4194kb - 4294656bytes
                         onComplete: function (event, queueID, fileObj, reponse, data) {
                             var div = document.getElementById('<%= uploadedFiles.ClientID%>');
