@@ -584,6 +584,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.TitleType1.datasource" />
     <None Include="Scripts\uploader.fla" />
     <None Include="Scripts\uploaderRemovedFolder.fla" />
+    <None Include="Scripts\uploaderRemovedFolder1.fla" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.wsdl" />
     <None Include="Service References\ActivityLogService\ActivityLogService1.xsd">
       <SubType>Designer</SubType>
@@ -977,6 +978,8 @@
     <None Include="Service References\ClientService\ClientService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <Content Include="Scripts\UploaderRemovedFolder1.js" />
+    <Content Include="Scripts\uploaderRemovedFolder1.swf" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\NPOI.dll" />
     <Content Include="TimEntry_New.xml">
