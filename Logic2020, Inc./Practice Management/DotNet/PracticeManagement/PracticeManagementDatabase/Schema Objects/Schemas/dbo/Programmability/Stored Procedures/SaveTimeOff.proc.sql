@@ -15,7 +15,8 @@ CREATE PROCEDURE [dbo].[SaveTimeOff]
       @ActualHours REAL ,
       @TimeTypeId INT ,
       @ApprovedBy INT,
-	  @OldStartDate DATETIME = NULL
+	  @OldStartDate DATETIME = NULL,
+	  @IsFromAddTimeOffButton BIT = 0
     )
 AS 
     BEGIN
@@ -36,6 +37,7 @@ AS
 		Update TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and exists with different ACTUAL HOURS in TimeEntry table.
 		Insert TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and not exists in TimeEntry table ONLY for w2salaried/w2hourly persons.
 	*/
+		
         DECLARE @Today			DATETIME ,
             @CurrentPMTime		DATETIME ,
             @ModifiedBy			INT ,
@@ -44,8 +46,10 @@ AS
             @ORTTimeTypeId		INT,
 			@UnpaidTimeTypeId	INT,
 			@W2SalaryId			INT,
-			@W2HourlyId			INT
-			
+			@W2HourlyId			INT,
+			@IsUpdate			BIT=0,
+			@SeriesId			INT = NULL
+		   
         SELECT  @Today = dbo.GettingPMTime(GETUTCDATE()) ,
                 @CurrentPMTime = dbo.InsertingTime() ,
                 @HolidayTimeTypeId = dbo.GetHolidayTimeTypeId() ,
@@ -62,7 +66,23 @@ AS
         WHERE   TimeTypeId = @TimeTypeId
        
 	--SELECT @ApprovedBy = CASE WHEN @ApprovedBy IS NOT NULL THEN @ApprovedBy ELSE @ModifiedBy END
-
+			DECLARE @PersonCalendarLog TABLE(
+											Id					INT,
+											StartDate			DATETIME,
+											EndDate			DATETIME,
+											[PersonId]			INT,
+											[DayOff]			BIT,
+											[ActualHours]		REAL,
+											[IsSeries]			BIT,
+											[TimeTypeId]		INT,
+											[SubstituteDate]	DATETIME ,
+											[Description]		NVARCHAR(500) ,
+											[IsFromTimeEntry]	BIT ,
+											[ApprovedBy]		INT ,
+											[SeriesId]          BIGINT,
+											IsUpdate			INT, --P.IsUpdate = 0 FOR INSERT ,1 FOR UPDATE,2 FOR DELETE
+											IsNewRow			BIT   --IsNewRow = 1 for insert into table,0 for others
+										   )
         BEGIN TRY
             BEGIN TRANSACTION tran_SaveTimeOff
 
@@ -96,6 +116,37 @@ AS
                         END
 
 		     --DELETE OLD Time-OFFS (AS PER #3133 DEFECT) 
+			                SET @SeriesId = (SELECT TOP 1 SeriesId 
+											FROM PersonCalendar PC
+											WHERE PC.Date=@OldStartDate AND PC.PersonId=@PersonId AND PC.DayOff=1)
+					IF @SeriesId IS NOT NULL
+					BEGIN
+					     SET @IsUpdate = 1
+						 INSERT INTO @PersonCalendarLog(Id,StartDate,EndDate,SeriesId)
+						 SELECT		ROW_NUMBER() OVER(ORDER BY MIN(P.Date)),
+									MIN(P.Date),
+									MAX(P.Date),
+									@SeriesId
+						 FROM dbo.PersonCalendar P
+						 WHERE P.SeriesId = @SeriesId
+						 GROUP BY P.SeriesId
+						 
+						UPDATE  P
+						SET P.DayOff = PC.DayOff,
+							P.PersonId = PC.PersonId,
+							P.ActualHours = PC.ActualHours,
+							P.IsSeries = PC.IsSeries,
+							P.TimeTypeId = PC.TimeTypeId,
+							P.SubstituteDate = PC.SubstituteDate,
+							P.Description = PC.Description,
+							P.IsFromTimeEntry =PC.IsFromTimeEntry,
+							P.ApprovedBy = @ApprovedBy,
+							P.IsUpdate = @IsUpdate,
+							P.IsNewRow = 0
+						FROM @PersonCalendarLog P
+						JOIN PersonCalendar PC ON PC.SeriesId = P.SeriesId
+					END
+
 					DELETE  P
 					FROM dbo.PersonCalendar P
                     WHERE P.SeriesId=(
@@ -122,6 +173,43 @@ AS
                                         )
 
 				--delete old Offs.
+				IF (@IsFromAddTimeOffButton = 0)
+				BEGIN
+				    SET @SeriesId = NULL
+					SELECT TOP 1 @SeriesId = PC.SeriesId 
+					FROM    dbo.PersonCalendar PC
+					JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId
+                    AND PC.Date = DEH.Date
+
+					IF @SeriesId IS NOT NULL
+					BEGIN
+						SET @IsUpdate = 1
+					END
+
+					INSERT INTO @PersonCalendarLog(Id,StartDate,EndDate,SeriesId,IsUpdate)
+					SELECT      ROW_NUMBER() OVER(ORDER BY CASE WHEN MIN(P.Date) > @StartDate THEN MIN(P.Date) ELSE @StartDate END),
+								CASE WHEN MIN(P.Date) > @StartDate THEN MIN(P.Date) ELSE @StartDate END,
+								CASE WHEN MAX(P.Date) > @EndDate THEN @EndDate ELSE MAX(P.Date) END,
+								P.SeriesId,
+								@IsUpdate
+					FROM dbo.PersonCalendar P
+					WHERE P.SeriesId = @SeriesId 
+					GROUP BY P.SeriesId
+
+					UPDATE  P
+						SET P.DayOff = PC.DayOff,
+							P.PersonId = PC.PersonId,
+							P.ActualHours = PC.ActualHours,
+							P.IsSeries = PC.IsSeries,
+							P.TimeTypeId = PC.TimeTypeId,
+							P.SubstituteDate = PC.SubstituteDate,
+							P.Description = PC.Description,
+							P.IsFromTimeEntry =PC.IsFromTimeEntry,
+							P.ApprovedBy = @ApprovedBy,
+							P.IsNewRow = 0
+						FROM @PersonCalendarLog P
+						JOIN PersonCalendar PC ON PC.SeriesId = P.SeriesId
+				END
                     DELETE PC
                     FROM    dbo.PersonCalendar PC
                             JOIN @DaysExceptHolidays DEH ON PC.PersonId = @PersonId
@@ -146,20 +234,60 @@ AS
                                     @ActualHours ,
                                     @Description ,
                                     0 ,
-                                    CASE WHEN @TimeTypeId = @ORTTimeTypeId OR @TimeTypeId = @UnpaidTimeTypeId
-                                         THEN @ApprovedBy
-                                         ELSE NULL
-                                    END
+                                    @ApprovedBy
                             FROM    @DaysExceptHolidays DEH
                                     LEFT JOIN PersonCalendar PC ON PC.Date = DEH.Date
                                                               AND PC.PersonId = @PersonId
  
 
+                 INSERT INTO @PersonCalendarLog(Id,StartDate,EndDate,SeriesId)
+						 SELECT		
+									ROW_NUMBER() OVER(ORDER BY MIN(DEH.Date)),
+									MIN(DEH.Date),
+									MAX(DEH.Date),
+									PC.SeriesId
+						 FROM @DaysExceptHolidays DEH
+                              LEFT JOIN PersonCalendar PC ON PC.Date = DEH.Date
+                                                              AND PC.PersonId = @PersonId
+						 GROUP BY PC.SeriesId 
 
+						UPDATE  P
+						SET P.DayOff = @DayOff,
+							P.PersonId = @PersonId,
+							P.ActualHours =@ActualHours,
+							P.IsSeries = PC.IsSeries,
+							P.TimeTypeId = @TimeTypeId,
+							P.SubstituteDate = PC.SubstituteDate,
+							P.Description = @Description,
+							P.IsFromTimeEntry =PC.IsFromTimeEntry,
+							P.ApprovedBy = @ApprovedBy,
+							P.IsUpdate = @IsUpdate,
+							P.IsNewRow = 1
+						FROM @PersonCalendarLog P
+						JOIN PersonCalendar PC ON P.PersonId IS NULL AND PC.SeriesId = P.SeriesId
                 END
             ELSE 
                 BEGIN
 
+				INSERT INTO @PersonCalendarLog
+					SELECT  ROW_NUMBER() OVER(ORDER BY @StartDate),
+							@StartDate,
+							@EndDate,
+							P.PersonId,
+							P.DayOff,
+							P.ActualHours,
+							P.IsSeries,
+							P.TimeTypeId,
+							P.SubstituteDate,
+							P.Description,
+							P.IsFromTimeEntry,
+							@ApprovedBy,
+							P.SeriesId,
+							2,
+							0
+					FROM dbo.PersonCalendar P
+                    WHERE   PersonId = @PersonId
+                            AND Date = @StartDate
 
                     DELETE  dbo.PersonCalendar
                     WHERE   PersonId = @PersonId
@@ -324,6 +452,111 @@ AS
                                                            AND TE.ChargeCodeDate = PC.Date
                             LEFT JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
                     WHERE   TEH.TimeEntryId IS NULL
+					--NEW_VALUES,OLD_VALUES CTE FOR ACTIVITY XML 
+					;WITH NEW_VALUES AS
+					(
+						SELECT	P.Id,
+								CONVERT(NVARCHAR(10), P.StartDate, 101) AS [StartDate],
+								CONVERT(NVARCHAR(10), P.EndDate, 101) AS [EndDate],	
+								P.PersonId,
+								per1.LastName+', '+per1.FirstName AS PersonName,
+								CAST(P.ActualHours as decimal(20,2)) AS ActualHours,
+								P.TimeTypeId,
+								TT.Name AS TimeTypeName,
+								P.Description AS Notes,
+								P.ApprovedBy AS ApprovedPersonId,
+								ISNULL(per2.LastName+', '+per2.FirstName,'') AS ApprovedBy,
+								P.SeriesId
+						FROM @PersonCalendarLog P
+						LEFT JOIN dbo.Person per1 ON per1.PersonId = P.PersonId
+						LEFT JOIN dbo.TimeType TT ON TT.TimeTypeId = P.TimeTypeId
+						LEFT JOIN dbo.Person per2 ON per2.PersonId = P.ApprovedBy
+						WHERE P.IsNewRow = 1 			
+					),
+
+					OLD_VALUES AS
+					(
+						SELECT	P.Id,
+								CONVERT(NVARCHAR(10), P.StartDate, 101) AS [StartDate],
+								CONVERT(NVARCHAR(10), P.EndDate, 101) AS [EndDate],	
+								P.PersonId,
+								per1.LastName+', '+per1.FirstName AS PersonName,
+								CAST(P.ActualHours as decimal(20,2)) AS ActualHours,
+								P.TimeTypeId,
+								TT.Name AS TimeTypeName,
+								P.Description AS Notes,
+								P.ApprovedBy AS ApprovedPersonId,
+								ISNULL(per2.LastName+', '+per2.FirstName,'') AS ApprovedBy,
+								P.SeriesId
+						FROM @PersonCalendarLog P
+						LEFT JOIN dbo.Person per1 ON per1.PersonId = P.PersonId
+						LEFT JOIN dbo.TimeType TT ON TT.TimeTypeId = P.TimeTypeId
+						LEFT JOIN dbo.Person per2 ON per2.PersonId = P.ApprovedBy
+						WHERE P.IsNewRow = 0 			
+					)
+		-- Log an activity
+	INSERT INTO dbo.UserActivityLog
+	            (ActivityTypeID,
+	             SessionID,
+	             SystemUser,
+	             Workstation,
+	             ApplicationName,
+	             UserLogin,
+	             PersonID,
+	             LastName,
+	             FirstName,
+				 Data,
+	             LogData,
+	             LogDate)
+	SELECT  CASE
+	           WHEN d.PersonId IS NULL THEN 3
+	           WHEN i.PersonId IS NULL THEN 5
+	           ELSE 4
+	       END as ActivityTypeID,
+	       l.SessionID,
+	       l.SystemUser,
+	       l.Workstation,
+	       l.ApplicationName,
+	       l.UserLogin,
+	       l.PersonID,
+	       l.LastName,
+	       l.FirstName,
+		   Data = CONVERT(NVARCHAR(MAX),(SELECT *
+					    FROM NEW_VALUES
+					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonId = OLD_VALUES.PersonId AND NEW_VALUES.Id = OLD_VALUES.Id
+			           WHERE (NEW_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId) OR OLD_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId)) AND (NEW_VALUES.Id = ISNULL(i.Id, d.Id) OR OLD_VALUES.Id = ISNULL(i.Id, d.Id))
+					  FOR XML AUTO, ROOT('PersonCalendar'))),
+		   LogData = (SELECT 
+						 NEW_VALUES.[StartDate] 
+						,NEW_VALUES.[EndDate]
+						,NEW_VALUES.PersonId
+						,NEW_VALUES.PersonName
+						,NEW_VALUES.ActualHours
+						,NEW_VALUES.TimeTypeId 
+						,NEW_VALUES.TimeTypeName
+						,NEW_VALUES.Notes 
+						,NEW_VALUES.ApprovedPersonId 
+						,NEW_VALUES.ApprovedBy
+						,NEW_VALUES.SeriesId
+						,OLD_VALUES.[StartDate] 
+						,OLD_VALUES.[EndDate]
+						,OLD_VALUES.PersonId
+						,OLD_VALUES.PersonName
+						,OLD_VALUES.ActualHours
+						,OLD_VALUES.TimeTypeId 
+						,OLD_VALUES.TimeTypeName
+						,OLD_VALUES.Notes 
+						,OLD_VALUES.ApprovedPersonId 
+						,OLD_VALUES.ApprovedBy
+						,OLD_VALUES.SeriesId
+					  FROM NEW_VALUES
+					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonId = OLD_VALUES.PersonId AND NEW_VALUES.Id = OLD_VALUES.Id
+			            WHERE (NEW_VALUES.PersonId = ISNULL(i.PersonId , d.PersonId ) OR OLD_VALUES.PersonId = ISNULL(i.PersonId , d.PersonId)) AND (NEW_VALUES.Id = ISNULL(i.Id , d.Id ) OR OLD_VALUES.Id = ISNULL(i.Id , d.Id))
+					FOR XML AUTO, ROOT('PersonCalendar'), TYPE),
+					@CurrentPMTime
+	  FROM NEW_VALUES AS i
+	       FULL JOIN OLD_VALUES AS d ON i.PersonId = d.PersonId AND i.Id = d.Id 
+	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 
             COMMIT TRANSACTION tran_SaveTimeOff
         END TRY
