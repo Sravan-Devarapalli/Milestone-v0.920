@@ -135,10 +135,7 @@ AS
 							TEP.TimeTypeName AS TimeTypeName ,
 							TEP.TimeTypeCode AS TimeTypeCode ,
 							TEP.ChargeCodeDate ,
-							( CASE WHEN ( TEP.TimeTypeId = @ORTTimeTypeId
-										  OR TEP.TimeTypeId = @HolidayTimeType
-										  OR TEP.TimeTypeId = @UnpaidTimeTypeId
-										)
+							( CASE WHEN  TEP.TimeEntrySectionId = 4
 								   THEN TEP.Note
 										+ dbo.GetApprovedByName(TEP.ChargeCodeDate,
 															  TEP.TimeTypeId,
