@@ -124,6 +124,12 @@ if (jQuery) {
                         if (settings.sizeLimit) {
                             f += "&sizeLimit=" + settings.sizeLimit
                         }
+                        if (settings.allowSpecialChars) {
+                            f += "&allowSpecialChars=" + settings.allowSpecialChars
+                        }
+                        if (settings.ValidChars) {
+                            f += "&ValidChars=" + settings.ValidChars
+                        }
                         if (settings.simUploadLimit) {
                             f += "&simUploadLimit=" + settings.simUploadLimit
                         }
@@ -201,8 +207,14 @@ if (jQuery) {
                                 if (fileNameError.length > 40) {
                                     fileNameError = j.name.substr(0, 40) + "..."
                                 }
-                                a("#" + a(this).attr("id") + h + " .fileName").text(i.type + " Error - " + fileNameError);
-                                a("#" + a(this).attr("id") + h).removeClass().addClass("errorFile");
+                                if ("File name voilation" == i.type) {
+                                    a("#" + a(this).attr("id") + h + " .fileName").text("Warning: Please remove any special characters from your file name before uploading to Practice Management");
+                                    a("#" + a(this).attr("id") + h).removeClass().addClass("WarningFile");
+                                }
+                                else {
+                                    a("#" + a(this).attr("id") + h + " .fileName").text(i.type + " Error - " + fileNameError);
+                                    a("#" + a(this).attr("id") + h).removeClass().addClass("errorFile");
+                                }
                                 a("#" + a(this).attr("id") + h + "ProgressBar").css({ "background-color": "#FDE5DD" });
                                 settings.onErrorComplete();
                             }
