@@ -68,6 +68,23 @@ namespace PraticeManagement.Controls
                 ViewState["SeriesStartDate_Key"] = value;
             }
         }
+
+        public bool IsFromAddTimeOffBtn
+        {
+            get
+            {
+                if (ViewState["IsFromAddTimeOffBtn_Key"] == null)
+                {
+                    ViewState["IsFromAddTimeOffBtn_Key"] = false;
+                }
+                return (bool)ViewState["IsFromAddTimeOffBtn_Key"];
+            }
+            set
+            {
+                ViewState["IsFromAddTimeOffBtn_Key"] = value;
+            }
+        }
+
         public DateTime SeriesEndDate
         {
             get
@@ -451,7 +468,7 @@ namespace PraticeManagement.Controls
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
             if (Page.IsValid)
             {
-                int? approvedBy = null;
+                int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
 
                 var date = Convert.ToDateTime(hdnDateSingleDay.Value);
                 ServiceCallers.Custom.Calendar(
@@ -463,7 +480,8 @@ namespace PraticeManagement.Controls
                                                                   Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
                                                                   Context.User.Identity.Name,
                                                                   approvedBy,
-                                                                  null
+                                                                  null,
+                                                                  IsFromAddTimeOffBtn
                                                                   )
                                                );
                 UpdateCalendar();
@@ -495,12 +513,10 @@ namespace PraticeManagement.Controls
                 {
                     hours = hours + (0.25 - hours % 0.25);
                 }
-                int? approvedBy = null;
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
-                if (timeTypeSelectedItem.Attributes[IsORTAttribute].ToLower() == "true" || timeTypeSelectedItem.Attributes[IsUnpaidAttribute].ToLower() == "true")
-                {
-                    approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
-                }
+               
+                  int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
+               
 
                 var date = Convert.ToDateTime(hdnDateSingleDay.Value);
                 ServiceCallers.Custom.Calendar(
@@ -512,7 +528,8 @@ namespace PraticeManagement.Controls
                                                                   Convert.ToInt32(ddlTimeTypesSingleDay.SelectedValue),
                                                                   Context.User.Identity.Name,
                                                                   approvedBy,
-                                                                  null
+                                                                  null,
+                                                                  IsFromAddTimeOffBtn
                                                                   )
                                                );
 
@@ -539,6 +556,7 @@ namespace PraticeManagement.Controls
 
         protected void btnAddTimeOff_Click(object sender, EventArgs e)
         {
+            IsFromAddTimeOffBtn = true;
             btnDeleteTimeOff.Visible = false;
             btnDeleteTimeOff.Enabled = true;
             dtpStartDateTimeOff.DateValue = DateTime.Today;
@@ -552,6 +570,7 @@ namespace PraticeManagement.Controls
         protected void btnCancelTimeOff_Click(object sender, EventArgs e)
         {
             SeriesStartDate = SeriesEndDate = DateTime.MinValue;
+            IsFromAddTimeOffBtn = false; 
         }
 
         protected void btncancel_EditCondtion_Click(object sender, EventArgs e)
@@ -576,13 +595,8 @@ namespace PraticeManagement.Controls
                     {
                         hours = hours + (0.25 - hours % 0.25);
                     }
-                    int? approvedBy = null;
                     var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
-
-                    if (timeTypeSelectedItem.Attributes[IsORTAttribute].ToLower() == "true" || timeTypeSelectedItem.Attributes[IsUnpaidAttribute].ToLower() == "true")
-                    {
-                        approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
-                    }
+                       int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
 
                     DateTime? oldStartDate;
                     if (SeriesStartDate.Date == DateTime.MinValue)
@@ -599,7 +613,8 @@ namespace PraticeManagement.Controls
                                                                       Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                       Context.User.Identity.Name,
                                                                       approvedBy,
-                                                                      oldStartDate
+                                                                      oldStartDate,
+                                                                      IsFromAddTimeOffBtn
                                                                       )
                                                    );
                   
@@ -614,12 +629,14 @@ namespace PraticeManagement.Controls
                                                                    Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                    Context.User.Identity.Name,
                                                                    approvedBy,
-                                                                   null
+                                                                   null,
+                                                                   IsFromAddTimeOffBtn
                                                                    )
                                                 );
                     }
                     UpdateCalendar();
                     SeriesStartDate = SeriesEndDate = DateTime.MinValue;
+                    IsFromAddTimeOffBtn = false;
                 }
                 catch (Exception ex)
                 {
@@ -664,7 +681,7 @@ namespace PraticeManagement.Controls
             Page.Validate(valSumTimeOff.ValidationGroup);
             if (Page.IsValid)
             {
-                int? approvedBy = null;
+                int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id); ;
 
                 ServiceCallers.Custom.Calendar(
                    c => c.SaveTimeOff(dtpStartDateTimeOff.DateValue,
@@ -675,9 +692,11 @@ namespace PraticeManagement.Controls
                                                                  Convert.ToInt32(ddlTimeTypesTimeOff.SelectedValue),
                                                                  Context.User.Identity.Name,
                                                                  approvedBy,
-                                                                 null
+                                                                 null,
+                                                                 IsFromAddTimeOffBtn
                                                                  )
                                               );
+                IsFromAddTimeOffBtn = false;
                 UpdateCalendar();
             }
             else
