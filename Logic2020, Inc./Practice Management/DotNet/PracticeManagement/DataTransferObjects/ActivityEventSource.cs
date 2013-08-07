@@ -181,6 +181,19 @@ namespace DataTransferObjects
         ChangedTitle = 57,
 
         [EnumMember]
-        DeletedTitle = 58
+        DeletedTitle = 58,
+
+         [EnumMember]
+        Calendar = 59,
+
+        [EnumMember]
+         AddedCalendar = 60,
+
+        [EnumMember]
+        ChangedCalendar = 61,
+
+        [EnumMember]
+        DeletedCalendar = 62
+
     }
 }
