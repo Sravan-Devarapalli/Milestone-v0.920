@@ -81,14 +81,7 @@ AS
 					  END ) AS BillingType ,
 					 CASE WHEN CC.TimeEntrySectionId = 3 THEN NULL
 							ELSE PDBR.HourlyRate END HourlyRate,
-					( CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
-								  OR TT.TimeTypeId = @HolidayTimeType
-								  OR TT.TimeTypeId = @UnpaidTimeTypeId
-								)
-						   THEN TE.Note
-								+ dbo.GetApprovedByName(TE.ChargeCodeDate,
-														TT.TimeTypeId,
-														@PersonIdLocal)
+					( CASE WHEN  CC.TimeEntrySectionId = 4 THEN TE.Note + dbo.GetApprovedByName(TE.ChargeCodeDate,TT.TimeTypeId,@PersonIdLocal)
 						   ELSE TE.Note
 					  END ) AS Note ,
 					ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
