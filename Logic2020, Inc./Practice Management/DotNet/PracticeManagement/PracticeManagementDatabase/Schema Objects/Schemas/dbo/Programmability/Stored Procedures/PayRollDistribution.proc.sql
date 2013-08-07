@@ -14,12 +14,10 @@ BEGIN
 	DECLARE @StartDateLocal DATETIME ,
 		@EndDateLocal DATETIME ,
 		@PersonIdLocal INT ,
-		@ORTTimeTypeId INT ,
 		@HolidayTimeType INT ,
-		@UnpaidTimeTypeId	INT,
 		@FutureDate DATETIME
 
-	SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate),@PersonIdLocal = @PersonId,@ORTTimeTypeId = dbo.GetORTTimeTypeId(),@HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate(),@UnpaidTimeTypeId = dbo.GetUnpaidTimeTypeId()
+	SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate),@PersonIdLocal = @PersonId,@HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
 
 	;WITH    PersonDayWiseByProjectsBillableTypes
 				AS ( SELECT   M.ProjectId ,
@@ -76,11 +74,7 @@ BEGIN
 				ROUND(SUM(TEH.ActualHours), 2) AS [Total Hours],
 				ISNULL(CONVERT(NVARCHAR(100),CASE WHEN CC.TimeEntrySectionId = 3 THEN NULL ELSE CONVERT(numeric(36,2),PDBR.HourlyRate) END),'') AS [Bill Rate],
 				ISNULL(CONVERT(NVARCHAR(100),CONVERT(numeric(36,2),Pa.AmountHourly)),'') AS [Pay Rate],
-				(CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
-								OR TT.TimeTypeId = @HolidayTimeType
-								OR TT.TimeTypeId = @UnpaidTimeTypeId
-							)
-						THEN TE.Note + dbo.GetApprovedByName(TE.ChargeCodeDate, TT.TimeTypeId, @PersonIdLocal)
+				(CASE WHEN CC.TimeEntrySectionId = 4 THEN TE.Note + dbo.GetApprovedByName(TE.ChargeCodeDate, TT.TimeTypeId, @PersonIdLocal)
 						ELSE TE.Note
 					END ) AS Note
 		FROM    dbo.TimeEntry AS TE
