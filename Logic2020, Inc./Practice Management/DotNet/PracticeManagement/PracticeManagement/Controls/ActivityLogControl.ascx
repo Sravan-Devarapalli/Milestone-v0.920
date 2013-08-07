@@ -194,6 +194,10 @@
                                         <asp:ListItem Text="&nbsp; Added Title" Value="56"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Changed Title" Value="57"></asp:ListItem>
                                         <asp:ListItem Text="&nbsp; Deleted Title" Value="58"></asp:ListItem>
+                                        <asp:ListItem Text="ALL Calendar Events" Value="59"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Added Calendar Events" Value="60"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Changed Calendar Events" Value="61"></asp:ListItem>
+                                        <asp:ListItem Text="&nbsp; Deleted Calendar Events" Value="62"></asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
                                 <td id="tdYear" runat="server" class="padLeft2">
