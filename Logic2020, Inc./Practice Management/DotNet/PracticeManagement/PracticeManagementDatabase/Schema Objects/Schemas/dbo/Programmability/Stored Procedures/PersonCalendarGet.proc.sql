@@ -28,12 +28,7 @@ BEGIN
             ISNULL(PCAL.CompanyDayOff, CAL.DayOff) AS CompanyDayOff ,
             CAST(CASE WHEN PCAL.Date IS NULL THEN 1 ELSE 0 END AS BIT) AS [ReadOnly],
             ( CASE WHEN CAL.DayOff = 1 THEN CAL.HolidayDescription
-                   WHEN PCAL.DayOff = 1
-                        AND PCAL.TimeTypeId IN ( @HolidayTimeTypeId,
-                                                 @ORTTimeTypeId ,
-												 @UnpaidTimeTypeId)
-										THEN PCAL.Description + dbo.GetApprovedByName(CAL.Date,PCAL.TimeTypeId,@PersonId)
-                   WHEN PCAL.DayOff = 1 THEN pcal.Description
+                   WHEN PCAL.DayOff = 1 THEN PCAL.Description + dbo.GetApprovedByName(CAL.Date,PCAL.TimeTypeId,@PersonId)
                    ELSE ''
               END ) AS HolidayDescription ,
             CASE WHEN CAL.DayOff = 1 THEN NULL
@@ -59,9 +54,7 @@ BEGIN
 						ELSE 0 
 				END AS BIT) AS [ReadOnly],
             ( CASE WHEN CAL.DayOff = 1 THEN CAL.HolidayDescription
-                   WHEN PCAL.DayOff = 1 AND PCAL.TimeTypeId IN ( @HolidayTimeTypeId,@ORTTimeTypeId,@UnpaidTimeTypeId)
-										THEN PCAL.Description + dbo.GetApprovedByName(CAL.Date,PCAL.TimeTypeId,@PersonId)
-                   WHEN PCAL.DayOff = 1 THEN PCAL.Description
+                   WHEN PCAL.DayOff = 1 THEN PCAL.Description + dbo.GetApprovedByName(CAL.Date,PCAL.TimeTypeId,@PersonId)                   
                    ELSE ''
               END ) AS HolidayDescription ,
 			CASE WHEN CAL.DayOff = 1 THEN NULL
