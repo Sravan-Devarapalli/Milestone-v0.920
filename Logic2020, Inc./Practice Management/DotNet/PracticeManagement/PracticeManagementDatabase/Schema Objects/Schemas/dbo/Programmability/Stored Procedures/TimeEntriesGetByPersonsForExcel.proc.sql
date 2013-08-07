@@ -59,10 +59,7 @@ BEGIN
 		   PROJ.Name AS [Project Name],
 		   TT.Name AS [Work Type],
 		   TE.ChargeCodeDate AS [Date],
-		   (CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
-								  OR TT.TimeTypeId = @HolidayTimeType
-								  OR TT.TimeTypeId = @UnpaidTimeTypeId
-								)
+		   (CASE WHEN CC.TimeEntrySectionId = 4
 						   THEN TE.Note
 								+ dbo.GetApprovedByName(TE.ChargeCodeDate,
 														TT.TimeTypeId,
@@ -103,7 +100,8 @@ BEGIN
 			 PG.Name,
 			 p.LastName,
 			 p.FirstName,
-			 p.EmployeeNumber
+			 p.EmployeeNumber,
+			 CC.TimeEntrySectionId
 	ORDER BY  p.LastName,p.FirstName,C.Name,PG.Name,PROJ.ProjectNumber,TT.Name,TE.ChargeCodeDate
 
 END
