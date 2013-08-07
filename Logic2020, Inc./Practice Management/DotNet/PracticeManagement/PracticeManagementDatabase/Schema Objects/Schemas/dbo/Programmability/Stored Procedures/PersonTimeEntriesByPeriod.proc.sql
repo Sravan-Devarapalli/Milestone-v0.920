@@ -60,12 +60,7 @@ AS
                 TEH.ModifiedDate ,
                 TEH.ActualHours ,
                 TE.ForecastedHours ,
-                ( CASE WHEN (CC.TimeTypeId = @HolidayTimeTypeId OR CC.TimeTypeId = @UnpaidTimeTypeId)
-                       THEN TE.Note + dbo.GetApprovedByName(TE.ChargeCodeDate,
-                                                            CC.TimeTypeId,
-                                                            TE.PersonId)
-                       ELSE TE.Note
-                  END ) AS Note ,
+                TE.Note ,
                 TEH.IsChargeable ,
                 TEH.ReviewStatusId ,
                 CC.TimeTypeId ,
@@ -83,7 +78,7 @@ AS
                 LEFT JOIN dbo.PersonCalendar PC ON PC.PersonId = @PersonId
                                                AND PC.Date = TE.ChargeCodeDate
                                                AND PC.TimeTypeId = CC.TimeTypeId
-                                               AND PC.TimeTypeId = @ORTTimeTypeId
+                                             
                 LEFT JOIN dbo.Person AP ON AP.PersonId = PC.ApprovedBy
         WHERE   ( ( @EndDateLocal < '20120401' )
                   OR ( ( @EndDateLocal >= '20120401' )
