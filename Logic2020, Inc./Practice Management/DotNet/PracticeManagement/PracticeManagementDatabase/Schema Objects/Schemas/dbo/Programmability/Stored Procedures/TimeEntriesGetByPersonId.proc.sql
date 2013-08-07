@@ -73,10 +73,7 @@ BEGIN
 						0
 				END), 2) AS [NonBillableHours] ,
 		   TE.ChargeCodeId,
-		   ( CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
-								  OR TT.TimeTypeId = @HolidayTimeType
-								  OR TT.TimeTypeId = @UnpaidTimeTypeId
-								)
+		   ( CASE WHEN  CC.TimeEntrySectionId = 4
 						   THEN TE.Note
 								+ dbo.GetApprovedByName(TE.ChargeCodeDate,
 														TT.TimeTypeId,
@@ -103,7 +100,8 @@ BEGIN
 		     C.Name,
 		     TT.Name,
 		     TE.Note,
-			 PG.Name
+			 PG.Name,
+			 CC.TimeEntrySectionId
 	ORDER BY PROJ.ProjectNumber, TE.ChargeCodeDate
 
 	SELECT P.FirstName,
