@@ -246,7 +246,7 @@ BEGIN
 			PC.IsFromTimeEntry = 1,
 			PC.TimeTypeId = TWTE.TimeTypeId,
 			PC.Description = CASE WHEN TT.IsAdministrative = 1 AND ( TWTE.Note = '' OR ISNULL(OldTT.Name,'') + '.' = TWTE.Note ) THEN TT.Name + '.' ELSE TWTE.Note END,
-			PC.ApprovedBy = CASE TWTE.TimeTypeId WHEN @ORTTimeTypeId THEN TWTE.ApprovedById ELSE NULL END
+			PC.ApprovedBy = CASE WHEN TWTE.TimeTypeId = @ORTTimeTypeId THEN TWTE.ApprovedById  ELSE @ModifiedBy END
 		FROM dbo.PersonCalendar PC
 		INNER JOIN @ThisWeekTimeEntries AS TWTE
 			ON TWTE.TimeEntrySectionId = 4
@@ -260,7 +260,7 @@ BEGIN
 			AND (TWTE.ActualHours <> PC.ActualHours 
 				OR PC.TimeTypeId <> TWTE.TimeTypeId 
 				OR PC.Description <> TWTE.Note
-				OR (PC.TimeTypeId = @ORTTimeTypeId AND PC.ApprovedBy <> TWTE.ApprovedById))
+				OR PC.ApprovedBy <> CASE WHEN TWTE.TimeTypeId = @ORTTimeTypeId THEN TWTE.ApprovedById  ELSE PC.ApprovedBy END)
 				
 		
 		--Insert administrative TIME TYPE time entries in person calendar table(note:Excluding HOLIDAY and UNPAID time types).
@@ -280,7 +280,7 @@ BEGIN
 				TWTE.TimeTypeId,
 				CASE WHEN TT.IsAdministrative = 1 AND ( TWTE.Note = '' OR ISNULL(OldTT.Name,'') + '.' = TWTE.Note ) THEN TT.Name + '.' ELSE TWTE.Note END,
 				1,
-				CASE TT.TimeTypeId WHEN @ORTTimeTypeId THEN TWTE.ApprovedById ELSE NULL END
+				CASE WHEN TWTE.TimeTypeId = @ORTTimeTypeId THEN TWTE.ApprovedById  ELSE @ModifiedBy END  
 		FROM dbo.PersonCalendar PC
 		RIGHT JOIN @ThisWeekTimeEntries AS TWTE
 				ON PC.PersonId =  @PersonId
