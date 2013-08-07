@@ -84,6 +84,10 @@ AS
 				  OR ((@EventSource = 'AddedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Added')
 				  OR ((@EventSource = 'ChangedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Changed')
 				  OR ((@EventSource = 'DeletedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Deleted')
+				  OR ((@EventSource = 'Calendar' OR @EventSource = 'All' ) AND a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1)
+				  OR ((@EventSource = 'AddedCalendar' OR @EventSource = 'All' ) AND (a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1) AND t.ActivityName = 'Added')
+				  OR ((@EventSource = 'ChangedCalendar' OR @EventSource = 'All' ) AND (a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1) AND t.ActivityName = 'Changed')
+				  OR ((@EventSource = 'DeletedCalendar' OR @EventSource = 'All' ) AND (a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1) AND t.ActivityName = 'Deleted')
 				  OR ((@EventSource = 'AddedSOW' OR @EventSource = 'All' ) AND a.LogData.exist('/ProjectAttachment') = 1 AND t.ActivityName = 'Added')
 				  OR ((@EventSource = 'DeletedSOW' OR @EventSource = 'All' ) AND a.LogData.exist('/ProjectAttachment') = 1 AND t.ActivityName = 'Deleted')
 				  OR ((@EventSource = 'Exports' OR @EventSource = 'All' ) AND a.LogData.exist('/Export') = 1 )
@@ -260,6 +264,10 @@ AS
 						OR a.LogData.value('(/Export/NEW_VALUES/@User)[1]','NVARCHAR(85)') = @PersonLastFirstName
 						OR (a.LogData.value('(/Attribution/NEW_VALUES/@TargetId)[1]', 'int') = @PersonId AND a.LogData.value('(/Attribution/NEW_VALUES/@AttributionRecordTypeId)[1]', 'int') = 1) --Person Type
 						OR (a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@TargetId)[1]', 'int') = @PersonId AND a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@AttributionRecordTypeId)[1]', 'int') = 1) --Person Type
+						OR (a.LogData.value('(/PersonCalendar/NEW_VALUES/@PersonId)[1]', 'int') = @PersonId ) 
+						OR (a.LogData.value('(/PersonCalendar/NEW_VALUES/OLD_VALUES/@PersonId)[1]', 'int') = @PersonId )
+						OR (a.LogData.value('(/SubstituteHoliday/NEW_VALUES/@PersonId)[1]', 'int') = @PersonId ) 
+						OR (a.LogData.value('(/SubstituteHoliday/NEW_VALUES/OLD_VALUES/@PersonId)[1]', 'int') = @PersonId )
 						)
 	        ORDER BY a.LogDate DESC) AS tmp
 		 WHERE tmp.rownum BETWEEN @FirstRecord AND @LastRecord - 1
