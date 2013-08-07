@@ -83,9 +83,7 @@ AS
                     TH.IsChargeable ,
                     TH.OriginalHours ,
                     TH.ActualHours ,
-                    ( CASE WHEN ( TT.TimeTypeId = @ORTTimeTypeId
-                                        OR TT.TimeTypeId = @HolidayTimeType
-                                    )
+                    ( CASE WHEN CC.TimeEntrySectionId = 4
                                 THEN TH.Note
                                     + dbo.GetApprovedByName(TH.ChargeCodeDate,
                                                             TT.TimeTypeId,
