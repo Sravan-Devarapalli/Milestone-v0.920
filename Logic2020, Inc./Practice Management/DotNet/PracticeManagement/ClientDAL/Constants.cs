@@ -479,6 +479,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IsFromAddTimeOffButton = "@IsFromAddTimeOffButton";
             public static string IsReHire = "@IsReHire";
             public static string ValidateAttribution = "@ValidateAttribution";
             public static string AttributionIds = "@AttributionIds";
