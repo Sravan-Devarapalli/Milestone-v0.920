@@ -55,6 +55,8 @@ BEGIN
 
 	DECLARE @Dates TABLE ([date] DATETIME)
 
+	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+
 	BEGIN TRY
 	BEGIN TRAN tran_CalendarUpdate
 	
@@ -361,6 +363,8 @@ BEGIN
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
+
+	EXEC dbo.SessionLogUnprepare
 END
 
 GO
