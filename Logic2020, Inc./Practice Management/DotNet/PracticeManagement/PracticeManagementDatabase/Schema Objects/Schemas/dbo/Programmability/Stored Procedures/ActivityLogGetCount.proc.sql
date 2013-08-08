@@ -48,7 +48,7 @@ AS
 				  OR ((@EventSource = 'AddedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Added')
 				  OR ((@EventSource = 'ChangedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Changed')
 				  OR ((@EventSource = 'DeletedTimeEntries' OR @EventSource = 'All' ) AND a.LogData.exist('/TimeEntry') = 1 AND t.ActivityName = 'Deleted')
-				  OR ((@EventSource = 'Calendar' OR @EventSource = 'All' ) AND a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1)
+				  OR ((@EventSource = 'Calendar' OR @EventSource = 'All' ) AND (a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1))
 				  OR ((@EventSource = 'AddedCalendar' OR @EventSource = 'All' ) AND (a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1) AND t.ActivityName = 'Added')
 				  OR ((@EventSource = 'ChangedCalendar' OR @EventSource = 'All' ) AND (a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1) AND t.ActivityName = 'Changed')
 				  OR ((@EventSource = 'DeletedCalendar' OR @EventSource = 'All' ) AND (a.LogData.exist('/PersonCalendar') = 1 OR a.LogData.exist('/CompanyHoliday') = 1 OR a.LogData.exist('/SubstituteHoliday') = 1) AND t.ActivityName = 'Deleted')
