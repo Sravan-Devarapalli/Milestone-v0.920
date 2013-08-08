@@ -31,6 +31,16 @@ BEGIN
 			@IsW2SalaryPerson		  BIT = 0,
 			@ModifiedBy				  INT
 
+		DECLARE @SubstituteDateLog TABLE(
+										PersonId INT,
+										HolidayDate DATETIME,
+										SubstituteDate DATETIME,
+										Notes NVARCHAR(100),
+										ActualHours DECIMAL(10,2),
+										ApprovedBy	INT,
+										IsNewRow	BIT
+									)
+
 	SELECT  @CurrentPMTime = dbo.InsertingTime(),
 			@HolidayTimeTypeId = dbo.GetHolidayTimeTypeId()
 
@@ -50,6 +60,11 @@ BEGIN
    
 	BEGIN TRY
 	BEGIN TRAN tran_DeleteSubstituteDay
+
+	INSERT INTO @SubstituteDateLog
+	SELECT PC.PersonId,PC.Date,pc.SubstituteDate,pc.Description,pc.ActualHours,@ModifiedBy,0
+	FROM dbo.PersonCalendar pc 
+	WHERE (pc.SubstituteDate = @SubstituteDayDate AND pc.PersonId = @PersonId)
 
 	DELETE pc
 	FROM dbo.PersonCalendar pc 
@@ -96,8 +111,100 @@ BEGIN
 		FROM [dbo].[TimeEntry] AS TE 
 		WHERE TE.PersonId = @PersonId AND TE.ChargeCodeDate = @ParentHolidayDate AND TE.ChargeCodeId = @HolidayChargeCodeId
 		
-
 	 END
+
+	 
+    --To log into activitylog as per #3168
+
+	;WITH NEW_VALUES AS
+	(
+	SELECT	i.PersonId,
+			CONVERT(NVARCHAR(10), i.HolidayDate, 101) AS [HolidayDate],
+			CONVERT(NVARCHAR(10), i.SubstituteDate, 101) AS SubstituteDate,			
+			P.LastName+', '+P.FirstName AS PersonName,
+			CAST(i.ActualHours AS DECIMAL(10,2)) AS ActualHours,
+			i.Notes,
+			i.ApprovedBy AS ApprovedPersonId,
+			Per.LastName+', '+Per.FirstName AS ApprovedBy
+	FROM @SubstituteDateLog AS i
+	JOIN dbo.Person P ON P.PersonId = i.PersonId 
+	LEFT JOIN dbo.Person Per ON Per.PersonId = i.ApprovedBy 
+	WHERE i.IsNewRow = 1
+	),
+
+	OLD_VALUES AS
+	(
+	SELECT	i.PersonId,
+			CONVERT(NVARCHAR(10), i.HolidayDate, 101) AS [HolidayDate],
+			CONVERT(NVARCHAR(10), i.SubstituteDate, 101) AS SubstituteDate,			
+			P.LastName+', '+P.FirstName AS PersonName,
+			CAST(i.ActualHours AS DECIMAL(10,2)) AS ActualHours,
+			i.Notes,
+			i.ApprovedBy AS ApprovedPersonId,
+			Per.LastName+', '+Per.FirstName AS ApprovedBy
+	FROM @SubstituteDateLog AS i
+	JOIN dbo.Person P ON P.PersonId = i.PersonId 
+	LEFT JOIN dbo.Person Per ON Per.PersonId = i.ApprovedBy 
+	WHERE i.IsNewRow = 0
+	)
+
+	-- Log an activity
+	INSERT INTO dbo.UserActivityLog
+	            (ActivityTypeID,
+	             SessionID,
+	             SystemUser,
+	             Workstation,
+	             ApplicationName,
+	             UserLogin,
+	             PersonID,
+	             LastName,
+	             FirstName,
+				 Data,
+	             LogData,
+	             LogDate)
+	SELECT  CASE
+	           WHEN d.PersonId IS NULL THEN 3
+	           WHEN i.PersonId IS NULL THEN 5
+	           ELSE 4
+	       END as ActivityTypeID,
+	       l.SessionID,
+	       l.SystemUser,
+	       l.Workstation,
+	       l.ApplicationName,
+	       l.UserLogin,
+	       l.PersonID,
+	       l.LastName,
+	       l.FirstName,
+		   Data = CONVERT(NVARCHAR(MAX),(SELECT *
+					    FROM NEW_VALUES
+					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonId = OLD_VALUES.PersonId 
+			           WHERE NEW_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId) OR OLD_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId)
+					  FOR XML AUTO, ROOT('SubstituteHoliday'))),
+		   LogData = (SELECT 
+						 NEW_VALUES.PersonId 
+						,NEW_VALUES.[HolidayDate]
+						,NEW_VALUES.SubstituteDate
+						,NEW_VALUES.PersonName
+						,NEW_VALUES.ActualHours
+						,NEW_VALUES.Notes
+						,NEW_VALUES.ApprovedPersonId
+						,NEW_VALUES.ApprovedBy 
+						,OLD_VALUES.PersonId 
+						,OLD_VALUES.[HolidayDate]
+						,OLD_VALUES.SubstituteDate
+						,OLD_VALUES.PersonName
+						,OLD_VALUES.ActualHours
+						,OLD_VALUES.Notes
+						,OLD_VALUES.ApprovedPersonId
+						,OLD_VALUES.ApprovedBy 
+					  FROM NEW_VALUES
+					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonId = OLD_VALUES.PersonId
+			            WHERE NEW_VALUES.PersonId = ISNULL(i.PersonId , d.PersonId ) OR OLD_VALUES.PersonId = ISNULL(i.PersonId , d.PersonId)
+					FOR XML AUTO, ROOT('SubstituteHoliday'), TYPE),
+					@CurrentPMTime
+	  FROM NEW_VALUES AS i
+	       FULL JOIN OLD_VALUES AS d ON i.PersonId = d.PersonId
+	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 
 	COMMIT TRAN tran_DeleteSubstituteDay
 	END TRY
