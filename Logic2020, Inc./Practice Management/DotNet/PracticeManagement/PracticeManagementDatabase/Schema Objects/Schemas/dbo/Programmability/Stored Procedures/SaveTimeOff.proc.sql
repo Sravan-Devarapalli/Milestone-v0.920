@@ -37,7 +37,7 @@ AS
 		Update TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and exists with different ACTUAL HOURS in TimeEntry table.
 		Insert TimeEntries if there is an entry with DayOff = 1 in PersonCalendar and not exists in TimeEntry table ONLY for w2salaried/w2hourly persons.
 	*/
-		
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
         DECLARE @Today			DATETIME ,
             @CurrentPMTime		DATETIME ,
             @ModifiedBy			INT ,
@@ -281,7 +281,7 @@ AS
 							P.SubstituteDate,
 							P.Description,
 							P.IsFromTimeEntry,
-							@ApprovedBy,
+							P.ApprovedBy,
 							P.SeriesId,
 							2,
 							0
@@ -453,6 +453,10 @@ AS
                             LEFT JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
                     WHERE   TEH.TimeEntryId IS NULL
 					--NEW_VALUES,OLD_VALUES CTE FOR ACTIVITY XML 
+					
+					EXEC dbo.SessionLogUnprepare
+					EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+
 					;WITH NEW_VALUES AS
 					(
 						SELECT	P.Id,
@@ -557,6 +561,11 @@ AS
 	  FROM NEW_VALUES AS i
 	       FULL JOIN OLD_VALUES AS d ON i.PersonId = d.PersonId AND i.Id = d.Id 
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
+	  WHERE  i.StartDate <> d.StartDate
+	  OR i.EndDate <> d.EndDate
+	  OR i.ActualHours <> d.ActualHours
+	  OR i.TimeTypeId <> i.TimeTypeId
+	  OR ISNULL(i.Notes, '') <> ISNULL(d.Notes, '')
 
             COMMIT TRANSACTION tran_SaveTimeOff
         END TRY
@@ -568,5 +577,6 @@ AS
 
             RAISERROR(@Error, 16, 1)
         END CATCH
+			EXEC dbo.SessionLogUnprepare
     END
 
