@@ -125,6 +125,38 @@
                 </xsl:for-each>
               </p>
             </xsl:when>
+            <xsl:when test="name() = 'PersonCalendar'">
+              <p>
+                <xsl:for-each select="//NEW_VALUES/attribute::*">
+                  <xsl:variable name="value" select="." />
+                  <xsl:variable name="attrName" select="name()" />
+                  <xsl:if test="$attrName = 'StartDate'">
+                    StartDate: <xsl:value-of select="$value" />
+                    <br />
+                  </xsl:if>
+                  <xsl:if test="$attrName = 'EndDate'">
+                    EndDate: <xsl:value-of select="$value" />
+                    <br />
+                  </xsl:if>
+                  <xsl:if test="$attrName = 'PersonName'">
+                    Person: <xsl:value-of select="$value" />
+                    <br />
+                  </xsl:if>
+                </xsl:for-each>
+              </p>
+            </xsl:when>
+            <xsl:when test="name() = 'SubstituteHoliday'">
+              <p>
+                <xsl:for-each select="//NEW_VALUES/attribute::*">
+                  <xsl:variable name="value" select="." />
+                  <xsl:variable name="attrName" select="name()" />
+                  <xsl:if test="$attrName = 'HolidayDate'">
+                    Holiday: <xsl:value-of select="$value" />
+                    <br />
+                  </xsl:if>
+                </xsl:for-each>
+              </p>
+            </xsl:when>
             <xsl:when test="name() = 'Export' "></xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="DisplayValue" />
@@ -182,3 +214,4 @@
     </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>
+
