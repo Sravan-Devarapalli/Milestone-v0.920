@@ -59,11 +59,13 @@ BEGIN
 	SELECT	@W2SalaryId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
 	SELECT	@W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
 
+		EXEC SessionLogPrepare @UserLogin = @UserLogin
+
 	BEGIN TRY
 	
 	BEGIN TRANSACTION Tran_SetRecurringHoliday	
 	
-	EXEC SessionLogPrepare @UserLogin = @UserLogin
+
 
 	--Set the value in CompanyRecurringHoliday
 	UPDATE dbo.CompanyRecurringHoliday
@@ -349,7 +351,7 @@ BEGIN
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
-
+	EXEC dbo.SessionLogUnprepare
 END
 
 GO
