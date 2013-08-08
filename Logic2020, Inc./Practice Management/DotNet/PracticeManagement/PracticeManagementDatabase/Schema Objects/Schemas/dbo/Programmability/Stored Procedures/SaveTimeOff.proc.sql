@@ -48,7 +48,10 @@ AS
 			@W2SalaryId			INT,
 			@W2HourlyId			INT,
 			@IsUpdate			BIT=0,
-			@SeriesId			INT = NULL
+			@SeriesId			INT = NULL,
+			@SeriesStartDate   DATETIME,
+			@SeriesEndDate     DATETIME
+
 		   
         SELECT  @Today = dbo.GettingPMTime(GETUTCDATE()) ,
                 @CurrentPMTime = dbo.InsertingTime() ,
@@ -119,6 +122,12 @@ AS
 			                SET @SeriesId = (SELECT TOP 1 SeriesId 
 											FROM PersonCalendar PC
 											WHERE PC.Date=@OldStartDate AND PC.PersonId=@PersonId AND PC.DayOff=1)
+					SELECT @SeriesStartDate = MIN(P.Date),
+							@SeriesEndDate = MAX(P.Date)
+					FROM dbo.PersonCalendar P
+					 WHERE P.SeriesId = @SeriesId
+						 GROUP BY P.SeriesId
+
 					IF @SeriesId IS NOT NULL
 					BEGIN
 					     SET @IsUpdate = 1
@@ -147,14 +156,36 @@ AS
 						JOIN PersonCalendar PC ON PC.SeriesId = P.SeriesId
 					END
 
-					DELETE  P
+				
+		
+		------------
+		 DELETE  TEH
+            FROM    dbo.TimeEntry TE
+                    INNER JOIN dbo.ChargeCode CC ON TE.ChargeCodeDate BETWEEN @SeriesStartDate AND @SeriesEndDate
+                                                    AND TE.PersonId = @PersonId
+                                                    AND TE.ChargeCodeId = CC.Id
+                    INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
+                                                  AND TT.IsAdministrative = 1
+                                                  AND TT.TimeTypeId <> @HolidayTimeTypeId
+                    INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
+                   
+
+            DELETE  TE
+            FROM    dbo.TimeEntry TE
+                    INNER JOIN dbo.ChargeCode CC ON TE.ChargeCodeDate BETWEEN @SeriesStartDate AND @SeriesEndDate
+                                                    AND TE.PersonId = @PersonId
+                                                    AND TE.ChargeCodeId = CC.Id
+                    INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
+                                                  AND TT.IsAdministrative = 1
+                                                  AND TT.TimeTypeId <> @HolidayTimeTypeId
+                   
+			----------
+				DELETE  P
 					FROM dbo.PersonCalendar P
                     WHERE P.SeriesId=(
 									 SELECT SeriesId 
 									 FROM PersonCalendar PC
 									 WHERE PC.Date=@OldStartDate AND PC.PersonId=@PersonId AND PC.DayOff=1)
-		
-
                     DECLARE @DaysExceptHolidays TABLE ( [Date] DATETIME )
 
                     INSERT  INTO @DaysExceptHolidays
