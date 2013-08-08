@@ -199,6 +199,7 @@ BEGIN
 	
 	END
 
+	EXEC dbo.SessionLogUnprepare
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
     --To log into activitylog as per #3168
 
