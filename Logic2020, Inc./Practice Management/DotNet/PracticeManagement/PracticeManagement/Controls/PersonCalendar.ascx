@@ -21,7 +21,7 @@
             var lblDeleteSubstituteDay = document.getElementById('<%= lblDeleteSubstituteDay.ClientID %>');
             var lblDeleteSubstituteDescription = document.getElementById('<%= lblDeleteSubstituteDescription.ClientID %>');
             lblDeleteSubstituteDay.innerHTML = hdnHolidayDate.value = date.format('MM/dd/yyyy');
-            lblDeleteSubstituteDescription.innerHTML = EncodeString(dayLink.title.substring(0, dayLink.title.indexOf('Approved')));
+            lblDeleteSubstituteDescription.innerHTML = EncodeString(dayLink.title.substring(0, dayLink.title.indexOf('Approved') != -1 ? dayLink.title.indexOf('Approved'):dayLink.title.indexOf('Entered')));
             var mpeDeleteSubstituteDay = $find('mpeDeleteSubstituteDay');
             mpeDeleteSubstituteDay.show();
         }
