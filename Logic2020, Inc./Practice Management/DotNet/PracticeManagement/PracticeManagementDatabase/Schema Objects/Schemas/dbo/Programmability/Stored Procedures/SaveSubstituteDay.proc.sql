@@ -34,13 +34,25 @@ BEGIN
 */
 
 	SET NOCOUNT ON;
-	
+
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+
 	DECLARE @CurrentPMTime DATETIME,
 			@ModifiedBy INT,
 			@HolidayTimeTypeId INT,
 			@HolidayChargeCodeId INT,
 			@IsW2SalaryPerson	BIT = 0
 	
+	DECLARE @SubstituteDateLog TABLE(
+										PersonId INT,
+										HolidayDate DATETIME,
+										SubstituteDate DATETIME,
+										Notes NVARCHAR(100),
+										ActualHours DECIMAL(10,2),
+										ApprovedBy	INT,
+										IsNewRow	BIT
+									)
+
 	BEGIN TRY
 	BEGIN TRAN tran_SaveSubstituteDay
 
@@ -89,6 +101,12 @@ BEGIN
 		FROM dbo.PersonCalendar PC 
 		WHERE PC.PersonId = @PersonId AND PC.Date = @Date AND PC.DayOff = 0 AND PC.SubstituteDate IS NOT NULL
 
+		--To Insert into Activitylog AS PER #3168
+		INSERT INTO @SubstituteDateLog
+		SELECT PC.PersonId,@Date,PC.SubstituteDate,@Note,8,@ModifiedBy,0
+		FROM dbo.PersonCalendar PC 
+		WHERE PC.PersonId = @PersonId AND PC.Date = @Date AND PC.DayOff = 0 AND PC.SubstituteDate IS NOT NULL
+
 		UPDATE PC
 			SET PC.SubstituteDate = @SubstituteDayDate
 		FROM dbo.PersonCalendar PC
@@ -101,6 +119,10 @@ BEGIN
 		FROM dbo.PersonCalendar PC
 		WHERE PC.PersonId = @PersonId AND PC.Date = @PreviousSubstituteDate AND PC.DayOff = 1
 		
+		--To Insert into Activitylog AS PER #3168
+		INSERT INTO @SubstituteDateLog
+		SELECT @PersonId,@Date,@SubstituteDayDate,@Note,8,@ModifiedBy,1
+
 		UPDATE TE
 			SET TE.Note = @Note,
 				ChargeCodeDate = @SubstituteDayDate
@@ -125,7 +147,10 @@ BEGIN
 		SELECT NULL,@Date,0,NULL,0,@PersonId,@SubstituteDayDate ,NULL, NULL
 		UNION 
 		SELECT 8,@SubstituteDayDate,1,@HolidayTimeTypeId ,0,@PersonId,NULL,@Note, @ModifiedBy
-				
+			
+			--To Insert into Activitylog AS PER #3168
+		INSERT INTO @SubstituteDateLog	
+		SELECT @PersonId,@Date,@SubstituteDayDate,@Note,8,@ModifiedBy,1
 
 		--Delete holiday time type  Entry from TimeEntry table for holiday date.
 		--Delete From TimeEntryHours.
@@ -170,7 +195,102 @@ BEGIN
 
 		END
 
+	
+	
 	END
+
+	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+    --To log into activitylog as per #3168
+
+	;WITH NEW_VALUES AS
+	(
+	SELECT	i.PersonId,
+			CONVERT(NVARCHAR(10), i.HolidayDate, 101) AS [HolidayDate],
+			CONVERT(NVARCHAR(10), i.SubstituteDate, 101) AS SubstituteDate,			
+			P.LastName+', '+P.FirstName AS PersonName,
+			CAST(i.ActualHours AS DECIMAL(10,2)) AS ActualHours,
+			i.Notes,
+			i.ApprovedBy AS ApprovedPersonId,
+			Per.LastName+', '+Per.FirstName AS ApprovedBy
+	FROM @SubstituteDateLog AS i
+	JOIN dbo.Person P ON P.PersonId = i.PersonId 
+	LEFT JOIN dbo.Person Per ON Per.PersonId = i.ApprovedBy 
+	WHERE i.IsNewRow = 1
+	),
+
+	OLD_VALUES AS
+	(
+	SELECT	i.PersonId,
+			CONVERT(NVARCHAR(10), i.HolidayDate, 101) AS [HolidayDate],
+			CONVERT(NVARCHAR(10), i.SubstituteDate, 101) AS SubstituteDate,			
+			P.LastName+', '+P.FirstName AS PersonName,
+			CAST(i.ActualHours AS DECIMAL(10,2)) AS ActualHours,
+			i.Notes,
+			i.ApprovedBy AS ApprovedPersonId,
+			Per.LastName+', '+Per.FirstName AS ApprovedBy
+	FROM @SubstituteDateLog AS i
+	JOIN dbo.Person P ON P.PersonId = i.PersonId 
+	LEFT JOIN dbo.Person Per ON Per.PersonId = i.ApprovedBy 
+	WHERE i.IsNewRow = 0
+	)
+
+	-- Log an activity
+	INSERT INTO dbo.UserActivityLog
+	            (ActivityTypeID,
+	             SessionID,
+	             SystemUser,
+	             Workstation,
+	             ApplicationName,
+	             UserLogin,
+	             PersonID,
+	             LastName,
+	             FirstName,
+				 Data,
+	             LogData,
+	             LogDate)
+	SELECT  CASE
+	           WHEN d.PersonId IS NULL THEN 3
+	           WHEN i.PersonId IS NULL THEN 5
+	           ELSE 4
+	       END as ActivityTypeID,
+	       l.SessionID,
+	       l.SystemUser,
+	       l.Workstation,
+	       l.ApplicationName,
+	       l.UserLogin,
+	       l.PersonID,
+	       l.LastName,
+	       l.FirstName,
+		   Data = CONVERT(NVARCHAR(MAX),(SELECT *
+					    FROM NEW_VALUES
+					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonId = OLD_VALUES.PersonId 
+			           WHERE NEW_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId) OR OLD_VALUES.PersonId = ISNULL(i.PersonId, d.PersonId)
+					  FOR XML AUTO, ROOT('SubstituteHoliday'))),
+		   LogData = (SELECT 
+						 NEW_VALUES.PersonId 
+						,NEW_VALUES.[HolidayDate]
+						,NEW_VALUES.SubstituteDate
+						,NEW_VALUES.PersonName
+						,NEW_VALUES.ActualHours
+						,NEW_VALUES.Notes
+						,NEW_VALUES.ApprovedPersonId
+						,NEW_VALUES.ApprovedBy 
+						,OLD_VALUES.PersonId 
+						,OLD_VALUES.[HolidayDate]
+						,OLD_VALUES.SubstituteDate
+						,OLD_VALUES.PersonName
+						,OLD_VALUES.ActualHours
+						,OLD_VALUES.Notes
+						,OLD_VALUES.ApprovedPersonId
+						,OLD_VALUES.ApprovedBy 
+					  FROM NEW_VALUES
+					         FULL JOIN OLD_VALUES ON NEW_VALUES.PersonId = OLD_VALUES.PersonId
+			            WHERE NEW_VALUES.PersonId = ISNULL(i.PersonId , d.PersonId ) OR OLD_VALUES.PersonId = ISNULL(i.PersonId , d.PersonId)
+					FOR XML AUTO, ROOT('SubstituteHoliday'), TYPE),
+					@CurrentPMTime
+	  FROM NEW_VALUES AS i
+	       FULL JOIN OLD_VALUES AS d ON i.PersonId = d.PersonId
+	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
 
 	COMMIT TRAN tran_SaveSubstituteDay
 	END TRY
@@ -187,6 +307,6 @@ BEGIN
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
-
+		EXEC dbo.SessionLogUnprepare
 END
 
