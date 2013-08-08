@@ -22,7 +22,7 @@ BEGIN
 
 */
 	SET NOCOUNT ON;
-	
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 	DECLARE @ParentHolidayDate		  DATETIME = NULL,
 	        @ParentHolidayDescription NVARCHAR(255),
 			@CurrentPMTime			  DATETIME,
@@ -115,6 +115,8 @@ BEGIN
 
 	 
     --To log into activitylog as per #3168
+		EXEC dbo.SessionLogUnprepare
+	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
 	;WITH NEW_VALUES AS
 	(
@@ -221,6 +223,6 @@ BEGIN
 		SET  @ERROR_STATE		= ERROR_STATE()
 		RAISERROR ('%s', @ERROR_SEVERITY, @ERROR_STATE, @ERROR_MESSAGE)
 	END CATCH
-
+			EXEC dbo.SessionLogUnprepare
 END
 
