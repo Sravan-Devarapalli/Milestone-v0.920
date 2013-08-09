@@ -116,7 +116,7 @@ namespace PraticeManagement
                         {
                             int days = Convert.ToInt32(changePasswordTimeSpanLimitInDays);
                             MembershipUser user = Membership.GetUser(changePassword.UserName);
-                            if (user != null && !IsFirstTimeLogin)
+                            if (user != null && !IsFirstTimeLogin && !IsHiredToday()) 
                             {
                                 TimeSpan daysTs = new TimeSpan(days, 0, 0, 0).Duration();
                                 DateTime lastPasswordChanged = user.LastPasswordChangedDate.ToUniversalTime();
@@ -198,6 +198,19 @@ namespace PraticeManagement
             }
 
             return isMatchedWithOldPassword;
+        }
+
+        private bool IsHiredToday()
+        {
+            DateTime now = SettingsHelper.GetCurrentPMTime();
+            using (var service = new PersonServiceClient())
+            {
+                Person person = service.GetPersonByAlias(changePassword.UserName);
+                TimeSpan ts = now.Subtract(person.HireDate).Duration();
+                TimeSpan ZerodaysTs = new TimeSpan(0, 0, 0, 0).Duration();
+                TimeSpan oneDayTs = new TimeSpan(1, 0, 0, 0).Duration();
+                return (ts > ZerodaysTs && ts < oneDayTs);
+            }
         }
 
         private void LoginUser()
