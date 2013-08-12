@@ -201,15 +201,7 @@ namespace PraticeManagement.Controls
             var item = (ScrollingDropDown)sender;
             var user = HttpContext.Current.User.Identity.Name;
 
-            if (item.Items[0].Selected)
-            {
-                SetRecurringHoliday(null, true, user);
-                foreach (var previousItem in PreviousRecurringHolidaysList)
-                {
-                    previousItem.Third = true;
-                }
-            }
-            else if (PreviousRecurringHolidaysList != null)
+            if (PreviousRecurringHolidaysList != null)
             {
                 foreach (var previousItem in PreviousRecurringHolidaysList)
                 {
