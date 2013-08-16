@@ -142,6 +142,11 @@
                     Person: <xsl:value-of select="$value" />
                     <br />
                   </xsl:if>
+                  <xsl:if test="$attrName = 'IsFromTimeEntry'">
+                    Is From TE: <xsl:value-of select="$value" />
+                    <br />
+                  </xsl:if>
+                 
                 </xsl:for-each>
               </p>
             </xsl:when>
