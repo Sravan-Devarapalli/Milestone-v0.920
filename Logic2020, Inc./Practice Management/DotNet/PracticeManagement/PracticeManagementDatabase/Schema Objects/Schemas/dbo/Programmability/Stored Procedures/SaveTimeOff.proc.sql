@@ -156,31 +156,7 @@ AS
 						JOIN PersonCalendar PC ON PC.SeriesId = P.SeriesId
 					END
 
-				
-		
-		------------
-		 DELETE  TEH
-            FROM    dbo.TimeEntry TE
-                    INNER JOIN dbo.ChargeCode CC ON TE.ChargeCodeDate BETWEEN @SeriesStartDate AND @SeriesEndDate
-                                                    AND TE.PersonId = @PersonId
-                                                    AND TE.ChargeCodeId = CC.Id
-                    INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
-                                                  AND TT.IsAdministrative = 1
-                                                  AND TT.TimeTypeId <> @HolidayTimeTypeId
-                    INNER JOIN dbo.TimeEntryHours TEH ON TEH.TimeEntryId = TE.TimeEntryId
-                   
-
-            DELETE  TE
-            FROM    dbo.TimeEntry TE
-                    INNER JOIN dbo.ChargeCode CC ON TE.ChargeCodeDate BETWEEN @SeriesStartDate AND @SeriesEndDate
-                                                    AND TE.PersonId = @PersonId
-                                                    AND TE.ChargeCodeId = CC.Id
-                    INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
-                                                  AND TT.IsAdministrative = 1
-                                                  AND TT.TimeTypeId <> @HolidayTimeTypeId
-                   
-			----------
-				DELETE  P
+					DELETE  P
 					FROM dbo.PersonCalendar P
                     WHERE P.SeriesId=(
 									 SELECT SeriesId 
@@ -235,7 +211,7 @@ AS
 							P.TimeTypeId = PC.TimeTypeId,
 							P.SubstituteDate = PC.SubstituteDate,
 							P.Description = PC.Description,
-							P.IsFromTimeEntry =PC.IsFromTimeEntry,
+							P.IsFromTimeEntry =0,
 							P.ApprovedBy = @ApprovedBy,
 							P.IsNewRow = 0
 						FROM @PersonCalendarLog P
@@ -290,7 +266,7 @@ AS
 							P.TimeTypeId = @TimeTypeId,
 							P.SubstituteDate = PC.SubstituteDate,
 							P.Description = @Description,
-							P.IsFromTimeEntry =PC.IsFromTimeEntry,
+							P.IsFromTimeEntry =0,
 							P.ApprovedBy = @ApprovedBy,
 							P.IsUpdate = @IsUpdate,
 							P.IsNewRow = 1
@@ -311,7 +287,7 @@ AS
 							P.TimeTypeId,
 							P.SubstituteDate,
 							P.Description,
-							P.IsFromTimeEntry,
+							0,
 							P.ApprovedBy,
 							P.SeriesId,
 							2,
@@ -328,7 +304,7 @@ AS
 	--Delete TimeOff(other than holiday administrative timetype) TimeEntries for all type of persons(w2salary/w2hourly/etc.) if there is no entry in PersonCalendar
             DELETE  TEH
             FROM    dbo.TimeEntry TE
-                    INNER JOIN dbo.ChargeCode CC ON TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+                    INNER JOIN dbo.ChargeCode CC ON ((TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate) OR (TE.ChargeCodeDate BETWEEN @SeriesStartDate AND @SeriesEndDate))
                                                     AND TE.PersonId = @PersonId
                                                     AND TE.ChargeCodeId = CC.Id
                     INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
@@ -345,7 +321,7 @@ AS
 
             DELETE  TE
             FROM    dbo.TimeEntry TE
-                    INNER JOIN dbo.ChargeCode CC ON TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate
+                    INNER JOIN dbo.ChargeCode CC ON ((TE.ChargeCodeDate BETWEEN @StartDate AND @EndDate) OR (TE.ChargeCodeDate BETWEEN @SeriesStartDate AND @SeriesEndDate))
                                                     AND TE.PersonId = @PersonId
                                                     AND TE.ChargeCodeId = CC.Id
                     INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = CC.TimeTypeId
@@ -496,6 +472,7 @@ AS
 								P.PersonId,
 								per1.LastName+', '+per1.FirstName AS PersonName,
 								CAST(P.ActualHours as decimal(20,2)) AS ActualHours,
+								CASE WHEN P.IsFromTimeEntry = 1 THEN 'YES' ELSE 'NO' END IsFromTimeEntry,
 								P.TimeTypeId,
 								TT.Name AS TimeTypeName,
 								P.Description AS Notes,
@@ -517,6 +494,7 @@ AS
 								P.PersonId,
 								per1.LastName+', '+per1.FirstName AS PersonName,
 								CAST(P.ActualHours as decimal(20,2)) AS ActualHours,
+								CASE WHEN P.IsFromTimeEntry = 1 THEN 'YES' ELSE 'NO' END IsFromTimeEntry,
 								P.TimeTypeId,
 								TT.Name AS TimeTypeName,
 								P.Description AS Notes,
@@ -567,6 +545,7 @@ AS
 						,NEW_VALUES.PersonId
 						,NEW_VALUES.PersonName
 						,NEW_VALUES.ActualHours
+						,NEW_VALUES.IsFromTimeEntry
 						,NEW_VALUES.TimeTypeId 
 						,NEW_VALUES.TimeTypeName
 						,NEW_VALUES.Notes 
@@ -578,6 +557,7 @@ AS
 						,OLD_VALUES.PersonId
 						,OLD_VALUES.PersonName
 						,OLD_VALUES.ActualHours
+						,OLD_VALUES.IsFromTimeEntry
 						,OLD_VALUES.TimeTypeId 
 						,OLD_VALUES.TimeTypeName
 						,OLD_VALUES.Notes 
