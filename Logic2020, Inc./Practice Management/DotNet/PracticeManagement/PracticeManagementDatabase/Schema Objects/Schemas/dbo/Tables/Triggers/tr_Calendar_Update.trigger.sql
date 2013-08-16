@@ -44,8 +44,7 @@ SET NOCOUNT ON;
 			i.HolidayDescription
 	FROM inserted AS i
 	INNER JOIN deleted  AS d on d.Date = i.Date AND i.DayOff <> d.DayOff AND i.DayOff = 1 
-	WHERE i.HolidayDescription IS NOT NULL 
-	
+	WHERE DATEPART(DW,i.Date) NOT IN (1,7) 
 	) as A
 	where a.RowNumber = 1
 	),
@@ -65,7 +64,7 @@ SET NOCOUNT ON;
 			d.HolidayDescription
 	FROM deleted AS d
 	INNER JOIN inserted AS i on d.Date = i.Date AND i.DayOff <> d.DayOff AND d.DayOff = 1 
-	WHERE d.HolidayDescription IS NOT NULL
+	WHERE DATEPART(DW,i.Date) NOT IN (1,7) 
 	) as A
 	where a.RowNumber = 1
 	)
@@ -128,7 +127,7 @@ SET NOCOUNT ON;
 	SELECT	CONVERT(NVARCHAR(10), i.Date, 101) AS Date
 	FROM inserted AS i
 	INNER JOIN deleted  AS d on d.Date = i.Date AND i.DayOff <> d.DayOff AND i.DayOff = 0 
-	WHERE i.HolidayDescription IS NULL AND d.HolidayDescription IS NULL  
+	WHERE DATEPART(DW,i.Date) IN (1,7) 
 	),
 
 	OLD_VALUES AS
@@ -136,7 +135,7 @@ SET NOCOUNT ON;
 	SELECT	CONVERT(NVARCHAR(10), d.Date, 101) AS Date
 	FROM inserted AS i
 	INNER JOIN deleted  AS d on d.Date = i.Date AND i.DayOff <> d.DayOff AND d.DayOff = 0 
-	WHERE i.HolidayDescription IS NULL	AND d.HolidayDescription IS NULL  
+	WHERE DATEPART(DW,i.Date) IN (1,7)   
 	)
 
 	-- Log an activity
