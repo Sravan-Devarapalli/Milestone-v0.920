@@ -623,7 +623,7 @@ namespace PraticeManagement.Controls
         {
             if (personId != null)
             {
-                return personLastFirstName.ToString();
+                return personLastFirstName.ToString() == "N/A, " ? "N/A" : personLastFirstName.ToString();
             }
 
             string modifiedOrUser = string.Empty;
