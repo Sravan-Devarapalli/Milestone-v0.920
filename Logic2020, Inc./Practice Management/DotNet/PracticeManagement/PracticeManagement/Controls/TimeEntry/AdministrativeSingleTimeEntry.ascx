@@ -69,8 +69,9 @@
                                 </tr>
                                 <tr>
                                     <td class="textLeft padLeft5">
-                                        <asp:DropDownList ID="ddlApprovedManagers" AppendDataBoundItems="false" runat="server">
-                                        </asp:DropDownList>
+                                        <pmc:CustomDropDown ID="ddlApprovedManagers" IsOptionGroupRequired="false" CssClass="width70P"
+                                            runat="server" AppendDataBoundItems="false">
+                                        </pmc:CustomDropDown>
                                         <asp:HiddenField ID="hdnApprovedManagerId" runat="server" Value="" />
                                     </td>
                                 </tr>
