@@ -103,7 +103,7 @@ BEGIN
 
 		--To Insert into Activitylog AS PER #3168
 		INSERT INTO @SubstituteDateLog
-		SELECT PC.PersonId,@Date,PC.SubstituteDate,@Note,8,@ModifiedBy,0
+		SELECT PC.PersonId,@Date,PC.SubstituteDate,@Note,8,PC.ApprovedBy,0
 		FROM dbo.PersonCalendar PC 
 		WHERE PC.PersonId = @PersonId AND PC.Date = @Date AND PC.DayOff = 0 AND PC.SubstituteDate IS NOT NULL
 
@@ -121,7 +121,9 @@ BEGIN
 		
 		--To Insert into Activitylog AS PER #3168
 		INSERT INTO @SubstituteDateLog
-		SELECT @PersonId,@Date,@SubstituteDayDate,@Note,8,@ModifiedBy,1
+		SELECT @PersonId,@Date,@SubstituteDayDate,@Note,8,PC.ApprovedBy,1
+		FROM dbo.PersonCalendar PC
+		WHERE PC.PersonId = @PersonId AND  PC.Date = @Date
 
 		UPDATE TE
 			SET TE.Note = @Note,
@@ -146,7 +148,7 @@ BEGIN
 		INSERT INTO dbo.PersonCalendar(ActualHours,Date,DayOff,TimeTypeId,IsFromTimeEntry,PersonId,SubstituteDate,Description, ApprovedBy)
 		SELECT NULL,@Date,0,NULL,0,@PersonId,@SubstituteDayDate ,NULL, NULL
 		UNION 
-		SELECT 8,@SubstituteDayDate,1,@HolidayTimeTypeId ,0,@PersonId,NULL,@Note, @ModifiedBy
+		SELECT 8,@SubstituteDayDate,1,@HolidayTimeTypeId ,0,@PersonId,NULL,@Note, @ModifiedBy --for insert substitute day
 			
 			--To Insert into Activitylog AS PER #3168
 		INSERT INTO @SubstituteDateLog	
