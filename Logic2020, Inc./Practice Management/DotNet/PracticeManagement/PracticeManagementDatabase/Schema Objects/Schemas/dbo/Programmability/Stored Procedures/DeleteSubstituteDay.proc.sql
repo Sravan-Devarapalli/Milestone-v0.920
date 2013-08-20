@@ -62,9 +62,16 @@ BEGIN
 	BEGIN TRAN tran_DeleteSubstituteDay
 
 	INSERT INTO @SubstituteDateLog
-	SELECT PC.PersonId,PC.Date,pc.SubstituteDate,pc.Description,pc.ActualHours,@ModifiedBy,0
+	SELECT PC.PersonId,PC.Date,pc.SubstituteDate,pc.Description,pc.ActualHours,PC.ApprovedBy,0
 	FROM dbo.PersonCalendar pc 
 	WHERE (pc.SubstituteDate = @SubstituteDayDate AND pc.PersonId = @PersonId)
+
+	UPDATE @SubstituteDateLog
+	SET ActualHours = PC.ActualHours,
+		Notes = PC.Description,
+		ApprovedBy = PC.ApprovedBy
+	FROM dbo.PersonCalendar PC 
+	WHERE PC.Date = @SubstituteDayDate AND pc.PersonId = @PersonId
 
 	DELETE pc
 	FROM dbo.PersonCalendar pc 
