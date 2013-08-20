@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Web.Security;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 using DataTransferObjects.TimeEntry;
 using PraticeManagement.Utils;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using System.Linq;
+
 namespace PraticeManagement.Controls.TimeEntry
 {
     public partial class AdministrativeSingleTimeEntry : System.Web.UI.UserControl
@@ -22,7 +23,7 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string IsChargeCodeTurnOffDisableAttribute = "isChargeCodeTurnOffDisable";
         private const string ImgNoteClientIdAttribute = "imgNoteClientId";
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
@@ -78,7 +79,6 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-
         public bool IsORT
         {
             get
@@ -123,7 +123,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
         public XElement ParentCalendarItem
         {
-
             get;
             set;
         }
@@ -216,8 +215,7 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
-
-        #endregion
+        #endregion Properties
 
         #region Control events
 
@@ -262,7 +260,6 @@ namespace PraticeManagement.Controls.TimeEntry
 
                 HostingPage.AdminstratorSectionTargetHours[DateBehind].Value = tbActualHours.ClientID;
                 HostingPage.AdminstratorSectionTargetNotes[DateBehind].Value = tbNotes.ClientID;
-
             }
             if (IsHoliday || IsUnpaid || IsHolidayDate)
             {
@@ -312,7 +309,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 args.IsValid = false;
         }
 
-        #endregion
+        #endregion Control events
 
         #region Methods
 
@@ -325,7 +322,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 = string.IsNullOrEmpty(tbNotes.Text)
                       ? Constants.ApplicationResources.AddCommentIcon
                       : Constants.ApplicationResources.RecentCommentIcon;
-
 
             tbActualHours.Text = TimeEntryRecordElement.Attribute(XName.Get("ActualHours")).Value;
             hdnActualHours.Value = tbActualHours.Text;
@@ -354,20 +350,17 @@ namespace PraticeManagement.Controls.TimeEntry
 
             if (selectedVal != string.Empty)
             {
-                imgNote.ToolTip = tbNotes.Text + (selectedVal == HostingPage.SelectedPerson.Id.Value.ToString() ? " Entered By " : " Approved By ") + ddlApprovedManagers.SelectedItem.Text + ".";
+                imgNote.ToolTip = tbNotes.Text + (selectedVal == HostingPage.SelectedPerson.Id.Value.ToString() ? " Entered By " : " Approved By ") + ddlApprovedManagers.SelectedItem.Attributes["ApprovedByName"] + ".";
             }
             else
             {
                 imgNote.ToolTip = tbNotes.Text;
             }
 
-
             var isReviewd = TimeEntryRecordElement.Attribute(XName.Get("IsReviewed")).Value;
             lblReview.Text = isReviewd;
 
-
             hfDirtyHours.Value = TimeEntryRecordElement.Attribute(XName.Get("IsDirty")).Value;
-
         }
 
         internal void DataBindApprovedManagers()
@@ -416,7 +409,6 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     tbActualHours.Attributes["readonly"] = "readonly";
                     tbActualHours.Attributes["class"] = "bgColorWhiteImp";
-
                 }
                 else
                 {
@@ -463,7 +455,12 @@ namespace PraticeManagement.Controls.TimeEntry
                 if (isORT)
                 {
                     element.Attribute(XName.Get("ApprovedById")).Value = ddlApprovedManagers.SelectedValue;
-                    element.Attribute(XName.Get("ApprovedByName")).Value = ddlApprovedManagers.SelectedItem.Text;
+                    element.Attribute(XName.Get("ApprovedByName")).Value = ddlApprovedManagers.SelectedItem.Value != "" ? ddlApprovedManagers.SelectedItem.Attributes["ApprovedByName"] : "";
+                }
+                else
+                {
+                    element.Attribute(XName.Get("ApprovedById")).Value = "";
+                    element.Attribute(XName.Get("ApprovedByName")).Value = "";
                 }
             }
             else
@@ -476,7 +473,12 @@ namespace PraticeManagement.Controls.TimeEntry
                 if (isORT)
                 {
                     element.SetAttributeValue(XName.Get("ApprovedById"), ddlApprovedManagers.SelectedValue);
-                    element.SetAttributeValue(XName.Get("ApprovedByName"), ddlApprovedManagers.SelectedItem.Text);
+                    element.SetAttributeValue(XName.Get("ApprovedByName"), ddlApprovedManagers.SelectedItem.Value != "" ? ddlApprovedManagers.SelectedItem.Attributes["ApprovedByName"] : "");
+                }
+                else
+                {
+                    element.SetAttributeValue(XName.Get("ApprovedById"), "");
+                    element.SetAttributeValue(XName.Get("ApprovedByName"), "");
                 }
             }
         }
@@ -572,7 +574,7 @@ namespace PraticeManagement.Controls.TimeEntry
             tbActualHours.Attributes["HorizontalTotalCalculator"] = clientId;
         }
 
-        #endregion
+        #endregion Methods
     }
 }
 
