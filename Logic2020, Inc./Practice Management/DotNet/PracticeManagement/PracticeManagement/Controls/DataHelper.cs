@@ -1980,7 +1980,8 @@ namespace PraticeManagement.Controls
                 {
                     var itemText = person.LastName + ", " + person.FirstName;
                     var item = new ListItem(itemText, person.Id.Value.ToString());
-
+                    var itemAttribute = person.FirstName + " " + person.LastName;
+                    item.Attributes["ApprovedByName"] = itemAttribute;
                     control.Items.Add(item);
                 }
             }
@@ -2519,3 +2520,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
