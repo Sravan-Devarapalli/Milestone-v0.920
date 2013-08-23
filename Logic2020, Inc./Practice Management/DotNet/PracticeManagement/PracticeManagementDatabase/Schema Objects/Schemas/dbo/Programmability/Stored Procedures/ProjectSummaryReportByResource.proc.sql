@@ -22,7 +22,7 @@ AS
 			@MilestoneIdLocal INT = NULL ,
 			@HolidayTimeType INT ,
 			@ProjectId INT = NULL ,
-			@Today DATE ,
+			@Today DATE,
 			@MilestoneStartDate DATETIME = NULL ,
 			@MilestoneEndDate DATETIME = NULL,
 			@FutureDate DATETIME
@@ -64,52 +64,39 @@ AS
 				INSERT  INTO @PersonRoleNamesTable
 						SELECT  ResultString
 						FROM    [dbo].[ConvertXmlStringInToStringTable](@PersonRoleNames);
-				WITH    PersonMaxRoleValues
-						  AS ( SELECT   MP.PersonId ,
-										MAX(ISNULL(PR.RoleValue, 0)) AS MaxRoleValue ,
-										MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue ,
-										MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
-							   FROM     dbo.MilestonePersonEntry AS MPE
-										INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-										INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-										INNER JOIN dbo.Calendar AS C ON C.Date BETWEEN MPE.StartDate AND MPE.EndDate
-															  AND C.DayOff = 0
-										LEFT  JOIN dbo.PersonRole AS PR ON PR.PersonRoleId = MPE.PersonRoleId
-							   WHERE    M.ProjectId = @ProjectId
-										AND ( @MilestoneIdLocal IS NULL
-											  OR M.MilestoneId = @MilestoneIdLocal
-											)
-										AND ( ( @StartDateLocal IS NULL
-												AND @EndDateLocal IS NULL
-											  )
-											  OR ( C.Date BETWEEN @StartDateLocal AND @EndDateLocal )
-											)
-							   GROUP BY MP.PersonId
-							 ),
-					   PersonForeCastedHours
-						  AS ( SELECT   MP.PersonId ,
-										SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
-											ELSE 0
-										END) AS ForecastedHoursUntilToday,
-										SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay)) AS ForecastedHours
-							   FROM     dbo.MilestonePersonEntry AS MPE
-										INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-										INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-										INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
-									    INNER JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
-															  AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate																																																			
-							   WHERE    M.ProjectId = @ProjectId
-										AND ( @MilestoneIdLocal IS NULL
-											  OR M.MilestoneId = @MilestoneIdLocal
-											)
-										AND ( ( @StartDateLocal IS NULL
-												AND @EndDateLocal IS NULL
-											  )
-											  OR ( PC.Date BETWEEN @StartDateLocal AND @EndDateLocal )
-											)								  
-							   GROUP BY MP.PersonId
-							 )
-					,TimeEntryPersons AS
+				WITH PersonForeCastedHoursRoleValues
+					AS
+					(	
+						SELECT   MP.PersonId ,
+								AVG(MPE.Amount) AS BillRate,
+								PC.Date,
+								SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
+									ELSE 0
+								END) AS ForecastedHoursUntilToday,
+								SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay)) AS ForecastedHours,
+								MAX(ISNULL(PR.RoleValue, 0)) AS MaxRoleValue ,
+								MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue ,
+								MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue 
+						FROM     dbo.MilestonePersonEntry AS MPE
+								INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+								INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+								INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId AND P.IsStrawman = 0
+								INNER JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
+														AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate	
+								LEFT  JOIN dbo.PersonRole AS PR ON PR.PersonRoleId = MPE.PersonRoleId
+						WHERE    M.ProjectId = @ProjectId
+								AND ( @MilestoneIdLocal IS NULL
+										OR M.MilestoneId = @MilestoneIdLocal
+									)
+								AND ( ( @StartDateLocal IS NULL
+										AND @EndDateLocal IS NULL
+										)
+										OR ( PC.Date BETWEEN @StartDateLocal AND @EndDateLocal )
+									)
+						GROUP BY MP.PersonId,PC.Date 
+					),
+					TimeEntryPersons 
+					AS
 					(
 						SELECT TE.*, TEH.IsChargeable, TEH.ActualHours, CC.*, PTSH.PersonStatusId
 						FROM TimeEntry TE
@@ -124,69 +111,86 @@ AS
 						INNER JOIN dbo.PersonStatusHistory PTSH ON PTSH.PersonId = TE.PersonId
 															  AND TE.ChargeCodeDate BETWEEN PTSH.StartDate
 															  AND ISNULL(PTSH.EndDate,@FutureDate)
+						INNER JOIN dbo.Person P ON P.PersonId = TE.PersonId 
+													AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate,@FutureDate)
+													AND ( 
+															CC.timeTypeId != @HolidayTimeType
+															OR ( 
+																	CC.timeTypeId = @HolidayTimeType
+																	AND PTSH.PersonStatusId IN (1,5)
+																)
+														)
+					),
+					GroupedPersonDetails
+					AS 
+					(
+						SELECT	ISNULL(PFR.PersonId,TEP.PersonId) AS PersonId,
+								PFR.BillRate,
+								SUM(PFR.ForecastedHoursUntilToday) AS ForecastedHoursUntilToday,
+								SUM(PFR.ForecastedHours) AS ForecastedHours,
+								MAX(ISNULL(PFR.MaxRoleValue, 0)) AS MaxRoleValue ,
+								MIN(CAST(PFR.MinimumValue AS INT)) MinimumValue ,
+								MAX(CAST(PFR.MaximumValue AS INT)) MaximumValue ,
+								ROUND(SUM(CASE WHEN ( TEP.IsChargeable = 1 AND @ProjectNumberLocal != 'P031000'
+											AND TEP.ChargeCodeDate < @Today
+													) THEN TEP.ActualHours
+												ELSE 0
+											END), 2) AS BillableHoursUntilToday ,
+								ROUND(SUM(CASE WHEN TEP.IsChargeable = 1  AND @ProjectNumberLocal != 'P031000'
+												THEN TEP.ActualHours
+												ELSE 0
+											END), 2) AS BillableHours ,
+								ROUND(SUM(CASE WHEN TEP.IsChargeable = 0 OR @ProjectNumberLocal = 'P031000'
+												THEN TEP.ActualHours
+												ELSE 0
+											END), 2) AS NonBillableHours
+						FROM PersonForeCastedHoursRoleValues	PFR
+						FULL JOIN TimeEntryPersons TEP ON TEP.PersonId = PFR.PersonId AND TEP.ChargeCodeDate = PFR.Date
+						GROUP BY ISNULL(PFR.PersonId,TEP.PersonId),PFR.BillRate,CASE WHEN PFR.ForecastedHours IS NOT NULL THEN 0 ELSE NULL END
 					)
 					SELECT  P.PersonId ,
 							P.LastName ,
 							P.FirstName ,
 							P.IsOffshore ,
-							ROUND(SUM(CASE WHEN ( TEP.IsChargeable = 1 AND @ProjectNumberLocal != 'P031000'
-												  AND TEP.ChargeCodeDate < @Today
-												) THEN TEP.ActualHours
-										   ELSE 0
-									  END), 2) AS BillableHoursUntilToday ,
-							ROUND(SUM(CASE WHEN TEP.IsChargeable = 1  AND @ProjectNumberLocal != 'P031000'
-										   THEN TEP.ActualHours
-										   ELSE 0
-									  END), 2) AS BillableHours ,
-							ROUND(SUM(CASE WHEN TEP.IsChargeable = 0 OR @ProjectNumberLocal = 'P031000'
-										   THEN TEP.ActualHours
-										   ELSE 0
-									  END), 2) AS NonBillableHours ,
 							ISNULL(PR.Name, '') AS ProjectRoleName ,
-							( CASE WHEN ( PMRV.MinimumValue IS NULL ) THEN ''
-								   WHEN ( PMRV.MinimumValue = PMRV.MaximumValue
-										  AND PMRV.MinimumValue = 0
-										) THEN 'Fixed'
-								   WHEN ( PMRV.MinimumValue = PMRV.MaximumValue
-										  AND PMRV.MinimumValue = 1
-										) THEN 'Hourly'
-								   ELSE 'Both'
-							  END ) AS BillingType ,
-							ROUND(MAX(ISNULL(PFH.ForecastedHoursUntilToday, 0)),
-								  2) AS ForecastedHoursUntilToday ,
-							ROUND(MAX(ISNULL(PFH.ForecastedHours, 0)), 2) AS ForecastedHours,							
+							( 
+								CASE	WHEN ( GPD.MinimumValue IS NULL ) THEN ''
+										WHEN ( GPD.MinimumValue = GPD.MaximumValue AND GPD.MinimumValue = 0 ) THEN 'Fixed'
+	 									WHEN ( GPD.MinimumValue = GPD.MaximumValue AND GPD.MinimumValue = 1) THEN 'Hourly'
+								ELSE 'Both'
+								END 
+							) AS BillingType ,
+							ROUND(MAX(ISNULL(GPD.ForecastedHoursUntilToday, 0)),2) AS ForecastedHoursUntilToday ,
+							ROUND(MAX(ISNULL(GPD.ForecastedHours, 0)), 2) AS ForecastedHours,
+							GPD.BillableHours,
+							GPD.BillableHoursUntilToday,
+							GPD.NonBillableHours,
+							ISNULL(GPD.BillRate,0) AS BillRate,
+							(CASE 
+									WHEN ( (GPD.MinimumValue = GPD.MaximumValue AND GPD.MinimumValue = 1) 
+											OR GPD.MinimumValue <> GPD.MaximumValue) 
+									THEN ISNULL(GPD.BillRate,0) * GPD.BillableHours 
+									ELSE 0 
+							END) AS EstimatedBillings,
 							P.EmployeeNumber
-					FROM    dbo.Person P
-					LEFT JOIN TimeEntryPersons TEP ON TEP.PersonId = P.PersonId
-					LEFT  JOIN PersonMaxRoleValues AS PMRV ON P.PersonId = PMRV.PersonId
-					LEFT  JOIN PersonForeCastedHours AS PFH ON PFH.PersonId = P.PersonId
-															  AND PFH.PersonId = PMRV.PersonId
-					LEFT  JOIN dbo.PersonRole AS PR ON PR.RoleValue = PMRV.MaxRoleValue
-					WHERE P.IsStrawman = 0
-						AND ( (TEP.Id IS NOT NULL 
-									AND TEP.ChargeCodeDate <= ISNULL(P.TerminationDate,@FutureDate)
-								    AND ( TEP.timeTypeId != @HolidayTimeType
-										 OR ( TEP.timeTypeId = @HolidayTimeType
-											  AND TEP.PersonStatusId IN (1,5)
-											)
-									   )
-								 )
-							 OR PMRV.PersonId IS NOT NULL
+					FROM  dbo.Person P
+					INNER JOIN GroupedPersonDetails AS GPD ON GPD.PersonId = P.PersonId
+					LEFT  JOIN dbo.PersonRole AS PR ON PR.RoleValue = GPD.MaxRoleValue
+					WHERE	(	@PersonRoleNames IS NULL
+								OR ISNULL(PR.Name, '') IN ( SELECT RoleName FROM  @PersonRoleNamesTable)
 							)
-							AND ( @PersonRoleNames IS NULL
-								  OR ISNULL(PR.Name, '') IN (
-								  SELECT    RoleName
-								  FROM      @PersonRoleNamesTable )
-								)
 					GROUP BY P.PersonId ,
 							P.LastName ,
 							P.FirstName ,
 							P.IsOffshore ,
 							PR.Name ,
-							PMRV.MinimumValue ,
-							PMRV.MaximumValue,
-							P.EmployeeNumber
-	
+							GPD.MinimumValue ,
+							GPD.MaximumValue,
+							P.EmployeeNumber,
+							GPD.BillRate,
+							GPD.BillableHours,
+							GPD.NonBillableHours,
+							GPD.BillableHoursUntilToday
 			END
 		ELSE 
 			BEGIN
