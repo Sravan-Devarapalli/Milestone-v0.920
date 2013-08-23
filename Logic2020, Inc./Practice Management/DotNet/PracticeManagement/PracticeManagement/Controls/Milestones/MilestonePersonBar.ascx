@@ -64,7 +64,7 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonStartInsert_ServerValidate"></asp:CustomValidator>
                     <asp:CustomValidator ID="custPeriodOvberlapping" runat="server" ControlToValidate="dpPersonStartInsert"
-                        ErrorMessage="" ToolTip="The specified period overlaps with another for this person with same role on the milestone."
+                        ErrorMessage="" ToolTip="The specified period overlaps with another for this person in the entire project."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidateEmptyText="false" ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPeriodOvberlappingInsert_ServerValidate"></asp:CustomValidator>
                     <asp:CustomValidator ID="custPeriodVacationOverlapping" runat="server" ControlToValidate="dpPersonStartInsert"
