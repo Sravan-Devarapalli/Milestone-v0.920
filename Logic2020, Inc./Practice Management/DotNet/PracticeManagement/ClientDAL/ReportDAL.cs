@@ -1072,6 +1072,8 @@ namespace DataAccess
             int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
             int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
             int EmployeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+            int billRateIndex = reader.GetOrdinal(Constants.ColumnNames.BillRate);
+            int estimatedBillingsIndex = reader.GetOrdinal(Constants.ColumnNames.EstimatedBillings);
 
             while (reader.Read())
             {
@@ -1093,6 +1095,8 @@ namespace DataAccess
                 PLGH.BillingType = reader.GetString(billingTypeIndex);
                 PLGH.Person = person;
                 PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);
+                PLGH.BillRate = Convert.ToDouble(reader[billRateIndex]);
+                PLGH.EstimatedBillings = Convert.ToDouble(reader[estimatedBillingsIndex]);
 
                 result.Add(PLGH);
             }
