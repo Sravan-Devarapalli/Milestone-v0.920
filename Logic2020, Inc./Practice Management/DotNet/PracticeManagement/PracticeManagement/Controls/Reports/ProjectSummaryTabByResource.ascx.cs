@@ -147,6 +147,10 @@ namespace PraticeManagement.Controls.Reports
                 var LnkActualHours = e.Item.FindControl("lnkActualHours") as LinkButton;
                 LnkActualHours.Attributes["NavigationUrl"] = string.Format(ByPersonByResourceUrl, (HostingPage.StartDate.HasValue) ? HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : null,
                     (HostingPage.EndDate.HasValue) ? HostingPage.EndDate.Value.Date.ToString(Constants.Formatting.EntryDateFormat) : null, (HostingPage.PeriodSelected != "*") ? HostingPage.PeriodSelected : "0", dataItem.Person.Id);
+                var lblBillRateData = e.Item.FindControl("lblBillRateData") as Label;
+                var lblEstBillingsData = e.Item.FindControl("lblEstBillingsData") as Label;
+                lblBillRateData.Text = (dataItem.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", dataItem.BillRate);
+                lblEstBillingsData.Text = (dataItem.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", dataItem.EstimatedBillings);
             }
         }
 
@@ -212,6 +216,10 @@ namespace PraticeManagement.Controls.Reports
                 sb.Append("\t");
                 sb.Append("Actual Hours");
                 sb.Append("\t");
+                sb.Append("Hourly Bill Rate");
+                sb.Append("\t");
+                sb.Append("Estimated Billings");
+                sb.Append("\t");
                 sb.Append("Billable Hours Variance");
                 sb.Append("\t");
                 sb.AppendLine();
@@ -234,6 +242,10 @@ namespace PraticeManagement.Controls.Reports
                     sb.Append(GetDoubleFormat(byPerson.NonBillableHours));
                     sb.Append("\t");
                     sb.Append(GetDoubleFormat(byPerson.TotalHours));
+                    sb.Append("\t");
+                    sb.Append((byPerson.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", byPerson.BillRate));
+                    sb.Append("\t");
+                    sb.Append((byPerson.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", byPerson.EstimatedBillings));
                     sb.Append("\t");
                     sb.Append(GetDoubleFormat(byPerson.BillableHoursVariance));
                     sb.Append("\t");
