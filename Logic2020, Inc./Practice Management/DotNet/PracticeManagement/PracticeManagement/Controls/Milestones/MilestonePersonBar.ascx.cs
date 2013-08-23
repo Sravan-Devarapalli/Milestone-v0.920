@@ -170,15 +170,12 @@ namespace PraticeManagement.Controls.Milestones
             DateTime endDate =
                 dpPersonEndInsert.DateValue != DateTime.MinValue ? dpPersonEndInsert.DateValue : HostingPage.Milestone.ProjectedDeliveryDate;
 
-
-
             List<MilestonePersonEntry> entries = HostingControl.MilestonePersonsEntries;
             // Validate overlapping with other entries.
             for (int i = 0; i < entries.Count; i++)
             {
-                var roleId = entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
                 var personId = entries[i].ThisPerson.Id.ToString();
-                if (personId == ddlPerson.SelectedValue && roleId == ddlRole.SelectedValue && entries[i].IsNewEntry == false)
+                if (personId == ddlPerson.SelectedValue && entries[i].IsNewEntry == false)
                 {
 
                     try
@@ -204,8 +201,12 @@ namespace PraticeManagement.Controls.Milestones
                     }
                 }
             }
-
-
+            if (e.IsValid)
+            {
+                int personId;
+                int.TryParse(ddlPerson.SelectedValue, out personId);
+                e.IsValid = !(ServiceCallers.Custom.Person(p => p.CheckIfPersonEntriesOverlapps(HostingControl.Milestone.Id.Value, personId, dpPersonStartInsert.DateValue, dpPersonEndInsert.DateValue)));
+            }
         }
 
         private void ValidateOvelappingWhenSaveAllClicked(object sender, ServerValidateEventArgs e)
@@ -221,16 +222,14 @@ namespace PraticeManagement.Controls.Milestones
             for (int i = 0; i < entries.Count; i++)
             {
                 var entry = entries[i];
-                string roleId = "", personId = "";
+                string personId = "";
 
                 if (entry.IsRepeaterEntry)
                 {
-                    roleId = entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
                     personId = entries[i].ThisPerson.Id.ToString();
                 }
                 else if (entry.IsShowPlusButton)
                 {
-                    roleId = entries[i].IsEditMode ? entries[i].EditedEntryValues["ddlRole"] : entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
                     personId = entries[i].IsEditMode ? entries[i].EditedEntryValues["ddlPersonName"] : entries[i].ThisPerson.Id.ToString();
                 }
                 else
@@ -238,11 +237,10 @@ namespace PraticeManagement.Controls.Milestones
                     var index = entries.FindIndex(mpe => mpe.Id == entries[i].ShowingPlusButtonEntryId);
 
                     personId = entries[index].IsEditMode ? entries[index].EditedEntryValues["ddlPersonName"] : entries[index].ThisPerson.Id.ToString();
-                    roleId = entries[index].IsEditMode ? entries[index].EditedEntryValues["ddlRole"] : (entries[index].Role != null ? entries[index].Role.Id.ToString() : string.Empty);
                 }
 
 
-                if (personId == ddlPerson.SelectedValue && roleId == ddlRole.SelectedValue && ((entries[i].IsNewEntry == false) || HostingPage.ValidateNewEntry))
+                if (personId == ddlPerson.SelectedValue && ((entries[i].IsNewEntry == false) || HostingPage.ValidateNewEntry))
                 {
 
                     try
@@ -273,6 +271,12 @@ namespace PraticeManagement.Controls.Milestones
 
                     }
                 }
+            }
+            if (e.IsValid)
+            {
+                int personId;
+                int.TryParse(ddlPerson.SelectedValue, out personId);
+                e.IsValid = !(ServiceCallers.Custom.Person(p => p.CheckIfPersonEntriesOverlapps(HostingControl.Milestone.Id.Value, personId, dpPersonStartInsert.DateValue, dpPersonEndInsert.DateValue)));
             }
         }
 
