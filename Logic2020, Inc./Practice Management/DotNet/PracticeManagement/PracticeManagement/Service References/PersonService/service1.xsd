@@ -187,6 +187,23 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="CheckIfPersonEntriesOverlapps">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="milestoneId" type="xs:int" />
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckIfPersonEntriesOverlappsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CheckIfPersonEntriesOverlappsResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SaveUserTemporaryCredentials">
     <xs:complexType>
       <xs:sequence>
