@@ -66,6 +66,12 @@
                         <th class="Width100Px">
                             <asp:Label ID="lblActualHours" runat="server" Text="Actual Hours"></asp:Label>
                         </th>
+                        <th class="Width100Px">
+                            <asp:Label ID="lblBillRate" runat="server" Text="Hourly Bill Rate"></asp:Label>
+                        </th>
+                        <th class="Width100Px">
+                            <asp:Label ID="lblEstimatedBillings" runat="server" Text="Estimated Billings"></asp:Label>
+                        </th>
                         <th class="Width200Px">
                             <asp:Label ID="lblBillableHoursVariance" runat="server" Text="Billable Hours Variance"></asp:Label>
                         </th>
@@ -98,6 +104,12 @@
                 <asp:LinkButton ID="lnkActualHours" runat="server" ToolTip='<%# GetDoubleFormat((double)Eval("TotalHours"))%>'
                     OnClientClick="OpenUrlInNewWindow(this);return false;" Text='<%# GetDoubleFormat((double)Eval("TotalHours"))%>'
                     target="_blank"></asp:LinkButton>
+            </td>
+            <td>
+                <asp:Label id="lblBillRateData" runat="server"></asp:Label>
+            </td>
+            <td>
+                <asp:Label id="lblEstBillingsData" runat="server"></asp:Label>
             </td>
             <td sorttable_customkey='<%# Eval("BillableHoursVariance") %>'>
                 <table class="WholeWidth TdLevelNoBorder">
