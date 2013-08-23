@@ -150,6 +150,12 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double AvailableHoursUntilToday { get; set; }
 
+        [DataMember]
+        public double BillRate { get; set; }
+
+        [DataMember]
+        public double EstimatedBillings { get; set; }
+
         public double TotalHours
         {
             get
