@@ -456,6 +456,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         Person CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        bool CheckIfPersonEntriesOverlapps(int milestoneId, int personId, DateTime startDate, DateTime endDate);
     }
 }
 
