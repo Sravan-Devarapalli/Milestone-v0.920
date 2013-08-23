@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string BillRate = "BillRate";
+            public const string EstimatedBillings = "EstimatedBillings"; 
             public const string AttributionRecordTypeId = "AttributionRecordTypeId";
             public const string ExtendAttributionStartDate = "ExtendAttributionStartDate";
             public const string ExtendAttributionEndDate = "ExtendAttributionEndDate";
@@ -891,6 +893,7 @@
 
             public class Person
             {
+                public const string CheckIfPersonEntriesOverlapps = "dbo.CheckIfPersonEntriesOverlapps";
                 public const string CheckIfValidDivision = "dbo.CheckIfValidDivision";
                 public const string GetCommissionsValidationByPersonId = "dbo.GetCommissionsValidationByPersonId";
                 public const string CheckIfPersonConsultantTypeInAPeriod = "dbo.CheckIfPersonConsultantTypeInAPeriod";
