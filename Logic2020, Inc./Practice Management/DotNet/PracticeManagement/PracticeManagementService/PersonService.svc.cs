@@ -1114,6 +1114,11 @@ namespace PracticeManagementService
             return PersonDAL.CheckIfValidDivision(personId, startDate, endDate);
         }
 
+        public bool CheckIfPersonEntriesOverlapps(int milestoneId, int personId, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.CheckIfPersonEntriesOverlapps(milestoneId, personId, startDate, endDate);
+        }
+
         #endregion IPersonService Members
     }
 }
