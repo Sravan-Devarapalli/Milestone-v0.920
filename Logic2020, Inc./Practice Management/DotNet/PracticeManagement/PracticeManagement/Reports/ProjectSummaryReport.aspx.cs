@@ -833,20 +833,22 @@ namespace PraticeManagement.Reporting
             if (data.Count > 0)
             {
                 //Header
-                _pdfProjectPersonsSummary = string.Format("Resource{0}ProjectRole{0}Projected Hours{0}Billable{0}Non-Billable{0}Actual Hours{0}Billable Hours Variance{1}", ColoumSpliter, RowSpliter);
+                _pdfProjectPersonsSummary = string.Format("Resource{0}ProjectRole{0}Projected Hours{0}Billable{0}Non-Billable{0}Actual Hours{0}Hourly Bill Rate{0}Estimated Billings{0}Billable Hours Variance{1}", ColoumSpliter, RowSpliter);
 
                 var list = data.OrderBy(p => p.Person.PersonLastFirstName);
 
                 //Data
                 foreach (var byPerson in list)
                 {
-                    _pdfProjectPersonsSummary += String.Format("{0}{7}{1}{7}{2}{7}{3}{7}{4}{7}{5}{7}{6}{8}",
+                    _pdfProjectPersonsSummary += String.Format("{0}{9}{1}{9}{2}{9}{3}{9}{4}{9}{5}{9}{6}{9}{7}{9}{8}{10}",
                         byPerson.Person.PersonLastFirstName,
                         byPerson.Person.ProjectRoleName,
                         GetDoubleFormat(byPerson.ForecastedHours),
                         GetDoubleFormat(byPerson.BillableHours),
                         GetDoubleFormat(byPerson.NonBillableHours),
                         GetDoubleFormat(byPerson.TotalHours),
+                        (byPerson.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", byPerson.BillRate),
+                        (byPerson.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", byPerson.EstimatedBillings),
                         (byPerson.BillableHoursVariance > 0) ? "+" + GetDoubleFormat(byPerson.BillableHoursVariance) : GetDoubleFormat(byPerson.BillableHoursVariance),
                         ColoumSpliter,
                         RowSpliter);
