@@ -518,19 +518,15 @@ namespace PraticeManagement.Controls.Milestones
             var dpPersonStart = gvRow.FindControl("dpPersonStart") as DatePicker;
             var dpPersonEnd = gvRow.FindControl("dpPersonEnd") as DatePicker;
 
-            string ddlPersonSelectedValue = "", ddlRoleSelectedValue = "";
+            string ddlPersonSelectedValue = "";
 
             ddlPersonSelectedValue = (gvRow.FindControl("ddlPersonName") as DropDownList).SelectedValue;
-            ddlRoleSelectedValue = (gvRow.FindControl("ddlRole") as DropDownList).SelectedValue;
-
+            
             var hdnPersonId = gvRow.FindControl("hdnPersonId") as HiddenField;
-
-            var lblRole = gvRow.FindControl("lblRole") as Label;
-            var oldRoleId = lblRole.Attributes["RoleId"];
 
             List<int> similarEntryIndexes = new List<int>();
 
-            if (ddlPersonSelectedValue != hdnPersonId.Value || ddlRoleSelectedValue != oldRoleId)
+            if (ddlPersonSelectedValue != hdnPersonId.Value)
             {
                 similarEntryIndexes = new List<int>();
 
@@ -545,8 +541,7 @@ namespace PraticeManagement.Controls.Milestones
 
 
 
-                        if (mpe.IsNewEntry == false && mpe.ThisPerson.Id.Value.ToString() == hdnPersonId.Value
-                            && ((mpe.Role != null) ? mpe.Role.Id.ToString() : string.Empty) == oldRoleId)
+                        if (mpe.IsNewEntry == false && mpe.ThisPerson.Id.Value.ToString() == hdnPersonId.Value )
                         {
                             similarEntryIndexes.Add(j);
                         }
@@ -566,11 +561,7 @@ namespace PraticeManagement.Controls.Milestones
 
                 var personId = MilestonePersonsEntries[i].ThisPerson.Id.ToString();
 
-                var roleId = MilestonePersonsEntries[i].Role != null ? MilestonePersonsEntries[i].Role.Id.ToString() : string.Empty;
-
-
-
-                if (!similarEntryIndexes.Any(indexVal => indexVal == i) && MilestonePersonsEntries[i].IsNewEntry == false && roleId == ddlRoleSelectedValue && personId == ddlPersonSelectedValue)
+                if (!similarEntryIndexes.Any(indexVal => indexVal == i) && MilestonePersonsEntries[i].IsNewEntry == false && personId == ddlPersonSelectedValue)
                 {
                     // Include Similar Entries Indexes rows start and end dates with other rows 
 
@@ -660,40 +651,38 @@ namespace PraticeManagement.Controls.Milestones
                 }
 
             }
-
-
+            if (e.IsValid)
+            {   int personId;
+                int.TryParse(ddlPersonSelectedValue,out personId);
+                e.IsValid = !(ServiceCallers.Custom.Person(p => p.CheckIfPersonEntriesOverlapps(Milestone.Id.Value, personId, dpPersonStart.DateValue,dpPersonEnd.DateValue)));
+            }
         }
 
         private void ValidateOvelappingWhenSaveAllClicked(object sender, ServerValidateEventArgs e)
         {
             CustomValidator custPerson = sender as CustomValidator;
             GridViewRow gvRow = custPerson.NamingContainer as GridViewRow;
-
+            GridView gv = gvRow.NamingContainer as GridView;
             var dpPersonStart = gvRow.FindControl("dpPersonStart") as DatePicker;
             var dpPersonEnd = gvRow.FindControl("dpPersonEnd") as DatePicker;
 
-            string ddlPersonSelectedValue = "", ddlRoleSelectedValue = "";
+            string ddlPersonSelectedValue = "";
 
             if (MilestonePersonsEntries[gvRow.DataItemIndex].IsShowPlusButton)
             {
                 ddlPersonSelectedValue = (gvRow.FindControl("ddlPersonName") as DropDownList).SelectedValue;
-                ddlRoleSelectedValue = (gvRow.FindControl("ddlRole") as DropDownList).SelectedValue;
             }
             else
             {
                 var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == MilestonePersonsEntries[gvRow.DataItemIndex].ShowingPlusButtonEntryId);
 
                 ddlPersonSelectedValue = MilestonePersonsEntries[index].IsEditMode ? (gvMilestonePersonEntries.Rows[index].FindControl("ddlPersonName") as DropDownList).SelectedValue : MilestonePersonsEntries[index].ThisPerson.Id.ToString();
-                ddlRoleSelectedValue = MilestonePersonsEntries[index].IsEditMode ? (gvMilestonePersonEntries.Rows[index].FindControl("ddlRole") as DropDownList).SelectedValue : (MilestonePersonsEntries[index].Role != null ? MilestonePersonsEntries[index].Role.Id.ToString() : string.Empty);
             }
 
             var hdnPersonId = gvRow.FindControl("hdnPersonId") as HiddenField;
-            var lblRole = gvRow.FindControl("lblRole") as Label;
-            var oldRoleId = lblRole.Attributes["RoleId"];
-
             List<int> similarEntryIndexes = new List<int>();
 
-            if (ddlPersonSelectedValue != hdnPersonId.Value || ddlRoleSelectedValue != oldRoleId)
+            if (ddlPersonSelectedValue != hdnPersonId.Value)
             {
                 similarEntryIndexes = new List<int>();
 
@@ -706,9 +695,7 @@ namespace PraticeManagement.Controls.Milestones
                     {
                         var mpe = MilestonePersonsEntries[j];
 
-                        if (((mpe.IsNewEntry == false) || HostingPage.ValidateNewEntry)
-                                                                        && mpe.ThisPerson.Id.Value.ToString() == hdnPersonId.Value
-                                                                        && ((mpe.Role != null) ? mpe.Role.Id.ToString() : string.Empty) == oldRoleId)
+                        if (((mpe.IsNewEntry == false) || HostingPage.ValidateNewEntry) && mpe.ThisPerson.Id.Value.ToString() == hdnPersonId.Value)
                         {
                             similarEntryIndexes.Add(j);
                         }
@@ -736,18 +723,9 @@ namespace PraticeManagement.Controls.Milestones
                                 ? MilestonePersonsEntries.First(ent => ent.Id == MilestonePersonsEntries[i].ShowingPlusButtonEntryId).EditedEntryValues["ddlPersonName"]
                                 : MilestonePersonsEntries.First(ent => ent.Id == MilestonePersonsEntries[i].ShowingPlusButtonEntryId).ThisPerson.Id.ToString())
                                 ;
-                var roleId = (MilestonePersonsEntries[i].IsShowPlusButton || HostingPage.IsSaveAllClicked == false)
-                    ?
-                                (
-                                MilestonePersonsEntries[i].IsEditMode ? MilestonePersonsEntries[i].EditedEntryValues["ddlRole"] : MilestonePersonsEntries[i].Role != null ? MilestonePersonsEntries[i].Role.Id.ToString() : string.Empty)
-
-                    : (MilestonePersonsEntries.First(ent => ent.Id == MilestonePersonsEntries[i].ShowingPlusButtonEntryId).IsEditMode
-                                ? MilestonePersonsEntries.First(ent => ent.Id == MilestonePersonsEntries[i].ShowingPlusButtonEntryId).EditedEntryValues["ddlRole"]
-                                : (MilestonePersonsEntries.First(ent => ent.Id == MilestonePersonsEntries[i].ShowingPlusButtonEntryId).Role != null) ? MilestonePersonsEntries.First(ent => ent.Id == MilestonePersonsEntries[i].ShowingPlusButtonEntryId).Role.Id.ToString() : string.Empty)
-                                ;
                 // Exclude Comparing with Similar Entries Indexes rows
                 if (!similarEntryIndexes.Any(indexVal => indexVal == i) && ((MilestonePersonsEntries[i].IsNewEntry == false)
-                    || (HostingPage.ValidateNewEntry)) && roleId == ddlRoleSelectedValue && personId == ddlPersonSelectedValue)
+                    || (HostingPage.ValidateNewEntry)) && personId == ddlPersonSelectedValue)
                 {
                     // Include Similar Entries Indexes rows start and end dates with other rows 
 
@@ -842,7 +820,6 @@ namespace PraticeManagement.Controls.Milestones
                                 {
                                     e.IsValid = false;
                                     break;
-
                                 }
                             }
                             catch
@@ -852,6 +829,43 @@ namespace PraticeManagement.Controls.Milestones
                         }
                     }
 
+                }
+            }
+            if (!e.IsValid)
+                return;
+            for (int j = 0; j < MilestonePersonsEntries.Count; j++)
+            {
+                if (MilestonePersonsEntries[j].IsEditMode)
+                {
+                    var gvdpPersonStart = gv.Rows[j].FindControl("dpPersonStart") as DatePicker;
+                    var gvdpPersonEnd = gv.Rows[j].FindControl("dpPersonEnd") as DatePicker;  
+                    var gvddlPersonName = gv.Rows[j].FindControl("ddlPersonName") as CustomDropDown;
+                    for (int i = j + 1; i < MilestonePersonsEntries.Count; i++)
+                    {
+                        var gvNextdpPersonStart = gv.Rows[i].FindControl("dpPersonStart") as DatePicker;
+                        var gvNextdpPersonEnd = gv.Rows[i].FindControl("dpPersonEnd") as DatePicker;
+                        var gvNextddlPersonName = gv.Rows[i].FindControl("ddlPersonName") as CustomDropDown;
+
+                        if (gvddlPersonName.SelectedValue == gvNextddlPersonName.SelectedValue && gvdpPersonStart.DateValue <= gvNextdpPersonEnd.DateValue && gvNextdpPersonStart.DateValue <= gvdpPersonEnd.DateValue)
+                        {
+                            e.IsValid = false;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            for (int j = 0; j < MilestonePersonsEntries.Count; j++)
+            {
+                if (MilestonePersonsEntries[j].IsEditMode)
+                {
+                    int personId;
+                    int.TryParse(ddlPersonSelectedValue, out personId);
+                    var gvdpPersonStart = gv.Rows[j].FindControl("dpPersonStart") as DatePicker;
+                    var gvdpPersonEnd = gv.Rows[j].FindControl("dpPersonEnd") as DatePicker;
+                    e.IsValid = !(ServiceCallers.Custom.Person(p => p.CheckIfPersonEntriesOverlapps(Milestone.Id.Value, personId, gvdpPersonStart.DateValue, gvdpPersonEnd.DateValue)));
+                    if (!e.IsValid)
+                        return;
                 }
             }
         }
