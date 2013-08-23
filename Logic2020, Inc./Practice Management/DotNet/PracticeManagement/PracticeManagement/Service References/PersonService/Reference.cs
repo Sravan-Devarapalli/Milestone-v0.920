@@ -55,6 +55,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.Person CheckIfValidDivision(int personId, System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckIfPersonEntriesOverlapps", ReplyAction="http://tempuri.org/IPersonService/CheckIfPersonEntriesOverlappsResponse")]
+        bool CheckIfPersonEntriesOverlapps(int milestoneId, int personId, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -308,8 +311,8 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
+       
         
-     
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -372,6 +375,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person CheckIfValidDivision(int personId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.CheckIfValidDivision(personId, startDate, endDate);
+        }
+        
+        public bool CheckIfPersonEntriesOverlapps(int milestoneId, int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.CheckIfPersonEntriesOverlapps(milestoneId, personId, startDate, endDate);
         }
         
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
