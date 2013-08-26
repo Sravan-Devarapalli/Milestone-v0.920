@@ -64,7 +64,7 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonStartInsert_ServerValidate"></asp:CustomValidator>
                     <asp:CustomValidator ID="custPeriodOvberlapping" runat="server" ControlToValidate="dpPersonStartInsert"
-                        ErrorMessage="" ToolTip="The specified period overlaps with another for this person in the entire project."
+                        ErrorMessage="" ToolTip="A project resource cannot have more than one bill rate on a project during the same time period. Please adjust the start and end dates to make sure that the time periods for the bill rates do not overlap."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidateEmptyText="false" ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPeriodOvberlappingInsert_ServerValidate"></asp:CustomValidator>
                     <asp:CustomValidator ID="custPeriodVacationOverlapping" runat="server" ControlToValidate="dpPersonStartInsert"
