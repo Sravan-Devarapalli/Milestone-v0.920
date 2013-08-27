@@ -616,7 +616,7 @@ TABLE.PaddingTenPx td{padding:0 5px}
 TABLE.PersonSummaryReport TD,TABLE.TerminationReport TD{border-bottom:1px solid #000;text-align:center;height:24px;vertical-align:middle;padding:2px}
 TABLE.PersonSummaryReport TH,TABLE.TerminationReport TH,CSATReportHeader{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
 .PersonSummaryReport .ResourceColum{text-align:left!important;width:210px!important}
-.PersonSummaryReport .ProjectColum{text-align:left!important;width:300px!important;background-color:White;padding-left:5px}
+.PersonSummaryReport .ProjectColum{text-align:left!important;width:220px!important;background-color:White;padding-left:5px}
 .PersonSummaryReport .ResourceColum img{padding-left:2px}
 .ResourceColumTable td{padding-left:5px!important;text-align:left!important}
 .ResourceColumTable td a{text-decoration:none;color:Black!important}
