@@ -1095,8 +1095,8 @@ namespace DataAccess
                 PLGH.BillingType = reader.GetString(billingTypeIndex);
                 PLGH.Person = person;
                 PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);
-                PLGH.BillRate = Convert.ToDouble(reader[billRateIndex]);
-                PLGH.EstimatedBillings = Convert.ToDouble(reader[estimatedBillingsIndex]);
+                PLGH.BillRate = PLGH.BillingType == "Fixed" ? -1 : Convert.ToDouble(reader[billRateIndex]);
+                PLGH.EstimatedBillings = PLGH.BillingType == "Fixed" ? -1 : Convert.ToDouble(reader[estimatedBillingsIndex]);
 
                 result.Add(PLGH);
             }
