@@ -847,8 +847,8 @@ namespace PraticeManagement.Reporting
                         GetDoubleFormat(byPerson.BillableHours),
                         GetDoubleFormat(byPerson.NonBillableHours),
                         GetDoubleFormat(byPerson.TotalHours),
-                        (byPerson.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", byPerson.BillRate),
-                        (byPerson.BillingType == "Fixed") ? "FF" : string.Format("{0:0.00}", byPerson.EstimatedBillings),
+                        (byPerson.FormattedBillRate),
+                        (byPerson.FormattedEstimatedBillings),
                         (byPerson.BillableHoursVariance > 0) ? "+" + GetDoubleFormat(byPerson.BillableHoursVariance) : GetDoubleFormat(byPerson.BillableHoursVariance),
                         ColoumSpliter,
                         RowSpliter);
