@@ -317,5 +317,22 @@ namespace DataTransferObjects.Reports
                 DayTotalHours.Add(dt);
             }
         }
+
+        public string FormattedBillRate
+        {
+            get
+            {
+                return BillRate == -1.00 ? "FF" : BillRate.ToString(Constants.Formatting.CurrencyFormat);
+            }
+        }
+
+        public string FormattedEstimatedBillings
+        {
+            get
+            {
+                return EstimatedBillings == -1.00 ? "FF" : EstimatedBillings.ToString(Constants.Formatting.CurrencyFormat);
+            }
+        }
+
     }
 }
