@@ -28,11 +28,6 @@
             SetTooltipsForallDropDowns();
             $("#tblProjectSummaryByResource").tablesorter(
             {
-                headers: {
-                    1: {
-                        sorter: false
-                    }
-                },
                 sortList: [[0, 0]],
                 sortForce: [[0, 0]]
             });
@@ -66,11 +61,6 @@
 
             $("#tblProjectSummaryByResource").tablesorter(
                 {
-                    headers: {
-                        1: {
-                            sorter: false
-                        }
-                    },
                     sortList: [[0, 0]],
                     sortForce: [[0, 0]]
                 });
