@@ -44,8 +44,6 @@
                         <th class="ProjectColum">
                             Resource
                         </th>
-                        <th class="Width140px">
-                        </th>
                         <th class="Width130px">
                             Project Role
                             <img alt="Filter" title="Filter" src="../../Images/search_filter.png" runat="server"
@@ -63,14 +61,14 @@
                         <th class="Width100Px">
                             <asp:Label ID="lblNonBillable" runat="server" Text="Non-Billable"></asp:Label>
                         </th>
-                        <th class="Width100Px">
+                        <th class="Width120Px">
                             <asp:Label ID="lblActualHours" runat="server" Text="Actual Hours"></asp:Label>
                         </th>
                         <th class="Width100Px">
-                            <asp:Label ID="lblBillRate" runat="server" Text="Hourly Bill Rate"></asp:Label>
+                            <asp:Label ID="lblBillRate" runat="server" Text="Hourly Rate"></asp:Label>
                         </th>
                         <th class="Width100Px">
-                            <asp:Label ID="lblEstimatedBillings" runat="server" Text="Estimated Billings"></asp:Label>
+                            <asp:Label ID="lblEstimatedBillings" runat="server" Text="Est. Billings"></asp:Label>
                         </th>
                         <th class="Width200Px">
                             <asp:Label ID="lblBillableHoursVariance" runat="server" Text="Billable Hours Variance"></asp:Label>
@@ -85,8 +83,6 @@
                 <%# Eval("Person.PersonLastFirstName")%>
                 <asp:Image ID="imgOffshore" runat="server" ImageUrl="~/Images/Offshore_Icon.png"
                     ToolTip="Resource is an offshore employee" Visible='<%# (bool)Eval("Person.IsOffshore")%>' />
-            </td>
-            <td>
             </td>
             <td class="t-center padLeft5">
                 <%# Eval("Person.ProjectRoleName")%>
@@ -105,11 +101,11 @@
                     OnClientClick="OpenUrlInNewWindow(this);return false;" Text='<%# GetDoubleFormat((double)Eval("TotalHours"))%>'
                     target="_blank"></asp:LinkButton>
             </td>
-            <td>
-                <asp:Label id="lblBillRateData" runat="server"></asp:Label>
+            <td sorttable_customkey='<%# Eval("BillRate") %>'>
+                <%# Eval("FormattedBillRate")%>
             </td>
-            <td>
-                <asp:Label id="lblEstBillingsData" runat="server"></asp:Label>
+            <td sorttable_customkey='<%# Eval("EstimatedBillings") %>'>
+                <%# Eval("FormattedEstimatedBillings")%>
             </td>
             <td sorttable_customkey='<%# Eval("BillableHoursVariance") %>'>
                 <table class="WholeWidth TdLevelNoBorder">
