@@ -15,6 +15,11 @@ namespace PraticeManagement.Controls.Milestones
     {
         private const string DuplPersonName = "The specified person is already assigned on this milestone.";
         private const string milestonePersonEntryInsert = "MilestonePersonEntryInsert";
+        public const string BothDatesEmployementError = "{0} cannot be assigned to the project due to his/her hire date-{1} and termination date-{2} from the company. Please update his/her start and end dates to align with that date.";
+        public const string TotalOutOfEmploymentError = "The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone.";
+        public const string TerminationDateEmployementError = "{0} cannot be assigned to the project past {1} due to his/her termination from the company. Please update his/her start and end dates to align with that date.";
+        public const string HireDateEmployementError = "{0} cannot be assigned to the project before {1} as he/she is not hired into the company. Please update his/her start and end dates to align with that date.";
+
         private ExceptionDetail _internalException;
 
         private PraticeManagement.MilestoneDetail HostingPage
@@ -310,8 +315,21 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void custPersonInsert_ServerValidate(object sender, ServerValidateEventArgs args)
         {
+            CustomValidator custPerson = sender as CustomValidator;
             Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
-            args.IsValid = HostingControl.IsRangeInThePersonEmpHistory(person, dpPersonStartInsert.DateValue.Date, dpPersonEndInsert.DateValue.Date);
+            Dictionary<string, List<DateTime>> PersonDatesViolations = HostingControl.IsRangeInThePersonEmpHistory(person, dpPersonStartInsert.DateValue.Date, dpPersonEndInsert.DateValue.Date);
+            args.IsValid = !(PersonDatesViolations.Count > 0);
+            if (PersonDatesViolations != null && PersonDatesViolations.Keys.Any())
+            {
+                string firstKey = PersonDatesViolations.Keys.First();
+                switch (firstKey)
+                {
+                    case "HireDate": custPerson.ToolTip = string.Format(HireDateEmployementError, person.LastName + ", " + person.FirstName, PersonDatesViolations[firstKey][0].ToString(Constants.Formatting.EntryDateFormat)); break;
+                    case "TerminationDate": custPerson.ToolTip = string.Format(TerminationDateEmployementError, person.LastName + ", " + person.FirstName, PersonDatesViolations[firstKey][0].ToString(Constants.Formatting.EntryDateFormat)); break;
+                    case "Both": custPerson.ToolTip = string.Format(BothDatesEmployementError, person.LastName + ", " + person.FirstName, PersonDatesViolations[firstKey][0].ToString(Constants.Formatting.EntryDateFormat), PersonDatesViolations[firstKey][1].ToString(Constants.Formatting.EntryDateFormat)); break;
+                    case "TotalOut": custPerson.ToolTip = string.Format(TotalOutOfEmploymentError); break;
+                }
+            }
         }
 
         protected void cvHoursInPeriod_ServerValidate(object source, ServerValidateEventArgs e)
@@ -417,6 +435,23 @@ namespace PraticeManagement.Controls.Milestones
             HostingControl.CopyItemAndDaabindRepeater(bar.ItemIndex);
         }
 
+        public void ddlPersonName_Changed(object sender, EventArgs e)
+        {
+            DropDownList ddlPerson = sender as DropDownList;
+            GridViewRow gvRow = ddlPerson.NamingContainer as GridViewRow;
+            var dpPersonStart = ((Control)sender).Parent.FindControl("dpPersonStartInsert") as DatePicker;
+            var dpPersonEnd = ((Control)sender).Parent.FindControl("dpPersonEndInsert") as DatePicker;
+            Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
+            if (person != null && !person.IsStrawMan && person.EmploymentHistory != null)
+            {
+                if (person.EmploymentHistory.Any(p => p.HireDate <= HostingControl.Milestone.ProjectedDeliveryDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && HostingControl.Milestone.StartDate <= p.TerminationDate))))
+                {
+                    Employment employment = person.EmploymentHistory.First(p => p.HireDate <= HostingControl.Milestone.ProjectedDeliveryDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && HostingControl.Milestone.StartDate <= p.TerminationDate)));
+                    dpPersonStart.TextValue = HostingControl.Milestone.StartDate < employment.HireDate.Date ? employment.HireDate.Date.ToString(Constants.Formatting.EntryDateFormat) : HostingControl.Milestone.StartDate.ToString(Constants.Formatting.EntryDateFormat);
+                    dpPersonEnd.TextValue = employment.TerminationDate.HasValue ? HostingControl.Milestone.ProjectedDeliveryDate < employment.TerminationDate.Value ? HostingControl.Milestone.ProjectedDeliveryDate.ToString(Constants.Formatting.EntryDateFormat) : employment.TerminationDate.Value.ToString(Constants.Formatting.EntryDateFormat) : HostingControl.Milestone.ProjectedDeliveryDate.ToString(Constants.Formatting.EntryDateFormat);
+                }
+            }
+        }
 
         protected string GetValidationGroup()
         {
