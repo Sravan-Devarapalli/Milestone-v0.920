@@ -1146,6 +1146,7 @@ namespace DataAccess
             int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
             int isOffShoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
             int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+            int billRateIndex = reader.GetOrdinal(Constants.ColumnNames.BillRate);
 
             while (reader.Read())
             {
@@ -1181,6 +1182,8 @@ namespace DataAccess
                     PLGH = result.First(r => r.Person.Id == personId);
                     if (dt != null)
                         PLGH.AddDayTotalHours(dt);
+                    PLGH.ForecastedHours += Convert.ToDouble(reader[forecastedHoursIndex]);
+                    PLGH.EstimatedBillings += ((!reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d) * Convert.ToDouble(reader[billRateIndex]));
                 }
                 else
                 {
@@ -1197,6 +1200,7 @@ namespace DataAccess
                     PLGH.Person = person;
                     PLGH.TimeEntrySectionId = !reader.IsDBNull(timeEntrySectionIdIndex) ? reader.GetInt32(timeEntrySectionIdIndex) : 0;
                     PLGH.ForecastedHours = Convert.ToDouble(reader[forecastedHoursIndex]);
+                    PLGH.EstimatedBillings = ((!reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d) * Convert.ToDouble(reader[billRateIndex]));
                     if (dt != null)
                     {
                         PLGH.DayTotalHours = new List<TimeEntriesGroupByDate>()
