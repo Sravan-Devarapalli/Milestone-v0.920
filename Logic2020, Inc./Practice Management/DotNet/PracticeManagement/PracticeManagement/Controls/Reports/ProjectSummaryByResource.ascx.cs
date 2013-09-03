@@ -108,7 +108,7 @@ namespace PraticeManagement.Controls.Reports
             double billableHours = personLevelGroupedHoursList.Sum(p => p.DayTotalHours != null ? p.DayTotalHours.Sum(d => d.BillableHours) : p.BillableHours);
             double nonBillableHours = personLevelGroupedHoursList.Sum(p => p.NonBillableHours);
             double projectedHours = personLevelGroupedHoursList.Sum(p => p.ForecastedHours);
-
+            double totalEstBillings = personLevelGroupedHoursList.Where(p=> p.EstimatedBillings != -1.00).Sum(p=>p.EstimatedBillings);
             var billablePercent = 0;
             var nonBillablePercent = 0;
             if (billableHours != 0 || nonBillableHours != 0)
@@ -129,6 +129,7 @@ namespace PraticeManagement.Controls.Reports
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
+            ltrlTotalEstBillings.Text = project.BillableType == "Fixed" ? "FF" : totalEstBillings.ToString(Constants.Formatting.CurrencyExcelReportFormatWithoutDecimal);
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
