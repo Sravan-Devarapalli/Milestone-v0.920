@@ -33,10 +33,10 @@
                 </tr>
             </table>
         </td>
-        <td class="ProjectSummaryReportTotals">
+        <td class="ProjectSummaryReportTotals Width750PxImp">
             <table class="tableFixed WholeWidth">
                 <tr>
-                    <td class="Width27Percent">
+                    <td class="Width19Percent">
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
@@ -50,7 +50,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="Width27Percent">
+                    <td class="Width19Percent">
                         <table class="ReportHeaderTotalsTable">
                             <tr>
                                 <td class="FirstTd">
@@ -64,7 +64,21 @@
                             </tr>
                         </table>
                     </td>
-                    <td class="Width27Percent vBottom">
+                      <td class="Width28Percent">
+                        <table class="WhiteSpaceNormal ReportHeaderTotalsTable">
+                            <tr>
+                                <td class="FirstTd">
+                                    Total Estimated Billings
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="SecondTd">
+                                    <asp:Literal ID="ltrlTotalEstBillings" runat="server"></asp:Literal>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="Width19Percent vBottom">
                         <table class="ReportHeaderBillAndNonBillTable">
                             <tr>
                                 <td>
