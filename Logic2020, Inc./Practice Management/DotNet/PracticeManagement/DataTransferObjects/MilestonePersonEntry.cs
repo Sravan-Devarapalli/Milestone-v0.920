@@ -300,6 +300,8 @@ namespace DataTransferObjects
 
         public bool IsRepeaterEntry { get; set; }
 
+        public bool IsAddButtonEntry { get; set; }
+
         public Dictionary<string, string> EditedEntryValues { get; set; }
 
         public MilestonePersonEntry PreviouslySavedEntry { get; set; }
