@@ -78,7 +78,7 @@
                 <table class="WholeWidth" id="tblPersonName" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
-                            <cc2:CustomDropDown ID="ddlPersonName" CssClass="Width98Percent" runat="server" />
+                            <cc2:CustomDropDown ID="ddlPersonName" CssClass="Width98Percent" runat="server"/>
                             <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("ThisPerson.Id") %>' />
                             <asp:HiddenField ID="hdnPersonIsStrawMan" runat="server" Value='<%# Eval("ThisPerson.IsStrawMan") %>' />
                         </td>
@@ -87,7 +87,7 @@
                                 ErrorMessage="" ToolTip="The Person Name is required." Display="Dynamic" Text="*"
                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup(Container) %>"></asp:RequiredFieldValidator>
                             <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPersonName"
-                                ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
+                                ErrorMessage="" ToolTip=""
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 ValidationGroup="<%# GetValidationGroup(Container) %>" OnServerValidate="custPerson_ServerValidate"></asp:CustomValidator>
                             <asp:CustomValidator ID="cvMaxRows" runat="server" ControlToValidate="ddlPersonName"
