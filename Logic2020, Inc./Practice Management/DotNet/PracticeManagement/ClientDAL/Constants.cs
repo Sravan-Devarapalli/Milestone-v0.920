@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string ProjectedDeliveryDate = "ProjectedDeliveryDate";
             public const string BillRate = "BillRate";
             public const string EstimatedBillings = "EstimatedBillings"; 
             public const string AttributionRecordTypeId = "AttributionRecordTypeId";
@@ -481,6 +482,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IsUnassignedReport = "@IsUnassignedReport";
             public static string IsFromAddTimeOffButton = "@IsFromAddTimeOffButton";
             public static string IsReHire = "@IsReHire";
             public static string ValidateAttribution = "@ValidateAttribution";
@@ -1099,6 +1101,8 @@
 
             public class Reports
             {
+                public const string ResourceAssignedOrUnassignedChargingExceptionReport = "dbo.ResourceAssignedOrUnassignedChargingExceptionReport";
+                public const string ZeroHourlyRateExceptionReport = "dbo.ZeroHourlyRateExceptionReport";
                 public const string ProjectAttributionReport = "dbo.ProjectAttributionReport";
                 public const string AttainmentProjectList = "dbo.AttainmentProjectList";
                 public const string AttainmentFinancialListByProject = "dbo.AttainmentFinancialListByProject";
