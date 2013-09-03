@@ -19,7 +19,8 @@
         <table class="WholeWidth">
             <tr>
                 <td class="Width85Percent">
-                    <cc2:CustomDropDown ID="ddlPerson" CssClass="Width98Percent" runat="server" />
+                    <cc2:CustomDropDown ID="ddlPerson" CssClass="Width98Percent" runat="server" OnSelectedIndexChanged="ddlPersonName_Changed"
+                        AutoPostBack="true" />
                 </td>
                 <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonName" runat="server" ControlToValidate="ddlPerson"
@@ -29,13 +30,13 @@
                         ErrorMessage="" ToolTip="The Person Name is required." Text="*" EnableClientScript="false"
                         SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
                     <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPerson"
-                        ErrorMessage="" ToolTip="The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone."
-                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                        ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonInsert_ServerValidate"></asp:CustomValidator>
+                        ErrorMessage="" ToolTip="" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                        Display="Dynamic" ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="custPersonInsert_ServerValidate"></asp:CustomValidator>
                     <asp:CustomValidator ID="cvMaxRows" runat="server" ControlToValidate="ddlPerson"
                         ErrorMessage="" ToolTip="Milestone person with same role cannot have more than 5 entries."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidationGroup="<%# GetValidationGroup() %>" OnServerValidate="cvMaxRows_ServerValidate"></asp:CustomValidator>
+                    <asp:HiddenField ID="hdnIsFromAddBtn" runat="server" />
                 </td>
             </tr>
         </table>
