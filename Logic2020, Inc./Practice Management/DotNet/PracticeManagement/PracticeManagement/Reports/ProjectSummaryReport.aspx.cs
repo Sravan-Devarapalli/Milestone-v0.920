@@ -709,10 +709,10 @@ namespace PraticeManagement.Reporting
             double billableHours = _personLevelGroupedHoursList.Sum(p => p.DayTotalHours != null ? p.DayTotalHours.Sum(d => d.BillableHours) : p.BillableHours);
             double nonBillableHours = _personLevelGroupedHoursList.Sum(p => p.NonBillableHours);
             double projectedHours = _personLevelGroupedHoursList.Sum(p => p.ForecastedHours);
-
-            PdfPTable outerTable = new PdfPTable(4);
+            double totalEstBillings = _personLevelGroupedHoursList.Where(p => p.EstimatedBillings != -1.00).Sum(p => p.EstimatedBillings);
+            PdfPTable outerTable = new PdfPTable(5);
             outerTable.WidthPercentage = 100;
-            float[] outerWidths = { .5f, .2f, .2f, .1f };
+            float[] outerWidths = { .4f, .15f, .15f,.2f, .1f };
             outerTable.SetWidths(outerWidths);
 
             var boldBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
@@ -789,6 +789,21 @@ namespace PraticeManagement.Reporting
             innerTable3.AddCell(headerText8);
             innerTable3.CompleteRow();
 
+            //inner table5
+            PdfPTable innerTable5 = new PdfPTable(1);
+            innerTable5.WidthPercentage = 100;
+            PdfPCell headerText13 = new PdfPCell(new Phrase("Total Estimated Billings", normalFont12));
+            PdfPCell headerText14 = new PdfPCell(new Phrase(project.BillableType == "Fixed" ? "FF" : (totalEstBillings).ToString(Constants.Formatting.CurrencyExcelReportFormatWithoutDecimal), boldFont));
+            headerText13.VerticalAlignment = Element.ALIGN_BOTTOM;
+            headerText14.VerticalAlignment = Element.ALIGN_TOP;
+            headerText13.HorizontalAlignment = headerText14.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerText13.FixedHeight = headerText14.FixedHeight = 30f;
+            headerText13.BorderWidth = headerText14.BorderWidth = 0f;
+
+            innerTable5.AddCell(headerText13);
+            innerTable5.CompleteRow();
+            innerTable5.AddCell(headerText14);
+            innerTable5.CompleteRow();
 
             //inner table4
             PdfPTable innerTable4 = new PdfPTable(1);
@@ -816,12 +831,14 @@ namespace PraticeManagement.Reporting
             PdfPCell innerTableCell2 = new PdfPCell(innerTable2);
             PdfPCell innerTableCell3 = new PdfPCell(innerTable3);
             PdfPCell innerTableCell4 = new PdfPCell(innerTable4);
-            innerTableCell1.BorderWidth = innerTableCell2.BorderWidth = innerTableCell3.BorderWidth = innerTableCell4.BorderWidth = 0f;
+            PdfPCell innerTableCell5 = new PdfPCell(innerTable5);
+            innerTableCell1.BorderWidth = innerTableCell2.BorderWidth = innerTableCell3.BorderWidth = innerTableCell4.BorderWidth = innerTableCell5.BorderWidth =  0f;
             innerTableCell1.PaddingBottom = 20f;
 
             outerTable.AddCell(innerTableCell1);
             outerTable.AddCell(innerTableCell2);
             outerTable.AddCell(innerTableCell3);
+            outerTable.AddCell(innerTableCell5);
             outerTable.AddCell(innerTableCell4);
             outerTable.CompleteRow();
             return outerTable;
