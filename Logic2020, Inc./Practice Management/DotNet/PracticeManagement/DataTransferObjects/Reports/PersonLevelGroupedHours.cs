@@ -306,7 +306,14 @@ namespace DataTransferObjects.Reports
 
         public void AddDayTotalHours(TimeEntriesGroupByDate dt)
         {
-            if (DayTotalHours.Any(dth => dth.Date == dt.Date))
+            if (DayTotalHours == null)
+            {
+                DayTotalHours = new List<TimeEntriesGroupByDate>()
+                            {
+                                dt
+                            };
+            }
+            else if (DayTotalHours.Any(dth => dth.Date == dt.Date))
             {
                 var workType = dt.DayTotalHoursList[0];
                 dt = DayTotalHours.First(dth => dth.Date == dt.Date);
