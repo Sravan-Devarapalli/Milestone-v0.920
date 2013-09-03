@@ -46,6 +46,10 @@ namespace PraticeManagement.Controls.Milestones
         private const string milestoneHasTimeEntries = "Cannot delete milestone person because this person has already entered time for this milestone.";
         private const string allMilestoneHasTimeEntries = "Cannot delete all milestone person entries because this person has already entered time for this milestone.";
         private const string milestonePersonEntry = "MilestonePersonEntry";
+        public const string BothDatesEmployementError = "{0} cannot be assigned to the project due to his/her hire date-{1} and termination date-{2} from the company. Please update his/her start and end dates to align with that date.";
+        public const string TotalOutOfEmploymentError = "The person you are trying to add is not set as being active during the entire length of their participation in the milestone.  Please adjust the person's hire and compensation records, or change the dates that they are attached to this milestone.";
+        public const string TerminationDateEmployementError = "{0} cannot be assigned to the project past {1} due to his/her termination from the company. Please update his/her start and end dates to align with that date.";
+        public const string HireDateEmployementError = "{0} cannot be assigned to the project before {1} as he/she is not hired into the company. Please update his/her start and end dates to align with that date.";
         private string ShowPanel = "ShowPanel('{0}', '{1}','{2}','{3}','{4}','{5}');";
         private string HidePanel = "HidePanel('{0}');";
         private string OnMouseOver = "onmouseover";
@@ -308,27 +312,51 @@ namespace PraticeManagement.Controls.Milestones
             var dpPersonStart = ((Control)sender).Parent.FindControl("dpPersonStart") as DatePicker;
             var dpPersonEnd = ((Control)sender).Parent.FindControl("dpPersonEnd") as DatePicker;
             Person person = GetPersonBySelectedValue(ddl.SelectedValue);
-            args.IsValid = IsRangeInThePersonEmpHistory(person, dpPersonStart.DateValue.Date, dpPersonEnd.DateValue.Date);
+            Dictionary<string, List<DateTime>> PersonDatesViolations = IsRangeInThePersonEmpHistory(person, dpPersonStart.DateValue.Date, dpPersonEnd.DateValue.Date);
+            args.IsValid = !(PersonDatesViolations.Count > 0);
+            if (PersonDatesViolations != null && PersonDatesViolations.Keys.Any())
+            {
+                string firstKey = PersonDatesViolations.Keys.First();
+                switch (firstKey)
+                {
+                    case "HireDate": custPerson.ToolTip = string.Format(HireDateEmployementError, person.LastName + ", " + person.FirstName, PersonDatesViolations[firstKey][0].ToString(Constants.Formatting.EntryDateFormat)); break;
+                    case "TerminationDate": custPerson.ToolTip = string.Format(TerminationDateEmployementError, person.LastName + ", " + person.FirstName, PersonDatesViolations[firstKey][0].ToString(Constants.Formatting.EntryDateFormat)); break;
+                    case "Both": custPerson.ToolTip = string.Format(BothDatesEmployementError, person.LastName + ", " + person.FirstName, PersonDatesViolations[firstKey][0].ToString(Constants.Formatting.EntryDateFormat), PersonDatesViolations[firstKey][1].ToString(Constants.Formatting.EntryDateFormat)); break;
+                    case "TotalOut": custPerson.ToolTip = string.Format(TotalOutOfEmploymentError); break;
+                }
+            }
         }
 
-        public bool IsRangeInThePersonEmpHistory(Person person, DateTime startDate, DateTime endDate)
+        public Dictionary<string, List<DateTime>> IsRangeInThePersonEmpHistory(Person person, DateTime startDate, DateTime endDate)
         {
-            bool check = false;
+            Dictionary<string, List<DateTime>> dateValidation = new Dictionary<string, List<DateTime>>();
             if (person != null && startDate != null && endDate != null)
             {
-                if (person.IsStrawMan)
-                {
-                    check = true;
-                }
-                else if(person.EmploymentHistory != null)
+                if(!person.IsStrawMan && person.EmploymentHistory != null)
                 {
                     if (person.EmploymentHistory.Any(p => p.HireDate <= startDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && endDate <= p.TerminationDate))))
                     {
-                        check = true;
+                    }
+                    else if (person.EmploymentHistory.Any(p => p.HireDate <= endDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && startDate <= p.TerminationDate))))
+                    {
+                        List<Employment> employments = person.EmploymentHistory.Where(p => p.HireDate <= endDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && startDate <= p.TerminationDate.Value))).ToList();
+                         foreach(Employment emp in employments)
+                         {
+                             if (startDate < emp.HireDate && emp.TerminationDate.HasValue && endDate > emp.TerminationDate.Value && !dateValidation.Keys.Any(p=>p == "Both"))
+                                 dateValidation.Add("Both",new List<DateTime>(){emp.HireDate,emp.TerminationDate.Value});
+                             else if (startDate < emp.HireDate && !dateValidation.Keys.Any(p => p == "HireDate"))
+                                 dateValidation.Add("HireDate",new List<DateTime>(){emp.HireDate});
+                             else if (emp.TerminationDate.HasValue && endDate > emp.TerminationDate.Value && !dateValidation.Keys.Any(p => p == "TerminationDate"))
+                                 dateValidation.Add("TerminationDate",new List<DateTime>(){emp.TerminationDate.Value});
+                         }
+                    }
+                    else
+                    {
+                     dateValidation.Add("TotalOut",null);
                     }
                 }
             }
-            return check;
+            return dateValidation;
         }
 
         protected void reqHourlyRevenue_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -1371,6 +1399,7 @@ namespace PraticeManagement.Controls.Milestones
             var dpPersonEnd = bar.FindControl(dpPersonEndInsert) as DatePicker;
             var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
             var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
+            var hdnIsFromAddBtn = bar.FindControl("hdnIsFromAddBtn") as HiddenField;
 
             if (dpPersonStart != null)
                 dpPersonStart.DateValue = DateTime.Parse(repeaterOldValues[e.Item.ItemIndex][dpPersonStartInsert]);
@@ -1404,6 +1433,12 @@ namespace PraticeManagement.Controls.Milestones
             if (txtHoursPerDay != null)
                 txtHoursPerDay.Text = repeaterOldValues[e.Item.ItemIndex][txtHoursPerDayInsert];
 
+            if (hdnIsFromAddBtn != null)
+                hdnIsFromAddBtn.Value = repeaterOldValues[e.Item.ItemIndex]["hdnIsFromAddBtn"];
+            if(hdnIsFromAddBtn.Value == true.ToString())
+            {
+                bar.ddlPersonName_Changed(ddlPerson,new EventArgs());
+            }
         }
 
         public List<MilestonePerson> GetMilestonePersons()
@@ -1461,7 +1496,7 @@ namespace PraticeManagement.Controls.Milestones
         protected void btnAddPerson_Click(object sender, EventArgs e)
         {
             lblResultMessage.ClearMessage();
-            AddRowAndBindRepeater(null);
+            AddRowAndBindRepeater(null,true);
         }
 
         private void StoreRepeterEntriesInObject()
@@ -1479,6 +1514,7 @@ namespace PraticeManagement.Controls.Milestones
                 var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
                 var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
                 var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
+                var hdnIsFromAddBtn = bar.FindControl("hdnIsFromAddBtn") as HiddenField;
 
                 var dic = new Dictionary<string, string>();
                 dic.Add(DDLPERSON_KEY, ddlPerson.SelectedValue);
@@ -1488,6 +1524,7 @@ namespace PraticeManagement.Controls.Milestones
                 dic.Add(txtAmountInsert, txtAmount.Text);
                 dic.Add(txtHoursPerDayInsert, txtHoursPerDay.Text);
                 dic.Add(txtHoursInPeriodInsert, txtHoursInPeriod.Text);
+                dic.Add("hdnIsFromAddBtn", hdnIsFromAddBtn.Value.ToString());
                 repoldValues.Add(dic);
             }
 
@@ -1550,7 +1587,7 @@ namespace PraticeManagement.Controls.Milestones
 
         }
 
-        internal void AddRowAndBindRepeater(Dictionary<string, string> dic)
+        internal void AddRowAndBindRepeater(Dictionary<string, string> dic,bool isFromAddPersonButton)
         {
             if (AddMilestonePersonEntries == null)
             {
@@ -1563,7 +1600,7 @@ namespace PraticeManagement.Controls.Milestones
             }
 
             var entry = new MilestonePersonEntry() { };
-
+            entry.IsAddButtonEntry = isFromAddPersonButton ? true : false;  
             entry.StartDate = Milestone.StartDate;
             entry.EndDate = Milestone.ProjectedDeliveryDate;
 
@@ -1577,6 +1614,7 @@ namespace PraticeManagement.Controls.Milestones
                 dic.Add(txtAmountInsert, string.Empty);
                 dic.Add(txtHoursPerDayInsert, string.Empty);
                 dic.Add(txtHoursInPeriodInsert, string.Empty);
+                dic.Add("hdnIsFromAddBtn", entry.IsAddButtonEntry.ToString());
             }
 
             repeaterOldValues.Add(dic);
@@ -1608,11 +1646,17 @@ namespace PraticeManagement.Controls.Milestones
             var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
             var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
             var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
+            var hdnIsFromAddBtn = bar.FindControl("hdnIsFromAddBtn") as HiddenField;
 
             var entry = new MilestonePersonEntry();
             entry.StartDate = dpPersonStart.DateValue;
             entry.EndDate = dpPersonEnd.DateValue != DateTime.MinValue ? (DateTime?)dpPersonEnd.DateValue : null;
             Person person = null;
+
+            if (!string.IsNullOrEmpty(hdnIsFromAddBtn.Value))
+            {
+              entry.IsAddButtonEntry =  hdnIsFromAddBtn.Value == true.ToString();
+            }
             if (!string.IsNullOrEmpty(ddlPerson.SelectedValue))
             {
                 person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
@@ -1888,6 +1932,7 @@ namespace PraticeManagement.Controls.Milestones
                 var txtHoursPerDay = row.FindControl("txtHoursPerDay") as TextBox;
                 var txtAmount = row.FindControl("txtAmount") as TextBox;
                 var txtHoursInPeriod = row.FindControl("txtHoursInPeriod") as TextBox;
+                var hdnIsFromAddBtn = row.FindControl("hdnIsFromAddBtn") as HiddenField;
 
 
                 dic.Add(DDLPERSON_KEY, ddlPersonName.SelectedValue);
@@ -1897,6 +1942,7 @@ namespace PraticeManagement.Controls.Milestones
                 dic.Add(txtAmountInsert, txtAmount.Text);
                 dic.Add(txtHoursPerDayInsert, txtHoursPerDay.Text);
                 dic.Add(txtHoursInPeriodInsert, txtHoursInPeriod.Text);
+                dic.Add("hdnIsFromAddBtn", hdnIsFromAddBtn.Value.ToString());
 
 
             }
@@ -1909,7 +1955,6 @@ namespace PraticeManagement.Controls.Milestones
                 var lblHoursPerDay = row.FindControl("lblHoursPerDay") as Label;
                 var lblAmount = row.FindControl("lblAmount") as Label;
                 var lblHoursInPeriodDay = row.FindControl("lblHoursInPeriodDay") as Label;
-
                 var hourlyrate = lblAmount.Text.Replace("$", "");
 
                 dic.Add(DDLPERSON_KEY, lnkPersonName.Attributes["PersonId"]);
@@ -1919,9 +1964,11 @@ namespace PraticeManagement.Controls.Milestones
                 dic.Add(txtAmountInsert, hourlyrate);
                 dic.Add(txtHoursPerDayInsert, lblHoursPerDay.Text);
                 dic.Add(txtHoursInPeriodInsert, lblHoursInPeriodDay.Text);
+                dic.Add("hdnIsFromAddBtn", false.ToString());
+               
             }
 
-            AddRowAndBindRepeater(dic);
+            AddRowAndBindRepeater(dic,false);
 
         }
 
@@ -2559,7 +2606,7 @@ namespace PraticeManagement.Controls.Milestones
                 thInsertMilestonePerson.Visible = true;
                 thHourlyRate.Visible = Milestone.IsHourlyAmount;
 
-                AddRowAndBindRepeater(null);
+                AddRowAndBindRepeater(null,true);
             }
             else
             {
