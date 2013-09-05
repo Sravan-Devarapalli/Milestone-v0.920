@@ -78,7 +78,8 @@
                 <table class="WholeWidth" id="tblPersonName" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
-                            <cc2:CustomDropDown ID="ddlPersonName" CssClass="Width98Percent" runat="server"/>
+                            <cc2:CustomDropDown ID="ddlPersonName" CssClass="Width98Percent" runat="server" OnSelectedIndexChanged="ddlPersonName_Changed"
+                                AutoPostBack="true" />
                             <asp:HiddenField ID="hdnPersonId" runat="server" Value='<%# Eval("ThisPerson.Id") %>' />
                             <asp:HiddenField ID="hdnPersonIsStrawMan" runat="server" Value='<%# Eval("ThisPerson.IsStrawMan") %>' />
                         </td>
@@ -87,13 +88,13 @@
                                 ErrorMessage="" ToolTip="The Person Name is required." Display="Dynamic" Text="*"
                                 EnableClientScript="false" SetFocusOnError="true" ValidationGroup="<%# GetValidationGroup(Container) %>"></asp:RequiredFieldValidator>
                             <asp:CustomValidator ID="custPeriod" runat="server" ControlToValidate="ddlPersonName"
-                                ErrorMessage="" ToolTip=""
-                                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
-                                ValidationGroup="<%# GetValidationGroup(Container) %>" OnServerValidate="custPerson_ServerValidate"></asp:CustomValidator>
+                                ErrorMessage="" ToolTip="" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                Display="Dynamic" ValidationGroup="<%# GetValidationGroup(Container) %>" OnServerValidate="custPerson_ServerValidate"></asp:CustomValidator>
                             <asp:CustomValidator ID="cvMaxRows" runat="server" ControlToValidate="ddlPersonName"
                                 ErrorMessage="" ToolTip="Milestone person with same role cannot have more than 5 entries."
                                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                 ValidationGroup="<%# GetValidationGroup(Container) %>" OnServerValidate="cvMaxRows_ServerValidate"></asp:CustomValidator>
+                            <asp:HiddenField ID="hdnIsFromAddBtn" runat="server" />
                         </td>
                     </tr>
                 </table>
