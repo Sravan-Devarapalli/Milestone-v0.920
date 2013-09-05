@@ -961,6 +961,24 @@ namespace PraticeManagement.Controls.Milestones
 
         #endregion
 
+        public void ddlPersonName_Changed(object sender, EventArgs e)
+        {
+            DropDownList ddlPerson = sender as DropDownList;
+            GridViewRow gvRow = ddlPerson.NamingContainer as GridViewRow;
+            var dpPersonStart = gvRow.FindControl("dpPersonStart") as DatePicker;
+            var dpPersonEnd = gvRow.FindControl("dpPersonEnd") as DatePicker;
+            Person person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
+            if (person != null && !person.IsStrawMan && person.EmploymentHistory != null)
+            {
+                if (person.EmploymentHistory.Any(p => p.HireDate <= Milestone.ProjectedDeliveryDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && Milestone.StartDate <= p.TerminationDate))))
+                {
+                    Employment employment = person.EmploymentHistory.First(p => p.HireDate <= Milestone.ProjectedDeliveryDate && (!p.TerminationDate.HasValue || (p.TerminationDate.HasValue && Milestone.StartDate <= p.TerminationDate)));
+                    dpPersonStart.TextValue = Milestone.StartDate < employment.HireDate.Date ? employment.HireDate.Date.ToString(Constants.Formatting.EntryDateFormat) : Milestone.StartDate.ToString(Constants.Formatting.EntryDateFormat);
+                    dpPersonEnd.TextValue = employment.TerminationDate.HasValue ? Milestone.ProjectedDeliveryDate < employment.TerminationDate.Value ? Milestone.ProjectedDeliveryDate.ToString(Constants.Formatting.EntryDateFormat) : employment.TerminationDate.Value.ToString(Constants.Formatting.EntryDateFormat) : Milestone.ProjectedDeliveryDate.ToString(Constants.Formatting.EntryDateFormat);
+                }
+            }
+        }
+
         public Person GetPersonBySelectedValue(String id)
         {
             if (!string.IsNullOrEmpty(id))
