@@ -3464,6 +3464,7 @@ namespace DataAccess
             if(connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
+                connection.Open();
             }
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ZeroHourlyRateExceptionReport, connection))
             {
@@ -3472,7 +3473,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-                connection.Open();
+            
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     ReadZeroHourlyRateExceptionReport(reader, result);
@@ -3560,6 +3561,7 @@ namespace DataAccess
             if (connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
+                connection.Open();
             }
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourceAssignedOrUnassignedChargingExceptionReport, connection))
             {
@@ -3569,7 +3571,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsUnassignedReport, isUnassignedReport);
-                connection.Open();
+               
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     ReadResourceAssignedOrUnassignedChargingExceptionReport(reader, result);
