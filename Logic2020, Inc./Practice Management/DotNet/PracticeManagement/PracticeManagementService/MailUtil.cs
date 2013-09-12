@@ -160,6 +160,14 @@ namespace PracticeManagementService
             return true;
         }
 
+        internal static void SendResourceExceptionReportsEmail(DateTime startDate,DateTime endDate,Attachment attachment)
+        {
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.ResourceExceptionReportsTemplateName);
+            var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment});
+        }
+
         public static SmtpClient GetSmtpClient(SMTPSettings smtpSettings = null)
         {
             if (smtpSettings == null)
