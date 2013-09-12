@@ -3458,10 +3458,13 @@ namespace DataAccess
             }
         }
 
-        public static List<ResourceExceptionReport> ZeroHourlyRateExceptionReport(DateTime startDate, DateTime endDate)
+        public static List<ResourceExceptionReport> ZeroHourlyRateExceptionReport(DateTime startDate, DateTime endDate, SqlConnection connection = null)
         {
             List<ResourceExceptionReport> result = new List<ResourceExceptionReport>();
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            if(connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ZeroHourlyRateExceptionReport, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
@@ -3551,10 +3554,13 @@ namespace DataAccess
             }
         }
 
-        public static List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport)
+        public static List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport, SqlConnection connection=null)
         {
             List<ResourceExceptionReport> result = new List<ResourceExceptionReport>();
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourceAssignedOrUnassignedChargingExceptionReport, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
