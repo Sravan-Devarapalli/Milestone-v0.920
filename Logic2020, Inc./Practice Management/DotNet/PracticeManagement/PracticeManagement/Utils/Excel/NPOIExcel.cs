@@ -7,6 +7,7 @@ using NPOI.HPSF;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using PraticeManagement.Utils.Excel;
+using System.Net.Mail;
 
 namespace PraticeManagement.Utils
 {
@@ -26,6 +27,12 @@ namespace PraticeManagement.Utils
             Export(fileName, hssfworkbook);
         }
 
+        public static byte[] GetAttachment(List<DataSet> dsInput, List<SheetStyles> sheetStylesList)
+        {
+            HSSFWorkbook hssfworkbook = GetWorkbook(dsInput, sheetStylesList);
+            return PrepareAttachment(hssfworkbook);
+        }
+
         public static void Export(string fileName, HSSFWorkbook hssfworkbook)
         {
             HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
@@ -38,6 +45,17 @@ namespace PraticeManagement.Utils
             hssfworkbook.Write(file);
             HttpContext.Current.Response.BinaryWrite(file.GetBuffer());
             HttpContext.Current.Response.End();
+        }
+
+        public static byte[] PrepareAttachment(HSSFWorkbook hssfworkbook)
+        {
+            DocumentSummaryInformation dsi = PropertySetFactory.CreateDocumentSummaryInformation();
+            dsi.Company = "Logic 2020";
+            hssfworkbook.DocumentSummaryInformation = dsi;
+            MemoryStream file = new MemoryStream();
+            hssfworkbook.Write(file);           
+            byte[] attachmentByte = file.ToArray();
+            return attachmentByte;
         }
 
         private static HSSFWorkbook GetWorkbook(List<DataSet> dsInput, List<SheetStyles> sheetStylesList)
