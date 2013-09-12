@@ -71,9 +71,12 @@ namespace DataAccess
             }
         }
 
-        public static EmailTemplate EmailTemplateGetByName(string emailTemplateName)
+        public static EmailTemplate EmailTemplateGetByName(string emailTemplateName, SqlConnection connection = null)
         {
-            using (SqlConnection connection = new SqlConnection(DataAccess.Other.DataSourceHelper.DataConnection))
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+            }
             using (SqlCommand command = new SqlCommand(EmailTemplateGetByNameProcedure, connection))
             {
                 command.Parameters.AddWithValue(EmailTemplateNameParam, emailTemplateName);
