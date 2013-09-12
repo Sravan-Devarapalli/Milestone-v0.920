@@ -78,6 +78,10 @@
       <Project>{848EAE46-9397-439B-86BC-5799B366EF61}</Project>
       <Name>DataTransferObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PracticeManagement\PracticeManagement.csproj">
+      <Project>{1C760F31-B468-4F6B-AB45-7EF0BB7CAB9B}</Project>
+      <Name>PracticeManagement</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
