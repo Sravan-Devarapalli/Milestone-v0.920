@@ -225,5 +225,15 @@ namespace PracticeManagementService
         {
             return ReportDAL.ProjectAttributionReport(startDate, endDate);
         }
+
+        public List<ResourceExceptionReport> ZeroHourlyRateExceptionReport(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.ZeroHourlyRateExceptionReport(startDate, endDate);
+        }
+
+        public List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport)
+        {
+            return ReportDAL.ResourceAssignedOrUnassignedChargingExceptionReport(startDate,endDate,isUnassignedReport);
+        }
     }
 }
