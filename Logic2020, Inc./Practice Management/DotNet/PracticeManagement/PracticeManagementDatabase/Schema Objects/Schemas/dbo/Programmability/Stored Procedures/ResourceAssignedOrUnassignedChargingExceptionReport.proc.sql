@@ -25,7 +25,8 @@ BEGIN
 								Pro.ProjectNumber,
 								pay.Timescale,
 								Pro.ProjectStatusId,
-								Pro.Name AS ProjectName
+								Pro.Name AS ProjectName,
+								PS.Name AS ProjectStatus
 						FROM     dbo.MilestonePersonEntry AS MPE
 								INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 								INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
@@ -34,6 +35,7 @@ BEGIN
 														AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate	
 								INNER JOIN dbo.Project Pro ON Pro.ProjectId = M.ProjectId
 								INNER JOIN v_Pay pay ON pay.PersonId = P.PersonId
+								INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = Pro.ProjectStatusId
 						WHERE   PC.Date BETWEEN @StartDate AND @EndDate 
 								AND Pro.IsAllowedToShow = 1 AND Pro.ProjectNumber != 'P031000'
 								AND Pro.ProjectStatusId IN (3,4) --Active AND Completed status
@@ -44,6 +46,7 @@ BEGIN
 									pay.Timescale,
 									Pro.ProjectNumber,
 									Pro.ProjectStatusId,
+									PS.Name,
 									Pro.Name 
 					),
 					PersonTimeEntries
@@ -55,6 +58,7 @@ BEGIN
 								Pro.ProjectNumber,
 								Pro.ProjectStatusId,
 								Pro.Name AS ProjectName,
+								PS.Name AS ProjectStatus,
 								ROUND(SUM(CASE WHEN TEH.IsChargeable = 1
 												THEN TEH.ActualHours
 												ELSE 0
@@ -71,6 +75,7 @@ BEGIN
 																AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate,@FutureDate)
 								INNER JOIN dbo.Project Pro ON Pro.ProjectId = CC.ProjectId 
 								INNER JOIN v_Pay pay ON pay.PersonId = P.PersonId
+								INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = Pro.ProjectStatusId
 						WHERE	CC.TimeEntrySectionId != 4 -- Adminstrative TimeEntrySectionId
 										AND Pro.IsAllowedToShow = 1 AND Pro.ProjectNumber != 'P031000'
 										AND Pro.ProjectStatusId IN (3,4)
@@ -81,7 +86,8 @@ BEGIN
 									pay.Timescale,
 									Pro.ProjectNumber,
 									Pro.ProjectStatusId,
-									Pro.Name
+									Pro.Name,
+									PS.Name
 					)
 					SELECT	ISNULL(PFH.PersonId,PTE.PersonId) AS PersonId,
 							P.EmployeeNumber,
@@ -95,7 +101,8 @@ BEGIN
 							ISNULL(PFH.ProjectName,PTE.ProjectName) AS ProjectName,
 							ISNULL(PFH.ForecastedHours,0) AS ForecastedHours,
 							ISNULL(PTE.BillableHours,0) AS BillableHours,
-							ISNULL(PTE.NonBillableHours,0) AS NonBillableHours
+							ISNULL(PTE.NonBillableHours,0) AS NonBillableHours,
+							ISNULL(PFH.ProjectStatus,PTE.ProjectStatus) AS ProjectStatus
 					FROM PersonForeCastedHours PFH
 					FULL JOIN PersonTimeEntries PTE ON PTE.ProjectId = PFH.ProjectId AND PTE.PersonId = PFH.PersonId AND PTE.Timescale = PFH.Timescale
 					INNER JOIN dbo.Timescale TS ON TS.TimescaleId = ISNULL(PFH.Timescale,PTE.Timescale)
