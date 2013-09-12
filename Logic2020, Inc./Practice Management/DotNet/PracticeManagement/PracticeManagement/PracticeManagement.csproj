@@ -574,6 +574,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonTimeEntriesTotals1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ResourceExceptionReport.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory.datasource" />
@@ -642,6 +643,30 @@
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.wsdl" />
     <None Include="Service References\ConfigurationService\ConfigurationService10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService13.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService14.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService15.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService16.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService17.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService18.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService5.xsd">
@@ -3022,6 +3047,7 @@
     <Compile Include="Utils\Generic.cs" />
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="Utils\ProjectHelper.cs" />
+    <Compile Include="Utils\ResourceExceptionReportExcelUtil.cs" />
     <Compile Include="Utils\SettingsHelper.cs" />
     <Compile Include="Utils\TimeEntryHelper.cs" />
     <Compile Include="Utils\UrlResolverUtil.cs" />
