@@ -45,5 +45,20 @@ AS
 	FROM dbo.Person AS P 
 	INNER JOIN dbo.MilestonePerson AS MP ON MP.PersonId = P.PersonId
 	WHERE mp.MilestonePersonId = @MilestonePersonId) AS Per
-	ORDER BY Per.LastName, Per.FirstName
+	UNION
+	SELECT  p.PersonId,
+			p.FirstName,
+			p.LastName,
+			p.IsDefaultManager,
+			p.HireDate,
+			p.IsStrawman AS IsStrawman
+	FROM dbo.Person p
+	LEFT JOIN dbo.aspnet_Users u
+	ON p.Alias = u.UserName
+	LEFT JOIN dbo.aspnet_UsersInRoles uir
+	ON u.UserId = uir.UserId
+	LEFT JOIN dbo.aspnet_Roles ur
+	ON ur.RoleId = uir.RoleId
+	WHERE p.PersonStatusId IN (1,5) AND ur.RoleName IN ('Client Director','Practice Area Manager')
+	ORDER BY 3,2
 
