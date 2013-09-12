@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using System.Net.Mail;
 
 namespace PracticeManagementService
 {
@@ -71,5 +72,8 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<string> GetAllDomains();
+
+        [OperationContract]
+        void SendResourceExceptionReportsEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray);
     }
 }
