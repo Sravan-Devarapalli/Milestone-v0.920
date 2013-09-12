@@ -85,6 +85,7 @@
       <xs:element minOccurs="0" name="TitleId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="VacationDays" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ValidateAttribution" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Pay" nillable="true" type="tns:Pay" />
@@ -480,39 +481,17 @@
   <xs:element name="Attribution" nillable="true" type="tns:Attribution" />
   <xs:simpleType name="AttributionRecordTypes">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Person">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Practice">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Person" />
+      <xs:enumeration value="Practice" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AttributionRecordTypes" nillable="true" type="tns:AttributionRecordTypes" />
   <xs:simpleType name="AttributionTypes">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Sales">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Delivery">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Sales" />
+      <xs:enumeration value="Delivery" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AttributionTypes" nillable="true" type="tns:AttributionTypes" />
