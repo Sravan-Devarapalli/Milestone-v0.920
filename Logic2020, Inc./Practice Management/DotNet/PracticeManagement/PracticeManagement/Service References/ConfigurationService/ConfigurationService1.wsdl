@@ -40,23 +40,11 @@
   <wsdl:message name="IConfigurationService_DeleteEmailTemplate_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteEmailTemplateResponse" />
   </wsdl:message>
-  <wsdl:message name="IConfigurationService_CheckProjectedProjects_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckProjectedProjects" />
-  </wsdl:message>
-  <wsdl:message name="IConfigurationService_CheckProjectedProjects_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckProjectedProjectsResponse" />
-  </wsdl:message>
   <wsdl:message name="IConfigurationService_GetEmailData_InputMessage">
     <wsdl:part name="parameters" element="tns:GetEmailData" />
   </wsdl:message>
   <wsdl:message name="IConfigurationService_GetEmailData_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetEmailDataResponse" />
-  </wsdl:message>
-  <wsdl:message name="IConfigurationService_CheckProjectedProjectsByHireDate_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckProjectedProjectsByHireDate" />
-  </wsdl:message>
-  <wsdl:message name="IConfigurationService_CheckProjectedProjectsByHireDate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckProjectedProjectsByHireDateResponse" />
   </wsdl:message>
   <wsdl:message name="IConfigurationService_GetCompanyLogoData_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyLogoData" />
@@ -148,6 +136,12 @@
   <wsdl:message name="IConfigurationService_GetAllDomains_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAllDomainsResponse" />
   </wsdl:message>
+  <wsdl:message name="IConfigurationService_SendResourceExceptionReportsEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendResourceExceptionReportsEmail" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SendResourceExceptionReportsEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendResourceExceptionReportsEmailResponse" />
+  </wsdl:message>
   <wsdl:portType name="IConfigurationService">
     <wsdl:operation name="GetAllEmailTemplates">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" message="tns:IConfigurationService_GetAllEmailTemplates_InputMessage" />
@@ -169,17 +163,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/DeleteEmailTemplate" message="tns:IConfigurationService_DeleteEmailTemplate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/DeleteEmailTemplateResponse" message="tns:IConfigurationService_DeleteEmailTemplate_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CheckProjectedProjects">
-      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjects" message="tns:IConfigurationService_CheckProjectedProjects_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjectsResponse" message="tns:IConfigurationService_CheckProjectedProjects_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="GetEmailData">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetEmailData" message="tns:IConfigurationService_GetEmailData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetEmailDataResponse" message="tns:IConfigurationService_GetEmailData_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CheckProjectedProjectsByHireDate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjectsByHireDate" message="tns:IConfigurationService_CheckProjectedProjectsByHireDate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/CheckProjectedProjectsByHireDateResponse" message="tns:IConfigurationService_CheckProjectedProjectsByHireDate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCompanyLogoData">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetCompanyLogoData" message="tns:IConfigurationService_GetCompanyLogoData_InputMessage" />
@@ -241,6 +227,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllDomains" message="tns:IConfigurationService_GetAllDomains_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetAllDomainsResponse" message="tns:IConfigurationService_GetAllDomains_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendResourceExceptionReportsEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SendResourceExceptionReportsEmail" message="tns:IConfigurationService_SendResourceExceptionReportsEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SendResourceExceptionReportsEmailResponse" message="tns:IConfigurationService_SendResourceExceptionReportsEmail_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -289,26 +279,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CheckProjectedProjects">
-      <soap:operation soapAction="http://tempuri.org/IConfigurationService/CheckProjectedProjects" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GetEmailData">
       <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetEmailData" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CheckProjectedProjectsByHireDate">
-      <soap:operation soapAction="http://tempuri.org/IConfigurationService/CheckProjectedProjectsByHireDate" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -444,6 +416,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetAllDomains">
       <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetAllDomains" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendResourceExceptionReportsEmail">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SendResourceExceptionReportsEmail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
