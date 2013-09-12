@@ -177,4 +177,7 @@
   <data name="ClientAddedTemplateName" xml:space="preserve">
     <value>ClientAddedTemplate</value>
   </data>
+  <data name="ResourceExceptionReportsTemplateName" xml:space="preserve">
+    <value>ResourceExceptionReports</value>
+  </data>
 </root>
