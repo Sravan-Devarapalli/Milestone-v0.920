@@ -86,14 +86,13 @@ namespace UpdatePracticeAndSeniority
         public const string M_FinishedActivateDeactivateEmails = "Finished to send the Activate and DeActivate Account Emails.";
         public const string M_InsertProjectSummaryCacheValueStartedProcess = "Started Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
         public const string M_InsertProjectSummaryCacheValueFinishedProcess = "Finished Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
-        public const string M_ExceptionReportsStartedProcess = "Started Process of emailing Resource Exception Report.";
+        public const string M_ExceptionReportsStartedProcess = "Started Process of Resource Exception Report.";
         public const string M_ExceptionReportsStartedReadingData = "Started reading data Resource Exception Report.";
         public const string M_ExceptionReportsReadDataSuccess = "Read the Resource Exception Report data.";
         public const string M_ExceptionReportsStartedEmailing = "Started emailing the Resource Exception Report data.";
         public const string M_ExceptionReportsEmailed = "Emailed the Resource Exception Report.";
-        public const string M_ExceptionReportsAttachmentPreparationStarted= "Started preparation of attachment of Resource Exception Report.";
+        public const string M_ExceptionReportsAttachmentPreparationStarted = "Started preparation of attachment of Resource Exception Report.";
         public const string M_ExceptionReportsAttachmentPreparationSucess = "Completed preparation of attachment of Resource Exception Report.";
-      
 
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
@@ -651,8 +650,9 @@ namespace UpdatePracticeAndSeniority
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
+                    connection.Open();
                     DateTime EndDate = currentDate.Date.AddDays(-1);
-                    DateTime StartDate = EndDate.AddDays(-7);
+                    DateTime StartDate = EndDate.AddDays(-6);
 
                     //Read the data.
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsStartedReadingData, nextRunTime);
@@ -668,7 +668,7 @@ namespace UpdatePracticeAndSeniority
                     resourceExceptionReport.PopulateAttachment();
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsAttachmentPreparationSucess, nextRunTime);
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsStartedEmailing, nextRunTime);
-                    WorkerRole.EmailResourceExceptionReports(StartDate, EndDate, resourceExceptionReport.Attachment);
+                    WorkerRole.EmailResourceExceptionReports(StartDate, EndDate, resourceExceptionReport.Attachment, connection);
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsEmailed, nextRunTime);
                 }
             }
@@ -710,17 +710,14 @@ namespace UpdatePracticeAndSeniority
         /// <param name="reportdata"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        private static void EmailResourceExceptionReports(DateTime startDate, DateTime endDate, byte[] attachmentByteArray)
+        private static void EmailResourceExceptionReports(DateTime startDate, DateTime endDate, byte[] attachmentByteArray, SqlConnection connection)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
-                var attachment = new Attachment(attachmentStream, string.Format("ExceptionReporting_{0}_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
-                var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName("ResourceExceptionReportsTemplate", connection);
-                var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
-                var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
-                WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
-            }
+            MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
+            var attachment = new Attachment(attachmentStream, string.Format("ExceptionReporting_{0}_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName("ResourceExceptionReports", connection);
+            var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
         }
 
         protected static void gvExp_RowDataBound(object sender, GridViewRowEventArgs e)
