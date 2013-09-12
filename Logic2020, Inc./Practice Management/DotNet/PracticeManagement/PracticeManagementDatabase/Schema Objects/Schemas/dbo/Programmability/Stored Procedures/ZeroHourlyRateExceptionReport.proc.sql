@@ -28,13 +28,15 @@ BEGIN
 			M.Description AS MilestoneName,
 			M.StartDate,
 			M.ProjectedDeliveryDate,
-			ISNULL(MPE.Amount,0) AS Amount
+			ISNULL(MPE.Amount,0) AS Amount,
+			PS.Name AS ProjectStatus
 	FROM dbo.Person P
 	INNER JOIN dbo.MilestonePerson MP ON MP.PersonId = P.PersonId
 	INNER JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
 	INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
 	INNER JOIN dbo.Project Pro ON Pro.ProjectId = M.ProjectId
 	INNER JOIN v_Pay pay ON pay.PersonId = P.PersonId
+	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = Pro.ProjectStatusId
 	WHERE M.IsHourlyAmount = 1 AND MPE.StartDate <= @EndDate AND @StartDate <= MPE.EndDate
 	AND pay.StartDate <= MPE.EndDate AND MPE.StartDate < pay.EndDateOrig
 	AND P.IsStrawman = 0 AND Pro.ProjectStatusId IN (3,4) --Active AND Completed status
