@@ -19,6 +19,7 @@ using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
 using PraticeManagement.Utils;
+using DataTransferObjects.Reports;
 
 namespace UpdatePracticeAndSeniority
 {
@@ -60,6 +61,8 @@ namespace UpdatePracticeAndSeniority
         public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
         public const string FailedRunningProcedureFormat = "Failed running the procedure {0} due to: {1}";
         public const string SuccessRunningProcedureFormat = "Successfully completed running the procedure {0}";
+        public const string FailedRunningDalMethodFormat = "Failed DAL Method {0} due to: {1}";
+        public const string SuccessRunningDalMethodFormat = "Successfully completed DAL Method {0}";
         public const string ExportExcelCellFormat = "&nbsp; {0}";
         public const string WelcomeEmailFailedFormat = "Failed to send the WelCome Emails due to: {0}";
         public const string ActivateDeactivateEmailsFailedFormat = "Failed to send Activate and DeActivate Account Emails due to: {0}";
@@ -88,6 +91,9 @@ namespace UpdatePracticeAndSeniority
         public const string M_ExceptionReportsReadDataSuccess = "Read the Resource Exception Report data.";
         public const string M_ExceptionReportsStartedEmailing = "Started emailing the Resource Exception Report data.";
         public const string M_ExceptionReportsEmailed = "Emailed the Resource Exception Report.";
+        public const string M_ExceptionReportsAttachmentPreparationStarted= "Started preparation of attachment of Resource Exception Report.";
+        public const string M_ExceptionReportsAttachmentPreparationSucess = "Completed preparation of attachment of Resource Exception Report.";
+      
 
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
@@ -645,16 +651,25 @@ namespace UpdatePracticeAndSeniority
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    DateTime endDate = currentDate.Date.AddDays(-1);
-                    DateTime startDate = endDate.AddDays(-7);
+                    DateTime EndDate = currentDate.Date.AddDays(-1);
+                    DateTime StartDate = EndDate.AddDays(-7);
 
                     //Read the data.
-                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus,M_ExceptionReportsStartedReadingData, nextRunTime);
-                    ResourceExceptionReportExcelUtil resourceExceptionReport = new ResourceExceptionReportExcelUtil(startDate, endDate);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsStartedReadingData, nextRunTime);
+                    ResourceExceptionReport[] zeroExceptionReportList = ReportDAL.ZeroHourlyRateExceptionReport(StartDate, EndDate, connection).ToArray();
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "ZeroHourlyRateExceptionReport"), nextRunTime);
+                    ResourceExceptionReport[] unassignedExceptionReportList = ReportDAL.ResourceAssignedOrUnassignedChargingExceptionReport(StartDate, EndDate, true, connection).ToArray();
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "ResourceAssignedOrUnassignedChargingExceptionReport for unassignedExceptionReportList"), nextRunTime);
+                    ResourceExceptionReport[] assignedExceptionReportList = ReportDAL.ResourceAssignedOrUnassignedChargingExceptionReport(StartDate, EndDate, false, connection).ToArray();
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "ResourceAssignedOrUnassignedChargingExceptionReport for assignedExceptionReportList"), nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsReadDataSuccess, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsAttachmentPreparationStarted, nextRunTime);
+                    ResourceExceptionReportExcelUtil resourceExceptionReport = new ResourceExceptionReportExcelUtil(StartDate, EndDate, zeroExceptionReportList, unassignedExceptionReportList, assignedExceptionReportList);
                     resourceExceptionReport.PopulateAttachment();
-                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus,M_ExceptionReportsReadDataSuccess, nextRunTime);
-                    resourceExceptionReport.EmailExceptionReport();
-                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus,M_ExceptionReportsEmailed, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsAttachmentPreparationSucess, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsStartedEmailing, nextRunTime);
+                    WorkerRole.EmailResourceExceptionReports(StartDate, EndDate, resourceExceptionReport.Attachment);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsEmailed, nextRunTime);
                 }
             }
             catch (Exception ex)
@@ -687,6 +702,25 @@ namespace UpdatePracticeAndSeniority
             var subject = string.Format(PayRollDistributionReportEmailSubjectFormat, range);
             var body = string.Format(PayRollDistributionReportEmailBodyFormat, range);
             Email(subject, body, true, PayrollDistributionReportReciever, string.Empty, attachments);
+        }
+
+        /// <summary>
+        /// Emails the Resource Exception Reports
+        /// </summary>
+        /// <param name="reportdata"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        private static void EmailResourceExceptionReports(DateTime startDate, DateTime endDate, byte[] attachmentByteArray)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
+                var attachment = new Attachment(attachmentStream, string.Format("ExceptionReporting_{0}_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
+                var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName("ResourceExceptionReportsTemplate", connection);
+                var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+                var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+                WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
+            }
         }
 
         protected static void gvExp_RowDataBound(object sender, GridViewRowEventArgs e)
