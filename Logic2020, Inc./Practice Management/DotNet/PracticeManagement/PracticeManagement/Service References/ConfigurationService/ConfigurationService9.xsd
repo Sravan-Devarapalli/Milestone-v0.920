@@ -71,19 +71,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CheckProjectedProjects">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="templateId" type="xs:int" />
-        <xs:element minOccurs="0" name="companyName" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CheckProjectedProjectsResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="GetEmailData">
     <xs:complexType>
       <xs:sequence>
@@ -96,19 +83,6 @@
       <xs:sequence>
         <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetEmailDataResult" nillable="true" type="q6:EmailData" />
       </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CheckProjectedProjectsByHireDate">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="templateId" type="xs:int" />
-        <xs:element minOccurs="0" name="companyName" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CheckProjectedProjectsByHireDateResponse">
-    <xs:complexType>
-      <xs:sequence />
     </xs:complexType>
   </xs:element>
   <xs:element name="GetCompanyLogoData">
@@ -314,6 +288,20 @@
       <xs:sequence>
         <xs:element xmlns:q19="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAllDomainsResult" nillable="true" type="q19:ArrayOfstring" />
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendResourceExceptionReportsEmail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="attachmentByteArray" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendResourceExceptionReportsEmailResponse">
+    <xs:complexType>
+      <xs:sequence />
     </xs:complexType>
   </xs:element>
 </xs:schema>
