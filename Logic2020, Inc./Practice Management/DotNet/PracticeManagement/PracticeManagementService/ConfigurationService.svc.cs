@@ -134,9 +134,7 @@ namespace PracticeManagementService
 
         public void SendResourceExceptionReportsEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray)
         {
-            MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
-            var attachent = new Attachment(attachmentStream, string.Format("ExceptionReporting_{0}_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
-            MailUtil.SendResourceExceptionReportsEmail(startDate, endDate, attachent);
+            MailUtil.SendResourceExceptionReportsEmail(startDate, endDate, attachmentByteArray);
         }
     }
 }
