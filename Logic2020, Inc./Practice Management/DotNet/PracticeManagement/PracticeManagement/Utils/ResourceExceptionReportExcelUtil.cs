@@ -18,52 +18,32 @@ namespace PraticeManagement.Utils
         private int UnassignedcoloumnsCount = 1;
         private int AssignedHeaderRowsCount = 1;
         private int AssignedcoloumnsCount = 1;
-        private ResourceExceptionReport[] _ZeroExceptionReportList = null;
-        private ResourceExceptionReport[] _UnassignedExceptionReportList = null;
-        private ResourceExceptionReport[] _AssignedExceptionReportList = null;
         private DateTime? StartDate = null;
         private DateTime? EndDate = null;
-        private byte[] Attachment = null;
 
         #endregion
 
         #region Properties
 
-        private ResourceExceptionReport[] ZeroExceptionReportList
+        public ResourceExceptionReport[] ZeroExceptionReportList
         {
-            get
-            {
-                if (_ZeroExceptionReportList == null)
-                {
-                    _ZeroExceptionReportList = ServiceCallers.Custom.Report(p => p.ZeroHourlyRateExceptionReport(StartDate.Value, EndDate.Value));
-                }
-                return (ResourceExceptionReport[])_ZeroExceptionReportList;
-            }
+            get;
+            set;
         }
 
-        private ResourceExceptionReport[] UnassignedExceptionReportList
+        public ResourceExceptionReport[] UnassignedExceptionReportList
         {
-            get
-            {
-                if (_UnassignedExceptionReportList == null)
-                {
-                    _UnassignedExceptionReportList = ServiceCallers.Custom.Report(p => p.ResourceAssignedOrUnassignedChargingExceptionReport(StartDate.Value, EndDate.Value, true));
-                }
-                return (ResourceExceptionReport[])_UnassignedExceptionReportList;
-            }
+            get;
+            set;
         }
 
-        private ResourceExceptionReport[] AssignedExceptionReportList
+        public ResourceExceptionReport[] AssignedExceptionReportList
         {
-            get
-            {
-                if (_AssignedExceptionReportList == null)
-                {
-                    _AssignedExceptionReportList = ServiceCallers.Custom.Report(p => p.ResourceAssignedOrUnassignedChargingExceptionReport(StartDate.Value, EndDate.Value, false));
-                }
-                return (ResourceExceptionReport[])_AssignedExceptionReportList;
-            }
+            get;
+            set;
         }
+
+        public byte[] Attachment { get; set; }
 
         private SheetStyles ZeroExceptionHeaderSheetStyle
         {
@@ -478,10 +458,22 @@ namespace PraticeManagement.Utils
 
         #endregion
 
+        public ResourceExceptionReportExcelUtil(DateTime startDate, DateTime endDate, ResourceExceptionReport[] zeroExceptionReportList, ResourceExceptionReport[] unassignedExceptionReportList, ResourceExceptionReport[] assignedExceptionReportList)
+        {
+            StartDate = (DateTime?)startDate;
+            EndDate = (DateTime?)endDate;
+            ZeroExceptionReportList = zeroExceptionReportList;
+            UnassignedExceptionReportList = unassignedExceptionReportList;
+            AssignedExceptionReportList = assignedExceptionReportList;
+        }
+
         public ResourceExceptionReportExcelUtil(DateTime startDate, DateTime endDate)
         {
-            StartDate = startDate;
-            EndDate = endDate;
+            StartDate = (DateTime?)startDate;
+            EndDate = (DateTime?)endDate;
+            ZeroExceptionReportList = ServiceCallers.Custom.Report(p => p.ZeroHourlyRateExceptionReport(StartDate.Value, EndDate.Value));
+            UnassignedExceptionReportList = ServiceCallers.Custom.Report(p => p.ResourceAssignedOrUnassignedChargingExceptionReport(StartDate.Value, EndDate.Value, true));
+            AssignedExceptionReportList = ServiceCallers.Custom.Report(p => p.ResourceAssignedOrUnassignedChargingExceptionReport(StartDate.Value, EndDate.Value, false));
         }
     }
 }
