@@ -3457,6 +3457,171 @@ namespace DataAccess
                 attributionReport.AttributionList.Add(attributionRecord);
             }
         }
+
+        public static List<ResourceExceptionReport> ZeroHourlyRateExceptionReport(DateTime startDate, DateTime endDate)
+        {
+            List<ResourceExceptionReport> result = new List<ResourceExceptionReport>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ZeroHourlyRateExceptionReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadZeroHourlyRateExceptionReport(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static void ReadZeroHourlyRateExceptionReport(SqlDataReader reader, List<ResourceExceptionReport> result)
+        {
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+            int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+            int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+            int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+            int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
+            int milestoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+            int milestoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
+            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+            int projectedDeliveryDateIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedDeliveryDate);
+            int amountIndex = reader.GetOrdinal(Constants.ColumnNames.Amount);
+
+            while (reader.Read())
+            {
+                ResourceExceptionReport resourceExceptionReport;
+                int personId = reader.GetInt32(personIdIndex);
+                int projectId = reader.GetInt32(projectIdIndex);
+                if (result.Any(p => p.Person.Id == personId && p.Project.Id == projectId))
+                {
+                    resourceExceptionReport = result.First(p => p.Person.Id == personId && p.Project.Id == projectId);
+                }
+                else
+                {
+                    resourceExceptionReport = new ResourceExceptionReport();
+                    Person person = new Person()
+                    {
+                        Id = personId,
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        EmployeeNumber = reader.GetString(employeeNumberIndex),
+                        IsOffshore = reader.GetBoolean(isOffshoreIndex),
+                        CurrentPay = new Pay()
+                        {
+                            TimescaleName = reader.GetString(timescaleNameIndex)
+                        }
+                    };
+                    Project project = new Project()
+                    {
+                        Id = reader.GetInt32(projectIdIndex),
+                        ProjectNumber = reader.GetString(projectNumberIndex),
+                        Name = reader.GetString(projectNameIndex),
+                        Status = new ProjectStatus()
+                        {
+                            Id = reader.GetInt32(projectStatusIdIndex)
+                        }
+                    };
+                    resourceExceptionReport.Project = project;
+                    resourceExceptionReport.Person = person;
+                    result.Add(resourceExceptionReport);
+                    resourceExceptionReport.Project.Milestones = new List<Milestone>();
+                }
+                Milestone milestone = new Milestone()
+                {
+                    Id = reader.GetInt32(milestoneIdIndex),
+                    Description = reader.GetString(milestoneNameIndex),
+                    StartDate = reader.GetDateTime(startDateIndex),
+                    ProjectedDeliveryDate = reader.GetDateTime(projectedDeliveryDateIndex),
+                    Amount = new PracticeManagementCurrency()
+                    {
+                        Value = reader.GetDecimal(amountIndex)
+                    }
+                };
+                resourceExceptionReport.Project.Milestones.Add(milestone);
+            }
+        }
+
+        public static List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport)
+        {
+            List<ResourceExceptionReport> result = new List<ResourceExceptionReport>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourceAssignedOrUnassignedChargingExceptionReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsUnassignedReport, isUnassignedReport);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadResourceAssignedOrUnassignedChargingExceptionReport(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static void ReadResourceAssignedOrUnassignedChargingExceptionReport(SqlDataReader reader, List<ResourceExceptionReport> result)
+        {
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+            int isOffshoreIndex = reader.GetOrdinal(Constants.ColumnNames.IsOffshore);
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+            int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+            int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+            int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
+            int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+            int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+            int NonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours); 
+
+            while (reader.Read())
+            {
+                ResourceExceptionReport resourceExceptionReport = new ResourceExceptionReport()
+               {
+                   Person = new Person()
+                   {
+                       Id = reader.GetInt32(personIdIndex),
+                       FirstName = reader.GetString(firstNameIndex),
+                       LastName = reader.GetString(lastNameIndex),
+                       EmployeeNumber = reader.GetString(employeeNumberIndex),
+                       IsOffshore = reader.GetBoolean(isOffshoreIndex),
+                       CurrentPay = new Pay()
+                       {
+                           TimescaleName = reader.IsDBNull(timescaleNameIndex) ? "" : reader.GetString(timescaleNameIndex)
+                       }
+                   },
+                   Project = new Project()
+                   {
+                       Id = reader.GetInt32(projectIdIndex),
+                       ProjectNumber = reader.GetString(projectNumberIndex),
+                       Name = reader.GetString(projectNameIndex),
+                       Status = new ProjectStatus()
+                       {
+                           Id = reader.GetInt32(projectStatusIdIndex)
+                       }
+                   },
+                   ProjectedHours = !reader.IsDBNull(forecastedHoursIndex) ? Convert.ToDouble(reader.GetDecimal(forecastedHoursIndex)) : 0d,
+                   BillableHours = reader.GetDouble(billableHoursIndex),
+                   NonBillableHours = reader.GetDouble(NonBillableHoursIndex)
+               };
+                result.Add(resourceExceptionReport);
+           }
+        }
     }
 }
 
