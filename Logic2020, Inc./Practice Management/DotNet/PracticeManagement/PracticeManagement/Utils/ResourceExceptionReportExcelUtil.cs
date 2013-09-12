@@ -23,6 +23,7 @@ namespace PraticeManagement.Utils
         private ResourceExceptionReport[] _AssignedExceptionReportList = null;
         private DateTime? StartDate = null;
         private DateTime? EndDate = null;
+        private byte[] Attachment = null;
 
         #endregion
 
@@ -386,13 +387,21 @@ namespace PraticeManagement.Utils
             return data;
         }
 
-        public bool EmailExceptionReport()
+        public bool PopulateAttachment()
         {
             if (StartDate == null || EndDate == null)
                 return false;
             var dataSetList = GetDataSetList();
             List<SheetStyles> sheetStylesList = GetStyleSheetList();
-            var attachment = NPOIExcel.GetAttachment(dataSetList, sheetStylesList);
+            Attachment = NPOIExcel.GetAttachment(dataSetList, sheetStylesList);
+            return true;
+        }
+
+        public bool EmailExceptionReport()
+        {
+            if (Attachment == null || StartDate == null || EndDate == null)
+                return false;
+
             using (var serviceClient = new ConfigurationServiceClient())
             {
                 serviceClient.SendResourceExceptionReportsEmail(StartDate.Value, EndDate.Value, attachment);
@@ -428,21 +437,21 @@ namespace PraticeManagement.Utils
             ZeroExceptioncoloumnsCount = ZeroExceptionReport.Columns.Count;
             DataTable ZeroExceptionReportHeader = new DataTable();
             ZeroExceptionReportHeader.Columns.Add("Exception Reporting: $0 Bill Rate");
-            ZeroExceptionReportHeader.Rows.Add(StartDate + " - " + EndDate);
+            ZeroExceptionReportHeader.Rows.Add(StartDate.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.ToString(Constants.Formatting.EntryDateFormat));
             ZeroExceptionHeaderRowsCount = ZeroExceptionReportHeader.Rows.Count + 3;
 
             var UnassignedExceptionReport = PrepareDataTableForUnassignedException(UnassignedExceptionReportList);
             UnassignedcoloumnsCount = UnassignedExceptionReport.Columns.Count;
             DataTable UnassignedExceptionReportHeader = new DataTable();
             UnassignedExceptionReportHeader.Columns.Add("Exception Reporting: Unassigned Resources Charging Hours to a Project ");
-            UnassignedExceptionReportHeader.Rows.Add(StartDate + " - " + EndDate);
+            UnassignedExceptionReportHeader.Rows.Add(StartDate.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.ToString(Constants.Formatting.EntryDateFormat));
             UnassignedHeaderRowsCount = UnassignedExceptionReportHeader.Rows.Count + 3;
 
             var AssignedExceptionReport = PrepareDataTableForAssignedException(AssignedExceptionReportList);
             AssignedcoloumnsCount = AssignedExceptionReport.Columns.Count;
             DataTable AssignedExceptionReportHeader = new DataTable();
             AssignedExceptionReportHeader.Columns.Add("Exception Reporting: Assigned Resources Not Charging Hours to Assigned Project ");
-            AssignedExceptionReportHeader.Rows.Add(StartDate + " - " + EndDate);
+            AssignedExceptionReportHeader.Rows.Add(StartDate.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.ToString(Constants.Formatting.EntryDateFormat));
             AssignedHeaderRowsCount = AssignedExceptionReportHeader.Rows.Count + 3;
 
             var dataSetList = new List<DataSet>();
