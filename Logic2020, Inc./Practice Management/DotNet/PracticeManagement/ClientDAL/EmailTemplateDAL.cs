@@ -76,6 +76,7 @@ namespace DataAccess
             if (connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
+                connection.Open();
             }
             using (SqlCommand command = new SqlCommand(EmailTemplateGetByNameProcedure, connection))
             {
@@ -83,7 +84,6 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
