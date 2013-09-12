@@ -18,6 +18,7 @@ using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
+using PraticeManagement.Utils;
 
 namespace UpdatePracticeAndSeniority
 {
@@ -40,6 +41,7 @@ namespace UpdatePracticeAndSeniority
         public const string EmailSubject_For_ProfilesUpdatedList_ConfigKey = "EmailSubjectForProfilesUpdatedList";
         public const string Skills_Profile_PagePath_ConfigKey = "SkillsProfilePagePath";
         public const string PAYROLLDISTRIBUTIONREPORT_SCHEDULETIME_ConfigKey = "PayrollDistributionScheduleTime";
+        public const string ExceptionReportsScheduleTime_ConfigKey = "ExceptionReportsScheduleTime";
         public const string PayRollDistibutionReportReciever_ConfigKey = "PayrollDistributionReportReciever";
         public const string EmailBccRecieverList_ConfigKey = "EmailBccRecieverList";
         public const string ProjectSummaryCacheScheduleTime_ConfigKey = "ProjectSummaryCacheScheduleTime";
@@ -52,6 +54,7 @@ namespace UpdatePracticeAndSeniority
         public const string PayRollDistributionReportEmailSubjectFormat = "Payroll Distribution Report for the period {0}.";
         public const string PayRollDistributionReportEmailBodyFormat = "Please find the Payroll Distribution report for the period {0} in the attachments.";
         public const string PayrollDistributionReportFailedFormat = "Failed to send an email of Payroll Distribution Report due to: {0}";
+        public const string ResourceExceptionReportFailedFormat = "Failed to send an email of Resource Exception Report due to: {0}";
         public const string DateFormat = "MM/dd/yyyy";
         public const string DateDotFormat = "MM.dd.yyyy";
         public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
@@ -80,6 +83,11 @@ namespace UpdatePracticeAndSeniority
         public const string M_FinishedActivateDeactivateEmails = "Finished to send the Activate and DeActivate Account Emails.";
         public const string M_InsertProjectSummaryCacheValueStartedProcess = "Started Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
         public const string M_InsertProjectSummaryCacheValueFinishedProcess = "Finished Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
+        public const string M_ExceptionReportsStartedProcess = "Started Process of emailing Resource Exception Report.";
+        public const string M_ExceptionReportsStartedReadingData = "Started reading data Resource Exception Report.";
+        public const string M_ExceptionReportsReadDataSuccess = "Read the Resource Exception Report data.";
+        public const string M_ExceptionReportsStartedEmailing = "Started emailing the Resource Exception Report data.";
+        public const string M_ExceptionReportsEmailed = "Emailed the Resource Exception Report.";
 
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
@@ -174,6 +182,14 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static TimeSpan ExceptionReportsScheduleTime
+        {
+            get
+            {
+                return TimeSpan.Parse(GetConfigValue(ExceptionReportsScheduleTime_ConfigKey));
+            }
+        }
+
         public static TimeSpan WelcomeMailScheduleTime
         {
             get
@@ -254,6 +270,8 @@ namespace UpdatePracticeAndSeniority
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
+                    //Runs at 07:00:00 on every monday.
+                    RunResourceExceptionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
                 }
@@ -278,6 +296,8 @@ namespace UpdatePracticeAndSeniority
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 07:00:00 on 3rd and 18th of every month.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
+                    //Runs at 07:00:00 on every monday.
+                    RunResourceExceptionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
                 }
@@ -593,6 +613,53 @@ namespace UpdatePracticeAndSeniority
             catch (Exception ex)
             {
                 WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(PayrollDistributionReportFailedFormat, ex.Message), nextRunTime);
+            }
+        }
+
+        /// <summary>
+        /// Runs Resource Exception Report Task as per the time reaches( Every monday morning at 07:00:00).
+        /// </summary>
+        /// <param name="currentDateTimeWithTimeZone"></param>
+        public static void RunResourceExceptionReport(DateTime currentDateTimeWithTimeZone)
+        {
+            if (currentDateTimeWithTimeZone.DayOfWeek == DayOfWeek.Monday && currentDateTimeWithTimeZone.TimeOfDay < ExceptionReportsScheduleTime)
+            {
+                currentDateTimeWithTimeZone = CurrentPMTime;
+                if (currentDateTimeWithTimeZone.DayOfWeek == DayOfWeek.Monday && currentDateTimeWithTimeZone.TimeOfDay < ExceptionReportsScheduleTime)
+                {
+                    var sleeptime = ExceptionReportsScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
+                    Thread.Sleep(sleeptime);
+                }
+                WorkerRole.SendResourceExceptionReport(CurrentPMTime);
+            }
+        }
+
+        /// <summary>
+        /// Sends an email of Resource Exception Report.
+        /// </summary>
+        public static void SendResourceExceptionReport(DateTime currentDate)
+        {
+            var nextRunTime = currentDate.AddDays(7);
+            WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_ExceptionReportsStartedProcess, nextRunTime);
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    DateTime endDate = currentDate.Date.AddDays(-1);
+                    DateTime startDate = endDate.AddDays(-7);
+
+                    //Read the data.
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus,M_ExceptionReportsStartedReadingData, nextRunTime);
+                    ResourceExceptionReportExcelUtil resourceExceptionReport = new ResourceExceptionReportExcelUtil(startDate, endDate);
+                    resourceExceptionReport.PopulateAttachment();
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus,M_ExceptionReportsReadDataSuccess, nextRunTime);
+                    resourceExceptionReport.EmailExceptionReport();
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus,M_ExceptionReportsEmailed, nextRunTime);
+                }
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(ResourceExceptionReportFailedFormat, ex.Message), nextRunTime);
             }
         }
 
