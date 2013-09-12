@@ -21,12 +21,12 @@
     <MetadataSource Address="http://localhost:3262/ReportService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ReportService9.xsd" MetadataType="Schema" ID="adfb03ef-b2fd-4ca7-bc9c-75030d76e951" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd9" />
     <MetadataFile FileName="ReportService.wsdl" MetadataType="Wsdl" ID="fa727c88-d689-484a-b416-cebb099eac83" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?wsdl" />
+    <MetadataFile FileName="ReportService9.xsd" MetadataType="Schema" ID="adfb03ef-b2fd-4ca7-bc9c-75030d76e951" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd9" />
+    <MetadataFile FileName="ReportService10.xsd" MetadataType="Schema" ID="8f7a5876-d0f8-42e4-b618-70b0f3a3e534" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd10" />
     <MetadataFile FileName="ReportService1.xsd" MetadataType="Schema" ID="62c9cc41-fa31-435b-ac2e-ecc9cb42beb3" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd2" />
     <MetadataFile FileName="ReportService.disco" MetadataType="Disco" ID="7fae72ad-40f8-4917-89b7-2848596de004" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?disco" />
     <MetadataFile FileName="ReportService3.xsd" MetadataType="Schema" ID="90a574f1-8838-4319-a58b-0e7124d06752" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ReportService10.xsd" MetadataType="Schema" ID="8f7a5876-d0f8-42e4-b618-70b0f3a3e534" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd10" />
     <MetadataFile FileName="ReportService2.xsd" MetadataType="Schema" ID="39d4da38-1084-44be-b08a-5172707b0a15" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd6" />
     <MetadataFile FileName="ReportService8.xsd" MetadataType="Schema" ID="3552d79b-b914-47a5-8e3a-b8abd760cced" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd8" />
     <MetadataFile FileName="ReportService4.xsd" MetadataType="Schema" ID="cf09ba22-38f8-4c0b-a0d5-ade70945fbd6" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd3" />
