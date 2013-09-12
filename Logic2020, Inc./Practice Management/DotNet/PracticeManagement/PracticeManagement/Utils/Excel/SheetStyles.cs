@@ -64,7 +64,7 @@ namespace PraticeManagement.Utils.Excel
 
             if (IsAutoResize)
             {
-                for (int i = 0; i < sheet.GetRow(TopRowNo).Cells.Count; i++)
+                for (int i = 0; i < sheet.GetRow(TopRowNo-1).Cells.Count; i++)
                 {
                     sheet.AutoSizeColumn(i, true);
                 }
