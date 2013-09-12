@@ -137,6 +137,13 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Project> ProjectAttributionReport(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<ResourceExceptionReport> ZeroHourlyRateExceptionReport(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport);
+        
     }
 }
 
