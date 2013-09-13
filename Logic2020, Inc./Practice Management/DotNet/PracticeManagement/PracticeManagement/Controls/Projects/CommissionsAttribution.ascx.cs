@@ -38,6 +38,7 @@ namespace PraticeManagement.Controls.Projects
         public const string TitleIdXname = "TitleId";
         public const string TitleXname = "Title";
         public const string StartDateXname = "StartDate";
+        public const string SortingStartDateXname = "SortingStartDate";
         public const string EndDateXname = "EndDate";
         public const string PercentageXname = "Percentage";
         public const string IsEditModeXname = "IsEditMode";
@@ -56,7 +57,7 @@ namespace PraticeManagement.Controls.Projects
         private const string AttributionTypeXmlClose = "</AttributionType>";
         private const string AttributionRecordTypeXmlOpen = "<AttributionRecordType AttributionRecordTypeId=\"{0}\">";
         private const string AttributionRecordTypeXmlClose = "</AttributionRecordType>";
-        private const string AttributionXmlOpen = "<Attribution AttributionId=\"{0}\" TargetId=\"{1}\" TargetName=\"{2}\" StartDate=\"{3}\" EndDate=\"{4}\" Percentage=\"{5}\" TitleId=\"{6}\" Title=\"{7}\" IsEditMode=\"{8}\" IsNewEntry=\"{9}\" IsCheckboxChecked=\"{10}\" TempTargetId=\"{11}\" TempTargetName=\"{12}\" TempStartDate=\"{13}\" TempEndDate=\"{14}\" TempPercentage=\"{15}\">";
+        private const string AttributionXmlOpen = "<Attribution AttributionId=\"{0}\" TargetId=\"{1}\" TargetName=\"{2}\" StartDate=\"{3}\" EndDate=\"{4}\" Percentage=\"{5}\" TitleId=\"{6}\" Title=\"{7}\" IsEditMode=\"{8}\" IsNewEntry=\"{9}\" IsCheckboxChecked=\"{10}\" TempTargetId=\"{11}\" TempTargetName=\"{12}\" TempStartDate=\"{13}\" TempEndDate=\"{14}\" TempPercentage=\"{15}\" SortingStartDate=\"{16}\" >";
         private const string AttributionXmlClose = "</Attribution>";
 
         #endregion XMLConstants
@@ -1202,6 +1203,7 @@ namespace PraticeManagement.Controls.Projects
                     t.Attribute(XName.Get(TargetIdXname)).Value = attribution.TargetId.ToString();
                     t.Attribute(XName.Get(TargetNameXname)).Value = attribution.HtmlEncodedTargetName;
                     t.Attribute(XName.Get(StartDateXname)).Value = attribution.StartDate.HasValue ? attribution.StartDate.Value.ToShortDateString() : string.Empty;
+                    t.Attribute(XName.Get(SortingStartDateXname)).Value = attribution.StartDate.HasValue ? attribution.StartDate.Value.ToString(Constants.Formatting.SortingDateFormat) : string.Empty;
                     t.Attribute(XName.Get(EndDateXname)).Value = attribution.EndDate.HasValue ? attribution.EndDate.Value.ToShortDateString() : string.Empty;
                     t.Attribute(XName.Get(PercentageXname)).Value = attribution.CommissionPercentage.ToString();
                     t.Attribute(XName.Get(TitleIdXname)).Value = attribution.Title != null ? attribution.Title.TitleId.ToString() : string.Empty;
@@ -1268,7 +1270,24 @@ namespace PraticeManagement.Controls.Projects
 
             foreach (var attribution in attributionList)
             {
-                xml.Append(string.Format(AttributionXmlOpen, attribution.Id, attribution.TargetId, attribution.HtmlEncodedTargetName, attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(), attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage, attribution.Title == null ? string.Empty : attribution.Title.TitleId.ToString(), attribution.Title == null ? string.Empty : attribution.Title.HtmlEncodedTitleName, attribution.IsEditMode, attribution.IsNewEntry, attribution.IsCheckBoxChecked, attribution.TargetId, attribution.HtmlEncodedTargetName, attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(), attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage));
+                xml.Append(string.Format(AttributionXmlOpen,
+                                        attribution.Id,
+                                        attribution.TargetId,
+                                        attribution.HtmlEncodedTargetName,
+                                        attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(),
+                                        attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(),
+                                        attribution.CommissionPercentage,
+                                        attribution.Title == null ? string.Empty : attribution.Title.TitleId.ToString(),
+                                        attribution.Title == null ? string.Empty : attribution.Title.HtmlEncodedTitleName,
+                                        attribution.IsEditMode,
+                                        attribution.IsNewEntry,
+                                        attribution.IsCheckBoxChecked,
+                                        attribution.TargetId,
+                                        attribution.HtmlEncodedTargetName,
+                                        attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(),
+                                        attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(),
+                                        attribution.CommissionPercentage,
+                                        attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToString(Constants.Formatting.SortingDateFormat)));
                 xml.Append(AttributionXmlClose);
             }
 
@@ -1285,7 +1304,7 @@ namespace PraticeManagement.Controls.Projects
             List<XElement> xlistLatest = xlist.OrderByDescending(x => (x.Attribute(XName.Get(TargetIdXname)).Value != "0" || x.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString()))
                                     .ThenBy(x => x.Attribute(XName.Get(TargetNameXname)).Value)
                                     .ThenBy(x => x.Attribute(XName.Get(IsNewEntryXname)).Value)
-                                    .ThenBy(x => x.Attribute(XName.Get(StartDateXname)).Value).ToList();
+                                    .ThenBy(x => x.Attribute(XName.Get(SortingStartDateXname)).Value).ToList();
             gridView.DataSource = xlistLatest;
             gridView.DataBind();
         }
@@ -1368,7 +1387,24 @@ namespace PraticeManagement.Controls.Projects
 
         public void PrePareXmlForAttributionSelection(StringBuilder xml, Attribution attribution)
         {
-            xml.Append(string.Format(AttributionXmlOpen, attribution.Id, attribution.TargetId, attribution.HtmlEncodedTargetName, attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(), attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage, attribution.Title == null ? string.Empty : attribution.Title.TitleId.ToString(), attribution.Title == null ? string.Empty : attribution.Title.HtmlEncodedTitleName, attribution.IsEditMode, attribution.IsNewEntry, attribution.IsCheckBoxChecked, attribution.TargetId, attribution.HtmlEncodedTargetName, attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(), attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(), attribution.CommissionPercentage));
+            xml.Append(string.Format(AttributionXmlOpen,
+                                    attribution.Id,
+                                    attribution.TargetId,
+                                    attribution.HtmlEncodedTargetName,
+                                    attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(),
+                                    attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(),
+                                    attribution.CommissionPercentage,
+                                    attribution.Title == null ? string.Empty : attribution.Title.TitleId.ToString(),
+                                    attribution.Title == null ? string.Empty : attribution.Title.HtmlEncodedTitleName,
+                                    attribution.IsEditMode,
+                                    attribution.IsNewEntry,
+                                    attribution.IsCheckBoxChecked,
+                                    attribution.TargetId,
+                                    attribution.HtmlEncodedTargetName,
+                                    attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToShortDateString(),
+                                    attribution.EndDate == null ? string.Empty : attribution.EndDate.Value.ToShortDateString(),
+                                    attribution.CommissionPercentage,
+                                    attribution.StartDate == null ? string.Empty : attribution.StartDate.Value.ToString(Constants.Formatting.SortingDateFormat)));
             xml.Append(AttributionXmlClose);
         }
 
