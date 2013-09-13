@@ -229,6 +229,7 @@ namespace PraticeManagement
             public const string PercentageFormat = "{0:##0.0#}%";
             public const string SearchResultFormat = "<span class=\"found\">$0</span>";
             public const string EntryDateFormat = "MM/dd/yyyy";
+            public const string SortingDateFormat = "yyyyMMdd";
             public const string DoubleFormat = "F2";
             public const string CurrentVersionFormat = "Binaries: v{0}.{1}.{2}.{3} [{4:%y-MM-dd}] | Database: {5}";
             public const string Ellipsis = "...";
