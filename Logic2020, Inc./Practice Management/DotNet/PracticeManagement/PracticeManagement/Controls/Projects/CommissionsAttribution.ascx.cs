@@ -115,8 +115,6 @@ namespace PraticeManagement.Controls.Projects
 
         public List<Attribution> SalesPracticeAttribution { get; set; }
 
-        public List<string> Persons { get; set; }
-
         public string DeliveryPersonAttributionXML
         {
             get { return (string)ViewState[deliveryPersonAttributionXmlKey]; }
@@ -171,10 +169,6 @@ namespace PraticeManagement.Controls.Projects
 
         protected void gvDeliveryAttributionPerson_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.Header)
-            {
-                Persons = new List<string>();
-            }
             if (e.Row.RowType != DataControlRowType.DataRow) return;
             var item = (XElement)e.Row.DataItem;
             EnableDisableValidators(e.Row, deliveryPersonAttribution);
@@ -236,12 +230,7 @@ namespace PraticeManagement.Controls.Projects
                 dpStartDate.TextValue = lblStartDate.Text;
                 dpEndDate.TextValue = lblEndDate.Text;
                 ddlPerson.SortByText();
-            }
-            if (Persons.Any(p => p == lblPersonName.Text && item.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString()))
-            {
-                ddlPerson.Visible = lblPersonName.Visible = false;
-            }
-            Persons.Add(lblPersonName.Text);
+            }  
         }
 
         protected void gvSalesAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -320,10 +309,6 @@ namespace PraticeManagement.Controls.Projects
 
         protected void gvSalesAttributionPerson_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.Header)
-            {
-                Persons = new List<string>();
-            }
             if (e.Row.RowType != DataControlRowType.DataRow) return;
             EnableDisableValidators(e.Row, salesPersonAttribution);
             var item = (XElement)e.Row.DataItem;
@@ -384,11 +369,6 @@ namespace PraticeManagement.Controls.Projects
                 dpEndDate.TextValue = lblEndDate.Text;
                 ddlPerson.SortByText();
             }
-            if (Persons.Any(p => p == lblPersonName.Text && item.Attribute(XName.Get(IsNewEntryXname)).Value == false.ToString()))
-            {
-                ddlPerson.Visible = lblPersonName.Visible = false;
-            }
-            Persons.Add(lblPersonName.Text);
         }
 
         protected void gvDeliveryAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -560,14 +540,14 @@ namespace PraticeManagement.Controls.Projects
             XDocument xdocLatest;
             if (attributionType == AttributionCategory.DeliveryPersonAttribution)
             {
-                XDocument xdoc = OnUpdateClick(attribution, DeliveryPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
+                XDocument xdoc = OnUpdateClick(attribution, DeliveryPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value);
                 DeliveryPersonAttributionXML = xdoc.ToString();
                 CopyTempValuesAsReal(attributionType);
                 xdocLatest = XDocument.Parse(DeliveryPersonAttributionXML);
             }
             else
             {
-                XDocument xdoc = OnUpdateClick(attribution, SalesPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value, true);
+                XDocument xdoc = OnUpdateClick(attribution, SalesPersonAttributionXML, lblpersonName.Text, hdnPersonId.Value);
                 SalesPersonAttributionXML = xdoc.ToString();
                 CopyTempValuesAsReal(attributionType);
                 xdocLatest = XDocument.Parse(SalesPersonAttributionXML);
@@ -606,14 +586,14 @@ namespace PraticeManagement.Controls.Projects
             XDocument xdocLatest;
             if (attributionType == AttributionCategory.DeliveryPracticeAttribution)
             {
-                XDocument xdoc = OnUpdateClick(attribution, DeliveryPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
+                XDocument xdoc = OnUpdateClick(attribution, DeliveryPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value);
                 DeliveryPracticeAttributionXML = xdoc.ToString();
                 CopyTempValuesAsReal(attributionType);
                 xdocLatest = XDocument.Parse(DeliveryPracticeAttributionXML);
             }
             else
             {
-                XDocument xdoc = OnUpdateClick(attribution, SalesPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value, false);
+                XDocument xdoc = OnUpdateClick(attribution, SalesPracticeAttributionXML, lblPractice.Text, hdnPracticeId.Value);
                 SalesPracticeAttributionXML = xdoc.ToString();
                 CopyTempValuesAsReal(attributionType);
                 xdocLatest = XDocument.Parse(SalesPracticeAttributionXML);
@@ -1191,7 +1171,7 @@ namespace PraticeManagement.Controls.Projects
             return xdoc;
         }
 
-        public XDocument OnUpdateClick(Attribution attribution, string attributionXML, string targetName, string targetId, bool isPersonType)
+        public XDocument OnUpdateClick(Attribution attribution, string attributionXML, string targetName, string targetId)
         {
             XDocument xdoc = XDocument.Parse(attributionXML);
             List<XElement> xlist = xdoc.Descendants(XName.Get(AttributionXname)).ToList();
@@ -1210,20 +1190,6 @@ namespace PraticeManagement.Controls.Projects
                     t.Attribute(XName.Get(TitleXname)).Value = attribution.Title != null ? attribution.Title.HtmlEncodedTitleName : string.Empty;
                     t.Attribute(XName.Get(IsNewEntryXname)).Value = "False";
                 }
-                if (!isPersonType) continue;
-                if ((t.Attribute(XName.Get(TargetIdXname)).Value != targetId)) continue;
-                t.Attribute(XName.Get(IsEditModeXname)).Value = "False";
-                t.Attribute(XName.Get(TargetIdXname)).Value = attribution.TargetId.ToString();
-                t.Attribute(XName.Get(TargetNameXname)).Value = attribution.HtmlEncodedTargetName;
-                t.Attribute(XName.Get(IsNewEntryXname)).Value = "False";
-                Title title = ServiceCallers.Custom.Person(p => p.GetPersonTitleByRange(attribution.TargetId, Convert.ToDateTime(t.Attribute(XName.Get(StartDateXname)).Value).Date, Convert.ToDateTime(t.Attribute(XName.Get(EndDateXname)).Value).Date));
-                if (title != null)
-                {
-                    if (!TitleList.ContainsKey(title.TitleId))
-                        TitleList.Add(title.TitleId, title.HtmlEncodedTitleName);
-                }
-                t.Attribute(XName.Get(TitleIdXname)).Value = title != null ? title.TitleId.ToString() : string.Empty;
-                t.Attribute(XName.Get(TitleXname)).Value = title != null ? title.HtmlEncodedTitleName : string.Empty;
             }
             attributionXML = xdoc.ToString();
 
