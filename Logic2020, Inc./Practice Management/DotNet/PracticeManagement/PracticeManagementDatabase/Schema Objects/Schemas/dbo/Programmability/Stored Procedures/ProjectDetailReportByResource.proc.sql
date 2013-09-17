@@ -97,6 +97,13 @@ AS
 									)
 						GROUP BY MP.PersonId,PC.Date 
 					)
+					,PersonForeCastedHours
+					AS
+					(
+					SELECT p.personid,SUM(ForecastedHours) AS ForecastedHours
+					FROM PersonForeCastedHoursRoleValues p
+					GROUP BY p.personid
+					)
 					,TimeEntryPersons AS
 					(
 						SELECT TE.*, TEH.IsChargeable, TEH.ActualHours, CC.ProjectId, CC.TimeEntrySectionId, PTSH.PersonStatusId, TT.TimeTypeId, TT.Name AS 'TimeTypeName', TT.Code AS 'TimeTypeCode'
@@ -148,10 +155,11 @@ AS
 										   ELSE 0
 									  END), 2) AS NonBillableHours ,
 							ISNULL(PR.Name, '') AS ProjectRoleName ,
-							ROUND(SUM(ISNULL(PFR.ForecastedHours, 0)), 2) AS ForecastedHours
+							ROUND(MAX(ISNULL(PFH.ForecastedHours, 0)), 2) AS ForecastedHours
 						FROM PersonForeCastedHoursRoleValues	PFR
 						FULL JOIN TimeEntryPersons TEP ON TEP.PersonId = PFR.PersonId AND TEP.ChargeCodeDate = PFR.Date
 						INNER JOIN dbo.person P ON P.personid = ISNULL(PFR.PersonId,TEP.PersonId)
+						LEFT JOIN PersonForeCastedHours PFH ON p.personid = PFH.personid
 						LEFT  JOIN dbo.PersonRole AS PR ON PR.RoleValue = PFR.MaxRoleValue
 						WHERE ( (TEP.TimeEntryId IS NOT NULL 
 									AND TEP.ChargeCodeDate <= ISNULL(P.TerminationDate,@FutureDate)
