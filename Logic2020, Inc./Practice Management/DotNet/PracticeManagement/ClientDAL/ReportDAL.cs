@@ -1182,7 +1182,6 @@ namespace DataAccess
                     PLGH = result.First(r => r.Person.Id == personId);
                     if (dt != null)
                         PLGH.AddDayTotalHours(dt);
-                    PLGH.ForecastedHours += Convert.ToDouble(reader[forecastedHoursIndex]);
                     PLGH.EstimatedBillings += ((!reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d) * Convert.ToDouble(reader[billRateIndex]));
                 }
                 else
@@ -3555,7 +3554,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport, SqlConnection connection=null)
+        public static List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport, SqlConnection connection = null)
         {
             List<ResourceExceptionReport> result = new List<ResourceExceptionReport>();
             if (connection == null)
@@ -3571,7 +3570,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsUnassignedReport, isUnassignedReport);
-               
+
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     ReadResourceAssignedOrUnassignedChargingExceptionReport(reader, result);
@@ -3595,7 +3594,7 @@ namespace DataAccess
             int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
             int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
             int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
-            int NonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours); 
+            int NonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
 
             while (reader.Read())
             {
@@ -3628,7 +3627,7 @@ namespace DataAccess
                    NonBillableHours = reader.GetDouble(NonBillableHoursIndex)
                };
                 result.Add(resourceExceptionReport);
-           }
+            }
         }
     }
 }
