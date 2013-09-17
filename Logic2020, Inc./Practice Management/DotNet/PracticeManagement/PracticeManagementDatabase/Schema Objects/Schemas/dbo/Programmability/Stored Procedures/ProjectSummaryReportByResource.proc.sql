@@ -98,7 +98,21 @@ AS
 					TimeEntryPersons 
 					AS
 					(
-						SELECT TE.*, TEH.IsChargeable, TEH.ActualHours, CC.*, PTSH.PersonStatusId
+						SELECT TE.PersonId,TE.ChargeCodeDate,
+						SUM(CASE WHEN ( TEH.IsChargeable = 1 AND @ProjectNumberLocal != 'P031000'
+											AND TE.ChargeCodeDate < @Today
+													) THEN TEH.ActualHours
+												ELSE 0
+											END) BillableHoursUntilToday,
+						SUM(CASE WHEN TEH.IsChargeable = 1  AND @ProjectNumberLocal != 'P031000'
+												THEN TEH.ActualHours
+												ELSE 0
+											END) AS BillableHours ,
+						SUM(CASE WHEN TEH.IsChargeable = 0 OR @ProjectNumberLocal = 'P031000'
+												THEN TEH.ActualHours
+												ELSE 0
+											END) AS NonBillableHours
+						--TE.*, TEH.IsChargeable, TEH.ActualHours, CC.*, PTSH.PersonStatusId
 						FROM TimeEntry TE
 						INNER JOIN dbo.ChargeCode AS CC ON CC.Id = TE.ChargeCodeId AND CC.ProjectId = @ProjectId
 						INNER JOIN dbo.TimeEntryHours AS TEH ON TEH.TimeEntryId = TE.TimeEntryId
@@ -120,6 +134,7 @@ AS
 																	AND PTSH.PersonStatusId IN (1,5)
 																)
 														)
+						GROUP BY TE.PersonId,TE.ChargeCodeDate
 					),
 					GroupedPersonDetails
 					AS 
@@ -131,19 +146,9 @@ AS
 								MAX(ISNULL(PFR.MaxRoleValue, 0)) AS MaxRoleValue ,
 								MIN(CAST(PFR.MinimumValue AS INT)) MinimumValue ,
 								MAX(CAST(PFR.MaximumValue AS INT)) MaximumValue ,
-								ROUND(SUM(CASE WHEN ( TEP.IsChargeable = 1 AND @ProjectNumberLocal != 'P031000'
-											AND TEP.ChargeCodeDate < @Today
-													) THEN TEP.ActualHours
-												ELSE 0
-											END), 2) AS BillableHoursUntilToday ,
-								ROUND(SUM(CASE WHEN TEP.IsChargeable = 1  AND @ProjectNumberLocal != 'P031000'
-												THEN TEP.ActualHours
-												ELSE 0
-											END), 2) AS BillableHours ,
-								ROUND(SUM(CASE WHEN TEP.IsChargeable = 0 OR @ProjectNumberLocal = 'P031000'
-												THEN TEP.ActualHours
-												ELSE 0
-											END), 2) AS NonBillableHours
+								ROUND(ISNULL(SUM(TEP.BillableHoursUntilToday),0), 2) AS BillableHoursUntilToday ,
+								ROUND(ISNULL(SUM(TEP.BillableHours),0), 2) AS BillableHours ,
+								ROUND(ISNULL(SUM(TEP.NonBillableHours),0), 2) AS NonBillableHours
 						FROM PersonForeCastedHoursRoleValues	PFR
 						FULL JOIN TimeEntryPersons TEP ON TEP.PersonId = PFR.PersonId AND TEP.ChargeCodeDate = PFR.Date
 						GROUP BY ISNULL(PFR.PersonId,TEP.PersonId),PFR.BillRate,CASE WHEN PFR.ForecastedHours IS NOT NULL THEN 0 ELSE NULL END
