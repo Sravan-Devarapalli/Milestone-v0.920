@@ -27,13 +27,18 @@ AS
 		   p.HireDate,
 		  p.IsStrawman AS IsStrawman
 	FROM dbo.Person AS p
-	INNER JOIN v_PersonHistory AS PH ON PH.PersonId = p.PersonId 
+	INNER JOIN v_PersonHistoryAndStrawman AS PH ON PH.PersonId = p.PersonId 
 	LEFT JOIN dbo.Practice AS Pra ON Pra.PracticeId = p.DefaultPractice 
 	WHERE 
-	   @MilestonePersonId IS NULL 
-	   AND PH.HireDate <= @EndDate AND (PH.TerminationDate IS NULL OR @StartDate <= PH.TerminationDate)
-	   AND ((p.IsStrawman = 0 AND (p.DefaultPractice IS NOT NULL AND Pra.IsCompanyInternal = 0)) OR (p.IsStrawman = 1 AND p.PersonStatusId = 1))
-	   
+		  (
+				(
+					p.IsStrawman = 0 AND (p.DefaultPractice IS NOT NULL AND Pra.IsCompanyInternal = 0) AND PH.HireDate <= @EndDate AND (PH.TerminationDate IS NULL OR @StartDate <= PH.TerminationDate)
+				) 
+				OR 
+				(
+					p.IsStrawman = 1 AND p.PersonStatusId = 1
+				)
+		  )   
 
 	UNION
 	SELECT P.PersonId,
