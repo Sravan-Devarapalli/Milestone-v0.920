@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE dbo.PersonListProjectOwner
 (
-	@IncludeInactive   BIT,
 	@PersonId INT = NULL
 )
 AS
@@ -9,6 +8,14 @@ AS
 	/*
 		Showing Project Owner of the Projects, Where the Logged in User is Project Manager OR Sales Person of 
 		the Project(applicable only for Project Lead role Person) as part of #2941.
+
+		If @PersonId != null	
+	    1.Checks whether person have 'only' project lead role.
+			If Yes:Lists the Projectmanagers of the projects where the @PersonId is assigned as ProjectOwner or ProjectManager or ProjectSalesPerson
+			Else : Lists the the persons  on whom(project managers) he has permissions(which appears in Permissions tab of Persondetail page.) or
+			      projectmanagers of the projects where the person is assigned as ProjectOwner or ProjectManager or ProjectSalesPerson
+	Otherwise
+		1.Lists all the persons who projectmanagers of the projects where the person is assigned as ProjectOwner or ProjectManager or ProjectSalesPerson  
 	*/
 
 	DECLARE @UserHasHighRoleThanProjectLead INT = NULL
@@ -53,10 +60,10 @@ AS
 				'Unknown' AS 'ManagerFirstName',	-- just stubs 
 				'Unknown' AS 'ManagerLastName'	-- just stubs
 		FROM dbo.Project Proj
-		LEFT JOIN dbo.ProjectManagers PM ON PM.ProjectId = Proj.ProjectId
-		JOIN dbo.Person Pers ON PM.ProjectManagerId = Pers.PersonId
+		INNER JOIN dbo.ProjectManagers PM ON PM.ProjectId = Proj.ProjectId
+		INNER JOIN dbo.Person Pers ON PM.ProjectManagerId = Pers.PersonId
 		WHERE (PM.ProjectManagerId = @PersonId OR Proj.SalesPersonId = @PersonId OR proj.projectOwnerId = @PersonId )
-			AND (@IncludeInactive = 1 OR pers.PersonStatusId != 4)
+			
 
 	END
 	ELSE
@@ -104,8 +111,7 @@ AS
 		FROM dbo.Project AS proj
 		INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
 		INNER JOIN dbo.Person AS pers ON ( projManagers.ProjectManagerId = pers.PersonId OR  proj.projectownerId = pers.PersonId )
-		WHERE (@IncludeInactive = 1 OR pers.PersonStatusId != 4)
-				AND ( @PersonId IS NULL
+		WHERE ( @PersonId IS NULL
 					  OR pers.PersonId IN (
 					  			SELECT    *
 					  			FROM      @ProjectManagersPermissions 
