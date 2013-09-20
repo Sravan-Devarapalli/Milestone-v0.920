@@ -482,6 +482,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IncludeTerminated = "@IncludeTerminated";
             public static string IsUnassignedReport = "@IsUnassignedReport";
             public static string IsFromAddTimeOffButton = "@IsFromAddTimeOffButton";
             public static string IsReHire = "@IsReHire";
@@ -827,6 +828,7 @@
             public static string CSATOwnerId = "@CSATOwnerId";
             public static string IsSeniorManagerUnassigned = "@IsSeniorManagerUnassigned";
             public static string IsAttainmentReportParam = "@IsAttainmentReport";
+            public static string ShowAssignedSalesPersons = "@ShowAssignedSalesPersons";
         }
 
         #endregion Nested type: ParameterNames
