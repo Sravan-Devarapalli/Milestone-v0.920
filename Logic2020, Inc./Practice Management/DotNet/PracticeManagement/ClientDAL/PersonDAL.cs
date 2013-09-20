@@ -842,7 +842,7 @@ namespace DataAccess
         /// <param name="person">Person to restrict permissions to</param>
         /// <param name="inactives">Determines whether inactive persons will are included into the results.</param>
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public static List<Person> PersonListSalesperson(Person person, bool inactives)
+        public static List<Person> PersonListSalesperson(Person person, bool includeTerminated, bool showAssignedSalesPersons)
         {
             var result = new List<Person>();
 
@@ -852,7 +852,8 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(IncludeInactiveParam, inactives);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeTerminated, includeTerminated);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowAssignedSalesPersons, showAssignedSalesPersons);
 
                 if (person != null)
                     command.Parameters.AddWithValue(PersonIdParam, person.Id);
@@ -872,7 +873,7 @@ namespace DataAccess
         /// <returns>
         /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
         /// </returns>
-        public static List<Person> PersonListProjectOwner(bool includeInactive, Person person)
+        public static List<Person> PersonListProjectOwner(Person person)
         {
             var result = new List<Person>();
 
@@ -881,8 +882,6 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
-
-                command.Parameters.AddWithValue(IncludeInactiveParam, includeInactive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
                     person == null ? (object)DBNull.Value : person.Id.Value);
 
