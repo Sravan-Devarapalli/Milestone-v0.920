@@ -236,15 +236,15 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.Person[] GetRecruiterList();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetSalespersonList", ReplyAction="http://tempuri.org/IPersonService/GetSalespersonListResponse")]
-        DataTransferObjects.Person[] GetSalespersonList(bool includeInactive);
+        DataTransferObjects.Person[] GetSalespersonList(bool includeTerminated, bool showAssignedSalesPersons);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListSalesperson", ReplyAction="http://tempuri.org/IPersonService/PersonListSalespersonResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person[] PersonListSalesperson(DataTransferObjects.Person person, bool inactives);
+        DataTransferObjects.Person[] PersonListSalesperson(DataTransferObjects.Person person, bool includeTerminated, bool showAssignedSalesPersons);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListProjectOwner", ReplyAction="http://tempuri.org/IPersonService/PersonListProjectOwnerResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        DataTransferObjects.Person[] PersonListProjectOwner(bool includeInactive, DataTransferObjects.Person person);
+        DataTransferObjects.Person[] PersonListProjectOwner(DataTransferObjects.Person person);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetOneOffList", ReplyAction="http://tempuri.org/IPersonService/GetOneOffListResponse")]
         DataTransferObjects.Person[] GetOneOffList(System.DateTime today);
@@ -311,6 +311,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
+        
        
         
         public PersonServiceClient(string endpointConfigurationName) : 
@@ -593,16 +594,16 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetRecruiterList();
         }
         
-        public DataTransferObjects.Person[] GetSalespersonList(bool includeInactive) {
-            return base.Channel.GetSalespersonList(includeInactive);
+        public DataTransferObjects.Person[] GetSalespersonList(bool includeTerminated, bool showAssignedSalesPersons) {
+            return base.Channel.GetSalespersonList(includeTerminated, showAssignedSalesPersons);
         }
         
-        public DataTransferObjects.Person[] PersonListSalesperson(DataTransferObjects.Person person, bool inactives) {
-            return base.Channel.PersonListSalesperson(person, inactives);
+        public DataTransferObjects.Person[] PersonListSalesperson(DataTransferObjects.Person person, bool includeTerminated, bool showAssignedSalesPersons) {
+            return base.Channel.PersonListSalesperson(person, includeTerminated, showAssignedSalesPersons);
         }
         
-        public DataTransferObjects.Person[] PersonListProjectOwner(bool includeInactive, DataTransferObjects.Person person) {
-            return base.Channel.PersonListProjectOwner(includeInactive, person);
+        public DataTransferObjects.Person[] PersonListProjectOwner(DataTransferObjects.Person person) {
+            return base.Channel.PersonListProjectOwner(person);
         }
         
         public DataTransferObjects.Person[] GetOneOffList(System.DateTime today) {
