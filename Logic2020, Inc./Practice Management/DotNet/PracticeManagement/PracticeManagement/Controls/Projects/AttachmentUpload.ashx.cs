@@ -34,7 +34,7 @@ namespace PraticeManagement.Controls.Projects
                 attachment.Category = (PraticeManagement.AttachmentService.ProjectAttachmentCategory)category;
                 if (projectId != 0)
                 {
-                    string loggedInUserAlias = string.IsNullOrEmpty(context.User.Identity.Name) ? context.Request.QueryString["LoggedInUser"] : context.User.Identity.Name;
+                    string loggedInUserAlias = context.Request.QueryString["LoggedInUser"];
                     PraticeManagement.AttachmentService.AttachmentService svc = PraticeManagement.Utils.WCFClientUtility.GetAttachmentService();
                     svc.SaveProjectAttachment(attachment, projectId, loggedInUserAlias);
                     context.Response.Write("Uploaded");
