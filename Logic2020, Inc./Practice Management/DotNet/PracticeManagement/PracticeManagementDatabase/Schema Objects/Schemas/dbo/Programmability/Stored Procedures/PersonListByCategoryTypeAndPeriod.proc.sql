@@ -51,7 +51,7 @@ BEGIN
 				P.FirstName,
 				P.IsDefaultManager
 		 FROM dbo.Person AS P 
-		 INNER JOIN dbo.Project Proj ON Proj.ProjectId = Proj.SalesPersonId AND 
+		 INNER JOIN dbo.Project Proj ON P.PersonId = Proj.SalesPersonId AND 
 										Proj.StartDate <=  @EndDateLocal AND 
 										ISNULL(Proj.EndDate,@FutureDateLocal) >= @StartDateLocal
 
@@ -70,6 +70,7 @@ BEGIN
 				P.FirstName,
 				P.IsDefaultManager				
 		 FROM ProjectSalesPerson P	
+		 ORDER BY 2,3
 	END
 
 END
