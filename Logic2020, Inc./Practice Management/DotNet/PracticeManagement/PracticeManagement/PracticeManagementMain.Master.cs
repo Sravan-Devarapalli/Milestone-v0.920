@@ -115,8 +115,7 @@ $(document).ready(function () {{
             FormsAuthTicketExpiry = new Date(hdnFormsAuthTicketExpiry.value);
             if (cookie_IsLoggedIn == 'true') {{
                 if (Cookie_FormsAuthTicketExpiryDate - FormsAuthTicketExpiry == 0) {{
-                    var lnkHiddenLinkForTimeOutAlert = document.getElementById('{1}');
-                    lnkHiddenLinkForTimeOutAlert.click();
+                     $find('bhAlterTimeOut').show();
                 }}
                 else if (Cookie_FormsAuthTicketExpiryDate > FormsAuthTicketExpiry) {{
                     hdnFormsAuthTicketExpiry.value = cookie_FormsAuthTicketExpiry;
