@@ -220,9 +220,9 @@ namespace PracticeManagementService
         /// </summary>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public List<Person> GetSalespersonList(bool includeTerminated, bool showAssignedSalesPersons)
+        public List<Person> GetSalespersonList(bool includeInactive)
         {
-            return PersonDAL.PersonListSalesperson(null, includeTerminated, showAssignedSalesPersons);
+            return PersonDAL.PersonListSalesperson(null, includeInactive);
         }
 
         /// <summary>
@@ -231,9 +231,9 @@ namespace PracticeManagementService
         /// <param name="person">Person to restrict permissions to</param>
         /// <param name="inactives">Determines whether inactive persons will are included into the results.</param>
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public List<Person> PersonListSalesperson(Person person, bool includeTerminated, bool showAssignedSalesPersons)
+        public List<Person> PersonListSalesperson(Person person, bool inactives)
         {
-            return PersonDAL.PersonListSalesperson(person, includeTerminated, showAssignedSalesPersons);
+            return PersonDAL.PersonListSalesperson(person, inactives);
         }
 
         /// <summary>
@@ -245,9 +245,9 @@ namespace PracticeManagementService
         /// <returns>
         /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
         /// </returns>
-        public List<Person> PersonListProjectOwner(Person person)
+        public List<Person> PersonListProjectOwner(bool includeInactive, Person person)
         {
-            return PersonDAL.PersonListProjectOwner(person);
+            return PersonDAL.PersonListProjectOwner(includeInactive, person);
         }
 
         /// <summary>
@@ -934,10 +934,10 @@ namespace PracticeManagementService
         public Person GetPayHistoryShortByPerson(int personId)
         {
             var person = new Person
-                {
-                    Id = personId,
-                    PaymentHistory = PayDAL.GetPayHistoryShortByPerson(personId)
-                };
+            {
+                Id = personId,
+                PaymentHistory = PayDAL.GetPayHistoryShortByPerson(personId)
+            };
             return person;
         }
 
@@ -1101,12 +1101,12 @@ namespace PracticeManagementService
         {
             return PersonDAL.CheckIfPersonConsultantTypeInAPeriod(personId, startDate, endDate);
         }
-        
+
         public List<Project> GetCommissionsValidationByPersonId(int personId, DateTime hireDate,
                                                                        DateTime? terminationDate, int personStatusId,
                                                                        int divisionId, bool IsReHire)
         {
-            return PersonDAL.GetCommissionsValidationByPersonId(personId, hireDate, terminationDate, personStatusId,divisionId, IsReHire);
+            return PersonDAL.GetCommissionsValidationByPersonId(personId, hireDate, terminationDate, personStatusId, divisionId, IsReHire);
         }
 
         public Person CheckIfValidDivision(int personId, DateTime startDate, DateTime endDate)
