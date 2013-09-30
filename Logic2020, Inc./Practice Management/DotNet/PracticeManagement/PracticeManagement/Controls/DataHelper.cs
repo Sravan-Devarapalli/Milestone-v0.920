@@ -810,13 +810,13 @@ namespace PraticeManagement.Controls
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
-        public static void FillSalespersonList(ListControl control, string firstItemText, bool includeTerminated, bool showAssignedSalesPersons)
+        public static void FillSalespersonList(ListControl control, string firstItemText, bool includeInactive)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    Person[] persons = serviceClient.GetSalespersonList(includeTerminated, showAssignedSalesPersons);
+                    Person[] persons = serviceClient.GetSalespersonList(includeInactive);
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -903,7 +903,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    Person[] persons = GetActivePersons(serviceClient.GetSalespersonList(false, false));
+                    Person[] persons = GetActivePersons(serviceClient.GetSalespersonList(false));
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -921,7 +921,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    Person[] persons = GetActivePersons(serviceClient.PersonListSalesperson(person, false,false));
+                    Person[] persons = GetActivePersons(serviceClient.PersonListSalesperson(person, false));
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -944,13 +944,13 @@ namespace PraticeManagement.Controls
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
- public static void FillSalespersonList(Person person, ListControl control, string firstItemText, bool includeTerminated,bool showAssignedSalesPersons)
+        public static void FillSalespersonList(Person person, ListControl control, string firstItemText, bool includeInactive)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    Person[] persons = serviceClient.PersonListSalesperson(person, includeTerminated,showAssignedSalesPersons);
+                    Person[] persons = serviceClient.PersonListSalesperson(person, includeInactive);
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
@@ -961,6 +961,19 @@ namespace PraticeManagement.Controls
                 }
             }
         }
+
+        /// <summary>
+        /// Fills the list control with the list of active practice managers.
+        /// </summary>
+        /// <param name="control">The control to be filled.</param>
+        /// <param name="firstItemText">The text to be displayed by default.</param>
+        /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
+        /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
+        public static void FillProjectOwnerList(ListControl control, string firstItemText, DateTime? endDate, bool includeInactive)
+        {
+            FillProjectOwnerList(control, firstItemText, includeInactive, null);
+        }
+
         /// <summary>
         /// Fills the list control with the list of active practice managers.
         /// </summary>
@@ -969,13 +982,13 @@ namespace PraticeManagement.Controls
         /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <param name="person">Person who requests the info</param>
-        public static void FillProjectOwnerList(ListControl control, string firstItemText, Person person)
+        public static void FillProjectOwnerList(ListControl control, string firstItemText, bool includeInactive, Person person)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
-                    var persons = serviceClient.PersonListProjectOwner(person);
+                    var persons = serviceClient.PersonListProjectOwner(includeInactive, person);
 
                     FillPersonList(control, firstItemText, persons, String.Empty);
                 }
