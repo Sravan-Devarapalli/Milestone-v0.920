@@ -492,14 +492,14 @@ namespace DataAccess
             while (reader.Read())
             {
                 var employment = new Employment
-                    {
-                        PersonId = reader.GetInt32(personIdIndex),
-                        HireDate = reader.GetDateTime(hireDateIndex),
-                        TerminationDate =
-                            reader.IsDBNull(terminationDateIndex)
-                                ? null
-                                : (DateTime?)reader.GetDateTime(terminationDateIndex)
-                    };
+                {
+                    PersonId = reader.GetInt32(personIdIndex),
+                    HireDate = reader.GetDateTime(hireDateIndex),
+                    TerminationDate =
+                        reader.IsDBNull(terminationDateIndex)
+                            ? null
+                            : (DateTime?)reader.GetDateTime(terminationDateIndex)
+                };
 
                 Person person = null;
                 if (result.Any(p => p.First.Id == employment.PersonId))
@@ -842,7 +842,7 @@ namespace DataAccess
         /// <param name="person">Person to restrict permissions to</param>
         /// <param name="inactives">Determines whether inactive persons will are included into the results.</param>
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
-        public static List<Person> PersonListSalesperson(Person person, bool includeTerminated, bool showAssignedSalesPersons)
+        public static List<Person> PersonListSalesperson(Person person, bool inactives)
         {
             var result = new List<Person>();
 
@@ -852,8 +852,7 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeTerminated, includeTerminated);
-                command.Parameters.AddWithValue(Constants.ParameterNames.ShowAssignedSalesPersons, showAssignedSalesPersons);
+                command.Parameters.AddWithValue(IncludeInactiveParam, inactives);
 
                 if (person != null)
                     command.Parameters.AddWithValue(PersonIdParam, person.Id);
@@ -873,7 +872,7 @@ namespace DataAccess
         /// <returns>
         /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
         /// </returns>
-        public static List<Person> PersonListProjectOwner(Person person)
+        public static List<Person> PersonListProjectOwner(bool includeInactive, Person person)
         {
             var result = new List<Person>();
 
@@ -882,6 +881,8 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(IncludeInactiveParam, includeInactive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId,
                     person == null ? (object)DBNull.Value : person.Id.Value);
 
@@ -1220,16 +1221,16 @@ namespace DataAccess
             {
                 var personId = reader.GetInt32(personIdIndex);
                 var person = new Person
+                {
+                    Id = personId,
+                    FirstName = reader.GetString(firstNameIndex),
+                    LastName = reader.GetString(lastNameIndex),
+                    Title = new Title
                     {
-                        Id = personId,
-                        FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex),
-                        Title = new Title
-                            {
-                                TitleId = reader.GetInt32(titleIdIndex),
-                                TitleName = reader.GetString(titleIndex)
-                            },
-                    };
+                        TitleId = reader.GetInt32(titleIdIndex),
+                        TitleName = reader.GetString(titleIndex)
+                    },
+                };
 
                 result.Add(person);
             }
@@ -1305,10 +1306,10 @@ namespace DataAccess
                 person.HireDate = reader.GetDateTime(hireDateIndex);
                 person.TerminationDate = reader.GetDateTime(terminationDateIndex);
                 person.DefaultPractice = new Practice()
-                    {
-                        Name = reader.GetString(practiceNameIndex),
-                        IsCompanyInternal = reader.GetBoolean(IsCompanyInternalIndex)
-                    };
+                {
+                    Name = reader.GetString(practiceNameIndex),
+                    IsCompanyInternal = reader.GetBoolean(IsCompanyInternalIndex)
+                };
 
                 if (person.ProjectedFinancialsByMonth == null)
                 {
@@ -1317,19 +1318,19 @@ namespace DataAccess
 
                 DateTime month = reader.GetDateTime(monthIndex);
                 var financials = new ComputedFinancials
-                    {
-                        Revenue = reader.GetDecimal(revenueIndex),
-                        Cogs = reader.GetDecimal(cogsIndex),
-                        GrossMargin = reader.GetDecimal(marginIndex),
-                        Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
-                        TimescaleChangeStatus = reader.GetInt32(timeScaleChangeStatusIndex)
-                    };
+                {
+                    Revenue = reader.GetDecimal(revenueIndex),
+                    Cogs = reader.GetDecimal(cogsIndex),
+                    GrossMargin = reader.GetDecimal(marginIndex),
+                    Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                    TimescaleChangeStatus = reader.GetInt32(timeScaleChangeStatusIndex)
+                };
 
                 person.Status = new PersonStatus
-                    {
-                        Id = reader.GetInt32(personStatusIdIndex),
-                        Name = reader.GetString(personStatusNameIndex)
-                    };
+                {
+                    Id = reader.GetInt32(personStatusIdIndex),
+                    Name = reader.GetString(personStatusNameIndex)
+                };
 
                 person.Seniority =
                     !reader.IsDBNull(seniorityIdIndex)
@@ -1603,34 +1604,34 @@ namespace DataAccess
             while (reader.Read())
             {
                 var overhead = new PersonOverhead
-                    {
-                        Name =
-                            !reader.IsDBNull(descriptionIndex)
-                                ? reader.GetString(descriptionIndex)
-                                : null,
-                        Rate = reader.GetDecimal(rateIndex),
-                        HoursToCollect =
-                            !reader.IsDBNull(hoursToCollectIndex)
-                                ? reader.GetInt32(hoursToCollectIndex)
-                                : 0,
-                        StartDate =
-                            !reader.IsDBNull(startDateIndex)
-                                ? reader.GetDateTime(startDateIndex)
-                                : DateTime.MinValue,
-                        EndDate =
-                            !reader.IsDBNull(endDateIndex)
-                                ? (DateTime?)reader.GetDateTime(endDateIndex)
-                                : null,
-                        IsPercentage = reader.GetBoolean(isPercentageIndex)
-                    };
+                {
+                    Name =
+                        !reader.IsDBNull(descriptionIndex)
+                            ? reader.GetString(descriptionIndex)
+                            : null,
+                    Rate = reader.GetDecimal(rateIndex),
+                    HoursToCollect =
+                        !reader.IsDBNull(hoursToCollectIndex)
+                            ? reader.GetInt32(hoursToCollectIndex)
+                            : 0,
+                    StartDate =
+                        !reader.IsDBNull(startDateIndex)
+                            ? reader.GetDateTime(startDateIndex)
+                            : DateTime.MinValue,
+                    EndDate =
+                        !reader.IsDBNull(endDateIndex)
+                            ? (DateTime?)reader.GetDateTime(endDateIndex)
+                            : null,
+                    IsPercentage = reader.GetBoolean(isPercentageIndex)
+                };
 
                 if (!reader.IsDBNull(overheadRateTypeIdIndex))
                 {
                     overhead.RateType = new OverheadRateType
-                        {
-                            Id = reader.GetInt32(overheadRateTypeIdIndex),
-                            Name = reader.GetString(overheadRateTypeNameIndex)
-                        };
+                    {
+                        Id = reader.GetInt32(overheadRateTypeIdIndex),
+                        Name = reader.GetString(overheadRateTypeNameIndex)
+                    };
                 }
 
                 overhead.BillRateMultiplier = reader.GetDecimal(billRateMultiplierIndex);
@@ -1778,17 +1779,17 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     var person = new Person
-                        {
-                            Id = (int)reader[PersonIdColumn],
-                            FirstName = (string)reader[FirstNameColumn],
-                            LastName = (string)reader[LastNameColumn],
-                            Alias =
-                                !reader.IsDBNull(aliasIndex)
-                                    ? reader.GetString(aliasIndex)
-                                    : string.Empty,
-                            HireDate = (DateTime)reader[HireDateColumn],
-                            TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty
-                        };
+                    {
+                        Id = (int)reader[PersonIdColumn],
+                        FirstName = (string)reader[FirstNameColumn],
+                        LastName = (string)reader[LastNameColumn],
+                        Alias =
+                            !reader.IsDBNull(aliasIndex)
+                                ? reader.GetString(aliasIndex)
+                                : string.Empty,
+                        HireDate = (DateTime)reader[HireDateColumn],
+                        TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty
+                    };
 
                     if (IsWelcomeEmailSentIndex > -1)
                     {
@@ -1817,10 +1818,10 @@ namespace DataAccess
                     if (!Convert.IsDBNull(reader["DefaultPractice"]))
                     {
                         person.DefaultPractice = new Practice
-                            {
-                                Id = (int)reader["DefaultPractice"],
-                                Name = (string)reader["PracticeName"]
-                            };
+                        {
+                            Id = (int)reader["DefaultPractice"],
+                            Name = (string)reader["PracticeName"]
+                        };
                     }
                     if (!Convert.IsDBNull(reader[EmployeeNumberColumn]))
                     {
@@ -1838,19 +1839,19 @@ namespace DataAccess
                     }
 
                     person.Status = new PersonStatus
-                        {
-                            Id = reader.GetInt32(personStatusIdIndex),
-                            Name = reader.GetString(personStatusNameIndex)
-                        };
+                    {
+                        Id = reader.GetInt32(personStatusIdIndex),
+                        Name = reader.GetString(personStatusNameIndex)
+                    };
 
                     if (!reader.IsDBNull(seniorityIdIndex))
                     {
                         person.Seniority =
                             new Seniority
-                                {
-                                    Id = reader.GetInt32(seniorityIdIndex),
-                                    Name = reader.GetString(seniorityNameIndex)
-                                };
+                            {
+                                Id = reader.GetInt32(seniorityIdIndex),
+                                Name = reader.GetString(seniorityNameIndex)
+                            };
                     }
 
                     if (isStrawManIndex > -1)
@@ -1886,21 +1887,21 @@ namespace DataAccess
                             if (xpractice.Attributes != null)
                                 person.PracticesOwned.Add(
                                     new Practice
-                                        {
-                                            Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
-                                            Name = xpractice.Attributes["Name"].Value
-                                        });
+                                    {
+                                        Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
+                                        Name = xpractice.Attributes["Name"].Value
+                                    });
                         }
                     }
 
                     if (!Convert.IsDBNull(reader[managerIdIndex]))
                     {
                         person.Manager = new Person
-                            {
-                                Id = reader.GetInt32(managerIdIndex),
-                                FirstName = reader.GetString(managerFirstNameIndex),
-                                LastName = reader.GetString(managerLastNameIndex)
-                            };
+                        {
+                            Id = reader.GetInt32(managerIdIndex),
+                            FirstName = reader.GetString(managerFirstNameIndex),
+                            LastName = reader.GetString(managerLastNameIndex)
+                        };
 
                         if (managerAliasIndex >= 0)
                         {
@@ -1959,42 +1960,42 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     var person = new Person
-                        {
-                            Id = (int)reader[PersonIdColumn],
-                            FirstName = (string)reader[FirstNameColumn],
-                            LastName = (string)reader[LastNameColumn],
-                            Alias = !reader.IsDBNull(aliasIndex) ? reader.GetString(aliasIndex) : string.Empty,
-                            HireDate = (DateTime)reader[HireDateColumn],
-                            IsStrawMan = !reader.IsDBNull(isStrawManIndex) && (bool)reader.GetBoolean(isStrawManIndex),
-                            TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty,
-                            TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null,
-                            LastLogin = !reader.IsDBNull(lastLoginDateIndex) ? (DateTime?)reader[lastLoginDateIndex] : null,
-                            DefaultPractice = !Convert.IsDBNull(reader["DefaultPractice"])
-                                                  ? new Practice
-                                                      {
-                                                          Id = (int)reader["DefaultPractice"],
-                                                          Name = (string)reader["PracticeName"]
-                                                      } : null,
-                            EmployeeNumber = !Convert.IsDBNull(reader[EmployeeNumberColumn]) ? (string)reader[EmployeeNumberColumn] : null,
+                    {
+                        Id = (int)reader[PersonIdColumn],
+                        FirstName = (string)reader[FirstNameColumn],
+                        LastName = (string)reader[LastNameColumn],
+                        Alias = !reader.IsDBNull(aliasIndex) ? reader.GetString(aliasIndex) : string.Empty,
+                        HireDate = (DateTime)reader[HireDateColumn],
+                        IsStrawMan = !reader.IsDBNull(isStrawManIndex) && (bool)reader.GetBoolean(isStrawManIndex),
+                        TelephoneNumber = !reader.IsDBNull(telephoneNumberIndex) ? reader.GetString(telephoneNumberIndex) : string.Empty,
+                        TerminationDate = !reader.IsDBNull(terminationDateIndex) ? (DateTime?)reader[terminationDateIndex] : null,
+                        LastLogin = !reader.IsDBNull(lastLoginDateIndex) ? (DateTime?)reader[lastLoginDateIndex] : null,
+                        DefaultPractice = !Convert.IsDBNull(reader["DefaultPractice"])
+                                              ? new Practice
+                                              {
+                                                  Id = (int)reader["DefaultPractice"],
+                                                  Name = (string)reader["PracticeName"]
+                                              } : null,
+                        EmployeeNumber = !Convert.IsDBNull(reader[EmployeeNumberColumn]) ? (string)reader[EmployeeNumberColumn] : null,
 
-                            Status = new PersonStatus
-                                {
-                                    Id = reader.GetInt32(personStatusIdIndex),
-                                    Name = reader.GetString(personStatusNameIndex)
-                                },
-                            Title = !reader.IsDBNull(titleIdIndex) ? new Title
-                                {
-                                    TitleId = reader.GetInt32(titleIdIndex),
-                                    TitleName = reader.GetString(titleNameIndex)
-                                } : null,
-                            Manager = !Convert.IsDBNull(reader[managerIdIndex]) ? new Person
-                                {
-                                    Id = reader.GetInt32(managerIdIndex),
-                                    FirstName = reader.GetString(managerFirstNameIndex),
-                                    LastName = reader.GetString(managerLastNameIndex)
-                                    // Alias = reader.GetString(managerAliasIndex)
-                                } : null
-                        };
+                        Status = new PersonStatus
+                        {
+                            Id = reader.GetInt32(personStatusIdIndex),
+                            Name = reader.GetString(personStatusNameIndex)
+                        },
+                        Title = !reader.IsDBNull(titleIdIndex) ? new Title
+                        {
+                            TitleId = reader.GetInt32(titleIdIndex),
+                            TitleName = reader.GetString(titleNameIndex)
+                        } : null,
+                        Manager = !Convert.IsDBNull(reader[managerIdIndex]) ? new Person
+                        {
+                            Id = reader.GetInt32(managerIdIndex),
+                            FirstName = reader.GetString(managerFirstNameIndex),
+                            LastName = reader.GetString(managerLastNameIndex)
+                            // Alias = reader.GetString(managerAliasIndex)
+                        } : null
+                    };
 
                     if (practicesOwnedIndex >= 0 && !reader.IsDBNull(practicesOwnedIndex))
                     {
@@ -2009,33 +2010,33 @@ namespace DataAccess
                             if (xpractice.Attributes != null)
                                 person.PracticesOwned.Add(
                                     new Practice
-                                        {
-                                            Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
-                                            Name = xpractice.Attributes["Name"].Value
-                                        });
+                                    {
+                                        Id = Convert.ToInt32(xpractice.Attributes["Id"].Value),
+                                        Name = xpractice.Attributes["Name"].Value
+                                    });
                         }
                     }
 
                     if (!reader.IsDBNull(payPersonIdIndex))
                     {
                         Pay pay = new Pay
-                            {
-                                PersonId = reader.GetInt32(personIdIndex),
-                                Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
-                                TimescaleName = reader.GetString(timescaleNameIndex),
-                                Amount = reader.GetDecimal(amountIndex),
-                                StartDate = reader.GetDateTime(startDateIndex),
-                                EndDate =
-                                    !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
-                                AmountHourly = reader.GetDecimal(amountHourlyIndex),
-                                VacationDays =
-                                    !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
-                                BonusAmount = reader.GetDecimal(bonusAmountIndex),
-                                BonusHoursToCollect =
-                                    !reader.IsDBNull(bonusHoursToCollectIndex) ?
-                                        (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
-                                IsYearBonus = reader.GetBoolean(isYearBonusIndex)
-                            };
+                        {
+                            PersonId = reader.GetInt32(personIdIndex),
+                            Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                            TimescaleName = reader.GetString(timescaleNameIndex),
+                            Amount = reader.GetDecimal(amountIndex),
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate =
+                                !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                            AmountHourly = reader.GetDecimal(amountHourlyIndex),
+                            VacationDays =
+                                !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
+                            BonusAmount = reader.GetDecimal(bonusAmountIndex),
+                            BonusHoursToCollect =
+                                !reader.IsDBNull(bonusHoursToCollectIndex) ?
+                                    (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
+                            IsYearBonus = reader.GetBoolean(isYearBonusIndex)
+                        };
                         person.CurrentPay = pay;
                     }
 
@@ -2119,12 +2120,12 @@ namespace DataAccess
             {
                 var personId = reader.GetInt32(personIdIndex);
                 var person = new Person
-                    {
-                        Id = personId,
-                        FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex),
-                        HireDate = (hireDateIndex > -1) ? reader.GetDateTime(hireDateIndex) : DateTime.MinValue
-                    };
+                {
+                    Id = personId,
+                    FirstName = reader.GetString(firstNameIndex),
+                    LastName = reader.GetString(lastNameIndex),
+                    HireDate = (hireDateIndex > -1) ? reader.GetDateTime(hireDateIndex) : DateTime.MinValue
+                };
                 if (aliasIndex > -1 && !reader.IsDBNull(aliasIndex))
                 {
                     person.Alias = reader.GetString(aliasIndex);
@@ -2132,10 +2133,10 @@ namespace DataAccess
                 if (seniorityIdColumnIndex > -1 && !reader.IsDBNull(seniorityIdColumnIndex))
                 {
                     person.Seniority = new Seniority
-                        {
-                            Id = reader.GetInt32(seniorityIdColumnIndex),
-                            Name = reader.GetString(seniorityNameColumnIndex)
-                        };
+                    {
+                        Id = reader.GetInt32(seniorityIdColumnIndex),
+                        Name = reader.GetString(seniorityNameColumnIndex)
+                    };
                 }
                 if (terminationDateIndex > -1)
                 {
@@ -2149,9 +2150,9 @@ namespace DataAccess
                 if (personStatusIdIndex > -1)
                 {
                     person.Status = new PersonStatus
-                        {
-                            Id = reader.GetInt32(personStatusIdIndex)
-                        };
+                    {
+                        Id = reader.GetInt32(personStatusIdIndex)
+                    };
                 }
                 if (isDefManagerIndex > -1)
                 {
@@ -2340,11 +2341,11 @@ namespace DataAccess
             while (reader.Read())
             {
                 var userCredentials = new UserCredentials
-                    {
-                        UserName = reader.GetString(userNameIndex),
-                        Password = reader.GetString(passwordIndex),
-                        PasswordSalt = reader.GetString(passwordSaltIndex),
-                    };
+                {
+                    UserName = reader.GetString(userNameIndex),
+                    Password = reader.GetString(passwordIndex),
+                    PasswordSalt = reader.GetString(passwordSaltIndex),
+                };
                 users.Add(userCredentials);
             }
         }
@@ -2506,10 +2507,10 @@ namespace DataAccess
             while (reader.Read())
             {
                 var user = new UserPasswordsHistory
-                    {
-                        HashedPassword = reader.GetString(hashedPasswordIndex),
-                        PasswordSalt = reader.GetString(passwordSaltIndex),
-                    };
+                {
+                    HashedPassword = reader.GetString(hashedPasswordIndex),
+                    PasswordSalt = reader.GetString(passwordSaltIndex),
+                };
 
                 result.Add(user);
             }
@@ -2583,11 +2584,11 @@ namespace DataAccess
             {
                 var personId = reader.GetInt32(personIdIndex);
                 var person = new Person
-                    {
-                        Id = personId,
-                        FirstName = reader.GetString(firstNameIndex),
-                        LastName = reader.GetString(lastNameIndex)
-                    };
+                {
+                    Id = personId,
+                    FirstName = reader.GetString(firstNameIndex),
+                    LastName = reader.GetString(lastNameIndex)
+                };
 
                 result.Add(person);
             }
@@ -2606,12 +2607,12 @@ namespace DataAccess
                     command.Parameters.AddWithValue(LastNameParam, person.LastName);
 
                     var personIdParameter = new SqlParameter
-                        {
-                            ParameterName = PersonIdParam,
-                            SqlDbType = SqlDbType.Int,
-                            Value = existingPersonId,
-                            Direction = ParameterDirection.InputOutput
-                        };
+                    {
+                        ParameterName = PersonIdParam,
+                        SqlDbType = SqlDbType.Int,
+                        Value = existingPersonId,
+                        Direction = ParameterDirection.InputOutput
+                    };
                     command.Parameters.Add(personIdParameter);
 
                     command.Parameters.AddWithValue(AmountParam, person.CurrentPay.Amount.Value);
@@ -2649,12 +2650,12 @@ namespace DataAccess
 
                     //var personIdParameter = new SqlParameter(PersonIdParam, SqlDbType.Int) { Direction = ParameterDirection.InputOutput, Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value };
                     var personIdParameter = new SqlParameter
-                        {
-                            ParameterName = PersonIdParam,
-                            SqlDbType = SqlDbType.Int,
-                            Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value,
-                            Direction = ParameterDirection.InputOutput
-                        };
+                    {
+                        ParameterName = PersonIdParam,
+                        SqlDbType = SqlDbType.Int,
+                        Value = person.Id.HasValue ? (object)person.Id.Value : DBNull.Value,
+                        Direction = ParameterDirection.InputOutput
+                    };
 
                     command.Parameters.Add(personIdParameter);
 
@@ -2755,20 +2756,20 @@ namespace DataAccess
             while (reader.Read())
             {
                 var consultant = new ConsultantDemandItem
-                    {
-                        ObjectId = reader.GetInt32(objectIdIndex),
-                        ObjectName = reader.GetString(objectNameIndex),
-                        ObjectNumber = reader.GetString(objectNumberIndex),
-                        ObjectStatusId = reader.GetInt32(objectStatusIdIndex),
-                        QuantityString = reader.GetString(quantityStringIndex),
-                        ObjectType = reader.GetInt32(objectTypeIndex),
-                        StartDate = reader.GetDateTime(startDateIndex),
-                        EndDate = reader.GetDateTime(endDateIndex),
-                        LinkedObjectId = reader.IsDBNull(linkedObjectIdIndex) ? null : (int?)reader.GetInt32(linkedObjectIdIndex),
-                        LinkedObjectNumber = reader.IsDBNull(linkedObjectNumberIndex) ? null : reader.GetString(linkedObjectNumberIndex),
-                        OpportunintyDescription = !reader.IsDBNull(opportunintyDescriptionIndex) ? reader.GetString(opportunintyDescriptionIndex) : string.Empty,
-                        ProjectDescription = !reader.IsDBNull(projectDescriptionIndex) ? reader.GetString(projectDescriptionIndex) : string.Empty
-                    };
+                {
+                    ObjectId = reader.GetInt32(objectIdIndex),
+                    ObjectName = reader.GetString(objectNameIndex),
+                    ObjectNumber = reader.GetString(objectNumberIndex),
+                    ObjectStatusId = reader.GetInt32(objectStatusIdIndex),
+                    QuantityString = reader.GetString(quantityStringIndex),
+                    ObjectType = reader.GetInt32(objectTypeIndex),
+                    StartDate = reader.GetDateTime(startDateIndex),
+                    EndDate = reader.GetDateTime(endDateIndex),
+                    LinkedObjectId = reader.IsDBNull(linkedObjectIdIndex) ? null : (int?)reader.GetInt32(linkedObjectIdIndex),
+                    LinkedObjectNumber = reader.IsDBNull(linkedObjectNumberIndex) ? null : reader.GetString(linkedObjectNumberIndex),
+                    OpportunintyDescription = !reader.IsDBNull(opportunintyDescriptionIndex) ? reader.GetString(opportunintyDescriptionIndex) : string.Empty,
+                    ProjectDescription = !reader.IsDBNull(projectDescriptionIndex) ? reader.GetString(projectDescriptionIndex) : string.Empty
+                };
                 var clientId = reader.GetInt32(clientIdIndex);
                 var client = clients.FirstOrDefault(c => c.Id.Value == clientId);
                 var personId = reader.GetInt32(personIdIndex);
@@ -2776,20 +2777,20 @@ namespace DataAccess
                 if (client == null)
                 {
                     client = new Client
-                        {
-                            Id = clientId,
-                            Name = reader.GetString(clientNameIndex)
-                        };
+                    {
+                        Id = clientId,
+                        Name = reader.GetString(clientNameIndex)
+                    };
                     clients.Add(client);
                 }
                 if (person == null)
                 {
                     person = new Person
-                        {
-                            Id = reader.GetInt32(personIdIndex),
-                            LastName = reader.GetString(lastNameIndex),
-                            FirstName = reader.GetString(firstNameIndex)
-                        };
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        FirstName = reader.GetString(firstNameIndex)
+                    };
                     persons.Add(person);
                 }
                 consultant.Client = client;
@@ -2911,22 +2912,22 @@ namespace DataAccess
 
                     if (reader.IsDBNull(payPersonIdIndex)) continue;
                     Pay pay = new Pay
-                        {
-                            PersonId = reader.GetInt32(payPersonIdIndex),
-                            Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
-                            TimescaleName = reader.GetString(timescaleNameIndex),
-                            Amount = reader.GetDecimal(amountIndex),
-                            StartDate = reader.GetDateTime(startDateIndex),
-                            EndDate =
-                                !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
-                            VacationDays =
-                                !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
-                            BonusAmount = reader.GetDecimal(bonusAmountIndex),
-                            BonusHoursToCollect =
-                                !reader.IsDBNull(bonusHoursToCollectIndex) ?
-                                    (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
-                            IsYearBonus = reader.GetBoolean(isYearBonusIndex),
-                        };
+                    {
+                        PersonId = reader.GetInt32(payPersonIdIndex),
+                        Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                        TimescaleName = reader.GetString(timescaleNameIndex),
+                        Amount = reader.GetDecimal(amountIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate =
+                            !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                        VacationDays =
+                            !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : null,
+                        BonusAmount = reader.GetDecimal(bonusAmountIndex),
+                        BonusHoursToCollect =
+                            !reader.IsDBNull(bonusHoursToCollectIndex) ?
+                                (int?)reader.GetInt32(bonusHoursToCollectIndex) : null,
+                        IsYearBonus = reader.GetBoolean(isYearBonusIndex),
+                    };
                     person.CurrentPay = pay;
                 }
             }
@@ -2953,33 +2954,33 @@ namespace DataAccess
             while (reader.Read())
             {
                 var person = new Person
-                    {
-                        Id = reader.GetInt32(personIdIndex),
-                        LastName = reader.GetString(lastNameIndex),
-                        FirstName = reader.GetString(firstNameIndex),
-                        InUse = reader.GetInt32(inUseIndex) == 1,
+                {
+                    Id = reader.GetInt32(personIdIndex),
+                    LastName = reader.GetString(lastNameIndex),
+                    FirstName = reader.GetString(firstNameIndex),
+                    InUse = reader.GetInt32(inUseIndex) == 1,
 
-                        Status = new PersonStatus
-                            {
-                                Id = (int)Enum.Parse(
-                                    typeof(PersonStatusType),
-                                    (string)reader[personStatusNameIndex]),
-                                Name = reader.GetString(personStatusNameIndex)
-                            },
-                    };
+                    Status = new PersonStatus
+                    {
+                        Id = (int)Enum.Parse(
+                            typeof(PersonStatusType),
+                            (string)reader[personStatusNameIndex]),
+                        Name = reader.GetString(personStatusNameIndex)
+                    },
+                };
 
                 if (!reader.IsDBNull(payPersonIdIndex))
                 {
                     Pay pay = new Pay
-                        {
-                            PersonId = reader.GetInt32(personIdIndex),
-                            TimescaleName = reader.GetString(timescaleNameIndex),
-                            Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
-                            Amount = reader.GetDecimal(amountIndex),
-                            StartDate = reader.GetDateTime(startDateIndex),
-                            EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
-                            VacationDays = !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : 0
-                        };
+                    {
+                        PersonId = reader.GetInt32(personIdIndex),
+                        TimescaleName = reader.GetString(timescaleNameIndex),
+                        Timescale = (TimescaleType)reader.GetInt32(timescaleIndex),
+                        Amount = reader.GetDecimal(amountIndex),
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                        VacationDays = !reader.IsDBNull(vacationDaysIndex) ? (int?)reader.GetInt32(vacationDaysIndex) : 0
+                    };
                     person.CurrentPay = pay;
                 }
                 result.Add(person);
@@ -2995,11 +2996,11 @@ namespace DataAccess
             while (reader.Read())
             {
                 var person = new Person
-                    {
-                        Id = reader.GetInt32(personIdIndex),
-                        LastName = reader.GetString(lastNameIndex),
-                        FirstName = reader.GetString(firstNameIndex)
-                    };
+                {
+                    Id = reader.GetInt32(personIdIndex),
+                    LastName = reader.GetString(lastNameIndex),
+                    FirstName = reader.GetString(firstNameIndex)
+                };
                 result.Add(person);
             }
         }
@@ -3047,14 +3048,14 @@ namespace DataAccess
                 person.IsStrawMan = !reader.IsDBNull(isStrawManIndex) && reader.GetBoolean(isStrawManIndex);
                 person.EmployeeNumber = reader.GetString(employeeNumberIndex);
                 person.CurrentPay = new Pay
-                    {
-                        TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
-                    };
+                {
+                    TimescaleName = reader.IsDBNull(timeScaleIndex) ? String.Empty : reader.GetString(timeScaleIndex)
+                };
                 person.IsOffshore = reader.GetBoolean(isOffshoreIndex);
                 person.Status = new PersonStatus
-                    {
-                        Id = reader.GetInt32(personStatusIdIndex)
-                    };
+                {
+                    Id = reader.GetInt32(personStatusIdIndex)
+                };
                 if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
                 {
                     break;
@@ -3210,15 +3211,15 @@ namespace DataAccess
                         while (reader.Read())
                         {
                             var terminationReason = new TerminationReason
-                                {
-                                    Id = reader.GetInt32(terminationReasonIdIndex),
-                                    Name = reader.GetString(terminationReasonIndex),
-                                    IsW2SalaryRule = reader.GetBoolean(isW2SalaryRuleIndex),
-                                    IsW2HourlyRule = reader.GetBoolean(isW2HourlyRuleIndex),
-                                    Is1099Rule = reader.GetBoolean(is1099RuleIndex),
-                                    IsContigent = reader.GetBoolean(isContingentRuleIndex),
-                                    IsVisible = reader.GetBoolean(isVisibleIndex)
-                                };
+                            {
+                                Id = reader.GetInt32(terminationReasonIdIndex),
+                                Name = reader.GetString(terminationReasonIndex),
+                                IsW2SalaryRule = reader.GetBoolean(isW2SalaryRuleIndex),
+                                IsW2HourlyRule = reader.GetBoolean(isW2HourlyRuleIndex),
+                                Is1099Rule = reader.GetBoolean(is1099RuleIndex),
+                                IsContigent = reader.GetBoolean(isContingentRuleIndex),
+                                IsVisible = reader.GetBoolean(isVisibleIndex)
+                            };
 
                             result.Add(terminationReason);
                         }
@@ -3329,18 +3330,18 @@ namespace DataAccess
             while (reader.Read())
             {
                 var employment = new Employment
-                    {
-                        PersonId = reader.GetInt32(personIdIndex),
-                        HireDate = reader.GetDateTime(hireDateIndex),
-                        TerminationDate =
-                            reader.IsDBNull(terminationDateIndex)
-                                ? null
-                                : (DateTime?)reader.GetDateTime(terminationDateIndex),
-                        TerminationReasonId =
-                            reader.IsDBNull(terminationReasonIdIndex)
-                                ? null
-                                : (int?)reader.GetInt32(terminationReasonIdIndex)
-                    };
+                {
+                    PersonId = reader.GetInt32(personIdIndex),
+                    HireDate = reader.GetDateTime(hireDateIndex),
+                    TerminationDate =
+                        reader.IsDBNull(terminationDateIndex)
+                            ? null
+                            : (DateTime?)reader.GetDateTime(terminationDateIndex),
+                    TerminationReasonId =
+                        reader.IsDBNull(terminationReasonIdIndex)
+                            ? null
+                            : (int?)reader.GetInt32(terminationReasonIdIndex)
+                };
 
                 result.Add(employment);
             }
@@ -3504,7 +3505,7 @@ namespace DataAccess
             return null;
         }
 
-     
+
 
         private static void ReadCommissions(SqlDataReader reader, List<Project> result)
         {
@@ -3515,10 +3516,10 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     Project project = new Project()
-                      {
-                          ProjectNumber = reader.GetString(projectNumberIndex),
-                          Name = reader.GetString(projectNameIndex)
-                      };
+                    {
+                        ProjectNumber = reader.GetString(projectNumberIndex),
+                        Name = reader.GetString(projectNameIndex)
+                    };
                     result.Add(project);
                 }
             }
@@ -3555,9 +3556,9 @@ namespace DataAccess
                 connection.Open();
                 return ((bool)command.ExecuteScalar());
             }
-        } 
+        }
 
-        public static List<Project> GetCommissionsValidationByPersonId(int personId, DateTime hireDate, DateTime? terminationDate, int personStatusId, int divisionId,bool IsReHire)
+        public static List<Project> GetCommissionsValidationByPersonId(int personId, DateTime hireDate, DateTime? terminationDate, int personStatusId, int divisionId, bool IsReHire)
         {
             List<Project> result = new List<Project>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -3568,7 +3569,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.HireDate, hireDate);
-                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate.HasValue ? (object)terminationDate.Value:DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TerminationDate, terminationDate.HasValue ? (object)terminationDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusId, personStatusId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, divisionId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsReHire, IsReHire);
@@ -3597,7 +3598,7 @@ namespace DataAccess
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                   return ReadDivision(reader);
+                    return ReadDivision(reader);
                 }
             }
         }
@@ -3613,19 +3614,19 @@ namespace DataAccess
                 while (reader.Read())
                 {
                     Person person = new Person()
-                      {
-                          Id = reader.GetInt32(personIdIndex),
-                          HireDate = reader.GetDateTime(startDateIndex),
-                          TerminationDate = reader.IsDBNull(endDateIndex) ? (DateTime?)null : reader.GetDateTime(endDateIndex),
-                          DivisionType = (PersonDivisionType)(reader.IsDBNull(divisionIdIndex)?0:reader.GetInt32(divisionIdIndex))
-                      };
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        HireDate = reader.GetDateTime(startDateIndex),
+                        TerminationDate = reader.IsDBNull(endDateIndex) ? (DateTime?)null : reader.GetDateTime(endDateIndex),
+                        DivisionType = (PersonDivisionType)(reader.IsDBNull(divisionIdIndex) ? 0 : reader.GetInt32(divisionIdIndex))
+                    };
                     return person;
                 }
             }
             return null;
         }
 
-        public static bool CheckIfPersonEntriesOverlapps(int milestoneId,int personId, DateTime startDate, DateTime endDate)
+        public static bool CheckIfPersonEntriesOverlapps(int milestoneId, int personId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (
@@ -3635,14 +3636,14 @@ namespace DataAccess
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId); 
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
                 connection.Open();
                 return ((bool)command.ExecuteScalar());
             }
-        } 
+        }
     }
 }
 
