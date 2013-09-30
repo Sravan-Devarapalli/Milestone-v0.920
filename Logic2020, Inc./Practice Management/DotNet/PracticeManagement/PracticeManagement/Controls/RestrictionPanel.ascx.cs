@@ -13,12 +13,12 @@ namespace PraticeManagement.Controls
             DataHelper.FillSalespersonList(
                 msddSalespersons,
                 Resources.Controls.AllSalespersonsText,
-                true,true);
+                true);
 
             DataHelper.FillProjectOwnerList(
                 msddPracticeManagers,
                 "All Project Managers",
-                null);
+                null, true);
 
             DataHelper.FillPracticeList(
                 msddPractices, Resources.Controls.AllPracticesText);
