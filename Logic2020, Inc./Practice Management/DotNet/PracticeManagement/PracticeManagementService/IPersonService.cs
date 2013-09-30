@@ -162,7 +162,7 @@ namespace PracticeManagementService
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
         [OperationContract]
-        List<Person> GetSalespersonList(bool includeTerminated, bool showAssignedSalesPersons);
+        List<Person> GetSalespersonList(bool includeInactive);
 
         /// <summary>
         /// List the persons who recieve the sales commissions
@@ -171,7 +171,7 @@ namespace PracticeManagementService
         /// <param name="inactives">Determines whether inactive persons will are included into the results.</param>
         /// <returns>The list of the <see cref="Person"/> objects.</returns>
         [OperationContract]
-        List<Person> PersonListSalesperson(Person person, bool includeTerminated,bool showAssignedSalesPersons);
+        List<Person> PersonListSalesperson(Person person, bool inactives);
 
         /// <summary>
         /// List the persons who recieve the Practice Management commissions
@@ -183,7 +183,7 @@ namespace PracticeManagementService
         /// The list of <see cref="Person"/> objects applicable to be a practice manager for the project.
         /// </returns>
         [OperationContract]
-        List<Person> PersonListProjectOwner(Person person);
+        List<Person> PersonListProjectOwner(bool includeInactive, Person person);
 
         /// <summary>
         /// Read All persons firstname and last name  except having inactive status and must have compensation for today or in future.
@@ -445,7 +445,7 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate);
-       
+
         [OperationContract]
         bool CheckIfPersonConsultantTypeInAPeriod(int personId, DateTime startDate, DateTime endDate);
 
