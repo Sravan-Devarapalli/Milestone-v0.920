@@ -793,7 +793,7 @@ namespace PraticeManagement.Reporting
             PdfPTable innerTable5 = new PdfPTable(1);
             innerTable5.WidthPercentage = 100;
             PdfPCell headerText13 = new PdfPCell(new Phrase("Total Estimated Billings", normalFont12));
-            PdfPCell headerText14 = new PdfPCell(new Phrase(project.BillableType == "Fixed" ? "FF" : (totalEstBillings).ToString(Constants.Formatting.CurrencyExcelReportFormatWithoutDecimal), boldFont));
+            PdfPCell headerText14 = new PdfPCell(new Phrase(project.BillableType == "Fixed" ? "FF" : (totalEstBillings).ToString(Constants.Formatting.CurrencyExcelReportFormat), boldFont));
             headerText13.VerticalAlignment = Element.ALIGN_BOTTOM;
             headerText14.VerticalAlignment = Element.ALIGN_TOP;
             headerText13.HorizontalAlignment = headerText14.HorizontalAlignment = Element.ALIGN_CENTER;
