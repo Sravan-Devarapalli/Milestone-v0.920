@@ -329,7 +329,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return BillRate == -1.00 ? "FF" : BillRate.ToString(Constants.Formatting.CurrencyFormat);
+                return BillRate == -1.00 ? "FF" : BillRate.ToString(Constants.Formatting.CurrencyWithDecimalsFormat);
             }
         }
 
@@ -337,7 +337,7 @@ namespace DataTransferObjects.Reports
         {
             get
             {
-                return EstimatedBillings == -1.00 ? "FF" : EstimatedBillings.ToString(Constants.Formatting.CurrencyFormat);
+                return EstimatedBillings == -1.00 ? "FF" : EstimatedBillings.ToString(Constants.Formatting.CurrencyWithDecimalsFormat);
             }
         }
 
