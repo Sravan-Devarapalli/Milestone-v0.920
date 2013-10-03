@@ -129,7 +129,7 @@ namespace PraticeManagement.Controls.Reports
             ltrlNonBillableHours.Text = nonBillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillablePercent.Text = billablePercent.ToString();
             ltrlNonBillablePercent.Text = nonBillablePercent.ToString();
-            ltrlTotalEstBillings.Text = project.BillableType == "Fixed" ? "FF" : totalEstBillings.ToString(Constants.Formatting.CurrencyExcelReportFormatWithoutDecimal);
+            ltrlTotalEstBillings.Text = project.BillableType == "Fixed" ? "FF" : totalEstBillings.ToString(Constants.Formatting.CurrencyExcelReportFormat);
 
             if (billablePercent == 0 && nonBillablePercent == 0)
             {
