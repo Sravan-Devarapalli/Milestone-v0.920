@@ -134,7 +134,7 @@ namespace UpdatePracticeAndSeniority
             get
             {
                 var disableAllMails = GetConfigValue(DisableAllMails_ConfigKey);
-                return (disableAllMails == "yes");
+                return (disableAllMails.ToLower() == "yes");
             }
         }
 
