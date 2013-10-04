@@ -361,7 +361,7 @@ namespace PraticeManagement.Controls.Milestones
 
         private PersonWorkingHoursDetailsWithinThePeriod GetPersonWorkingHoursDetailsWithinThePeriod(DateTime startDate, DateTime endDate, DropDownList ddlPersonName)
         {
-            
+
             if (!string.IsNullOrEmpty(ddlPersonName.SelectedValue))
             {
                 using (var serviceClient = new PersonServiceClient())
@@ -450,6 +450,11 @@ namespace PraticeManagement.Controls.Milestones
                     dpPersonStart.TextValue = HostingControl.Milestone.StartDate < employment.HireDate.Date ? employment.HireDate.Date.ToString(Constants.Formatting.EntryDateFormat) : HostingControl.Milestone.StartDate.ToString(Constants.Formatting.EntryDateFormat);
                     dpPersonEnd.TextValue = employment.TerminationDate.HasValue ? HostingControl.Milestone.ProjectedDeliveryDate < employment.TerminationDate.Value ? HostingControl.Milestone.ProjectedDeliveryDate.ToString(Constants.Formatting.EntryDateFormat) : employment.TerminationDate.Value.ToString(Constants.Formatting.EntryDateFormat) : HostingControl.Milestone.ProjectedDeliveryDate.ToString(Constants.Formatting.EntryDateFormat);
                 }
+            }
+            if (person != null && person.IsStrawMan)
+            {
+                dpPersonStart.TextValue = HostingControl.Milestone.StartDate.ToString(Constants.Formatting.EntryDateFormat);
+                dpPersonEnd.TextValue = HostingControl.Milestone.EndDate.ToString(Constants.Formatting.EntryDateFormat);
             }
         }
 
