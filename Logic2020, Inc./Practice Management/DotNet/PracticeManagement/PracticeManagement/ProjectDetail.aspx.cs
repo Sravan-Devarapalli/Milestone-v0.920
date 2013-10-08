@@ -428,7 +428,7 @@ namespace PraticeManagement
 
                 int size = Convert.ToInt32(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Project, Constants.ResourceKeys.AttachmentFileSize));
 
-                lblAttachmentMessage.Text = string.Format(AttachSOWMessage, size / 1000);
+                lblAttachmentMessage.Text = string.Format(AttachSOWMessage, size / 1024);
                 DataHelper.FillAttachemntCategoryList(ddlAttachmentCategory);
             }
             mlConfirmation.ClearMessage();
