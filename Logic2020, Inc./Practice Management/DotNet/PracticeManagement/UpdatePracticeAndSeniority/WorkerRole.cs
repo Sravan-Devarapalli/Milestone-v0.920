@@ -384,7 +384,7 @@ namespace UpdatePracticeAndSeniority
         public static void RunPayrollDistributionReport(DateTime currentDateTimeWithTimeZone)
         {
             if (
-                ((currentDateTimeWithTimeZone.Day == 3 || currentDateTimeWithTimeZone.Day == 18) && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime)
+                ((currentDateTimeWithTimeZone.Day == 4 || currentDateTimeWithTimeZone.Day == 19) && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime)
                 || (currentDateTimeWithTimeZone.Date == new DateTime(2013, 6, 4).Date && currentDateTimeWithTimeZone.TimeOfDay < PayrollDistributionReportScheduleTime) //Added For the sake of defect #3151 . need to remove in next update.
                 )
             {
@@ -596,14 +596,14 @@ namespace UpdatePracticeAndSeniority
         /// </summary>
         public static void SendPayrollDistributionReport(DateTime currentDate)
         {
-            var nextRunTime = currentDate.Day == 3 ? currentDate.AddDays(18 - 3) : currentDate.AddMonths(1).AddDays(3);
+            var nextRunTime = currentDate.Day == 4 ? currentDate.AddDays(19 - 4) : currentDate.AddMonths(1).AddDays(4);
             WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_PayrollDistributionReportStartedProcess, nextRunTime);
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    DateTime startDate = currentDate.Day == 3 ? currentDate.AddMonths(-1).AddDays(16 - currentDate.AddMonths(-1).Day).Date : new DateTime(currentDate.Year, currentDate.Month, 1);
-                    DateTime endDate = currentDate.Day == 3 ? currentDate.Date.AddDays(-currentDate.Day) : new DateTime(currentDate.Year, currentDate.Month, 15);
+                    DateTime startDate = currentDate.Day == 4 ? currentDate.AddMonths(-1).AddDays(16 - currentDate.AddMonths(-1).Day).Date : new DateTime(currentDate.Year, currentDate.Month, 1);
+                    DateTime endDate = currentDate.Day == 4 ? currentDate.Date.AddDays(-currentDate.Day) : new DateTime(currentDate.Year, currentDate.Month, 15);
 
                     //Read the data.
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_PayrollDistributionReportStartedReadingData, nextRunTime);
