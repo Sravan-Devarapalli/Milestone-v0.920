@@ -31,6 +31,7 @@
     <MetadataFile FileName="DataTransferObjects.TimeEntry5.xsd" MetadataType="Schema" ID="65c0549a-4847-4c8c-9c01-e8816271daa4" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="ceda29ae-28c0-4a7b-a996-14d9b919a956" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="DataTransferObjects.ContextObjects.xsd" MetadataType="Schema" ID="31116ca5-9425-41d1-9da6-29137eece512" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
+    <MetadataFile FileName="DataTransferObjects.Reports2.xsd" MetadataType="Schema" ID="d7a8372c-c55d-4905-91e7-5307c4237592" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="d990e436-bc56-4e0f-9357-42c7336fa441" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
   </Metadata>
   <Extensions>
