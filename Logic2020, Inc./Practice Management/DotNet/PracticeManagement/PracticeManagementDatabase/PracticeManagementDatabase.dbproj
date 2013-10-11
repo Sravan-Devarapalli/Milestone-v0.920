@@ -4334,6 +4334,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ResourceAssignedOrUnassignedChargingExceptionReport.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetLatestPayWithInTheGivenRange.function.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
