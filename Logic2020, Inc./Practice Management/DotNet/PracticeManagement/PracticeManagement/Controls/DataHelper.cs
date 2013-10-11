@@ -10,6 +10,7 @@ using System.Web.Security;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using DataTransferObjects.Reports;
 using PraticeManagement.ActivityLogService;
 using PraticeManagement.CalendarService;
 using PraticeManagement.ClientService;
@@ -224,7 +225,7 @@ namespace PraticeManagement.Controls
         /// <summary>
         /// Retrives consultans report: Person - load per range - avarage u%
         /// </summary>
-        public static List<Quadruple<Person, int[], int, int>> GetConsultantsWeeklyReport
+        public static List<ConsultantUtilizationPerson> GetConsultantsWeeklyReport
             (DateTime startDate,
             int step,
             int duration,
@@ -247,7 +248,7 @@ namespace PraticeManagement.Controls
                     activeProjects, projectedProjects, experimentalProjects, internalProjects,
                     timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, isSampleReport);
 
-            return consultants.FindAll(Q => Q.Third < avgUtil);
+            return consultants.FindAll(Q => Q.AverageUtilization < avgUtil);
         }
 
         public static List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson
