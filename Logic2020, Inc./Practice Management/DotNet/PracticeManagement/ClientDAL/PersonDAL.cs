@@ -8,6 +8,7 @@ using System.Xml;
 using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using DataTransferObjects.Reports;
 using DataTransferObjects.TimeEntry;
 
 namespace DataAccess
@@ -223,11 +224,11 @@ namespace DataAccess
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public static List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
+        public static List<ConsultantUtilizationPerson> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             {
-                List<Quadruple<Person, int[], int, int>> result = null;
+                List<ConsultantUtilizationPerson> result = null;
 
                 using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationWeeklyProcedure, connection))
                 {
@@ -255,29 +256,21 @@ namespace DataAccess
                     {
                         result = GetPersonLoadWithVactionDays(reader);
                         reader.NextResult();
-                        //ReadPersonsWeeklyUtlization(reader, result);
-                        //reader.NextResult();
                         ReadPersonsEmploymentHistory(reader, result);
+                        reader.NextResult();
+                        ReadPersonTimeOffDates(reader, result);
                     }
                 }
-                Dictionary<int, List<int>> PersonWeeklyUtlization = GetWeeklyUtilizationForConsultant(context);
-
-                if (result != null && PersonWeeklyUtlization != null)
+                if (result != null)
                 {
-                    foreach (var record in result)
-                    {
-                        if (record.First.Id.HasValue && PersonWeeklyUtlization.Any(p => p.Key == record.First.Id.Value))
-                        {
-                            record.Second = PersonWeeklyUtlization[record.First.Id.Value].ToArray();
-                        }
-                    }
+                    GetWeeklyUtilizationForConsultant(context, result);
                 }
 
                 return result;
             }
         }
 
-        public static Dictionary<int, List<int>> GetWeeklyUtilizationForConsultant(ConsultantTimelineReportContext context)
+        public static void GetWeeklyUtilizationForConsultant(ConsultantTimelineReportContext context, List<ConsultantUtilizationPerson> consultantUtilizationPersonList)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetWeeklyUtilizationForConsultant, connection))
@@ -303,7 +296,7 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    return ReadPersonsWeeklyUtlization(reader);
+                    ReadPersonsWeeklyUtlization(reader, consultantUtilizationPersonList);
                 }
             }
         }
@@ -386,7 +379,7 @@ namespace DataAccess
         /// <summary>
         /// reads a dataset of persons into a collection
         /// </summary>
-        private static List<Quadruple<Person, int[], int, int>> GetPersonLoadWithVactionDays(SqlDataReader reader)
+        private static List<ConsultantUtilizationPerson> GetPersonLoadWithVactionDays(SqlDataReader reader)
         {
             if (reader.HasRows)
             {
@@ -404,9 +397,10 @@ namespace DataAccess
                 int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
                 int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
 
-                var res = new List<Quadruple<Person, int[], int, int>>();
+                var res = new List<ConsultantUtilizationPerson>();
                 while (reader.Read())
                 {
+                    ConsultantUtilizationPerson item = new ConsultantUtilizationPerson();
                     var person =
                         new Person
                         {
@@ -440,14 +434,13 @@ namespace DataAccess
                     {
                         person.TerminationDate = (DateTime)reader[TerminationDateColumn];
                     }
-
-                    int[] load = { 0 };//Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
-
-                    int avgUtil = reader.GetInt32(avgUtilIndex);
-
-                    int PersonVactionDays = reader.GetInt32(personVacationDaysIndex);
-
-                    res.Add(new Quadruple<Person, int[], int, int>(person, load, avgUtil, PersonVactionDays));
+                    item.WeeklyPayTypes = new List<int>();
+                    item.WeeklyUtilization = new List<int>();
+                    item.WeeklyVacationDays = new List<int>();
+                    item.TimeOffDates = new List<DateTime>();
+                    item.Person = person;
+                    item.PersonVacationDays = reader.GetInt32(personVacationDaysIndex);
+                    res.Add(item);
                 }
 
                 return res;
@@ -455,64 +448,92 @@ namespace DataAccess
             return null;
         }
 
-        private static Dictionary<int, List<int>> ReadPersonsWeeklyUtlization(SqlDataReader reader)
+        private static void ReadPersonsWeeklyUtlization(SqlDataReader reader, List<ConsultantUtilizationPerson> consultantUtilizationPersonList)
         {
-            Dictionary<int, List<int>> PersonWeeklyUtlization = new Dictionary<int, List<int>>();
             if (reader.HasRows)
             {
                 int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                 int weeklyUtlizationIndex = reader.GetOrdinal(Constants.ColumnNames.WeeklyUtlization);
+                int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHours);
+                int availableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.AvailableHours);
+                int payTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int vacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.VacationDays);
                 while (reader.Read())
                 {
                     int personid = reader.GetInt32(personIdIndex);
-                    List<int> weeklyUtlization = null;
-                    if (PersonWeeklyUtlization.Any(p => p.Key == personid))
+                    if (consultantUtilizationPersonList.Any(p => p.Person.Id == personid))
                     {
-                        weeklyUtlization = PersonWeeklyUtlization.First(p => p.Key == personid).Value;
+                        var record = consultantUtilizationPersonList.First(p => p.Person.Id == personid);
+                        record.ProjectedHours = record.ProjectedHours + reader.GetDecimal(projectedHoursIndex);
+                        record.AvailableHours = record.AvailableHours + reader.GetDecimal(availableHoursIndex);
+                        record.WeeklyUtilization.Add(reader.GetInt32(weeklyUtlizationIndex));
+                        record.WeeklyPayTypes.Add(reader.IsDBNull(payTypeIndex) ? 0 : reader.GetInt32(payTypeIndex));
+                        record.WeeklyVacationDays.Add(reader.GetInt32(vacationDaysIndex));
                     }
-                    else
-                    {
-                        weeklyUtlization = new List<int>();
-                        PersonWeeklyUtlization.Add(personid, weeklyUtlization);
-                    }
-                    weeklyUtlization.Add(reader.GetInt32(weeklyUtlizationIndex));
                 }
             }
-            return PersonWeeklyUtlization;
         }
 
-        private static void ReadPersonsEmploymentHistory(SqlDataReader reader, List<Quadruple<Person, int[], int, int>> result)
+        private static void ReadPersonsEmploymentHistory(SqlDataReader reader, List<ConsultantUtilizationPerson> result)
         {
-            if (result == null) return;
-            if (!reader.HasRows) return;
-            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-            int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
-            int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
-
-            while (reader.Read())
+            if (result != null)
             {
-                var employment = new Employment
+                if (reader.HasRows)
                 {
-                    PersonId = reader.GetInt32(personIdIndex),
-                    HireDate = reader.GetDateTime(hireDateIndex),
-                    TerminationDate =
-                        reader.IsDBNull(terminationDateIndex)
-                            ? null
-                            : (DateTime?)reader.GetDateTime(terminationDateIndex)
-                };
+                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                    int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                    int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
 
-                Person person = null;
-                if (result.Any(p => p.First.Id == employment.PersonId))
-                {
-                    person = result.First(p => p.First.Id == employment.PersonId).First;
-                    if (person.EmploymentHistory == null)
+                    while (reader.Read())
                     {
-                        person.EmploymentHistory = new List<Employment>();
+                        var employment = new Employment
+                            {
+                                PersonId = reader.GetInt32(personIdIndex),
+                                HireDate = reader.GetDateTime(hireDateIndex),
+                                TerminationDate =
+                                    reader.IsDBNull(terminationDateIndex)
+                                        ? null
+                                        : (DateTime?)reader.GetDateTime(terminationDateIndex)
+                            };
+
+                        Person person = null;
+                        if (result.Any(p => p.Person.Id == employment.PersonId))
+                        {
+                            person = result.First(p => p.Person.Id == employment.PersonId).Person;
+                            if (person.EmploymentHistory == null)
+                            {
+                                person.EmploymentHistory = new List<Employment>();
+                            }
+                        }
+                        if (person != null)
+                        {
+                            person.EmploymentHistory.Add(employment);
+                        }
                     }
                 }
-                if (person != null)
+            }
+        }
+
+        private static void ReadPersonTimeOffDates(SqlDataReader reader, List<ConsultantUtilizationPerson> result)
+        {
+            if (result != null)
+            {
+                if (reader.HasRows)
                 {
-                    person.EmploymentHistory.Add(employment);
+                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                    int timeOffDateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
+
+                    while (reader.Read())
+                    {
+                        int personId = reader.GetInt32(personIdIndex);
+                        var timeOffDate = reader.GetDateTime(timeOffDateIndex);
+                        if (result.Any(p => p.Person.Id == personId))
+                        {
+                            var record = result.First(p => p.Person.Id == personId);
+                            if (record.TimeOffDates == null) record.TimeOffDates = new List<DateTime>();
+                            record.TimeOffDates.Add(timeOffDate);
+                        }
+                    }
                 }
             }
         }
