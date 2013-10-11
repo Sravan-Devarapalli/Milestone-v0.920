@@ -4,6 +4,7 @@
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:element name="IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale">
     <xs:complexType>
@@ -766,7 +767,7 @@
   <xs:element name="GetConsultantUtilizationWeeklyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetConsultantUtilizationWeeklyResult" nillable="true" type="q38:ArrayOfQuadrupleOfPersonArrayOfintintintlqlLCQKx" />
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetConsultantUtilizationWeeklyResult" nillable="true" type="q38:ArrayOfConsultantUtilizationPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
