@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using DataTransferObjects.Reports;
 using PraticeManagement.PersonService;
 
 namespace PraticeManagement.Controls.Reports
@@ -27,7 +28,7 @@ namespace PraticeManagement.Controls.Reports
                                                         bool projectedProjects, bool experimentalProjects,
                                                         string userName,
                                                         string practicesIds,
-                                                        bool completedProjects =false)
+                                                        bool completedProjects = false)
         {
             var context = new BenchReportContext
                 {
@@ -51,7 +52,7 @@ namespace PraticeManagement.Controls.Reports
             return ServiceCallers.Custom.Project(c => c.GetBenchListWithoutBenchTotalAndAdminCosts(context));
         }
 
-        public static List<Quadruple<DataTransferObjects.Person, int[], int,int>> GetConsultantsTimelineReport(
+        public static List<ConsultantUtilizationPerson> GetConsultantsTimelineReport(
             DateTime start, int granularity, int period,
             bool activePersons, bool projectedPersons, bool activeProjects,
             bool projectedProjects, bool experimentalProjects, bool internalProjects,
@@ -79,7 +80,7 @@ namespace PraticeManagement.Controls.Reports
 
             var consultants = ServiceCallers.Custom.Person(
                 client => client.GetConsultantUtilizationWeekly(context));
-            var consultantsList = new List<Quadruple<DataTransferObjects.Person, int[], int,int>>();
+            var consultantsList = new List<ConsultantUtilizationPerson>();
             if (consultants != null && consultants.Any())
             {
                 consultantsList.AddRange(consultants);
