@@ -11,6 +11,7 @@ using DataAccess;
 using DataAccess.Other;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
+using DataTransferObjects.Reports;
 using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Utils;
 
@@ -41,7 +42,7 @@ namespace PracticeManagementService
         /// Retrives consultans report
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
-        public List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
+        public List<ConsultantUtilizationPerson> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context)
         {
             return PersonDAL.GetConsultantUtilizationWeekly(context);
         }
