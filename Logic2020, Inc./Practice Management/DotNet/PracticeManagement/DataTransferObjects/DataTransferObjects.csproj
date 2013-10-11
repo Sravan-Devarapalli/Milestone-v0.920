@@ -164,6 +164,7 @@
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupbySkill.cs" />
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupbyTitle.cs" />
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupbyTitleSkill.cs" />
+    <Compile Include="Reports\ConsultantUtilizationPerson.cs" />
     <Compile Include="Reports\GroupedHours.cs" />
     <Compile Include="Reports\HumanCapital\TerminationPersonsInRange.cs" />
     <Compile Include="Reports\PersonLevelGroupedHours.cs" />
