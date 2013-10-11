@@ -5,6 +5,7 @@ using System.ServiceModel;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using DataTransferObjects.TimeEntry;
+using DataTransferObjects.Reports;
 
 namespace PracticeManagementService
 {
@@ -29,7 +30,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
         [OperationContract]
-        List<Quadruple<Person, int[], int, int>> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context);
+        List<ConsultantUtilizationPerson> GetConsultantUtilizationWeekly(ConsultantTimelineReportContext context);
 
         /// <summary>
         /// Retrieves a consultant's  daily report whose Oersin Id is given by personId.
