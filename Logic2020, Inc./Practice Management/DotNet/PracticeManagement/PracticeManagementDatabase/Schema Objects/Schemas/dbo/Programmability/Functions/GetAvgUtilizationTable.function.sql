@@ -22,9 +22,9 @@ RETURN
 	WITH SalaryPersonsAvaliableHours
 	AS
 	(
-		SELECT PC.PersonId ,CAST(SUM(8 - ISNULL(PC.ActualHours,0)) AS DECIMAL(10,2)) AS AvaliableHours 
-		FROM dbo.v_PersonCalendar PC
-		INNER JOIN dbo.GetCurrentPayTypeTable() CPT ON CPT.PersonId = PC.PersonId AND CPT.Timescale = 2
+		SELECT PC.PersonId ,CAST(SUM(8 - ISNULL(PC.TimeOffHours,0)) AS DECIMAL(10,2)) AS AvaliableHours 
+		FROM dbo.PersonCalendarAuto PC
+		INNER JOIN dbo.[GetLatestPayWithInTheGivenRange](@StartDate,@EndDate) CPT ON CPT.PersonId = PC.PersonId AND CPT.Timescale = 2
 		WHERE PC.Date BETWEEN @StartDate AND @EndDate 
 				AND (PC.DayOff = 0 OR (PC.DayOff = 1 AND PC.CompanyDayOff = 0))
 		GROUP BY PC.PersonId
@@ -34,7 +34,7 @@ RETURN
 	(
 	SELECT  p.PersonId,CAST (ISNULL(SUM(MPS.HoursPerDay),0) AS DECIMAL(10,2)) AS ProjectedHours 
     FROM    dbo.Person P 
-    INNER JOIN dbo.GetCurrentPayTypeTable() CPT ON CPT.PersonId = P.PersonId AND CPT.Timescale = 2
+    INNER JOIN dbo.[GetLatestPayWithInTheGivenRange](@StartDate,@EndDate) CPT ON CPT.PersonId = P.PersonId AND CPT.Timescale = 2
 	LEFT JOIN dbo.v_MilestonePersonSchedule AS MPS ON P.PersonId = MPS.PersonId 
 												AND MPS.MilestoneId <> (SELECT MilestoneId FROM dbo.DefaultMilestoneSetting)
 												AND MPS.Date BETWEEN @StartDate AND @EndDate
