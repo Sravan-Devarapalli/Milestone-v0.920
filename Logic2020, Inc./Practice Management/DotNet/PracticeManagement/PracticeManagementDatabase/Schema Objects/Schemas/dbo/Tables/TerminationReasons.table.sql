@@ -6,6 +6,8 @@
 	IsW2HourlyRule		BIT NOT NULL CONSTRAINT DF_TerminationReasons_IsW2HourlyRule DEFAULT(0),
 	Is1099Rule			BIT NOT NULL CONSTRAINT DF_TerminationReasons_Is1099Rule DEFAULT(0),
 	IsContingentRule	BIT NOT NULL CONSTRAINT DF_TerminationReasons_IsContingentRule DEFAULT(0),
+	IsPersonWorkedRule	BIT NOT NULL CONSTRAINT DF_TerminationReasons_IsPersonWorkedRule DEFAULT(1),
 	IsVisible			BIT NOT NULL CONSTRAINT DF_TerminationReasons_IsVisible DEFAULT(1),
 	CONSTRAINT PK_TerminationReasons_TerminationReasonId PRIMARY KEY (TerminationReasonId)
 )
+
