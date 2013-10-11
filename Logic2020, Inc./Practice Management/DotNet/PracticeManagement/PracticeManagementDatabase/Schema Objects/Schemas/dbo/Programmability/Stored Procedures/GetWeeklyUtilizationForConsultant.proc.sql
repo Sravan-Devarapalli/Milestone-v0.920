@@ -39,9 +39,9 @@ AS
 		SET @EndRange = DATEADD(dd , @DaysForward, @StartDate) - 1
 		IF(@Step = 7)
 		BEGIN
-			IF(DATEPART(DW,@StartDate)>2)
+			IF(DATEPART(DW,@StartDate)>0)
 			BEGIN
-				SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+2
+				SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+1
 			END
 			IF(DATEPART(DW,@StartDate)<7)
 			BEGIN
@@ -51,9 +51,9 @@ AS
 		ELSE IF (@Step = 30)
 		BEGIN
                 
-			IF(DATEPART(DW,@StartDate)>2)
+			IF(DATEPART(DW,@StartDate)>0)
 			BEGIN
-				SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+2
+				SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+1
 			END
 			IF(DATEPART(DW,@EndRange)<7)
 			BEGIN
@@ -61,8 +61,9 @@ AS
 			END
 		END
 
-		SELECT WUT.PersonId,WUT.WeeklyUtlization
+		SELECT WUT.PersonId,WUT.WeeklyUtlization,WUT.AvailableHours,WUT.ProjectedHours,WUT.Timescale,WUT.VacationDays
 		FROM dbo.GetWeeklyUtilizationTable(@StartDate,@EndRange, @Step, @ActivePersons, @ActiveProjects, @ProjectedPersons, @ProjectedProjects,@ExperimentalProjects,@InternalProjects,@TimescaleIds,@PracticeIds,@ExcludeInternalPractices) AS WUT 
 		ORDER BY WUT.PersonId,WUT.StartDate
 				 
     END
+
