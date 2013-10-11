@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.DataVisualization.Charting;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
+using DataTransferObjects.Reports;
 using PraticeManagement.Configuration.ConsReportColoring;
+using PraticeManagement.FilterObjects;
 using PraticeManagement.Objects;
 using PraticeManagement.Utils;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-using PraticeManagement.FilterObjects;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -30,9 +31,10 @@ namespace PraticeManagement.Controls.Reports
         private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
         private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}";
         private const char DELIMITER = '+';
-        private const string TOOLTIP_FORMAT = "{0}-{1} {2}";
+        private const string TOOLTIP_FORMAT = "{0}-{1} {2},{3}";
+        private const string TOOLTIP_FORMAT_FOR_SINGLEDAY = "{0} {1},{2}";
         private const string FULL_MONTH_NAME_FORMAT = "MMMM, yyyy";
-        private const string VACATION_TOOLTIP_FORMAT = "On vacation";
+        private const string VACATION_TOOLTIP_FORMAT = "On vacation: {0}";
         private const string UTILIZATION_TOOLTIP_FORMAT = "U% = {0}";
         private const string CAPACITY_TOOLTIP_FORMAT = "C% = {0}";
         private const string AVERAGE_UTIL_FORMAT = "~{0}%";
@@ -41,7 +43,8 @@ namespace PraticeManagement.Controls.Reports
         private const string Capacity = "Capacity";
         private const string NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%";
         private const string VACATION_NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%*";
-        #endregion
+
+        #endregion Constants
 
         #region Fields
 
@@ -88,7 +91,6 @@ namespace PraticeManagement.Controls.Reports
             get
             {
                 return utf.AvgUtil;
-
             }
         }
 
@@ -167,7 +169,7 @@ namespace PraticeManagement.Controls.Reports
             set;
         }
 
-        #endregion
+        #endregion Fields
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
@@ -283,9 +285,36 @@ namespace PraticeManagement.Controls.Reports
         /// <param name = "horizAxis">Axis to decorate</param>
         private void InitAxis(Axis horizAxis)
         {
+            var beginPeriodLocal = BegPeriod;
+            var endPeriodLocal = EndPeriod;
+            if (Granularity == 7)
+            {
+                if ((int)BegPeriod.DayOfWeek > 0)
+                {
+                    beginPeriodLocal = BegPeriod.AddDays(-1 * ((int)BegPeriod.DayOfWeek));
+                }
+                if ((int)EndPeriod.DayOfWeek < 6)
+                {
+                    endPeriodLocal = EndPeriod.AddDays(6 - ((int)EndPeriod.DayOfWeek));
+                }
+            }
+            else if (Granularity == 30)
+            {
+                beginPeriodLocal = BegPeriod;
+                endPeriodLocal = EndPeriod;
+
+                if ((int)beginPeriodLocal.DayOfWeek > 0)
+                {
+                    beginPeriodLocal = beginPeriodLocal.AddDays(-1 * ((int)beginPeriodLocal.DayOfWeek));
+                }
+                if ((int)endPeriodLocal.DayOfWeek < 6)
+                {
+                    endPeriodLocal = endPeriodLocal.AddDays(6 - ((int)endPeriodLocal.DayOfWeek));
+                }
+            }
             //  Set min and max values
-            horizAxis.Minimum = BegPeriod.ToOADate();
-            horizAxis.Maximum = EndPeriod.AddDays(1).ToOADate();
+            horizAxis.Minimum = beginPeriodLocal.ToOADate();
+            horizAxis.Maximum = endPeriodLocal.AddDays(1).ToOADate();
             horizAxis.IsLabelAutoFit = true;
             horizAxis.IsStartedFromZero = true;
 
@@ -310,20 +339,11 @@ namespace PraticeManagement.Controls.Reports
 
                 horizAxis.IntervalOffset = GetOffset(BegPeriod);
                 horizAxis.IntervalOffsetType = DateTimeIntervalType.Days;
-
             }
             else if (utf.DetalizationSelectedValue == "7")
             {
-                if ((int)BegPeriod.DayOfWeek > 1)
-                {
-                    double period = Convert.ToDouble("-" + (int)BegPeriod.DayOfWeek);
-                    horizAxis.Minimum = BegPeriod.AddDays(period + 1).ToOADate();
-                }
-                if ((int)EndPeriod.DayOfWeek < 6)
-                {
-                    double period = Convert.ToDouble((int)EndPeriod.DayOfWeek);
-                    horizAxis.Maximum = EndPeriod.AddDays(6 - period).ToOADate();
-                }
+                horizAxis.Minimum = beginPeriodLocal.ToOADate();
+                horizAxis.Maximum = endPeriodLocal.AddDays(1).ToOADate();
 
                 horizAxis.IntervalType = DateTimeIntervalType.Weeks;
                 horizAxis.Interval = 1;
@@ -369,18 +389,15 @@ namespace PraticeManagement.Controls.Reports
 
         private int GetOffset(DateTime date)
         {
-            int index = 0;
-            for (index = 0; ; index++)
-            {
-                if (date.AddDays(index).DayOfWeek == DayOfWeek.Sunday)
-                {
-                    return -1 * ((index + 1) % 7);
-                }
-            }
+            //Offset for sunday is 0,monday is -6,tuesday is -5,wednesday is -4,thursday is -3,friday is -2,saturday is -1
+            if (date.DayOfWeek == DayOfWeek.Sunday)
+                return 0;
+            else
+                return  -1*(7 - (int)date.DayOfWeek);
         }
 
         /// <summary>
-        /// 	Format chart title according to 
+        /// 	Format chart title according to
         /// 	period and granularity selected
         /// </summary>
         private void UpdateChartTitle()
@@ -482,7 +499,6 @@ namespace PraticeManagement.Controls.Reports
             System.Web.UI.ScriptManager.RegisterClientScriptBlock(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
 
             SaveFilters(personId, query[3]);
-
         }
 
         private void SaveFilters(int? personId, string chartTitle)
@@ -529,7 +545,7 @@ namespace PraticeManagement.Controls.Reports
 
                     var range = chartDetails.Series["Milestones"].Points[ind];
                     range.Color = Coloring.GetColorByUtilization(load, load < 0);
-                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1));
+                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), load < 0);
                 }
             }
 
@@ -598,27 +614,28 @@ namespace PraticeManagement.Controls.Reports
             horizAxis.Maximum = maxDate.ToOADate();
         }
 
-
         /// <summary>
         /// 	Add person to the graph.
         /// </summary>
         /// <param name = "triple">Person - loads per range - average u%</param>
-        public void AddPerson(Quadruple<Person, int[], int, int> quadruple)
+        public void AddPerson(ConsultantUtilizationPerson quadruple)
         {
-            var partsCount = quadruple.Second.Length;
-            var csv = FormCSV(quadruple.Second);
+            var partsCount = quadruple.WeeklyUtilization.Count;
+            var csv = FormCSV(quadruple.WeeklyUtilization.ToArray());
             for (var w = 0; w < partsCount; w++)
             {
+                TimescaleType payType = (TimescaleType)quadruple.WeeklyPayTypes[w];
                 //  Add another range to the person's timeline
                 AddPersonRange(
-                    quadruple.First, //  Person
+                    quadruple.Person, //  Person
                      w, //  Range index
-                     IsCapacityMode ? 100 - quadruple.Second[w] : quadruple.Second[w], csv); //  U% or C% for the period
-
+                     IsCapacityMode ? 100 - quadruple.WeeklyUtilization[w] : quadruple.WeeklyUtilization[w], csv,
+                     payType == TimescaleType.Undefined ? "No Pay Type" : DataHelper.GetDescription(payType), quadruple.WeeklyVacationDays[w], quadruple.TimeOffDates
+                     ); //  U% or C% for the period
             }
 
             //  Add axis label
-            AddLabel(quadruple.First, IsCapacityMode ? 100 - quadruple.Third : quadruple.Third, quadruple.Fourth);
+            AddLabel(quadruple.Person, IsCapacityMode ? 100 - quadruple.AverageUtilization : quadruple.AverageUtilization, quadruple.PersonVacationDays);
 
             //  Increase persons counter
             _personsCount++;
@@ -682,17 +699,16 @@ namespace PraticeManagement.Controls.Reports
                     FormatAvgPercentage(vacationDays, avg), // Formated person title
                     0, // Index
                     LabelMarkStyle.None); // Mark style: none
-
         }
 
-        private void AddPersonRange(Person p, int w, int load, string csv)
+        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, List<DateTime> timeoffDates)
         {
             var beginPeriod = BegPeriod;
             var endPeriod = EndPeriod;
 
             if (Granularity == 7)
             {
-                if ((int)BegPeriod.DayOfWeek > 1)
+                if ((int)BegPeriod.DayOfWeek > 0)
                 {
                     beginPeriod = BegPeriod.AddDays(-1 * ((int)BegPeriod.DayOfWeek));
                 }
@@ -700,14 +716,13 @@ namespace PraticeManagement.Controls.Reports
                 {
                     endPeriod = EndPeriod.AddDays(6 - ((int)EndPeriod.DayOfWeek));
                 }
-
             }
             else if (Granularity == 30)
             {
                 beginPeriod = BegPeriod;
                 endPeriod = EndPeriod;
 
-                if ((int)beginPeriod.DayOfWeek > 1)
+                if ((int)beginPeriod.DayOfWeek > 0)
                 {
                     beginPeriod = beginPeriod.AddDays(-1 * ((int)beginPeriod.DayOfWeek));
                 }
@@ -742,6 +757,7 @@ namespace PraticeManagement.Controls.Reports
             }
 
             var range = AddRange(pointStartDate, pointEndDate, _personsCount);
+            List<DataPoint> innerRangeList = new List<DataPoint>();
             bool isHiredIntheEmployeementRange = p.EmploymentHistory.Any(ph => ph.HireDate < pointEndDate && (!ph.TerminationDate.HasValue || ph.TerminationDate.Value >= pointStartDate));
             range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, load > 100, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, load < 0, isHiredIntheEmployeementRange);
             if (!isHiredIntheEmployeementRange)
@@ -766,13 +782,53 @@ namespace PraticeManagement.Controls.Reports
                 range.ToolTip = tooltip;
             }
             else
-            {
-                range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), IsCapacityMode);
+            {   //vacationDays doesn't include company holidays
+                if (vacationDays > 0 && !(IsCapacityMode ? load > 100 : load < 0))
+                {
+                    range.ToolTip = "";
+                    range.Color = Color.White;
+                    ConsReportColoringElementSection coloring = ConsReportColoringElementSection.ColorSettings;
+                    List<Triple<DateTime, DateTime, bool>> weekDatesRange = new List<Triple<DateTime, DateTime, bool>>();
+                    for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
+                    {
+                        bool isVacation = timeoffDates.Any(t => t == d);
+                        if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && isVacation == tri.Third))
+                        {
+                            var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && isVacation == tri.Third);
+                            tripleRange.Second = d;
+                        }
+                        else
+                        {
+                            weekDatesRange.Add(new Triple<DateTime, DateTime, bool>(d, d, isVacation));
+                        }
+                    }
+
+                    foreach (var tripleR in weekDatesRange)
+                    {
+                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount);
+                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third, isHiredIntheEmployeementRange);
+                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode);
+                        innerRangeList.Add(innerRange);
+                    }
+                }
+                else
+                {
+                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), (IsCapacityMode ? load > 100 : load < 0), payType, IsCapacityMode);
+                }
                 if (!IsSampleReport)
                 {
                     range.PostBackValue = FormatRangePostbackValue(p, beginPeriod, endPeriod); // For the whole period
                     range.Url = IsCapacityMode ? (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsultingCapacityWithDetails)
                                     : (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsTimelineReportDetails);
+
+                    if (innerRangeList.Any())
+                    {
+                        foreach (var r in innerRangeList)
+                        {
+                            r.PostBackValue = range.PostBackValue;
+                            r.Url = range.Url;
+                        }
+                    }
                 }
             }
         }
@@ -848,16 +904,33 @@ namespace PraticeManagement.Controls.Reports
                 );
         }
 
-        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate, bool IsCapacityMode = false)
+        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate, bool IsVacation, string payType = null, bool IsCapacityMode = false)
         {
-            return string.Format(TOOLTIP_FORMAT,
-                                 pointStartDate.ToString("MMM, d"),
-                                 pointEndDate.ToString("MMM, d"),
-                                 (IsCapacityMode ? load > 100 : load < 0)
-                                     ? VACATION_TOOLTIP_FORMAT
-                                     : string.Format(
+            string tooltip = "";
+
+            if (pointStartDate == pointEndDate)
+            {
+                tooltip =  IsVacation? 
+                           string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM, d")) : 
+                           string.Format(TOOLTIP_FORMAT_FOR_SINGLEDAY,
+                                 pointStartDate.ToString("MMM, d"), string.Format(
                                      IsCapacityMode ? CAPACITY_TOOLTIP_FORMAT : UTILIZATION_TOOLTIP_FORMAT,
-                                         load));
+                                         load), payType);
+            }
+            else
+            {
+                tooltip = IsVacation?
+                          string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM, d")+" - "+
+                                     pointEndDate.ToString("MMM, d")) : 
+                          string.Format(TOOLTIP_FORMAT,
+                                     pointStartDate.ToString("MMM, d"),
+                                     pointEndDate.ToString("MMM, d"),
+                                      string.Format(
+                                         IsCapacityMode ? CAPACITY_TOOLTIP_FORMAT : UTILIZATION_TOOLTIP_FORMAT,
+                                             load), payType);
+            }
+
+            return tooltip;
         }
 
         protected void btnUpdateView_OnClick(object sender, EventArgs e)
@@ -884,7 +957,7 @@ namespace PraticeManagement.Controls.Reports
             SaveFilters(null, null);
         }
 
-        #endregion
+        #endregion Formatting
     }
 }
 
