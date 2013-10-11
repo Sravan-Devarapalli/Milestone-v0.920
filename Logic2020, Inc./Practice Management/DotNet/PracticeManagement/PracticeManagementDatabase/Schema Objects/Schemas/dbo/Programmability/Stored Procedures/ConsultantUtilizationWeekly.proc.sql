@@ -50,8 +50,18 @@ AS
 			SET @OrderBy = @OrderBy + @SortDirection + ' ,  p.LastName DESC'
         END
         
-        SET @Query = ' DECLARE @EndDate DATETIME
-					   SET @EndDate = DATEADD(DAY, @DaysForward - 1, @StartDate) '
+         SET @Query = ' DECLARE @EndDate DATETIME SET @EndDate = DATEADD(DAY, @DaysForward - 1, @StartDate) 
+					   IF(@Step = 7) 
+					   BEGIN
+							IF(DATEPART(DW,@StartDate)>0) BEGIN SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+1 END
+							IF(DATEPART(DW,@StartDate)<7) BEGIN SELECT @EndDate = DATEADD(dd , 7-DATEPART(DW,@EndDate), @EndDate) END
+						END
+						ELSE IF (@Step = 30)
+						BEGIN
+							IF(DATEPART(DW,@StartDate)>0) BEGIN SELECT @StartDate = @StartDate - DATEPART(DW,@StartDate)+1 END
+							IF(DATEPART(DW,@EndDate)<7) BEGIN SELECT @EndDate = DATEADD(dd , 7-DATEPART(DW,@EndDate), @EndDate) END
+						END
+					   '
 
 		/*
 		----- Person Status ------
@@ -69,9 +79,11 @@ AS
                 SELECT  p.PersonId, T.TimescaleId, T.Name
                 FROM    dbo.Person AS p
 				INNER JOIN dbo.Timescale T ON T.TimescaleId IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))
-				INNER JOIN dbo.GetCurrentPayTypeTable() AS PCPT ON PCPT.PersonId = p.PersonId AND T.TimescaleId = PCPT.Timescale  
+				INNER JOIN dbo.[GetLatestPayWithInTheGivenRange](@StartDate,@EndDate) AS PCPT ON PCPT.PersonId = p.PersonId AND T.TimescaleId = PCPT.Timescale  
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
-                WHERE   (p.IsStrawman = 0) 
+				LEFT JOIN dbo.[TerminationReasons] TR ON TR.TerminationReasonId = P.TerminationReasonId
+                WHERE   (p.IsStrawman = 0)
+						AND (TR.TerminationReasonId IS NULL OR TR.IsPersonWorkedRule = 1)
                         AND ( (@ActivePersons = 1 AND p.PersonStatusId IN (1,5)) 
 								OR
                               (@ProjectedPersons = 1 AND p.PersonStatusId = 3)
@@ -98,15 +110,14 @@ AS
                 st.[Name],
 				P.TitleId,
 				T.Title,
-                --dbo.GetWeeklyUtilization(c.ConsId, @StartDate, @Step, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects) AS wutil,
-                AvgUT.AvgUtilization AS wutilAvg,
+                CASE WHEN AvaHrs.AvaliableHours > 0 THEN  AvgUT.AvgUtilization ELSE 0 END AS wutilAvg,
                 ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays
         FROM    dbo.Person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
 				INNER JOIN dbo.Title AS T ON T.TitleId = P.TitleId
-				INNER JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId AND AvaHrs.AvaliableHours > 0
-                LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
+				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
+		LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 LEFT JOIN dbo.GetPersonVacationDaysTable(@StartDate,@Enddate) VactionDaysTable ON VactionDaysTable.PersonId = c.ConsId
 				LEFT JOIN dbo.GetAvgUtilizationTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvgUT ON AvgUT.PersonId =  p.PersonId'
 
@@ -118,10 +129,18 @@ AS
 				PH.TerminationDate
 		FROM v_PersonHistory PH
 		INNER JOIN @CurrentConsultants AS c ON c.ConsId = PH.PersonId
-		ORDER BY PH.PersonId,PH.HireDate
-				 
-		'
-     
+		ORDER BY PH.PersonId,PH.HireDate '
+
+	--if a person has added Timeoff  for complete 8 hr then the day is treated as vacation day.
+	SET @Query = @Query+	
+		'  
+		SELECT	PC.PersonId,
+				PC.Date
+		FROM dbo.PersonCalendarAuto PC 
+		INNER JOIN  @CurrentConsultants AS c ON c.ConsId = PC.PersonId AND  PC.[Date] BETWEEN @StartDate AND @EndDate 
+		WHERE  PC.DayOff = 1  AND PC.TimeOffHours = 8 
+		ORDER BY PC.PersonId,PC.Date '
+		
      --PRINT @Query
      EXEC SP_EXECUTESQL @Query,N'@StartDate				DATETIME,
 								 @Step					INT ,
