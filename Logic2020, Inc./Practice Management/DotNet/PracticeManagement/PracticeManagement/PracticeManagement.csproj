@@ -561,6 +561,9 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultantDemand.ConsultantGroupBySalesStage.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultantUtilizationPerson2.datasource">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupByMonth.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupBySalesStage.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbySkill.datasource" />
@@ -748,6 +751,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PersonService\DataTransferObjects.Financials1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonService\DataTransferObjects.Reports2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PersonService\DataTransferObjects.TimeEntry5.xsd">
