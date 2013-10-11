@@ -80,6 +80,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfdateTimeboolean" nillable="true" type="tns:ArrayOfKeyValueOfdateTimeboolean" />
+  <xs:complexType name="ArrayOfdateTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="dateTime" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfdateTime" nillable="true" type="tns:ArrayOfdateTime" />
   <xs:complexType name="ArrayOfint">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
