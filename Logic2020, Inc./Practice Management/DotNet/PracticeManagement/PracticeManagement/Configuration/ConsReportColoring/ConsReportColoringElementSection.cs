@@ -10,11 +10,13 @@ namespace PraticeManagement.Configuration.ConsReportColoring
         private const string COLORS_PROPERTY = "colors";
         private const string COLORING_SECTION_NAME = "practiceManagement/consReportColoring";
         private const string DEFAULT_COLOR_PROPERTY = "defaultColorValue";
-        private const string VACATION_COLOR_PROPERTY = "vacationColorValue";       
+        private const string VACATION_COLOR_PROPERTY = "vacationColorValue";
+        private const string COMPANYHOLIDAY_COLOR_PROPERTY = "companyHolidayColorValue";
         private const string HIRED_COLOR_PROPERTY = "hiredColorValue";       
         private const string MILESTONE_COLOR_PROPERTY = "milestonesColorValue";
         private const string OPPORTUNITY_COLOR_PROPERTY = "opportunityColorValue";
         private const string VACATION_TITLE_PROPERTY = "vacationTitle";
+        private const string COMPANYHOLIDAYS_TITLE_PROPERTY = "companyHolidaysTitle";
         private const string SEPARATOR_PROPERTY = "separator";
 
         #endregion
@@ -54,12 +56,30 @@ namespace PraticeManagement.Configuration.ConsReportColoring
             }
         }
 
+        [ConfigurationProperty(COMPANYHOLIDAYS_TITLE_PROPERTY)]
+        public string CompanyHolidaysTitle
+        {
+            get
+            {
+                return this[COMPANYHOLIDAYS_TITLE_PROPERTY] as string;
+            }
+        }
+
         [ConfigurationProperty(VACATION_COLOR_PROPERTY)]
         protected string VacationColorValue
         {
             get
             {
                 return this[VACATION_COLOR_PROPERTY] as string;
+            }
+        }
+
+        [ConfigurationProperty(COMPANYHOLIDAY_COLOR_PROPERTY)]
+        protected string CompanyHolidayColorValue
+        {
+            get
+            {
+                return this[COMPANYHOLIDAY_COLOR_PROPERTY] as string;
             }
         }
 
@@ -106,6 +126,15 @@ namespace PraticeManagement.Configuration.ConsReportColoring
             {
                 return Utils.Coloring.StringToColor(
                     VacationColorValue, Separator);
+            }
+        }
+
+        public Color CompanyHolidayColor
+        {
+            get
+            {
+                return Utils.Coloring.StringToColor(
+                    CompanyHolidayColorValue, Separator);
             }
         }
 
