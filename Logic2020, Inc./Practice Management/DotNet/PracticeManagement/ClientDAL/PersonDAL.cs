@@ -522,16 +522,30 @@ namespace DataAccess
                 {
                     int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                     int timeOffDateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
+                    int isTimeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsTimeOff);
+                    int holidayDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDescriptionColumn);
 
                     while (reader.Read())
                     {
                         int personId = reader.GetInt32(personIdIndex);
                         var timeOffDate = reader.GetDateTime(timeOffDateIndex);
+                        bool isTimeOff = reader.GetInt32(isTimeOffIndex) == 1;
+                        string holidayDescription = reader.IsDBNull(holidayDescriptionIndex)
+                                        ? string.Empty
+                                        : reader.GetString(holidayDescriptionIndex);
                         if (result.Any(p => p.Person.Id == personId))
                         {
                             var record = result.First(p => p.Person.Id == personId);
-                            if (record.TimeOffDates == null) record.TimeOffDates = new List<DateTime>();
-                            record.TimeOffDates.Add(timeOffDate);
+                            if (isTimeOff)
+                            {
+                                if (record.TimeOffDates == null) record.TimeOffDates = new List<DateTime>();
+                                record.TimeOffDates.Add(timeOffDate);
+                            }
+                            else
+                            {
+                                if (record.CompanyHolidayDates == null) record.CompanyHolidayDates = new Dictionary<DateTime,string>();
+                                record.CompanyHolidayDates.Add(timeOffDate, holidayDescription);
+                            }
                         }
                     }
                 }
