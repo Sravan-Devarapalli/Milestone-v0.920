@@ -23,8 +23,9 @@ namespace PraticeManagement.Utils
         /// <param name="utilization">Utilization value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByUtilization(int utilization, bool isVac, bool isHiredIntheEmployeementRange = true)
+        public static Color GetColorByUtilization(int utilization, int dayType, bool isHiredIntheEmployeementRange = true)
         {
+            //if dayType == 1 =>it's timeoff if daytype == 2 =>it's companyholiday
             //  Get settings from web.config
             ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
@@ -33,8 +34,10 @@ namespace PraticeManagement.Utils
                 return coloring.HiredColor;
 
             //  If that's vacation, return vacation color
-            if (isVac)
+            if (dayType == 1)
                 return coloring.VacationColor;
+            if (dayType == 2)
+                return coloring.CompanyHolidayColor;    
 
             //  Iterate through all colors and check their min/max values
             foreach (ConsReportColoringElement color in coloring.Colors)
@@ -54,8 +57,9 @@ namespace PraticeManagement.Utils
         /// <param name="utilization">Capacity value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByCapacity(int capacity, bool isVac, bool isHiredIntheEmployeementRange, bool isWeekEnd)
+        public static Color GetColorByCapacity(int capacity, int dayType, bool isHiredIntheEmployeementRange, bool isWeekEnd)
         {
+            //if dayType == 1 =>it's timeoff if daytype == 2 =>it's companyholiday
             //  Get settings from web.config
             ConsReportColoringElementSection coloring =
                 ConsReportColoringElementSection.ColorSettings;
@@ -64,8 +68,10 @@ namespace PraticeManagement.Utils
                 return coloring.HiredColor;
 
             //  If that's vacation, return vacation color
-            if (isVac)
+            if (dayType == 1)
                 return coloring.VacationColor;
+            if (dayType == 2)
+                return coloring.CompanyHolidayColor;    
 
             if (isWeekEnd)
                 return Color.FromArgb(255, 255, 255);
@@ -107,6 +113,8 @@ namespace PraticeManagement.Utils
                 ConsReportColoringElementSection.ColorSettings;
             //  Add vacation item
             legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+            // Add company holiday item
+            legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
         }
 
         public static Color GetColorByConsultingDemand(DataTransferObjects.ConsultantDemandItem item)
@@ -174,6 +182,8 @@ namespace PraticeManagement.Utils
 
             //  Add vacation item
             legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+            // Add company holiday item
+            legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
         }
 
         /// <summary>
