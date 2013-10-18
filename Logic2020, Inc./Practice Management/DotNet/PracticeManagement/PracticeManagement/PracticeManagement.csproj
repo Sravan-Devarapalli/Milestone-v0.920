@@ -2605,13 +2605,6 @@
     <Compile Include="Controls\Reports\CommissionsAndRates.ascx.designer.cs">
       <DependentUpon>CommissionsAndRates.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Reports\ConsultantMilestones.ascx.cs">
-      <DependentUpon>ConsultantMilestones.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\Reports\ConsultantMilestones.ascx.designer.cs">
-      <DependentUpon>ConsultantMilestones.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Reports\ConsultantsReportFilter.ascx.cs">
       <DependentUpon>ConsultantsReportFilter.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3142,7 +3135,6 @@
     <Content Include="Controls\Reports\BenchCosts.ascx" />
     <Content Include="Controls\Reports\BenchReport.ascx" />
     <Content Include="Controls\Reports\CommissionsAndRates.ascx" />
-    <Content Include="Controls\Reports\ConsultantMilestones.ascx" />
     <Content Include="Controls\Reports\ConsultantsReportFilter.ascx" />
     <Content Include="Controls\Reports\ConsultantsWeeklyReport.ascx" />
     <Content Include="Controls\Reports\PersonStats.ascx" />
