@@ -37,6 +37,13 @@ namespace DataTransferObjects.Reports
             get;
             set;
         }
+        
+        [DataMember]
+        public Dictionary<DateTime,string> CompanyHolidayDates
+        {
+            get;
+            set;
+        }
 
         [DataMember]
         public decimal AvailableHours
