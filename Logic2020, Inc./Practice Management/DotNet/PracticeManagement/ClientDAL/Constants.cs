@@ -418,6 +418,7 @@
             public const string IsJuryDuty = "IsJuryDuty";
             public const string IsBereavement = "IsBereavement";
             public const string IsTimeOffExists = "IsTimeOffExists";
+            public const string IsTimeOff = "IsTimeOff";
             public const string WeeklyUtlization = "WeeklyUtlization";
             public const string TitleId = "TitleId";
             public const string Title = "Title";
