@@ -480,6 +480,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(MilestoneIdParam, milestoneId);
                 command.Parameters.AddWithValue(CloneDurationParam, cloneDuration);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsFromMilestoneDetail, true);
 
                 SqlParameter cloneIdParam =
                     new SqlParameter(MilestoneCloneIdParam, SqlDbType.Int) { Direction = ParameterDirection.Output };
