@@ -483,6 +483,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IsFromMilestoneDetail = "@IsFromMilestoneDetail";
             public static string IsUnassignedReport = "@IsUnassignedReport";
             public static string IsFromAddTimeOffButton = "@IsFromAddTimeOffButton";
             public static string IsReHire = "@IsReHire";
