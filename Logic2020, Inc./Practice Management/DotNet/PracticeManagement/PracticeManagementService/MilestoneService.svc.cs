@@ -281,6 +281,11 @@ namespace PracticeManagementService
             return MilestoneDAL.ShouldAttributionDateExtend(milestoneId, startDate, endDate);
         }
 
+        public List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate)
+        {
+            return MilestoneDAL.GetPersonMilestonesOnPreviousHireDate(personId, previousHireDate);
+        }
+
         #endregion Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
     }
 }
