@@ -2020,6 +2020,105 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCancelTerminationCancelButton;
         
         /// <summary>
+        /// hdnExtendingHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnExtendingHireDate;
+        
+        /// <summary>
+        /// mpeExtendingHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeExtendingHireDate;
+        
+        /// <summary>
+        /// pnlExtendingHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlExtendingHireDate;
+        
+        /// <summary>
+        /// dvExtendingHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dvExtendingHireDate;
+        
+        /// <summary>
+        /// custMilestonesOnPreviousHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custMilestonesOnPreviousHireDate;
+        
+        /// <summary>
+        /// dlMilestonesOnPreviousHireDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataList dlMilestonesOnPreviousHireDate;
+        
+        /// <summary>
+        /// imgPrinterMilestone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton imgPrinterMilestone;
+        
+        /// <summary>
+        /// lnkSaveReportMilestone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton lnkSaveReportMilestone;
+        
+        /// <summary>
+        /// hdnSaveReportHireDateExtend control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportHireDateExtend;
+        
+        /// <summary>
+        /// btnOkHireDateExtend control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOkHireDateExtend;
+        
+        /// <summary>
+        /// btnCancelHireDateExtend control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelHireDateExtend;
+        
+        /// <summary>
         /// hdnTargetErrorPanel control.
         /// </summary>
         /// <remarks>
