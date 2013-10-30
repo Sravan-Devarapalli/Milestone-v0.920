@@ -172,6 +172,12 @@
   <wsdl:message name="IMilestoneService_ShouldAttributionDateExtend_OutputMessage">
     <wsdl:part name="parameters" element="tns:ShouldAttributionDateExtendResponse" />
   </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetPersonMilestonesOnPreviousHireDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMilestonesOnPreviousHireDate" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetPersonMilestonesOnPreviousHireDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonMilestonesOnPreviousHireDateResponse" />
+  </wsdl:message>
   <wsdl:portType name="IMilestoneService">
     <wsdl:operation name="SaveDefaultMilestone">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/SaveDefaultMilestone" message="tns:IMilestoneService_SaveDefaultMilestone_InputMessage" />
@@ -280,6 +286,10 @@
     <wsdl:operation name="ShouldAttributionDateExtend">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/ShouldAttributionDateExtend" message="tns:IMilestoneService_ShouldAttributionDateExtend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/ShouldAttributionDateExtendResponse" message="tns:IMilestoneService_ShouldAttributionDateExtend_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMilestonesOnPreviousHireDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetPersonMilestonesOnPreviousHireDate" message="tns:IMilestoneService_GetPersonMilestonesOnPreviousHireDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetPersonMilestonesOnPreviousHireDateResponse" message="tns:IMilestoneService_GetPersonMilestonesOnPreviousHireDate_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IMilestoneService" type="tns:IMilestoneService">
@@ -520,6 +530,15 @@
     </wsdl:operation>
     <wsdl:operation name="ShouldAttributionDateExtend">
       <soap:operation soapAction="http://tempuri.org/IMilestoneService/ShouldAttributionDateExtend" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonMilestonesOnPreviousHireDate">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetPersonMilestonesOnPreviousHireDate" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
