@@ -483,7 +483,8 @@
         /// </summary>
         public class ParameterNames
         {
-            public static string IsFromMilestoneDetail = "@IsFromMilestoneDetail";
+	        public static string PreviousHireDate = "@PreviousHireDate";            
+	        public static string IsFromMilestoneDetail = "@IsFromMilestoneDetail";
             public static string IsUnassignedReport = "@IsUnassignedReport";
             public static string IsFromAddTimeOffButton = "@IsFromAddTimeOffButton";
             public static string IsReHire = "@IsReHire";
@@ -1279,6 +1280,7 @@
                 public const string UpdateMilestonePersonEntry = "dbo.UpdateMilestonePersonEntry";
                 public const string MilestoneResourceUpdateProcedure = "dbo.MilestoneResourceUpdate";
                 public const string IsProjectAttributionConflictsWithMilestoneChanges = "dbo.IsProjectAttributionConflictsWithMilestoneChanges";
+                public const string GetPersonMilestonesOnPreviousHireDate = "dbo.GetPersonMilestonesOnPreviousHireDate";
             }
 
             #endregion Nested type: MilestonePerson
