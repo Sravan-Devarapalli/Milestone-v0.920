@@ -436,6 +436,7 @@ namespace PraticeManagement
             btnUpload.Attributes["onclick"] = "startUpload(); return false;";
 
             ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            ddlCloneProjectStatus.SelectedValue = ((int)ProjectStatusType.Experimental).ToString();
         }
 
         public void ShowTabs()
