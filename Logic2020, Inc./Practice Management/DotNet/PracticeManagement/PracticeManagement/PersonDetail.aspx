@@ -77,13 +77,17 @@
 
         function printform(popup) {
         var printContent;
-         if(popup == 1)
+            if(popup == 1)
             {
                 printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
             }
-            else
+            else if(popup == 2)
             {
                 printContent = document.getElementById('<%= dvCancelTerminationDateErrors.ClientID %>');
+            }
+            else
+            {
+                printContent = document.getElementById('<%= dvExtendingHireDate.ClientID %>');
             }
             var windowUrl = 'about:blank';
             var uniqueName = new Date();
@@ -107,13 +111,17 @@
             printContent = document.getElementById('<%= dvTerminationDateErrors.ClientID %>');
             hdnSaveReportText = document.getElementById('<%= hdnSaveReportText.ClientID %>');
         }
-        else
-        {
-            printContent = document.getElementById('<%= dvCancelTerminationDateErrors.ClientID %>');
-            hdnSaveReportText = document.getElementById('<%= hdnSaveReportTextCancelTermination.ClientID %>');
-        }
+         else if(popup == 2)
+            {
+                printContent = document.getElementById('<%= dvCancelTerminationDateErrors.ClientID %>');
+                hdnSaveReportText = document.getElementById('<%= hdnSaveReportTextCancelTermination.ClientID %>');
+            }
+            else
+            {
+                printContent = document.getElementById('<%= dvExtendingHireDate.ClientID %>');
+                hdnSaveReportText = document.getElementById('<%= hdnSaveReportHireDateExtend.ClientID %>');
+            }
         hdnSaveReportText.value = printContent.innerHTML;
-
         }
 
         function SetTooltipsForallDropDowns() {
@@ -1455,7 +1463,6 @@
                                         </ItemTemplate>
                                     </asp:DataList>
                                 </div>
-                            
                             </div>
                         </td>
                     </tr>
@@ -1714,13 +1721,16 @@
                             <br />
                         </td>
                     </tr>
-                    <tr><td>
-                        <asp:DataList ID="dlAttributions" runat="server" CssClass="WS-Normal">
-                            <ItemTemplate>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>-
-                                <%# Eval("Name") %>
-                            </ItemTemplate>
-                        </asp:DataList></td></tr>
+                    <tr>
+                        <td>
+                            <asp:DataList ID="dlAttributions" runat="server" CssClass="WS-Normal">
+                                <ItemTemplate>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>-
+                                    <%# Eval("Name") %>
+                                </ItemTemplate>
+                            </asp:DataList>
+                        </td>
+                    </tr>
                     <tr>
                         <td style="text-align: center; padding: 4px;">
                             <asp:Button ID="btnOkConsultantToContract" runat="server" Text="Ok" UseSubmitBehavior="false" CssClass="Width60Px"
@@ -1846,6 +1856,52 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:HiddenField ID="hdnExtendingHireDate" runat="server" Value="" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeExtendingHireDate" runat="server" TargetControlID="hdnExtendingHireDate"
+                BackgroundCssClass="modalBackground" PopupControlID="pnlExtendingHireDate" DropShadow="false" />
+            <asp:Panel ID="pnlExtendingHireDate" runat="server" CssClass="popUp PopUpPersonDetailPage"
+                Style="display: none;">
+                <table class="WholeWidth">
+                    <tr>
+                        <td class="Padding6">
+                            <div id="dvExtendingHireDate" runat="server" class="PaddingTop5">
+                                <asp:CustomValidator ID="custMilestonesOnPreviousHireDate" runat="server" Text="*"
+                                    ErrorMessage="" ForeColor="Black" ToolTip="" OnServerValidate="custMilestonesOnPreviousHireDate_ServerValidate"
+                                    ValidationGroup="HireDateExtend" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
+                                <br />
+                                <br />
+                                <asp:DataList ID="dlMilestonesOnPreviousHireDate" runat="server" CssClass="WS-Normal">
+                                    <ItemTemplate>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.ProjectNumber) + " - "+HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Project.Name)+ " - " + HttpUtility.HtmlEncode(((DataTransferObjects.Milestone)Container.DataItem).Description)%>
+                                    </ItemTemplate>
+                                </asp:DataList>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" class="Padding6">
+                            <table class="Width70Percent">
+                                <tr>
+                                    <td class="textCenter Width50Percent">
+                                        <asp:ImageButton ID="imgPrinterMilestone" runat="server" ImageUrl="~/Images/printer.png"
+                                            ToolTip="Print" OnClientClick="return printform(3);" />
+                                        <asp:ImageButton ID="lnkSaveReportMilestone" runat="server" ImageUrl="~/Images/saveToDisk.png"
+                                            class="Margin-Left10Px" OnClientClick="saveReport(3);" OnClick="lnkSaveReportMilestone_OnClick"
+                                            ToolTip="Save Report" /><asp:HiddenField ID="hdnSaveReportHireDateExtend" runat="server" />
+                                    </td>
+                                    <td class="textCenter Width50Percent">
+                                        <asp:Button ID="btnOkHireDateExtend" runat="server" Text="OK" OnClick="btnOkHireDateExtend_OnClick"
+                                            UseSubmitBehavior="false" CssClass="Width60Px" />
+                                        &nbsp;
+                                        <asp:Button ID="btnCancelHireDateExtend" runat="server" Text="Cancel" OnClick="btnCancelHireDateExtend_OnClick"
+                                            UseSubmitBehavior="false" CssClass="Width60Px" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
             <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
                 TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
@@ -1956,7 +2012,8 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
-            <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" />
+            <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" /> 
+            <asp:PostBackTrigger ControlID="lnkSaveReportMilestone" />
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
             <asp:PostBackTrigger ControlID="bntEndCompensationOk" />
             <asp:PostBackTrigger ControlID="btnTerminationProcessOK" />
