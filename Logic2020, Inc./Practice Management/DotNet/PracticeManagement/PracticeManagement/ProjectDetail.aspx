@@ -1027,7 +1027,7 @@
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjectTools" runat="server" Visible="false">
                                     <span class="bg"><span>
-                                        <asp:LinkButton ID="btnProjectTools" runat="server" Text="Tools" CausesValidation="false"
+                                        <asp:LinkButton ID="btnProjectTools" runat="server" Text="Clone Project" CausesValidation="false"
                                             OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
