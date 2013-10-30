@@ -184,6 +184,9 @@ namespace PracticeManagementService
 
          [OperationContract]
         List<bool> ShouldAttributionDateExtend(int milestoneId, DateTime startDate, DateTime endDate);
+
+         [OperationContract]
+         List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate);
     }
 }
 
