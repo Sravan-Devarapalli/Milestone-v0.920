@@ -100,6 +100,10 @@ namespace PraticeManagement.MilestoneService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/ShouldAttributionDateExtend", ReplyAction="http://tempuri.org/IMilestoneService/ShouldAttributionDateExtendResponse")]
         bool[] ShouldAttributionDateExtend(int milestoneId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/GetPersonMilestonesOnPreviousHireDate", ReplyAction="http://tempuri.org/IMilestoneService/GetPersonMilestonesOnPreviousHireDateRespons" +
+            "e")]
+        DataTransferObjects.Milestone[] GetPersonMilestonesOnPreviousHireDate(int personId, System.DateTime previousHireDate);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -109,7 +113,6 @@ namespace PraticeManagement.MilestoneService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class MilestoneServiceClient : System.ServiceModel.ClientBase<PraticeManagement.MilestoneService.IMilestoneService>, PraticeManagement.MilestoneService.IMilestoneService {
-   
         
         public MilestoneServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -233,6 +236,10 @@ namespace PraticeManagement.MilestoneService {
         
         public bool[] ShouldAttributionDateExtend(int milestoneId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.ShouldAttributionDateExtend(milestoneId, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Milestone[] GetPersonMilestonesOnPreviousHireDate(int personId, System.DateTime previousHireDate) {
+            return base.Channel.GetPersonMilestonesOnPreviousHireDate(personId, previousHireDate);
         }
     }
 }
