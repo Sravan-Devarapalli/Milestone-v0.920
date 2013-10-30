@@ -197,6 +197,36 @@ BEGIN TRY
 		EXEC dbo.OnPersonHireDateChange	@PersonId = @PersonId , @NewHireDate = @HireDate, @ModifiedBy = @ModifiedBy
 	END
 
+	--to update milestoneperson entries as per #3184
+
+	UPDATE	MPE
+	SET MPE.StartDate = CASE WHEN MPE.StartDate > PH.HireDate THEN MPE.StartDate
+						ELSE PH.HireDate END,
+		MPE.EndDate = CASE WHEN (MPE.EndDate < PH.TerminationDate) OR PH.TerminationDate IS NULL THEN MPE.EndDate
+						ELSE PH.TerminationDate END
+	FROM dbo.MilestonePersonEntry AS MPE 
+	INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+	INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+	INNER JOIN v_PersonHistory AS PH ON PH.PersonId = MP.PersonId AND (PH.TerminationDate IS NULL OR MPE.StartDate <= PH.TerminationDate) AND PH.HireDate <= MPE.EndDate
+	WHERE MP.PersonId = @PersonId AND
+	(
+		(
+		MPE.StartDate <> CASE WHEN MPE.StartDate > PH.HireDate THEN MPE.StartDate
+						ELSE PH.HireDate END
+		)
+		OR
+		(
+		MPE.EndDate <> CASE WHEN (MPE.EndDate < PH.TerminationDate) OR PH.TerminationDate IS NULL THEN MPE.EndDate
+						ELSE PH.TerminationDate END
+		)
+	)
+	---to delete milestoneperson entries as per #3184
+	DELETE MPE
+	FROM dbo.MilestonePersonEntry AS MPE 
+	INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+	INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+	LEFT JOIN v_PersonHistory AS PH ON PH.PersonId = MP.PersonId AND (PH.TerminationDate IS NULL OR MPE.StartDate <= PH.TerminationDate) AND PH.HireDate <= MPE.EndDate
+	WHERE MP.PersonId = @PersonId AND PH.PersonId IS NULL
 
 	IF(ISNULL(@Alias,'') <> '' AND NOT EXISTS (SELECT 1 FROM dbo.aspnet_Users WHERE UserName = @Alias))
 	BEGIN
