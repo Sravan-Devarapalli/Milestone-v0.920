@@ -236,6 +236,56 @@ namespace DataAccess
             }
         }
 
+        public static List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.GetPersonMilestonesOnPreviousHireDate, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PreviousHireDate, previousHireDate);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<Milestone> result = new List<Milestone>();
+
+                    ReadPersonMilestonesOnPreviousHireDate(reader, result);
+
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadPersonMilestonesOnPreviousHireDate(SqlDataReader reader, List<Milestone> result)
+        {
+            if (!reader.HasRows) return;
+            int projectIdIndex = reader.GetOrdinal("ProjectId");
+            int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
+            int descriptionIndex = reader.GetOrdinal("Description");
+            int projectNameIndex = reader.GetOrdinal("ProjectName");
+            int projectNumberIndex = reader.GetOrdinal("ProjectNumber");
+
+            while (reader.Read())
+            {
+                Milestone milestone = new Milestone
+                {
+                    Id = reader.GetInt32(milestoneIdIndex),
+                    Description = reader.GetString(descriptionIndex),
+                    Project =
+                        new Project
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        }
+                };
+
+                result.Add(milestone);
+            }
+        }
+
         /// <summary>
         /// Retrieves a <see cref="Milestone"/> by the specified ID.
         /// </summary>
