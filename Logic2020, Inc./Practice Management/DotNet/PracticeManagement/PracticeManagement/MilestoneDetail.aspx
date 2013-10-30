@@ -871,6 +871,16 @@
                                             </tr>
                                             <tr>
                                                 <td>
+                                                    days. (e.g. 3)
+                                                </td>
+                                            </tr>
+                                              <tr>
+                                               <td class="height19Px">
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
                                                     <asp:Button ID="btnClone" runat="server" OnClick="btnClone_Click" TabIndex="3" Text="Clone Milestone"
                                                         ValidationGroup="Clone" />
                                                     <ext:ElementDisablerExtender ID="edeClone1" runat="server" TargetControlID="btnClone"
