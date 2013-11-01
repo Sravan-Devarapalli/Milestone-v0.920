@@ -62,14 +62,14 @@ BEGIN
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
 					 ELSE 0 
 				END),2) AS BillableHours,
-		    ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND TE.ChargeCodeDate < @Today THEN TEH.ActualHours 
+		    ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
 					 ELSE 0 
 				END),2) AS BillableHoursUntilToday,
 			ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
 					 ELSE 0 
 				END),2) AS NonBillableHours,
 			ROUND(PDBR.ProjectedHours,2) AS ProjectedHours,
-			ROUND(PDBR.ProjectedHoursUntilToday,2) AS ProjectedHoursUntilToday
+			ROUND(PDBR.ProjectedHours,2) AS ProjectedHoursUntilToday
 	FROM dbo.TimeEntry AS TE 
 	INNER JOIN dbo.TimeEntryHours AS TEH  ON TEH.TimeEntryId = TE.TimeEntryId 
 	INNER JOIN dbo.ChargeCode CC ON CC.Id = TE.ChargeCodeId 
