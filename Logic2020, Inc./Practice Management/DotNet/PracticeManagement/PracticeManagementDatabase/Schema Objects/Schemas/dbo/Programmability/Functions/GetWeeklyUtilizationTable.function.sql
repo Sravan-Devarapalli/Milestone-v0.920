@@ -87,6 +87,7 @@ AS
 			CCWR.EndDate,
 			CCWR.Timescale, 
 			ISNULL(COUNT(PC.Date),0) AS VacationDays,
+			CASE WHEN CCWR.Timescale = 2 THEN ISNULL(COUNT(PC.Date),0) ELSE ISNULL(SUM(CASE WHEN PC.CompanyDayOff = 1 AND pc.DayOff = 1 AND (DATEPART(DW,PC.Date) <> 1 AND DATEPART(DW,PC.Date) <> 7) THEN 0 ELSE (case when PC.Date is not null then 1 else 0 end) END),0) END AS RedefinedVacationDays,
 			ISNULL(SUM(CASE WHEN PC.CompanyDayOff = 0 THEN 1 ELSE 0 END),0) AS VacationDaysExcludingCompanyDayOff,
 			ISNULL(SUM(CASE WHEN DATEPART(DW,PC.Date) <> 1 AND DATEPART(DW,PC.Date) <> 7 THEN 1 ELSE 0 END),0) AS VacationDaysIncludingCompanyDayOffsNotWeekends
 	FROM CurrentConsultantsWithRanges CCWR
@@ -135,7 +136,7 @@ AS
 CurrentConsultantsWithAllHours
 AS
 (
-	SELECT CCWV.PersonId,CCWV.StartDate,CCWV.EndDate,CCWV.VacationDays,CCWV.VacationDaysIncludingCompanyDayOffsNotWeekends,ISNULL(CCWA.AvailableHours,0) AS AvailableHours,ISNULL(CCWP.ProjectedHours,0) AS ProjectedHours,CCWV.Timescale
+	SELECT CCWV.PersonId,CCWV.StartDate,CCWV.EndDate,CCWV.RedefinedVacationDays,CCWV.VacationDaysIncludingCompanyDayOffsNotWeekends,ISNULL(CCWA.AvailableHours,0) AS AvailableHours,ISNULL(CCWP.ProjectedHours,0) AS ProjectedHours,CCWV.Timescale
 	FROM CurrentConsultantsWithVacationDays CCWV
 	LEFT JOIN CurrentConsultantsWithAvailableHours CCWA ON CCWV.PersonId = CCWA.PersonId AND CCWV.StartDate = CCWA.StartDate
 	LEFT JOIN CurrentConsultantsWithProjectedHours CCWP ON CCWV.PersonId = CCWP.PersonId AND CCWV.StartDate = CCWP.StartDate
@@ -147,7 +148,7 @@ SELECT	CC.PersonId,
 		CC.ProjectedHours,
 		CC.Timescale,
 		CC.VacationDaysIncludingCompanyDayOffsNotWeekends AS VacationDays,
-		CONVERT(INT,CASE	WHEN CC.VacationDays >= @Step
+		CONVERT(INT,CASE	WHEN CC.RedefinedVacationDays >= @Step
 				THEN -1
 				WHEN CC.AvailableHours = 0
 				THEN 0
