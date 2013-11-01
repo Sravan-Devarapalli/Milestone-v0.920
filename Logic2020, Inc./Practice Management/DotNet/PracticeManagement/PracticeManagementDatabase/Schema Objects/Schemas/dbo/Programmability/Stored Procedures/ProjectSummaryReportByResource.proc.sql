@@ -165,10 +165,10 @@ AS
 								ELSE 'Both'
 								END 
 							) AS BillingType ,
-							ROUND(MAX(ISNULL(GPD.ForecastedHoursUntilToday, 0)),2) AS ForecastedHoursUntilToday ,
+							ROUND(MAX(ISNULL(GPD.ForecastedHours, 0)), 2) AS ForecastedHoursUntilToday ,
 							ROUND(MAX(ISNULL(GPD.ForecastedHours, 0)), 2) AS ForecastedHours,
 							GPD.BillableHours,
-							GPD.BillableHoursUntilToday,
+							GPD.BillableHours AS BillableHoursUntilToday,
 							GPD.NonBillableHours,
 							ISNULL(GPD.BillRate,0) AS BillRate,
 							(CASE 
