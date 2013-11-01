@@ -763,7 +763,7 @@ namespace PraticeManagement.Controls.Reports
             var range = AddRange(pointStartDate, pointEndDate, _personsCount);
             List<DataPoint> innerRangeList = new List<DataPoint>();
             bool isHiredIntheEmployeementRange = p.EmploymentHistory.Any(ph => ph.HireDate < pointEndDate && (!ph.TerminationDate.HasValue || ph.TerminationDate.Value >= pointStartDate));
-            bool isRangeComapanyHolidays = IsRangeComapanyHolidays(pointStartDate, pointEndDate, companyHolidayDates, true);
+            bool isRangeComapanyHolidays = IsRangeComapanyHolidays(pointStartDate, pointEndDate, companyHolidayDates, false) == 2;
             int rangeType = IsCapacityMode ? ((load > 100 && !isRangeComapanyHolidays) ? 1 : (load > 100 && isRangeComapanyHolidays) ? 2 : 0) : ((load < 0 && !isRangeComapanyHolidays) ? 1 : (load < 0 && isRangeComapanyHolidays) ? 2 : 0);
             range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, rangeType, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, rangeType, isHiredIntheEmployeementRange);
             if (!isHiredIntheEmployeementRange)
@@ -788,7 +788,7 @@ namespace PraticeManagement.Controls.Reports
                 range.ToolTip = tooltip;
             }
             else
-            {   //vacationDays doesn't include company holidays
+            {   //vacationDays doesn't include saturdays and sundays
                 //if some part of the range has vacation days(not the whole range) OR the whole range is vacation days
                 if ((vacationDays > 0 && !(IsCapacityMode ? load > 100 : load < 0)) || (IsCapacityMode ? load > 100 : load < 0))
                 {
@@ -796,30 +796,71 @@ namespace PraticeManagement.Controls.Reports
                     range.Color = Color.White;
                     ConsReportColoringElementSection coloring = ConsReportColoringElementSection.ColorSettings;
                     List<Quadruple<DateTime, DateTime, int, string>> weekDatesRange = new List<Quadruple<DateTime, DateTime, int, string>>();//third parameter in the list int will have 3 possible values '0' for utilization '1' for timeoffs '2' for companyholiday
+                    bool IsWholeRangeVacation = true;
+                    bool IsWholeRangeCompanyHolidays = true;
                     for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
                     {
-                        int dayType = timeoffDates.Any(t => t == d) ? 1 : IsRangeComapanyHolidays(d, d.AddDays(1), companyHolidayDates, (IsCapacityMode ? load > 100 : load < 0)) ? 2 : 0;
-
-                        string holidayDescription = companyHolidayDates.Keys.Any(t => t == d) ? companyHolidayDates[d] : "Weekly off";
-                        if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third && dayType != 2))
+                        if (!timeoffDates.Any(t => t == d))
                         {
-                            var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third);
-                            tripleRange.Second = d;
+                            if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                            {
+                                IsWholeRangeVacation = false;
+                                break;
+                            }
                         }
-                        else
+                    }
+                    if (payType == "W2-Salary")
+                    {
+                        for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
                         {
-                            weekDatesRange.Add(new Quadruple<DateTime, DateTime, int, string>(d, d, dayType, holidayDescription));
+                            if (!companyHolidayDates.Select(s => s.Key).Any(t => t == d))
+                            {
+                                if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                                {
+                                    IsWholeRangeCompanyHolidays = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                        IsWholeRangeCompanyHolidays = false;
+                    if (!IsWholeRangeVacation)
+                    {
+
+                        for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
+                        {
+                            int dayType = timeoffDates.Any(t => t == d) ? 1 : payType == "W2-Salary" ? IsRangeComapanyHolidays(d, d.AddDays(1), companyHolidayDates, (IsCapacityMode ? load > 100 : load < 0), (IsCapacityMode ? load > 100 : load < 0) && !IsWholeRangeCompanyHolidays) : 0;
+
+                            string holidayDescription = companyHolidayDates.Keys.Any(t => t == d) ? companyHolidayDates[d] : "Weekly off";
+                            if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third && dayType != 2))
+                            {
+                                var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third);
+                                tripleRange.Second = d;
+                            }
+                            else
+                            {
+                                weekDatesRange.Add(new Quadruple<DateTime, DateTime, int, string>(d, d, dayType, holidayDescription));
+                            }
+                        }
+
+                        foreach (var tripleR in weekDatesRange)
+                        {
+                            var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount);
+                            innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third, isHiredIntheEmployeementRange);
+                            innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth);
+                            innerRangeList.Add(innerRange);
                         }
                     }
 
-                    foreach (var tripleR in weekDatesRange)
+
+                    else //If the whole range is vacation days
                     {
-                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount);
-                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third, isHiredIntheEmployeementRange);
-                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth);
-                        innerRangeList.Add(innerRange);
+                        range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange);
+                        range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), 1);
                     }
                 }
+
                 //If the whole range is working days
                 else
                 {
@@ -867,13 +908,18 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        private bool IsRangeComapanyHolidays(DateTime startDate, DateTime endDate, Dictionary<DateTime, string> companyHolidayDates, bool includeWeekends)
+        private int IsRangeComapanyHolidays(DateTime startDate, DateTime endDate, Dictionary<DateTime, string> companyHolidayDates, bool includeWeekends, bool IsMixedVacationDays = false)
         {
             //returns true if the given range is companyholidays or saturdays or sundays otherwise false
+
             for (var i = startDate; i < endDate; i = i.AddDays(1))
+            {
+                if (IsMixedVacationDays && !companyHolidayDates.Keys.Any(d => d == i) && (i.DayOfWeek == DayOfWeek.Saturday || i.DayOfWeek == DayOfWeek.Sunday))
+                    return 1;
                 if (companyHolidayDates.Keys.Any(d => d == i) || (includeWeekends && (i.DayOfWeek == DayOfWeek.Saturday || i.DayOfWeek == DayOfWeek.Sunday)))
-                    return true;
-            return false;
+                    return 2;
+            }
+            return 0;
         }
 
         #region Formatting
