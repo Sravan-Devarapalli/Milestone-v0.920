@@ -19,6 +19,7 @@ using PraticeManagement.PersonService;
 using PraticeManagement.Security;
 using PraticeManagement.Utils;
 using Resources;
+using System.Diagnostics;
 
 namespace PraticeManagement
 {
@@ -43,6 +44,7 @@ namespace PraticeManagement
         private const string HireDateChangeMessage = "This person has compensation record(s) before/after the new hire date. Click OK to adjust the compensation record to reflect the new hire date, or click Cancel to exit without saving changes.";
         public const string ReHireMessage = "On switching contractor status from 1099 Hourly or 1099 POR to W2-Hourly or W2-Salary he/she will be terminated on the end date of the latest compensation record and will be considered as Re-Hired from the start date of new compensation record. Click ok to continue or click cancel to exit without saving changes.";
         private const string CancelTerminationMessage = "Following are the list of projects in which {0} resource's end date(s)  were set to his/her previous termination date automatically. Please reset the end dates for {0} in the below listed 'Projects-Milestones' if applicable.";
+        private const string ExtendHireDateMessage = "Following are the list of projects in which {0} resource's start dates(s)  were set to his/her previous hire date automatically. Please reset the start dates for {0} in the below listed 'Projects-Milestones' if applicable.";
         private const string displayNone = "displayNone";
         public const string SalaryToContractException = "Salary Type to Contract Type Violation";
         public const string SalaryToContractMessage = "To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the \"Change Employee Status\" workflow, select a termination reason, and then re-activate the person's status via the \"Change Employee Status\" workflow, changing their pay type to \"1099 Hourly\" or \"1099 POR\".";
@@ -604,7 +606,7 @@ namespace PraticeManagement
             }
             mpeConsultantToContract.Hide();
         }
-        
+
 
         #region mpeRehireConfirmation Events
 
@@ -668,7 +670,7 @@ namespace PraticeManagement
                 IsStatusChangeClicked = true;
                 _disableValidatecustTerminateDateTE = false;
                 custCompensationCoversMilestone.Enabled = false;
-                cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = true;
+                cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = true;
 
                 var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnTerminate.Checked ? PersonStatusType.TerminationPending : PopupStatus.Value;
 
@@ -772,6 +774,19 @@ namespace PraticeManagement
             mpeCancelTermination.Hide();
         }
 
+        protected void btnOkHireDateExtend_OnClick(object source, EventArgs args)
+        {
+            custMilestonesOnPreviousHireDate.Enabled = false;
+            Save_Click(source, args);
+            mpeExtendingHireDate.Hide();
+        }
+
+        protected void btnCancelHireDateExtend_OnClick(object source, EventArgs args)
+        {
+            ResetToPreviousData();
+            mpeExtendingHireDate.Hide();
+        }
+
         #endregion mpeCancelTermination Events
 
         #region mpeViewTerminationDateErrors Events
@@ -828,6 +843,12 @@ namespace PraticeManagement
 
         #endregion mpeViewTerminationDateErrors Events
 
+        protected void lnkSaveReportMilestone_OnClick(object sender, EventArgs e)
+        {
+            string html = hdnSaveReportHireDateExtend.Value;
+            HTMLToPdf(html, "MilestoneInfo");
+        }
+
         protected void dtpTerminationDate_OnSelectionChanged(object sender, EventArgs e)
         {
             FillTerminationReasonsByTerminationDate((DatePicker)sender, ddlTerminationReason);
@@ -852,7 +873,7 @@ namespace PraticeManagement
         {
             var updatePersonStatusDropdown = true;
             custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = !IsStatusChangeClicked;
-            custCancelTermination.Enabled = true;
+            custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = true;
 
             if (PersonId.HasValue)
             {
@@ -1105,6 +1126,25 @@ namespace PraticeManagement
                     custCancelTermination.Text = string.Format(CancelTerminationMessage, txtLastName.Text + ", " + txtFirstName.Text);
                     args.IsValid = false;
                     mpeCancelTermination.Show();
+                    IsOtherPanelDisplay = true;
+                }
+            }
+        }
+
+        protected void custMilestonesOnPreviousHireDate_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            List<Milestone> milestones = new List<Milestone>();
+            if (PersonHireDate.HasValue && (PersonHireDate.Value > dtpHireDate.DateValue))
+            {
+                milestones.AddRange(ServiceCallers.Custom.Milestone(m => m.GetPersonMilestonesOnPreviousHireDate(PersonId.Value, PersonHireDate.Value)));
+                if (milestones.Any())
+                {
+                    this.dlMilestonesOnPreviousHireDate.DataSource = milestones;
+                    this.dlMilestonesOnPreviousHireDate.DataBind();
+                    custMilestonesOnPreviousHireDate.Text = string.Format(ExtendHireDateMessage, txtLastName.Text + ", " + txtFirstName.Text);
+                    args.IsValid = false;
+                    mpeExtendingHireDate.Show();
                     IsOtherPanelDisplay = true;
                 }
             }
@@ -1375,7 +1415,7 @@ namespace PraticeManagement
             string selectedDivisionId = ddlDivision.SelectedValue;
             int divisionId;
             int.TryParse(selectedDivisionId, out divisionId);
-            List<Project> projectList=new List<Project>();
+            List<Project> projectList = new List<Project>();
             if (PersonId.HasValue)
             {
                 projectList =
@@ -1384,7 +1424,7 @@ namespace PraticeManagement
                         p.GetCommissionsValidationByPersonId(PersonId.Value, HireDate.Value,
                                                              TerminationDate.HasValue
                                                                  ? TerminationDate.Value
-                                                                 : (DateTime?) null, (int) PersonStatusId.Value,
+                                                                 : (DateTime?)null, (int)PersonStatusId.Value,
                                                              divisionId, IsRehire))).ToList();
             }
             e.IsValid = !(projectList.Count > 0);
@@ -1421,7 +1461,7 @@ namespace PraticeManagement
             List<Milestone> milestonesAfterTerminationDate = new List<Milestone>();
             List<Project> ownerProjects = new List<Project>();
             List<Opportunity> ownerOpportunities = new List<Opportunity>();
-          
+
 
             using (PersonServiceClient serviceClient = new PersonServiceClient())
             {
@@ -1435,7 +1475,7 @@ namespace PraticeManagement
                     ownerOpportunities.AddRange(serviceClient.GetActiveOpportunitiesByOwnerId(PersonId.Value));
                 }
             }
-            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any() || ownerProjects.Any() || ownerOpportunities.Any() )
+            if (TEsExistsAfterTerminationDate || milestonesAfterTerminationDate.Any() || ownerProjects.Any() || ownerOpportunities.Any())
             {
                 dvTerminationDateErrors.Visible = true;
 
@@ -2129,7 +2169,7 @@ namespace PraticeManagement
                         {
                             mpeConsultantToContract.Show();
                             IsOtherPanelDisplay = true;
-                            lblPerson.Text = txtLastName.Text+", "+txtFirstName.Text;
+                            lblPerson.Text = txtLastName.Text + ", " + txtFirstName.Text;
                             int length = "Attribution Error:".Length;
                             string attributionIds = exceptionMessage.Substring(length);
                             dlAttributions.DataSource =
@@ -2336,7 +2376,7 @@ namespace PraticeManagement
 
         public void RaisePostBackEvent(string eventArgument)
         {
-            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = true;
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = true;
             bool result = ValidateAndSavePersonDetails();
             if (result)
             {
@@ -2586,19 +2626,24 @@ namespace PraticeManagement
 
         private void HTMLToPdf(String HTML, string filename)
         {
-            var document = new iTextSharp.text.Document();
-            iTextSharp.text.pdf.PdfWriter.GetInstance(document, new FileStream(Request.PhysicalApplicationPath + @"\" + filename + ".pdf", FileMode.Create));
-
-            document.Open();
-            var styles = new iTextSharp.text.html.simpleparser.StyleSheet();
-            var hw = new iTextSharp.text.html.simpleparser.HTMLWorker(document);
-            hw.Parse(new StringReader(HTML));
-            document.Close();
-            HttpContext.Current.Response.Clear();
-            HttpContext.Current.Response.ContentType = "Application/pdf";
-            HttpContext.Current.Response.AddHeader(
-                "content-disposition", string.Format("attachment; filename={0}", filename + ".pdf"));
-            HttpContext.Current.Response.WriteFile(Request.PhysicalApplicationPath + @"\" + filename + ".pdf");
+            using (FileStream fs = new FileStream(Request.PhysicalApplicationPath + @"\" + filename + ".pdf", FileMode.Create))
+            {
+                var document = new iTextSharp.text.Document();
+                iTextSharp.text.pdf.PdfWriter.GetInstance(document, fs);
+                document.Open();
+                var styles = new iTextSharp.text.html.simpleparser.StyleSheet();
+                var hw = new iTextSharp.text.html.simpleparser.HTMLWorker(document);
+                hw.Parse(new StringReader(HTML));
+                document.Close();
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.ContentType = "Application/pdf";
+                HttpContext.Current.Response.AddHeader(
+                    "content-disposition", string.Format("attachment; filename={0}", filename + ".pdf"));
+                HttpContext.Current.Response.WriteFile(Request.PhysicalApplicationPath + @"\" + filename + ".pdf");
+                HttpContext.Current.Response.OutputStream.Flush();
+                HttpContext.Current.Response.End();
+                document.Dispose();
+            }
         }
 
         private void ResetToPreviousData()
@@ -2733,7 +2778,11 @@ namespace PraticeManagement
                 custCancelTermination.Validate();
                 SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
             }
-
+            if (custMilestonesOnPreviousHireDate.Enabled && Page.IsValid)
+            {
+                custMilestonesOnPreviousHireDate.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
             if (!_disableValidatecustTerminateDateTE && Page.IsValid)
             {
                 custTerminateDateTE.Enabled = true;
@@ -3035,9 +3084,9 @@ namespace PraticeManagement
             txtTelephoneNumber.Text = person.TelephoneNumber.Trim();
             ddlPersonType.SelectedValue = person.IsOffshore ? "1" : "0";
             txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
-            if ((int) person.DivisionType != 0)
+            if ((int)person.DivisionType != 0)
             {
-                ddlDivision.SelectedValue = ((int) person.DivisionType).ToString();
+                ddlDivision.SelectedValue = ((int)person.DivisionType).ToString();
             }
             else
                 ddlDivision.SelectedValue = string.Empty;
