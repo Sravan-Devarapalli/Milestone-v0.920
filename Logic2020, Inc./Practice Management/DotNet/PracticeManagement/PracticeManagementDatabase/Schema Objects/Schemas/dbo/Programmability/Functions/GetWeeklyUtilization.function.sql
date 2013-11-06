@@ -28,7 +28,8 @@ BEGIN
     DECLARE @end DATETIME
     DECLARE @wUtil INT
     DECLARE @av INT 
-    DECLARE @vac INT 
+    DECLARE @vac INT = 0
+    DECLARE @timeScale INT 
 	DECLARE @Delta INT
 	DECLARE @EndRange DATETIME
 	
@@ -89,23 +90,28 @@ BEGIN
 			ELSE
 				SET @end = DATEADD(day, (@w + 1)*@Step - 1, @StartDate)
 		END
-		SET @vac = dbo.GetNumberHolidayDaysWithWeekends(@PersonId, @start, @end)
+		SELECT @timeScale = Timescale FROM dbo.GetLatestPayWithInTheGivenRange(@start,@end) WHERE PersonId = @PersonId
+		
 		IF @Step = 1 AND DATEPART(dw, @start)IN(7,1)
 		SET @wUtil = 0
-		ELSE IF @vac >= @Step
-			SET @wUtil = -1
-		ELSE  
+		ELSE
 		BEGIN
-			SET @av = dbo.GetNumberAvaliableHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@InternalProjects)
+		    IF @timeScale = 2
+				SET @vac = dbo.GetNumberHolidayDaysWithWeekends(@PersonId, @start, @end)
+			IF @vac >= @Step
+				SET @wUtil = -1
+			ELSE  
+			BEGIN
+				SET @av = dbo.GetNumberAvaliableHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@InternalProjects)
 			
-			IF (@av = 0 OR @av IS NULL)
-				SET @wUtil = 0
-			ELSE 		
-				SET @wUtil = CEILING(
-					100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects), 0) / 
-						@av)
-		END 
-				
+				IF (@av = 0 OR @av IS NULL)
+					SET @wUtil = 0
+				ELSE 		
+					SET @wUtil = CEILING(
+						100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects), 0) / 
+							@av)
+			END 
+		END	
 		SET @rep = @rep + CONVERT(VARCHAR, ISNULL(@wUtil, 0)) + ','
 		
 		SET @w = @w + 1
