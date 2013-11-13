@@ -114,7 +114,6 @@ BEGIN
 				IsNoteRequired  = @IsNoteRequired,
 				ProjectOwnerId  = @ProjectOwner,
 				SowBudget		= @SowBudget,
-				Discount		= C.DefaultDiscount,
 				PricingListId   =@PricingListId,
 				BusinessTypeId   =@BusinessTypeId,
 				SeniorManagerId = @SeniorManagerId,
@@ -123,8 +122,17 @@ BEGIN
 				PONumber		= @PONumber,
 				SalesPersonId = @SalesPersonId
 		FROM dbo.Project P
-		INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
 		WHERE ProjectId = @ProjectId
+
+		IF @ClientId <> @PreviousClientId OR @ProjectStatusId <> 4
+		BEGIN
+				UPDATE P
+				SET P.Discount = C.DefaultDiscount
+				FROM dbo.Project P
+				JOIN dbo.Client C ON C.ClientId = P.ClientId
+				WHERE ProjectId = @ProjectId
+				AND P.Discount <> C.DefaultDiscount
+		END
 
 		EXEC dbo.ProjectStatusHistoryUpdate
 			@ProjectId = @ProjectId,
