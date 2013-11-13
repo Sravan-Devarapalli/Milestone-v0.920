@@ -42,6 +42,13 @@ AS
 			   IsNoteRequired = @IsNoteRequired,
 			   IsHouseAccount= @IsHouseAccount
 		 WHERE ClientId = @ClientId
+
+		 --Updating Discount in All Projects(except COMPLETED status)of the given client,on updating discount in clientdetail page
+		 UPDATE dbo.Project
+		 SET Discount = @DefaultDiscount
+		 WHERE ClientId =  @ClientId
+		 AND ProjectStatusId <> 4  --4 = completed status
+		 AND Discount <> @DefaultDiscount
 	END
 
 GO
