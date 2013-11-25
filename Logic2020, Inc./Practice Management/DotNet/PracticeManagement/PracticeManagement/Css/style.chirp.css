@@ -2446,6 +2446,10 @@ Width99PercentImp
 {
     width: 140px;
 }
+.Width140pxImp
+{
+    width: 140px !important;
+}
 .Width145px
 {
     width: 145px;
@@ -2481,6 +2485,10 @@ Width99PercentImp
 .Width170Px
 {
     width: 170px;
+}
+.Width170PxImp
+{
+    width: 170px !important;
 }
 .Width175Px
 {
@@ -4409,6 +4417,12 @@ div.scrollextLabel Label
 /*Recently added
 BenchCosts.ascx*/
 
+.HyperlinkByProjectReport
+{
+    color: #0898E6 !important;
+    text-decoration: underline !important;
+}
+
 .MinWidth
 {
     min-width: 150px;
@@ -5303,7 +5317,7 @@ HyplinkConsultantDetailReport
 .AccountSummaryReportHeader .FirstTrTd5
 {
     text-align: right;
-    width: 470px;
+    width: 750px;
     padding-bottom: 10px;
 }
 .FadingTooltip
