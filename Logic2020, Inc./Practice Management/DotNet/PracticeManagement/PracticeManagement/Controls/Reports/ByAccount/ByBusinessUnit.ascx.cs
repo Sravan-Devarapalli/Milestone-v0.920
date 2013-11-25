@@ -94,6 +94,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.PersonsCount = reportData.PersonsCount;
 
             HostingPage.TotalProjectHours = (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) > 0 ? (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) : 0d;
+            HostingPage.TotalProjectedHours = reportData.TotalProjectedHours;
             HostingPage.BDHours = reportData.BusinessDevelopmentHours;
             HostingPage.BillableHours = reportData.BillableHours;
             HostingPage.NonBillableHours = reportData.NonBillableHours + HostingPage.BDHours;
@@ -189,11 +190,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 sb.Append(account.Code);
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(HostingPage.BusinessUnitsCount + " Business Units");
+                sb.Append(HostingPage.BusinessUnitsCount + " Business Unit(s)");
                 sb.Append("\t");
-                sb.Append(HostingPage.ProjectsCount + " Projects");
+                sb.Append(HostingPage.ProjectsCount + " Project(s)");
                 sb.Append("\t");
-                sb.Append(HostingPage.PersonsCount + " Persons");
+                sb.Append(HostingPage.PersonsCount.ToString() == "1" ? HostingPage.PersonsCount + " Person" : HostingPage.PersonsCount + " People");
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
@@ -225,15 +226,21 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     sb.Append("\t");
                     sb.Append("Business Unit Name");
                     sb.Append("\t");
-                    sb.Append("# of Projects");
+                    sb.Append("# of Active Projects");
+                    sb.Append("\t");
+                    sb.Append("# of Completed Projects");
+                    sb.Append("\t");
+                    sb.Append("Projected Hours");
                     sb.Append("\t");
                     sb.Append("Billable");
                     sb.Append("\t");
                     sb.Append("Non-Billable");
                     sb.Append("\t");
+                    sb.Append("Actual Hours");
+                    sb.Append("\t");
                     sb.Append("BD");
                     sb.Append("\t");
-                    sb.Append("Total");
+                    sb.Append("Total BU Hours");
                     sb.Append("\t");
                     sb.Append("Percent of Total Hours");
                     sb.Append("\t");
@@ -250,11 +257,17 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                         sb.Append("\t");
                         sb.Append(businessUnitLevelGroupedHours.BusinessUnit.HtmlEncodedName);
                         sb.Append("\t");
-                        sb.Append(businessUnitLevelGroupedHours.ProjectsCount);
+                        sb.Append(businessUnitLevelGroupedHours.ActiveProjectsCount);
+                        sb.Append("\t");
+                        sb.Append(businessUnitLevelGroupedHours.CompletedProjectsCount);
+                        sb.Append("\t");
+                        sb.Append(businessUnitLevelGroupedHours.ForecastedHours);
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.BillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.NonBillableHours));
+                        sb.Append("\t");
+                        sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.ActualHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.BusinessDevelopmentHours));
                         sb.Append("\t");
@@ -268,7 +281,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 }
                 else
                 {
-                    sb.Append("There are no Time Entries towards this range selected.");
+                    sb.Append("There are no projects with Active or Completed statuses for the report parameters selected.");
                 }
                 //“TimePeriod_ByProject_DateRange.xls”.  
                 var filename = string.Format("Account_ByBusinessUnit_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy"), HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
