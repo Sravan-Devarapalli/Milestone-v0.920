@@ -52,6 +52,13 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        [DataMember]
+        public double EstimatedBillings
+        {
+            get;
+            set;
+        }
+
         public double TotalHours
         {
             get
