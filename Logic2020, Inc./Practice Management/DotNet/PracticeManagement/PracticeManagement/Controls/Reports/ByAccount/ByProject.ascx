@@ -49,7 +49,7 @@
                                     PopupControlID="pnlFilterResource" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width110Px">
+                            <th class="Width140pxImp">
                                 Status
                                 <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
                                     id="imgProjectStatusFilter" class="PosAbsolute padLeft2" />
@@ -57,25 +57,31 @@
                                     PopupControlID="pnlFilterProjectStatus" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width110Px">
-                                Billing
+                            <th class="Width140pxImp">
+                                Billing Type
                                 <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
                                     id="imgBilling" class="PosAbsolute padLeft2" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceBilling" runat="server" TargetControlID="imgBilling"
                                     PopupControlID="pnlBilling" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width100Px">
+                            <th class="Width140pxImp">
+                                Projected Hours
+                            </th>
+                            <th class="Width140pxImp">
                                 Billable
                             </th>
-                            <th class="Width100Px">
+                            <th class="Width130pxImp">
                                 Non-Billable
                             </th>
-                            <th class="Width100Px">
-                                Total
+                            <th class="Width140pxImp">
+                                Actual Hours
                             </th>
-                            <th class="Width325Px">
-                                Project Variance (in Hours)
+                            <th class="Width160PxImp">
+                                Total Estimated Billings
+                            </th>
+                            <th class="Width160PxImp">
+                                Billable Hours Variance
                             </th>
                         </tr>
                     </thead>
@@ -96,7 +102,10 @@
                             <td class="SecondTd">
                                 <%# Eval("Project.ProjectNumber")%>
                                 -
-                                <%# Eval("Project.HtmlEncodedName")%>
+                                <asp:Label ID="lblProjectName" runat="server" Visible="false" Text=' <%# Eval("Project.HtmlEncodedName")%> '></asp:Label>
+                                <asp:HyperLink ID="hlProjectName" runat="server" CssClass="HyperlinkByProjectReport"
+                                    Text=' <%# Eval("Project.HtmlEncodedName")%> ' Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Project.Id"))) %>'>
+                                </asp:HyperLink>
                             </td>
                         </tr>
                     </table>
@@ -108,55 +117,32 @@
                     <%# Eval("BillingType")%>
                 </td>
                 <td>
+                    <%# GetDoubleFormat((double)Eval("ForecastedHours"))%>
+                </td>
+                <td>
                     <%# GetDoubleFormat((double)Eval("BillableHours"))%>
                 </td>
                 <td>
                     <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                 </td>
                 <td>
-                    <%# GetDoubleFormat((double)Eval("TotalHours"))%>
+                <asp:Label ID="lblActualHours" runat="server" Visible="false" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '></asp:Label>
+                    <asp:HyperLink ID="hlActualHours" runat="server" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '
+                        Target="_blank" NavigateUrl='<%# GetReportByProjectLink((string)Eval("Project.ProjectNumber"))%>'>
+                    </asp:HyperLink>
                 </td>
-                <td sorttable_customkey='<%# GetVarianceSortValue((string)Eval("Variance"))%>'>
+                <td>
+                    <asp:Label ID="lblEstimatedBillings" runat="server"></asp:Label>
+                </td>
+                <td sorttable_customkey='<%# Eval("BillableHoursVariance") %>'>
                     <table class="WholeWidth TdLevelNoBorder">
                         <tr>
-                            <td class="Width5Percent">
+                            <td class="Width50Percent textRightImp">
+                                <%#((double)Eval("BillableHoursVariance") > 0) ? "+" + GetDoubleFormat((double)Eval("BillableHoursVariance")) : GetDoubleFormat((double)Eval("BillableHoursVariance"))%>
                             </td>
-                            <td class="Width70Per textRight">
-                                <table class="WholeWidth">
-                                    <tr class="border1Px">
-                                        <td class="Width50Percent borderRightImp">
-                                            <table class="WholeWidth">
-                                                <tr>
-                                                    <td style="<%# Eval("BillableFirstHalfHtmlStyle")%>">
-                                                    </td>
-                                                    <td style="<%# Eval("BillableSecondHalfHtmlStyle")%>">
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td class="Width50Percent borderLeft">
-                                            <table class="WholeWidth">
-                                                <tr>
-                                                    <td style="<%# Eval("ForecastedFirstHalfHtmlStyle")%>">
-                                                    </td>
-                                                    <td style="<%# Eval("ForecastedSecondHalfHtmlStyle")%>">
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="Width20Percent">
-                                <table class="WholeWidth">
-                                    <tr>
-                                        <td class="TimePeriodByProjectVariance">
-                                            <%# Eval("Variance")%>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="Width5Percent">
+                            <td class="Width50Percent t-left">
+                                <asp:Label ID="lblExclamationMark" runat="server" Visible='<%# ((double)Eval("BillableHoursVariance") < 0)%>'
+                                    Text="!" CssClass="error-message fontSizeLarge" ToolTip="Project Underrun"></asp:Label>
                             </td>
                         </tr>
                     </table>
@@ -168,7 +154,8 @@
         </FooterTemplate>
     </asp:Repeater>
     <div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
-        There are no Time Entries towards this range selected.
+        There are no projects with Active or Completed statuses for the report parameters
+        selected.
     </div>
 </div>
 
