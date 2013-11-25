@@ -30,7 +30,7 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ProjectsCount) : GroupedProjects.Count;
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ActiveProjectsCount) + GroupedBusinessUnits.Sum(g=>g.CompletedProjectsCount) : GroupedProjects.Count;
             }
         }
 
@@ -42,6 +42,14 @@ namespace DataTransferObjects.Reports.ByAccount
             get
             {
                 return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.TotalHours) : GroupedProjects.Sum(p => p.TotalHours);
+            }
+        }
+
+        public Double TotalProjectedHours
+        {
+            get
+            {
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ForecastedHours) : GroupedProjects.Sum(p => p.ForecastedHours);
             }
         }
 
