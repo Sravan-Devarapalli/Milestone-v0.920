@@ -15,7 +15,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
     public partial class ByProject : System.Web.UI.UserControl
     {
         private const string ByAccountByProjectReportExport = "Account Report By Project";
-
+        private string ProjectDetailUrl = "ProjectDetail.aspx?id={0}";
+        private string ByProjectUrl = "~/Reports/ProjectSummaryReport.aspx?ProjectNumber={0}&StartDate={1}&EndDate={2}&PeriodSelected={3}";
         private HtmlImage ImgBusinessUnitFilter { get; set; }
 
         private HtmlImage ImgProjectStatusFilter { get; set; }
@@ -106,11 +107,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 sb.Append(account.Code);
                 sb.Append("\t");
                 sb.AppendLine();
-                sb.Append(HostingPage.BusinessUnitsCount + " Business Units");
+                sb.Append(HostingPage.BusinessUnitsCount + " Business Unit(s)");
                 sb.Append("\t");
-                sb.Append(HostingPage.ProjectsCount + " Projects");
+                sb.Append(HostingPage.ProjectsCount + " Project(s)");
                 sb.Append("\t");
-                sb.Append(HostingPage.PersonsCount + " Persons");
+                sb.Append(HostingPage.PersonsCount.ToString() == "1" ? HostingPage.PersonsCount + " Person" : HostingPage.PersonsCount + " People");
                 sb.Append("\t");
                 sb.AppendLine();
                 sb.Append(HostingPage.Range);
@@ -148,15 +149,19 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     sb.Append("\t");
                     sb.Append("Status");
                     sb.Append("\t");
-                    sb.Append("Billing");
+                    sb.Append("Billing Type");
+                    sb.Append("\t");
+                    sb.Append("Projected Hours");
                     sb.Append("\t");
                     sb.Append("Billable");
                     sb.Append("\t");
                     sb.Append("Non-Billable");
                     sb.Append("\t");
-                    sb.Append("Total");
+                    sb.Append("Actual Hours");
                     sb.Append("\t");
-                    sb.Append("Project Variance (in Hours)");
+                    sb.Append("Total Estimated Billings");
+                    sb.Append("\t");
+                    sb.Append("Billable Hours Variance");
                     sb.Append("\t");
                     sb.AppendLine();
 
@@ -179,13 +184,17 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                         sb.Append("\t");
                         sb.Append(projectLevelGroupedHours.BillingType);
                         sb.Append("\t");
+                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.ForecastedHours));
+                        sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.BillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.NonBillableHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Variance);
+                        sb.Append(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : GetDoubleFormat(projectLevelGroupedHours.EstimatedBillings));
+                        sb.Append("\t");
+                        sb.Append(projectLevelGroupedHours.BillableHoursVariance);
                         sb.Append("\t");
                         sb.AppendLine();
                     }
@@ -232,6 +241,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.PersonsCount = reportData.PersonsCount;
 
             HostingPage.TotalProjectHours = (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) > 0 ? (reportData.TotalProjectHours - reportData.BusinessDevelopmentHours) : 0d;
+            HostingPage.TotalProjectedHours = reportData.TotalProjectedHours;
             HostingPage.BDHours = reportData.BusinessDevelopmentHours;
             HostingPage.BillableHours = reportData.BillableHours;
             HostingPage.NonBillableHours = reportData.NonBillableHours;
@@ -247,8 +257,36 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-
+                var dataItem = (ProjectLevelGroupedHours)e.Item.DataItem;
+                var lblEstimatedBillings = e.Item.FindControl("lblEstimatedBillings") as Label;
+                var lblActualHours = e.Item.FindControl("lblActualHours") as Label;
+                var lblExclamationMark = e.Item.FindControl("lblExclamationMark") as Label;
+                var lblProjectName = e.Item.FindControl("lblProjectName") as Label;
+                var hlProjectName = e.Item.FindControl("hlProjectName") as HyperLink;
+                var hlActualHours = e.Item.FindControl("hlActualHours") as HyperLink;
+                lblExclamationMark.Visible = dataItem.BillableHoursVariance < 0;
+                lblEstimatedBillings.Text = dataItem.EstimatedBillings == -1 ? "FF" : GetDoubleFormat(dataItem.EstimatedBillings).ToString();
+                lblActualHours.Visible = lblProjectName.Visible = dataItem.Project.TimeEntrySectionId == 2 || dataItem.Project.TimeEntrySectionId == 3 || dataItem.Project.TimeEntrySectionId == 4;
+                hlActualHours.Visible = hlProjectName.Visible = !(dataItem.Project.TimeEntrySectionId == 2 || dataItem.Project.TimeEntrySectionId == 3 || dataItem.Project.TimeEntrySectionId == 4);
             }
+        }
+
+        protected string GetProjectDetailsLink(int? projectId)
+        {
+            if (projectId.HasValue)
+                return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.ProjectDetail, projectId.Value),
+                                                            Constants.ApplicationPages.AccountSummaryReport);
+            else
+                return string.Empty;
+        }
+
+        protected string GetReportByProjectLink(string projectNumber)
+        {
+            if (projectNumber != null)
+                return String.Format(ByProjectUrl, projectNumber, (HostingPage.StartDate.HasValue) ? HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : null,
+                    (HostingPage.EndDate.HasValue) ? HostingPage.EndDate.Value.Date.ToString(Constants.Formatting.EntryDateFormat) : null, "0");
+            else
+                return string.Empty;
         }
 
         public void DataBindProject(ProjectLevelGroupedHours[] reportData, bool isPopulateFilters)
