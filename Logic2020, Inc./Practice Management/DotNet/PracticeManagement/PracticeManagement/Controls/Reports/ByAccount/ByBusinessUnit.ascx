@@ -36,7 +36,7 @@
                 <table id="tblAccountSummaryByBusinessReport" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
-                            <th class="ResourceColum">
+                            <th class="TextAlignLeftImp Width320PxImp">
                                 Business Unit
                                 <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgBusinessUnitFilter" />
@@ -45,22 +45,31 @@
                                     Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width130px">
-                                # of Projects
+                            <th class="Width170PxImp">
+                                # of Active Projects
                             </th>
-                            <th class="Width100Px">
+                            <th class="Width170PxImp">
+                                # of Completed Projects
+                            </th>
+                            <th class="Width170PxImp">
+                                Projected Hours
+                            </th>
+                            <th class="Width150pxImp">
                                 Billable
                             </th>
-                            <th class="Width100Px">
+                            <th class="Width150pxImp">
                                 Non-Billable
+                            </th>
+                            <th class="Width150pxImp">
+                                Actual Hours
                             </th>
                             <th class="Width100Px">
                                 BD
                             </th>
-                            <th class="Width100Px">
-                                Total
+                            <th class="Width150pxImp">
+                                Total BU Hours
                             </th>
-                            <th class="Width295Px">
+                            <th class="Width170PxImp">
                                 Percent of Total Hours
                             </th>
                         </tr>
@@ -74,7 +83,13 @@
                     (<%# ((Boolean)Eval("BusinessUnit.IsActive")) ? "Active" : "Inactive"%>)
                 </td>
                 <td>
-                    <%# Eval("ProjectsCount")%>
+                    <%# Eval("ActiveProjectsCount")%>
+                </td>
+                 <td>
+                    <%# Eval("CompletedProjectsCount")%>
+                </td>
+                 <td>
+                    <%# GetDoubleFormat((double)Eval("ForecastedHours"))%>
                 </td>
                 <td>
                     <%# GetDoubleFormat((double)Eval("BillableHours"))%>
@@ -83,33 +98,16 @@
                     <%# GetDoubleFormat((double)Eval("NonBillableHours"))%>
                 </td>
                 <td>
+                    <%# GetDoubleFormat((double)Eval("ActualHours"))%>
+                </td>
+                <td>
                     <%# GetDoubleFormat((double)Eval("BusinessDevelopmentHours"))%>
                 </td>
                 <td>
-                    <%# GetDoubleFormat((double)Eval("TotalHours"))%>
+                    <%# GetDoubleFormat((double)Eval("TotalHours"))%>  
                 </td>
-                <td sorttable_customkey='<%# Eval("BusinessUnitTotalHoursPercent")%>'>
-                    <table class="TdLevelNoBorder UtlizationGraph">
-                        <tr>
-                            <td class="Width5Percent">
-                            </td>
-                            <td class="GraphTd">
-                                <table>
-                                    <tr>
-                                        <td class="FirstTd" width="<%# Eval("BusinessUnitTotalHoursPercent")%>%">
-                                        </td>
-                                        <td class="SecondTd" width="<%# 100 - ((int)Eval("BusinessUnitTotalHoursPercent") )%>%">
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="GraphValueTd">
-                                <%# Eval("BusinessUnitTotalHoursPercent")%>%
-                            </td>
-                            <td class="Width5Percent">
-                            </td>
-                        </tr>
-                    </table>
+                <td>
+                    <%# Eval("BusinessUnitTotalHoursPercent")%>%
                 </td>
             </tr>
         </ItemTemplate>
@@ -118,7 +116,7 @@
         </FooterTemplate>
     </asp:Repeater>
     <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
-        There are no Time Entries towards this range selected.
+      There are no projects with Active or Completed statuses for the report parameters selected.
     </div>
 </div>
 
