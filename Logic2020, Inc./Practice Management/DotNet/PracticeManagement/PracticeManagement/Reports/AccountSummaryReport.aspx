@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="By Account" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="AccountSummaryReport.aspx.cs" Inherits="PraticeManagement.Reporting.AccountSummaryReport" %>
-    
+
 <%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
@@ -14,9 +14,12 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-    <script src="<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.min.js", this) %>" type="text/javascript"></script>
-    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet" type="text/css" />
-    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ExpandOrCollapse.min.js", this) %>"
+        type="text/javascript"></script>
+    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
+        type="text/css" />
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
     <script src="../Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
@@ -196,25 +199,11 @@
                         <td class="FirstTrTd5">
                             <table class="ReportHeaderTotals">
                                 <tr>
-                                    <td class="Width27Percent">
-                                        <table class="WholeWidth ReportHeaderTotalsTable">
-                                            <tr>
-                                                <td class="FirstTd no-wrap">
-                                                    Total Project Hours
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="SecondTd">
-                                                    <asp:Literal ID="ltrlTotalProjectHours" runat="server"></asp:Literal>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td class="Width27Percent">
+                                    <td class="Width21Percent">
                                         <table class="WholeWidth ReportHeaderTotalsTable">
                                             <tr>
                                                 <td class="FirstTd">
-                                                    BD
+                                                    BD Hours
                                                 </td>
                                             </tr>
                                             <tr>
@@ -224,7 +213,35 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td class="Width27Percent vBottom">
+                                    <td class="Width21Percent">
+                                        <table class="WholeWidth ReportHeaderTotalsTable">
+                                            <tr>
+                                                <td class="FirstTd no-wrap">
+                                                    Total Projected Hours
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="SecondTd">
+                                                    <asp:Literal ID="ltrlTotalProjectedHours" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="Width21Percent">
+                                        <table class="WholeWidth ReportHeaderTotalsTable">
+                                            <tr>
+                                                <td class="FirstTd no-wrap">
+                                                    Total Actual Hours
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="SecondTd">
+                                                    <asp:Literal ID="ltrlTotalActualHours" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="Width18Percent vBottom">
                                         <table class="ReportHeaderBillAndNonBillTable">
                                             <tr>
                                                 <td>
