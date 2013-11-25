@@ -48,9 +48,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 hostingPage.BusinessUnitsCount = reportData.Select(r => r.BusinessUnit.Id.Value).Distinct().Count();
                 hostingPage.ProjectsCount = reportData.Count > 0 ? 1 : 0;
                 hostingPage.PersonsCount = reportData.SelectMany(g => g.PersonLevelGroupedHoursList.Select(p => p.Person.Id.Value)).Distinct().Count();
-
-                hostingPage.TotalProjectHours = reportData.Sum(g => g.TotalHours);
-                hostingPage.BDHours = hostingPage.TotalProjectHours;
+                hostingPage.TotalProjectedHours = 0;
+                hostingPage.BDHours = hostingPage.TotalProjectHours = reportData.Sum(p => p.TotalHours);
                 hostingPage.BillableHours = 0d;
                 hostingPage.NonBillableHours = hostingPage.TotalProjectHours;
             }
