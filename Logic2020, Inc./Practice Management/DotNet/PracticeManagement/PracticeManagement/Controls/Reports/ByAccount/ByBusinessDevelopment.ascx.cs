@@ -160,11 +160,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             sb.Append(account.Code);
             sb.Append("\t");
             sb.AppendLine();
-            sb.Append(businessUnitsCount + " Business Units");
+            sb.Append(businessUnitsCount + " Business Unit(s)");
             sb.Append("\t");
-            sb.Append(projectsCount + " Projects");
+            sb.Append(projectsCount + " Project(s)");
             sb.Append("\t");
-            sb.Append(personsCount + " Persons");
+            sb.Append(personsCount.ToString() == "1" ? personsCount + " Person" : personsCount + " People");
             sb.Append("\t");
             sb.AppendLine();
             sb.Append(range);
