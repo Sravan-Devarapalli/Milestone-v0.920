@@ -59,13 +59,23 @@ namespace DataTransferObjects.Reports.ByAccount
         }
 
         [DataMember]
-        public int ProjectsCount { get; set; }
+        public int ActiveProjectsCount { get; set; }
+
+        [DataMember]
+        public int CompletedProjectsCount { get; set; }
 
         public double TotalHours
         {
             get
             {
                 return PersonLevelGroupedHoursList != null ? PersonLevelGroupedHoursList.Sum(t => t.TotalHours) : BillableHours + NonBillableHours + BusinessDevelopmentHours;
+            }
+        }
+        public double ActualHours
+        {
+            get
+            {
+                return PersonLevelGroupedHoursList != null ? PersonLevelGroupedHoursList.Sum(t => t.TotalHours) : BillableHours + NonBillableHours;
             }
         }
     }
