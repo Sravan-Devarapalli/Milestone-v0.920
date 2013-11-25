@@ -184,15 +184,6 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.Literal ltRange;
         
         /// <summary>
-        /// ltrlTotalProjectHours control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltrlTotalProjectHours;
-        
-        /// <summary>
         /// ltrlBDHours control.
         /// </summary>
         /// <remarks>
@@ -200,6 +191,24 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal ltrlBDHours;
+        
+        /// <summary>
+        /// ltrlTotalProjectedHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlTotalProjectedHours;
+        
+        /// <summary>
+        /// ltrlTotalActualHours control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlTotalActualHours;
         
         /// <summary>
         /// ltrlBillableHours control.
