@@ -44,6 +44,8 @@ namespace PraticeManagement.Reporting
 
         public Double TotalProjectHours { get; set; }
 
+        public Double TotalProjectedHours { get; set; }
+
         public Double BDHours { get; set; }
 
         public Double BillableHours { get; set; }
@@ -54,7 +56,7 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                return string.Format("{0} BUs, {1} Projects, {2} Persons", BusinessUnitsCount, ProjectsCount, PersonsCount);
+                return string.Format("{0} Business Unit(s), {1} Project(s), {2}", BusinessUnitsCount, ProjectsCount, PersonsCount.ToString() == "1" ? PersonsCount + " Person" : PersonsCount + " People");
             }
         }
 
@@ -387,7 +389,6 @@ namespace PraticeManagement.Reporting
 
         public bool SetSelectedFilters { get; set; }
 
-
         protected void btnView_Command(object sender, CommandEventArgs e)
         {
 
@@ -551,8 +552,8 @@ namespace PraticeManagement.Reporting
             ltAccount.Text = HttpUtility.HtmlEncode(AccountName);
             ltHeaderCount.Text = HeaderCountText;
             ltRange.Text = Range;
-
-            ltrlTotalProjectHours.Text = TotalProjectHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlTotalActualHours.Text = TotalProjectHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlTotalProjectedHours.Text = TotalProjectedHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBDHours.Text = BDHours.ToString(Constants.Formatting.DoubleValue);
             ltrlBillableHours.Text = BillableHours.ToString(Constants.Formatting.DoubleValue);
             ltrlNonBillableHours.Text = NonBillableHours.ToString(Constants.Formatting.DoubleValue);
