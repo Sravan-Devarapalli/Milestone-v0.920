@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string CompletedProjectsCount = "CompletedProjectsCount";
+            public const string ActiveProjectsCount = "ActiveProjectsCount";
             public const string ProjectedDeliveryDate = "ProjectedDeliveryDate";
             public const string BillRate = "BillRate";
             public const string EstimatedBillings = "EstimatedBillings";
