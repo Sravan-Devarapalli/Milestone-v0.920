@@ -541,6 +541,7 @@ namespace DataAccess
             int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
             int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
             int forecastedHoursIndex;
+            int estimatedBillingsIndex;
 
             int groupIdIndex = -1;
 
@@ -560,6 +561,15 @@ namespace DataAccess
             catch
             {
                 forecastedHoursIndex = -1;
+            }
+
+            try
+            {
+                estimatedBillingsIndex = reader.GetOrdinal(Constants.ColumnNames.EstimatedBillings);
+            }
+            catch
+            {
+                estimatedBillingsIndex = -1;
             }
 
             while (reader.Read())
@@ -605,7 +615,11 @@ namespace DataAccess
                 {
                     plgh.ForecastedHours = Convert.ToDouble(reader.GetDecimal(forecastedHoursIndex));
                 }
-
+                if (estimatedBillingsIndex > -1)
+                {
+                    plgh.EstimatedBillings = reader.GetDouble(estimatedBillingsIndex);
+                }
+                
                 result.Add(plgh);
             }
         }
@@ -687,7 +701,10 @@ namespace DataAccess
             int businessUnitStatusIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
             int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
             int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
-            int projectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectsCount);
+            int activeProjectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.ActiveProjectsCount);
+            int completedProjectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.CompletedProjectsCount);
+            int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHours);
+            
 
             while (reader.Read())
             {
@@ -710,7 +727,10 @@ namespace DataAccess
                             !reader.IsDBNull(businessDevelopmentHoursIndex)
                                 ? reader.GetDouble(businessDevelopmentHoursIndex)
                                 : 0d,
-                        ProjectsCount = !reader.IsDBNull(projectsCountIndex) ? reader.GetInt32(projectsCountIndex) : 0,
+                        ForecastedHours =
+                   !reader.IsDBNull(projectedHoursIndex) ? reader.GetDouble(projectedHoursIndex) : 0d,
+                        ActiveProjectsCount = !reader.IsDBNull(activeProjectsCountIndex) ? reader.GetInt32(activeProjectsCountIndex) : 0,
+                        CompletedProjectsCount = !reader.IsDBNull(completedProjectsCountIndex) ? reader.GetInt32(completedProjectsCountIndex) : 0,
                         BusinessUnit = pg
                     };
 
