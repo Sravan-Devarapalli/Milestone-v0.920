@@ -1138,15 +1138,6 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.ElementDisabler.ElementDisablerExtender edeCloneButton;
         
         /// <summary>
-        /// odsProjectStatus control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsProjectStatus;
-        
-        /// <summary>
         /// vwCSAT control.
         /// </summary>
         /// <remarks>
