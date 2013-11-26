@@ -1196,7 +1196,7 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static void FillProjectStatusList(ListControl control, string firstItemText, List<int> excludedStatus = null)
+        public static void FillProjectStatusList(ListControl control, string firstItemText, List<int> excludedStatus = null,bool noFirstItem = false)
         {
             using (var serviceClient = new ProjectStatusServiceClient())
             {
@@ -1204,7 +1204,7 @@ namespace PraticeManagement.Controls
                 {
                     ProjectStatus[] statuses = serviceClient.GetProjectStatuses();
                     statuses = excludedStatus != null ? statuses.Where(p => !excludedStatus.Any(g => g == p.Id)).ToArray() : statuses;
-                    FillListDefault(control, firstItemText, statuses, false);
+                    FillListDefault(control, firstItemText, statuses, noFirstItem);
                 }
                 catch (CommunicationException)
                 {
