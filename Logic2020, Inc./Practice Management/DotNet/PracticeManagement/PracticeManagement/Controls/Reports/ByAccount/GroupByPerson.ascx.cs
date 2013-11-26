@@ -99,7 +99,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected string GetDoubleFormat(double value)
         {
-            return value.ToString(Constants.Formatting.DoubleValue);
+            return value.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
         }
 
         protected string GetBusinessUnitStatus(bool isActive)
