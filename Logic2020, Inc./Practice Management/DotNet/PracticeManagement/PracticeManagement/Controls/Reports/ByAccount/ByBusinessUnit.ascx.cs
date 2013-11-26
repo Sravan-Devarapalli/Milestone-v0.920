@@ -55,6 +55,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             {
                 ImgBusinessUnitFilter = e.Item.FindControl("imgBusinessUnitFilter") as HtmlImage;
             }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var dataItem = (BusinessUnitLevelGroupedHours)e.Item.DataItem;
+                var lblExclamationMark = e.Item.FindControl("lblExclamationMark") as Label;
+                lblExclamationMark.Visible = dataItem.BillableHoursVariance < 0;
+            }
         }
 
         protected void btnFilterOK_OnClick(object sender, EventArgs e)
@@ -65,7 +71,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected string GetDoubleFormat(double value)
         {
-            return value.ToString(Constants.Formatting.DoubleValue);
+            return value.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
         }
 
         public void PopulateByBusinessUnitReport(bool isPopulateFilters = true)
@@ -242,7 +248,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     sb.Append("\t");
                     sb.Append("Total BU Hours");
                     sb.Append("\t");
-                    sb.Append("Percent of Total Hours");
+                    sb.Append("Billable Hours Variance");
                     sb.Append("\t");
                     sb.AppendLine();
 
@@ -261,7 +267,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                         sb.Append("\t");
                         sb.Append(businessUnitLevelGroupedHours.CompletedProjectsCount);
                         sb.Append("\t");
-                        sb.Append(businessUnitLevelGroupedHours.ForecastedHours);
+                        sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.ForecastedHours));
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.BillableHours));
                         sb.Append("\t");
@@ -273,7 +279,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.TotalHours));
                         sb.Append("\t");
-                        sb.Append(businessUnitLevelGroupedHours.BusinessUnitTotalHoursPercent);
+                        sb.Append(GetDoubleFormat(businessUnitLevelGroupedHours.BillableHoursVariance));
                         sb.Append("\t");
                         sb.AppendLine();
                     }
