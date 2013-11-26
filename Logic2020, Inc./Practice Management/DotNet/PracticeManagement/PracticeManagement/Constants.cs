@@ -243,6 +243,7 @@ namespace PraticeManagement
             public const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
             public const string CurrencyExcelReportFormatWithoutDecimal = "$####,###,###,###,###,##0";
             public const string NumberFormatWithCommas = "###,###,###,###,###,###,###0";
+            public const string NumberFormatWithCommasAndDecimals = "###,###,###,###,###,###,###0.00";
             public const string DoubleValueWithSinglePrecision = "0.0";
         }
 
