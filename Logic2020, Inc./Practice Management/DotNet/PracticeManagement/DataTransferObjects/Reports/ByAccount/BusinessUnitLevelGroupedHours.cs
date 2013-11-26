@@ -78,5 +78,13 @@ namespace DataTransferObjects.Reports.ByAccount
                 return PersonLevelGroupedHoursList != null ? PersonLevelGroupedHoursList.Sum(t => t.TotalHours) : BillableHours + NonBillableHours;
             }
         }
+
+        public double BillableHoursVariance
+        {
+            get
+            {
+                return (BillableHours - ForecastedHours);
+            }
+        }
     }
 }
