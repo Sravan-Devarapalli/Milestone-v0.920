@@ -70,7 +70,7 @@
                                 Total BU Hours
                             </th>
                             <th class="Width170PxImp">
-                                Percent of Total Hours
+                                Billable Hours Variance
                             </th>
                         </tr>
                     </thead>
@@ -106,8 +106,18 @@
                 <td>
                     <%# GetDoubleFormat((double)Eval("TotalHours"))%>  
                 </td>
-                <td>
-                    <%# Eval("BusinessUnitTotalHoursPercent")%>%
+               <td sorttable_customkey='<%# Eval("BillableHoursVariance") %>'>
+                    <table class="WholeWidth TdLevelNoBorder">
+                        <tr>
+                            <td class="Width50Percent textRightImp">
+                                <%#((double)Eval("BillableHoursVariance") > 0) ? "+" + GetDoubleFormat((double)Eval("BillableHoursVariance")) : GetDoubleFormat((double)Eval("BillableHoursVariance"))%>
+                            </td>
+                            <td class="Width50Percent t-left">
+                                <asp:Label ID="lblExclamationMark" runat="server" Visible='<%# ((double)Eval("BillableHoursVariance") < 0)%>'
+                                    Text="!" CssClass="error-message fontSizeLarge" ToolTip="Project Underrun"></asp:Label>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </ItemTemplate>
