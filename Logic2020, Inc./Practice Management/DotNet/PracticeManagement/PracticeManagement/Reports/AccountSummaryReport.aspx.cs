@@ -305,6 +305,10 @@ namespace PraticeManagement.Reporting
                 {
                     FillInitProjectGroupList();
                 }
+
+                ddlAccount.SelectedValue = "";
+                ddlAccount_SelectedIndexChanged(ddlAccount,new EventArgs());
+                ddlPeriod.SelectedValue = "30";//This Month - as per 3201 
             }
 
         }
@@ -377,7 +381,7 @@ namespace PraticeManagement.Reporting
                 DataHelper.FillListDefaultWithEncodedName(cblProjectGroup, "All Business Units", null,
                                              false);
             }
-            ddlPeriod.SelectedValue = "Please Select";
+            //ddlPeriod.SelectedValue = "Please Select";
             SelectView();
         }
 
@@ -552,11 +556,11 @@ namespace PraticeManagement.Reporting
             ltAccount.Text = HttpUtility.HtmlEncode(AccountName);
             ltHeaderCount.Text = HeaderCountText;
             ltRange.Text = Range;
-            ltrlTotalActualHours.Text = TotalProjectHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlTotalProjectedHours.Text = TotalProjectedHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlBDHours.Text = BDHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlBillableHours.Text = BillableHours.ToString(Constants.Formatting.DoubleValue);
-            ltrlNonBillableHours.Text = NonBillableHours.ToString(Constants.Formatting.DoubleValue);
+            ltrlTotalActualHours.Text = TotalProjectHours.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
+            ltrlTotalProjectedHours.Text = TotalProjectedHours.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
+            ltrlBDHours.Text = BDHours.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
+            ltrlBillableHours.Text = BillableHours.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
+            ltrlNonBillableHours.Text = NonBillableHours.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
 
             var billablePercent = 0;
             var nonBillablePercent = 0;
