@@ -53,7 +53,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected string GetDoubleFormat(double value)
         {
-            return value.ToString(Constants.Formatting.DoubleValue);
+            return value.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
+        }
+
+        protected string GetCurrencyDecimalFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.CurrencyExcelReportFormat);
         }
 
         protected string GetCurrencyFormat(double value)
@@ -192,9 +197,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                         sb.Append("\t");
                         sb.Append(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : GetDoubleFormat(projectLevelGroupedHours.EstimatedBillings));
+                        sb.Append(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : GetCurrencyDecimalFormat(projectLevelGroupedHours.EstimatedBillings));
                         sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.BillableHoursVariance);
+                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.BillableHoursVariance));
                         sb.Append("\t");
                         sb.AppendLine();
                     }
@@ -265,7 +270,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 var hlProjectName = e.Item.FindControl("hlProjectName") as HyperLink;
                 var hlActualHours = e.Item.FindControl("hlActualHours") as HyperLink;
                 lblExclamationMark.Visible = dataItem.BillableHoursVariance < 0;
-                lblEstimatedBillings.Text = dataItem.EstimatedBillings == -1 ? "FF" : GetDoubleFormat(dataItem.EstimatedBillings).ToString();
+                lblEstimatedBillings.Text = dataItem.EstimatedBillings == -1 ? "FF" : GetCurrencyDecimalFormat(dataItem.EstimatedBillings).ToString();
                 lblActualHours.Visible = lblProjectName.Visible = dataItem.Project.TimeEntrySectionId == 2 || dataItem.Project.TimeEntrySectionId == 3 || dataItem.Project.TimeEntrySectionId == 4;
                 hlActualHours.Visible = hlProjectName.Visible = !(dataItem.Project.TimeEntrySectionId == 2 || dataItem.Project.TimeEntrySectionId == 3 || dataItem.Project.TimeEntrySectionId == 4);
             }
@@ -387,8 +392,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.BusinessUnitsFilteredIds = cblBusinessUnits.SelectedItems;
             PopulateByProjectData(false);
         }
-
-
     }
 }
 
