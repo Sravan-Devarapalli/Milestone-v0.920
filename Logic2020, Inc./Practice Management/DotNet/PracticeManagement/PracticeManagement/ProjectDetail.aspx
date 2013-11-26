@@ -1189,8 +1189,7 @@
                                                     <li>
                                                         <asp:CheckBox ID="chbCloneCommissions" runat="server" Checked="true" Text="Clone commissions" /></li>
                                                     <li>Clone status
-                                                        <asp:DropDownList ID="ddlCloneProjectStatus" runat="server" DataSourceID="odsProjectStatus"
-                                                            DataTextField="Name" DataValueField="Id" />
+                                                        <asp:DropDownList ID="ddlCloneProjectStatus" runat="server"/>
                                                     </li>
                                                 </ul>
                                             </td>
@@ -1209,9 +1208,6 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <asp:ObjectDataSource ID="odsProjectStatus" runat="server" SelectMethod="GetProjectStatuses"
-                                        TypeName="PraticeManagement.ProjectStatusService.ProjectStatusServiceClient">
-                                    </asp:ObjectDataSource>
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwCSAT" runat="server">
