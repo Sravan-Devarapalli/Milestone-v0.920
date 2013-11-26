@@ -430,13 +430,14 @@ namespace PraticeManagement
 
                 lblAttachmentMessage.Text = string.Format(AttachSOWMessage, size / 1024);
                 DataHelper.FillAttachemntCategoryList(ddlAttachmentCategory);
+                ddlCloneProjectStatus.SelectedValue = ((int)ProjectStatusType.Experimental).ToString();
             }
             mlConfirmation.ClearMessage();
 
             btnUpload.Attributes["onclick"] = "startUpload(); return false;";
 
             ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-            ddlCloneProjectStatus.SelectedValue = ((int)ProjectStatusType.Experimental).ToString();
+            
         }
 
         public void ShowTabs()
@@ -1415,6 +1416,7 @@ namespace PraticeManagement
             Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
+            DataHelper.FillProjectStatusList(ddlCloneProjectStatus, string.Empty,null,true);
             DataHelper.FillBusinessTypes(ddlBusinessOptions);
             PopulateDirectorsList();
             PopulateCSATOwnerList();
