@@ -294,7 +294,7 @@ namespace PraticeManagement
         #endregion Properties
 
         public bool IsErrorPanelDisplay;
-        private bool IsOtherPanelDisplay;
+        public bool IsOtherPanelDisplay;
         private bool FromSaveButtonClick;
 
         #region Methods
