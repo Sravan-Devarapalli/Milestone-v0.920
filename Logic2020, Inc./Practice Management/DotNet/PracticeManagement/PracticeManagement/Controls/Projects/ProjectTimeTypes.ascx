@@ -232,7 +232,7 @@
             </td>
         </tr>
         <tr>
-            <td class="no-wrap LeftPadding10px">
+            <td class="WhiteSpaceNormal LeftPadding10px">
                 <asp:ValidationSummary ID="vsumNewTimeType" runat="server" EnableClientScript="false"
                     ValidationGroup="NewTimeType" />
             </td>
