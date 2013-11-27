@@ -73,8 +73,8 @@
                                         ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
                                         ValidationGroup='ProjectExpensesEdit'>*</asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="cstStartDateShouldbewithinProjectPeriod" runat="server"
-                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="Start Date must be with in the Project Period range."
-                                        Text="*" ToolTip="Start Date must be with in the Project Period range."></asp:CustomValidator>
+                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."
+                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                 </td>
                             </tr>
                         </table>
@@ -102,8 +102,8 @@
                                         ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
                                         ValidationGroup='ProjectExpensesAdd'>*</asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="cstStartDateShouldbewithinProjectPeriod" runat="server"
-                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="Start Date must be with in the Project Period range."
-                                        Text="*" ToolTip="Start Date must be with in the Project Period range."></asp:CustomValidator>
+                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."
+                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                 </td>
                             </tr>
                         </table>
@@ -143,8 +143,8 @@
                                         ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
                                         ValidationGroup='ProjectExpensesEdit'>*</asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="cstEndDateShouldbewithinProjectPeriod" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        ErrorMessage="End Date must be with in the Project Period range." Display="Dynamic"
-                                        Text="*" ToolTip="End Date must be with in the Project Period range."></asp:CustomValidator>
+                                        ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item." Display="Dynamic"
+                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                 </td>
                             </tr>
                         </table>
@@ -176,7 +176,8 @@
                                     <asp:CustomValidator ID="cstPeriodOverlaps" runat="server" ValidationGroup="ProjectExpensesEdit"
                                         ErrorMessage="Selected Period Overlaps with existing periods." Text="*"></asp:CustomValidator>
                                     <asp:CustomValidator ID="cstEndDateShouldbewithinProjectPeriod" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        ErrorMessage="End Date must be with in the Project Period range." Text="*" ToolTip="End Date must be with in the Project Period range."></asp:CustomValidator>
+                                        ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item." Text="*" 
+                                        ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                 </td>
                             </tr>
                         </table>
