@@ -133,8 +133,6 @@
                                         PopupButtonID="lnkCalendarEndDate" TargetControlID="txtEndDate" />
                                     <asp:CustomValidator ID="cstEndShouldBeGreater" runat="server" Text="*" ErrorMessage="End date must be greater than Start date"
                                         ToolTip="End date must be greater than Start date" Display="Dynamic" ValidationGroup="ProjectExpensesEdit"></asp:CustomValidator>
-                                    <asp:CustomValidator ID="cstPeriodOverlaps" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        ErrorMessage="Selected Period Overlaps with existing periods." Text="*" Display="Dynamic"></asp:CustomValidator>
                                     <asp:RequiredFieldValidator ID="valReqEndDate" ValidationGroup="ProjectExpensesEdit"
                                         runat="server" ControlToValidate="txtEndDate" ErrorMessage="End Date is required"
                                         Text="*" Display="Dynamic" />
@@ -173,8 +171,6 @@
                                         ValidationGroup='ProjectExpensesAdd'>*</asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="cstEndShouldBeGreater" runat="server" Text="*" ErrorMessage="End date shuould be greater than Start date"
                                         ToolTip="End date shuould be greater than Start date" ValidationGroup="ProjectExpensesEdit"></asp:CustomValidator>
-                                    <asp:CustomValidator ID="cstPeriodOverlaps" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        ErrorMessage="Selected Period Overlaps with existing periods." Text="*"></asp:CustomValidator>
                                     <asp:CustomValidator ID="cstEndDateShouldbewithinProjectPeriod" runat="server" ValidationGroup="ProjectExpensesEdit"
                                         ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item." Text="*" 
                                         ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
