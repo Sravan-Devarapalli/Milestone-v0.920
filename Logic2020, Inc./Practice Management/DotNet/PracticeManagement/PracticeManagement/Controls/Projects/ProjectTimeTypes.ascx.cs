@@ -19,6 +19,11 @@ namespace PraticeManagement.Controls.Projects
 {
     public partial class ProjectTimeTypes : System.Web.UI.UserControl
     {
+        private PraticeManagement.ProjectDetail HostingPage
+        {
+            get { return ((PraticeManagement.ProjectDetail)Page); }
+        }
+
         public TimeTypeRecord[] AllTimeTypes
         {
             get
@@ -162,6 +167,7 @@ namespace PraticeManagement.Controls.Projects
             if (!Page.IsValid)
             {
                 mpeAddTimeType.Show();
+                HostingPage.IsOtherPanelDisplay = true;
             }
             else
             {
