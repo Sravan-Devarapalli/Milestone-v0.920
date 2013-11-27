@@ -54,12 +54,14 @@ namespace PraticeManagement.Controls.ProjectExpenses
             {
                 CustomValidator cstEndShouldBeGreater = footerRow.FindControl("cstEndShouldBeGreater") as CustomValidator;
                 cstEndShouldBeGreater.IsValid = false;
+                HostingPage.IsOtherPanelDisplay = true;
                 return;
             }
             else if (IsPeriodOverlaps(txtStartDate.Text, txtEndDate.Text, null))
             {
                 CustomValidator cvUpdatedTimeTypeName = footerRow.FindControl("cstPeriodOverlaps") as CustomValidator;
                 cvUpdatedTimeTypeName.IsValid = false;
+                HostingPage.IsOtherPanelDisplay = true;
                 return;
             }
             else if (HostingPage.Project.StartDate.HasValue && HostingPage.Project.EndDate.HasValue)
@@ -80,6 +82,7 @@ namespace PraticeManagement.Controls.ProjectExpenses
 
                 if (!isValid)
                 {
+                    HostingPage.IsOtherPanelDisplay = true;
                     return;
                 }
             }
