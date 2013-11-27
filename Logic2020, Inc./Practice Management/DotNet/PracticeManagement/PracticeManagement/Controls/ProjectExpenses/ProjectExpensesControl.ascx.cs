@@ -73,8 +73,8 @@ namespace PraticeManagement.Controls.ProjectExpenses
                     CustomValidator cstStartDateShouldbewithinProjectPeriod = footerRow.FindControl("cstStartDateShouldbewithinProjectPeriod") as CustomValidator;
                     cstStartDateShouldbewithinProjectPeriod.IsValid = isValid = false;
                 }
-                if (endDate < HostingPage.Project.StartDate.Value.Date ||
-                    endDate > HostingPage.Project.EndDate.Value.Date)
+                if ((endDate < HostingPage.Project.StartDate.Value.Date ||
+                    endDate > HostingPage.Project.EndDate.Value.Date) && isValid)
                 {
                     CustomValidator cstEndDateShouldbewithinProjectPeriod = footerRow.FindControl("cstEndDateShouldbewithinProjectPeriod") as CustomValidator;
                     cstEndDateShouldbewithinProjectPeriod.IsValid = isValid = false;
@@ -170,6 +170,7 @@ namespace PraticeManagement.Controls.ProjectExpenses
                     {
                         CustomValidator cstEndShouldBeGreater = gvProjectExpenses.Rows[e.RowIndex].FindControl("cstEndShouldBeGreater") as CustomValidator;
                         cstEndShouldBeGreater.IsValid = false;
+                        HostingPage.IsOtherPanelDisplay = true;
                         e.Cancel = true;
                     }
                     else
@@ -183,12 +184,14 @@ namespace PraticeManagement.Controls.ProjectExpenses
                             {
                                 CustomValidator cstStartDateShouldbewithinProjectPeriod = gvProjectExpenses.Rows[e.RowIndex].FindControl("cstStartDateShouldbewithinProjectPeriod") as CustomValidator;
                                 cstStartDateShouldbewithinProjectPeriod.IsValid = isValid = false;
+                                HostingPage.IsOtherPanelDisplay = true;
                             }
                             if ((endDate < HostingPage.Project.StartDate.Value.Date ||
-                               endDate > HostingPage.Project.EndDate.Value.Date))
+                               endDate > HostingPage.Project.EndDate.Value.Date) && isValid)
                             {
                                 CustomValidator cstEndDateShouldbewithinProjectPeriod = gvProjectExpenses.Rows[e.RowIndex].FindControl("cstEndDateShouldbewithinProjectPeriod") as CustomValidator;
                                 cstEndDateShouldbewithinProjectPeriod.IsValid = isValid = false;
+                                HostingPage.IsOtherPanelDisplay = true;
                             }
                             if (!isValid)
                             {
