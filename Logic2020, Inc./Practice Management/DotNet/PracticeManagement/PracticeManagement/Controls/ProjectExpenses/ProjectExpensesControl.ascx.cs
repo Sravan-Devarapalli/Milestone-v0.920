@@ -57,13 +57,7 @@ namespace PraticeManagement.Controls.ProjectExpenses
                 HostingPage.IsOtherPanelDisplay = true;
                 return;
             }
-            else if (IsPeriodOverlaps(txtStartDate.Text, txtEndDate.Text, null))
-            {
-                CustomValidator cvUpdatedTimeTypeName = footerRow.FindControl("cstPeriodOverlaps") as CustomValidator;
-                cvUpdatedTimeTypeName.IsValid = false;
-                HostingPage.IsOtherPanelDisplay = true;
-                return;
-            }
+           
             else if (HostingPage.Project.StartDate.HasValue && HostingPage.Project.EndDate.HasValue)
             {
                 var isValid = true;
@@ -198,13 +192,6 @@ namespace PraticeManagement.Controls.ProjectExpenses
                                 e.Cancel = true;
                                 return;
                             }
-                        }
-
-                        if (IsPeriodOverlaps(newStartDate, newEndDate, e.Keys[0]))
-                        {
-                            CustomValidator cvUpdatedTimeTypeName = gvProjectExpenses.Rows[e.RowIndex].FindControl("cstPeriodOverlaps") as CustomValidator;
-                            cvUpdatedTimeTypeName.IsValid = false;
-                            e.Cancel = true;
                         }
                     }
                 }
