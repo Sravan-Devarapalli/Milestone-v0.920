@@ -225,8 +225,8 @@
                     ToolTip="Work Type Name is required">*</asp:RequiredFieldValidator>
                 <asp:CustomValidator ID="cvNewTimeTypeName" runat="server" ControlToValidate="txtNewTimeType"
                     ValidationGroup="NewTimeType" OnServerValidate="cvNewTimeTypeName_OnServerValidate"
-                    ErrorMessage="This work type already exists. Please enter a different work type."
-                    Display="Dynamic" ToolTip="This work type already exists. Please enter a different work type.">*</asp:CustomValidator>
+                    ErrorMessage="Work Type with this name already exists. Please enter a different Work Type name."
+                    Display="Dynamic" ToolTip="Work Type with this name already exists. Please enter a different Work Type name.">*</asp:CustomValidator>
             </td>
             <td class="Width15Px">
             </td>
