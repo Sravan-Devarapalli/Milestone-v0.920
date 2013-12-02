@@ -1189,7 +1189,10 @@
                                                     <li>
                                                         <asp:CheckBox ID="chbCloneCommissions" runat="server" Checked="true" Text="Clone commissions" /></li>
                                                     <li>Clone status
-                                                        <asp:DropDownList ID="ddlCloneProjectStatus" runat="server"/>
+                                                        <asp:DropDownList ID="ddlCloneProjectStatus" runat="server" />
+                                                        <asp:CustomValidator ID="cvCloneStatus" runat="server" ControlToValidate="ddlCloneProjectStatus"
+                                                            ValidationGroup="CloneStatus" OnServerValidate="cvCloneStatus_ServerValidate"  ErrorMessage="Project without milestone cannot be cloned with Active status."
+                                                            Display="Dynamic" ToolTip="Project without milestone cannot be cloned with Active status.">*</asp:CustomValidator>
                                                     </li>
                                                 </ul>
                                             </td>
@@ -1205,6 +1208,12 @@
                                                     the button.</span>
                                                 <extDisable:ElementDisablerExtender ID="edeCloneButton" runat="server" TargetControlID="lnkClone"
                                                     ControlToDisableID="lnkClone" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <asp:ValidationSummary ID="vsCloneStatus" runat="server" EnableClientScript="false"
+                                                    ValidationGroup="CloneStatus" />
                                             </td>
                                         </tr>
                                     </table>
