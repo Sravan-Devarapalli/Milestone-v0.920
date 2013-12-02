@@ -392,6 +392,16 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvCloneStatus_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = true;
+            if(((Project.Milestones == null || Project.Milestones.Count == 0) && ddlCloneProjectStatus.SelectedValue == "3") || (chbCloneMilestones.Checked == false && ddlCloneProjectStatus.SelectedValue == "3"))
+            {
+                args.IsValid = false;
+                IsOtherPanelDisplay = true;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -1915,6 +1925,9 @@ namespace PraticeManagement
 
         protected void lnkClone_OnClick(object sender, EventArgs e)
         {
+            Page.Validate("CloneStatus");
+            if (!Page.IsValid)
+                return;
             var clonedId =
                 DataHelper.CloneProject(
                     new ProjectCloningContext
