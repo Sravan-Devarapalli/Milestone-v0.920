@@ -1120,6 +1120,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlCloneProjectStatus;
         
         /// <summary>
+        /// cvCloneStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvCloneStatus;
+        
+        /// <summary>
         /// lnkClone control.
         /// </summary>
         /// <remarks>
@@ -1136,6 +1145,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.ElementDisabler.ElementDisablerExtender edeCloneButton;
+        
+        /// <summary>
+        /// vsCloneStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary vsCloneStatus;
         
         /// <summary>
         /// vwCSAT control.
