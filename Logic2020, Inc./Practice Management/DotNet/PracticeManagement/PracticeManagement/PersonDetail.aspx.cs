@@ -454,15 +454,11 @@ namespace PraticeManagement
         protected void Page_PreRender(object sender, EventArgs e)
         {
             // Security
-            chblRoles.Visible =
             btnResetPassword.Visible =
-            locRolesLabel.Visible =
-            ddlRecruiter.Enabled =
-            cellPermissions.Visible =
             chbLockedOut.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
             txtEmployeeNumber.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
             lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
-
+            ddlRecruiter.Enabled = cellPermissions.Visible = chblRoles.Visible = locRolesLabel.Visible = true;
             if (!UserIsAdministrator && !UserIsHR && !PersonId.HasValue)//#2817 UserisHR is added as per requirement.
             {
                 // Recruiter should not be able to set the person active.
@@ -1052,11 +1048,12 @@ namespace PraticeManagement
 
         protected void vwPermissions_PreRender(object sender, EventArgs e)
         {
-            if (UserIsAdministrator || UserIsHR)//#2817 UserisHR is added as per requirement.
-            {
+            //as per #3207 person with 'Recruiter' role able to hire a person
+            //if (UserIsAdministrator || UserIsHR)//#2817 UserisHR is added as per requirement.
+            //{
                 DisplayPersonPermissions();
                 hfReloadPerms.Value = bool.TrueString;
-            }
+            //}
         }
 
         protected void lbSetPracticeOwner_Click(object sender, EventArgs e)
@@ -1291,7 +1288,7 @@ namespace PraticeManagement
             Person current = DataHelper.CurrentPerson;
             e.IsValid =
                 UserIsAdministrator || UserIsHR ||
-                (current != null && current.Id.HasValue && int.Parse(ddlRecruiter.SelectedValue) != current.Id.Value);
+                (current != null && current.Id.HasValue && int.Parse(ddlRecruiter.SelectedValue) == current.Id.Value);
         }
 
         protected void cvEndCompensation_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -2847,7 +2844,7 @@ namespace PraticeManagement
         private void ShowPermissionsPerEntities()
         {
             //  If we're editing existing user and having administrators rights
-            if (PersonId.HasValue && (UserIsAdministrator || UserIsHR))//#2817 UserisHR is added as per requirement.
+            if (PersonId.HasValue)//#2817 UserisHR is added as per requirement.as per #3207 UserisRecruiter is added 
             {
                 var permissions = DataHelper.GetPermissions(new Person { Id = PersonId.Value });
                 rpPermissions.ApplyPermissions(permissions);
@@ -2937,7 +2934,11 @@ namespace PraticeManagement
 
             personProjects.PersonId = id;
             personProjects.UserIsAdministrator = UserIsAdministrator || UserIsHR; //#2817 UserIsHR is added as per requirement.
-
+            if(!UserIsAdministrator && !UserIsHR && !PersonId.HasValue)
+            {
+                Person current = DataHelper.CurrentPerson;
+                ddlRecruiter.SelectedValue = current.Id.ToString();
+            }
             Person person = null;
 
             if (id.HasValue) // Edit existing person mode
