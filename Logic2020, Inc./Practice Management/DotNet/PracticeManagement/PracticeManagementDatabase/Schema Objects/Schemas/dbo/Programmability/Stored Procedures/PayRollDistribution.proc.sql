@@ -25,8 +25,7 @@ BEGIN
 							C.Date ,
 							MIN(CAST(M.IsHourlyAmount AS INT)) MinimumValue ,
 							MAX(CAST(M.IsHourlyAmount AS INT)) MaximumValue
-							,CASE WHEN MAX(CAST(m.IsHOurlyAmount AS INT)) = 1 AND MIN(CAST(m.IsHourlyAmount AS INT)) = 1 
-							THEN (CASE WHEN SUM(MPE.HoursPerDay) = 0 THEN 0 ELSE SUM(MPE.Amount * MPE.HoursPerDay)/ SUM(MPE.HoursPerDay) END)
+							,CASE WHEN MAX(CAST(m.IsHOurlyAmount AS INT)) = 1 AND MIN(CAST(m.IsHourlyAmount AS INT)) = 1 THEN SUM(MPE.Amount * MPE.HoursPerDay)/ SUM(MPE.HoursPerDay)
 							ELSE NULL END HourlyRate
 					FROM     dbo.MilestonePersonEntry AS MPE
 							INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
