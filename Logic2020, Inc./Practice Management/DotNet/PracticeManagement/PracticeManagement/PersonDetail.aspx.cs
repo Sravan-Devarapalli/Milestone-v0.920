@@ -3275,6 +3275,8 @@ namespace PraticeManagement
                         return null;
                     }
 
+                    if(personId.HasValue)
+                        person.Id = personId.Value;
                     SavePersonsPermissions(person, serviceClient);
 
                     ValidateAttribution = true;
