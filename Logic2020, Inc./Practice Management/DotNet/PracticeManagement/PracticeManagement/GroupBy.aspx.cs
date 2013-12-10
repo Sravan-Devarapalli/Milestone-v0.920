@@ -15,6 +15,7 @@ using PraticeManagement.Configuration;
 using PraticeManagement.Controls;
 using PraticeManagement.ProjectService;
 using PraticeManagement.Utils;
+using PraticeManagement.Security;
 
 namespace PraticeManagement
 {
@@ -73,6 +74,7 @@ namespace PraticeManagement
         private const string LinkHTMLTemplate = "<a href='{0}' target='_blank'>{1}</a>";
         private const string ProjectDetailPagePath = "ProjectDetail.aspx";
         private const string DefaultProjectId_Key = "DefaultProjectId";
+        private const string OneGreaterSeniorityExistsKey = "OneGreaterSeniorityExistsInProject";
 
         #endregion "Constants"
 
@@ -152,6 +154,41 @@ namespace PraticeManagement
             {
                 Session["ProjectsGroupedByPractice"] = value;
             }
+        }
+
+        private bool OneGreaterSeniorityExists
+        {
+            get
+            {
+                if (Session[OneGreaterSeniorityExistsKey] == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return Convert.ToBoolean(Session[OneGreaterSeniorityExistsKey]);
+                }
+            }
+            set
+            {
+                Session[OneGreaterSeniorityExistsKey] = value;
+            }
+        }
+
+        private bool IsDirectorGrandTotalHidden
+        {
+            get;
+            set;
+        }
+        private bool IsBDMGrandTotalHidden
+        {
+            get;
+            set;
+        }
+        private bool IsPracticeAreaGrandTotalHidden
+        {
+            get;
+            set;
         }
 
         private List<ProjectsGroupedByPractice> GetGroupedPracticeManagers(List<MilestonePerson> milestonePersons)
@@ -331,6 +368,7 @@ namespace PraticeManagement
                     project.Group = clientProject.Group;
                     project.ComputedFinancials = new ComputedFinancials();
                     project.ProjectedFinancialsByMonth = GetProjectedFinancials(GetMonthBegin(), GetPeriodLength());
+                    project.ProjectPersons = clientProject.ProjectPersons;
 
                     groupedClientGroup.Projects.Add(project);
                 }
@@ -597,6 +635,9 @@ namespace PraticeManagement
             if (!IsPostBack)
             {
                 GroupedPractices = null;
+                IsDirectorGrandTotalHidden =
+                IsBDMGrandTotalHidden =
+                IsPracticeAreaGrandTotalHidden = false;
             }
             var person = DataHelper.CurrentPerson;
             if (person == null || Seniority.GetSeniorityValueById(person.Seniority.Id) > 35)
@@ -1197,6 +1238,7 @@ namespace PraticeManagement
         {
             if (e.Item.ItemType == ListViewItemType.DataItem)
             {
+                var PersonListView = sender as ListView;
                 var groupedDir = (e.Item as ListViewDataItem).DataItem as ProjectsGroupedByPerson;
                 var row = e.Item.FindControl("testTr") as HtmlTableRow;
                 var attributes = string.Format(PersonAttributeTemplate, groupedDir.PersonId);
@@ -1205,9 +1247,35 @@ namespace PraticeManagement
                                                         string.Empty, groupedDir.LastName +
                                                         (!string.IsNullOrEmpty(groupedDir.FirstName) ? ", " + groupedDir.FirstName : string.Empty),
                                                         string.Empty);
-
-                row.Cells[NumberOfFixedColumns - 1].InnerHtml += getMonthCellsHTML(groupedDir.ProjectedFinancialsByMonth);
-                row.Cells[row.Cells.Count - 1].InnerHtml = string.Format(GrandTotalCellTemplate, groupedDir.ComputedFinancials.Revenue, groupedDir.ComputedFinancials.GrossMargin);
+                var isHidden = false;
+                foreach (var groupedClient in groupedDir.GroupedClients)
+                {
+                    foreach (var groupedClientGroups in groupedClient.GroupedClientGroups)
+                    {
+                        foreach (var project in groupedClientGroups.Projects)
+                        {
+                            isHidden = IsOneGreaterSeniorityExists(project);
+                            if (isHidden)
+                                break;
+                        }
+                        if (isHidden)
+                            break;
+                    }
+                    if (isHidden)
+                        break;
+                }
+                if (PersonListView.ID == "lvGroupByDirector")
+                {
+                    if (isHidden && !IsDirectorGrandTotalHidden)
+                        IsDirectorGrandTotalHidden = true;
+                }
+                else
+                {
+                    if (isHidden && !IsBDMGrandTotalHidden)
+                        IsBDMGrandTotalHidden = true;
+                }
+                row.Cells[NumberOfFixedColumns - 1].InnerHtml += getMonthCellsHTML(groupedDir.ProjectedFinancialsByMonth, false, isHidden);
+                row.Cells[row.Cells.Count - 1].InnerHtml = string.Format(GrandTotalCellTemplate, groupedDir.ComputedFinancials.Revenue, groupedDir.ComputedFinancials.GrossMargin.ToString(isHidden));
                 row.Cells[row.Cells.Count - 1].InnerHtml += GetClientRowsHtml(groupedDir.GroupedClients, attributes);
             }
         }
@@ -1227,9 +1295,27 @@ namespace PraticeManagement
                                                     string.Empty, groupedPractice.Name + "<br/>(" + PracticeManagersName
                                                     + CurrentPracticeManagerName + ")",
                                                     string.Empty);
-
-                row.Cells[NumberOfFixedColumns - 1].InnerHtml += getMonthCellsHTML(groupedPractice.ProjectedFinancialsByMonth);
-                row.Cells[row.Cells.Count - 1].InnerHtml = string.Format(GrandTotalCellTemplate, groupedPractice.ComputedFinancials.Revenue, groupedPractice.ComputedFinancials.GrossMargin);
+                var isHidden = false;
+                foreach (var groupedClient in groupedPractice.GroupedClients)
+                {
+                    foreach (var groupedClientGroups in groupedClient.GroupedClientGroups)
+                    {
+                        foreach (var project in groupedClientGroups.Projects)
+                        {
+                            isHidden = IsOneGreaterSeniorityExists(project);
+                            if (isHidden)
+                                break;
+                        }
+                        if (isHidden)
+                            break;
+                    }
+                    if (isHidden)
+                        break;
+                }
+                if (isHidden && !IsPracticeAreaGrandTotalHidden)
+                    IsPracticeAreaGrandTotalHidden = true;
+                row.Cells[NumberOfFixedColumns - 1].InnerHtml += getMonthCellsHTML(groupedPractice.ProjectedFinancialsByMonth, false, isHidden);
+                row.Cells[row.Cells.Count - 1].InnerHtml = string.Format(GrandTotalCellTemplate, groupedPractice.ComputedFinancials.Revenue, groupedPractice.ComputedFinancials.GrossMargin.ToString(isHidden));
                 row.Cells[row.Cells.Count - 1].InnerHtml += GetClientRowsHtml(groupedPractice.GroupedClients, attributes);
             }
         }
@@ -1257,13 +1343,14 @@ namespace PraticeManagement
         {
             var lvGroupByPerson = sender as ListView;
             var grandtotals = lvGroupByPerson.ID == "lvGroupByDirector" ? DirectorGrandTotals : AccountManagerGrandTotals;
+            bool isHidden = lvGroupByPerson.ID == "lvGroupByDirector" ? IsDirectorGrandTotalHidden : IsBDMGrandTotalHidden;
             if (lvGroupByPerson.Items.Any() && grandtotals != null)
             {
                 var lastItem = lvGroupByPerson.Items.Last();
                 var row = lastItem.FindControl("testTr") as HtmlTableRow;
                 row.Cells[row.Cells.Count - 1].InnerHtml += string.Format(GrandTotalRowHTMLTemplate,
-                    getMonthCellsHTML(grandtotals.ProjectedFinancialsByMonth, true),
-                    grandtotals.ComputedFinancials.Revenue, grandtotals.ComputedFinancials.GrossMargin);
+                    getMonthCellsHTML(grandtotals.ProjectedFinancialsByMonth, true, isHidden),
+                    grandtotals.ComputedFinancials.Revenue, grandtotals.ComputedFinancials.GrossMargin.ToString(isHidden));
             }
         }
 
@@ -1277,8 +1364,8 @@ namespace PraticeManagement
                 var lastItem = lvGroupByPerson.Items.Last();
                 var row = lastItem.FindControl("testTr") as HtmlTableRow;
                 row.Cells[row.Cells.Count - 1].InnerHtml += string.Format(GrandTotalRowHTMLTemplate,
-                    getMonthCellsHTML(grandtotals.ProjectedFinancialsByMonth, true),
-                    grandtotals.ComputedFinancials.Revenue, grandtotals.ComputedFinancials.GrossMargin);
+                    getMonthCellsHTML(grandtotals.ProjectedFinancialsByMonth, true,IsPracticeAreaGrandTotalHidden),
+                    grandtotals.ComputedFinancials.Revenue, grandtotals.ComputedFinancials.GrossMargin.ToString(IsPracticeAreaGrandTotalHidden));
             }
         }
 
@@ -1445,12 +1532,25 @@ namespace PraticeManagement
         private string GetClientRowsHtml(List<ProjectsGroupedByClient> groupedClients, string attributes)
         {
             var clientSb = new StringBuilder(string.Empty);
+
             foreach (var client in groupedClients)
             {
+                var isHidden = false;
+                foreach (var groupedClientGroups in client.GroupedClientGroups)
+                {
+                    foreach (var project in groupedClientGroups.Projects)
+                    {
+                        isHidden = IsOneGreaterSeniorityExists(project);
+                        if (isHidden)
+                            break;
+                    }
+                    if (isHidden)
+                        break;
+                }
                 var ClientAttributes = attributes + string.Format(ClientAttributeTemplate, client.Id);
                 clientSb.Append(string.Format(RowHTMLTemplate, ClientCellLeftPadding,
-                    getMonthCellsHTML(client.ProjectedFinancialsByMonth), client.ComputedFinancials.Revenue,
-                    client.ComputedFinancials.GrossMargin, GetClientNameCellHtml(client, ClientAttributes),
+                    getMonthCellsHTML(client.ProjectedFinancialsByMonth, false, isHidden), client.ComputedFinancials.Revenue,
+                    client.ComputedFinancials.GrossMargin.ToString(isHidden), GetClientNameCellHtml(client, ClientAttributes),
                     ClientBagroundStyle + ClientAttributes + ExpandCollapseStatusAttribute));
                 clientSb.Append(GetClientGroupRowsHtml(client.GroupedClientGroups, ClientAttributes));
                 if (client.ProjectsWithoutClientGroup != null)
@@ -1507,9 +1607,16 @@ namespace PraticeManagement
                 var clientGroupAttributes = attributes + string.Format(ClientGroupAttributeTemplate, clientGroup.Id);
                 if (isClientGroupRowRequired)
                 {
+                    var isHidden = false;
+                    foreach (var project in clientGroup.Projects)
+                    {
+                        isHidden = IsOneGreaterSeniorityExists(project);
+                        if (isHidden)
+                            break;
+                    }
                     clientGroupSb.Append(string.Format(RowHTMLTemplate, ClientGroupCellLeftPadding,
-                        getMonthCellsHTML(clientGroup.ProjectedFinancialsByMonth), clientGroup.ComputedFinancials.Revenue,
-                        clientGroup.ComputedFinancials.GrossMargin, GetClientGroupNameCellHTML(clientGroup, clientGroup.Projects, clientGroupAttributes),
+                        getMonthCellsHTML(clientGroup.ProjectedFinancialsByMonth, false, isHidden), clientGroup.ComputedFinancials.Revenue,
+                         clientGroup.ComputedFinancials.GrossMargin.ToString(isHidden), GetClientGroupNameCellHTML(clientGroup, clientGroup.Projects, clientGroupAttributes),
                         clientGroupAttributes + ExpandCollapseStatusAttribute));
                 }
                 if (clientGroup.Projects != null)
@@ -1540,8 +1647,9 @@ namespace PraticeManagement
                 }
 
                 var projectAttribures = attributes + (projectList.IndexOf(project) % 2 == 0 ? ProjectBagroundStyle : string.Empty);
-                projectSb.Append(string.Format(RowHTMLTemplate, ProjectCellLeftPadding, getMonthCellsHTML(project.ProjectedFinancialsByMonth.OrderByDescending(kv => kv.Key).ToDictionary(v => v.Key, v => v.Value)),
-                                                temp.Revenue, temp.GrossMargin, GetProjectNameHTML(project), projectAttribures));
+                var ishidden = IsOneGreaterSeniorityExists(project);
+                projectSb.Append(string.Format(RowHTMLTemplate, ProjectCellLeftPadding, getMonthCellsHTML(project.ProjectedFinancialsByMonth.OrderByDescending(kv => kv.Key).ToDictionary(v => v.Key, v => v.Value), false, ishidden),
+                    temp.Revenue, temp.GrossMargin.ToString(ishidden), GetProjectNameHTML(project), projectAttribures));
             }
             return projectSb.ToString();
         }
@@ -1567,7 +1675,7 @@ namespace PraticeManagement
                                     projectname);
         }
 
-        private string getMonthCellsHTML(Dictionary<DateTime, ComputedFinancials> FinancialsByMonth, bool IsGrandTotalRow = false)
+        private string getMonthCellsHTML(Dictionary<DateTime, ComputedFinancials> FinancialsByMonth, bool IsGrandTotalRow = false, bool ShowHidden = false)
         {
             var financials = GetProjectedFinancials(GetMonthBegin(), GetPeriodLength());
             var MonthCellSb = new StringBuilder(string.Empty);
@@ -1581,11 +1689,11 @@ namespace PraticeManagement
 
                 if (monthFinancial.Key.Month == DateTime.Now.Month && monthFinancial.Key.Year == DateTime.Now.Year)
                 {
-                    MonthCellSb.Append(string.Format(IsGrandTotalRow ? CurrentMonthLastCellTemplate : CurrentMonthCellTemplate, monthFinancial.Value.Revenue, monthFinancial.Value.GrossMargin));
+                    MonthCellSb.Append(string.Format(IsGrandTotalRow ? CurrentMonthLastCellTemplate : CurrentMonthCellTemplate, monthFinancial.Value.Revenue, monthFinancial.Value.GrossMargin.ToString(ShowHidden)));
                 }
                 else
                 {
-                    MonthCellSb.Append(string.Format(MonthCellTemplate, monthFinancial.Value.Revenue, monthFinancial.Value.GrossMargin));
+                    MonthCellSb.Append(string.Format(MonthCellTemplate, monthFinancial.Value.Revenue, monthFinancial.Value.GrossMargin.ToString(ShowHidden)));
                 }
             }
             return MonthCellSb.ToString();
@@ -1612,5 +1720,19 @@ namespace PraticeManagement
 
             return clientGroupNameHTML;
         }
+
+        private bool IsOneGreaterSeniorityExists(Project project)
+        {
+            var OneGreaterSeniorityExists = false;
+            var personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
+
+            var greaterSeniorityExists = project.ProjectPersons == null ? false : personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
+            if (greaterSeniorityExists)
+            {
+                OneGreaterSeniorityExists = greaterSeniorityExists;
+            }
+            return OneGreaterSeniorityExists;
+        }
     }
 }
+
