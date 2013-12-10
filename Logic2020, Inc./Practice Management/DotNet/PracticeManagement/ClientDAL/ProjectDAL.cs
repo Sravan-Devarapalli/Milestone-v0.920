@@ -447,6 +447,8 @@ namespace DataAccess
                 }
             }
 
+            MilestonePersonDAL.LoadMilestonePersonListForProject(projectList);
+
             return projectList;
         }
 
@@ -697,6 +699,7 @@ namespace DataAccess
                 }
                 projectList.Add(project);
             }
+            MilestonePersonDAL.LoadMilestonePersonListForProject(projectList);
         }
 
         private static void ReadProjectsGroupByPerson(SqlDataReader reader, List<Project> projectList)
@@ -3345,3 +3348,4 @@ namespace DataAccess
         }
     }
 }
+
