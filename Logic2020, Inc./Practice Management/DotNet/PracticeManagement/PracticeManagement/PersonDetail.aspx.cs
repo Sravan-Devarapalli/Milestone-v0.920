@@ -459,12 +459,7 @@ namespace PraticeManagement
             txtEmployeeNumber.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
             lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
             ddlRecruiter.Enabled = cellPermissions.Visible = chblRoles.Visible = locRolesLabel.Visible = true;
-            if (!UserIsAdministrator && !UserIsHR && !PersonId.HasValue)//#2817 UserisHR is added as per requirement.
-            {
-                // Recruiter should not be able to set the person active.
-                PersonStatusId = PersonStatusType.Contingent;
-            }
-
+            
             //Disable TerminationDate, TerminationReason
             DisableTerminationDateAndReason();
 
@@ -1275,13 +1270,13 @@ namespace PraticeManagement
             custUserName.ErrorMessage = custUserName.ToolTip = message;
         }
 
-        protected void custPersonStatus_ServerValidate(object sender, ServerValidateEventArgs e)
-        {
-            e.IsValid =
-                // Only administrators can set a status to Active or Terminated
-                UserIsAdministrator || UserIsHR || !PersonStatusId.HasValue ||
-                PersonStatusId.Value == PersonStatusType.Contingent || PersonStatusId.Value == PersonStatusType.Inactive;//#2817 UserisHR is added as per requirement.
-        }
+        //protected void custPersonStatus_ServerValidate(object sender, ServerValidateEventArgs e)
+        //{
+        //    e.IsValid =
+        //        // Only administrators can set a status to Active or Terminated
+        //        UserIsAdministrator || UserIsHR || !PersonStatusId.HasValue ||
+        //        PersonStatusId.Value == PersonStatusType.Contingent || PersonStatusId.Value == PersonStatusType.Inactive;//#2817 UserisHR is added as per requirement.
+        //}
 
         protected void custRecruiter_ServerValidate(object sender, ServerValidateEventArgs e)
         {
