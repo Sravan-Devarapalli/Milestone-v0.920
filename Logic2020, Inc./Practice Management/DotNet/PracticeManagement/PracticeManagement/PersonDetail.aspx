@@ -492,11 +492,11 @@
                                     <asp:RequiredFieldValidator ID="reqPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
                                         ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Person"
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
-                                    <asp:CustomValidator ID="custPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
-                                        ErrorMessage="Only individuals with a security role of 'Administrator' or 'HR' may change a person's employment status." ToolTip="Only individuals with a security role of 'Administrator' or 'HR' may change a person's employment status."
+                                 <%--   <asp:CustomValidator ID="custPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
+                                        ErrorMessage="Only individuals with a security role of 'Administrator' or 'HR' or 'Recruiter' may change a person's employment status." ToolTip="Only individuals with a security role of 'Administrator' or 'HR' or 'Recruiter' may change a person's employment status."
                                         ValidationGroup="Person" Text="*" ValidateEmptyText="false" EnableClientScript="false"
                                         SetFocusOnError="true" Display="Dynamic" OnServerValidate="custPersonStatus_ServerValidate"></asp:CustomValidator>
-                                    &nbsp;
+                                    &nbsp;--%>
                                 </td>
                             </tr>
                             <tr>
