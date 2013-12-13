@@ -5,7 +5,7 @@ AS
 	(SELECT  
 		pexp.ProjectId,
 	    c.Date,
-	    COUNT(*) MileStonesPerDay 
+	    COUNT(DISTINCT MilestoneId) MileStonesPerDay 
 	from dbo.ProjectExpense as pexp
 	JOIN dbo.Calendar c ON c.Date BETWEEN pexp.StartDate AND pexp.EndDate
 	JOIN dbo.Milestone M ON M.ProjectId = pexp.ProjectId AND c.Date BETWEEN M.StartDate AND M.ProjectedDeliveryDate
