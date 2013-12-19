@@ -22,7 +22,7 @@ BEGIN
 
 	  ;WITH ProjectsRecentlyUpdatedCSATS AS 
 	 (
-		  SELECT PC.ProjectId, MAX(ModifiedDate) AS ModifiedDate,COUNT(*) AS NumberOfCSATs
+		  SELECT PC.ProjectId, MAX(CASE WHEN PC.ReferralScore <> -1 THEN ModifiedDate END) AS ModifiedDate,COUNT(*) AS NumberOfCSATs
 		  FROM dbo.ProjectCSAT PC
 		  INNER JOIN dbo.Project P ON pc.ProjectId=p.ProjectId AND P.ProjectStatusId IN (3,4)
 		  WHERE PC.CompletionDate BETWEEN @StartDate AND @EndDate
@@ -33,7 +33,7 @@ BEGIN
 				AND (
 							@AccountIds IS NULL
 							OR P.ClientId IN ( SELECT Ids FROM  @AccountIdsTable)
-					) 
+					)
 		  GROUP BY PC.ProjectId
 	 ),
 	 EstimatedRevenueByProject
@@ -124,6 +124,7 @@ BEGIN
 					@IsExport = 0 
 					AND P.ProjectId = PRC.ProjectId 
 					AND PCSAT.ModifiedDate = PRC.ModifiedDate
+					AND PCSAT.ReferralScore <> -1
 				)
 				OR 
 				(
