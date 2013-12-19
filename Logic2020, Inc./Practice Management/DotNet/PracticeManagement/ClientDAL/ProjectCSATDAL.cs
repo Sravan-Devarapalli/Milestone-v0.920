@@ -241,7 +241,7 @@ namespace DataAccess
 
                     ProjectCSAT cSATItem = new ProjectCSAT()
                         {
-                            ReferralScore = !reader.IsDBNull(referralScoreIndex) ? reader.GetInt32(referralScoreIndex) : -1,
+                            ReferralScore = !reader.IsDBNull(referralScoreIndex) ? reader.GetInt32(referralScoreIndex) : -2,
                             Id = !reader.IsDBNull(cSATIdIndex) ? reader.GetInt32(cSATIdIndex) : -1,
                             CompletionDate = !reader.IsDBNull(completionDateIndex) ? reader.GetDateTime(completionDateIndex) : DateTime.MinValue,
                             ReviewStartDate = !reader.IsDBNull(reviewStartDateIndex) ? reader.GetDateTime(reviewStartDateIndex) : DateTime.MinValue,
