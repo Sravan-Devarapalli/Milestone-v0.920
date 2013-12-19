@@ -173,6 +173,7 @@ namespace PraticeManagement
             {
                 ddlScore.Items.Add(new ListItem(i.ToString(), i.ToString()));
             }
+            ddlScore.Items.Add(new ListItem("Not Applicable","-1"));
         }
 
         public void PopulateData()
