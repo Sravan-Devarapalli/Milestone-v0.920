@@ -170,7 +170,7 @@
                 <HeaderStyle CssClass="Width15Percent" />
                 <ItemStyle CssClass="textCenter" />
                 <ItemTemplate>
-                    <%# Eval("ReferralScore")%>
+                    <asp:Label ID="lblReferralScore" runat="server"></asp:Label>
                 </ItemTemplate>
                 <EditItemTemplate>
                     <asp:DropDownList ID="ddlScore" runat="server" CssClass="Width100Px">
