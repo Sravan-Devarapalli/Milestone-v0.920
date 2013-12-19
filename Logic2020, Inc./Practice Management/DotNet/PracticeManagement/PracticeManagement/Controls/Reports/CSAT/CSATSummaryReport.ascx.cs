@@ -185,7 +185,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                     row.Add(pro.CSATList[i].ReviewEndDate != DateTime.MinValue ? pro.CSATList[i].ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat) : "");
                     row.Add(pro.CSATList[i].CompletionDate != DateTime.MinValue ? pro.CSATList[i].CompletionDate.ToString(Constants.Formatting.EntryDateFormat) : "");
                     row.Add(HttpUtility.HtmlEncode(pro.CSATList[i].ReviewerName));
-                    row.Add(pro.CSATList[i].ReferralScore > -1 ? pro.CSATList[i].ReferralScore.ToString() : "");
+                    row.Add(pro.CSATList[i].ReferralScore == -2 ? string.Empty : pro.CSATList[i].ReferralScore == -1 ? "Not Applicable" : pro.CSATList[i].ReferralScore.ToString());
                     row.Add(HttpUtility.HtmlEncode(pro.CSATList[i].Comments));
                     data.Rows.Add(row.ToArray());
 
@@ -193,7 +193,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
                     {
                         rownew = new List<object>();
                         rownew.AddRange(row);
-                        rownew.RemoveRange(17, 6);
+                        rownew.RemoveRange(18, 6);
                         row = rownew;
                     }
                 }
