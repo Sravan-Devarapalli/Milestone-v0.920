@@ -119,13 +119,16 @@ namespace PraticeManagement.Controls.Projects
                 }
                 else
                 {
+                    DataTransferObjects.ProjectCSAT dataItem = e.Row.DataItem as DataTransferObjects.ProjectCSAT;
                     ImageButton imgDeleteCSAT = (ImageButton)e.Row.FindControl("imgDeleteCSAT");
                     HyperLink hlReviewStartDate = (HyperLink)e.Row.FindControl("hlReviewStartDate");
                     Label lblReviewStartDate = (Label)e.Row.FindControl("lblReviewStartDate");
+                    Label lblReferralScore = (Label)e.Row.FindControl("lblReferralScore");
                     imgDeleteCSAT.Visible = userIsAdministrator;
                     ImageButton imgEditCSAT = (ImageButton)e.Row.FindControl("imgEditCSAT");
                     imgEditCSAT.Visible = hlReviewStartDate.Visible = HostingPage.CSATTabEditPermission && (HostingPage.SelectedStatus == (int)ProjectStatusType.Active || HostingPage.SelectedStatus == (int)ProjectStatusType.Completed);
                     lblReviewStartDate.Visible = !imgEditCSAT.Visible;
+                    lblReferralScore.Text = dataItem.ReferralScore == -1 ? "Not Applicable" : dataItem.ReferralScore.ToString();
                 }
             }
         }
@@ -225,6 +228,7 @@ namespace PraticeManagement.Controls.Projects
             {
                 ddlScore.Items.Add(new ListItem(i.ToString(), i.ToString()));
             }
+            ddlScore.Items.Add(new ListItem("Not Applicable", "-1"));
         }
     }
 }
