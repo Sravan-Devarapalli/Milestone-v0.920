@@ -23,8 +23,8 @@ BEGIN
     ;WITH ProjectsRecentlyUpdatedCSATS AS 
 	 (
 		  SELECT PC.ProjectId, 
-				MAX(ModifiedDate) AS ModifiedDateWithoutFilter,
-				MAX( CASE WHEN (@PracticeIds IS null OR  pra.Id IS NOT NULL ) AND ( @AccountIds IS NULL OR acc.Id IS NOT NULL) THEN  ModifiedDate END) AS ModifiedDateWithFilter
+				MAX(CASE WHEN PC.ReferralScore <> -1 THEN ModifiedDate END) AS ModifiedDateWithoutFilter,
+				MAX( CASE WHEN (@PracticeIds IS null OR  pra.Id IS NOT NULL ) AND ( @AccountIds IS NULL OR acc.Id IS NOT NULL) AND (PC.ReferralScore <> -1) THEN  ModifiedDate END) AS ModifiedDateWithFilter
 		  FROM dbo.ProjectCSAT PC
 		  INNER JOIN dbo.Project P ON pc.ProjectId=p.ProjectId AND P.ProjectStatusId IN (3,4)
 		  LEFT JOIN @PracticeIdsTable pra ON pra.Id = P.PracticeId
@@ -43,6 +43,7 @@ BEGIN
 	 FROM ProjectsRecentlyUpdatedCSATS  PRC 
 	 LEFT  JOIN dbo.ProjectCSAT PC ON PC.ProjectId = PRC.ProjectId AND PC.ModifiedDate = PRC.ModifiedDateWithoutFilter
 	 LEFT JOIN dbo.ProjectCSAT PCS ON PCS.ProjectId = PRC.ProjectId AND PCS.ModifiedDate = PRC.ModifiedDateWithFilter
+	 WHERE PC.ReferralScore <> -1 AND (PCS.CSATId IS NULL OR PCS.ReferralScore <> -1)
 
 END
 
