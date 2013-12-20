@@ -12,8 +12,6 @@ A.Update The person Compensation
 3.Get the latest start date of the compensation record after the previous termination date
 4.Update the latest compensation start date with the hire date.
 
-B.Need to adjust  person status history record if the person is hired for the first time
-
 */
 BEGIN
 --a.Update The person Compensation 
@@ -227,34 +225,4 @@ BEGIN
 						)
 						)
 					)
-		--END
-
-
-	--B.Need to adjust  person status history record if the person is hired for the first time
-
-	;WITH IsFirstHire AS
-	(
-		SELECT PH.PersonId, MIN(PH.HireDate) 'HireDate', MIN(PH.CreatedDate) AS 'CreatedDate', MIN(PH.TerminationDate) AS 'TerminationDate'
-		FROM dbo.v_PersonHistory PH
-		WHERE PH.PersonId = @PersonId
-		GROUP BY PH.PersonId
-		HAVING COUNT(*) = 1 AND MIN(PH.TerminationDate) IS NULL
-	)
-	,FirstPSHRow  AS
-	(
-		SELECT MIN(StartDate) AS StartDate,
-			@PersonId AS PersonId,
-			CONVERT(DATE, MIN(FH.CreatedDate)) AS CreatedDate,
-			CONVERT(DATE, MIN(FH.HireDate)) AS HireDate
-		FROM dbo.PersonStatusHistory AS PSH
-		INNER JOIN IsFirstHire FH ON FH.PersonId = PSH.PersonId
-	)
-
-	UPDATE PSH
-	SET PSH.startdate = CASE WHEN FPSHR.HireDate < FPSHR.CreatedDate THEN FPSHR.HireDate
-										ELSE FPSHR.CreatedDate END
-	FROM FirstPSHRow AS FPSHR
-	INNER JOIN dbo.PersonStatusHistory AS PSH ON PSH.PersonId = FPSHR.PersonId AND  FPSHR.startdate = PSH.startdate
-	WHERE  (FPSHR.HireDate < FPSHR.CreatedDate AND FPSHR.HireDate <> PSH.StartDate) OR (FPSHR.HireDate > FPSHR.CreatedDate AND FPSHR.CreatedDate <> PSH.StartDate)
-
 END
