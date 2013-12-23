@@ -21,7 +21,6 @@ namespace PraticeManagement.Controls.Configuration
 
         #region Fields
 
-        private int _defManagerId = -1;
         private Person _personToSelect;
 
         #endregion Fields
@@ -33,6 +32,14 @@ namespace PraticeManagement.Controls.Configuration
             get
             {
                 return ((PraticeManagement.Config.DefaultLineManager)Page);
+            }
+        }
+
+        public DropDownList ManagerDdl
+        {
+            get
+            {
+                return ddlActivePersons;
             }
         }
 
@@ -171,6 +178,7 @@ namespace PraticeManagement.Controls.Configuration
             {
                 EnsureChildControls();
                 btnSetDefault.Visible = AllowChange;
+                DataHelper.FillDefaultManager(ddlActivePersons, string.Empty, PersonsRole, !InsertFirtItem,_personToSelect == null);
             }
 
             if (!string.IsNullOrEmpty(OnClientChange))
@@ -208,11 +216,6 @@ namespace PraticeManagement.Controls.Configuration
 
             if (InsertFirtItem)
                 ddlActivePersons.Items.Insert(0, new ListItem { Value = string.Empty, Text = string.Empty });
-            else
-            {
-                if (_defManagerId >= 0)
-                    SelectDropDownValue(_defManagerId.ToString());
-            }
         }
 
         private void SelectDropDownValue(string valueToSelect)
@@ -230,30 +233,6 @@ namespace PraticeManagement.Controls.Configuration
             }
         }
 
-        protected void odsPersons_OnSelected(object sender, ObjectDataSourceStatusEventArgs e)
-        {
-            if (_personToSelect == null)
-                SelectDefaultManager(e.ReturnValue as IEnumerable<Person>);
-            //else
-            //    SelectDropDownValue(_personToSelect.Id.Value.ToString());
-        }
-
-        protected void odsPersons_OnSelecting(object sender, ObjectDataSourceSelectingEventArgs e)
-        {
-            e.InputParameters["roleName"] = PersonsRole;
-        }
-
-        private void SelectDefaultManager(IEnumerable<Person> persons)
-        {
-            if (persons != null)
-                foreach (var person in persons)
-                    if (person.Manager != null)
-                    {
-                        _defManagerId = person.Manager.Id.Value;
-                        break;
-                    }
-        }
-
         public void SetEmptyItem()
         {
             var item = ddlActivePersons.Items.FindByValue(string.Empty);
@@ -266,3 +245,4 @@ namespace PraticeManagement.Controls.Configuration
         #endregion Events
     }
 }
+
