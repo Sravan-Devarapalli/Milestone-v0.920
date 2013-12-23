@@ -615,7 +615,7 @@
                                     <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
                                         Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                         OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
-                                    <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set Termination Date for this person because this person is set as default career counselor. Please select another default career counselor and refresh this page to enter termination date for this person."
+                                    <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set the Termination Date for this person because this person is set as the Default Career Counselor for the company. Please select another Default Career Counselor (Configuration > Company Resources > Default Career Counselor) before terminating the individual."
                                         Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                         OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
                                     <asp:DropDownList ID="ddlTerminationReason" runat="server" Visible="false" CssClass="Width250Px">
