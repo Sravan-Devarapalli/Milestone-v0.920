@@ -459,7 +459,7 @@ namespace PraticeManagement
             txtEmployeeNumber.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
             lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
             ddlRecruiter.Enabled = cellPermissions.Visible = chblRoles.Visible = locRolesLabel.Visible = true;
-            
+
             //Disable TerminationDate, TerminationReason
             DisableTerminationDateAndReason();
 
@@ -468,6 +468,12 @@ namespace PraticeManagement
 
             DisableInactiveViews();
             DisplayWizardButtons();
+            if (PersonId.HasValue)
+            {
+                Person person = GetPerson(PersonId.Value);
+                if (!IsWizards && person.Manager == null)
+                    defaultManager.ManagerDdl.SelectedValue = "-1";
+            }
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -1046,8 +1052,8 @@ namespace PraticeManagement
             //as per #3207 person with 'Recruiter' role able to hire a person
             //if (UserIsAdministrator || UserIsHR)//#2817 UserisHR is added as per requirement.
             //{
-                DisplayPersonPermissions();
-                hfReloadPerms.Value = bool.TrueString;
+            DisplayPersonPermissions();
+            hfReloadPerms.Value = bool.TrueString;
             //}
         }
 
@@ -2929,7 +2935,7 @@ namespace PraticeManagement
 
             personProjects.PersonId = id;
             personProjects.UserIsAdministrator = UserIsAdministrator || UserIsHR; //#2817 UserIsHR is added as per requirement.
-            if(!UserIsAdministrator && !UserIsHR && !PersonId.HasValue)
+            if (!UserIsAdministrator && !UserIsHR && !PersonId.HasValue)
             {
                 Person current = DataHelper.CurrentPerson;
                 ddlRecruiter.SelectedValue = current.Id.ToString();
@@ -3198,7 +3204,7 @@ namespace PraticeManagement
             var roleNames = GetSelectedRoles();
             person.RoleNames = roleNames.ToArray();
 
-            person.Manager = defaultManager.SelectedManager;
+            person.Manager = defaultManager.SelectedManager.Id == -1 ? null : defaultManager.SelectedManager;
 
             if (ddlDivision.SelectedIndex != 0)
             {
@@ -3270,7 +3276,7 @@ namespace PraticeManagement
                         return null;
                     }
 
-                    if(personId.HasValue)
+                    if (personId.HasValue)
                         person.Id = personId.Value;
                     SavePersonsPermissions(person, serviceClient);
 
