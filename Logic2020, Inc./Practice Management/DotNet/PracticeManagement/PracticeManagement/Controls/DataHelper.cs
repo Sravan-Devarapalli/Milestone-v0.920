@@ -898,6 +898,33 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillDefaultManager(ListControl control, string firstItemText, string roleName, bool noFirstItem, bool selectItem)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
+                    Person[] persons = serviceClient.PersonListShortByRoleAndStatus(statusids, roleName);
+                    FillListDefault(control, firstItemText, persons, noFirstItem, "Id", "PersonLastFirstName");
+                    ListItem unasigned = new ListItem("Unassigned", "-1");
+                    control.Items.Add(unasigned);
+                    if (selectItem)
+                    {
+                        if (persons.Any(p => p.Manager != null))
+                            control.SelectedValue = persons.First(p => p.Manager != null).Manager.Id.ToString();
+                        else
+                            control.SelectedValue = "-1";
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         public static void FillSalespersonListOnlyActive(ListControl control, string firstItemText)
         {
             using (var serviceClient = new PersonServiceClient())
@@ -1196,7 +1223,7 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control">The control to be filled.</param>
         /// <param name="firstItemText">The text to be displayed by default.</param>
-        public static void FillProjectStatusList(ListControl control, string firstItemText, List<int> excludedStatus = null,bool noFirstItem = false)
+        public static void FillProjectStatusList(ListControl control, string firstItemText, List<int> excludedStatus = null, bool noFirstItem = false)
         {
             using (var serviceClient = new ProjectStatusServiceClient())
             {
