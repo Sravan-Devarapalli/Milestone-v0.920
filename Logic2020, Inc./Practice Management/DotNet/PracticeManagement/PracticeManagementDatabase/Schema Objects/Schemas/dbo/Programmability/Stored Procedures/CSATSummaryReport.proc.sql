@@ -142,6 +142,7 @@ BEGIN
 								)
 							)
 						)
+				    AND (PCSAT.ProjectId IS NULL OR PCSAT.ModifiedDate = PRC.ModifiedDate)
 				)
 			)
 		ORDER BY p.ProjectNumber ASC,PCSAT.CompletionDate DESC
