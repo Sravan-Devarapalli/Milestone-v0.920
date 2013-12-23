@@ -52,30 +52,14 @@ BEGIN TRY
 
 	IF @PersonStatusId <> 1
 	BEGIN
-		-- SET new manager for subordinates
-		DECLARE @CurrentPractice INT
+		-- SET new manager for subordinates as per 3212
 		DECLARE @NewManager INT
 
-		SELECT @CurrentPractice = p.DefaultPractice
-		FROM [dbo].Person AS P
-		WHERE P.PersonId = @PersonId
-
 		SELECT @NewManager = P.PersonId
-		FROM [dbo].Person AS P
-		INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
-		WHERE P.DefaultPractice = @CurrentPractice
-		AND S.SeniorityValue <= 65 AND P.PersonId != @PersonId AND P.PersonStatusId = 1 -- ActivePerson
+		FROM dbo.Person AS P
+		WHERE P.IsDefaultManager = 1 AND P.PersonId != @PersonId AND P.PersonStatusId = 1 -- ActivePerson
 
-		IF (@NewManager IS NULL)
-			SELECT @NewManager = P.PersonId
-			FROM dbo.Person AS P
-			WHERE P.IsDefaultManager = 1 AND P.PersonId != @PersonId AND P.PersonStatusId = 1 -- ActivePerson
-
-		IF (@NewManager IS NULL)
-			SELECT @NewManager = pr.PracticeManagerId
-			FROM Practice AS pr
-			WHERE pr.PracticeId = @currentPractice
-
+		
 		UPDATE dbo.Person
 		SET ManagerId = @NewManager
 		WHERE ManagerId = @PersonId
