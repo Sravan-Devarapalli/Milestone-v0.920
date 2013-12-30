@@ -544,6 +544,14 @@ namespace DataTransferObjects
             }
         }
 
+        public string DefaultCareerCounselour
+        {
+            get
+            {
+                return Manager != null ? Manager.PersonLastFirstName : "Unassigned";
+            }
+        }
+
         #endregion Properties - calculated
 
         #region Constructors
