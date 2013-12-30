@@ -62,15 +62,15 @@ AS
 			SET @Counter = @Counter + 1
 		END
 
-		-- From #1663: if you save the person record, and line manager is blank, but practice is set, set the Line Manager to the person's Practice.PracticeManager.
-		IF @DefaultPractice IS NOT NULL AND @ManagerId IS NULL
-			-- Try to get default manager id
-			SELECT @ManagerId = p.PracticeManagerId FROM practice as p WHERE p.PracticeId = @DefaultPractice
+		---- From #1663: if you save the person record, and line manager is blank, but practice is set, set the Line Manager to the person's Practice.PracticeManager.
+		--IF @DefaultPractice IS NOT NULL AND @ManagerId IS NULL
+		--	-- Try to get default manager id
+		--	SELECT @ManagerId = p.PracticeManagerId FROM practice as p WHERE p.PracticeId = @DefaultPractice
 			
-		-- From #1663: if you save the person record, and both line manager and practice are blank, set the Line Manager to the default line manager value.
-		IF @ManagerId IS NULL AND @DefaultPractice IS NULL
-			-- Try to get default manager id
-			SELECT @ManagerId = p.PersonId FROM person AS p WHERE p.IsDefaultManager = 1
+		---- From #1663: if you save the person record, and both line manager and practice are blank, set the Line Manager to the default line manager value.
+		--IF @ManagerId IS NULL AND @DefaultPractice IS NULL
+		--	-- Try to get default manager id
+		--	SELECT @ManagerId = p.PersonId FROM person AS p WHERE p.IsDefaultManager = 1
 
 		SELECT @PersonStatusId = CASE WHEN @TerminationDate < @Today THEN 2 ELSE @PersonStatusId END
 		-- Inserting Person
