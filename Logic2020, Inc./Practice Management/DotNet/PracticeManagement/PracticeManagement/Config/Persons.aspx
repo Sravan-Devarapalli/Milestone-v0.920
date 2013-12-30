@@ -301,7 +301,7 @@
                             </HeaderTemplate>
                             <ItemStyle CssClass="Width14Percent" />
                             <ItemTemplate>
-                                <asp:HyperLink ID="btnManagerName" runat="server" Text='<%# Eval("Manager.PersonLastFirstName") %>'
+                                <asp:HyperLink ID="btnManagerName" runat="server" Text='<%# Eval("DefaultCareerCounselour") %>'
                                     NavigateUrl='<%# GetPersonDetailsUrlWithReturn(Eval("Manager.Id")) %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
