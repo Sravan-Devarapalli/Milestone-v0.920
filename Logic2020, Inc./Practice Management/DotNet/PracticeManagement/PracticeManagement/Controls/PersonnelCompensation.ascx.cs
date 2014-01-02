@@ -692,9 +692,11 @@ namespace PraticeManagement.Controls
             txtPercRevenue.Enabled = reqPercRevenue.Enabled = compPercRevenue.Enabled = compPercRevenueGreaterThanZero.Enabled = rbtnPercentRevenue.Checked;
             //txtVacationDays.Enabled = !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked);
             // Bonus and vacation are  available for the w2-salary employess.
+            if(IsStrawmanMode)
+            {
+                compSalaryWageGreaterThanZero.Enabled = compHourlyWageGreaterThanZero.Enabled = compHourlyGreaterThanZero.Enabled = compPercRevenueGreaterThanZero.Enabled = false;
+            }
             UpdateBonusState();
-
-
         }
 
         public void UpdatePTOHours()
