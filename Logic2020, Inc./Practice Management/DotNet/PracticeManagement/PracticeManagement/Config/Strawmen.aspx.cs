@@ -16,7 +16,7 @@ namespace PraticeManagement.Config
 
         private bool IsValidationPanelDisplay;
 
-        private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
+        private const string DuplicatePersonName = "There is another Strawman with the same Skill and Title.";
 
         private string ExMessage { get; set; }
 
