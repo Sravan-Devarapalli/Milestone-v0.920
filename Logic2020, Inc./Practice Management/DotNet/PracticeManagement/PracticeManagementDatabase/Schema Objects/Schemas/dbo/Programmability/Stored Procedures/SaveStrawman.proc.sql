@@ -34,8 +34,8 @@ BEGIN
 						AND P.LastName = @LastName
 					)
 			BEGIN
-				-- Person First and Last Name uniqueness violation
-				SELECT @ErrorMessage = [dbo].[GetErrorMessage](70001)
+				-- Strawman title and skill uniqueness violation
+				SELECT @ErrorMessage = [dbo].[GetErrorMessage](70021)
 				RAISERROR (@ErrorMessage, 16, 1)
 			END
 
