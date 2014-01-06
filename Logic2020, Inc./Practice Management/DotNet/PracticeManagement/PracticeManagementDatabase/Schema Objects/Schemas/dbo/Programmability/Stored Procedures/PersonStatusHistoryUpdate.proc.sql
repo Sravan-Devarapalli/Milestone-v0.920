@@ -77,6 +77,7 @@ BEGIN
 		 END
 		 ELSE
 		 BEGIN
+				--If you set a status from one status to 'TerminationPending' today and now you are again setting status from 'TerminationPending' to the previous status on the same day.
 				 IF EXISTS (SELECT 1 FROM dbo.PersonStatusHistory
 									   WHERE EndDate = @Today-1
 												AND PersonId = @PersonId
@@ -105,7 +106,11 @@ BEGIN
 						SET EndDate = @TempDate-1
 						WHERE EndDate IS NULL 
 						AND  PersonId = @PersonId
-				
+
+						DELETE [dbo].[PersonStatusHistory]
+						WHERE PersonId = @PersonId
+						AND StartDate = @TempDate
+
 						INSERT INTO [dbo].[PersonStatusHistory]
 						([PersonId]
 						,[PersonStatusId]
