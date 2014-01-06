@@ -170,6 +170,7 @@ namespace PraticeManagement
             public const string PersonsPage = "~/Config/Persons.aspx";
             public const string ConsultingDemand_New = "~/Reports/ConsultingDemand_new.aspx";
             public const string CSATReport = "~/Reports/CSATReport.aspx";
+            public const string SkillsProfile = "~/SkillsProfile.aspx";
 
         }
 
