@@ -12,6 +12,12 @@ using PraticeManagement.Configuration.ConsReportColoring;
 using PraticeManagement.FilterObjects;
 using PraticeManagement.Objects;
 using PraticeManagement.Utils;
+using System.Web.Security;
+using System.Web;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.Drawing.Imaging;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -44,13 +50,18 @@ namespace PraticeManagement.Controls.Reports
         private const string NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%";
         private const string VACATION_NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%*";
         private const string COMPANYHOLIDAYS_KEY = "CompanyHolidays_Key";
+        private const string CONSULTANTUTILIZATIONPERSON_KEY = "ConsultantUtilizationPerson_Key";
+        private const string PageCount = "Page {0} of {1}";
+        private const int reportSize = 14;
+        private const string ConsultantCapacityReport = "Consulting Capacity Report";
+        private const string ConsultantUtilizationReport = "Consulting Utilization Report";
 
         #endregion Constants
 
         #region Fields
 
         private int _personsCount;
-
+        private bool? _userIsAdministratorValue;
         /// <summary>
         /// 	Report's 'step' in days
         /// </summary>
@@ -114,6 +125,11 @@ namespace PraticeManagement.Controls.Reports
             get { return chart.Series[WEEKS_SERIES_NAME]; }
         }
 
+        public Series WeeksSeriesPdf
+        {
+            get { return chartPdf.Series[WEEKS_SERIES_NAME]; }
+        }
+
         /// <summary>
         /// 	Report's start date
         /// </summary>
@@ -166,8 +182,13 @@ namespace PraticeManagement.Controls.Reports
 
         public bool IsCapacityMode
         {
-            get;
-            set;
+            get
+            {
+                if (ViewState["IsCapacityMode_Key"] == null)
+                    ViewState["IsCapacityMode_Key"] = false;
+                return (bool)ViewState["IsCapacityMode_Key"];
+            }
+            set { ViewState["IsCapacityMode_Key"] = value; }
         }
 
         public Dictionary<DateTime, string> CompanyHolidays
@@ -175,6 +196,35 @@ namespace PraticeManagement.Controls.Reports
             get { return ViewState[COMPANYHOLIDAYS_KEY] as Dictionary<DateTime, string>; }
             set { ViewState[COMPANYHOLIDAYS_KEY] = value; }
         }
+
+        public List<ConsultantUtilizationPerson> ConsultantUtilizationPerson
+        {
+            get
+            {
+                if (ViewState[CONSULTANTUTILIZATIONPERSON_KEY] == null)
+                    ViewState[CONSULTANTUTILIZATIONPERSON_KEY] = new List<ConsultantUtilizationPerson>();
+                return ViewState[CONSULTANTUTILIZATIONPERSON_KEY] as List<ConsultantUtilizationPerson>;
+            }
+            set { ViewState[CONSULTANTUTILIZATIONPERSON_KEY] = value; }
+        }
+
+        protected bool UserIsAdministrator
+        {
+            get
+            {
+                if (!_userIsAdministratorValue.HasValue)
+                {
+                    _userIsAdministratorValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                }
+
+                return _userIsAdministratorValue.Value;
+            }
+        }
+
+        public float ChartImageHeight { get; set; }
+
+        public float ChartImageWidth { get; set; }
 
         #endregion Fields
 
@@ -248,7 +298,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
                     utf.InternalProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices);
-
+            ConsultantUtilizationPerson = report;
             foreach (var quadruple in report)
                 AddPerson(quadruple);
 
@@ -260,20 +310,33 @@ namespace PraticeManagement.Controls.Reports
         /// <summary>
         /// 	Init axises, title and legends
         /// </summary>
-        private void InitChart()
+        private void InitChart(bool isPdf = false, int pageNumber = 0)
         {
-            InitAxis(chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY);
-            InitAxis(chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2);
-            UpdateChartTitle();
-            InitLegends();
+            if (isPdf)
+            {
+                SetFont();
+            }
+            InitAxis(isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY);
+            InitAxis(isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2 : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2);
+            UpdateChartTitle(isPdf, pageNumber);
+            InitLegends(isPdf);
+        }
+
+        private void SetFont()
+        {
+            chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY.LabelStyle.Font = new System.Drawing.Font("Candara", 9f);
+            chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2.LabelStyle.Font = new System.Drawing.Font("Candara", 9f);
+            chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.LabelStyle.Font = new System.Drawing.Font("Candara", 9f);
+            chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.LabelStyle.Font = new System.Drawing.Font("Candara", 9f);
         }
 
         /// <summary>
         /// 	Apply color coding to all legends
         /// </summary>
-        private void InitLegends()
+        private void InitLegends(bool isPdf = false)
         {
-            foreach (var legend in chart.Legends)
+            LegendCollection lcollection = isPdf ? chartPdf.Legends : chart.Legends;
+            foreach (var legend in lcollection)
             {
                 if (IsCapacityMode)
                 {
@@ -407,7 +470,7 @@ namespace PraticeManagement.Controls.Reports
         /// 	Format chart title according to
         /// 	period and granularity selected
         /// </summary>
-        private void UpdateChartTitle()
+        private void UpdateChartTitle(bool isPdf, int pageNumber)
         {
             //  Add chart title
             string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
@@ -476,14 +539,39 @@ namespace PraticeManagement.Controls.Reports
             {
                 projectsPlaceHolder = "No";
             }
-
-            chart.Titles.Add(
-                string.Format(
+            if (isPdf)
+            {
+                System.Web.UI.DataVisualization.Charting.Title title_top = new System.Web.UI.DataVisualization.Charting.Title(string.Format(
                     IsCapacityMode ? TITLE_FORMAT_WITHOUT_REPORT : TITLE_FORMAT,
                     IsCapacityMode ? Capacity : Utilization,
                     BegPeriod.ToString("MM/dd/yyyy"),
                     EndPeriod.ToString("MM/dd/yyyy"),
                     personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
+                title_top.Font = new System.Drawing.Font("Candara", 9f);
+                chartPdf.Titles.Add(title_top);
+
+                System.Web.UI.DataVisualization.Charting.Title title_bottom = new System.Web.UI.DataVisualization.Charting.Title(string.Format(PageCount, pageNumber + 1, Math.Ceiling((double)ConsultantUtilizationPerson.Count / reportSize)));
+                title_bottom.Alignment = ContentAlignment.BottomRight;
+                title_bottom.Docking = Docking.Bottom;
+                title_bottom.Font = new System.Drawing.Font("Candara", 9f);
+                chartPdf.Titles.Add(title_bottom);
+            }
+            else
+            {
+                chart.Titles.Add(
+                    string.Format(
+                        IsCapacityMode ? TITLE_FORMAT_WITHOUT_REPORT : TITLE_FORMAT,
+                        IsCapacityMode ? Capacity : Utilization,
+                        BegPeriod.ToString("MM/dd/yyyy"),
+                        EndPeriod.ToString("MM/dd/yyyy"),
+                        personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
+            }
+        }
+
+        protected void btnExport_Click(object sender, EventArgs e)
+        {
+            DataHelper.InsertExportActivityLogMessage(IsCapacityMode?ConsultantCapacityReport : ConsultantUtilizationReport);
+            PDFExport();
         }
 
         protected void Chart_Click(object sender, ImageMapEventArgs e)
@@ -506,6 +594,8 @@ namespace PraticeManagement.Controls.Reports
             System.Web.UI.ScriptManager.RegisterClientScriptBlock(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
 
             SaveFilters(personId, query[3]);
+            hdnpopup.Value = "true";
+            mpeConsultantDetailReport.Show();
         }
 
         private void SaveFilters(int? personId, string chartTitle)
@@ -551,9 +641,9 @@ namespace PraticeManagement.Controls.Reports
                     pointEndDate);
 
                     var range = chartDetails.Series["Milestones"].Points[ind];
-                    range.Color = Coloring.GetColorByUtilization(load, load < 0 ? 2 : 0);
+                    range.Color = Coloring.GetColorByUtilization(load, load == -1 ? 2 : (load == -2 ? 1 : 0));
                     string holidayDescription = CompanyHolidays.Keys.Any(t => t == pointStartDate) ? CompanyHolidays[pointStartDate] : string.Empty;
-                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), load < 0 ? 2 : 0,null,false,holidayDescription);
+                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), load == -1 ? 2 : (load == -2 ? 1 : 0), null, false, holidayDescription);
                 }
             }
 
@@ -587,7 +677,6 @@ namespace PraticeManagement.Controls.Reports
 
                 // Make it clickable
                 pt.Url = bars[barIndex].NavigateUrl;
-
                 // Set proper tooltip
                 pt.ToolTip = bars[barIndex].Tooltip;
 
@@ -626,7 +715,7 @@ namespace PraticeManagement.Controls.Reports
         /// 	Add person to the graph.
         /// </summary>
         /// <param name = "triple">Person - loads per range - average u%</param>
-        public void AddPerson(ConsultantUtilizationPerson quadruple)
+        public void AddPerson(ConsultantUtilizationPerson quadruple, bool isPdf = false)
         {
             var partsCount = quadruple.WeeklyUtilization.Count;
             var csv = FormCSV(quadruple.WeeklyUtilization.ToArray());
@@ -638,12 +727,12 @@ namespace PraticeManagement.Controls.Reports
                     quadruple.Person, //  Person
                      w, //  Range index
                      IsCapacityMode ? 100 - quadruple.WeeklyUtilization[w] : quadruple.WeeklyUtilization[w], csv,
-                     payType == TimescaleType.Undefined ? "No Pay Type" : DataHelper.GetDescription(payType), quadruple.WeeklyVacationDays[w], quadruple.TimeOffDates, quadruple.CompanyHolidayDates
+                     payType == TimescaleType.Undefined ? "No Pay Type" : DataHelper.GetDescription(payType), quadruple.WeeklyVacationDays[w], quadruple.TimeOffDates, quadruple.CompanyHolidayDates, isPdf
                      ); //  U% or C% for the period
             }
 
             //  Add axis label
-            AddLabel(quadruple.Person, IsCapacityMode ? 100 - quadruple.AverageUtilization : quadruple.AverageUtilization, quadruple.PersonVacationDays);
+            AddLabel(quadruple.Person, IsCapacityMode ? 100 - quadruple.AverageUtilization : quadruple.AverageUtilization, quadruple.PersonVacationDays, isPdf);
 
             //  Increase persons counter
             _personsCount++;
@@ -665,11 +754,11 @@ namespace PraticeManagement.Controls.Reports
         /// </summary>
         /// <param name = "p">Person</param>
         /// <param name = "avg">Average load</param>
-        private void AddLabel(Person p, int avg, int vacationDays)
+        private void AddLabel(Person p, int avg, int vacationDays, bool isPdf)
         {
             //  Get labels collection
             var labels =
-                chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
+                isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
             //  Create new label
             var label =
                 labels.Add(
@@ -682,11 +771,7 @@ namespace PraticeManagement.Controls.Reports
             if (!IsSampleReport)
             {
                 //  Url to person details page, return to report
-                label.Url =
-                    Urls.GetPersonDetailsUrl(p,
-                    IsCapacityMode ? (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsultingCapacityWithFilterQueryString)
-                     : (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryString)
-                     );
+                label.Url = getPersonUrl(p);
             }
             //  Tooltip
             label.ToolTip =
@@ -698,7 +783,7 @@ namespace PraticeManagement.Controls.Reports
                     );
 
             //  Get labels collection
-            labels = chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels;
+            labels = isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels;
             //  Create new label
             label =
                 labels.Add(
@@ -709,7 +794,19 @@ namespace PraticeManagement.Controls.Reports
                     LabelMarkStyle.None); // Mark style: none
         }
 
-        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, List<DateTime> timeoffDates, Dictionary<DateTime, string> companyHolidayDates)
+        private string getPersonUrl(Person p)
+        {
+            if (UserIsAdministrator)
+            {
+                return Urls.GetPersonDetailsUrl(p,
+                       IsCapacityMode ? (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.ConsultingCapacityWithFilterQueryString)
+                        : (Request.Url.AbsoluteUri.Contains("#details") ? Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryString)
+                        );
+            }
+            return Urls.GetSkillsProfileUrl(p);
+        }
+
+        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, List<DateTime> timeoffDates, Dictionary<DateTime, string> companyHolidayDates, bool isPdf)
         {
             if (companyHolidayDates == null)
                 companyHolidayDates = new Dictionary<DateTime, string>();
@@ -760,7 +857,7 @@ namespace PraticeManagement.Controls.Reports
                 }
             }
 
-            var range = AddRange(pointStartDate, pointEndDate, _personsCount);
+            var range = AddRange(pointStartDate, pointEndDate, _personsCount, isPdf);
             List<DataPoint> innerRangeList = new List<DataPoint>();
             bool isHiredIntheEmployeementRange = p.EmploymentHistory.Any(ph => ph.HireDate < pointEndDate && (!ph.TerminationDate.HasValue || ph.TerminationDate.Value >= pointStartDate));
             bool isRangeComapanyHolidays = IsRangeComapanyHolidays(pointStartDate, pointEndDate, companyHolidayDates, false) == 2;
@@ -846,7 +943,7 @@ namespace PraticeManagement.Controls.Reports
 
                         foreach (var tripleR in weekDatesRange)
                         {
-                            var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount);
+                            var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
                             innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third, isHiredIntheEmployeementRange);
                             innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth);
                             innerRangeList.Add(innerRange);
@@ -885,14 +982,17 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        private DataPoint AddRange(DateTime pointStartDate, DateTime pointEndDate, double yvalue)
+        private DataPoint AddRange(DateTime pointStartDate, DateTime pointEndDate, double yvalue, bool isPdf)
         {
-            var ind = WeeksSeries.Points.AddXY(
+            var ind = isPdf ? WeeksSeriesPdf.Points.AddXY(
+                yvalue,
+                pointStartDate,
+                pointEndDate) : WeeksSeries.Points.AddXY(
                 yvalue,
                 pointStartDate,
                 pointEndDate);
 
-            var range = WeeksSeries.Points[ind];
+            var range = isPdf ? WeeksSeriesPdf.Points[ind] : WeeksSeries.Points[ind];
             return range;
         }
 
@@ -920,6 +1020,84 @@ namespace PraticeManagement.Controls.Reports
                     return 2;
             }
             return 0;
+        }
+
+        private byte[] RenderPdf(HtmlToPdfBuilder builder)
+        {
+            MemoryStream file = new MemoryStream();
+            Document document = new Document(builder.PageSize);
+            document.SetPageSize(iTextSharp.text.PageSize.A4_LANDSCAPE.Rotate());
+            PdfWriter writer = PdfWriter.GetInstance(document, file);
+            document.Open();
+            ConsultantUtilizationPerson.Reverse();
+            var count = ConsultantUtilizationPerson.Count;
+            for (int i = 0; i < Math.Ceiling((double)count / reportSize); i++)
+            {
+                ChartForPdf(i);
+                document.NewPage();
+                document.Add(ConsultingImage(i, document));
+            }
+            document.Close();
+            return file.ToArray();
+        }
+
+        public void PDFExport()
+        {
+            HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4);
+            string filename = IsCapacityMode ? "ConsultingCapacity.pdf" : "ConsultingUtilization.pdf";
+            byte[] pdfDataInBytes = this.RenderPdf(builder);
+
+            HttpContext.Current.Response.ContentType = "Application/pdf";
+            HttpContext.Current.Response.AddHeader(
+                "content-disposition", string.Format("attachment; filename={0}", Utils.Generic.EncodedFileName(filename)));
+
+            int len = pdfDataInBytes.Length;
+            int bytes;
+            byte[] buffer = new byte[1024];
+            Stream outStream = HttpContext.Current.Response.OutputStream;
+            using (MemoryStream stream = new MemoryStream(pdfDataInBytes))
+            {
+                while (len > 0 && (bytes = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    outStream.Write(buffer, 0, bytes);
+                    HttpContext.Current.Response.Flush();
+                    len -= bytes;
+                }
+            }
+        }
+
+        public PdfPTable ConsultingImage(int i, Document doc)
+        {
+            PdfPTable headerTable = new PdfPTable(1);
+            MemoryStream chartImage = new MemoryStream();
+            chartPdf.SaveImage(chartImage, ChartImageFormat.Png);
+
+            System.Drawing.Image img = System.Drawing.Image.FromStream(chartImage);
+            Bitmap objBitmap = new Bitmap(img, new Size(img.Width,img.Height));
+            iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance((System.Drawing.Image)objBitmap, ImageFormat.Png);
+            PdfPCell logo = new PdfPCell(image, true);
+
+            logo.Border = PdfPCell.NO_BORDER;
+            headerTable.AddCell(logo);
+            return headerTable;
+        }
+
+        public void ChartForPdf(int i)
+        {
+            chartPdf.Titles.Clear();
+            foreach (var series in chartPdf.Series)
+                series.Points.Clear();
+            chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels.Clear();
+            chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels.Clear();
+            InitChart(true, i);
+            var report = ConsultantUtilizationPerson;
+            report = report.Skip(i * reportSize).Take(reportSize).ToList();
+            report.Reverse();
+            foreach (var quadruple in report)
+                AddPerson(quadruple, true);
+            chartPdf.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
+                (i != (Math.Ceiling((double)ConsultantUtilizationPerson.Count / reportSize) - 1) || report.Count == reportSize ? (Resources.Controls.TimelineGeneralItemHeigth + 3) * report.Count : (report.Count >= 9 && report.Count <= 13) ? 25 * report.Count + 100 : 18 * report.Count + 70) +
+                              + Resources.Controls.TimelineGeneralFooterHeigth+50;
         }
 
         #region Formatting
@@ -1007,6 +1185,7 @@ namespace PraticeManagement.Controls.Reports
             uaeDetails.EnableClientState = true;
             this.UpdateReport();
             this.hdnIsChartRenderedFirst.Value = "true";
+            btnExport.Visible = true;
             updConsReport.Update();
 
             SaveFilters(null, null);
@@ -1026,6 +1205,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
         #endregion Formatting
+
     }
 }
 
