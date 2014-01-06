@@ -96,20 +96,26 @@ BEGIN
 		SET @wUtil = 0
 		ELSE
 		BEGIN
-		    IF @timeScale = 2
-				SET @vac = dbo.GetNumberHolidayDaysWithWeekends(@PersonId, @start, @end)
-			IF @vac >= @Step
-				SET @wUtil = -1
-			ELSE  
+			SET @vac = dbo.GetPersonVacationDays(@PersonId, @start, 1)
+			IF @vac >= @Step 
+				SET @wUtil = -2
+			ELSE
 			BEGIN
-				SET @av = dbo.GetNumberAvaliableHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@InternalProjects)
+			IF @timeScale = 2
+					SET @vac = dbo.GetNumberHolidayDaysWithWeekends(@PersonId, @start, @end)
+				IF @vac >= @Step
+					SET @wUtil = -1
+				ELSE  
+				BEGIN
+					SET @av = dbo.GetNumberAvaliableHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@InternalProjects)
 			
-				IF (@av = 0 OR @av IS NULL)
-					SET @wUtil = 0
-				ELSE 		
-					SET @wUtil = CEILING(
-						100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects), 0) / 
-							@av)
+					IF (@av = 0 OR @av IS NULL)
+						SET @wUtil = 0
+					ELSE 		
+						SET @wUtil = CEILING(
+							100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects), 0) / 
+								@av)
+				END
 			END 
 		END	
 		SET @rep = @rep + CONVERT(VARCHAR, ISNULL(@wUtil, 0)) + ','
@@ -120,3 +126,4 @@ BEGIN
 	RETURN @rep
 
 END
+
