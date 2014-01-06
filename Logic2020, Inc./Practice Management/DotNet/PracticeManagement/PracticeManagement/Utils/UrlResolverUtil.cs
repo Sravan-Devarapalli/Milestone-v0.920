@@ -120,6 +120,14 @@ namespace PraticeManagement.Utils
 
             return Generic.GetTargetUrlWithReturn(opportunityDetailsUrl, returnTo);
         }
+
+        public static string GetSkillsProfileUrl(Person p)
+        {
+            var skillsProfileUrl = String.Format(Constants.ApplicationPages.DetailRedirectFormat,
+                                                 Constants.ApplicationPages.SkillsProfile,
+                                                 p.Id);
+            return GetUrlWithoutReturnTo(skillsProfileUrl);
+        }
     }
 }
 
