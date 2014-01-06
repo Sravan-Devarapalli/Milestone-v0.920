@@ -67,6 +67,33 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.UpdatePanel updConsReport;
         
         /// <summary>
+        /// hdnSaveReportText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportText;
+        
+        /// <summary>
+        /// btnExport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExport;
+        
+        /// <summary>
+        /// divConsultingUtil control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divConsultingUtil;
+        
+        /// <summary>
         /// chart control.
         /// </summary>
         /// <remarks>
@@ -74,15 +101,6 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.DataVisualization.Charting.Chart chart;
-        
-        /// <summary>
-        /// updPersonDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updPersonDetails;
         
         /// <summary>
         /// tblDetails control.
@@ -94,6 +112,60 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.HtmlControls.HtmlTable tblDetails;
         
         /// <summary>
+        /// uaeDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.UpdatePanelAnimationExtender uaeDetails;
+        
+        /// <summary>
+        /// hdnTempField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnTempField;
+        
+        /// <summary>
+        /// mpeConsultantDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeConsultantDetailReport;
+        
+        /// <summary>
+        /// pnlConsultantDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlConsultantDetailReport;
+        
+        /// <summary>
+        /// updPersonDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updPersonDetails;
+        
+        /// <summary>
+        /// hdnpopup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnpopup;
+        
+        /// <summary>
         /// chartDetails control.
         /// </summary>
         /// <remarks>
@@ -103,13 +175,22 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.DataVisualization.Charting.Chart chartDetails;
         
         /// <summary>
-        /// uaeDetails control.
+        /// btnCancelConsultantDetailReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.UpdatePanelAnimationExtender uaeDetails;
+        protected global::System.Web.UI.WebControls.Button btnCancelConsultantDetailReport;
+        
+        /// <summary>
+        /// chartPdf control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.DataVisualization.Charting.Chart chartPdf;
     }
 }
 
