@@ -115,9 +115,8 @@ namespace PraticeManagement.Objects
             get
             {
                 return string.Format(
-                    Constants.ApplicationPages.MilestoneWithReturnFormat,   //  format
-                    Constants.ApplicationPages.MilestoneDetail,             //  page
-                    Entry.ParentMilestone.Id,                               //  milestone id
+                    Constants.ApplicationPages.DetailRedirectWithReturnFormat,   //  format
+                    Constants.ApplicationPages.ProjectDetail,             //  page
                     Entry.ParentMilestone.Project.Id,                       //  project id
                     IsCapacityMode ? Constants.ApplicationPages.ConsultingCapacityWithFilterQueryStringAndDetails : Constants.ApplicationPages.UtilizationTimelineWithFilterQueryStringAndDetails);
             }
