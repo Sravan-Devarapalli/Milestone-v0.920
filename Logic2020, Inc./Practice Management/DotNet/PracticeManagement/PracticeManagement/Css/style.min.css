@@ -958,6 +958,7 @@ div.scrollextLabel Label{padding-left:4px}
 .FilteredCheckBoxListdivFilterPopUp{border:2px solid black;background-color:#d4dff8;width:170px}
 .PosAbsolute{position:absolute}
 .TimePeriodSummaryPersonDetailReportPopUp{background-color:#E2EBFF;border-color:Black;border-style:solid;border-width:2px;position:fixed;width:85%;z-index:100001}
+.ConsultantUtilReportPopup{position:fixed;z-index:100001;left:360.5px;top:316px;width:65%}
 .CloseButtonTable{width:100%;padding:5px}
 .CloseButtonTable tr,.bgGroupByProjectHeader{background-color:#f5faff}
 .CloseButtonTable td{width:100%;text-align:right;padding:3px}
