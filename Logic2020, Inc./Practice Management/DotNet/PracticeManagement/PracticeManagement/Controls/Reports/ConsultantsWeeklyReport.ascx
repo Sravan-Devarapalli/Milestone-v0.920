@@ -49,20 +49,11 @@
         Applytargetatt();
     }
 
-//    function ShowImage() {
-//        var hdn = document.getElementById("<%= hdnIsChartRenderedFirst.ClientID%>");
-//        if (hdn.value == 'true') {
-//            document.getElementById('loading_img').className = 'tab-visible';
-//        }
-//    }
     window.scrollTo = function (x, y) {
 
         return true;
     }
 
-//    function HideImage() {
-//        document.getElementById('loading_img').className = 'tab-invisible'
-//    }
 </script>
 <asp:UpdatePanel ID="updFilters" runat="server">
     <ContentTemplate>
@@ -78,11 +69,32 @@
     <ContentTemplate>
         <asp:HiddenField ID="hdnSaveReportText" runat="server" />
         <div class="textRight">
-        <asp:Button ID="btnExport" Text="PDF Export" runat="server" OnClick="btnExport_Click" Visible="false"
-            OnClientClick="saveReport();" />
-            </div>
+            <table class="WholeWidthWithHeight" id="tblExport" runat="server" visible="false">
+                <tr>
+                    <td colspan="4" class="Width90Percent">
+                    </td>
+                    <td class="Width10Percent padRight5">
+                        <table class="WholeWidth">
+                            <tr>
+                                <td class="Width40P">
+                                    Export:
+                                </td>
+                                <td>
+                                    <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                                        Enabled="false" UseSubmitBehavior="false" ToolTip="Export To Excel" />
+                                </td>
+                                <td>
+                                    <asp:Button ID="btnExport" runat="server" Text="PDF" OnClick="btnExport_Click" UseSubmitBehavior="false"
+                                        ToolTip="Export To PDF" OnClientClick="saveReport();" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <div class="ConsultantsWeeklyReportAlignCenter" id="divConsultingUtil" runat="server">
-            <asp:Chart ID="chart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server" 
+            <asp:Chart ID="chart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
                 Width="920px" Height="850px" OnClick="Chart_Click">
                 <Legends>
                     <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
@@ -129,13 +141,6 @@
                     </asp:ChartArea>
                 </ChartAreas>
             </asp:Chart>
-            <table cellpadding="0" cellspacing="0" width="100%" runat="server" id="tblDetails">
-                <tr>
-                    <td align="center">
-                        <a name="details">Detailed report (click on colored bar to load)</a>
-                    </td>
-                </tr>
-            </table>
         </div>
     </ContentTemplate>
     <Triggers>
@@ -166,13 +171,17 @@
 <AjaxControlToolkit:ModalPopupExtender ID="mpeConsultantDetailReport" runat="server"
     TargetControlID="hdnTempField" BackgroundCssClass="modalBackground" PopupControlID="pnlConsultantDetailReport"
     DropShadow="false" CancelControlID="btnCancelConsultantDetailReport" OnCancelScript="OnCancelClick();" />
-<asp:Panel ID="pnlConsultantDetailReport" CssClass="TimePeriodSummaryPersonDetailReportPopUp"
+<asp:Panel ID="pnlConsultantDetailReport" CssClass="ConsultantUtilReportPopup"
     Style="display: none;" runat="server">
     <table class="WholeWidth Padding5">
-        <tr class="bgGroupByProjectHeader">
-            <td class="Width1Percent">
+        <tr>
+            <td colspan="3" class="BackGroundWhiteImp">
+                <asp:Button ID="btnCancelConsultantDetailReport" runat="server" CssClass="mini-report-close floatright"
+                    ToolTip="Close" Text="X"></asp:Button>
             </td>
-            <td class="Width99Percent">
+        </tr>
+        <tr class="bgGroupByProjectHeader BackGroundWhiteImp">
+            <td>
                 <div class="ConsultantsWeeklyReportupdPersonDetails">
                     <asp:UpdatePanel ID="updPersonDetails" runat="server">
                         <ContentTemplate>
@@ -219,16 +228,9 @@
             </td>
         </tr>
     </table>
-    <table class="CloseButtonTable">
-        <tr>
-            <td>
-                <asp:Button ID="btnCancelConsultantDetailReport" Text="Close" ToolTip="Close" runat="server" />
-            </td>
-        </tr>
-    </table>
 </asp:Panel>
-<asp:Chart ID="chartPdf" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server" Visible= "false"
-    Width="920px" Height="850px">
+<asp:Chart ID="chartPdf" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
+    Visible="false" Width="920px" Height="850px">
     <Legends>
         <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
             Alignment="Center">
