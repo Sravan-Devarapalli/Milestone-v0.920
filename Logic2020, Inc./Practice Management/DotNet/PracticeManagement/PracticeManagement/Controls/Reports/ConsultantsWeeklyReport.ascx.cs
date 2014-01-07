@@ -33,8 +33,10 @@ namespace PraticeManagement.Controls.Reports
         private const int DEFAULT_STEP = 7;
         private const string NAME_FORMAT = "{0}, {1} ({2})";
         private const string NAME_FORMAT_WITH_DATES = "{0}, {1} ({2}): {3}-{4}";
-        private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
-        private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
+        private const string TITLE_FORMAT_ForPdf = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
+        private const string TITLE_FORMAT_WITHOUT_REPORT_ForPdf = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
+        private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
+        private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
         private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}";
         private const char DELIMITER = '+';
         private const string TOOLTIP_FORMAT = "{0}-{1} {2},{3}";
@@ -52,7 +54,7 @@ namespace PraticeManagement.Controls.Reports
         private const string COMPANYHOLIDAYS_KEY = "CompanyHolidays_Key";
         private const string CONSULTANTUTILIZATIONPERSON_KEY = "ConsultantUtilizationPerson_Key";
         private const string PageCount = "Page {0} of {1}";
-        private const int reportSize = 14;
+        private const int reportSize = 25;
         private const string ConsultantCapacityReport = "Consulting Capacity Report";
         private const string ConsultantUtilizationReport = "Consulting Utilization Report";
 
@@ -264,7 +266,6 @@ namespace PraticeManagement.Controls.Reports
                     else
                     {
                         chart.CssClass = "hide";
-                        tblDetails.Attributes.Add("class", "hide");
                     }
                 }
             }
@@ -542,7 +543,7 @@ namespace PraticeManagement.Controls.Reports
             if (isPdf)
             {
                 System.Web.UI.DataVisualization.Charting.Title title_top = new System.Web.UI.DataVisualization.Charting.Title(string.Format(
-                    IsCapacityMode ? TITLE_FORMAT_WITHOUT_REPORT : TITLE_FORMAT,
+                    IsCapacityMode ? TITLE_FORMAT_WITHOUT_REPORT_ForPdf : TITLE_FORMAT_ForPdf,
                     IsCapacityMode ? Capacity : Utilization,
                     BegPeriod.ToString("MM/dd/yyyy"),
                     EndPeriod.ToString("MM/dd/yyyy"),
@@ -570,8 +571,13 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExport_Click(object sender, EventArgs e)
         {
-            DataHelper.InsertExportActivityLogMessage(IsCapacityMode?ConsultantCapacityReport : ConsultantUtilizationReport);
+            DataHelper.InsertExportActivityLogMessage(IsCapacityMode ? ConsultantCapacityReport : ConsultantUtilizationReport);
             PDFExport();
+        }
+
+        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
+        {
+
         }
 
         protected void Chart_Click(object sender, ImageMapEventArgs e)
@@ -1034,8 +1040,8 @@ namespace PraticeManagement.Controls.Reports
             for (int i = 0; i < Math.Ceiling((double)count / reportSize); i++)
             {
                 ChartForPdf(i);
-                document.NewPage();
-                document.Add(ConsultingImage(i, document));
+                document.SetMargins(document.LeftMargin, document.RightMargin, document.TopMargin / 2, document.BottomMargin / 2);
+                document.Add(ConsultingImage(i));
             }
             document.Close();
             return file.ToArray();
@@ -1066,14 +1072,14 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
-        public PdfPTable ConsultingImage(int i, Document doc)
+        public PdfPTable ConsultingImage(int i)
         {
             PdfPTable headerTable = new PdfPTable(1);
             MemoryStream chartImage = new MemoryStream();
             chartPdf.SaveImage(chartImage, ChartImageFormat.Png);
 
             System.Drawing.Image img = System.Drawing.Image.FromStream(chartImage);
-            Bitmap objBitmap = new Bitmap(img, new Size(img.Width,img.Height));
+            Bitmap objBitmap = new Bitmap(img, new Size(img.Width, img.Height));
             iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance((System.Drawing.Image)objBitmap, ImageFormat.Png);
             PdfPCell logo = new PdfPCell(image, true);
 
@@ -1096,8 +1102,9 @@ namespace PraticeManagement.Controls.Reports
             foreach (var quadruple in report)
                 AddPerson(quadruple, true);
             chartPdf.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
-                (i != (Math.Ceiling((double)ConsultantUtilizationPerson.Count / reportSize) - 1) || report.Count == reportSize ? (Resources.Controls.TimelineGeneralItemHeigth + 3) * report.Count : (report.Count >= 9 && report.Count <= 13) ? 25 * report.Count + 100 : 18 * report.Count + 70) +
-                              + Resources.Controls.TimelineGeneralFooterHeigth+50;
+                
+                (report.Count == reportSize ? Resources.Controls.TimelineGeneralItemHeigth * report.Count : (report.Count <= 14) ? 70 + report.Count * 20 : 80 + report.Count * 22) +
+                              Resources.Controls.TimelineGeneralFooterHeigth;
         }
 
         #region Formatting
@@ -1181,11 +1188,10 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnUpdateView_OnClick(object sender, EventArgs e)
         {
-            tblDetails.Attributes.Remove("class");
             uaeDetails.EnableClientState = true;
             this.UpdateReport();
             this.hdnIsChartRenderedFirst.Value = "true";
-            btnExport.Visible = true;
+            tblExport.Visible = true;
             updConsReport.Update();
 
             SaveFilters(null, null);
