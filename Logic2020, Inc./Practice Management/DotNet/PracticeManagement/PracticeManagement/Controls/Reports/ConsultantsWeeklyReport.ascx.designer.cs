@@ -76,6 +76,24 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.HiddenField hdnSaveReportText;
         
         /// <summary>
+        /// tblExport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblExport;
+        
+        /// <summary>
+        /// btnExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        
+        /// <summary>
         /// btnExport control.
         /// </summary>
         /// <remarks>
@@ -101,15 +119,6 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.DataVisualization.Charting.Chart chart;
-        
-        /// <summary>
-        /// tblDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTable tblDetails;
         
         /// <summary>
         /// uaeDetails control.
@@ -148,6 +157,15 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Panel pnlConsultantDetailReport;
         
         /// <summary>
+        /// btnCancelConsultantDetailReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelConsultantDetailReport;
+        
+        /// <summary>
         /// updPersonDetails control.
         /// </summary>
         /// <remarks>
@@ -173,15 +191,6 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.DataVisualization.Charting.Chart chartDetails;
-        
-        /// <summary>
-        /// btnCancelConsultantDetailReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelConsultantDetailReport;
         
         /// <summary>
         /// chartPdf control.
