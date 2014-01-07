@@ -4998,6 +4998,14 @@ BenchCosts.ascx*/
     width: 85%;
     z-index: 100001;
 }
+.ConsultantUtilReportPopup
+{
+    position: fixed;
+    z-index: 100001;
+    left: 360.5px;
+    top: 316px;
+    width: 65%
+}
 .CloseButtonTable
 {
     width: 100%;
