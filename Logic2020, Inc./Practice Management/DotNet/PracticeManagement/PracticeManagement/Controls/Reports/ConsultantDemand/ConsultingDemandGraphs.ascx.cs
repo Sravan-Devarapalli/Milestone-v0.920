@@ -68,11 +68,11 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         {
             string[] postBackDetails = e.PostBackValue.Split(',');
             ctrDetails._hdIsGraphPage.Value = true.ToString();
-            DateTime SelectedMonthStartdate = Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0]));
-            DateTime SelectedMonthEnddate = Utils.Calendar.MonthEndDate(Convert.ToDateTime(postBackDetails[0]));
+            DateTime SelectedMonthStartdate = Utils.Calendar.MonthStartDate(Convert.ToDateTime(DateTime.ParseExact(postBackDetails[0], "MMM yy", null)));
+            DateTime SelectedMonthEnddate = Utils.Calendar.MonthEndDate(Convert.ToDateTime(DateTime.ParseExact(postBackDetails[0], "MMM yy", null)));
             ctrDetails.BtnExportSelectedStartDate = SelectedMonthStartdate > HostingPage.StartDate ? SelectedMonthStartdate.ToString() : HostingPage.StartDate.ToString();
             ctrDetails.BtnExportSelectedEndDate = SelectedMonthEnddate < HostingPage.EndDate ? SelectedMonthEnddate.ToString() : HostingPage.EndDate.ToString();
-            lblMonth.Text = "Month: " + "" + Utils.Calendar.MonthStartDate(Convert.ToDateTime(postBackDetails[0])).ToString(Constants.Formatting.FullMonthYearFormat);
+            lblMonth.Text = "Month: " + "" + Utils.Calendar.MonthStartDate(Convert.ToDateTime(DateTime.ParseExact(postBackDetails[0], "MMM yy", null))).ToString(Constants.Formatting.FullMonthYearFormat);
             ctrDetails.PopulateData(true);
             lblCount.Text = HostingPage.RolesCount.ToString();
             lblCount.Text += lblCount.Text != "1" ? " Roles" : " Role";
