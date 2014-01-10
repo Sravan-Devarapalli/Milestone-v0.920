@@ -194,7 +194,7 @@
                                     <tr>
                                         <td align="center" class="bgcolorwhite">
                                             <asp:HiddenField ID="hdnpopup" runat="server" />
-                                            <asp:Chart ID="chartDetails" Width="886px" Height="600px" runat="server" Visible="false">
+                                            <asp:Chart ID="chartDetails" Width="850px" Height="600px" runat="server" Visible="false">
                                                 <Series>
                                                     <asp:Series Name="Milestones" ChartType="RangeBar" XValueMember="Description" YValueMembers="StartDate,EndDate">
                                                     </asp:Series>
