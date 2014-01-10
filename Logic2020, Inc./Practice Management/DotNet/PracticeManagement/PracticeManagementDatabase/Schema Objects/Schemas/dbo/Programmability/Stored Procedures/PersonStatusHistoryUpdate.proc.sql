@@ -135,6 +135,10 @@ BEGIN
 								WHERE EndDate IS NULL 
 								AND PersonId = @PersonId
 
+								DELETE [dbo].[PersonStatusHistory]
+								WHERE PersonId = @PersonId
+								AND StartDate = @TempDate
+
 								UPDATE dbo.PersonStatusHistory
 								SET StartDate = @TempDate
 								WHERE StartDate = @TempDate2
