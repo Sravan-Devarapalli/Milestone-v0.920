@@ -1035,13 +1035,14 @@ namespace PraticeManagement.Controls.Reports
             document.SetPageSize(iTextSharp.text.PageSize.A4_LANDSCAPE.Rotate());
             PdfWriter writer = PdfWriter.GetInstance(document, file);
             document.Open();
-            float topMargin = document.TopMargin/2;
+            float topMargin = 0f;
             ConsultantUtilizationPerson.Reverse();
             var count = ConsultantUtilizationPerson.Count;
             for (int i = 0; i < Math.Ceiling((double)count / reportSize); i++)
             {
                 ChartForPdf(i);
                 document.SetMargins(document.LeftMargin, document.RightMargin, topMargin, topMargin);
+                document.NewPage();
                 document.Add(ConsultingImage(i));
             }
             document.Close();
