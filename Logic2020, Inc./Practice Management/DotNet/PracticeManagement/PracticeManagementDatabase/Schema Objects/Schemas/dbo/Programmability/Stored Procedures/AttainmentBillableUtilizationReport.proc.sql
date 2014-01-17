@@ -10,7 +10,9 @@ BEGIN
 				@HolidayTimeType INT ,
 				@FutureDate DATETIME,
 				@CurrtenDate DATETIME,
-				@CurrentMonthStartDate DATETIME
+				@CurrentMonthStartDate DATETIME,
+				@YTDStartDate DATETIME,
+				@YTDEndDate DATETIME
 
 			
 		SELECT @StartDateLocal = CONVERT(DATE, @StartDate), 
@@ -18,7 +20,11 @@ BEGIN
 				@CurrtenDate = CONVERT(DATE,dbo.GettingPMTime(GETUTCDATE())),
 				@FutureDate = dbo.GetFutureDate()
 		SELECT @CurrentMonthStartDate = MonthStartDate FROM dbo.Calendar WHERE date = @CurrtenDate -1
-			 
+	    SELECT @YTDStartDate =	CASE WHEN Year(DATEADD(yy,-1,@CurrtenDate)) = Year(@StartDateLocal) THEN DATEADD(yy, DATEDIFF(yy,0,@StartDateLocal), 0)
+								ELSE DATEADD(d,-DATEPART(dy,@CurrtenDate)+1,@CurrtenDate) END,
+
+			   @YTDEndDate = CASE WHEN Year(DATEADD(yy,-1,@CurrtenDate)) = Year(@StartDateLocal) THEN DATEADD(yy, DATEDIFF(yy,0,@StartDateLocal) + 1, -1) 
+								ELSE DATEADD(d,-1,CONVERT(DATE,@CurrtenDate)) END
 		;WITH Ranges
 		AS
 		(
@@ -30,7 +36,7 @@ BEGIN
 			WHERE C.DATE between @StartDateLocal and @EndDateLocal
 			GROUP BY C.QuarterStartDate,C.QuarterEndDate
 			UNION ALL
-			SELECT DATEADD(d,-DATEPART(dy,@CurrtenDate)+1,@CurrtenDate),DATEADD(d,-1,CONVERT(DATE,@CurrtenDate)),'YTD',17
+			SELECT @YTDStartDate,@YTDEndDate,'YTD',17
 		),
 		PersonsList
 		AS 
