@@ -52,10 +52,7 @@ namespace PraticeManagement.Reports
             {
                 if (_BillableUtlizationList == null)
                 {
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    DateTime CurrentYearStartdate = Utils.Calendar.YearStartDate(now).Date;
-                    DateTime CurrentYearEnddate = Utils.Calendar.YearEndDate(now).Date;
-                    _BillableUtlizationList = ServiceCallers.Custom.Report(p => p.AttainmentBillableutlizationReport(CurrentYearStartdate, CurrentYearEnddate));
+                    _BillableUtlizationList = ServiceCallers.Custom.Report(p => p.AttainmentBillableutlizationReport(diRange.FromDate.Value, diRange.ToDate.Value));
                 }
                 return (AttainmentBillableutlizationReport[])_BillableUtlizationList;
             }
@@ -699,8 +696,7 @@ namespace PraticeManagement.Reports
 
                 foreach (var bu in attainmentBillableutlizationList[0].BillableUtilizationList)
                 {
-                    var now = Utils.Generic.GetNowWithTimeZone();
-                    var yearStarDate = Utils.Calendar.YearStartDate(now);
+                    var yearStarDate = Utils.Calendar.YearStartDate(diRange.FromDate.Value);
 
                     if (bu.RangeType != "Q1" && bu.RangeType != "Q2" && bu.RangeType != "Q3" && bu.RangeType != "Q4" && bu.RangeType != "YTD")
                     {
@@ -870,13 +866,13 @@ namespace PraticeManagement.Reports
             var blliableUtilization = PrepareDataTableForBillableUtilization(BillableUtlizationList);
             billingcoloumnsCount = blliableUtilization.Columns.Count;
             DataTable billableUtilheader = new DataTable();
-            billableUtilheader.Columns.Add("Billable Utilization: " + CurrentYearStartdate.Year);
+            billableUtilheader.Columns.Add("Billable Utilization: " + diRange.FromDate.Value.Year);
             billingheaderRowsCount = billableUtilheader.Rows.Count + 3;
 
             var attributionReport = PrepareDataTableForAttribution(ProjectAttributionList);
             attributionColoumnsCount = attributionReport.Columns.Count;
             DataTable attributionHeader = new DataTable();
-            attributionHeader.Columns.Add("Commissions - " + now.ToShortDateString());
+            attributionHeader.Columns.Add("Commissions - " + diRange.FromDate.Value.Year);
             attributionHeaderRowsCount = attributionHeader.Rows.Count + 3;
 
             string dateRangeTitle = string.Format(ExportDateRangeFormat, diRange.FromDate.Value.ToShortDateString(), diRange.ToDate.Value.ToShortDateString());
