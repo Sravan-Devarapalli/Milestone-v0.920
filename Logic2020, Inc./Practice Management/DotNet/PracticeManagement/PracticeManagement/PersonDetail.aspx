@@ -532,6 +532,7 @@
                                 </td>
                                 <td>
                                     <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set to Practice Area Owner</asp:LinkButton>
+                                    <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server"/>
                                 </td>
                             </tr>
                             <tr>
