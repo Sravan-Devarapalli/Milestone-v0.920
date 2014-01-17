@@ -187,13 +187,14 @@
                             Practice Area Owner (Status)
                         </HeaderTemplate>
                         <ItemTemplate>
-                            <%# ((Practice) Container.DataItem).PracticeOwner.PersonLastFirstName %>
-                            (<%# ((Practice) Container.DataItem).PracticeOwner.Status.Name %>)
+                        <asp:Label ID="lblPracticeManager" runat="server"></asp:Label>
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <asp:DropDownList ID="ddlActivePersons" runat="server" DataSourceID="odsActivePersons"
-                                CssClass="Width95Percent" DataValueField="Id" DataTextField="PersonLastFirstName">
+                            <asp:DropDownList ID="ddlActivePersons" runat="server" CssClass="Width95Percent">
                             </asp:DropDownList>
+                            <asp:CustomValidator ID="custEditPracticeManager" runat="server" ValidationGroup="EditPractice"
+                                Display="Dynamic" Text="*" ErrorMessage="Please add a person as Practice area owner."
+                                ToolTip="Please add a person as Practice area owner." />
                             <asp:HiddenField ID="hfPracticeOwner" runat="server" Value='<%#Bind("PracticeManagerId")%>' />
                         </EditItemTemplate>
                     </asp:TemplateField>
@@ -219,7 +220,7 @@
                         <td class="Width7Percent PaddingTop10">
                             <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
                                 ToolTip="Add Practice Area" Visible="true" />
-                            <asp:ImageButton ID="btnInsert" runat="server" ValidationGroup="InsertPractice" ImageUrl="~/Images/icon-check.png"
+                            <asp:ImageButton ID="btnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
                                 ToolTip="Confirm" Visible="false" OnClick="btnInsert_Click" />
                             <asp:ImageButton ID="btnCancel" runat="server" ImageUrl="~/Images/no.png" OnClick="btnCancel_OnClick"
                                 ToolTip="Cancel" Visible="false" />
@@ -228,7 +229,7 @@
                             <asp:TextBox ID="tbPracticeName" ValidationGroup="InsertPractice" runat="server"
                                 CssClass="Width95Percent" Visible="false" />
                             <asp:RequiredFieldValidator ID="valPracticeName" runat="server" ValidationGroup="InsertPractice"
-                                ToolTip="Practice Area name is required." Display="Dynamic" Text="*" ErrorMessage="Practice Area name is required."
+                                ToolTip="Practice Area name is required." Text="*" ErrorMessage="Practice Area name is required." SetFocusOnError="true"
                                 ControlToValidate="tbPracticeName" />
                             <asp:RegularExpressionValidator ID="regValPracticeName" ControlToValidate="tbPracticeName"
                                 Display="Dynamic" Text="*" runat="server" ValidationGroup="InsertPractice" ValidationExpression="^[\s\S]{0,100}$"
@@ -255,8 +256,10 @@
                             <asp:CheckBox ID="chbIsInternalPractice" runat="server" Checked="false" Visible="false" />
                         </td>
                         <td class="Width40P Left">
-                            <asp:DropDownList ID="ddlPracticeManagers" runat="server" DataValueField="Id" DataTextField="PersonLastFirstName"
-                                CssClass="Width95Percent" Visible="false" DataSourceID="odsActivePersons" />
+                            <asp:DropDownList ID="ddlPracticeManagers" runat="server" CssClass="Width95Percent" Visible="false"  />
+                             <asp:CustomValidator ID="custPracticeManager" runat="server" ValidationGroup="InsertPractice"
+                                Display="Dynamic" Text="*" ErrorMessage="Please add a person as Practice area owner." OnServerValidate="custPracticeManager_ServerValidate" 
+                                ToolTip="Please add a person as Practice area owner." />
                         </td>
                         <td class="Width4Percent">
                         </td>
@@ -297,13 +300,6 @@
             <%--  <asp:ObjectDataSource ID="odsPractices" runat="server" SelectMethod="GetAllPractices"
                 TypeName="PraticeManagement.Controls.Configuration.PracticesHelper" DataObjectTypeName="PraticeManagement.Controls.Configuration.Practice"
                 DeleteMethod="RemovePracticeEx" ></asp:ObjectDataSource>--%>
-            <asp:ObjectDataSource ID="odsActivePersons" runat="server" SelectMethod="PersonListShortByRoleAndStatus"
-                TypeName="PraticeManagement.PersonService.PersonServiceClient">
-                <SelectParameters>
-                    <asp:Parameter DefaultValue="1,5" Name="statusIds" Type="String" />
-                    <asp:Parameter DefaultValue="Practice Area Manager" Name="roleName" Type="String" />
-                </SelectParameters>
-            </asp:ObjectDataSource>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
