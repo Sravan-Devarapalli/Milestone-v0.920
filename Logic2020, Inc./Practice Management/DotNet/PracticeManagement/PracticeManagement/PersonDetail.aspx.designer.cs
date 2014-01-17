@@ -157,6 +157,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.LinkButton lbSetPracticeOwner;
         
         /// <summary>
+        /// hdnIsSetPracticeOwnerClicked control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnIsSetPracticeOwnerClicked;
+        
+        /// <summary>
         /// ddlPersonTitle control.
         /// </summary>
         /// <remarks>
