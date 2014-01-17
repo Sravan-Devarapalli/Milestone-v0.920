@@ -471,7 +471,7 @@ namespace PraticeManagement
             if (PersonId.HasValue)
             {
                 Person person = GetPerson(PersonId.Value);
-                if (!IsWizards && person.Manager == null)
+                if (!IsWizards && person.Manager == null && hdnIsSetPracticeOwnerClicked.Value == "false")
                     defaultManager.ManagerDdl.SelectedValue = "-1";
             }
         }
@@ -1062,7 +1062,8 @@ namespace PraticeManagement
             if (!string.IsNullOrEmpty(ddlDefaultPractice.SelectedValue))
             {
                 var practiceList = DataHelper.GetPracticeById(int.Parse(ddlDefaultPractice.SelectedValue));
-                defaultManager.SelectedManager = practiceList[0].PracticeOwner;
+                defaultManager.ManagerDdl.SelectedValue = practiceList[0].PracticeOwner.Status.Id != (int)PersonStatusType.Terminated ? practiceList[0].PracticeOwner.Id.ToString() : "-1";
+                hdnIsSetPracticeOwnerClicked.Value = "true";
             }
         }
 
