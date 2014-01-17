@@ -193,6 +193,15 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.DropDownList ddlPracticeManagers;
         
         /// <summary>
+        /// custPracticeManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custPracticeManager;
+        
+        /// <summary>
         /// hdnTargetErrorPanel control.
         /// </summary>
         /// <remarks>
@@ -263,15 +272,6 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnOKErrorPanel;
-        
-        /// <summary>
-        /// odsActivePersons control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsActivePersons;
     }
 }
 
