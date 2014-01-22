@@ -51,13 +51,14 @@ BEGIN
 	 (
 		 SELECT -- Milestones with a hourly amount
 			   mp.ProjectId,
+			   mp.MilestoneId,
 			   ISNULL(SUM(mp.Amount * mp.HoursPerDay), 0) AS ProjectRevenue
 		  FROM dbo.v_MilestonePersonSchedule mp
 			   INNER JOIN dbo.Project AS p ON mp.ProjectId = p.ProjectId AND mp.IsHourlyAmount = 1
-		GROUP BY mp.ProjectId
+		GROUP BY mp.ProjectId,mp.MilestoneId
 		UNION ALL
 		SELECT -- Milestones with a fixed amount
-			m.ProjectId,
+			DISTINCT m.ProjectId,m.MilestoneId,
 			ISNULL(m.Amount,0) AS ProjectRevenue 
 		FROM dbo.Project AS p 
 		INNER JOIN dbo.Milestone AS m ON m.ProjectId = p.ProjectId AND P.IsAdministrative = 0 AND P.ProjectId != 174 AND  m.IsHourlyAmount = 0
