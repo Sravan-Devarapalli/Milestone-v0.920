@@ -12,9 +12,11 @@ BEGIN
 	DECLARE @StartDateLocal DATETIME ,
 		@EndDateLocal DATETIME,
 		@HolidayTimeType INT,
-		@FutureDate DATETIME
+		@FutureDate DATETIME,
+		@Today DATE
 
-	SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate), @HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate()
+	SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate), @HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate(), 
+							 @Today = dbo.GettingPMTime(GETUTCDATE())
 
 	DECLARE @BusinessUnitIdsTable TABLE ( Id INT)
 
@@ -27,6 +29,9 @@ BEGIN
 		AS
 		(
 			SELECT Pro.ProjectId,Pro.GroupId,
+				   SUM(CASE WHEN PC.Date <= @Today AND P.IsStrawman = 0 THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
+									ELSE 0
+								END) AS ForecastedHoursUntilToday,
 				  ROUND(SUM(CASE WHEN P.IsStrawman = 0 THEN dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay) ELSE 0 END),2)  AS ForecastedHours
 		    FROM  dbo.Project Pro
 			LEFT JOIN dbo.Milestone AS M ON M.ProjectId = Pro.ProjectId
@@ -66,6 +71,11 @@ BEGIN
 										THEN TEH.ActualHours
 										ELSE 0
 									END), 2) AS BillableHours ,
+						ROUND(SUM(CASE WHEN ( TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000'
+								AND TE.ChargeCodeDate <= @Today
+										) THEN TEH.ActualHours
+									ELSE 0
+								END),2) AS BillableHoursUntilToday,
 						ROUND(SUM(CASE WHEN TEH.IsChargeable = 0
 											AND CC.TimeEntrySectionId <> 2
 											AND Pro.ProjectNumber != 'P031000'
@@ -112,8 +122,10 @@ BEGIN
 				PG.Code AS GroupCode,
 				SUM(CASE WHEN P.ProjectStatusId = 4 THEN 1 ELSE 0 END) AS CompletedProjectsCount,
 				SUM(CASE WHEN P.ProjectStatusId = 3 THEN 1 ELSE 0 END) AS ActiveProjectsCount,
-			    CAST((ROUND(ISNULL(SUM(PH.ForecastedHours),0), 2)) AS float) as ProjectedHours,
+			    CAST((ROUND(ISNULL(SUM(PH.ForecastedHours),0), 2)) AS float) as ForecastedHours,
+				CAST((ROUND(ISNULL(SUM(PH.ForecastedHoursUntilToday),0), 2)) AS float) as ForecastedHoursUntilToday,
 				ROUND(ISNULL(SUM(TH.BillableHours),0), 2) as BillableHours,
+				ROUND(ISNULL(SUM(TH.BillableHoursUntilToday),0), 2) as BillableHoursUntilToday,
 				ROUND(ISNULL(SUM(TH.NonBillableHours),0), 2) as NonBillableHours,
 				ROUND(ISNULL(SUM(TH.BusinessDevelopmentHours),0), 2) as BusinessDevelopmentHours
 		FROM TimeEntryHours TH  
