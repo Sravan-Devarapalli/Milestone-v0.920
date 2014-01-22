@@ -34,7 +34,7 @@ AS
 				FROM    [dbo].[ConvertStringListIntoTable](@ProjectStatusIds);
 			WITH    ProjectForeCastedHoursUntilToday
 					  AS ( SELECT   M.ProjectId ,
-					                SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
+					                SUM(CASE WHEN PC.Date <= @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
 											 ELSE 0
 										END)  AS ForecastedHoursUntilToday,
 									SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay)) AS ForecastedHours,
@@ -92,7 +92,7 @@ AS
 										  END), 2) AS [NonBillableHours] ,
 								ROUND(SUM(CASE WHEN ( TEH.IsChargeable = 1
 													  AND PRO.ProjectNumber != 'P031000'
-													  AND TE.ChargeCodeDate < @Today
+													  AND TE.ChargeCodeDate <= @Today
 													) THEN TEH.ActualHours
 											   ELSE 0
 										  END), 2) AS BillableHoursUntilToday
