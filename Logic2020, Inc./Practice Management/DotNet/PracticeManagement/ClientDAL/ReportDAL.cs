@@ -619,7 +619,7 @@ namespace DataAccess
                 {
                     plgh.EstimatedBillings = reader.GetDouble(estimatedBillingsIndex);
                 }
-                
+
                 result.Add(plgh);
             }
         }
@@ -695,6 +695,7 @@ namespace DataAccess
         {
             if (!reader.HasRows) return;
             int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+            int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
             int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
             int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
             int businessUnitCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
@@ -703,8 +704,9 @@ namespace DataAccess
             int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
             int activeProjectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.ActiveProjectsCount);
             int completedProjectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.CompletedProjectsCount);
-            int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHours);
-            
+            int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+            int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
+
 
             while (reader.Read())
             {
@@ -721,6 +723,7 @@ namespace DataAccess
                 BusinessUnitLevelGroupedHours buLGH = new BusinessUnitLevelGroupedHours
                     {
                         BillableHours = !reader.IsDBNull(billableHoursIndex) ? reader.GetDouble(billableHoursIndex) : 0d,
+                        BillableHoursUntilToday = !reader.IsDBNull(billableHoursUntilTodayIndex) ? reader.GetDouble(billableHoursUntilTodayIndex) : 0d,
                         NonBillableHours =
                             !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
                         BusinessDevelopmentHours =
@@ -729,6 +732,8 @@ namespace DataAccess
                                 : 0d,
                         ForecastedHours =
                    !reader.IsDBNull(projectedHoursIndex) ? reader.GetDouble(projectedHoursIndex) : 0d,
+                        ForecastedHoursUntilToday =
+                      !reader.IsDBNull(forecastedHoursUntilTodayIndex) ? reader.GetDouble(forecastedHoursUntilTodayIndex) : 0d,
                         ActiveProjectsCount = !reader.IsDBNull(activeProjectsCountIndex) ? reader.GetInt32(activeProjectsCountIndex) : 0,
                         CompletedProjectsCount = !reader.IsDBNull(completedProjectsCountIndex) ? reader.GetInt32(completedProjectsCountIndex) : 0,
                         BusinessUnit = pg
@@ -3480,7 +3485,7 @@ namespace DataAccess
         public static List<ResourceExceptionReport> ZeroHourlyRateExceptionReport(DateTime startDate, DateTime endDate, SqlConnection connection = null)
         {
             List<ResourceExceptionReport> result = new List<ResourceExceptionReport>();
-            if(connection == null)
+            if (connection == null)
             {
                 connection = new SqlConnection(DataSourceHelper.DataConnection);
                 connection.Open();
@@ -3492,7 +3497,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
-            
+
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     ReadZeroHourlyRateExceptionReport(reader, result);
