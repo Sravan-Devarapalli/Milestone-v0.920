@@ -51,6 +51,12 @@
                     </th>
                     <th class="Width200Px">
                         <asp:Label ID="lblBillableHoursVariance" runat="server" Text="Billable Hours Variance"></asp:Label>
+                        <asp:Image alt="Billable Hours Variance Hint" ImageUrl="~/Images/hint1.png" runat="server"
+                            ID="imgBillableHoursVarianceHint" CssClass="CursorPointer" ToolTip="Billable Hours Variance Calculation" />
+                        <AjaxControlToolkit:ModalPopupExtender ID="mpeBillableUtilization" runat="server"
+                            TargetControlID="imgBillableHoursVarianceHint" CancelControlID="btnCancel" BehaviorID="pnlBillableUtilization"
+                            BackgroundCssClass="modalBackground" PopupControlID="pnlBillableUtilization"
+                            DropShadow="false" />
                     </th>
                     <th class="Width215Px">
                         Percent of Actual Hours this Period
@@ -66,7 +72,7 @@
                     <tr>
                         <td class="FirstTd">
                             <%# Eval("Client.HtmlEncodedName")%>
-                            >
+>
                             <%# Eval("Project.Group.HtmlEncodedName")%>
                         </td>
                     </tr>
@@ -123,7 +129,7 @@
                     <tr>
                         <td class="FirstTd">
                             <%# Eval("Client.HtmlEncodedName")%>
-                            >
+>
                             <%# Eval("Project.Group.HtmlEncodedName")%>
                         </td>
                     </tr>
@@ -234,4 +240,41 @@
     <asp:Label ID="lblExclamationMarkPanl" runat="server" Visible="false" Text="!" CssClass="error-message fontSizeLarge t-left"
         ToolTip="Project Underrun"></asp:Label>
 </asp:Panel>
-
+<asp:Panel ID="pnlBillableUtilization" runat="server" CssClass="popUpBillableUtilization"
+    Style="display: none;">
+    <table>
+        <tr>
+            <td colspan="2" class="textCenter">
+                <label class="LabelProject">
+                    Billable Hours Variance
+                </label>
+            </td>
+            <td>
+                <asp:Button ID="btnCancel" runat="server" CssClass="mini-report-close floatright"
+                    ToolTip="Close" Text="X"></asp:Button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <br />
+            </td>
+        </tr>
+       <tr>
+            <td>
+            <p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For a time period that includes today's date, the Billable Hours Variance is calculated as the number of Billable Hours <b>up to and including today</b> minus the number of Projected Hours, <b>up to and including today</b>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For historical time periods, the
+                    system calculates Billable Hours Variance as Projected Hours minus Actual Hours.</p>
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
