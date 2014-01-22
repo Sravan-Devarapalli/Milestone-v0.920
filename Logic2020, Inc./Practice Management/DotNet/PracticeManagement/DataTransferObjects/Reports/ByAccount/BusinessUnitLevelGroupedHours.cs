@@ -31,6 +31,13 @@ namespace DataTransferObjects.Reports.ByAccount
         }
 
         [DataMember]
+        public double BillableHoursUntilToday
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public double NonBillableHours
         {
             get;
@@ -46,6 +53,13 @@ namespace DataTransferObjects.Reports.ByAccount
 
         [DataMember]
         public double ForecastedHours
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public double ForecastedHoursUntilToday
         {
             get;
             set;
@@ -83,7 +97,7 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                return (BillableHours - ForecastedHours);
+                return (BillableHoursUntilToday - ForecastedHoursUntilToday);
             }
         }
     }
