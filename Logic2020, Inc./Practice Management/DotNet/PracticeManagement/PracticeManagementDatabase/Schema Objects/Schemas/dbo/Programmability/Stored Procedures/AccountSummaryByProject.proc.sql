@@ -68,7 +68,7 @@ BEGIN
 		(
 			SELECT TE.PersonId,PRO.ProjectId,TE.ChargeCodeDate,
 			SUM(CASE WHEN ( TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000'
-								AND TE.ChargeCodeDate < @Today
+								AND TE.ChargeCodeDate <= @Today
 										) THEN TEH.ActualHours
 									ELSE 0
 								END) BillableHoursUntilToday,
@@ -154,7 +154,7 @@ BEGIN
 	AS (
 		SELECT	Pro.ProjectId
 				,Pro.ClientId
-				, SUM(CASE WHEN PC.Date < @Today AND P.IsStrawman = 0 THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
+				, SUM(CASE WHEN PC.Date <= @Today AND P.IsStrawman = 0 THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
 									ELSE 0
 								END) AS ForecastedHoursUntilToday
 				, AVG(ISNULL(MPE.Amount,0)) as BillRate
@@ -202,7 +202,7 @@ BEGIN
 						0
 				END), 2) AS [NonBillableHours]
 			  , ROUND(SUM(CASE
-					WHEN (TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' AND TE.ChargeCodeDate < @Today) THEN
+					WHEN (TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' AND TE.ChargeCodeDate <= @Today) THEN
 						TEH.ActualHours
 					ELSE
 						0
@@ -259,9 +259,9 @@ BEGIN
 		 , PS.Name AS ProjectStatusName
 		 , ISNULL(HD.BillableHours,0) AS BillableHours 
 		 , ISNULL(HD.NonBillableHours,0) AS NonBillableHours
-		 , ISNULL(pfh.ForecastedHours, 0) AS ForecastedHoursUntilToday
+		 , ISNULL(pfh.ForecastedHoursUntilToday, 0) AS ForecastedHoursUntilToday
 		 , ISNULL(pfh.ForecastedHours, 0) AS ForecastedHours
-		 , ISNULL(HD.BillableHours,0) AS BillableHoursUntilToday
+		 , ISNULL(HD.BillableHoursUntilToday,0) AS BillableHoursUntilToday
 		 , ISNULL(HD.TimeEntrySectionId,-1) AS TimeEntrySectionId
 		 , (CASE
 			   WHEN (ISNULL(pfh.MinimumValue,PNP.MinimumValue) IS NULL) THEN
