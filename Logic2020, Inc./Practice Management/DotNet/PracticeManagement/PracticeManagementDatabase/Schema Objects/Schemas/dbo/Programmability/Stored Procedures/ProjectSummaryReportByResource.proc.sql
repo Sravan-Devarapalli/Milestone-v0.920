@@ -70,7 +70,7 @@ AS
 						SELECT   MP.PersonId ,
 								AVG(MPE.Amount) AS BillRate,
 								PC.Date,
-								SUM(CASE WHEN PC.Date < @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
+								SUM(CASE WHEN PC.Date <= @Today THEN (dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay))
 									ELSE 0
 								END) AS ForecastedHoursUntilToday,
 								SUM(dbo.PersonProjectedHoursPerDay(PC.DayOff,PC.CompanyDayOff,PC.TimeOffHours,MPE.HoursPerDay)) AS ForecastedHours,
@@ -100,7 +100,7 @@ AS
 					(
 						SELECT TE.PersonId,TE.ChargeCodeDate,
 						SUM(CASE WHEN ( TEH.IsChargeable = 1 AND @ProjectNumberLocal != 'P031000'
-											AND TE.ChargeCodeDate < @Today
+											AND TE.ChargeCodeDate <= @Today
 													) THEN TEH.ActualHours
 												ELSE 0
 											END) BillableHoursUntilToday,
@@ -165,10 +165,10 @@ AS
 								ELSE 'Both'
 								END 
 							) AS BillingType ,
-							ROUND(MAX(ISNULL(GPD.ForecastedHours, 0)), 2) AS ForecastedHoursUntilToday ,
+							ROUND(MAX(ISNULL(GPD.ForecastedHoursUntilToday, 0)),2) AS ForecastedHoursUntilToday ,
 							ROUND(MAX(ISNULL(GPD.ForecastedHours, 0)), 2) AS ForecastedHours,
 							GPD.BillableHours,
-							GPD.BillableHours AS BillableHoursUntilToday,
+							GPD.BillableHoursUntilToday,
 							GPD.NonBillableHours,
 							ISNULL(GPD.BillRate,0) AS BillRate,
 							(CASE 
