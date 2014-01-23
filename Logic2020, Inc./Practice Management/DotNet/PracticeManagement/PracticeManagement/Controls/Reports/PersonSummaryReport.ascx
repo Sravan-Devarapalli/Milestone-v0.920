@@ -261,7 +261,7 @@
         </tr>
        <tr>
             <td>
-            <p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For a time period that includes today's date, the Billable Hours Variance is calculated as the number of Billable Hours <b>up to and including today</b> minus the number of Projected Hours, <b>up to and including today</b>.</p>
+            <p>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For a time period that includes today's date, the Billable Hours Variance is calculated as the number of Billable Hours <b>up to and including today</b> minus the number of Projected Hours <b>up to and including today</b>.</p>
             </td>
         </tr>
         <tr>
@@ -278,3 +278,4 @@
         </tr>
     </table>
 </asp:Panel>
+
