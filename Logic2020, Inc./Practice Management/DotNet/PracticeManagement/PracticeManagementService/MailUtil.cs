@@ -42,6 +42,21 @@ namespace PracticeManagementService
             }
         }
 
+        private static bool IsDemo
+        {
+            get
+            {
+                try
+                {
+                    return ConfigurationManager.AppSettings["Environment"] == "DEMO";
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
         private static bool IsMailsEnable
         {
             get
@@ -231,13 +246,17 @@ namespace PracticeManagementService
             }
             try
             {
-                if (!IsUAT)
+                if (IsUAT)
                 {
-                    message.Subject = subject;
+                    message.Subject = "(UAT) " + subject;
+                }
+                else if(IsDemo)
+                {
+                    message.Subject = "(Demo) " + subject;
                 }
                 else
                 {
-                    message.Subject = "(UAT) " + subject;
+                    message.Subject = subject;
                 }
             }
             catch (Exception e)
