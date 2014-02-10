@@ -43,12 +43,19 @@ AS
 			p.TerminationReasonId,
 			p.RecruiterId,
 			p.TitleId,
-			T.Title
+			T.Title,
+			p.JobSeekerStatusId,
+			p.SourceId,
+			p.TargetedCompanyId,
+			p.EmployeeReferralId,
+			empRef.FirstName AS EmployeeReferralFirstName,
+			empRef.LastName AS EmployeeReferralLastName
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
 	       LEFT JOIN dbo.Seniority AS e ON p.SeniorityId = e.SeniorityId
 	       LEFT JOIN dbo.Person AS manager ON p.ManagerId = manager.PersonId
 		   LEFT JOIN dbo.Title AS T ON p.TitleId = T.TitleId
+		   LEFT JOIN dbo.Person AS empRef ON empRef.PersonId = p.EmployeeReferralId 
 
 
