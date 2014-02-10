@@ -9,6 +9,15 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string SourceRecruitingMetricsName = "SourceRecruitingMetricsName";
+            public const string TargetedCompanyRecruitingMetricsName = "TargetedCompanyRecruitingMetricsName";
+            public const string TimeScaleId = "TimeScaleId";
+            public const string EmployeeReferralLastName = "EmployeeReferralLastName";
+            public const string EmployeeReferralFirstName = "EmployeeReferralFirstName";
+            public const string EmployeeReferralId = "EmployeeReferralId";
+            public const string TargetedCompanyId = "TargetedCompanyId";
+            public const string SourceId = "SourceId";
+            public const string JobSeekerStatusId = "JobSeekerStatusId";
             public const string CompletedProjectsCount = "CompletedProjectsCount";
             public const string ActiveProjectsCount = "ActiveProjectsCount";
             public const string ProjectedDeliveryDate = "ProjectedDeliveryDate";
@@ -466,6 +475,10 @@
             public const string MilestoneCountColumn = "MilestoneCount";
             public const string CSATCountColumn = "CSATCount";
             public const string AttributionCount = "AttributionCount";
+            public const string RecruitingMetricsId = "RecruitingMetricsId";
+            public const string RecruitingMetrics = "RecruitingMetrics";
+            public const string RecruitingMetricsTypeId = "RecruitingMetricsTypeId";
+            public const string RecruitingMetricsInUse = "RecruitingMetricsInUse";
         }
 
         #endregion Nested type: ColumnNames
@@ -485,8 +498,17 @@
         /// </summary>
         public class ParameterNames
         {
-	        public static string PreviousHireDate = "@PreviousHireDate";            
-	        public static string IsFromMilestoneDetail = "@IsFromMilestoneDetail";
+
+            public static string EmployeeReferralId = "@EmployeeReferralId";
+            public static string TargetRecruitingMetricsId = "@TargetRecruitingMetricsId";
+            public static string SourceRecruitingMetricsId = "@SourceRecruitingMetricsId";
+            public static string JobSeekerStatusId = "@JobSeekerStatusId";
+            public static string StatusIds = "@StatusIds";
+            public static string PayTypeIds = "@PayTypeIds";
+            public static string RecruitingMetricsId = "@RecruitingMetricsId";
+            public static string RecruitingMetricsTypeId = "@RecruitingMetricsTypeId";
+            public static string PreviousHireDate = "@PreviousHireDate";
+            public static string IsFromMilestoneDetail = "@IsFromMilestoneDetail";
             public static string IsUnassignedReport = "@IsUnassignedReport";
             public static string IsFromAddTimeOffButton = "@IsFromAddTimeOffButton";
             public static string IsReHire = "@IsReHire";
@@ -892,6 +914,10 @@
                 public const string SaveAnnouncement = "dbo.SaveAnnouncement";
                 public const string GetLatestAnnouncement = "dbo.GetLatestAnnouncement";
                 public const string GetAllDomainsProcedure = "dbo.GetAllDomains";
+                public const string GetRecruitingMetrics = "dbo.GetRecruitingMetrics";
+                public const string SaveRecruitingMetrics = "dbo.SaveRecruitingMetrics";
+                public const string RecruitingMetricsDelete = "dbo.RecruitingMetricsDelete";
+                public const string RecruitingMetricsInsert = "dbo.RecruitingMetricsInsert";
             }
 
             #endregion Nested type: Configuration
@@ -900,6 +926,7 @@
 
             public class Person
             {
+                public const string GetPersonsByPayTypesAndByStatusIds = "dbo.GetPersonsByPayTypesAndByStatusIds";
                 public const string CheckIfPersonEntriesOverlapps = "dbo.CheckIfPersonEntriesOverlapps";
                 public const string CheckIfValidDivision = "dbo.CheckIfValidDivision";
                 public const string GetCommissionsValidationByPersonId = "dbo.GetCommissionsValidationByPersonId";
@@ -1106,6 +1133,7 @@
 
             public class Reports
             {
+                public const string RecruitingMetricsReport = "dbo.RecruitingMetricsReport";
                 public const string ResourceAssignedOrUnassignedChargingExceptionReport = "dbo.ResourceAssignedOrUnassignedChargingExceptionReport";
                 public const string ZeroHourlyRateExceptionReport = "dbo.ZeroHourlyRateExceptionReport";
                 public const string ProjectAttributionReport = "dbo.ProjectAttributionReport";
