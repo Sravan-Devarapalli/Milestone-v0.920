@@ -28,7 +28,11 @@ CREATE PROCEDURE [dbo].[PersonUpdate]
 	@PersonDivisionId	INT,
 	@TerminationReasonId	INT,
 	@SLTApproval		   BIT,
-	@SLTPTOApproval			BIT
+	@SLTPTOApproval			BIT,
+	@JobSeekerStatusId INT,
+	@SourceRecruitingMetricsId	INT,
+	@TargetRecruitingMetricsId	INT,
+	@EmployeeReferralId	INT
 )
 AS
 SET NOCOUNT ON
@@ -163,7 +167,11 @@ BEGIN TRY
 			DivisionId = @PersonDivisionId,
 			TerminationReasonId = @TerminationReasonId,
                         IsWelcomeEmailSent = CASE WHEN @PersonStatusId = 2  OR (@PreviousHireDate <> @HireDate AND @HireDate >= @Today) THEN 0
-										     ELSE IsWelcomeEmailSent END
+										     ELSE IsWelcomeEmailSent END,
+			JobSeekerStatusId = @JobSeekerStatusId,
+			SourceId = @SourceRecruitingMetricsId,
+			TargetedCompanyId = @TargetRecruitingMetricsId,
+			EmployeeReferralId = @EmployeeReferralId
 		WHERE PersonId = @PersonId
 
 		EXEC dbo.PersonStatusHistoryUpdate
