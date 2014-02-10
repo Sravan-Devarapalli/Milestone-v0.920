@@ -25,6 +25,10 @@
 	TerminationReasonId	INT						NULL,
 	PictureData         VARBINARY(MAX)			NULL,
 	PictureFileName     NVARCHAR(MAX)			NULL,
-	PictureModifiedDate DATETIME				NULL
+	PictureModifiedDate DATETIME				NULL,
+	JobSeekerStatusId	INT						NULL,
+	SourceId			INT						NULL,
+	TargetedCompanyId	INT						NULL,
+	EmployeeReferralId	INT						NULL
 );
 
