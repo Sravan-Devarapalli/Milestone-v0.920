@@ -3654,6 +3654,112 @@ namespace DataAccess
                 result.Add(resourceExceptionReport);
             }
         }
+
+        public static List<Person> RecruitingMetricsReport(DateTime startDate, DateTime endDate, SqlConnection connection = null)
+        {
+            List<Person> result = new List<Person>();
+            if (connection == null)
+            {
+                connection = new SqlConnection(DataSourceHelper.DataConnection);
+                connection.Open();
+            }
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.RecruitingMetricsReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadRecruitingMetricsReport(reader, result);
+                }
+            }
+            return result;
+        }
+
+        public static void ReadRecruitingMetricsReport(SqlDataReader reader, List<Person> result)
+        {
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+
+            int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+            int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+            int PersonStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
+            int TitleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+            int TitleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+
+            int HireDateColumnIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+            int TerminationDateColumnIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
+            int TerminationReasonIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationReasonIdColumn);
+            int TerminationReasonColumnIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationReasonColumn);
+            int TimeScaleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeScaleId);
+
+            int TimescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+            int RecruiterIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterIdColumn);
+            int RecruiterFirstNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterFirstNameColumn);
+            int RecruiterLastNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.RecruiterLastNameColumn);
+            int JobSeekerStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.JobSeekerStatusId);
+
+            int TargetedCompanyIdIndex = reader.GetOrdinal(Constants.ColumnNames.TargetedCompanyId);
+            int TargetedCompanyRecruitingMetricsNameIndex = reader.GetOrdinal(Constants.ColumnNames.TargetedCompanyRecruitingMetricsName);
+            int SourceIdIndex = reader.GetOrdinal(Constants.ColumnNames.SourceId);
+            int SourceRecruitingMetricsNameIndex = reader.GetOrdinal(Constants.ColumnNames.SourceRecruitingMetricsName);
+            int EmployeeReferralIdIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralId);
+            int EmployeeReferralFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralFirstName);
+            int EmployeeReferralLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralLastName);
+
+            while (reader.Read())
+            {
+                Person person = new Person()
+                {
+                    Id = reader.GetInt32(personIdIndex),
+                    FirstName = reader.GetString(firstNameIndex),
+                    LastName = reader.GetString(lastNameIndex),
+                    EmployeeNumber = reader.GetString(employeeNumberIndex),
+                    CurrentPay = new Pay()
+                    {
+                        Timescale = (TimescaleType)reader.GetInt32(TimeScaleIdIndex)
+                    },
+                    Status = new PersonStatus()
+                    {
+                        Id = reader.GetInt32(PersonStatusIdIndex)
+                    },
+                    Title = new Title()
+                    {
+                        TitleId = reader.GetInt32(TitleIdIndex),
+                        TitleName = reader.GetString(TitleIndex)
+                    },
+                    HireDate = reader.GetDateTime(HireDateColumnIndex),
+                    TerminationDate = !reader.IsDBNull(TerminationDateColumnIndex) ? (DateTime?)reader.GetDateTime(TerminationDateColumnIndex) : null,
+                    TerminationReasonid = !reader.IsDBNull(TerminationReasonIdColumnIndex) ? (int?)reader.GetInt32(TerminationReasonIdColumnIndex) : null,
+                    TerminationReason = !reader.IsDBNull(TerminationReasonColumnIndex) ? reader.GetString(TerminationReasonColumnIndex) : null,
+                    RecruiterId = reader.GetInt32(RecruiterIdColumnIndex),
+                    RecruiterFirstName = reader.GetString(RecruiterFirstNameColumnIndex),
+                    RecruiterLastName = reader.GetString(RecruiterLastNameColumnIndex),
+                    JobSeekersStatusId = !reader.IsDBNull(JobSeekerStatusIdIndex) ? (int?)reader.GetInt32(JobSeekerStatusIdIndex) : null,
+                   
+                    TargetedCompanyRecruitingMetrics = new RecruitingMetrics()
+                    {
+                        RecruitingMetricsId = !reader.IsDBNull(TargetedCompanyIdIndex) ? (int?)reader.GetInt32(TargetedCompanyIdIndex) : null,
+                        Name = !reader.IsDBNull(TargetedCompanyRecruitingMetricsNameIndex) ? reader.GetString(TargetedCompanyRecruitingMetricsNameIndex) : ""
+                    },
+
+                    SourceRecruitingMetrics = new RecruitingMetrics()
+                    {
+                        RecruitingMetricsId = !reader.IsDBNull(SourceIdIndex) ? (int?)reader.GetInt32(SourceIdIndex) : null,
+                        Name = !reader.IsDBNull(SourceRecruitingMetricsNameIndex) ? reader.GetString(SourceRecruitingMetricsNameIndex) : ""
+                    },
+                    EmployeeReferralId = !reader.IsDBNull(EmployeeReferralIdIndex) ? (int?)reader.GetInt32(EmployeeReferralIdIndex) : null,
+                    EmployeeReferralFirstName =!reader.IsDBNull(EmployeeReferralIdIndex) ? reader.GetString(EmployeeReferralFirstNameIndex):"",
+                    EmployeeReferralLastName = !reader.IsDBNull(EmployeeReferralIdIndex) ?reader.GetString(EmployeeReferralLastNameIndex):""
+                };
+                result.Add(person);
+            }
+        }
+
     }
 }
 
