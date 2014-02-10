@@ -19,14 +19,17 @@
   <xs:element name="ArrayOfBusinessUnitLevelGroupedHours" nillable="true" type="tns:ArrayOfBusinessUnitLevelGroupedHours" />
   <xs:complexType name="BusinessUnitLevelGroupedHours">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ActiveProjectsCount" type="xs:int" />
       <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
+      <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="BusinessDevelopmentHours" type="xs:double" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="BusinessUnit" nillable="true" type="q3:ProjectGroup" />
       <xs:element minOccurs="0" name="BusinessUnitTotalHoursPercent" type="xs:int" />
+      <xs:element minOccurs="0" name="CompletedProjectsCount" type="xs:int" />
       <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
+      <xs:element minOccurs="0" name="ForecastedHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
       <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonLevelGroupedHoursList" nillable="true" type="q4:ArrayOfPersonLevelGroupedHours" />
-      <xs:element minOccurs="0" name="ProjectsCount" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BusinessUnitLevelGroupedHours" nillable="true" type="tns:BusinessUnitLevelGroupedHours" />
