@@ -1120,6 +1120,11 @@ namespace PracticeManagementService
             return PersonDAL.CheckIfPersonEntriesOverlapps(milestoneId, personId, startDate, endDate);
         }
 
+        public List<Person> GetPersonsByPayTypesAndByStatusIds(string statusIds, string payTypeIds)
+        {
+            return PersonDAL.GetPersonsByPayTypesAndByStatusIds(statusIds, payTypeIds);
+        }
+
         #endregion IPersonService Members
     }
 }
