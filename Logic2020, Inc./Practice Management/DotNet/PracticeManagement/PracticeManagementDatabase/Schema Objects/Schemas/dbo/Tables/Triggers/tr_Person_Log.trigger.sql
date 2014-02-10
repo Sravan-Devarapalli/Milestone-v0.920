@@ -111,7 +111,16 @@ BEGIN
 				i.RecruiterId,
 				recr.LastName + ', ' + recr.FirstName as RecruiterName,
 				i.TitleId,
-				T.Title
+				T.Title,
+				i.JobSeekerStatusId,
+				JSS.Name AS JobSeekerStatus,
+				i.SourceId,
+				RM.Name AS SourceName,
+				i.TargetedCompanyId,
+				RMT.Name AS TargetedCompanyName,
+				i.EmployeeReferralId,
+				CASE WHEN i.EmployeeReferralId IS NULL THEN 'NO' ELSE  'YES' END AS EmployeeReferral,
+				EmpRef.LastName+ ', '+EmpRef.FirstName AS EmployeeReferralName
 			FROM inserted AS i
 				LEFT JOIN dbo.Practice AS p ON i.DefaultPractice = p.PracticeId
 				INNER JOIN dbo.PersonStatus AS s ON i.PersonStatusId = s.PersonStatusId
@@ -121,6 +130,10 @@ BEGIN
 				LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = i.DivisionId
 				LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = i.TerminationReasonId
 				LEFT JOIN dbo.Title AS T ON i.TitleId = T.TitleId
+				LEFT JOIN dbo.JobSeekerStatus JSS ON JSS.JobSeekerStatusId = i.JobSeekerStatusId
+				LEFT JOIN dbo.RecruitingMetrics RM ON RM.RecruitingMetricsId = i.SourceId
+				LEFT JOIN dbo.RecruitingMetrics RMT ON RMT.RecruitingMetricsId = i.TargetedCompanyId
+				LEFT JOIN dbo.Person EmpRef ON EmpRef.PersonId = i.EmployeeReferralId
 			WHERE i.IsStrawman = 0 
 			),
 
@@ -150,7 +163,16 @@ BEGIN
 				d.RecruiterId,
 				recr.LastName + ', ' + recr.FirstName as RecruiterName,
 				d.TitleId,
-				T.Title
+				T.Title,
+				d.JobSeekerStatusId,
+				JSS.Name AS JobSeekerStatus,
+				d.SourceId,
+				RM.Name AS SourceName,
+				d.TargetedCompanyId,
+				RMT.Name AS TargetedCompanyName,
+				d.EmployeeReferralId,
+				CASE WHEN d.EmployeeReferralId IS NULL THEN 'NO' ELSE  'YES' END AS EmployeeReferral,
+				EmpRef.LastName+ ', '+EmpRef.FirstName AS EmployeeReferralName
 			FROM deleted AS d
 				LEFT JOIN dbo.Practice AS p ON d.DefaultPractice = p.PracticeId
 				INNER JOIN dbo.PersonStatus AS s ON d.PersonStatusId = s.PersonStatusId
@@ -160,6 +182,10 @@ BEGIN
 				LEFT JOIN dbo.PersonDivision PD ON PD.DivisionId = d.DivisionId
 				LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = d.TerminationReasonId
 				LEFT JOIN dbo.Title AS T ON d.TitleId = T.TitleId
+				LEFT JOIN dbo.JobSeekerStatus JSS ON JSS.JobSeekerStatusId = d.JobSeekerStatusId
+				LEFT JOIN dbo.RecruitingMetrics RM ON RM.RecruitingMetricsId = d.SourceId
+				LEFT JOIN dbo.RecruitingMetrics RMT ON RMT.RecruitingMetricsId = d.TargetedCompanyId
+				LEFT JOIN dbo.Person EmpRef ON EmpRef.PersonId = d.EmployeeReferralId
 			WHERE d.IsStrawman = 0
 			)
 
@@ -235,6 +261,10 @@ BEGIN
 				OR ISNULL(i.TerminationReasonId, -1) <> ISNULL(d.TerminationReasonId, -1)
 				OR ISNULL(i.[RecruiterId], -1) <> ISNULL(d.[RecruiterId], -1)
 				OR ISNULL(i.[TitleId], -1) <> ISNULL(d.[TitleId], -1)
+				OR ISNULL(i.JobSeekerStatusId, -1) <> ISNULL(d.JobSeekerStatusId, -1)
+				OR ISNULL(i.SourceId, -1) <> ISNULL(d.SourceId, -1)
+				OR ISNULL(i.TargetedCompanyId, -1) <> ISNULL(d.TargetedCompanyId, -1)
+				OR ISNULL(i.EmployeeReferralId, -1) <> ISNULL(d.EmployeeReferralId, -1)
 			)
 		END
 	END
@@ -362,6 +392,10 @@ BEGIN
 								  ,[TerminationReasonId]
 								  ,[RecruiterId]
 								  ,[TitleId]
+								  ,JobSeekerStatusId
+								  ,SourceId
+								  ,TargetedCompanyId
+								  ,EmployeeReferralId
 								  ,[CreatedDate]
 								  ,[CreatedBy])
 		SELECT i.[PersonId]
@@ -387,6 +421,10 @@ BEGIN
 			  ,i.[TerminationReasonId]
 			  ,i.[RecruiterId]
 			  ,i.TitleId
+			  ,i.JobSeekerStatusId
+			  ,i.SourceId
+			  ,i.TargetedCompanyId
+			  ,i.EmployeeReferralId
 			  ,@insertTime
 			  ,l.PersonID
 		FROM inserted i
@@ -414,7 +452,11 @@ BEGIN
 					OR ISNULL(i.IsOffshore,'') <> ISNULL(d.IsOffshore,'')
 					OR ISNULL(i.TerminationReasonId, -1) <> ISNULL(d.TerminationReasonId, -1)
 					OR ISNULL(i.[RecruiterId], -1) <> ISNULL(d.[RecruiterId], -1)
-					OR ISNULL(i.[TitleId], -1) <> ISNULL(d.[TitleId], -1)			
+					OR ISNULL(i.[TitleId], -1) <> ISNULL(d.[TitleId], -1)	
+					OR ISNULL(i.JobSeekerStatusId, -1) <> ISNULL(d.JobSeekerStatusId, -1)
+					OR ISNULL(i.SourceId, -1) <> ISNULL(d.SourceId, -1)
+					OR ISNULL(i.TargetedCompanyId, -1) <> ISNULL(d.TargetedCompanyId, -1)
+					OR ISNULL(i.EmployeeReferralId, -1) <> ISNULL(d.EmployeeReferralId, -1)		
 	END
 
 		-- End logging session
