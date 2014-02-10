@@ -243,4 +243,37 @@ namespace DataTransferObjects
         [Description("Practice")]
         Practice = 2
     }
+
+    [DataContract]
+    public enum RecruitingMetricsType
+    {
+        [EnumMember]
+        [Description("Undefined")]
+        Undefined = 0,
+
+        [EnumMember]
+        [Description("Source")]
+        Source = 1,
+
+        [EnumMember]
+        [Description("Targeted Company")]
+        TargetedCompany = 2
+    }
+
+    [DataContract]
+    public enum JobSeekersStatus
+    {
+        [EnumMember]
+        [Description("Undefined")]
+        Undefined = 0,
+
+        [EnumMember]
+        [Description("Active Candidate")]
+        ActiveCandidate = 1,
+
+        [EnumMember]
+        [Description("Passive Candidate")]
+        PassiveCandidate = 2
+    }
+
 }
