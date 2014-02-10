@@ -75,5 +75,20 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SendResourceExceptionReportsEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray);
+
+        [OperationContract]
+        List<RecruitingMetrics> GetRecruitingMetrics(int? recruitingMetricsTypeId);
+
+        [OperationContract]
+        void SaveRecruitingMetrics(RecruitingMetrics metric);
+
+        [OperationContract]
+        void RecruitingMetricsDelete(int recruitingMetricId);
+
+        [OperationContract]
+        void RecruitingMetricsInsert(RecruitingMetrics metrics);
+
+        [OperationContract]
+        void SendRecruitingMetricsReportEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray);
     }
 }
