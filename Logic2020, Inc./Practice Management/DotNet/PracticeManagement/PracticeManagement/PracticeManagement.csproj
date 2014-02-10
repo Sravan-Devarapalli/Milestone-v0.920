@@ -377,6 +377,7 @@
     <EmbeddedResource Include="Controls\Generic\BillableNonBillableAndTotal\BillableNonBillableAndTotalExtender.js" />
     <Content Include="Controls\Clients\ClientBusinessGroups.ascx" />
     <Content Include="Controls\Clients\ClientPricingList.ascx" />
+    <Content Include="Controls\Configuration\RecruitingMetricsHeader.ascx" />
     <Content Include="Controls\FilteredCheckBoxList.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\PersonCalendar.ascx" />
@@ -530,6 +531,7 @@
     <Content Include="Images\right_icon.png" />
     <Content Include="Images\trash-icon-Large.png" />
     <Content Include="ProjectCSATDetails.aspx" />
+    <Content Include="RecruitingMetrics.aspx" />
     <Content Include="Reports\AccountSummaryReport.aspx" />
     <Content Include="Reports\AttainmentReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
@@ -556,6 +558,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PricingList.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectCSAT.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.RecruitingMetrics.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.AttainmentBillableutlizationReport.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
@@ -1011,6 +1014,8 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="Scripts\UploaderRemovedFolder1.js" />
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
+    <Content Include="SourceRecruitingMetrics.aspx" />
+    <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\NPOI.dll" />
     <Content Include="TimEntry_New.xml">
@@ -1460,6 +1465,13 @@
     </Compile>
     <Compile Include="Controls\Clients\ClientPricingList.ascx.designer.cs">
       <DependentUpon>ClientPricingList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Configuration\RecruitingMetricsHeader.ascx.cs">
+      <DependentUpon>RecruitingMetricsHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Configuration\RecruitingMetricsHeader.ascx.designer.cs">
+      <DependentUpon>RecruitingMetricsHeader.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\FilteredCheckBoxList.ascx.cs">
       <DependentUpon>FilteredCheckBoxList.ascx</DependentUpon>
@@ -2063,6 +2075,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="RecruitingMetrics.aspx.cs">
+      <DependentUpon>RecruitingMetrics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RecruitingMetrics.aspx.designer.cs">
+      <DependentUpon>RecruitingMetrics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\AccountSummaryReport.aspx.cs">
       <DependentUpon>AccountSummaryReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2491,12 +2510,26 @@
     <Compile Include="SkillsSearch.aspx.designer.cs">
       <DependentUpon>SkillsSearch.aspx</DependentUpon>
     </Compile>
+    <Compile Include="SourceRecruitingMetrics.aspx.cs">
+      <DependentUpon>SourceRecruitingMetrics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SourceRecruitingMetrics.aspx.designer.cs">
+      <DependentUpon>SourceRecruitingMetrics.aspx</DependentUpon>
+    </Compile>
     <Compile Include="StrawManDetails.aspx.cs">
       <DependentUpon>StrawManDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="StrawManDetails.aspx.designer.cs">
       <DependentUpon>StrawManDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="TargetedCompanyRecruitingMetrics.aspx.cs">
+      <DependentUpon>TargetedCompanyRecruitingMetrics.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TargetedCompanyRecruitingMetrics.aspx.designer.cs">
+      <DependentUpon>TargetedCompanyRecruitingMetrics.aspx</DependentUpon>
     </Compile>
     <Compile Include="TimeEntryHandler.ashx.cs">
       <DependentUpon>TimeEntryHandler.ashx</DependentUpon>
@@ -3046,6 +3079,7 @@
     <Compile Include="Utils\Generic.cs" />
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="Utils\ProjectHelper.cs" />
+    <Compile Include="Utils\RecruitingMetricsReportExcelUtil.cs" />
     <Compile Include="Utils\ResourceExceptionReportExcelUtil.cs" />
     <Compile Include="Utils\SettingsHelper.cs" />
     <Compile Include="Utils\TimeEntryHelper.cs" />
