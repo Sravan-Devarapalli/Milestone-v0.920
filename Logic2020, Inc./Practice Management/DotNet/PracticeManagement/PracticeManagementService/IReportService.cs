@@ -144,6 +144,8 @@ namespace PracticeManagementService
         [OperationContract]
         List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport);
         
+        [OperationContract]
+        List<Person> RecruitingMetricsReport(DateTime startDate, DateTime endDate);
     }
 }
 
