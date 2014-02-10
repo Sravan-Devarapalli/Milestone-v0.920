@@ -155,6 +155,7 @@
       <xs:element minOccurs="0" name="BillableHours" type="xs:double" />
       <xs:element minOccurs="0" name="BillableHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="BillingType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EstimatedBillings" type="xs:double" />
       <xs:element minOccurs="0" name="ForecastedHours" type="xs:double" />
       <xs:element minOccurs="0" name="ForecastedHoursUntilToday" type="xs:double" />
       <xs:element minOccurs="0" name="NonBillableHours" type="xs:double" />
