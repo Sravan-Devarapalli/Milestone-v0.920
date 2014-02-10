@@ -235,5 +235,10 @@ namespace PracticeManagementService
         {
             return ReportDAL.ResourceAssignedOrUnassignedChargingExceptionReport(startDate,endDate,isUnassignedReport);
         }
+
+        public List<Person> RecruitingMetricsReport(DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.RecruitingMetricsReport(startDate, endDate);
+        }
     }
 }
