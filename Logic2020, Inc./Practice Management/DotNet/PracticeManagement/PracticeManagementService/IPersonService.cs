@@ -460,6 +460,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool CheckIfPersonEntriesOverlapps(int milestoneId, int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<Person> GetPersonsByPayTypesAndByStatusIds(string statusIds, string payTypeIds);
     }
 }
 
