@@ -241,4 +241,28 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="QuickLinks" nillable="true" type="tns:QuickLinks" />
+  <xs:complexType name="ArrayOfRecruitingMetrics">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RecruitingMetrics" nillable="true" type="tns:RecruitingMetrics" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfRecruitingMetrics" nillable="true" type="tns:ArrayOfRecruitingMetrics" />
+  <xs:complexType name="RecruitingMetrics">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecruitingMetricsId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="RecruitingMetricsType" type="tns:RecruitingMetricsType" />
+      <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RecruitingMetrics" nillable="true" type="tns:RecruitingMetrics" />
+  <xs:simpleType name="RecruitingMetricsType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Source" />
+      <xs:enumeration value="TargetedCompany" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RecruitingMetricsType" nillable="true" type="tns:RecruitingMetricsType" />
 </xs:schema>
