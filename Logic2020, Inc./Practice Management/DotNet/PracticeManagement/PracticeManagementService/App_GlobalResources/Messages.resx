@@ -180,4 +180,7 @@
   <data name="ResourceExceptionReportsTemplateName" xml:space="preserve">
     <value>ResourceExceptionReports</value>
   </data>
+  <data name="RecruitingMetricsReportTemplateName" xml:space="preserve">
+    <value>RecruitingMetricsReport</value>
+  </data>
 </root>
