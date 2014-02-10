@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ConfigurationService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ConfigurationService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ConfigurationService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -142,6 +142,36 @@
   <wsdl:message name="IConfigurationService_SendResourceExceptionReportsEmail_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendResourceExceptionReportsEmailResponse" />
   </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetRecruitingMetrics_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRecruitingMetrics" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetRecruitingMetrics_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRecruitingMetricsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveRecruitingMetrics_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveRecruitingMetrics" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveRecruitingMetrics_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveRecruitingMetricsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_RecruitingMetricsDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:RecruitingMetricsDelete" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_RecruitingMetricsDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RecruitingMetricsDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_RecruitingMetricsInsert_InputMessage">
+    <wsdl:part name="parameters" element="tns:RecruitingMetricsInsert" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_RecruitingMetricsInsert_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RecruitingMetricsInsertResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SendRecruitingMetricsReportEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendRecruitingMetricsReportEmail" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SendRecruitingMetricsReportEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendRecruitingMetricsReportEmailResponse" />
+  </wsdl:message>
   <wsdl:portType name="IConfigurationService">
     <wsdl:operation name="GetAllEmailTemplates">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" message="tns:IConfigurationService_GetAllEmailTemplates_InputMessage" />
@@ -230,6 +260,26 @@
     <wsdl:operation name="SendResourceExceptionReportsEmail">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SendResourceExceptionReportsEmail" message="tns:IConfigurationService_SendResourceExceptionReportsEmail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SendResourceExceptionReportsEmailResponse" message="tns:IConfigurationService_SendResourceExceptionReportsEmail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecruitingMetrics">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetRecruitingMetrics" message="tns:IConfigurationService_GetRecruitingMetrics_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetRecruitingMetricsResponse" message="tns:IConfigurationService_GetRecruitingMetrics_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveRecruitingMetrics">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SaveRecruitingMetrics" message="tns:IConfigurationService_SaveRecruitingMetrics_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SaveRecruitingMetricsResponse" message="tns:IConfigurationService_SaveRecruitingMetrics_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RecruitingMetricsDelete">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/RecruitingMetricsDelete" message="tns:IConfigurationService_RecruitingMetricsDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/RecruitingMetricsDeleteResponse" message="tns:IConfigurationService_RecruitingMetricsDelete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RecruitingMetricsInsert">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/RecruitingMetricsInsert" message="tns:IConfigurationService_RecruitingMetricsInsert_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/RecruitingMetricsInsertResponse" message="tns:IConfigurationService_RecruitingMetricsInsert_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendRecruitingMetricsReportEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SendRecruitingMetricsReportEmail" message="tns:IConfigurationService_SendRecruitingMetricsReportEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SendRecruitingMetricsReportEmailResponse" message="tns:IConfigurationService_SendRecruitingMetricsReportEmail_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
@@ -425,6 +475,51 @@
     </wsdl:operation>
     <wsdl:operation name="SendResourceExceptionReportsEmail">
       <soap:operation soapAction="http://tempuri.org/IConfigurationService/SendResourceExceptionReportsEmail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecruitingMetrics">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetRecruitingMetrics" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveRecruitingMetrics">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SaveRecruitingMetrics" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecruitingMetricsDelete">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/RecruitingMetricsDelete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecruitingMetricsInsert">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/RecruitingMetricsInsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendRecruitingMetricsReportEmail">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SendRecruitingMetricsReportEmail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
