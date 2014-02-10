@@ -543,7 +543,7 @@ namespace DataAccess
                             }
                             else
                             {
-                                if (record.CompanyHolidayDates == null) record.CompanyHolidayDates = new Dictionary<DateTime,string>();
+                                if (record.CompanyHolidayDates == null) record.CompanyHolidayDates = new Dictionary<DateTime, string>();
                                 record.CompanyHolidayDates.Add(timeOffDate, holidayDescription);
                             }
                         }
@@ -721,6 +721,11 @@ namespace DataAccess
                 command.Parameters.AddWithValue(PersonDivisionIdParam, (int)person.DivisionType != 0 ? (object)((int)person.DivisionType) : DBNull.Value);
                 command.Parameters.AddWithValue(TerminationReasonIdParam, person.TerminationReasonid.HasValue ? (object)person.TerminationReasonid.Value : DBNull.Value);
                 command.Parameters.AddWithValue(RecruiterIdParam, person.RecruiterId.HasValue ? (object)person.RecruiterId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.JobSeekerStatusId, person.JobSeekersStatus != JobSeekersStatus.Undefined ? (object)person.JobSeekersStatusId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SourceRecruitingMetricsId, person.SourceRecruitingMetrics != null ? (object)person.SourceRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TargetRecruitingMetricsId, person.TargetedCompanyRecruitingMetrics != null ? (object)person.TargetedCompanyRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EmployeeReferralId, person.EmployeeRefereral != null ? (object)person.EmployeeRefereral.Id.Value : DBNull.Value);
+
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
@@ -829,6 +834,10 @@ namespace DataAccess
                 command.Parameters.AddWithValue(SLTApprovalParam, person.SLTApproval);
                 command.Parameters.AddWithValue(SLTPTOApprovalParam, person.SLTPTOApproval);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager != null ? (object)person.Manager.Id.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.JobSeekerStatusId, person.JobSeekersStatus != JobSeekersStatus.Undefined ? (object)person.JobSeekersStatusId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SourceRecruitingMetricsId, person.SourceRecruitingMetrics != null ? (object)person.SourceRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TargetRecruitingMetricsId, person.TargetedCompanyRecruitingMetrics != null ? (object)person.TargetedCompanyRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EmployeeReferralId, person.EmployeeRefereral != null ? (object)person.EmployeeRefereral.Id.Value : DBNull.Value);
 
                 try
                 {
@@ -1714,6 +1723,42 @@ namespace DataAccess
                 int titleIdIndex = -1;
                 int recruterIdIndex = -1;
                 int titleIndex = -1;
+                int jobSeekerStatusIdIndex = -1;
+                int sourceIdIndex = -1;
+                int targetedCompanyIndex = -1;
+                int employeeReferalIdIndex = -1;
+                int employeeReferalFirstNameIndex = -1;
+                int employeeReferalLastNameIndex = -1;
+                try
+                {
+                    jobSeekerStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.JobSeekerStatusId);
+                }
+                catch
+                { }
+
+                try
+                {
+                    sourceIdIndex = reader.GetOrdinal(Constants.ColumnNames.SourceId);
+                }
+                catch
+                { }
+
+                try
+                {
+                    targetedCompanyIndex = reader.GetOrdinal(Constants.ColumnNames.TargetedCompanyId);
+                }
+                catch
+                { }
+
+                try
+                {
+                    employeeReferalIdIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralId);
+                    employeeReferalFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralFirstName);
+                    employeeReferalLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralLastName);
+                }
+                catch
+                { }
+
                 try
                 {
                     titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
@@ -1942,6 +1987,31 @@ namespace DataAccess
                         {
                             person.Manager.Alias = reader.GetString(managerAliasIndex);
                         }
+                    }
+
+                    if (jobSeekerStatusIdIndex>-1&& !reader.IsDBNull(jobSeekerStatusIdIndex))
+                    {
+                        person.JobSeekersStatusId = !reader.IsDBNull(jobSeekerStatusIdIndex)? reader.GetInt32(jobSeekerStatusIdIndex):0;
+                    }
+
+                    if (sourceIdIndex > -1 && !reader.IsDBNull(sourceIdIndex))
+                    {
+                        person.SourceRecruitingMetrics = new RecruitingMetrics() { RecruitingMetricsId = reader.GetInt32(sourceIdIndex) };
+                    }
+
+                    if (targetedCompanyIndex > -1 && !reader.IsDBNull(targetedCompanyIndex))
+                    {
+                        person.TargetedCompanyRecruitingMetrics = new RecruitingMetrics() { RecruitingMetricsId = reader.GetInt32(targetedCompanyIndex) };
+                    }
+
+                    if (employeeReferalIdIndex > -1 && !reader.IsDBNull(employeeReferalIdIndex))
+                    {
+                        person.EmployeeRefereral = new Person()
+                        {
+                            Id = reader.GetInt32(employeeReferalIdIndex),
+                            FirstName = reader.GetString(employeeReferalFirstNameIndex),
+                            LastName = reader.GetString(employeeReferalLastNameIndex)
+                        };
                     }
 
                     personList.Add(person);
@@ -3679,6 +3749,27 @@ namespace DataAccess
                 return ((bool)command.ExecuteScalar());
             }
         }
+
+        public static List<Person> GetPersonsByPayTypesAndByStatusIds(string statusIds, string payTypeIds)
+        {
+            var result = new List<Person>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonsByPayTypesAndByStatusIds, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StatusIds, statusIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, payTypeIds);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadPersonsShort(reader, result);
+                }
+            }
+            return result;
+        }
+
     }
 }
 
