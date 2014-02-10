@@ -458,5 +458,98 @@ namespace DataAccess
                 }
             }
         }
+        #region RecruitingMetrics
+
+        public static List<RecruitingMetrics> GetRecruitingMetrics(int? recruitingMetricsTypeId)
+        {
+            var recruitingMetrics = new List<RecruitingMetrics>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetRecruitingMetrics, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.RecruitingMetricsTypeId, recruitingMetricsTypeId.HasValue ? recruitingMetricsTypeId.Value : (object)DBNull.Value);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        ReadRecruitingMetrics(reader, recruitingMetrics);
+                    }
+                }
+            }
+            return recruitingMetrics;
+        }
+
+        private static void ReadRecruitingMetrics(SqlDataReader reader, List<RecruitingMetrics> recruitingMetrics)
+        {
+            if (!reader.HasRows) return;
+            int recruitingMetricsIdndex = reader.GetOrdinal(Constants.ColumnNames.RecruitingMetricsId);
+            int nameIndex = reader.GetOrdinal(Constants.ColumnNames.RecruitingMetrics);
+            int recruitingMetricsTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.RecruitingMetricsTypeId);
+            int sortOrderIndex = reader.GetOrdinal(Constants.ColumnNames.SortOrder);
+            int recruitingMetricsInUseIndex = reader.GetOrdinal(Constants.ColumnNames.RecruitingMetricsInUse);
+
+            while (reader.Read())
+            {
+                recruitingMetrics.Add(new RecruitingMetrics()
+                {
+                    RecruitingMetricsType = (RecruitingMetricsType)reader.GetInt32(recruitingMetricsTypeIdIndex),
+                    RecruitingMetricsId = reader.GetInt32(recruitingMetricsIdndex),
+                    Name = reader.GetString(nameIndex),
+                    SortOrder = reader.GetInt32(sortOrderIndex),
+                    InUse = reader.GetBoolean(recruitingMetricsInUseIndex)
+                });
+            }
+        }
+
+
+        public static void SaveRecruitingMetrics(RecruitingMetrics metric)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveRecruitingMetrics, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.RecruitingMetricsId, metric.RecruitingMetricsId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Name, metric.Name);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SortOrder, metric.SortOrder);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void RecruitingMetricsDelete(int recruitingMetricId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.RecruitingMetricsDelete, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.RecruitingMetricsId, recruitingMetricId);
+               
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void RecruitingMetricsInsert(RecruitingMetrics metrics)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.RecruitingMetricsInsert, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.Name, metrics.Name);
+                command.Parameters.AddWithValue(Constants.ParameterNames.RecruitingMetricsTypeId, (int)metrics.RecruitingMetricsType);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SortOrder, metrics.SortOrder);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        #endregion
     }
 }
