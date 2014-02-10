@@ -14,6 +14,10 @@
       <xs:element minOccurs="0" name="DivisionType" type="tns:PersonDivisionType" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q2:ArrayOfPersonDocument" />
       <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EmployeeRefereral" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="EmployeeReferralFirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EmployeeReferralId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="EmployeeReferralLastName" nillable="true" type="xs:string" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
       <xs:element minOccurs="0" name="EmploymentHistory" nillable="true" type="tns:ArrayOfEmployment" />
       <xs:element minOccurs="0" name="FirstHireDate" nillable="true" type="xs:dateTime" />
@@ -31,6 +35,7 @@
       <xs:element minOccurs="0" name="IsStrawMan" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsTerminatedDueToPay" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsWelcomeEmailSent" type="xs:boolean" />
+      <xs:element minOccurs="0" name="JobSeekersStatusId" type="xs:int" />
       <xs:element minOccurs="0" name="LastLogin" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LastTerminationDate" nillable="true" type="xs:dateTime" />
@@ -54,7 +59,9 @@
       <xs:element minOccurs="0" name="SLTPTOApproval" type="xs:boolean" />
       <xs:element minOccurs="0" name="Seniority" nillable="true" type="tns:Seniority" />
       <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Skills" nillable="true" type="q9:ArrayOfPersonSkill" />
+      <xs:element minOccurs="0" name="SourceRecruitingMetrics" nillable="true" type="tns:RecruitingMetrics" />
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
+      <xs:element minOccurs="0" name="TargetedCompanyRecruitingMetrics" nillable="true" type="tns:RecruitingMetrics" />
       <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TerminationReason" nillable="true" type="xs:string" />
@@ -302,6 +309,24 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="SeniorityCategory" nillable="true" type="tns:SeniorityCategory" />
+  <xs:complexType name="RecruitingMetrics">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RecruitingMetricsId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="RecruitingMetricsType" type="tns:RecruitingMetricsType" />
+      <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RecruitingMetrics" nillable="true" type="tns:RecruitingMetrics" />
+  <xs:simpleType name="RecruitingMetricsType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="Source" />
+      <xs:enumeration value="TargetedCompany" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RecruitingMetricsType" nillable="true" type="tns:RecruitingMetricsType" />
   <xs:complexType name="PersonStatus">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
