@@ -43,7 +43,13 @@ BEGIN
 		   p.TerminationReasonId,
 		   p.RecruiterId AS RecruiterId,
 		   p.TitleId,
-           p.Title
+           p.Title,
+		   p.JobSeekerStatusId,
+		   p.SourceId,
+		   p.TargetedCompanyId,
+		   p.EmployeeReferralId,
+		   p.EmployeeReferralFirstName,
+		   p.EmployeeReferralLastName
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 END
