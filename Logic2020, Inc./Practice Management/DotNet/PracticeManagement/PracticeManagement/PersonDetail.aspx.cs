@@ -20,6 +20,7 @@ using PraticeManagement.Security;
 using PraticeManagement.Utils;
 using Resources;
 using System.Diagnostics;
+using PraticeManagement.ConfigurationService;
 
 namespace PraticeManagement
 {
@@ -68,7 +69,7 @@ namespace PraticeManagement
         private Pay payForcvEmployeePayTypeChangeViolation;
         private ExceptionDetail internalException;
         private bool _disableValidatecustTerminateDateTE;
-        private int _finalWizardView = 2;
+        private int _finalWizardView = 3;
         private int _startingWizardView = 0;
         private DateTime? _editablePayStartDate;
 
@@ -417,6 +418,7 @@ namespace PraticeManagement
                 _ActiveWizardsArray.Add(0, new int[] { 0 });
                 _ActiveWizardsArray.Add(1, new int[] { 0, 1 });
                 _ActiveWizardsArray.Add(2, new int[] { 0, 1, 2 });
+                _ActiveWizardsArray.Add(3, new int[] { 0, 1, 2,3 });
                 return _ActiveWizardsArray;
             }
         }
@@ -1291,6 +1293,13 @@ namespace PraticeManagement
             e.IsValid =
                 UserIsAdministrator || UserIsHR ||
                 (current != null && current.Id.HasValue && int.Parse(ddlRecruiter.SelectedValue) == current.Id.Value);
+        }
+
+        protected void CustEmpReferral_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            if (rbEmpReferralYes.Checked && ddlEmpReferral.SelectedValue == string.Empty)
+                e.IsValid = false;
         }
 
         protected void cvEndCompensation_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -2942,7 +2951,7 @@ namespace PraticeManagement
                 ddlRecruiter.SelectedValue = current.Id.ToString();
             }
             Person person = null;
-
+            FillRecruitingMetrics();
             if (id.HasValue) // Edit existing person mode
             {
                 person = GetPerson(id);
@@ -2962,6 +2971,7 @@ namespace PraticeManagement
                 btnResetPassword.Visible = false;
             }
             personOpportunities.DataBind();
+
         }
 
         private static Person GetPerson(int? id)
@@ -2982,6 +2992,40 @@ namespace PraticeManagement
             }
         }
 
+        public void FillRecruitingMetrics()
+        {
+            List<DataTransferObjects.RecruitingMetrics> recruitingMetrics;
+            using (ConfigurationServiceClient csc = new ConfigurationServiceClient())
+            {
+                recruitingMetrics = csc.GetRecruitingMetrics(null).ToList();
+            }
+            var listItems = new List<ListItem>();
+            listItems.Add(new ListItem("-- Select Source --", string.Empty));
+            foreach (var item in recruitingMetrics.Where(p => p.RecruitingMetricsType == RecruitingMetricsType.Source).ToList())
+            {
+                listItems.Add(new ListItem(item.Name, item.RecruitingMetricsId.ToString()));
+            }
+            ddlSource.Items.AddRange(listItems.ToArray());
+            listItems.Clear();
+            listItems.Add(new ListItem("-- Select Targeted Company --", string.Empty));
+            foreach (var item in recruitingMetrics.Where(p => p.RecruitingMetricsType == RecruitingMetricsType.TargetedCompany).ToList())
+            {
+                listItems.Add(new ListItem(item.Name, item.RecruitingMetricsId.ToString()));
+            }
+            ddlTarget.Items.AddRange(listItems.ToArray());
+            var persons = new List<Person>();
+            string statusIds = ((int)PersonStatusType.Active).ToString() + "," + ((int)PersonStatusType.TerminationPending).ToString();
+            string paytypeIds = ((int)TimescaleType.Salary).ToString() + "," + ((int)TimescaleType.Hourly).ToString();
+            persons = ServiceCallers.Custom.Person(p => p.GetPersonsByPayTypesAndByStatusIds(statusIds, paytypeIds)).ToList();
+            DataHelper.FillPersonList(ddlEmpReferral, "-- Select Employee referral Name --", persons.ToArray(), string.Empty);
+            rbEmpReferralNo.Checked = true;
+        }
+
+        protected void rbActiveCandidate_CheckedChanged(object sender, EventArgs e)
+        {
+            ddlEmpReferral.Enabled = !rbEmpReferralNo.Checked;
+        }
+
         #region Populate controls
 
         private void PopulateControls(Person person)
@@ -2997,6 +3041,9 @@ namespace PraticeManagement
 
             // EmploymentHistory
             PopulateEmploymentHistory(person);
+
+            //Recruiting Metrics
+            PopulateRecruitingMetrics(person);
         }
 
         private void PopulateRolesAndSeniority(Person person)
@@ -3135,6 +3182,41 @@ namespace PraticeManagement
             }
         }
 
+        private void PopulateRecruitingMetrics(Person person)
+        {
+            if (person != null && person.EmployeeRefereral != null)
+            {
+                ListItem selectedEmpRef = ddlEmpReferral.Items.FindByValue(person.EmployeeRefereral.Id.Value.ToString());
+
+                if (selectedEmpRef == null)
+                {
+                    selectedEmpRef = new ListItem(person.EmployeeRefereral.PersonLastFirstName, person.EmployeeRefereral.Id.Value.ToString());
+                    ddlEmpReferral.Items.Add(selectedEmpRef);
+                }
+
+                ddlEmpReferral.SelectedValue = selectedEmpRef.Value;
+                rbEmpReferralYes.Checked = true;
+                ddlEmpReferral.Enabled = true;
+            }
+            else if (person != null && person.EmployeeRefereral == null)
+            {
+                rbEmpReferralNo.Checked = true;
+            }
+            if (person != null && person.JobSeekersStatus != JobSeekersStatus.Undefined)
+            {
+                rbActiveCandidate.Checked = person.JobSeekersStatus == JobSeekersStatus.ActiveCandidate;
+                rbPassiveCandidate.Checked = person.JobSeekersStatus == JobSeekersStatus.PassiveCandidate;
+            }
+            if (person != null && person.SourceRecruitingMetrics != null)
+            {
+                ddlSource.SelectedValue = person.SourceRecruitingMetrics.RecruitingMetricsId.ToString();
+            }
+            if (person != null && person.TargetedCompanyRecruitingMetrics != null)
+            {
+                ddlTarget.SelectedValue = person.TargetedCompanyRecruitingMetrics.RecruitingMetricsId.ToString();
+            }
+        }
+
         private void PopulateTerminationReason(int? terminationReasonId)
         {
             string selectedValue = string.Empty;
@@ -3229,6 +3311,13 @@ namespace PraticeManagement
                 person.SLTPTOApproval = person.CurrentPay != null && person.CurrentPay.Timescale == TimescaleType.Salary && bool.Parse(hdcvSLTPTOApproval.Value);
                 if (person.CurrentPay != null) person.CurrentPay.ValidateAttribution = ValidateAttribution;
             }
+
+            person.JobSeekersStatusId = rbActiveCandidate.Checked ? (int)JobSeekersStatus.ActiveCandidate : rbPassiveCandidate.Checked ? (int)JobSeekersStatus.PassiveCandidate : (int)JobSeekersStatus.Undefined;
+            if (ddlSource.SelectedValue != string.Empty)
+                person.SourceRecruitingMetrics = new DataTransferObjects.RecruitingMetrics() { RecruitingMetricsId = int.Parse(ddlSource.SelectedValue), Name = ddlSource.SelectedItem.Text };
+            if (ddlTarget.SelectedValue != string.Empty)
+                person.TargetedCompanyRecruitingMetrics = new DataTransferObjects.RecruitingMetrics() { RecruitingMetricsId = int.Parse(ddlTarget.SelectedValue), Name = ddlTarget.SelectedItem.Text };
+            person.EmployeeRefereral = rbEmpReferralYes.Checked ? new Person() { Id = int.Parse(ddlEmpReferral.SelectedValue) } : null;
         }
 
         private List<string> GetSelectedRoles()
