@@ -186,6 +186,16 @@ namespace PracticeManagementService
             Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment});
         }
 
+        internal static void SendRecruitingMetricsReportEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray)
+        {
+            MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
+            var attachment = new Attachment(attachmentStream, string.Format("RecruitingMetrics_{0}_and_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.RecruitingMetricsReportTemplateName);
+            var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
+        }
+
         public static SmtpClient GetSmtpClient(SMTPSettings smtpSettings = null)
         {
             if (smtpSettings == null)
