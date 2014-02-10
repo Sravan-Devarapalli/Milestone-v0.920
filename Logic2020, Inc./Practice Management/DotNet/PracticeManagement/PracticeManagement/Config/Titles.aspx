@@ -304,10 +304,10 @@
                         <td class="Padding10Px">
                             <asp:ValidationSummary ID="valSummaryAddTitle" runat="server" ValidationGroup="AddTitle"
                                 DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false"
-                                ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a Salary Brand and PTO Accrual." />
+                                ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while adding a Salary Brand and PTO Accrual." />
                             <asp:ValidationSummary ID="valSummaryEditTitle" runat="server" ValidationGroup="EditTitle"
                                 DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false"
-                                ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a practice capability." />
+                                ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a Salary Brand and PTO Accrual." />
                             <uc:Label ID="mlInsertStatus" runat="server" ErrorColor="Red" InfoColor="Green" WarningColor="Orange" />
                         </td>
                     </tr>
