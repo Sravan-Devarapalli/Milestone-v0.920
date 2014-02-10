@@ -288,6 +288,35 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public int? EmployeeReferralId
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string EmployeeReferralFirstName
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string EmployeeReferralLastName
+        {
+            get;
+            set;
+        }
+
+        public string EmployeeReferralLastFirstName
+        {
+            get
+            {
+                return EmployeeReferralId.HasValue ? string.Format(PersonNameFormat, EmployeeReferralLastName, EmployeeReferralFirstName) : string.Empty;
+            }
+        }
+
+        [DataMember]
         public Pay CurrentPay
         {
             get { return _currentPay; }
@@ -476,6 +505,18 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsTerminatedDueToPay { get; set; }
 
+        [DataMember]
+        public RecruitingMetrics SourceRecruitingMetrics { get; set; }
+
+        [DataMember]
+        public RecruitingMetrics TargetedCompanyRecruitingMetrics { get; set; }
+
+        [DataMember]
+        public int? JobSeekersStatusId { get; set; }
+
+        [DataMember]
+        public Person EmployeeRefereral { get; set; }
+
         #endregion Properties - data members
 
         #region Properties - calculated
@@ -549,6 +590,16 @@ namespace DataTransferObjects
             get
             {
                 return Manager != null ? Manager.PersonLastFirstName : "Unassigned";
+            }
+        }
+
+        public JobSeekersStatus JobSeekersStatus
+        {
+            get
+            {
+                if (JobSeekersStatusId != null)
+                    return (JobSeekersStatus)JobSeekersStatusId;
+                return JobSeekersStatus.Undefined;
             }
         }
 
