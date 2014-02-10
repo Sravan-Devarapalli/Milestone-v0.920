@@ -136,5 +136,30 @@ namespace PracticeManagementService
         {
             MailUtil.SendResourceExceptionReportsEmail(startDate, endDate, attachmentByteArray);
         }
+
+        public List<RecruitingMetrics> GetRecruitingMetrics(int? recruitingMetricsTypeId)
+        {
+            return ConfigurationDAL.GetRecruitingMetrics(recruitingMetricsTypeId);
+        }
+
+        public void SaveRecruitingMetrics(RecruitingMetrics metric)
+        {
+            ConfigurationDAL.SaveRecruitingMetrics(metric);
+        }
+
+        public void RecruitingMetricsDelete(int recruitingMetricId)
+        {
+            ConfigurationDAL.RecruitingMetricsDelete(recruitingMetricId);
+        }
+
+        public void RecruitingMetricsInsert(RecruitingMetrics metrics)
+        {
+            ConfigurationDAL.RecruitingMetricsInsert(metrics);
+        }
+
+        public void SendRecruitingMetricsReportEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray)
+        {
+            MailUtil.SendRecruitingMetricsReportEmail(startDate, endDate, attachmentByteArray);
+        }
     }
 }
