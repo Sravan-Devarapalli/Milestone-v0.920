@@ -492,7 +492,7 @@
                                     <asp:RequiredFieldValidator ID="reqPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
                                         ErrorMessage="The Status is required." ToolTip="The Status is required." ValidationGroup="Person"
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>
-                                 <%--   <asp:CustomValidator ID="custPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
+                                    <%--   <asp:CustomValidator ID="custPersonStatus" runat="server" ControlToValidate="ddlPersonStatus"
                                         ErrorMessage="Only individuals with a security role of 'Administrator' or 'HR' or 'Recruiter' may change a person's employment status." ToolTip="Only individuals with a security role of 'Administrator' or 'HR' or 'Recruiter' may change a person's employment status."
                                         ValidationGroup="Person" Text="*" ValidateEmptyText="false" EnableClientScript="false"
                                         SetFocusOnError="true" Display="Dynamic" OnServerValidate="custPersonStatus_ServerValidate"></asp:CustomValidator>
@@ -532,7 +532,7 @@
                                 </td>
                                 <td>
                                     <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set to Practice Area Owner</asp:LinkButton>
-                                    <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server"/>
+                                    <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
                                 </td>
                             </tr>
                             <tr>
@@ -716,21 +716,15 @@
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
                                 </td>
-                                <td class="padRight10Imp">
-                                    Recruiter
+                                <td>
+                                    &nbsp;
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlRecruiter" runat="server" onchange="setDirty();" CssClass="Width256Px">
-                                    </asp:DropDownList>
+                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
+                                        Text="Locked-Out" />
                                 </td>
                                 <td>
-                                    <asp:RequiredFieldValidator ID="rfvRecruiter" runat="server" ErrorMessage="The Recruiter is required."
-                                        ControlToValidate="ddlRecruiter" ToolTip="The Recruiter is required." ValidationGroup="Person"
-                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
-                                    <asp:CustomValidator ID="custRecruiter" runat="server" ControlToValidate="ddlRecruiter"
-                                        ErrorMessage="Cannot set a other person as recruiter." ToolTip="Cannot set a other person as recruiter."
-                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                        Display="Dynamic" OnServerValidate="custRecruiter_ServerValidate"></asp:CustomValidator>&nbsp;
+                                    &nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -752,16 +746,6 @@
                                         Display="Dynamic" EnableClientScript="false" ValidationGroup="Person" ErrorMessage="There is another Person with the same Employee Number."
                                         OnServerValidate="custEmployeeNumber_ServerValidate" SetFocusOnError="true" Text="*"
                                         ToolTip="There is another Person with the same Employee Number."></asp:CustomValidator>&nbsp;
-                                </td>
-                                <td>
-                                    &nbsp;
-                                </td>
-                                <td>
-                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
-                                        Text="Locked-Out" />
-                                </td>
-                                <td>
-                                    &nbsp;
                                 </td>
                             </tr>
                         </table>
@@ -797,28 +781,35 @@
                                             CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
+                                <%--Command Argument = 7 for Recruiting Metrics tab--%>
+                                <asp:TableCell ID="cellRecruitingMetrics" runat="server">
+                                    <span class="bg">
+                                        <asp:LinkButton ID="btnRecruitingMetrics" runat="server" Text="Recruiting Metrics"
+                                            CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton>
+                                    </span>
+                                </asp:TableCell>
                                 <asp:TableCell ID="cellEmploymentHistory" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnEmploymentHistory" runat="server" Text="Employment History"
-                                            CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width83Px" OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjects" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnProjects" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Projects"
-                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="width50Px" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellOpportunities" runat="server">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnOppportunities" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Opportunities"
-                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellActivityLog" runat="server" Visible="false">
                                     <span class="bg">
                                         <asp:LinkButton ID="btnActivityLog" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History"
-                                            CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton>
+                                            CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -1331,6 +1322,71 @@
                                     </div>
                                 </asp:Panel>
                             </asp:View>
+                            <asp:View ID="vwRecruitingMetrics" runat="server">
+                                <asp:Panel ID="pnlRecruitingMetrics" runat="server" CssClass="tab-pane">
+                                    <table class="Width50Percent">
+                                        <tr class="Height30Px">
+                                            <td class="padRight10Imp Width20PerImp">
+                                                Recruiter
+                                            </td>
+                                            <td>
+                                                <asp:DropDownList ID="ddlRecruiter" runat="server" onchange="setDirty();" CssClass="Width256Px">
+                                                </asp:DropDownList>
+                                            </td>
+                                            <td>
+                                                <asp:RequiredFieldValidator ID="rfvRecruiter" runat="server" ErrorMessage="The Recruiter is required."
+                                                    ControlToValidate="ddlRecruiter" ToolTip="The Recruiter is required." ValidationGroup="Person"
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                                <asp:CustomValidator ID="custRecruiter" runat="server" ControlToValidate="ddlRecruiter"
+                                                    ErrorMessage="Cannot set a other person as recruiter." ToolTip="Cannot set a other person as recruiter."
+                                                    ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="custRecruiter_ServerValidate"></asp:CustomValidator>&nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr class="Height30Px">
+                                            <td>
+                                                Job Seeker Status
+                                            </td>
+                                            <td>
+                                                <asp:RadioButton ID="rbActiveCandidate" runat="server" Text="Active Candidate" GroupName="JobSeekerStatus"/><asp:RadioButton
+                                                    ID="rbPassiveCandidate" runat="server" Text="Passive Candidate" GroupName="JobSeekerStatus"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="Height30Px">
+                                            <td>
+                                                Source
+                                            </td>
+                                            <td>
+                                                <asp:DropDownList ID="ddlSource" runat="server">
+                                                </asp:DropDownList>
+                                            </td>
+                                        </tr>
+                                        <tr class="Height30Px">
+                                            <td>
+                                                Targeted Company
+                                            </td>
+                                            <td>
+                                                <asp:DropDownList ID="ddlTarget" runat="server">
+                                                </asp:DropDownList>
+                                            </td>
+                                        </tr>
+                                        <tr class="Height30Px">
+                                            <td>
+                                                Employee Referral
+                                            </td>
+                                            <td>
+                                                <asp:RadioButton ID="rbEmpReferralNo" Text="No" runat="server" GroupName="EmployeeReferral" AutoPostBack="true" OnCheckedChanged="rbActiveCandidate_CheckedChanged"/>
+                                                <asp:RadioButton ID="rbEmpReferralYes" runat="server" Text="Yes" GroupName="EmployeeReferral" AutoPostBack="true" OnCheckedChanged="rbActiveCandidate_CheckedChanged"/>
+                                                <asp:DropDownList ID="ddlEmpReferral" runat="server" Enabled="false"></asp:DropDownList>
+                                                <asp:CustomValidator ID="CustEmpReferral" runat="server"
+                                                    ErrorMessage="Please select the employee referral." ToolTip="Please select the employee referral."
+                                                    ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="CustEmpReferral_ServerValidate"></asp:CustomValidator>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </asp:Panel>
+                            </asp:View>
                             <asp:View ID="vwEmploymentHistory" runat="server">
                                 <asp:Panel ID="pnlEmploymentHistory" runat="server" CssClass="tab-pane">
                                     <asp:GridView ID="gvEmploymentHistory" runat="server" AutoGenerateColumns="false"
@@ -1529,7 +1585,8 @@
                                             <asp:CompareValidator ID="cvActiveHireDateFormat" runat="server" ControlToValidate="dtpActiveHireDate"
                                                 Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToActive"
-                                                ToolTip="Please enter a date in the correct format: MM/DD/YYYY." Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+                                                ToolTip="Please enter a date in the correct format: MM/DD/YYYY." Type="Date"
+                                                EnableClientScript="false">*</asp:CompareValidator>
                                             <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ControlToValidate="dtpActiveHireDate"
                                                 ErrorMessage="New Hire Date should be greater than previous Termination date."
                                                 ToolTip="New Hire Date should be greater than previous Termination date." ValidationGroup="ChangePersonStatusToActive"
@@ -1599,8 +1656,8 @@
                                                 Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                             <asp:CompareValidator ID="cvContingentHireDateFormat" runat="server" ControlToValidate="dtpContingentHireDate"
                                                 Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                                                Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToContingent" Type="Date"
-                                                EnableClientScript="false">*</asp:CompareValidator>
+                                                Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToContingent"
+                                                Type="Date" EnableClientScript="false">*</asp:CompareValidator>
                                             <asp:CompareValidator ID="cvWithTermiantionDate" runat="server" ControlToValidate="dtpContingentHireDate"
                                                 ControlToCompare="dtpTerminationDate" Operator="GreaterThan" Type="Date" ErrorMessage="New Hire date should be greater than previous Termination date."
                                                 Display="Dynamic" Text="*" ValidationGroup="ChangePersonStatusToContingent" ToolTip="New Hire date should be greater than previous Termination date."
@@ -1734,11 +1791,11 @@
                     </tr>
                     <tr>
                         <td style="text-align: center; padding: 4px;">
-                            <asp:Button ID="btnOkConsultantToContract" runat="server" Text="Ok" UseSubmitBehavior="false" CssClass="Width60Px"
-                                OnClick="btnOkConsultantToContract_Click" />
+                            <asp:Button ID="btnOkConsultantToContract" runat="server" Text="Ok" UseSubmitBehavior="false"
+                                CssClass="Width60Px" OnClick="btnOkConsultantToContract_Click" />
                             &nbsp;
-                            <asp:Button ID="btnCloseConsultantToContract" runat="server" Text="Cancel" UseSubmitBehavior="false" CssClass="Width60Px"
-                                OnClick="btnCloseConsultantToContract_Click" />
+                            <asp:Button ID="btnCloseConsultantToContract" runat="server" Text="Cancel" UseSubmitBehavior="false"
+                                CssClass="Width60Px" OnClick="btnCloseConsultantToContract_Click" />
                         </td>
                     </tr>
                 </table>
@@ -1760,27 +1817,28 @@
                         <td>
                             <p>
                                 <asp:Label runat="server" ID="lblPersonName"></asp:Label>
-                                 has following Attribution record(s). The records will update/delete accordingly.
+                                has following Attribution record(s). The records will update/delete accordingly.
                                 Click "OK" to proceed with this change.
-                            <br />
+                                <br />
                         </td>
                     </tr>
-                       <tr>
-                           <td>
-                        <asp:DataList ID="dlCommissionAttribution" runat="server" CssClass="WS-Normal">
-                            <ItemTemplate>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>-
-                                <%# Eval("Name") %>
-                            </ItemTemplate>
-                        </asp:DataList></td>
-                       </tr>
+                    <tr>
+                        <td>
+                            <asp:DataList ID="dlCommissionAttribution" runat="server" CssClass="WS-Normal">
+                                <ItemTemplate>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;<%# Eval("ProjectNumber") %>-
+                                    <%# Eval("Name") %>
+                                </ItemTemplate>
+                            </asp:DataList>
+                        </td>
+                    </tr>
                     <tr>
                         <td style="text-align: center; padding: 4px;">
-                            <asp:Button ID="btnDivisionChageOk" runat="server" Text="Ok" OnClick="btnDivisionChageOk_Click" CssClass="Width60Px"
-                                UseSubmitBehavior="false" />
+                            <asp:Button ID="btnDivisionChageOk" runat="server" Text="Ok" OnClick="btnDivisionChageOk_Click"
+                                CssClass="Width60Px" UseSubmitBehavior="false" />
                             &nbsp;
-                            <asp:Button ID="btnDivisionChangeCancel" runat="server" Text="Cancel" OnClick="btnDivisionChangeCancel_Click" CssClass="Width60Px"
-                                UseSubmitBehavior="false" />
+                            <asp:Button ID="btnDivisionChangeCancel" runat="server" Text="Cancel" OnClick="btnDivisionChangeCancel_Click"
+                                CssClass="Width60Px" UseSubmitBehavior="false" />
                         </td>
                     </tr>
                 </table>
@@ -2013,7 +2071,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="lnkSaveReport" />
-            <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" /> 
+            <asp:PostBackTrigger ControlID="lnkSaveReportCancelTermination" />
             <asp:PostBackTrigger ControlID="lnkSaveReportMilestone" />
             <asp:PostBackTrigger ControlID="btnOkChangePersonStatus" />
             <asp:PostBackTrigger ControlID="bntEndCompensationOk" />
