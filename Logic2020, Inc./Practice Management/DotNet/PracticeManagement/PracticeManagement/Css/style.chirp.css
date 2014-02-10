@@ -2136,6 +2136,10 @@ TABLE.Section td
 {
     width: 44%;
 }
+.Width44point5Percent
+{
+    width: 44.5% !important;
+}
 .Width45Percent
 {
     width: 45%;
@@ -2216,6 +2220,10 @@ TABLE.Section td
 .Width80Percent
 {
     width: 80%;
+}
+.Width80PercentImp
+{
+    width: 80% !important;
 }
 .Width85Percent
 {
@@ -2713,6 +2721,11 @@ Width99PercentImp
 .ModalPopUpDropDownPadding
 {
     padding-top: 8px;
+}
+.divMetrics
+{
+    padding-top: 20px;
+    padding-left: 10%;
 }
 .TimeEntryAddPopUpTable
 {
@@ -5004,7 +5017,7 @@ BenchCosts.ascx*/
     z-index: 100001;
     left: 360.5px;
     top: 316px;
-    width: 65%
+    width: 65%;
 }
 .CloseButtonTable
 {
