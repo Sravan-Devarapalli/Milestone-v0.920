@@ -43,6 +43,7 @@ namespace UpdatePracticeAndSeniority
         public const string Skills_Profile_PagePath_ConfigKey = "SkillsProfilePagePath";
         public const string PAYROLLDISTRIBUTIONREPORT_SCHEDULETIME_ConfigKey = "PayrollDistributionScheduleTime";
         public const string ExceptionReportsScheduleTime_ConfigKey = "ExceptionReportsScheduleTime";
+        public const string RecruitingMetricsReportScheduleTime_ConfigKey = "RecruitingMetricsReportScheduleTime";
         public const string PayRollDistibutionReportReciever_ConfigKey = "PayrollDistributionReportReciever";
         public const string EmailBccRecieverList_ConfigKey = "EmailBccRecieverList";
         public const string ProjectSummaryCacheScheduleTime_ConfigKey = "ProjectSummaryCacheScheduleTime";
@@ -86,6 +87,7 @@ namespace UpdatePracticeAndSeniority
         public const string M_FinishedActivateDeactivateEmails = "Finished to send the Activate and DeActivate Account Emails.";
         public const string M_InsertProjectSummaryCacheValueStartedProcess = "Started Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
         public const string M_InsertProjectSummaryCacheValueFinishedProcess = "Finished Process of Insert ProjectSummary Cache Values (DateTime:{0}).";
+
         public const string M_ExceptionReportsStartedProcess = "Started Process of Resource Exception Report.";
         public const string M_ExceptionReportsStartedReadingData = "Started reading data Resource Exception Report.";
         public const string M_ExceptionReportsReadDataSuccess = "Read the Resource Exception Report data.";
@@ -93,6 +95,15 @@ namespace UpdatePracticeAndSeniority
         public const string M_ExceptionReportsEmailed = "Emailed the Resource Exception Report.";
         public const string M_ExceptionReportsAttachmentPreparationStarted = "Started preparation of attachment of Resource Exception Report.";
         public const string M_ExceptionReportsAttachmentPreparationSucess = "Completed preparation of attachment of Resource Exception Report.";
+
+        public const string M_RecruitingMetricsReportStartedProcess = "Started Process of Recruiting Metrics Report.";
+        public const string M_RecruitingMetricsReportStartedReadingData = "Started reading data Recruiting Metrics Report.";
+        public const string M_RecruitingMetricsReportReadDataSuccess = "Read the Recruiting Metrics Report data.";
+        public const string M_RecruitingMetricsReportAttachmentPreparationStarted = "Started preparation of attachment of Recruiting Metrics Report.";
+        public const string M_RecruitingMetricsReportAttachmentPreparationSucess = "Completed preparation of attachment of Recruiting Metrics Report.";
+        public const string M_RecruitingMetricsReportStartedEmailing = "Started emailing the Recruiting Metrics Report data.";
+        public const string M_RecruitingMetricsReportEmailed = "Emailed the Recruiting Metrics Report.";
+        public const string RecruitingMetricsReportFailedFormat = "Failed to send an email of Recruiting Metrics Report due to: {0}";
 
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
@@ -195,6 +206,14 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static TimeSpan RecruitingMetricsReportScheduleTime
+        {
+            get
+            {
+                return TimeSpan.Parse(GetConfigValue(RecruitingMetricsReportScheduleTime_ConfigKey));
+            }
+        }
+
         public static TimeSpan WelcomeMailScheduleTime
         {
             get
@@ -270,15 +289,17 @@ namespace UpdatePracticeAndSeniority
                 if (currentDateTimeWithTimeZone.TimeOfDay > FirstSchedularTime)
                 {
                     currentDateTimeWithTimeZone = CurrentPMTime;
-                    //For the starting of the schedular if we update schedular binaries between 00:01:00 and 02:00:00, then we need to run Project Summary Cache Task.
+                   //For the starting of the schedular if we update schedular binaries between 00:01:00 and 02:00:00, then we need to run Project Summary Cache Task.
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on every monday.
                     RunResourceExceptionReport(currentDateTimeWithTimeZone);
+                    //Runs at 07:00:00 on 1st of every month.
+                RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
-                    RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
+                   RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
                 }
 
                 while (true)
@@ -303,6 +324,8 @@ namespace UpdatePracticeAndSeniority
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on every monday.
                     RunResourceExceptionReport(currentDateTimeWithTimeZone);
+                    //Runs at 07:00:00 on 1st of every month.
+                    RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
                 }
@@ -640,6 +663,24 @@ namespace UpdatePracticeAndSeniority
         }
 
         /// <summary>
+        /// Runs Recruiting Metrics Report Task as per the time reaches(1st of Every month morning at 07:00:00).
+        /// </summary> 
+        /// <param name="currentDateTimeWithTimeZone"></param>
+        public static void RunRecruitingMetricsReport(DateTime currentDateTimeWithTimeZone)
+        {
+            if (currentDateTimeWithTimeZone.Day == 1 && currentDateTimeWithTimeZone.TimeOfDay < RecruitingMetricsReportScheduleTime)
+            {
+                currentDateTimeWithTimeZone = CurrentPMTime;
+                if (currentDateTimeWithTimeZone.Day == 1 && currentDateTimeWithTimeZone.TimeOfDay < RecruitingMetricsReportScheduleTime)
+                {
+                    var sleeptime = RecruitingMetricsReportScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
+                    Thread.Sleep(sleeptime);
+                }
+                WorkerRole.SendRecruitingMetricsReport(CurrentPMTime);
+            }
+        }
+
+        /// <summary>
         /// Sends an email of Resource Exception Report.
         /// </summary>
         public static void SendResourceExceptionReport(DateTime currentDate)
@@ -675,6 +716,42 @@ namespace UpdatePracticeAndSeniority
             catch (Exception ex)
             {
                 WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(ResourceExceptionReportFailedFormat, ex.Message), nextRunTime);
+            }
+        }
+
+        /// <summary>
+        /// Sends an email of Recruiting Metrics Report.
+        /// </summary>
+        public static void SendRecruitingMetricsReport(DateTime currentDate)
+        {
+            var nextRunTime = currentDate.AddMonths(1);
+            WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportStartedProcess, nextRunTime);
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    DateTime EndDate = currentDate.Date.AddDays(-1);
+                    DateTime StartDate = EndDate.AddDays(1 - EndDate.DayOfYear);
+
+                    //Read the data.
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportStartedReadingData, nextRunTime);
+                    Person[] recruitingMetricsReportList = ReportDAL.RecruitingMetricsReport(StartDate, EndDate, connection).ToArray();
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "RecrutingMetricsReport"), nextRunTime);
+                    
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportReadDataSuccess, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportAttachmentPreparationStarted, nextRunTime);
+                    RecruitingMetricsReportExcelUtil recruitingMetricsReport = new RecruitingMetricsReportExcelUtil(StartDate, EndDate, recruitingMetricsReportList);
+                    recruitingMetricsReport.PopulateAttachment();
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportAttachmentPreparationSucess, nextRunTime);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportStartedEmailing, nextRunTime);
+                    WorkerRole.EmailRecruitingMetricsReport(StartDate, EndDate, recruitingMetricsReport.Attachment, connection);
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportEmailed, nextRunTime);
+                }
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(RecruitingMetricsReportFailedFormat, ex.Message), nextRunTime);
             }
         }
 
@@ -715,6 +792,16 @@ namespace UpdatePracticeAndSeniority
             MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
             var attachment = new Attachment(attachmentStream, string.Format("ExceptionReporting_{0}_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName("ResourceExceptionReports", connection);
+            var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
+            WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
+        }
+
+        private static void EmailRecruitingMetricsReport(DateTime startDate, DateTime endDate, byte[] attachmentByteArray, SqlConnection connection)
+        {
+            MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
+            var attachment = new Attachment(attachmentStream, string.Format("RecruitingMetricsReport_{0}_and_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName("RecruitingMetricsReport", connection);
             var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
             var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
             WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
