@@ -14,7 +14,8 @@
       <Setting name="EmailSubjectForProfilesUpdatedList"/>
       <Setting name="ProjectSummaryCacheScheduleTime"/>
       <Setting name="PayrollDistributionScheduleTime"/>
-      <Setting name="ExceptionReportsScheduleTime"/>      
+      <Setting name="ExceptionReportsScheduleTime"/>
+      <Setting name="RecruitingMetricsReportScheduleTime"/>
       <Setting name="PayrollDistributionReportReciever"/>
       <Setting name="EmailBccRecieverList"/>
       <Setting name="DisableAllMails"/>      
