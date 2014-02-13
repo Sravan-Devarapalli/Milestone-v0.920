@@ -44,13 +44,13 @@ BEGIN
 			p.HireDate AS [Hire Date],
 			p.TerminationDate AS [Termination Date],
 			TR.TerminationReason AS [Termination Reason],
+			CASE WHEN p.HireDate > @Today THEN 0 WHEN p.PersonStatusId = 2 THEN DATEDIFF(DAY, p.HireDate, p.TerminationDate)+1 ELSE DATEDIFF(DAY, p.HireDate, @EndDate)+1 END AS LengthOfTenureInDays,
 			TS.Name AS [Pay Type],
 			recr.LastName+', '+recr.FirstName AS [Recruiter Name],
 			JSS.Name AS [Passive/Active Candidate],
 			targetRM.Name AS [Targeted Company],
 			sourceRM.Name AS [Recruiting Source],
-			empRef.LastName+', '+empRef.FirstName AS [Employee Referral],
-			CASE WHEN p.HireDate > @Today THEN 0 WHEN p.PersonStatusId = 2 THEN DATEDIFF(DAY, p.HireDate, p.TerminationDate)+1 ELSE DATEDIFF(DAY, p.HireDate, @EndDate)+1 END AS LengthOfTenureInDays
+			empRef.LastName+', '+empRef.FirstName AS [Employee Referral]
 	FROM dbo.Person p
 	INNER JOIN dbo.PersonStatus PS ON p.PersonStatusId = PS.PersonStatusId
 	INNER JOIN dbo.Title T ON T.TitleId = p.TitleId
