@@ -123,6 +123,7 @@ namespace PraticeManagement.Utils
             data.Columns.Add("Target Company");
             data.Columns.Add("Recruiting Source");
             data.Columns.Add("Employee Referral");
+            data.Columns.Add("Length of Tenure (in days)");
 
             foreach (var pro in personsList)
             {
@@ -141,7 +142,7 @@ namespace PraticeManagement.Utils
                 row.Add(pro.TargetedCompanyRecruitingMetrics.RecruitingMetricsId != null ? pro.TargetedCompanyRecruitingMetrics.Name : "");
                 row.Add(pro.SourceRecruitingMetrics.RecruitingMetricsId != null ? pro.SourceRecruitingMetrics.Name : "");
                 row.Add(pro.EmployeeReferralId != null ? pro.EmployeeReferralLastFirstName : "");
-
+                row.Add(pro.LengthOfTenture);
                 data.Rows.Add(row.ToArray());
             }
             return data;
