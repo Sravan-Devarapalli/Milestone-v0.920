@@ -1379,7 +1379,7 @@
                                                 <asp:RadioButton ID="rbEmpReferralYes" runat="server" Text="Yes" GroupName="EmployeeReferral" AutoPostBack="true" OnCheckedChanged="rbActiveCandidate_CheckedChanged"/>
                                                 <asp:DropDownList ID="ddlEmpReferral" runat="server" Enabled="false"></asp:DropDownList>
                                                 <asp:CustomValidator ID="CustEmpReferral" runat="server"
-                                                    ErrorMessage="Please select the employee referral." ToolTip="Please select the employee referral."
+                                                    ErrorMessage=" Please select the name of the employee who provided the referral." ToolTip=" Please select the name of the employee who provided the referral."
                                                     ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="CustEmpReferral_ServerValidate"></asp:CustomValidator>
                                             </td>
