@@ -3017,7 +3017,7 @@ namespace PraticeManagement
             string statusIds = ((int)PersonStatusType.Active).ToString() + "," + ((int)PersonStatusType.TerminationPending).ToString();
             string paytypeIds = ((int)TimescaleType.Salary).ToString() + "," + ((int)TimescaleType.Hourly).ToString();
             persons = ServiceCallers.Custom.Person(p => p.GetPersonsByPayTypesAndByStatusIds(statusIds, paytypeIds)).ToList();
-            DataHelper.FillPersonList(ddlEmpReferral, "-- Select Employee referral Name --", persons.ToArray(), string.Empty);
+            DataHelper.FillPersonList(ddlEmpReferral, "-- Select Employee --", persons.ToArray(), string.Empty);
             rbEmpReferralNo.Checked = true;
         }
 
