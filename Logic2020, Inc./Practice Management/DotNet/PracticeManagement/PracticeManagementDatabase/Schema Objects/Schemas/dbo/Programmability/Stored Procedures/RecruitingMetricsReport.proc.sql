@@ -14,7 +14,9 @@ BEGIN
 	(
 	SELECT p.Person,p.StartDate
 	FROM dbo.Pay AS p
-	WHERE @Today BETWEEN @StartDate AND @EndDate
+	INNER JOIN dbo.Person per on p.person = per.personid
+	WHERE @Today BETWEEN p.StartDate AND p.EndDate
+	AND per.isStrawman = 0
 	),
 	PersonPayBeforeToday
 	AS 
@@ -60,7 +62,8 @@ BEGIN
 			sourceRM.Name AS SourceRecruitingMetricsName,
 			p.EmployeeReferralId,
 			empRef.FirstName AS EmployeeReferralFirstName,
-			empRef.LastName AS EmployeeReferralLastName
+			empRef.LastName AS EmployeeReferralLastName,
+			CASE WHEN p.HireDate > @Today THEN 0 WHEN p.PersonStatusId = 2 THEN DATEDIFF(DAY, p.HireDate, p.TerminationDate) ELSE DATEDIFF(DAY, p.HireDate, @Today) END AS LengthOfTenureInDays
 	FROM dbo.Person p
 	INNER JOIN dbo.PersonStatus PS ON p.PersonStatusId = PS.PersonStatusId
 	INNER JOIN dbo.Title T ON T.TitleId = p.TitleId
