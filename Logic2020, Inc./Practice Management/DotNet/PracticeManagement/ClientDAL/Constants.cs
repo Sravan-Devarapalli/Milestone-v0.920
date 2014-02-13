@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string LengthOfTenureInDays = "LengthOfTenureInDays";
             public const string SourceRecruitingMetricsName = "SourceRecruitingMetricsName";
             public const string TargetedCompanyRecruitingMetricsName = "TargetedCompanyRecruitingMetricsName";
             public const string TimeScaleId = "TimeScaleId";
