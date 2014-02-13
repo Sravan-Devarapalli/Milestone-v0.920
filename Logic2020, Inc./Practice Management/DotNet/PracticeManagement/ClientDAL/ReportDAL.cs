@@ -3710,6 +3710,7 @@ namespace DataAccess
             int EmployeeReferralIdIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralId);
             int EmployeeReferralFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralFirstName);
             int EmployeeReferralLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeReferralLastName);
+            int LengthOfTenureInDaysIndex = reader.GetOrdinal(Constants.ColumnNames.LengthOfTenureInDays);
 
             while (reader.Read())
             {
@@ -3754,7 +3755,8 @@ namespace DataAccess
                     },
                     EmployeeReferralId = !reader.IsDBNull(EmployeeReferralIdIndex) ? (int?)reader.GetInt32(EmployeeReferralIdIndex) : null,
                     EmployeeReferralFirstName =!reader.IsDBNull(EmployeeReferralIdIndex) ? reader.GetString(EmployeeReferralFirstNameIndex):"",
-                    EmployeeReferralLastName = !reader.IsDBNull(EmployeeReferralIdIndex) ?reader.GetString(EmployeeReferralLastNameIndex):""
+                    EmployeeReferralLastName = !reader.IsDBNull(EmployeeReferralIdIndex) ?reader.GetString(EmployeeReferralLastNameIndex):"",
+                    LengthOfTenture = reader.GetInt32(LengthOfTenureInDaysIndex)
                 };
                 result.Add(person);
             }
