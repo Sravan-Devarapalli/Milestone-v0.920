@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
+using PraticeManagement.Utils.Excel;
+using PraticeManagement.Utils;
+using System.Data;
 
 namespace PraticeManagement.Controls.Reports.HumanCapital
 {
@@ -11,6 +14,79 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
     {
 
         #region Properties
+
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
+        private string NewHireReportExport = "New Hire Report";
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                dataCellStyle.IsBold = true;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.FontHeight = 200;
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                datarowStyle.Height = 350;
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.MergeRegion.Add(new int[] { 1, 1, 0, coloumnsCount - 1 });
+                sheetStyle.MergeRegion.Add(new int[] { 2, 2, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                   dataDateCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
 
         private HtmlImage ImgTitleFilter { get; set; }
 
@@ -65,31 +141,97 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
         #endregion
 
         #region ControlEvents
-
+        
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             var btn = sender as Button;
             bool isTitle;
             Boolean.TryParse(btn.Attributes["IsTitle"], out isTitle);
             string filterValue = btn.Attributes["FilterValue"];
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+            var dataSetList = new List<DataSet>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var data = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
+                var report = ServiceCallers.Custom.Report(r => r.NewHireReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.PersonStatus, HostingPage.PayTypes, HostingPage.Practices, HostingPage.ExcludeInternalProjects, null, null, null, null)).ToList();
                 if (!string.IsNullOrEmpty(filterValue))
                 {
                     filterValue = filterValue.Trim();
                     bool isUnassigned = filterValue.Equals(Constants.FilterKeys.Unassigned);
                     if (isTitle)
                     {
-                        data = data.Where(p => p.Title != null ? p.Title.TitleName == filterValue : isUnassigned).ToList();
+                        report = report.Where(p => p.Title != null ? p.Title.TitleName == filterValue : isUnassigned).ToList();
                     }
                     else
                     {
-                        data = data.Where(p => p.RecruiterId.HasValue ? p.RecruiterLastFirstName == filterValue : isUnassigned).ToList();
+                        report = report.Where(p => p.RecruiterId.HasValue ? p.RecruiterLastFirstName == filterValue : isUnassigned).ToList();
                     }
                 }
-                HostingPage.ExportToExcel(data);
+                report = report.OrderBy(p => p.PersonLastFirstName).ToList();
+                DataHelper.InsertExportActivityLogMessage(NewHireReportExport);
+                if (report.Count > 0)
+                {
+                    DataTable header1 = new DataTable();
+                    header1.Columns.Add("New Hire Report");
+                    header1.Rows.Add(report.Count + " New Hires");
+                    header1.Rows.Add(HostingPage.Range);
+
+                    headerRowsCount = header1.Rows.Count + 3;
+                    var data = PrepareDataTable(report);
+                    coloumnsCount = data.Columns.Count;
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(DataSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "NewHireReport";
+                    dataset.Tables.Add(header1);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
+                }
+                else
+                {
+                    string dateRangeTitle = "There are no Persons Hired for the selected range.";
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "NewHireReport";
+                    dataset.Tables.Add(header);
+                    dataSetList.Add(dataset);
+                }
+
+                var filename = string.Format("{0}_{1}-{2}.xls", "NewHireReport", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+                
             }
+        }
+
+        public DataTable PrepareDataTable(List<Person> reportData)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            data.Columns.Add("Employee Id");
+            data.Columns.Add("Resource");
+            data.Columns.Add("Title");
+            data.Columns.Add("Pay Types");
+            data.Columns.Add("Hire Date");
+            data.Columns.Add("Status");
+            data.Columns.Add("Recruiter");
+
+            foreach (var person in reportData)
+            {
+
+                row = new List<object>();
+                row.Add(person.EmployeeNumber);
+                row.Add(person.HtmlEncodedName);
+                row.Add(person.Title != null ? person.Title.HtmlEncodedTitleName : string.Empty);
+                row.Add(person.CurrentPay != null ? person.CurrentPay.TimescaleName : string.Empty);
+                row.Add(person.HireDate);
+                row.Add(person.Status.Name);
+                row.Add(person.RecruiterId.HasValue ? person.RecruiterLastFirstName : string.Empty);
+                data.Rows.Add(row.ToArray());
+            }
+            return data;
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
