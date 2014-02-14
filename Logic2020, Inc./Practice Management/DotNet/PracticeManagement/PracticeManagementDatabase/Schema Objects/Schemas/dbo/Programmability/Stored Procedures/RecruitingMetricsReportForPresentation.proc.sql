@@ -44,7 +44,7 @@ BEGIN
 			p.HireDate AS [Hire Date],
 			p.TerminationDate AS [Termination Date],
 			TR.TerminationReason AS [Termination Reason],
-			CASE WHEN p.HireDate > @Today THEN 0 WHEN p.PersonStatusId = 2 THEN DATEDIFF(DAY, p.HireDate, p.TerminationDate)+1 ELSE DATEDIFF(DAY, p.HireDate, @EndDate)+1 END AS LengthOfTenureInDays,
+			CASE WHEN p.HireDate > @Today THEN 0 WHEN p.PersonStatusId = 2 AND p.HireDate <> p.TerminationDate THEN DATEDIFF(DAY, p.HireDate, p.TerminationDate)+1 WHEN p.PersonStatusId = 2 AND p.HireDate = p.TerminationDate THEN 0 ELSE DATEDIFF(DAY, p.HireDate, @EndDate)+1 END AS LengthOfTenureInDays,
 			TS.Name AS [Pay Type],
 			recr.LastName+', '+recr.FirstName AS [Recruiter Name],
 			JSS.Name AS [Passive/Active Candidate],
