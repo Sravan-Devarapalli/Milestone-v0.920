@@ -9,6 +9,9 @@ using System.Web.UI.HtmlControls;
 using System.Text;
 using DataTransferObjects;
 using DataTransferObjects.Reports.ByAccount;
+using PraticeManagement.Utils.Excel;
+using PraticeManagement.Utils;
+using System.Data;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
@@ -17,6 +20,81 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         private const string ByAccountByProjectReportExport = "Account Report By Project";
         private string ProjectDetailUrl = "ProjectDetail.aspx?id={0}";
         private string ByProjectUrl = "~/Reports/ProjectSummaryReport.aspx?ProjectNumber={0}&StartDate={1}&EndDate={2}&PeriodSelected={3}";
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                dataCellStyle.IsBold = true;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.FontHeight = 200;
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                datarowStyle.Height = 350;
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle};
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles[] dataCellStylearray = { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
+
         private HtmlImage ImgBusinessUnitFilter { get; set; }
 
         private HtmlImage ImgProjectStatusFilter { get; set; }
@@ -74,17 +152,18 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             return variance;
         }
-
+        
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(ByAccountByProjectReportExport);
-
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+            var dataSetList = new List<DataSet>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value,
                      cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
 
-                var data = report.GroupedProjects.ToArray();
+                var reportdata = report.GroupedProjects.ToList();
 
                 string filterApplied = "Filters applied to columns: ";
                 List<string> filteredColoums = new List<string>();
@@ -103,27 +182,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
                 var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(HostingPage.AccountId));
 
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Account_ByProject Report");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(account.HtmlEncodedName);
-                sb.Append("\t");
-                sb.Append(account.Code);
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(HostingPage.BusinessUnitsCount + " Business Unit(s)");
-                sb.Append("\t");
-                sb.Append(HostingPage.ProjectsCount + " Project(s)");
-                sb.Append("\t");
-                sb.Append(HostingPage.PersonsCount.ToString() == "1" ? HostingPage.PersonsCount + " Person" : HostingPage.PersonsCount + " People");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(HostingPage.Range);
-                sb.Append("\t");
                 if (filteredColoums.Count > 0)
                 {
-                    sb.AppendLine();
+                  
                     for (int i = 0; i < filteredColoums.Count; i++)
                     {
                         if (i == filteredColoums.Count - 1)
@@ -131,88 +192,107 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                         else
                             filterApplied = filterApplied + filteredColoums[i] + ",";
                     }
-                    sb.Append(filterApplied);
-                    sb.Append("\t");
+                
                 }
-                sb.AppendLine();
-                sb.AppendLine();
 
-                if (data.Length > 0)
+
+                if (reportdata.Count > 0)
                 {
-                    //Header
-                    sb.Append("Account");
-                    sb.Append("\t");
-                    sb.Append("Account Name");
-                    sb.Append("\t");
-                    sb.Append("Business Unit");
-                    sb.Append("\t");
-                    sb.Append("Business Unit Name");
-                    sb.Append("\t");
-                    sb.Append("Project");
-                    sb.Append("\t");
-                    sb.Append("Project Name");
-                    sb.Append("\t");
-                    sb.Append("Status");
-                    sb.Append("\t");
-                    sb.Append("Billing Type");
-                    sb.Append("\t");
-                    sb.Append("Projected Hours");
-                    sb.Append("\t");
-                    sb.Append("Billable");
-                    sb.Append("\t");
-                    sb.Append("Non-Billable");
-                    sb.Append("\t");
-                    sb.Append("Actual Hours");
-                    sb.Append("\t");
-                    sb.Append("Total Estimated Billings");
-                    sb.Append("\t");
-                    sb.Append("Billable Hours Variance");
-                    sb.Append("\t");
-                    sb.AppendLine();
+                    DataTable header1 = new DataTable();
+                    header1.Columns.Add("Account By Project Report");
+                    header1.Columns.Add(" ");
+                    header1.Columns.Add("  ");
 
-                    //Data
-                    foreach (var projectLevelGroupedHours in data)
+                    List<object> row1 = new List<object>();
+                    row1.Add(account.HtmlEncodedName);
+                    row1.Add(account.Code);
+                    header1.Rows.Add(row1.ToArray());
+
+                    List<object> row2 = new List<object>();
+                    row2.Add(HostingPage.BusinessUnitsCount + " Business Unit(s)");
+                    row2.Add(HostingPage.ProjectsCount + " Project(s)");
+                    row2.Add(HostingPage.PersonsCount.ToString() == "1" ? HostingPage.PersonsCount + " Person" : HostingPage.PersonsCount + " People");
+                    header1.Rows.Add(row2.ToArray());
+
+                    List<object> row3 = new List<object>();
+                    row3.Add(HostingPage.RangeForExcel);
+                    header1.Rows.Add(row3.ToArray());
+
+                    List<object> row4 = new List<object>();
+                    if (filteredColoums.Count > 0)
                     {
-                        sb.Append(projectLevelGroupedHours.Project.Client.Code);
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Client.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Group.Code);
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Group.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.ProjectNumber);
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.Project.Status.Name);
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.BillingType);
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.ForecastedHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.BillableHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.NonBillableHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
-                        sb.Append("\t");
-                        sb.Append(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : GetCurrencyDecimalFormat(projectLevelGroupedHours.EstimatedBillings));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(projectLevelGroupedHours.BillableHoursVariance));
-                        sb.Append("\t");
-                        sb.AppendLine();
+                        row4.Add(filterApplied);
+                        header1.Rows.Add(row4.ToArray());
                     }
-
+                    headerRowsCount = header1.Rows.Count + 3;
+                    var data = PrepareDataTable(reportdata);
+                    coloumnsCount = data.Columns.Count;
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(DataSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "Account_ByProject";
+                    dataset.Tables.Add(header1);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
                 }
                 else
                 {
-                    sb.Append("There are no Time Entries towards this range selected.");
+                    string dateRangeTitle = "There are no Time Entries towards this range selected.";
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "Account_ByProject";
+                    dataset.Tables.Add(header);
+                    dataSetList.Add(dataset);
                 }
                 //“TimePeriod_ByProject_DateRange.xls”.  
                 var filename = string.Format("Account_ByProject_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy"), HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
-                GridViewExportUtil.Export(filename, sb);
+                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
+        }
+
+        public DataTable PrepareDataTable(List<ProjectLevelGroupedHours> reportData)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            data.Columns.Add("Account");
+            data.Columns.Add("Account Name");
+            data.Columns.Add("Business Unit");
+            data.Columns.Add("Business Unit Name");
+            data.Columns.Add("Project");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Status");
+            data.Columns.Add("Billing Type");
+            data.Columns.Add("Projected Hours");
+            data.Columns.Add("Billable");
+            data.Columns.Add("Non-Billable");
+            data.Columns.Add("Actual Hours");
+            data.Columns.Add("Total Estimated Billings");
+            data.Columns.Add("Billable Hours Variance");
+            foreach (var projectLevelGroupedHours in reportData)
+            {
+
+                row = new List<object>();
+                row.Add(projectLevelGroupedHours.Project.Client.Code);
+                row.Add(projectLevelGroupedHours.Project.Client.HtmlEncodedName);
+                row.Add(projectLevelGroupedHours.Project.Group.Code);
+                row.Add(projectLevelGroupedHours.Project.Group.HtmlEncodedName);
+                row.Add(projectLevelGroupedHours.Project.ProjectNumber);
+                row.Add(projectLevelGroupedHours.Project.HtmlEncodedName);
+                row.Add(projectLevelGroupedHours.Project.Status.Name);
+                row.Add(projectLevelGroupedHours.BillingType);
+                row.Add(GetDoubleFormat(projectLevelGroupedHours.ForecastedHours));
+                row.Add(GetDoubleFormat(projectLevelGroupedHours.BillableHours));
+                row.Add(GetDoubleFormat(projectLevelGroupedHours.NonBillableHours));
+                row.Add(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
+                row.Add(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : GetCurrencyDecimalFormat(projectLevelGroupedHours.EstimatedBillings));
+                row.Add(GetDoubleFormat(projectLevelGroupedHours.BillableHoursVariance));
+                data.Rows.Add(row.ToArray());
+            }
+            return data;
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
