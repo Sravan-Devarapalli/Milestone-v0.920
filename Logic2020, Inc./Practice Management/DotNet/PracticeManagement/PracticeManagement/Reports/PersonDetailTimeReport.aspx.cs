@@ -264,6 +264,34 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public String RangeForExcel
+        {
+            get
+            {
+                string range = string.Empty;
+                int selectedVal = 0;
+                if (int.TryParse(ddlPeriod.SelectedValue, out selectedVal) && StartDate.HasValue && EndDate.HasValue)
+                {
+                    if (selectedVal == -1)
+                    {
+                        range = "Total Employment (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
+                    }
+                    else
+                    {
+                        if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
+                        {
+                            range = StartDate.Value.ToString("yyyy");
+                        }
+                        else
+                        {
+                            range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                        }
+                    }
+                }
+                return range;
+            }
+        }
+
         public int SelectedPersonId
         {
             get
