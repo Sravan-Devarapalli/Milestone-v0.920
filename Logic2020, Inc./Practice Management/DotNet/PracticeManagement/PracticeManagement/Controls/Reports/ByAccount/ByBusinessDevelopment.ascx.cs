@@ -7,6 +7,9 @@ using System.Web.UI.WebControls;
 using DataTransferObjects.Reports.ByAccount;
 using System.Text;
 using PraticeManagement.Reporting;
+using PraticeManagement.Utils.Excel;
+using PraticeManagement.Utils;
+using System.Data;
 
 namespace PraticeManagement.Controls.Reports.ByAccount
 {
@@ -17,8 +20,82 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         private const string Text_GroupByBusinessUnit = "Group by Business Unit";
         private const string Text_GroupByPerson = "Group by Person";
         private const string AccountDetailByBusinessDevelopmentExport = "Account Detail Report By Business Development";
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
 
         #endregion
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                dataCellStyle.IsBold = true;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.FontHeight = 200;
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                datarowStyle.Height = 350;
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dateformatCellStyle = new CellStyles();
+                dateformatCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dateformatCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -119,7 +196,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 businessUnitIds = hostingPage.BusinessUnitIds;
                 startDate = hostingPage.StartDate;
                 endDate = hostingPage.EndDate;
-                range = hostingPage.Range;
+                range = hostingPage.RangeForExcel;
             }
             else
             {
@@ -128,10 +205,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 businessUnitIds = hostingPage.BusinessUnitIds;
                 startDate = hostingPage.StartDate;
                 endDate = hostingPage.EndDate;
-                range = hostingPage.Range;
+                range = hostingPage.RangeForExcel;
             }
 
             DataHelper.InsertExportActivityLogMessage(AccountDetailByBusinessDevelopmentExport);
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+            var dataSetList = new List<DataSet>();
 
             List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate.Value, endDate.Value)).ToList();
 
@@ -150,102 +229,101 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 projectsCount = hostingPage.ProjectsCount;
                 personsCount = hostingPage.PersonsCount;
             }
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Account_ByBusinessDevelopment Report");
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(account.HtmlEncodedName);
-            sb.Append("\t");
-            sb.Append(account.Code);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(businessUnitsCount + " Business Unit(s)");
-            sb.Append("\t");
-            sb.Append(projectsCount + " Project(s)");
-            sb.Append("\t");
-            sb.Append(personsCount.ToString() == "1" ? personsCount + " Person" : personsCount + " People");
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(range);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.AppendLine();
-
+            var filename = string.Format("{0}_{1}_{2}.xls", account.Code, account.Name, "_ByBusinessDevlopment");
+            filename = filename.Replace(' ', '_');
             if (data.Count > 0)
             {
-                //Header
-                /* Person Name 
-                Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
-                sb.Append("Employee Id");
-                sb.Append("\t");
-                sb.Append("Resource");
-                sb.Append("\t");
-                sb.Append("Date");
-                sb.Append("\t");
-                sb.Append("WorkType");
-                sb.Append("\t");
-                sb.Append("WorkType Name");
-                sb.Append("\t");
-                sb.Append("Business Unit");
-                sb.Append("\t");
-                sb.Append("Business Unit Name");
-                sb.Append("\t");
-                sb.Append("Non-Billable");
-                sb.Append("\t");
-                sb.Append("Total");
-                sb.Append("\t");
-                sb.Append("Note");
-                sb.AppendLine();
-                //Data
-                foreach (var buLevelGroupedHours in data)
-                {
+                DataTable header1 = new DataTable();
+                header1.Columns.Add("Account By Business Development Report");
+                header1.Columns.Add(" ");
+                header1.Columns.Add("  ");
 
-                    foreach (var personLevelGroupedHoursList in buLevelGroupedHours.PersonLevelGroupedHoursList)
-                    {
-                        foreach (var groupByDate in personLevelGroupedHoursList.DayTotalHours)
-                        {
+                List<object> row1 = new List<object>();
+                row1.Add(account.HtmlEncodedName);
+                row1.Add(account.Code);
+                header1.Rows.Add(row1.ToArray());
 
-                            foreach (var dateLevel in groupByDate.DayTotalHoursList)
-                            {
-                                sb.Append(personLevelGroupedHoursList.Person.EmployeeNumber);
-                                sb.Append("\t");
-                                sb.Append(personLevelGroupedHoursList.Person.HtmlEncodedName);
-                                sb.Append("\t");
+                List<object> row2 = new List<object>();
+                row2.Add(businessUnitsCount + " Business Unit(s)");
+                row2.Add(projectsCount + " Project(s)");
+                row2.Add(personsCount.ToString() == "1" ? personsCount + " Person" : personsCount + " People");
+                header1.Rows.Add(row2.ToArray());
 
-                                sb.Append(groupByDate.Date.ToString("MM/dd/yyyy"));
-                                sb.Append("\t");
-                                sb.Append(dateLevel.TimeType.Code);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.TimeType.Name);
-                                sb.Append("\t");
-                                sb.Append(buLevelGroupedHours.BusinessUnit.Code);
-                                sb.Append("\t");
-                                sb.Append(buLevelGroupedHours.BusinessUnit.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.NonBillableHours);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.TotalHours);
-                                sb.Append("\t");
-                                sb.Append(dateLevel.HtmlEncodedNoteForExport);
-                                sb.Append("\t");
-                                sb.AppendLine();
+                List<object> row3 = new List<object>();
+                row3.Add(range);
+                header1.Rows.Add(row3.ToArray());
 
-                            }
-
-                        }
-                    }
-
-                }
+                headerRowsCount = header1.Rows.Count + 3;
+                var data1 = PrepareDataTable(data);
+                coloumnsCount = data1.Columns.Count;
+                sheetStylesList.Add(HeaderSheetStyle);
+                sheetStylesList.Add(DataSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = filename;
+                dataset.Tables.Add(header1);
+                dataset.Tables.Add(data1);
+                dataSetList.Add(dataset);
             }
             else
             {
-                sb.Append("There are no Time Entries towards this account.");
+                string dateRangeTitle = "There are no Time Entries towards this account.";
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = filename;
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
             }
-            var filename = string.Format("{0}_{1}_{2}.xls", account.Code, account.Name, "_ByBusinessDevlopment");
-            filename = filename.Replace(' ', '_');
-            GridViewExportUtil.Export(Utils.Generic.EncodedFileName(filename), sb);
+            
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+        }
 
+        public DataTable PrepareDataTable(List<BusinessUnitLevelGroupedHours> reportData)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            data.Columns.Add("Employee Id");
+            data.Columns.Add("Resource");
+            data.Columns.Add("Date");
+            data.Columns.Add("Work Type");
+            data.Columns.Add("Work Type Name");
+            data.Columns.Add("Business Unit");
+            data.Columns.Add("Business Unit Name");
+            data.Columns.Add("Non-Billable");
+            data.Columns.Add("Total");
+            data.Columns.Add("Note");
+
+            foreach (var buLevelGroupedHours in reportData)
+            {
+
+                foreach (var personLevelGroupedHoursList in buLevelGroupedHours.PersonLevelGroupedHoursList)
+                {
+                    foreach (var groupByDate in personLevelGroupedHoursList.DayTotalHours)
+                    {
+
+                        foreach (var dateLevel in groupByDate.DayTotalHoursList)
+                        {
+
+                            row = new List<object>();
+                            row.Add(personLevelGroupedHoursList.Person.EmployeeNumber);
+                            row.Add(personLevelGroupedHoursList.Person.HtmlEncodedName);
+                            row.Add(groupByDate.Date);
+                            row.Add(dateLevel.TimeType.Code);
+                            row.Add(dateLevel.TimeType.Name);
+                            row.Add(buLevelGroupedHours.BusinessUnit.Code);
+                            row.Add(buLevelGroupedHours.BusinessUnit.HtmlEncodedName);
+                            row.Add(dateLevel.NonBillableHours);
+                            row.Add(dateLevel.TotalHours);
+                            row.Add(dateLevel.HtmlEncodedNoteForExport);
+                            data.Rows.Add(row.ToArray());
+                        }
+                    }
+                }
+            }
+            return data;
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
