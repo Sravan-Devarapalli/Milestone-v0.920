@@ -359,6 +359,7 @@ namespace PraticeManagement.Controls.Reports
                                                                                  string.IsNullOrEmpty(payType) ? personType :
                                                                                  string.IsNullOrEmpty(personType) ? payType :
                                                                                                                      payType + ", " + personType;
+                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Detail", StartDate.Value.ToString("MM.dd.yyyy"), EndDate.Value.ToString("MM.dd.yyyy"));
                 if (reportData.Count > 0)
                 {
                     DataTable header1 = new DataTable();
@@ -373,7 +374,7 @@ namespace PraticeManagement.Controls.Reports
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Details_ByPerson";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -385,11 +386,10 @@ namespace PraticeManagement.Controls.Reports
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Details_ByPerson";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
-                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Detail", StartDate.Value.ToString("MM.dd.yyyy"), EndDate.Value.ToString("MM.dd.yyyy"));
                 NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
         }
