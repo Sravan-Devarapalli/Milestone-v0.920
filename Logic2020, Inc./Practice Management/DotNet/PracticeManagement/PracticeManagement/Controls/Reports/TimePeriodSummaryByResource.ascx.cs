@@ -10,6 +10,9 @@ using System.Text;
 using System.Web.Security;
 using PraticeManagement.Controls.Reports.ByPerson;
 using AjaxControlToolkit;
+using PraticeManagement.Utils.Excel;
+using System.Data;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -24,6 +27,81 @@ namespace PraticeManagement.Controls.Reports
         private string OnMouseOver = "onmouseover";
         private string OnMouseOut = "onmouseout";
         private string ByPersonByResourceUrl = "PersonDetailTimeReport.aspx?StartDate={0}&EndDate={1}&PeriodSelected={2}&PersonId={3}";
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                dataCellStyle.IsBold = true;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.FontHeight = 200;
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                datarowStyle.Height = 350;
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle};
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles dataPercentageCellStyle = new CellStyles();
+                dataPercentageCellStyle.DataFormat = "0.00%";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataPercentageCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
 
         public ModalPopupExtender PersonDetailPopup
         {
@@ -89,7 +167,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected string GetPercentageFormat(double value)
         {
-            return value.ToString(Constants.Formatting.DoubleValueWithSinglePrecision) + "%";
+            return value.ToString(Constants.Formatting.DoubleValue) + "%";
         }
 
         protected string GetPayTypeSortValue(string payType, string name)
@@ -109,14 +187,15 @@ namespace PraticeManagement.Controls.Reports
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(TimePeriodSummaryReportExport);
-
+            var filename = string.Format("{0}_{1}-{2}.xls", "TimePeriod_ByResource", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+            var dataSetList = new List<DataSet>();
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-
-                var data = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value,
-                    HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.SelectedItemsXmlFormat,
-                    cblSeniorities.SelectedItems,
-                    cblPayTypes.SelectedItemsXmlFormat, cblPersonStatusType.SelectedItems, cblDivision.SelectedItemsXmlFormat)).ToList();
+                var report = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryReportByResource(HostingPage.StartDate.Value,
+                   HostingPage.EndDate.Value, HostingPage.IncludePersonWithNoTimeEntries, cblOffShore.SelectedItemsXmlFormat,
+                   cblSeniorities.SelectedItems,
+                   cblPayTypes.SelectedItemsXmlFormat, cblPersonStatusType.SelectedItems, cblDivision.SelectedItemsXmlFormat)).ToList();
 
                 string filterApplied = "Filters applied to columns: ";
                 List<string> filteredColoums = new List<string>();
@@ -133,104 +212,88 @@ namespace PraticeManagement.Controls.Reports
                     filteredColoums.Add("Pay Type");
                 }
 
-                StringBuilder sb = new StringBuilder();
-                sb.Append("TimePeriod_ByResource Report");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(data.Count + " Employees");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(HostingPage.Range);
-                sb.Append("\t");
-                if (filteredColoums.Count > 0)
+                if (report.Count > 0)
                 {
-                    sb.AppendLine();
-                    for (int i = 0; i < filteredColoums.Count; i++)
+                    DataTable header1 = new DataTable();
+                    header1.Columns.Add("Time Period By Resource Report");
+                    header1.Rows.Add(report.Count + " Employees");
+                    header1.Rows.Add(HostingPage.RangeForExcel);
+                    if (filteredColoums.Count > 0)
                     {
-                        if (i == filteredColoums.Count - 1)
-                            filterApplied = filterApplied + filteredColoums[i] + ".";
-                        else
-                            filterApplied = filterApplied + filteredColoums[i] + ",";
+                        for (int i = 0; i < filteredColoums.Count; i++)
+                        {
+                            if (i == filteredColoums.Count - 1)
+                                filterApplied = filterApplied + filteredColoums[i] + ".";
+                            else
+                                filterApplied = filterApplied + filteredColoums[i] + ",";
+                        }
+                        header1.Rows.Add(filterApplied);
                     }
-                    sb.Append(filterApplied);
-                    sb.Append("\t");
-                }
-                sb.AppendLine();
-                sb.AppendLine();
-
-                if (data.Count > 0)
-                {
-                    //Header
-                    sb.Append("Employee Id");
-                    sb.Append("\t");
-                    sb.Append("Resource");
-                    sb.Append("\t");
-                    sb.Append("Title");
-                    sb.Append("\t");
-                    sb.Append("Pay Types");
-                    sb.Append("\t");
-                    sb.Append("IsOffshore");
-                    sb.Append("\t");
-                    sb.Append("Billable");
-                    sb.Append("\t");
-                    sb.Append("Non-Billable");
-                    sb.Append("\t");
-                    sb.Append("BD");
-                    sb.Append("\t");
-                    sb.Append("Internal");
-                    sb.Append("\t");
-                    sb.Append("Time-Off");
-                    sb.Append("\t");
-                    sb.Append("Actual Hours");
-                    sb.Append("\t");
-                    sb.Append("Available Hours");
-                    sb.Append("\t");
-                    sb.Append("Billable Utilization");
-                    sb.Append("\t");
-                    sb.AppendLine();
-
-                    //Data
-                    foreach (var personLevelGroupedHours in data)
-                    {
-                        sb.Append(personLevelGroupedHours.Person.EmployeeNumber);
-                        sb.Append("\t");
-                        sb.Append(personLevelGroupedHours.Person.HtmlEncodedName);
-                        sb.Append("\t");
-                        sb.Append(personLevelGroupedHours.Person.Title.HtmlEncodedTitleName);
-                        sb.Append("\t");
-                        sb.Append(personLevelGroupedHours.Person.CurrentPay.TimescaleName);
-                        sb.Append("\t");
-                        sb.Append(personLevelGroupedHours.Person.IsOffshore ? "Yes" : "No");
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelGroupedHours.BillableHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelGroupedHours.ProjectNonBillableHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelGroupedHours.BusinessDevelopmentHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelGroupedHours.InternalHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelGroupedHours.AdminstrativeHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelGroupedHours.TotalHours));
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelGroupedHours.AvailableHours));
-                        sb.Append("\t");
-                        sb.Append(GetPercentageFormat(personLevelGroupedHours.Person.BillableUtilizationPercent));
-                        sb.Append("\t");
-                        sb.AppendLine();
-                    }
-
+                    headerRowsCount = header1.Rows.Count + 3;
+                    var data = PrepareDataTable(report);
+                    coloumnsCount = data.Columns.Count;
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(DataSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = filename;
+                    dataset.Tables.Add(header1);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
                 }
                 else
                 {
-                    sb.Append("There are no Time Entries by any Employee  for the selected range.");
+                    string dateRangeTitle = "There are no Time Entries by any Employee  for the selected range.";
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = filename;
+                    dataset.Tables.Add(header);
+                    dataSetList.Add(dataset);
                 }
-                //“TimePeriod_ByResource_[StartOfRange]_[EndOfRange].xls”.  
-                var filename = string.Format("{0}_{1}-{2}.xls", "TimePeriod_ByResource", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
-                GridViewExportUtil.Export(filename, sb);
-
+                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
+        }
+
+        public DataTable PrepareDataTable(List<PersonLevelGroupedHours> report)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            data.Columns.Add("Employee Id");
+            data.Columns.Add("Resource");
+            data.Columns.Add("Title");
+            data.Columns.Add("Pay Types");
+            data.Columns.Add("Is Offshore");
+            data.Columns.Add("Billable");
+            data.Columns.Add("Non-Billable");
+            data.Columns.Add("BD");
+            data.Columns.Add("Internal");
+            data.Columns.Add("Time-Off");
+            data.Columns.Add("Actual Hours");
+            data.Columns.Add("Available Hours");
+            data.Columns.Add("Billable Utilization");
+
+            foreach (var item in report)
+            {
+                row = new List<object>();
+                row.Add(item.Person.EmployeeNumber != null ? item.Person.EmployeeNumber : "");
+                row.Add(item.Person.HtmlEncodedName != null ? item.Person.HtmlEncodedName : "");
+                row.Add((item.Person.Title.HtmlEncodedTitleName != null) ? item.Person.Title.HtmlEncodedTitleName : "");
+                row.Add((item.Person.CurrentPay.TimescaleName != null) ? item.Person.CurrentPay.TimescaleName : "");
+                row.Add(item.Person.IsOffshore ? "Yes" : "No");
+                row.Add(GetDoubleFormat(item.BillableHours));
+                row.Add(GetDoubleFormat(item.ProjectNonBillableHours));
+                row.Add(GetDoubleFormat(item.BusinessDevelopmentHours));
+                row.Add(GetDoubleFormat(item.InternalHours));
+                row.Add(GetDoubleFormat(item.AdminstrativeHours));
+                row.Add(GetDoubleFormat(item.TotalHours));
+                row.Add(GetDoubleFormat(item.AvailableHours));
+                row.Add(GetPercentageFormat(item.Person.BillableUtilizationPercent));
+                data.Rows.Add(row.ToArray());
+            }
+            return data;
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
