@@ -8,6 +8,9 @@ using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
 using DataTransferObjects.TimeEntry;
 using System.Text;
+using PraticeManagement.Utils.Excel;
+using PraticeManagement.Utils;
+using System.Data;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -18,7 +21,65 @@ namespace PraticeManagement.Controls.Reports
         private string OnMouseOver = "onmouseover";
         private string OnMouseOut = "onmouseout";
         private string ProjectSummaryReportExport = "ProjectSummary Report By WorkType";
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
 
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 200;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 350;
+
+                RowStyles[] rowStylearray = { headerrowStyle};
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dataPercentCellStyle = new CellStyles();
+                dataPercentCellStyle.DataFormat = "0.00%";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataPercentCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
 
         private Label LblBillable { get; set; }
 
@@ -62,73 +123,97 @@ namespace PraticeManagement.Controls.Reports
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(ProjectSummaryReportExport);
-
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+            var dataSetList = new List<DataSet>();
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.StartDate, HostingPage.EndDate));
-            WorkTypeLevelGroupedHours[] data = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "*" ? null : HostingPage.StartDate, HostingPage.PeriodSelected == "*" ? null : HostingPage.EndDate, null));
-            data = data.OrderBy(p => p.WorkType.Name).ToArray();
-            PopulateWorkTypeTotalHoursPercent(data);
-            StringBuilder sb = new StringBuilder();
-            sb.Append(project.Client.HtmlEncodedName);
-            sb.Append("\t");
-            sb.Append(project.Group.HtmlEncodedName);
-            sb.Append("\t");
-            sb.AppendLine();
-            //P081003 - [ProjectName]
-            sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.HtmlEncodedName));
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(HostingPage.ProjectRange);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.AppendLine();
+            List<WorkTypeLevelGroupedHours> report = ServiceCallers.Custom.Report(r => r.ProjectSummaryReportByWorkType(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "*" ? null : HostingPage.StartDate, HostingPage.PeriodSelected == "*" ? null : HostingPage.EndDate, null)).ToList();
+            report = report.OrderBy(p => p.WorkType.Name).ToList();
+            PopulateWorkTypeTotalHoursPercent(report.ToArray());
 
-            if (data.Length > 0)
+            var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByWorkType");
+            filename = filename.Replace(' ', '_');
+            if (report.Count > 0)
             {
-                //Header
-                sb.Append("WorkType");
-                sb.Append("\t");
-                sb.Append("Billable");
-                sb.Append("\t");
-                sb.Append("Non-Billable");
-                sb.Append("\t");
-                sb.Append("Actual Hours");
-                sb.Append("\t");
-                sb.Append("Percent of Total Actual Hours");
-                sb.Append("\t");
-                sb.AppendLine();
+                DataTable header1 = new DataTable();
+                header1.Columns.Add(project.Client.HtmlEncodedName);
+                header1.Columns.Add(project.Group.HtmlEncodedName);
 
-                //Data
-                foreach (var workTypeLevelGroupedHours in data)
-                {
-                    sb.Append(workTypeLevelGroupedHours.WorkType.Name);
-                    sb.Append("\t");
-                    sb.Append(GetDoubleFormat(workTypeLevelGroupedHours.BillableHours));
-                    sb.Append("\t");
-                    sb.Append(GetDoubleFormat(workTypeLevelGroupedHours.NonBillableHours));
-                    sb.Append("\t");
-                    sb.Append(GetDoubleFormat(workTypeLevelGroupedHours.TotalHours));
-                    sb.Append("\t");
-                    sb.Append(workTypeLevelGroupedHours.WorkTypeTotalHoursPercent + "%");
-                    sb.Append("\t");
-                    sb.AppendLine();
-                }
+                var row1 = new List<object>();
+                row1.Add(string.Format("{0} - {1}", project.ProjectNumber, project.HtmlEncodedName));
+                row1.Add("");
+                header1.Rows.Add(row1.ToArray());
+
+                var row2 = new List<object>();
+                row2.Add(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType);
+                row2.Add("");
+                header1.Rows.Add(row2.ToArray());
+
+                var row3 = new List<object>();
+                row3.Add(HostingPage.ProjectRangeForExcel);
+                row3.Add("");
+                header1.Rows.Add(row3.ToArray());
+
+                headerRowsCount = header1.Rows.Count + 3;
+
+                var data = PrepareDataTable(report);
+                coloumnsCount = data.Columns.Count;
+                sheetStylesList.Add(HeaderSheetStyle);
+                sheetStylesList.Add(DataSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = string.Format("{0}_{1}_{2}", project.ProjectNumber, project.Name, "_ByWorkType");
+                dataset.Tables.Add(header1);
+                dataset.Tables.Add(data);
+                dataSetList.Add(dataset);
 
             }
             else
             {
-                sb.Append("There are no Time Entries towards this project.");
+                string dateRangeTitle = "There are no Time Entries towards this project.";
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = string.Format("{0}_{1}_{2}", project.ProjectNumber, project.Name, "_ByWorkType");
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
             }
-            var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByWorkType");
-            filename = filename.Replace(' ', '_');
-            GridViewExportUtil.Export(Utils.Generic.EncodedFileName(filename), sb);
+            
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+        }
+
+        public DataTable PrepareDataTable(List<WorkTypeLevelGroupedHours> report)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            data.Columns.Add("WorkType");
+            data.Columns.Add("Billable");
+            data.Columns.Add("Non-Billable");
+            data.Columns.Add("Actual Hours");
+            data.Columns.Add("Percent of Total Actual Hours");
+            
+            foreach (var item in report)
+            {
+                row = new List<object>();
+                row.Add(item.WorkType.Name);
+                row.Add(GetDoubleFormat(item.BillableHours));
+                row.Add(GetDoubleFormat(item.NonBillableHours));
+                row.Add(GetDoubleFormat(item.TotalHours));
+                row.Add(GetPercentageFormat(item.WorkTypeTotalHoursPercent));
+                data.Rows.Add(row.ToArray());
+            }
+            return data;
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
 
+        }
+
+        protected string GetPercentageFormat(double value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValue) + "%";
         }
 
         public void DataBindResource(WorkTypeLevelGroupedHours[] reportData)
