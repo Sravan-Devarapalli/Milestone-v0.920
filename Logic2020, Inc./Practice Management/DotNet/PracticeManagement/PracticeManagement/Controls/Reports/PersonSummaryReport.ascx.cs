@@ -60,6 +60,9 @@ namespace PraticeManagement.Controls.Reports
 
                 CellStyles dataCellStyle = new CellStyles();
 
+                CellStyles dataPercentCellStyle = new CellStyles();
+                dataPercentCellStyle.DataFormat = "0.00%";
+
                 CellStyles[] dataCellStylearray = { dataCellStyle,
                                                     dataCellStyle, 
                                                     dataCellStyle,
@@ -73,7 +76,7 @@ namespace PraticeManagement.Controls.Reports
                                                     dataCellStyle,
                                                     dataCellStyle,
                                                     dataCellStyle,
-                                                    dataCellStyle
+                                                    dataPercentCellStyle
                                                   };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
@@ -170,6 +173,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            
             DataHelper.InsertExportActivityLogMessage(PersonSummaryReportExport);
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
@@ -186,6 +190,8 @@ namespace PraticeManagement.Controls.Reports
                                                                                  string.IsNullOrEmpty(payType) ? personType :
                                                                                  string.IsNullOrEmpty(personType) ? payType :
                                                                                                                      payType + ", " + personType;
+                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Summary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+
                 if (timeEntriesGroupByClientAndProjectList.Count > 0)
                 {
 
@@ -201,7 +207,7 @@ namespace PraticeManagement.Controls.Reports
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Summary_ByPerson";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -213,13 +219,13 @@ namespace PraticeManagement.Controls.Reports
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Summary_ByPerson";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
                 //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  
                 //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
-                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Summary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                
                 NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
         }
