@@ -6,6 +6,9 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using DataTransferObjects.Reports.ConsultingDemand;
+using PraticeManagement.Utils.Excel;
+using System.Data;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls.Reports.ConsultantDemand
 {
@@ -16,6 +19,8 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         private string HidePanel = "HidePanel('{0}');";
         private string OnMouseOver = "onmouseover";
         private string OnMouseOut = "onmouseout";
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
         private Dictionary<string, int> monthTotalCounts = new Dictionary<string, int>();
         private HtmlImage ImgTitleFilter { get; set; }
         private HtmlImage ImgSkillFilter { get; set; }
@@ -31,6 +36,70 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             {
                 return mpeConsultantDetailReport;
 
+            }
+        }
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataDateCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
             }
         }
 
@@ -84,84 +153,79 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             ConsultantDetailReport.Collapsed = true.ToString();
             ConsultantDetailReport.PopulateData(false);
             lblConsultant.Text = ConsultantDetailReport._hdTitle.Value + "," + ConsultantDetailReport._hdSkill.Value;
-            lblTotalCount.Text = "Total: "+ConsultantDetailReport.GrandTotal.ToString();
+            lblTotalCount.Text = "Total: " + ConsultantDetailReport.GrandTotal.ToString();
             mpeConsultantDetailReport.Show();
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(ConsultantSummaryReportExport);
-
-            // mso-number-format:"0\.00"
+            var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
+            var dataSetList = new List<DataSet>();
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-
-                var ConsultantSummaryReportExportList = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems, "")).ToList();
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Period: ");
-                sb.Append(HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                sb.Append(" To ");
-                sb.Append(HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.AppendLine();
-                if (ConsultantSummaryReportExportList.Count > 0)
+                var report = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems, "")).ToList();
+                if (report.Count > 0)
                 {
-                    //Header
-                    sb.Append("Title");
-                    sb.Append("\t");
-                    sb.Append("Skill Set");
-                    sb.Append("\t");
-                    sb.Append("Opportunity Number");
-                    sb.Append("\t");
-                    sb.Append("Project Number");
-                    sb.Append("\t");
-                    sb.Append("Account Name");
-                    sb.Append("\t");
-                    sb.Append("Project Name");
-                    sb.Append("\t");
-                    sb.Append("Resource Start Date");
-                    sb.Append("\t");
-
-                    sb.AppendLine();
-
-                    //Data
-                    foreach (var item in ConsultantSummaryReportExportList)
-                    {
-                        for (int item2 = 0; item2 < item.ConsultantDetails.Count; item2++)
-                        {
-                            for (int i = 0; i < item.ConsultantDetails[item2].Count; i++)
-                            {
-                                sb.Append(item.Title);
-                                sb.Append("\t");
-                                sb.Append(item.Skill);
-                                sb.Append("\t");
-                                sb.Append(item.ConsultantDetails[item2].OpportunityNumber);
-                                sb.Append("\t");
-                                sb.Append(item.ConsultantDetails[item2].ProjectNumber);
-                                sb.Append("\t");
-                                sb.Append(item.ConsultantDetails[item2].AccountName);
-                                sb.Append("\t");
-                                sb.Append(item.ConsultantDetails[item2].ProjectName);
-                                sb.Append("\t");
-                                sb.Append(item.ConsultantDetails[item2].ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
-                                sb.Append("\t");
-                                sb.AppendLine();
-                            }
-                        }
-                    }
-
+                    string dateRangeTitle = string.Format("Period: {0} to {1}", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    headerRowsCount = header.Rows.Count + 3;
+                    var data = PrepareDataTable(report);
+                    coloumnsCount = data.Columns.Count;
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(DataSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = filename;
+                    dataset.Tables.Add(header);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
                 }
                 else
                 {
-                    sb.Append("No Consultants are there for the selected period.");
+                    string dateRangeTitle = "No Consultants are there for the selected period.";
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = filename;
+                    dataset.Tables.Add(header);
+                    dataSetList.Add(dataset);
                 }
-                //“[LastName]_[FirstName]-[“Summary” or “Detail”]-[StartOfRange]_[EndOfRange].xls”.  cblTitle
-                //example :Hong-Turney_Jason-Summary-03.01.2012_03.31.2012.xlsx
-                var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantSummary", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
-                GridViewExportUtil.Export(filename, sb);
+                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
+        }
+
+        private DataTable PrepareDataTable(List<ConsultantGroupbyTitleSkill> projectsList)
+        {
+            DataTable data = new DataTable();
+            List<object> row;
+
+            data.Columns.Add("Title");
+            data.Columns.Add("Skill Set");
+            data.Columns.Add("Opportunity Number");
+            data.Columns.Add("Project Number");
+            data.Columns.Add("Account Name");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Resource Start Date");
+
+            foreach (var pro in projectsList)
+            {
+                foreach (var item in pro.ConsultantDetails)
+                {
+                    row = new List<object>();
+                    row.Add(pro.Title != null ? pro.HtmlEncodedTitle : "");
+                    row.Add(pro.Skill != null ? pro.HtmlEncodedSkill : "");
+                    row.Add((item.OpportunityNumber != null) ? item.OpportunityNumber : "");
+                    row.Add((item.ProjectNumber != null) ? item.ProjectNumber : "");
+                    row.Add((item.AccountName != null) ? item.HtmlEncodedAccountName : "");
+                    row.Add(item.ProjectName != null ? item.HtmlEncodedProjectName : "");
+                    row.Add(item.ResourceStartDate != null && item.ResourceStartDate != DateTime.MinValue ? item.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat) : "");
+                    data.Rows.Add(row.ToArray());
+                }
+            }
+            return data;
         }
 
         protected void btnFilterOK_OnClick(object sender, EventArgs e)
