@@ -64,7 +64,10 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 headerCellStyleList.Add(headerCellStyle);
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
-                CellStyles dataCellStyle = new CellStyles();
+                CellStyles dataCellStyle = new CellStyles(); 
+
+                CellStyles dataCurrancyCellStyle = new CellStyles();
+                dataCurrancyCellStyle.DataFormat = "$#,##0.00_);($#,##0.00)";
 
                 CellStyles[] dataCellStylearray = { dataCellStyle, 
                                                     dataCellStyle,
@@ -78,7 +81,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                                                     dataCellStyle,
                                                     dataCellStyle,
                                                     dataCellStyle,
-                                                    dataCellStyle,
+                                                    dataCurrancyCellStyle,
                                                     dataCellStyle
                                                   };
 
@@ -155,6 +158,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            //“TimePeriod_ByProject_DateRange.xls”.  
+            var filename = string.Format("Account_ByProject_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM_dd_yyyy"), HostingPage.EndDate.Value.ToString("MM_dd_yyyy"));
             DataHelper.InsertExportActivityLogMessage(ByAccountByProjectReportExport);
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
@@ -230,7 +235,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Account_ByProject";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -242,12 +247,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Account_ByProject";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
-                //“TimePeriod_ByProject_DateRange.xls”.  
-                var filename = string.Format("Account_ByProject_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy"), HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                
                 NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
         }
