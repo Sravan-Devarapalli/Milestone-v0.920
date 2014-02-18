@@ -9,11 +9,83 @@ using System.Web.Script.Serialization;
 using AjaxControlToolkit;
 using System.Text;
 using PraticeManagement.Reporting;
+using PraticeManagement.Utils.Excel;
+using System.Data;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls.Reports
 {
     public partial class ProjectDetailTabByResource : System.Web.UI.UserControl
     {
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 200;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 350;
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle};
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataDateCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
+
         private PraticeManagement.Reporting.ProjectSummaryReport HostingPage
         {
             get
@@ -113,7 +185,7 @@ namespace PraticeManagement.Controls.Reports
                 {
                     return StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
                 }
-                return HostingPage.ProjectRange;
+                return HostingPage.ProjectRangeForExcel;
             }
         }
 
@@ -334,10 +406,14 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+
             DataHelper.InsertExportActivityLogMessage(ProjectDetailByResourceExport);
+            
+            var dataSetList = new List<DataSet>();
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(ProjectNumber, MilestoneId, StartDate, EndDate));
-            PersonLevelGroupedHours[] data = GetReportData().ToArray();
+            List<PersonLevelGroupedHours> report = GetReportData();
 
             string filterApplied = "Filters applied to columns: ";
             bool isFilterApplied = false;
@@ -347,121 +423,121 @@ namespace PraticeManagement.Controls.Reports
                 isFilterApplied = true;
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append(project.Client.HtmlEncodedName);
-            sb.Append("\t");
-            sb.Append(project.Group.HtmlEncodedName);
-            sb.Append("\t");
-            sb.AppendLine();
-            //P081003 - [ProjectName]
-            sb.Append(string.Format("{0} - {1}", project.ProjectNumber, project.HtmlEncodedName));
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType);
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.Append(ProjectRange);
-            sb.Append("\t");
-            if (isFilterApplied)
+            var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByResourceDetail");
+            filename = filename.Replace(' ', '_');
+            if (report.Count > 0)
             {
-                sb.AppendLine();
-                sb.Append(filterApplied);
-                sb.Append("\t");
-            }
-            sb.AppendLine();
-            sb.AppendLine();
-            if (data.Length > 0)
-            {
-                //Header
-                /* Person Name 
-                Work Type	Work Type Name	Date	Billable Hours	Non-Billable Hours	Total Hours	Note */
-                sb.Append("Employee Id");
-                sb.Append("\t");
-                sb.Append("Resource");
-                sb.Append("\t");
-                sb.Append("Project Role");
-                sb.Append("\t");
-                sb.Append("Date");
-                sb.Append("\t");
-                sb.Append("WorkType");
-                sb.Append("\t");
-                sb.Append("WorkType Name");
-                sb.Append("\t");
-                sb.Append("Billable");
-                sb.Append("\t");
-                sb.Append("Non-Billable");
-                sb.Append("\t");
-                sb.Append("Actual Hours");
-                sb.Append("\t");
-                sb.Append("Note");
-                sb.AppendLine();
-                //Data
-                foreach (var timeEntriesGroupByClientAndProject in data)
+                DataTable header1 = new DataTable();
+                header1.Columns.Add(project.Client.HtmlEncodedName);
+                header1.Columns.Add(project.Group.HtmlEncodedName);
+
+                var row1 = new List<object>();
+                row1.Add(string.Format("{0} - {1}", project.ProjectNumber, project.HtmlEncodedName));
+                row1.Add("");
+                header1.Rows.Add(row1.ToArray());
+
+                var row2 = new List<object>();
+                row2.Add(string.IsNullOrEmpty(project.BillableType) ? project.Status.Name : project.Status.Name + ", " + project.BillableType);
+                row2.Add("");
+                header1.Rows.Add(row2.ToArray());
+
+                var row3 = new List<object>();
+                row3.Add(ProjectRange);
+                row3.Add("");
+                header1.Rows.Add(row3.ToArray());
+
+                var row4 = new List<object>();
+                if (isFilterApplied)
                 {
-                    if (timeEntriesGroupByClientAndProject.DayTotalHours != null)
-                    {
-                        foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
-                        {
-                            foreach (var byWorkType in byDateList.DayTotalHoursList)
-                            {
-                                sb.Append(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
-                                sb.Append("\t");
-                                sb.Append(timeEntriesGroupByClientAndProject.Person.HtmlEncodedName);
-                                sb.Append("\t");
-                                sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
-                                sb.Append("\t");
-                                sb.Append(byDateList.Date.ToString("MM/dd/yyyy"));
-                                sb.Append("\t");
-                                sb.Append(byWorkType.TimeType.Code);
-                                sb.Append("\t");
-                                sb.Append(byWorkType.TimeType.Name);
-                                sb.Append("\t");
-                                sb.Append(byWorkType.BillableHours);
-                                sb.Append("\t");
-                                sb.Append(byWorkType.NonBillableHours);
-                                sb.Append("\t");
-                                sb.Append(byWorkType.TotalHours);
-                                sb.Append("\t");
-                                sb.Append(byWorkType.HtmlEncodedNoteForExport);
-                                sb.Append("\t");
-                                sb.AppendLine();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        sb.Append(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
-                        sb.Append("\t");
-                        sb.Append(timeEntriesGroupByClientAndProject.Person.PersonLastFirstName);
-                        sb.Append("\t");
-                        sb.Append(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
-                        sb.Append("\t");
-                        sb.Append("");
-                        sb.Append("\t");
-                        sb.Append("");
-                        sb.Append("\t");
-                        sb.Append("");
-                        sb.Append("\t");
-                        sb.Append("0");
-                        sb.Append("\t");
-                        sb.Append("0");
-                        sb.Append("\t");
-                        sb.Append("0");
-                        sb.Append("\t");
-                        sb.Append("");
-                        sb.Append("\t");
-                        sb.AppendLine();
-                    }
+                    row4.Add(filterApplied);
+                    row4.Add("");
+                    header1.Rows.Add(row4.ToArray());
                 }
+                headerRowsCount = header1.Rows.Count + 3;
+
+                var data = PrepareDataTable(report);
+                coloumnsCount = data.Columns.Count;
+                sheetStylesList.Add(HeaderSheetStyle);
+                sheetStylesList.Add(DataSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = filename;
+                dataset.Tables.Add(header1);
+                dataset.Tables.Add(data);
+                dataSetList.Add(dataset);
             }
             else
             {
-                sb.Append("There are no Time Entries towards this project.");
+                string dateRangeTitle = "There are no Time Entries towards this project.";
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = filename;
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
             }
-            var filename = string.Format("{0}_{1}_{2}.xls", project.ProjectNumber, project.Name, "_ByResourceDetail");
-            filename = filename.Replace(' ', '_');
-            GridViewExportUtil.Export(Utils.Generic.EncodedFileName(filename), sb);
+            
 
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+        }
+
+        public DataTable PrepareDataTable(List<PersonLevelGroupedHours> report)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            data.Columns.Add("Employee Id");
+            data.Columns.Add("Resource");
+            data.Columns.Add("Project Role");
+            data.Columns.Add("Date");
+            data.Columns.Add("WorkType");
+            data.Columns.Add("WorkType Name");
+            data.Columns.Add("Billable");
+            data.Columns.Add("Non-Billable");
+            data.Columns.Add("Actual Hours");
+            data.Columns.Add("Note");
+
+            foreach (var timeEntriesGroupByClientAndProject in report)
+            {
+                if (timeEntriesGroupByClientAndProject.DayTotalHours != null)
+                {
+                    foreach (var byDateList in timeEntriesGroupByClientAndProject.DayTotalHours)
+                    {
+                        foreach (var byWorkType in byDateList.DayTotalHoursList)
+                        {
+                            row = new List<object>();
+                            row.Add(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
+                            row.Add(timeEntriesGroupByClientAndProject.Person.HtmlEncodedName);
+                            row.Add(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
+                            row.Add(byDateList.Date);
+                            row.Add(byWorkType.TimeType.Code);
+                            row.Add(byWorkType.TimeType.Name);
+                            row.Add(byWorkType.BillableHours);
+                            row.Add(byWorkType.NonBillableHours);
+                            row.Add(byWorkType.TotalHours);
+                            row.Add(byWorkType.HtmlEncodedNoteForExport);
+                            data.Rows.Add(row.ToArray());
+                        }
+                    }
+                }
+                else
+                {
+                    row = new List<object>();
+                    row.Add(timeEntriesGroupByClientAndProject.Person.EmployeeNumber);
+                    row.Add(timeEntriesGroupByClientAndProject.Person.PersonLastFirstName);
+                    row.Add(timeEntriesGroupByClientAndProject.Person.ProjectRoleName);
+                    row.Add("");
+                    row.Add("");
+                    row.Add("");
+                    row.Add("0");
+                    row.Add("0");
+                    row.Add("0");
+                    row.Add("");
+                    data.Rows.Add(row.ToArray());
+                }
+            }
+            return data;
         }
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
