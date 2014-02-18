@@ -12,6 +12,9 @@ using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.FilterObjects;
 using PraticeManagement.PersonService;
+using PraticeManagement.Utils.Excel;
+using System.Collections.Generic;
+using PraticeManagement.Utils;
 namespace PraticeManagement.Config
 {
     public partial class Persons : PracticeManagementPageBase
@@ -28,6 +31,8 @@ namespace PraticeManagement.Config
         private const string ViewingRecords = "Viewing {0} - {1} of {2} Persons";
         private const string DuplicatePersonName = "There is another Person with the same First Name and Last Name.";
         private const int NameCharactersLength = 50;
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
 
         #endregion
 
@@ -157,6 +162,62 @@ namespace PraticeManagement.Config
             set
             {
                 ViewState[ViewStateSortDirection] = value;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles wrapdataCellStyle = new CellStyles();
+                wrapdataCellStyle.WrapText = true;
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles dataNumberDataCellStyle = new CellStyles();
+                dataNumberDataCellStyle.DataFormat = "$#,##0.#####0";
+
+                CellStyles dataNumberDateCellStyle1 = new CellStyles();
+                dataNumberDateCellStyle1.DataFormat = "#,##0";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataDateCellStyle,
+                                                    dataDateCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataNumberDataCellStyle,
+                                                    dataNumberDataCellStyle,
+                                                    dataNumberDataCellStyle,
+                                                    dataNumberDateCellStyle1,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+                
+                return sheetStyle;
             }
         }
 
@@ -454,14 +515,16 @@ namespace PraticeManagement.Config
                 try
                 {
                     DataHelper.InsertExportActivityLogMessage("Person");
-
+                    var dataSetList = new List<DataSet>();
+                    List<SheetStyles> sheetStylesList = new List<SheetStyles>();
                     DataSet excelData =
                         serviceClient.PersonGetExcelSet();
-                    excelGrid.DataSource = excelData;
-                    excelGrid.DataMember = "excelDataTable";
-                    excelGrid.DataBind();
-                    excelGrid.Visible = true;
-                    GridViewExportUtil.Export("Person_List.xls", excelGrid);
+                    headerRowsCount = 1;
+                    coloumnsCount = excelData.Tables[0].Columns.Count;
+                    sheetStylesList.Add(DataSheetStyle);
+                    excelData.DataSetName = "Person_List";
+                    dataSetList.Add(excelData);
+                    NPOIExcel.Export("Person_List.xls", dataSetList, sheetStylesList);
                 }
                 catch (CommunicationException)
                 {
