@@ -13,6 +13,8 @@ using System.Text;
 using PraticeManagement.OpportunityService;
 using PraticeManagement.Controls.Generic.Filtering;
 using System.ServiceModel;
+using PraticeManagement.Utils.Excel;
+using System.Data;
 
 namespace PraticeManagement.Controls.Opportunities
 {
@@ -39,7 +41,8 @@ namespace PraticeManagement.Controls.Opportunities
         private const string Description = "<b>Description : </b>{0}";
         private const string LblTeamResourcesText = "An Opportunity with a {0} sales stage must have a Team Make-Up.";
         private const string LblTeamMakeUpText = "opportunity before it can be saved with a {0} sales stage.";
-
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
 
         private const string ANIMATION_SHOW_SCRIPT =
                      @"<OnClick>
@@ -177,6 +180,64 @@ namespace PraticeManagement.Controls.Opportunities
                 {
                     return serviceClient.GetOpportunityStatusChangeCount(Constants.Dates.HistoryDays);
                 }
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles wrapdataCellStyle = new CellStyles();
+                wrapdataCellStyle.WrapText = true;
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles dollorCellStyle = new CellStyles();
+                dollorCellStyle.DataFormat = "$#,##0.00_);($#,##0.00)";
+
+                CellStyles dataNumberDateCellStyle1 = new CellStyles();
+                dataNumberDateCellStyle1.DataFormat = "#,##0";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataDateCellStyle,
+                                                    dataDateCellStyle,
+                                                    dataDateCellStyle,
+                                                    dollorCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
             }
         }
 
@@ -958,14 +1019,16 @@ namespace PraticeManagement.Controls.Opportunities
                 {
                     DataHelper.InsertExportActivityLogMessage("Opportunity");
 
-                    System.Data.DataSet excelData =
+                    var dataSetList = new List<DataSet>();
+                    List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+                    DataSet excelData =
                         serviceClient.OpportunityGetExcelSet();
-                    GridView excelGrid = new GridView();
-                    excelGrid.DataSource = excelData;
-                    excelGrid.DataMember = "excelDataTable";
-                    excelGrid.DataBind();
-                    excelGrid.Visible = true;
-                    GridViewExportUtil.Export("Opportunity_List.xls", excelGrid);
+                    headerRowsCount = 1;
+                    coloumnsCount = excelData.Tables[0].Columns.Count;
+                    sheetStylesList.Add(DataSheetStyle);
+                    excelData.DataSetName = "Opportunity_List";
+                    dataSetList.Add(excelData);
+                    NPOIExcel.Export("Opportunity_List.xls", dataSetList, sheetStylesList);
                 }
                 catch (CommunicationException)
                 {
