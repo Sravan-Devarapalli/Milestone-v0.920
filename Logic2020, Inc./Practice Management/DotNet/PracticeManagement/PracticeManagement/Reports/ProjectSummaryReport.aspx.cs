@@ -281,6 +281,35 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public string ProjectRangeForExcel
+        {
+            get
+            {
+                System.Web.UI.WebControls.ListItem li = ddlPeriod.SelectedItem;
+                if (!StartDate.HasValue || !EndDate.HasValue)
+                {
+                    return string.Empty;
+                }
+                else if (li.Attributes["milestone"] != null)
+                {
+                    string milestoneName = li.Attributes["milestone"];
+                    return milestoneName + " (" + StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) + ")";
+                }
+                else
+                {
+                    if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
+                    {
+                        return StartDate.Value.ToString("yyyy");
+                    }
+                    else
+                    {
+                        return StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                    }
+
+                }
+            }
+        }
+
         public int? MilestoneId
         {
             get
