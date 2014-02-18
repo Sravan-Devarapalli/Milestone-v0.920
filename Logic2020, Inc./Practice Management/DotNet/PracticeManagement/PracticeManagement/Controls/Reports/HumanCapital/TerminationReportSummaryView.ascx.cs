@@ -159,6 +159,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            var filename = string.Format("{0}_{1}-{2}.xls", "TerminationReport", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
             var btn = sender as Button;
@@ -202,7 +203,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "TerminationReport";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -214,12 +215,11 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "TerminationReport";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
 
-                var filename = string.Format("{0}_{1}-{2}.xls", "TerminationReport", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
                 NPOIExcel.Export(filename, dataSetList, sheetStylesList);   
             }
         }
