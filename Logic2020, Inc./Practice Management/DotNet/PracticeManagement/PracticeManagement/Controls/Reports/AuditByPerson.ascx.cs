@@ -142,7 +142,8 @@ namespace PraticeManagement.Controls.Reports
             DataHelper.InsertExportActivityLogMessage(AuditReportExport);
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-
+            //“Time_Entry_Audit_[StartOfRange]_[EndOfRange].xls”.  
+            var filename = string.Format("{0}_{1}-{2}.xls", "Time_Entry_Audit", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 List<PersonLevelTimeEntriesHistory> report = ServiceCallers.Custom.Report(r => r.TimeEntryAuditReportByPerson(HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
@@ -159,7 +160,7 @@ namespace PraticeManagement.Controls.Reports
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Audit_ByPerson";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -171,12 +172,11 @@ namespace PraticeManagement.Controls.Reports
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Audit_ByPerson";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
-                //“Time_Entry_Audit_[StartOfRange]_[EndOfRange].xls”.  
-                var filename = string.Format("{0}_{1}-{2}.xls", "Time_Entry_Audit", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                
                 NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
         }
