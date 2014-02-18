@@ -207,6 +207,26 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public String RangeForExcel
+        {
+            get
+            {
+                string range = string.Empty;
+                if (StartDate.HasValue && EndDate.HasValue)
+                {
+                    if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
+                    {
+                        range = StartDate.Value.ToString("yyyy");
+                    }
+                    else
+                    {
+                        range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                    }
+                }
+                return range;
+            }
+        }
+
         public string SelectedView
         {
             get
