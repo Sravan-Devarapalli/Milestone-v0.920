@@ -245,6 +245,8 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            //“TimePeriod_ByProject_DateRange.xls”.  
+            var filename = string.Format("Account_ByBusinessUnit_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM_dd_yyyy"), HostingPage.EndDate.Value.ToString("MM_dd_yyyy"));
             DataHelper.InsertExportActivityLogMessage(ByAccountByBusinessUnitReportExport);
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
@@ -310,7 +312,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Account_ByBusinessUnit";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -322,12 +324,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = "Account_ByBusinessUnit";
+                    dataset.DataSetName = filename;
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
-                //“TimePeriod_ByProject_DateRange.xls”.  
-                var filename = string.Format("Account_ByBusinessUnit_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM/dd/yyyy"), HostingPage.EndDate.Value.ToString("MM/dd/yyyy"));
+                
                 NPOIExcel.Export(filename, dataSetList, sheetStylesList);
             }
         }
