@@ -1071,10 +1071,15 @@
                                                     ToolTip="The Buyer Name is required." Text="*" SetFocusOnError="true" Display="Dynamic"
                                                     ErrorMessage="The Buyer Name is required." ValidationGroup="Opportunity"></asp:RequiredFieldValidator>
                                                 <asp:RegularExpressionValidator ID="valregBuyerName" runat="server" ControlToValidate="txtBuyerName"
-                                                    ToolTip="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe or hyphen."
-                                                    ErrorMessage="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe or hyphen."
+                                                    ToolTip="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                                    ErrorMessage="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
                                                     ValidationGroup="Opportunity" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" ValidationExpression="^[a-zA-Z'\-]{2,30}$"></asp:RegularExpressionValidator>
+                                                    Display="Dynamic" ValidationExpression="^[a-zA-Z'\-\ ]{2,30}$"></asp:RegularExpressionValidator>
+                                                <asp:CustomValidator ID="cvBNAllowSpace" runat="server" ControlToValidate="txtBuyerName"
+                                                    ErrorMessage="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                                    ToolTip="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                                    ValidationGroup="Opportunity" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="cvBNAllowSpace_ServerValidate"></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
