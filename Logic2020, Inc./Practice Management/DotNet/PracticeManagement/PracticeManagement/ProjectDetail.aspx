@@ -548,10 +548,15 @@
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic"></asp:RequiredFieldValidator>
                                                 <asp:RegularExpressionValidator ID="valregBuyerName" runat="server" ControlToValidate="txtBuyerName"
-                                                    ErrorMessage="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe or hyphen."
-                                                    ToolTip="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe or hyphen."
+                                                    ErrorMessage="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                                    ToolTip="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" ValidationExpression="^[a-zA-Z'\-]{2,30}$"></asp:RegularExpressionValidator>
+                                                    Display="Dynamic" ValidationExpression="^[a-zA-Z'\-\ ]{2,30}$"></asp:RegularExpressionValidator>
+                                                <asp:CustomValidator ID="cvBNAllowSpace" runat="server" ControlToValidate="txtBuyerName"
+                                                    ErrorMessage="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                                    ToolTip="Buyer Name should be limited to 2-30 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="cvBNAllowSpace_ServerValidate"></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -1191,7 +1196,8 @@
                                                     <li>Clone status
                                                         <asp:DropDownList ID="ddlCloneProjectStatus" runat="server" />
                                                         <asp:CustomValidator ID="cvCloneStatus" runat="server" ControlToValidate="ddlCloneProjectStatus"
-                                                            ValidationGroup="CloneStatus" OnServerValidate="cvCloneStatus_ServerValidate"  ErrorMessage="Project without milestone cannot be cloned with Active status."
+                                                            ValidationGroup="CloneStatus" OnServerValidate="cvCloneStatus_ServerValidate"
+                                                            ErrorMessage="Project without milestone cannot be cloned with Active status."
                                                             Display="Dynamic" ToolTip="Project without milestone cannot be cloned with Active status.">*</asp:CustomValidator>
                                                     </li>
                                                 </ul>
