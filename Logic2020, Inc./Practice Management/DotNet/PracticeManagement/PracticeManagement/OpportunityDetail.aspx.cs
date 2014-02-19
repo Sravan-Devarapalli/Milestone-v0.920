@@ -912,6 +912,21 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvBNAllowSpace_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var isValid = valregBuyerName.IsValid;
+            if (isValid)
+            {
+                var inputString = txtBuyerName.Text.Trim();
+                var spacesRemovedInputString = inputString.Replace(" ", "");
+                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) == 1) ? true : false;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
         protected override bool ValidateAndSave()
         {
             var retValue = false;
