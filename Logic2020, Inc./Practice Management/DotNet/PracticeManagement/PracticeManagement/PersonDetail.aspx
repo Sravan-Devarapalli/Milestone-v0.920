@@ -473,9 +473,14 @@
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                         OnServerValidate="custPersonName_ServerValidate"></asp:CustomValidator>
                                     <asp:RegularExpressionValidator ControlToValidate="txtFirstName" ValidationGroup="Person"
-                                        ID="valRegFirstName" runat="server" ErrorMessage="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                        ToolTip="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                        EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
+                                        ID="valRegFirstName" runat="server" ErrorMessage="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ToolTip="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-\ ]{2,35}$" />
+                                    <asp:CustomValidator ID="cvFNAllowSpace" runat="server" ControlToValidate="txtFirstName"
+                                        ErrorMessage="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ToolTip="First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic" OnServerValidate="cvFNAllowSpace_ServerValidate"></asp:CustomValidator>
                                 </td>
                                 <td>
                                     Status
@@ -511,10 +516,15 @@
                                         ControlToValidate="txtLastName" ErrorMessage="The Last Name is required." EnableClientScript="False"
                                         SetFocusOnError="True" ToolTip="The Last Name is required.">*</asp:RequiredFieldValidator>
                                     <asp:RegularExpressionValidator ControlToValidate="txtLastName" ID="valRegLastName"
-                                        runat="server" ValidationGroup="Person" ErrorMessage="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                        ToolTip="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe or hyphen."
-                                        EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-]{2,35}$" />
+                                        runat="server" ValidationGroup="Person" ErrorMessage="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ToolTip="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-\ ]{2,35}$" />
                                     &nbsp;
+                                    <asp:CustomValidator ID="cvLNAllowSpace" runat="server" ControlToValidate="txtLastName"
+                                        ErrorMessage="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ToolTip="Last Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic" OnServerValidate="cvLNAllowSpace_ServerValidate"></asp:CustomValidator>
                                 </td>
                                 <td>
                                     Career Counselor
@@ -1348,8 +1358,8 @@
                                                 Job Seeker Status
                                             </td>
                                             <td>
-                                                <asp:RadioButton ID="rbActiveCandidate" runat="server" Text="Active Candidate" GroupName="JobSeekerStatus"/><asp:RadioButton
-                                                    ID="rbPassiveCandidate" runat="server" Text="Passive Candidate" GroupName="JobSeekerStatus"/>
+                                                <asp:RadioButton ID="rbActiveCandidate" runat="server" Text="Active Candidate" GroupName="JobSeekerStatus" /><asp:RadioButton
+                                                    ID="rbPassiveCandidate" runat="server" Text="Passive Candidate" GroupName="JobSeekerStatus" />
                                             </td>
                                         </tr>
                                         <tr class="Height30Px">
@@ -1375,11 +1385,14 @@
                                                 Employee Referral
                                             </td>
                                             <td>
-                                                <asp:RadioButton ID="rbEmpReferralNo" Text="No" runat="server" GroupName="EmployeeReferral" AutoPostBack="true" OnCheckedChanged="rbActiveCandidate_CheckedChanged"/>
-                                                <asp:RadioButton ID="rbEmpReferralYes" runat="server" Text="Yes" GroupName="EmployeeReferral" AutoPostBack="true" OnCheckedChanged="rbActiveCandidate_CheckedChanged"/>
-                                                <asp:DropDownList ID="ddlEmpReferral" runat="server" Enabled="false"></asp:DropDownList>
-                                                <asp:CustomValidator ID="CustEmpReferral" runat="server"
-                                                    ErrorMessage=" Please select the name of the employee who provided the referral." ToolTip=" Please select the name of the employee who provided the referral."
+                                                <asp:RadioButton ID="rbEmpReferralNo" Text="No" runat="server" GroupName="EmployeeReferral"
+                                                    AutoPostBack="true" OnCheckedChanged="rbActiveCandidate_CheckedChanged" />
+                                                <asp:RadioButton ID="rbEmpReferralYes" runat="server" Text="Yes" GroupName="EmployeeReferral"
+                                                    AutoPostBack="true" OnCheckedChanged="rbActiveCandidate_CheckedChanged" />
+                                                <asp:DropDownList ID="ddlEmpReferral" runat="server" Enabled="false">
+                                                </asp:DropDownList>
+                                                <asp:CustomValidator ID="CustEmpReferral" runat="server" ErrorMessage=" Please select the name of the employee who provided the referral."
+                                                    ToolTip=" Please select the name of the employee who provided the referral."
                                                     ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="CustEmpReferral_ServerValidate"></asp:CustomValidator>
                                             </td>
