@@ -418,7 +418,7 @@ namespace PraticeManagement
                 _ActiveWizardsArray.Add(0, new int[] { 0 });
                 _ActiveWizardsArray.Add(1, new int[] { 0, 1 });
                 _ActiveWizardsArray.Add(2, new int[] { 0, 1, 2 });
-                _ActiveWizardsArray.Add(3, new int[] { 0, 1, 2,3 });
+                _ActiveWizardsArray.Add(3, new int[] { 0, 1, 2, 3 });
                 return _ActiveWizardsArray;
             }
         }
@@ -1156,6 +1156,36 @@ namespace PraticeManagement
             if (!String.IsNullOrEmpty(ExMessage))
             {
                 args.IsValid = !(ExMessage == DuplicatePersonName);
+            }
+        }
+
+        protected void cvFNAllowSpace_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var isValid = valRegFirstName.IsValid;
+            if(isValid)
+            {
+                var inputString = txtFirstName.Text.Trim();
+                var spacesRemovedInputString = inputString.Replace(" ","");
+                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) == 1) ? true : false;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
+        protected void cvLNAllowSpace_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var isValid = valRegLastName.IsValid;
+            if (isValid)
+            {
+                var inputString = txtLastName.Text.Trim();
+                var spacesRemovedInputString = inputString.Replace(" ", "");
+                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) == 1) ? true : false;
+            }
+            else
+            {
+                args.IsValid = true;
             }
         }
 
