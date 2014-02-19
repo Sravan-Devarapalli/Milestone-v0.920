@@ -67,6 +67,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator valRegFirstName;
         
         /// <summary>
+        /// cvFNAllowSpace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvFNAllowSpace;
+        
+        /// <summary>
         /// ddlPersonStatus control.
         /// </summary>
         /// <remarks>
@@ -128,6 +137,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator valRegLastName;
+        
+        /// <summary>
+        /// cvLNAllowSpace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvLNAllowSpace;
         
         /// <summary>
         /// pnlLineManager control.
