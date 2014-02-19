@@ -220,6 +220,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator valregBuyerName;
         
         /// <summary>
+        /// cvBNAllowSpace control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvBNAllowSpace;
+        
+        /// <summary>
         /// ddlSalesperson control.
         /// </summary>
         /// <remarks>
