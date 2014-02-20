@@ -1164,9 +1164,9 @@ namespace PraticeManagement
             var isValid = valRegFirstName.IsValid;
             if(isValid)
             {
-                var inputString = txtFirstName.Text.Trim();
+                var inputString = txtFirstName.Text;
                 var spacesRemovedInputString = inputString.Replace(" ","");
-                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) == 1) ? true : false;
+                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) < 2) ? true : false;
             }
             else
             {
@@ -1179,9 +1179,9 @@ namespace PraticeManagement
             var isValid = valRegLastName.IsValid;
             if (isValid)
             {
-                var inputString = txtLastName.Text.Trim();
+                var inputString = txtLastName.Text;
                 var spacesRemovedInputString = inputString.Replace(" ", "");
-                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) == 1) ? true : false;
+                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) < 2) ? true : false;
             }
             else
             {
