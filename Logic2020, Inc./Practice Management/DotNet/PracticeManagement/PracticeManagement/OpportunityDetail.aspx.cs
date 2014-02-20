@@ -917,9 +917,9 @@ namespace PraticeManagement
             var isValid = valregBuyerName.IsValid;
             if (isValid)
             {
-                var inputString = txtBuyerName.Text.Trim();
+                var inputString = txtBuyerName.Text;
                 var spacesRemovedInputString = inputString.Replace(" ", "");
-                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) == 1) ? true : false;
+                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) < 2) ? true : false;
             }
             else
             {
