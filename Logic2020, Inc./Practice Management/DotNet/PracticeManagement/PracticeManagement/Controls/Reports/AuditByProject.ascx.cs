@@ -167,7 +167,7 @@ namespace PraticeManagement.Controls.Reports
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = filename;
+                    dataset.DataSetName = "TimeEntryAudit_ByProject";
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -179,7 +179,7 @@ namespace PraticeManagement.Controls.Reports
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = filename;
+                    dataset.DataSetName = "TimeEntryAudit_ByProject";
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
