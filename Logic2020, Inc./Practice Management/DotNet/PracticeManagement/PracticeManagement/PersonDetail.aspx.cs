@@ -451,6 +451,7 @@ namespace PraticeManagement
             {
                 activityLog.Update();
             }
+            cellOpportunities.Visible = UserIsAdministrator;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
