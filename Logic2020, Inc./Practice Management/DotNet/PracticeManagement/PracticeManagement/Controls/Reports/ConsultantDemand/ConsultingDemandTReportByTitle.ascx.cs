@@ -7,16 +7,86 @@ using AjaxControlToolkit;
 using DataTransferObjects.Reports.ConsultingDemand;
 using PraticeManagement.Reports;
 using System.Linq;
+using PraticeManagement.Utils.Excel;
+using PraticeManagement.Utils;
+using System.Data;
 
 namespace PraticeManagement.Controls.Reports.ConsultantDemand
 {
     public partial class ConsultingDemandTReportByTitle : System.Web.UI.UserControl
     {
         private string ConsultantDetailReportExport = "Consultant Detail Report Export";
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
 
         private PraticeManagement.Reports.ConsultingDemand_New HostingPage
         {
             get { return ((PraticeManagement.Reports.ConsultingDemand_New)Page); }
+        }
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataDateCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
         }
 
         private List<CollapsiblePanelExtender> CollapsiblePanelDateExtenderList
@@ -386,18 +456,12 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            var dataSetList = new List<DataSet>();
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             List<ConsultantGroupbySkill> PopUpFilteredSkill = null;
             List<ConsultantGroupbyTitle> PopUpFilteredTitle = null;
             List<ConsultantGroupByMonth> PopUpFilteredByMonth = null;
             DataHelper.InsertExportActivityLogMessage(ConsultantDetailReportExport);
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Period: ");
-            sb.Append(StartDate.ToString(Constants.Formatting.EntryDateFormat));
-            sb.Append(" To ");
-            sb.Append(EndDate.ToString(Constants.Formatting.EntryDateFormat));
-            sb.Append("\t");
-            sb.AppendLine();
-            sb.AppendLine();
             if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
             {
                 string titles = HostingPage.isSelectAllTitles ? null : HostingPage.hdnTitlesProp;
@@ -410,118 +474,140 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             }
             else if (HostingPage.GraphType == ConsultingDemand_New.PipelineTitle)
             {
-                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null,HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp, "", true)).ToList();
+                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, BtnExportPipeLineSelectedValue, null, HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp, "", true)).ToList();
             }
             else if (HostingPage.GraphType == ConsultingDemand_New.PipelineSkill)
             {
-                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue,HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp, "", true)).ToList();
+                PopUpFilteredByMonth = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByMonth(StartDate, EndDate, null, BtnExportPipeLineSelectedValue, HostingPage.isSelectAllSalesStages ? null : HostingPage.hdnSalesStagesProp, "", true)).ToList();
             }
             if ((PopUpFilteredTitle != null && PopUpFilteredTitle.Count > 0) || (PopUpFilteredSkill != null && PopUpFilteredSkill.Count > 0) || (PopUpFilteredByMonth != null && PopUpFilteredByMonth.Count > 0))
             {
-                sb.Append("Title ");
-                sb.Append("\t");
-                sb.Append("SkillSet ");
-                sb.Append("\t");
-                sb.Append("Sales Stage");
-                sb.Append("\t");
-                sb.Append("OpportunityNumber ");
-                sb.Append("\t");
-                sb.Append("ProjectNumber ");
-                sb.Append("\t");
-                sb.Append("AccountName ");
-                sb.Append("\t");
-                sb.Append("ProjectName ");
-                sb.Append("\t");
-                sb.Append("ResourceStartDate ");
-                sb.Append("\t");
-                sb.AppendLine();
-
-                //Data
-                if (HostingPage.GraphType == ConsultingDemand_New.TransactionTitle)
-                {
-                    foreach (var gbytitle in PopUpFilteredTitle)
-                    {
-                        foreach (var detailsbyTitle in gbytitle.ConsultantDetails)
-                        {
-                            sb.Append(gbytitle.HtmlEncodedTitle);
-                            sb.Append("\t");
-                            sb.Append(detailsbyTitle.HtmlEncodedSkill);
-                            sb.Append("\t");
-                            sb.Append(detailsbyTitle.SalesStage);
-                            sb.Append("\t");
-                            sb.Append(detailsbyTitle.OpportunityNumber);
-                            sb.Append("\t");
-                            sb.Append(detailsbyTitle.ProjectNumber);
-                            sb.Append("\t");
-                            sb.Append(detailsbyTitle.HtmlEncodedAccountName);
-                            sb.Append("\t");
-                            sb.Append(detailsbyTitle.HtmlEncodedProjectName);
-                            sb.Append("\t");
-                            sb.Append(detailsbyTitle.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
-                            sb.Append("\t");
-                            sb.AppendLine();
-                        }
-                    }
-                }
-                else if (HostingPage.GraphType == ConsultingDemand_New.TransactionSkill)
-                {
-                    foreach (var gbyskill in PopUpFilteredSkill)
-                    {
-                        foreach (var detailsbySkill in gbyskill.ConsultantDetails)
-                        {
-                            sb.Append(detailsbySkill.HtmlEncodedTitle);
-                            sb.Append("\t");
-                            sb.Append(gbyskill.HtmlEncodedSkill);
-                            sb.Append("\t");
-                            sb.Append(detailsbySkill.SalesStage);
-                            sb.Append("\t");
-                            sb.Append(detailsbySkill.OpportunityNumber);
-                            sb.Append("\t");
-                            sb.Append(detailsbySkill.ProjectNumber);
-                            sb.Append("\t");
-                            sb.Append(detailsbySkill.HtmlEncodedAccountName);
-                            sb.Append("\t");
-                            sb.Append(detailsbySkill.HtmlEncodedProjectName);
-                            sb.Append("\t");
-                            sb.Append(detailsbySkill.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
-                            sb.Append("\t");
-                            sb.AppendLine();
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var pipeLineDetails in PopUpFilteredByMonth)
-                    {
-                        foreach (var pipeLineDet in pipeLineDetails.ConsultantDetailsByMonth)
-                        {
-                            sb.Append(pipeLineDet.HtmlEncodedTitle);
-                            sb.Append("\t");
-                            sb.Append(pipeLineDet.HtmlEncodedSkill);
-                            sb.Append("\t");
-                            sb.Append(pipeLineDet.SalesStage);
-                            sb.Append("\t");
-                            sb.Append(pipeLineDet.OpportunityNumber);
-                            sb.Append("\t");
-                            sb.Append(pipeLineDet.ProjectNumber);
-                            sb.Append("\t");
-                            sb.Append(pipeLineDet.HtmlEncodedAccountName);
-                            sb.Append("\t");
-                            sb.Append(pipeLineDet.HtmlEncodedProjectName);
-                            sb.Append("\t");
-                            sb.Append(pipeLineDet.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat));
-                            sb.Append("\t");
-                            sb.AppendLine();
-                        }
-                    }
-                }
+                string dateRangeTitle = string.Format("Period: {0} to {1}", StartDate.ToString(Constants.Formatting.EntryDateFormat), EndDate.ToString(Constants.Formatting.EntryDateFormat));
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                headerRowsCount = header.Rows.Count + 3;
+                var data = HostingPage.GraphType == ConsultingDemand_New.TransactionSkill ? PrepareSkillDataTable(PopUpFilteredSkill) : HostingPage.GraphType == ConsultingDemand_New.TransactionTitle ? PrepareTitleDataTable(PopUpFilteredTitle) : PrepareMonthDataTable(PopUpFilteredByMonth);
+                coloumnsCount = data.Columns.Count;
+                sheetStylesList.Add(HeaderSheetStyle);
+                sheetStylesList.Add(DataSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = "ConsultantDemandDetail";
+                dataset.Tables.Add(header);
+                dataset.Tables.Add(data);
+                dataSetList.Add(dataset);
             }
             else
             {
-                sb.Append("This consultant does not have demand for the selected period.");
+                string dateRangeTitle = "This consultant does not have demand for the selected period.";
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = "ConsultantDemandDetail";
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
             }
             var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantDemandDetail", StartDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter), EndDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
-            GridViewExportUtil.Export(filename, sb);
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+        }
+
+        private DataTable PrepareSkillDataTable(List<ConsultantGroupbySkill> PopUpFilteredSkill)
+        {
+            DataTable data = new DataTable();
+            List<object> row;
+
+            data.Columns.Add("Title");
+            data.Columns.Add("Skill Set");
+            data.Columns.Add("Sales Stage");
+            data.Columns.Add("Opportunity Number");
+            data.Columns.Add("Project Number");
+            data.Columns.Add("Account Name");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Resource Start Date");
+
+            foreach (var gbyskill in PopUpFilteredSkill)
+            {
+                foreach (var detailsbySkill in gbyskill.ConsultantDetails)
+                {
+                    row = new List<object>();
+                    row.Add(detailsbySkill.HtmlEncodedTitle);
+                    row.Add(gbyskill.HtmlEncodedSkill);
+                    row.Add(detailsbySkill.SalesStage);
+                    row.Add(detailsbySkill.OpportunityNumber);
+                    row.Add(detailsbySkill.ProjectNumber);
+                    row.Add(detailsbySkill.HtmlEncodedAccountName);
+                    row.Add(detailsbySkill.HtmlEncodedProjectName);
+                    row.Add(detailsbySkill.ResourceStartDate);
+                    data.Rows.Add(row.ToArray());
+                }
+            }
+            return data;
+        }
+
+        private DataTable PrepareTitleDataTable(List<ConsultantGroupbyTitle> PopUpFilteredTitle)
+        {
+            DataTable data = new DataTable();
+            List<object> row;
+
+            data.Columns.Add("Title");
+            data.Columns.Add("Skill Set");
+            data.Columns.Add("Sales Stage");
+            data.Columns.Add("Opportunity Number");
+            data.Columns.Add("Project Number");
+            data.Columns.Add("Account Name");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Resource Start Date");
+
+            foreach (var gbyskill in PopUpFilteredTitle)
+            {
+                foreach (var detailsbySkill in gbyskill.ConsultantDetails)
+                {
+                    row = new List<object>();
+                    row.Add(gbyskill.HtmlEncodedTitle);
+                    row.Add(detailsbySkill.HtmlEncodedSkill);
+                    row.Add(detailsbySkill.SalesStage);
+                    row.Add(detailsbySkill.OpportunityNumber);
+                    row.Add(detailsbySkill.ProjectNumber);
+                    row.Add(detailsbySkill.HtmlEncodedAccountName);
+                    row.Add(detailsbySkill.HtmlEncodedProjectName);
+                    row.Add(detailsbySkill.ResourceStartDate);
+                    data.Rows.Add(row.ToArray());
+                }
+            }
+            return data;
+        }
+
+        private DataTable PrepareMonthDataTable(List<ConsultantGroupByMonth> PopUpFilteredByMonth)
+        {
+            DataTable data = new DataTable();
+            List<object> row;
+
+            data.Columns.Add("Title");
+            data.Columns.Add("Skill Set");
+            data.Columns.Add("Sales Stage");
+            data.Columns.Add("Opportunity Number");
+            data.Columns.Add("Project Number");
+            data.Columns.Add("Account Name");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Resource Start Date");
+
+            foreach (var gbyskill in PopUpFilteredByMonth)
+            {
+                foreach (var detailsbySkill in gbyskill.ConsultantDetailsByMonth)
+                {
+                    row = new List<object>();
+                    row.Add(detailsbySkill.HtmlEncodedTitle);
+                    row.Add(detailsbySkill.HtmlEncodedSkill);
+                    row.Add(detailsbySkill.SalesStage);
+                    row.Add(detailsbySkill.OpportunityNumber);
+                    row.Add(detailsbySkill.ProjectNumber);
+                    row.Add(detailsbySkill.HtmlEncodedAccountName);
+                    row.Add(detailsbySkill.HtmlEncodedProjectName);
+                    row.Add(detailsbySkill.ResourceStartDate);
+                    data.Rows.Add(row.ToArray());
+                }
+            }
+            return data;
         }
 
         protected void repTitles_ItemDataBound(object sender, RepeaterItemEventArgs e)
