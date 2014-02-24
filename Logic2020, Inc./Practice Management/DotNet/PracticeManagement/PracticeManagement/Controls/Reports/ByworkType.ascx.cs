@@ -160,7 +160,7 @@ namespace PraticeManagement.Controls.Reports
                 sheetStylesList.Add(HeaderSheetStyle);
                 sheetStylesList.Add(DataSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = string.Format("{0}_{1}_{2}", project.ProjectNumber, project.Name, "_ByWorkType");
+                dataset.DataSetName = "Project_ByWorkType";
                 dataset.Tables.Add(header1);
                 dataset.Tables.Add(data);
                 dataSetList.Add(dataset);
@@ -173,7 +173,7 @@ namespace PraticeManagement.Controls.Reports
                 header.Columns.Add(dateRangeTitle);
                 sheetStylesList.Add(HeaderSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = string.Format("{0}_{1}_{2}", project.ProjectNumber, project.Name, "_ByWorkType");
+                dataset.DataSetName = "Project_ByWorkType";
                 dataset.Tables.Add(header);
                 dataSetList.Add(dataset);
             }
