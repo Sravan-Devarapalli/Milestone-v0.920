@@ -203,7 +203,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = filename;
+                    dataset.DataSetName = "TerminationReport";
                     dataset.Tables.Add(header1);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -215,7 +215,7 @@ namespace PraticeManagement.Controls.Reports.HumanCapital
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = filename;
+                    dataset.DataSetName = "TerminationReport";
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
