@@ -259,7 +259,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 sheetStylesList.Add(HeaderSheetStyle);
                 sheetStylesList.Add(DataSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = filename;
+                dataset.DataSetName = "Account_ByBusinessDevlopment";
                 dataset.Tables.Add(header1);
                 dataset.Tables.Add(data1);
                 dataSetList.Add(dataset);
@@ -271,7 +271,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 header.Columns.Add(dateRangeTitle);
                 sheetStylesList.Add(HeaderSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = filename;
+                dataset.DataSetName = "Account_ByBusinessDevlopment";
                 dataset.Tables.Add(header);
                 dataSetList.Add(dataset);
             }
