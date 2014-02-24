@@ -177,7 +177,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                     sheetStylesList.Add(HeaderSheetStyle);
                     sheetStylesList.Add(DataSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = filename;
+                    dataset.DataSetName = "ConsultingDemandSummary";
                     dataset.Tables.Add(header);
                     dataset.Tables.Add(data);
                     dataSetList.Add(dataset);
@@ -189,7 +189,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                     header.Columns.Add(dateRangeTitle);
                     sheetStylesList.Add(HeaderSheetStyle);
                     var dataset = new DataSet();
-                    dataset.DataSetName = filename;
+                    dataset.DataSetName = "ConsultingDemandSummary";
                     dataset.Tables.Add(header);
                     dataSetList.Add(dataset);
                 }
