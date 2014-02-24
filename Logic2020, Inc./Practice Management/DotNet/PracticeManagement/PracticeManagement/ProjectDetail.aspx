@@ -935,7 +935,7 @@
                                     <table class="WholeWidth Height100Percent">
                                         <tr>
                                             <td class="InnerTdProjectNotes">
-                                                <u>Opportunity Linking</u>
+                                                <u><asp:Label ID="lblOppLinking" runat="server" Text="Opportunity Linking"></asp:Label></u>
                                                 <asp:ImageButton ID="imgLink" runat="server" AlternateText="Link Opportunity" ToolTip="Link Opportunity"
                                                     OnClick="imgLink_Click" Visible="true" ImageUrl="~/Images/link.png" />
                                             </td>
