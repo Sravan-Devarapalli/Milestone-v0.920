@@ -395,7 +395,7 @@ namespace PraticeManagement
         protected void cvCloneStatus_ServerValidate(object sender, ServerValidateEventArgs args)
         {
             args.IsValid = true;
-            if(((Project.Milestones == null || Project.Milestones.Count == 0) && ddlCloneProjectStatus.SelectedValue == "3") || (chbCloneMilestones.Checked == false && ddlCloneProjectStatus.SelectedValue == "3"))
+            if (((Project.Milestones == null || Project.Milestones.Count == 0) && ddlCloneProjectStatus.SelectedValue == "3") || (chbCloneMilestones.Checked == false && ddlCloneProjectStatus.SelectedValue == "3"))
             {
                 args.IsValid = false;
                 IsOtherPanelDisplay = true;
@@ -419,9 +419,9 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             if (!IsPostBack)
             {
-                bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 bool userIsSalesPerson = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
                 bool userIsPracticeManager = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName);
                 bool userIsBusinessUnitManager = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
@@ -462,7 +462,15 @@ namespace PraticeManagement
             btnUpload.Attributes["onclick"] = "startUpload(); return false;";
 
             ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-            
+
+            if (!userIsAdministrator)
+            {
+                lblOppLinking.Style["display"] = "none";
+                imgLink.Style["display"] = "none";
+                lbOpportunity.Style["display"] = "none";
+                imgUnlink.Style["display"] = "none";
+                imgNavigateToOpp.Style["display"] = "none";
+            }
         }
 
         public void ShowTabs()
@@ -683,7 +691,7 @@ namespace PraticeManagement
         protected void btnUpdateProjectName_OnClick(object sender, EventArgs e)
         {
             Page.Validate("ProjectName");
-           
+
             if (Page.IsValid)
             {
                 lblProjectNameLinkPopUp.Text = lblProjectName.Text = ProjectId.HasValue ? HttpUtility.HtmlEncode(txtProjectName.Text) : HttpUtility.HtmlEncode(txtProjectNameFirstTime.Text);
@@ -1441,7 +1449,7 @@ namespace PraticeManagement
             Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
-            DataHelper.FillProjectStatusList(ddlCloneProjectStatus, string.Empty,null,true);
+            DataHelper.FillProjectStatusList(ddlCloneProjectStatus, string.Empty, null, true);
             DataHelper.FillBusinessTypes(ddlBusinessOptions);
             PopulateDirectorsList();
             PopulateCSATOwnerList();
