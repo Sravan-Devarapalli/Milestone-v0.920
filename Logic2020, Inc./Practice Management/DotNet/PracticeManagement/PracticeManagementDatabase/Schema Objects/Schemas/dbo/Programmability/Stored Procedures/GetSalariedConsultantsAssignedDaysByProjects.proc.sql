@@ -32,6 +32,8 @@ BEGIN
 				P.ProjectNumber,
 				P.Name AS ProjectName,
 				P.ProjectId,
+				P.ProjectStatusId,
+				PS.Name AS Status,
 				C.Date,
 				Pers.PersonId,
 				Po.LastName + ', '+ Po.FirstName AS ProjectOwner
@@ -48,12 +50,13 @@ BEGIN
 		INNER JOIN dbo.Client Cli ON Cli.ClientId = P.ClientId
 		INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = P.GroupId
 		INNER JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
+		INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
 		LEFT JOIN dbo.Person PO ON PO.PersonId = P.ProjectOwnerId
 		LEFT JOIN dbo.Person Mngr ON Mngr.PersonId = Pers.ManagerId
 		LEFT JOIN dbo.Title Ttle ON Ttle.TitleId = Pers.TitleId
 		WHERE P.ProjectStatusId NOT IN (1,5) -- not in inactive and experimental
 		 AND PerS.PersonStatusId IN(1,5)  AND P.ProjectId !=174 AND MPE.StartDate <= @Enddate AND @StartDate <= MPE.EndDate
-		GROUP BY P.ProjectId,P.ProjectNumber,P.Name,Pers.LastName ,Ttle.Title,Pers.FirstName ,C.Date,P.Name,Mngr.FirstName,Mngr.LastName,Pers.PersonId,T.Name,PD.DivisionName,Pers.HireDate,Pers.EmployeeNumber,Cli.Name,BG.Name,PG.Name,Po.LastName,Po.FirstName
+		GROUP BY P.ProjectId,P.ProjectNumber,P.Name,Pers.LastName ,Ttle.Title,Pers.FirstName ,C.Date,P.Name,Mngr.FirstName,Mngr.LastName,Pers.PersonId,T.Name,PD.DivisionName,Pers.HireDate,Pers.EmployeeNumber,Cli.Name,BG.Name,PG.Name,Po.LastName,Po.FirstName,P.ProjectStatusId,PS.Name
 	) 
 
 	SELECT	P.PayType AS [Pay Type],
@@ -67,7 +70,8 @@ BEGIN
 			P.Account,
 			P.BusinessGroup AS [Business Group],
 			P.BusinessUnit AS [Business Unit],
-			P.ProjectNumber AS Project,
+			P.ProjectNumber AS [Project Number],
+			P.Status,
 			P.ProjectName AS [Project Name],
 			ISNULL(P.ProjectOwner,'') AS [Project Owner],
 			P.Manager AS [Career Counselor],
@@ -88,6 +92,7 @@ BEGIN
 			P.BusinessGroup,
 			P.BusinessUnit,
 			P.ProjectNumber,
+			P.Status,
 			P.ProjectName,
 			P.ProjectOwner
 	ORDER BY P.FirstName, P.LastName,P.ProjectNumber
