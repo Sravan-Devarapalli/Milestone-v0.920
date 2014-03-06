@@ -183,4 +183,7 @@
   <data name="RecruitingMetricsReportTemplateName" xml:space="preserve">
     <value>RecruitingMetricsReport</value>
   </data>
+  <data name="CohortAssignmentChangeTemplateName" xml:space="preserve">
+    <value>CohortAssignmentChangeTemplate</value>
+  </data>
 </root>
