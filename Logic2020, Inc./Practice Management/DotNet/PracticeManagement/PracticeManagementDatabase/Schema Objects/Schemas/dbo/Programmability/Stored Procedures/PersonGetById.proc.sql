@@ -49,7 +49,9 @@ BEGIN
 		   p.TargetedCompanyId,
 		   p.EmployeeReferralId,
 		   p.EmployeeReferralFirstName,
-		   p.EmployeeReferralLastName
+		   p.EmployeeReferralLastName,
+		   p.CohortAssignmentId,
+		   p.CohortAssignmentName
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 END
