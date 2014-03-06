@@ -120,7 +120,9 @@ BEGIN
 				RMT.Name AS TargetedCompanyName,
 				i.EmployeeReferralId,
 				CASE WHEN i.EmployeeReferralId IS NULL THEN 'NO' ELSE  'YES' END AS EmployeeReferral,
-				EmpRef.LastName+ ', '+EmpRef.FirstName AS EmployeeReferralName
+				EmpRef.LastName+ ', '+EmpRef.FirstName AS EmployeeReferralName,
+				i.CohortAssignmentId,
+				CA.Name AS CohortAssignmentName
 			FROM inserted AS i
 				LEFT JOIN dbo.Practice AS p ON i.DefaultPractice = p.PracticeId
 				INNER JOIN dbo.PersonStatus AS s ON i.PersonStatusId = s.PersonStatusId
@@ -134,6 +136,7 @@ BEGIN
 				LEFT JOIN dbo.RecruitingMetrics RM ON RM.RecruitingMetricsId = i.SourceId
 				LEFT JOIN dbo.RecruitingMetrics RMT ON RMT.RecruitingMetricsId = i.TargetedCompanyId
 				LEFT JOIN dbo.Person EmpRef ON EmpRef.PersonId = i.EmployeeReferralId
+				LEFT JOIN dbo.CohortAssignment CA ON CA.CohortAssignmentId = i.CohortAssignmentId
 			WHERE i.IsStrawman = 0 
 			),
 
@@ -172,7 +175,9 @@ BEGIN
 				RMT.Name AS TargetedCompanyName,
 				d.EmployeeReferralId,
 				CASE WHEN d.EmployeeReferralId IS NULL THEN 'NO' ELSE  'YES' END AS EmployeeReferral,
-				EmpRef.LastName+ ', '+EmpRef.FirstName AS EmployeeReferralName
+				EmpRef.LastName+ ', '+EmpRef.FirstName AS EmployeeReferralName,
+				d.CohortAssignmentId,
+				CA.Name AS CohortAssignmentName
 			FROM deleted AS d
 				LEFT JOIN dbo.Practice AS p ON d.DefaultPractice = p.PracticeId
 				INNER JOIN dbo.PersonStatus AS s ON d.PersonStatusId = s.PersonStatusId
@@ -186,6 +191,7 @@ BEGIN
 				LEFT JOIN dbo.RecruitingMetrics RM ON RM.RecruitingMetricsId = d.SourceId
 				LEFT JOIN dbo.RecruitingMetrics RMT ON RMT.RecruitingMetricsId = d.TargetedCompanyId
 				LEFT JOIN dbo.Person EmpRef ON EmpRef.PersonId = d.EmployeeReferralId
+				LEFT JOIN dbo.CohortAssignment CA ON CA.CohortAssignmentId = d.CohortAssignmentId
 			WHERE d.IsStrawman = 0
 			)
 
@@ -265,6 +271,7 @@ BEGIN
 				OR ISNULL(i.SourceId, -1) <> ISNULL(d.SourceId, -1)
 				OR ISNULL(i.TargetedCompanyId, -1) <> ISNULL(d.TargetedCompanyId, -1)
 				OR ISNULL(i.EmployeeReferralId, -1) <> ISNULL(d.EmployeeReferralId, -1)
+				OR ISNULL(i.CohortAssignmentId, -1) <> ISNULL(d.CohortAssignmentId, -1)		
 			)
 		END
 	END
@@ -396,6 +403,7 @@ BEGIN
 								  ,SourceId
 								  ,TargetedCompanyId
 								  ,EmployeeReferralId
+								  ,CohortAssignmentId
 								  ,[CreatedDate]
 								  ,[CreatedBy])
 		SELECT i.[PersonId]
@@ -425,6 +433,7 @@ BEGIN
 			  ,i.SourceId
 			  ,i.TargetedCompanyId
 			  ,i.EmployeeReferralId
+			  ,i.CohortAssignmentId
 			  ,@insertTime
 			  ,l.PersonID
 		FROM inserted i
@@ -456,7 +465,8 @@ BEGIN
 					OR ISNULL(i.JobSeekerStatusId, -1) <> ISNULL(d.JobSeekerStatusId, -1)
 					OR ISNULL(i.SourceId, -1) <> ISNULL(d.SourceId, -1)
 					OR ISNULL(i.TargetedCompanyId, -1) <> ISNULL(d.TargetedCompanyId, -1)
-					OR ISNULL(i.EmployeeReferralId, -1) <> ISNULL(d.EmployeeReferralId, -1)		
+					OR ISNULL(i.EmployeeReferralId, -1) <> ISNULL(d.EmployeeReferralId, -1)
+					OR ISNULL(i.CohortAssignmentId, -1) <> ISNULL(d.CohortAssignmentId, -1)		
 	END
 
 		-- End logging session
