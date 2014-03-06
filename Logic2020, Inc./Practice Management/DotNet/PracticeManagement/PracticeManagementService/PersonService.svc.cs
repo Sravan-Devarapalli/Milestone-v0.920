@@ -433,6 +433,10 @@ namespace PracticeManagementService
             {
                 SendActivateAccountEmail(person, oldPerson, loginPageUrl);
             }
+            if (oldPerson != null && (oldPerson.CohortAssignment.Id != person.CohortAssignment.Id))
+            {
+                MailUtil.SendCohortAssignmentChangeEmail(person.LastName+", "+person.FirstName,oldPerson.CohortAssignment.Name,person.CohortAssignment.Name);
+            }
         }
 
         /// <summary>
@@ -1123,6 +1127,11 @@ namespace PracticeManagementService
         public List<Person> GetPersonsByPayTypesAndByStatusIds(string statusIds, string payTypeIds)
         {
             return PersonDAL.GetPersonsByPayTypesAndByStatusIds(statusIds, payTypeIds);
+        }
+
+        public List<CohortAssignment> GetAllCohortAssignments()
+        {
+            return PersonDAL.GetAllCohortAssignments();
         }
 
         #endregion IPersonService Members
