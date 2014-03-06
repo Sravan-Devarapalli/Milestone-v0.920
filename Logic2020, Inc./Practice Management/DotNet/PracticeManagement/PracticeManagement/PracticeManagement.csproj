@@ -552,6 +552,7 @@
     <Content Include="Controls\Projects\AttachmentUpload.ashx" />
     <None Include="Properties\DataSources\DataTransferObjects.Attribution.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.BusinessGroup.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.CohortAssignment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod.datasource" />
