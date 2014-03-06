@@ -28,6 +28,7 @@
 	SourceId			INT			  NULL,
 	TargetedCompanyId	INT			  NULL,
 	EmployeeReferralId	INT			  NULL,
+	CohortAssignmentId	INT			  NULL,
 	CreatedDate			DATETIME	  NOT NULL,
 	CreatedBy			INT			  NULL,
 	CONSTRAINT PK_PersonHistory PRIMARY KEY (Id)
