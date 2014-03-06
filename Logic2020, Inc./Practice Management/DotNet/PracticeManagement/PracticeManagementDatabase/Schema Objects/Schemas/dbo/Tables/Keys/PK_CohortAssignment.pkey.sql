@@ -1,0 +1,3 @@
+﻿ALTER TABLE [dbo].[CohortAssignment]
+	ADD CONSTRAINT [PK_CohortAssignment]
+	PRIMARY KEY CLUSTERED ([CohortAssignmentId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);
