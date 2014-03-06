@@ -725,7 +725,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.SourceRecruitingMetricsId, person.SourceRecruitingMetrics != null ? (object)person.SourceRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TargetRecruitingMetricsId, person.TargetedCompanyRecruitingMetrics != null ? (object)person.TargetedCompanyRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EmployeeReferralId, person.EmployeeRefereral != null ? (object)person.EmployeeRefereral.Id.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.CohortAssignmentId, person.CohortAssignment.Id);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
@@ -838,7 +838,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.SourceRecruitingMetricsId, person.SourceRecruitingMetrics != null ? (object)person.SourceRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TargetRecruitingMetricsId, person.TargetedCompanyRecruitingMetrics != null ? (object)person.TargetedCompanyRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EmployeeReferralId, person.EmployeeRefereral != null ? (object)person.EmployeeRefereral.Id.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.CohortAssignmentId, person.CohortAssignment.Id);
                 try
                 {
                     if (connection.State != ConnectionState.Open)
@@ -1729,6 +1729,16 @@ namespace DataAccess
                 int employeeReferalIdIndex = -1;
                 int employeeReferalFirstNameIndex = -1;
                 int employeeReferalLastNameIndex = -1;
+                int cohortAssignmentIdIndex = -1;
+                int cohortAssignmentNameIndex = -1;
+                try
+                {
+                    cohortAssignmentIdIndex = reader.GetOrdinal(Constants.ColumnNames.CohortAssignmentId);
+                    cohortAssignmentNameIndex = reader.GetOrdinal(Constants.ColumnNames.CohortAssignmentName);
+                }
+                catch
+                { }
+
                 try
                 {
                     jobSeekerStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.JobSeekerStatusId);
@@ -2011,6 +2021,15 @@ namespace DataAccess
                             Id = reader.GetInt32(employeeReferalIdIndex),
                             FirstName = reader.GetString(employeeReferalFirstNameIndex),
                             LastName = reader.GetString(employeeReferalLastNameIndex)
+                        };
+                    }
+
+                    if (cohortAssignmentIdIndex > -1 && !reader.IsDBNull(cohortAssignmentIdIndex))
+                    {
+                        person.CohortAssignment = new CohortAssignment()
+                        {
+                            Id = reader.GetInt32(cohortAssignmentIdIndex),
+                            Name = reader.GetString(cohortAssignmentNameIndex)
                         };
                     }
 
@@ -3629,6 +3648,7 @@ namespace DataAccess
                 }
             }
         }
+
         public static bool CheckIfRangeWithinHireAndTermination(int personId, DateTime startDate, DateTime endDate)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -3770,6 +3790,44 @@ namespace DataAccess
             return result;
         }
 
+        #region Cohort Assignments
+
+        public static List<CohortAssignment> GetAllCohortAssignments()
+        {
+            var result = new List<CohortAssignment>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetAllCohortAssignments, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadCohorts(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadCohorts(SqlDataReader reader, List<CohortAssignment> result)
+        {
+            if (reader.HasRows)
+            {
+                int cohortAssignmentIdIndex = reader.GetOrdinal(Constants.ColumnNames.CohortAssignmentId);
+                int cohortAssignmentNameIndex = reader.GetOrdinal(Constants.ColumnNames.CohortAssignmentName);
+                while (reader.Read())
+                {
+                    CohortAssignment cohort = new CohortAssignment()
+                    {
+                        Id = reader.GetInt32(cohortAssignmentIdIndex),
+                        Name = reader.GetString(cohortAssignmentNameIndex)
+                    };
+                    result.Add(cohort);
+                }
+            }
+        }
+
+        #endregion
     }
 }
 
