@@ -99,6 +99,12 @@
   <wsdl:message name="IPersonService_GetPersonsByPayTypesAndByStatusIds_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonsByPayTypesAndByStatusIdsResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetAllCohortAssignments_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllCohortAssignments" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetAllCohortAssignments_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllCohortAssignmentsResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -591,6 +597,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonsByPayTypesAndByStatusIds" message="tns:IPersonService_GetPersonsByPayTypesAndByStatusIds_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonsByPayTypesAndByStatusIdsResponse" message="tns:IPersonService_GetPersonsByPayTypesAndByStatusIds_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetAllCohortAssignments">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetAllCohortAssignments" message="tns:IPersonService_GetAllCohortAssignments_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetAllCohortAssignmentsResponse" message="tns:IPersonService_GetAllCohortAssignments_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -1002,6 +1012,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonsByPayTypesAndByStatusIds">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonsByPayTypesAndByStatusIds" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllCohortAssignments">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetAllCohortAssignments" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
