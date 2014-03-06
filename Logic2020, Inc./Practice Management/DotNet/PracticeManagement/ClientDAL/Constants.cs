@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string CohortAssignmentName = "CohortAssignmentName";
+            public const string CohortAssignmentId = "CohortAssignmentId";
             public const string LengthOfTenureInDays = "LengthOfTenureInDays";
             public const string SourceRecruitingMetricsName = "SourceRecruitingMetricsName";
             public const string TargetedCompanyRecruitingMetricsName = "TargetedCompanyRecruitingMetricsName";
@@ -499,7 +501,7 @@
         /// </summary>
         public class ParameterNames
         {
-
+            public static string CohortAssignmentId = "@CohortAssignmentId";
             public static string EmployeeReferralId = "@EmployeeReferralId";
             public static string TargetRecruitingMetricsId = "@TargetRecruitingMetricsId";
             public static string SourceRecruitingMetricsId = "@SourceRecruitingMetricsId";
@@ -927,6 +929,7 @@
 
             public class Person
             {
+                public const string GetAllCohortAssignments = "dbo.GetAllCohortAssignments";
                 public const string GetPersonsByPayTypesAndByStatusIds = "dbo.GetPersonsByPayTypesAndByStatusIds";
                 public const string CheckIfPersonEntriesOverlapps = "dbo.CheckIfPersonEntriesOverlapps";
                 public const string CheckIfValidDivision = "dbo.CheckIfValidDivision";
