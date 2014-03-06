@@ -518,6 +518,9 @@ namespace DataTransferObjects
         public Person EmployeeRefereral { get; set; }
 
         [DataMember]
+        public CohortAssignment CohortAssignment { get; set; }
+
+        [DataMember]
         public int LengthOfTenture { get; set; }
 
         #endregion Properties - data members
