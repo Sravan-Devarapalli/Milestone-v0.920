@@ -1540,6 +1540,29 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillCohortAssignments(ListControl control, string firstItemText = null)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var cohorts = serviceClient.GetAllCohortAssignments();
+                    cohorts = cohorts.OrderBy(p => p.Id).ToArray();
+
+                    FillListDefault(control, firstItemText, cohorts, firstItemText == null);
+                    if (firstItemText == null)
+                        control.SelectedIndex = control.Items.Count - 1;
+                    else
+                        control.SelectedIndex = 0;
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         public static void FillPricingLists(ListControl control, PricingList[] pricingList, string firstItemText = null, bool noFirstItem = false, string valueField = "PricingListId", string NameField = "Name")
         {
             pricingList = pricingList.Where(p => p.IsActive).ToArray();
