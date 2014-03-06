@@ -446,24 +446,23 @@
             for (var i = 0; i < optionList.length; ++i) {
                 optionList[i].title = DecodeString(optionList[i].innerHTML);
             }
-
         }
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <table class="PersonForm">
+            <table class="PersonForm WholeWidth">
                 <tr>
                     <td>
-                        <table class="PersonInfo">
+                        <table class="PersonInfo WholeWidth">
                             <tr>
-                                <td>
+                                <td style="width: 6%">
                                     First Name
                                 </td>
-                                <td>
+                                <td style="width: 10%">
                                     <asp:TextBox ID="txtFirstName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
                                 </td>
-                                <td>
+                                <td style="width: 1%">
                                     <asp:RequiredFieldValidator ID="reqFirstName" runat="server" ValidationGroup="Person"
                                         ControlToValidate="txtFirstName" ErrorMessage="The First Name is required." EnableClientScript="False"
                                         SetFocusOnError="True" ToolTip="The First Name is required.">*</asp:RequiredFieldValidator>
@@ -482,10 +481,10 @@
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic" OnServerValidate="cvFNAllowSpace_ServerValidate"></asp:CustomValidator>
                                 </td>
-                                <td>
+                                <td style="width: 6%">
                                     Status
                                 </td>
-                                <td>
+                                <td style="width: 10%">
                                     <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width250Px" onchange="setDirty();"
                                         AutoPostBack="true" Visible="false">
                                     </asp:DropDownList>
@@ -541,8 +540,11 @@
                                     </asp:UpdatePanel>
                                 </td>
                                 <td>
-                                    <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set to Practice Area Owner</asp:LinkButton>
-                                    <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
+                                Cohort Assignment Field &nbsp;
+                                    <asp:DropDownList ID="ddlCohortAssignment" runat="server">
+                                    </asp:DropDownList>
+                                        <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Counselor to Practice Area Owner</asp:LinkButton>
+                                        <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
                                 </td>
                             </tr>
                             <tr>
