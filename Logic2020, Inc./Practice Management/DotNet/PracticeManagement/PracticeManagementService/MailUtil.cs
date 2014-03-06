@@ -142,6 +142,13 @@ namespace PracticeManagementService
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
         }
 
+        internal static void SendCohortAssignmentChangeEmail(string personName, string oldCohort, string newCohort)
+        {
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.CohortAssignmentChangeTemplateName);
+            var body = string.Format(emailTemplate.Body, personName, oldCohort, newCohort);
+            Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
+        }
+
         internal static void SendLockedOutNotificationEmail(string userName, string loginPageUrl)
         {
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.LockedOutEmailTemplateName);
