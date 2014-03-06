@@ -29,6 +29,7 @@
 	JobSeekerStatusId	INT						NULL,
 	SourceId			INT						NULL,
 	TargetedCompanyId	INT						NULL,
-	EmployeeReferralId	INT						NULL
+	EmployeeReferralId	INT						NULL,
+	CohortAssignmentId	INT						NULL
 );
 
