@@ -111,6 +111,7 @@
     <Compile Include="CategoryItemBudget.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ClientMarginColorInfo.cs" />
+    <Compile Include="CohortAssignment.cs" />
     <Compile Include="ColorInformation.cs" />
     <Compile Include="CompanyLogo.cs" />
     <Compile Include="CompositeObjects\GroupedTimeEntries.cs" />
