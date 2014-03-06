@@ -650,7 +650,7 @@
                                 </td>
                                 <td>
                                     <asp:TextBox ID="txtEmailAddress" runat="server" CssClass="Width120Px" onchange="setDirty();"></asp:TextBox>&nbsp;@&nbsp;
-                                    <asp:DropDownList ID="ddlDomain" runat="server" onchange="setDirty();" CssClass="Width110Px">
+                                    <asp:DropDownList ID="ddlDomain" runat="server" onchange="setDirty();" CssClass="Width109PxImp">
                                     </asp:DropDownList>
                                 </td>
                                 <td>
