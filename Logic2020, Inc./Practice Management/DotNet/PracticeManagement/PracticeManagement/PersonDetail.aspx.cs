@@ -2966,9 +2966,10 @@ namespace PraticeManagement
             DataHelper.FillPersonDivisionList(ddlDivision);
             ddlDivision.SelectedValue = "2";//Division default value is 'Consulting'
             DataHelper.FillTitleList(ddlPersonTitle, "-- Select Title --");
+            DataHelper.FillCohortAssignments(ddlCohortAssignment);
             DataHelper.FillDomainsList(ddlDomain);
             txtFirstName.Focus();
-
+	    ddlCohortAssignment.SelectedValue = "1";
             chblRoles.DataSource = Roles.GetAllRoles();
             chblRoles.DataBind();
 
@@ -3195,6 +3196,7 @@ namespace PraticeManagement
             hdTitleChanged.Value = 0.ToString();
             hdcvSLTApproval.Value = person.SLTApproval.ToString();
             hdcvSLTPTOApproval.Value = person.SLTPTOApproval.ToString();
+	    ddlCohortAssignment.SelectedValue = person.CohortAssignment != null?person.CohortAssignment.Id.ToString():"1";
         }
 
         private void PopulatePracticeDropDown(Person person)
@@ -3349,6 +3351,11 @@ namespace PraticeManagement
             if (ddlTarget.SelectedValue != string.Empty)
                 person.TargetedCompanyRecruitingMetrics = new DataTransferObjects.RecruitingMetrics() { RecruitingMetricsId = int.Parse(ddlTarget.SelectedValue), Name = ddlTarget.SelectedItem.Text };
             person.EmployeeRefereral = rbEmpReferralYes.Checked ? new Person() { Id = int.Parse(ddlEmpReferral.SelectedValue) } : null;
+            person.CohortAssignment = new CohortAssignment()
+            {
+                Id = Convert.ToInt32(ddlCohortAssignment.SelectedValue),
+                Name= ddlCohortAssignment.SelectedItem.Text
+            };
         }
 
         private List<string> GetSelectedRoles()
