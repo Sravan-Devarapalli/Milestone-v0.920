@@ -32,7 +32,8 @@ CREATE PROCEDURE [dbo].[PersonUpdate]
 	@JobSeekerStatusId INT,
 	@SourceRecruitingMetricsId	INT,
 	@TargetRecruitingMetricsId	INT,
-	@EmployeeReferralId	INT
+	@EmployeeReferralId	INT,
+	@CohortAssignmentId INT
 )
 AS
 SET NOCOUNT ON
@@ -171,7 +172,8 @@ BEGIN TRY
 			JobSeekerStatusId = @JobSeekerStatusId,
 			SourceId = @SourceRecruitingMetricsId,
 			TargetedCompanyId = @TargetRecruitingMetricsId,
-			EmployeeReferralId = @EmployeeReferralId
+			EmployeeReferralId = @EmployeeReferralId,
+			CohortAssignmentId = @CohortAssignmentId
 		WHERE PersonId = @PersonId
 
 		EXEC dbo.PersonStatusHistoryUpdate
