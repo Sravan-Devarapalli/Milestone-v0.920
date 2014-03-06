@@ -463,6 +463,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> GetPersonsByPayTypesAndByStatusIds(string statusIds, string payTypeIds);
+
+        [OperationContract]
+        List<CohortAssignment> GetAllCohortAssignments();
     }
 }
 
