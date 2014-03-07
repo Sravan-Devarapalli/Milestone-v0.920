@@ -451,18 +451,18 @@
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
-            <table class="PersonForm WholeWidth">
+            <table class="PersonForm">
                 <tr>
                     <td>
-                        <table class="PersonInfo WholeWidth">
+                        <table class="PersonInfo">
                             <tr>
-                                <td style="width: 6%">
+                                <td>
                                     First Name
                                 </td>
-                                <td style="width: 10%">
+                                <td>
                                     <asp:TextBox ID="txtFirstName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
                                 </td>
-                                <td style="width: 1%">
+                                <td>
                                     <asp:RequiredFieldValidator ID="reqFirstName" runat="server" ValidationGroup="Person"
                                         ControlToValidate="txtFirstName" ErrorMessage="The First Name is required." EnableClientScript="False"
                                         SetFocusOnError="True" ToolTip="The First Name is required.">*</asp:RequiredFieldValidator>
@@ -481,10 +481,10 @@
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic" OnServerValidate="cvFNAllowSpace_ServerValidate"></asp:CustomValidator>
                                 </td>
-                                <td style="width: 6%">
+                                <td>
                                     Status
                                 </td>
-                                <td style="width: 10%">
+                                <td>
                                     <asp:DropDownList ID="ddlPersonStatus" runat="server" CssClass="Width250Px" onchange="setDirty();"
                                         AutoPostBack="true" Visible="false">
                                     </asp:DropDownList>
