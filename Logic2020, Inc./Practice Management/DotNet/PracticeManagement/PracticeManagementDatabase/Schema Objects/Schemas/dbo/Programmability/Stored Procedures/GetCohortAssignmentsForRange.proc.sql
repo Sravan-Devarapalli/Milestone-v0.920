@@ -37,7 +37,7 @@ BEGIN
 			   PD.[Cohort Assignment]
 		FROM dbo.Pay P 
 		INNER JOIN PersonDetails PD ON PD.PersonId = P.Person
-		WHERE PD.HireDate <= P.EndDate-1 AND (PD.TerminationDate IS NULL OR P.StartDate <= PD.TerminationDate)
+		WHERE PD.HireDate <= P.EndDate-1 AND ((PD.TerminationDate IS NULL OR PD.TerminationDate > @EndDate) AND P.StartDate <= @EndDate OR P.StartDate <= PD.TerminationDate)
 		GROUP BY PD.PersonId,PD.HireDate,PD.[Employee ID],PD.[Person Name],PD.Status,PD.TerminationDate,PD.[Career Counselor],PD.[Cohort Assignment]
 	)
 	SELECT PDWS.[Employee ID],
