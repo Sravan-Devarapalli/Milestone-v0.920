@@ -435,7 +435,7 @@ namespace PracticeManagementService
             }
             if (oldPerson != null && (oldPerson.CohortAssignment.Id != person.CohortAssignment.Id))
             {
-                MailUtil.SendCohortAssignmentChangeEmail(person.LastName+", "+person.FirstName,oldPerson.CohortAssignment.Name,person.CohortAssignment.Name);
+                MailUtil.SendCohortAssignmentChangeEmail(person.FirstName + " " + person.LastName, oldPerson.CohortAssignment.Name, person.CohortAssignment.Name);
             }
         }
 
