@@ -540,7 +540,7 @@
                                     </asp:UpdatePanel>
                                 </td>
                                 <td>
-                                Cohort Assignment Field &nbsp;
+                                Cohort Assignment
                                     <asp:DropDownList ID="ddlCohortAssignment" runat="server">
                                     </asp:DropDownList>
                                         <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Counselor to Practice Area Owner</asp:LinkButton>
