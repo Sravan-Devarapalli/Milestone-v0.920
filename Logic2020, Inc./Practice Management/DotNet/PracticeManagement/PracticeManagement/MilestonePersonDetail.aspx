@@ -326,8 +326,8 @@
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:CustomValidator ID="custPeriodOvberlapping" runat="server" ControlToValidate="dpPersonStart"
-                                            ErrorMessage="The specified period overlaps with another for this person on the milestone."
-                                            ToolTip="The specified period overlaps with another for this person on the milestone."
+                                            ErrorMessage="A project resource cannot have more than one bill rate on a project during the same time period. Please adjust the start and end dates to make sure that the time periods for the bill rates do not overlap."
+                                            ToolTip="A project resource cannot have more than one bill rate on a project during the same time period. Please adjust the start and end dates to make sure that the time periods for the bill rates do not overlap."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             ValidateEmptyText="false" ValidationGroup="MilestonePersonEntry" OnServerValidate="custPeriodOvberlapping_ServerValidate"></asp:CustomValidator>
                                         <asp:CustomValidator ID="custPeriodVacationOverlapping" runat="server" ControlToValidate="dpPersonStart"
@@ -403,8 +403,8 @@
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Currency" ValidationGroup="MilestonePersonEntry"></asp:CompareValidator>
                                         <asp:CustomValidator ID="custPeriodOvberlapping" runat="server" ControlToValidate="dpPersonStart"
-                                            ErrorMessage="The specified period overlaps with another for this person on the milestone."
-                                            ToolTip="The specified period overlaps with another for this person on the milestone."
+                                            ErrorMessage="A project resource cannot have more than one bill rate on a project during the same time period. Please adjust the start and end dates to make sure that the time periods for the bill rates do not overlap."
+                                            ToolTip="A project resource cannot have more than one bill rate on a project during the same time period. Please adjust the start and end dates to make sure that the time periods for the bill rates do not overlap."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             ValidateEmptyText="false" ValidationGroup="MilestonePersonEntry" OnServerValidate="custPeriodOvberlapping_ServerValidate"></asp:CustomValidator>
                                         <asp:CustomValidator ID="custPeriodVacationOverlapping" runat="server" ControlToValidate="dpPersonStart"
