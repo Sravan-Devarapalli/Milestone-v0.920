@@ -299,8 +299,7 @@ namespace PraticeManagement
 
                 CustomValidator custPerson = sender as CustomValidator;
                 GridViewRow gvRow = custPerson.NamingContainer as GridViewRow;
-                var ddlRole = gvRow.FindControl("ddlRole") as DropDownList;
-                var oldRoleId = ddlRole.Attributes["RoleId"];
+                
                 var personId = hdnPersonId.Value;
 
                 DateTime startDate = dpPersonStart.DateValue;
@@ -312,9 +311,7 @@ namespace PraticeManagement
                 //Validate overlapping with other entries.
                 for (int i = 0; i < entries.Count; i++)
                 {
-                    var roleId = entries[i].Role != null ? entries[i].Role.Id.ToString() : string.Empty;
-
-                    if (i != gvMilestonePersonEntries.EditIndex && roleId == ddlRole.SelectedValue && entries[i].ThisPerson.Id.ToString() == personId)
+                    if (i != gvMilestonePersonEntries.EditIndex && entries[i].ThisPerson.Id.ToString() == personId)
                     {
                         DateTime entryStartDate = entries[i].StartDate;
                         DateTime entryEndDate =
