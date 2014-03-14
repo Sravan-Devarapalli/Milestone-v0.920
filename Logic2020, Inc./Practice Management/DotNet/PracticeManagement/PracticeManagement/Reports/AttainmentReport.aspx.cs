@@ -132,10 +132,10 @@ namespace PraticeManagement.Reports
                 wrapdataCellStyle.WrapText = true;
 
                 CellStyles dataStartDateCellStyle = new CellStyles();
-                dataStartDateCellStyle.DataFormat = "mm/dd/yyyy";
+                dataStartDateCellStyle.DataFormat = "mm/dd/yy;@";
 
                 CellStyles dataNumberDateCellStyle = new CellStyles();
-                dataNumberDateCellStyle.DataFormat = "_($#,##0.00_);[Red]($#,##0.00)";
+                dataNumberDateCellStyle.DataFormat = "$#,##0.00_);($#,##0.00)";
 
                 CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
@@ -306,7 +306,7 @@ namespace PraticeManagement.Reports
                 CellStyles dataCellStyle = new CellStyles();
 
                 CellStyles dataStartDateCellStyle = new CellStyles();
-                dataStartDateCellStyle.DataFormat = "mm/dd/yyyy";
+                dataStartDateCellStyle.DataFormat = "mm/dd/yy;@";
 
                 CellStyles decimaldataCellStyle = new CellStyles();
                 decimaldataCellStyle.DataFormat = "0.0%";
