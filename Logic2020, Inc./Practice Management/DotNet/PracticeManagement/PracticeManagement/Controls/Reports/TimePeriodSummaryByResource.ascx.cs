@@ -169,6 +169,11 @@ namespace PraticeManagement.Controls.Reports
         {
             return value.ToString(Constants.Formatting.DoubleValue) + "%";
         }
+        protected string GetPercentageFormatForExcel(double value)
+        {
+            var result = (double)(value / 100);
+            return result.ToString();
+        }
 
         protected string GetPayTypeSortValue(string payType, string name)
         {
@@ -290,7 +295,7 @@ namespace PraticeManagement.Controls.Reports
                 row.Add(GetDoubleFormat(item.AdminstrativeHours));
                 row.Add(GetDoubleFormat(item.TotalHours));
                 row.Add(GetDoubleFormat(item.AvailableHours));
-                row.Add(GetPercentageFormat(item.Person.BillableUtilizationPercent));
+                row.Add(GetPercentageFormatForExcel(item.Person.BillableUtilizationPercent));
                 data.Rows.Add(row.ToArray());
             }
             return data;
