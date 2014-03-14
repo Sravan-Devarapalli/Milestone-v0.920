@@ -266,7 +266,7 @@ namespace PraticeManagement.Controls.Reports
                 row.Add(GetDoubleFormat(timeEntriesGroupByClientAndProject.NonBillableHours));
                 row.Add(GetDoubleFormat(timeEntriesGroupByClientAndProject.TotalHours));
                 row.Add(GetDoubleFormat(timeEntriesGroupByClientAndProject.BillableHoursVariance));
-                row.Add(timeEntriesGroupByClientAndProject.ProjectTotalHoursPercent + "%");
+                row.Add((double)timeEntriesGroupByClientAndProject.ProjectTotalHoursPercent/100);
                 data.Rows.Add(row.ToArray());
             }
             return data;
