@@ -67,7 +67,7 @@ namespace PraticeManagement.Controls.Reports
                 CellStyles dataCellStyle = new CellStyles();
 
                 CellStyles dataNumberDataCellStyle = new CellStyles();
-                dataNumberDataCellStyle.DataFormat = "$#,##0.00_);($#,##0.00)";
+                dataNumberDataCellStyle.DataFormat = "$#,##0.00";
 
                 CellStyles[] dataCellStylearray = { dataCellStyle,
                                                     dataCellStyle, 
