@@ -204,7 +204,7 @@ namespace PraticeManagement.Controls.Reports
                 data.Rows.Add(row.ToArray());
             }
             return data;
-        }
+        } 
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
@@ -213,7 +213,8 @@ namespace PraticeManagement.Controls.Reports
 
         protected string GetPercentageFormat(double value)
         {
-            return value.ToString(Constants.Formatting.DoubleValue) + "%";
+            var result = (double)(value/100);
+            return result.ToString();
         }
 
         public void DataBindResource(WorkTypeLevelGroupedHours[] reportData)
