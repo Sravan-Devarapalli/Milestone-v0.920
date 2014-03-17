@@ -292,7 +292,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 row.Add(GetDoubleFormat(projectLevelGroupedHours.BillableHours));
                 row.Add(GetDoubleFormat(projectLevelGroupedHours.NonBillableHours));
                 row.Add(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
-                row.Add(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : GetCurrencyDecimalFormat(projectLevelGroupedHours.EstimatedBillings));
+                row.Add(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : projectLevelGroupedHours.EstimatedBillings.ToString());
                 row.Add(GetDoubleFormat(projectLevelGroupedHours.BillableHoursVariance));
                 data.Rows.Add(row.ToArray());
             }
