@@ -341,5 +341,20 @@ namespace DataTransferObjects.Reports
             }
         }
 
+        public string FormattedBillRateForExcel
+        {
+            get
+            {
+                return BillRate == -1.00 ? "FF" : BillRate.ToString();
+            }
+        }
+
+        public string FormattedEstimatedBillingsForExcel
+        {
+            get
+            {
+                return EstimatedBillings == -1.00 ? "FF" : EstimatedBillings.ToString();
+            }
+        }
     }
 }
