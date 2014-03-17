@@ -326,8 +326,8 @@ namespace PraticeManagement.Controls.Reports
                 row.Add(GetDoubleFormat(item.BillableHours));
                 row.Add(GetDoubleFormat(item.NonBillableHours));
                 row.Add(GetDoubleFormat(item.TotalHours));
-                row.Add(item.FormattedBillRate);
-                row.Add(item.FormattedEstimatedBillings);
+                row.Add(item.FormattedBillRateForExcel);
+                row.Add(item.FormattedEstimatedBillingsForExcel);
                 row.Add(GetDoubleFormat(item.BillableHoursVariance));
                 data.Rows.Add(row.ToArray());
             }
