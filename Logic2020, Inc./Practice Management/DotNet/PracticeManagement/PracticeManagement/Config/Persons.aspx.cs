@@ -185,7 +185,7 @@ namespace PraticeManagement.Config
                 dataDateCellStyle.DataFormat = "mm/dd/yy;@";
 
                 CellStyles dataNumberDataCellStyle = new CellStyles();
-                dataNumberDataCellStyle.DataFormat = "$#,##0.#####0";
+                dataNumberDataCellStyle.DataFormat = "$#,##0.00";
 
                 CellStyles dataNumberDateCellStyle1 = new CellStyles();
                 dataNumberDateCellStyle1.DataFormat = "#,##0";
