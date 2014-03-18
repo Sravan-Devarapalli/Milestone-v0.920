@@ -523,6 +523,10 @@ namespace DataTransferObjects
         [DataMember]
         public int LengthOfTenture { get; set; }
 
+        [DataMember]
+        public List<PersonTimeOff> TimeOffHistory { get; set; }
+
+
         #endregion Properties - data members
 
         #region Properties - calculated
