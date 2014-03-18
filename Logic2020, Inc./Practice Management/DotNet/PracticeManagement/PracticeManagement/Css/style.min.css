@@ -80,6 +80,7 @@ TD.CompPerfClient{min-width:100px}
 TD.CompPerfProject{min-width:150px}
 TD.CompPerfPeriod TABLE{margin:2px 0}
 TD.CompPerfPeriod TABLE TD{padding-right:2px}
+.PadRight20PImp{padding-right:20%!important}
 .bScroll TABLE TD.CompPerfTotalSummary{min-width:105px}
 TD.CompPerfMonthSummary{min-width:90px;text-align:center}
 TD.MonthSummary{min-width:80px;text-align:center}
