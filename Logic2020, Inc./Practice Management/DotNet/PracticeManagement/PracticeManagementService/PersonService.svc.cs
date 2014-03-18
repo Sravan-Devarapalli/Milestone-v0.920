@@ -1134,6 +1134,11 @@ namespace PracticeManagementService
             return PersonDAL.GetAllCohortAssignments();
         }
 
+        public List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays)
+        {
+            return PersonDAL.GetPTOReport(startDate, endDate, includeCompanyHolidays);
+        }
+
         #endregion IPersonService Members
     }
 }
