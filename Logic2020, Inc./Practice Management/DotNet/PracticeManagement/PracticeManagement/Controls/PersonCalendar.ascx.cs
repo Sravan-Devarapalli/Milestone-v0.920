@@ -12,6 +12,8 @@ using System.Web.Security;
 using PraticeManagement.PersonService;
 using PraticeManagement.Utils;
 using AjaxControlToolkit;
+using PraticeManagement.Utils.Excel;
+using System.Data;
 
 namespace PraticeManagement.Controls
 {
@@ -42,11 +44,84 @@ namespace PraticeManagement.Controls
         public const string SalaryVoliationForMessage = "Invalid Pay Type: Employee is not a W2-Salary employee for the selected day(s).";
         public const string HourlyVoliationForMessage = "Invalid Pay Type: Employee is not a W2-Hourly employee for the selected day(s).";
         public const string EmployeeVoliationForMessage = "Invalid Pay Type: Employee is not a W2-Salary/W2-Hourly employee for the selected day(s).";
-
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
 
         #endregion
 
         #region Properties
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle, 
+                                                   dataDateCellStyle,
+                                                   dataDateCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                   dataCellStyle,
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+                return sheetStyle;
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets a year to be displayed within the calendar.
@@ -293,8 +368,11 @@ namespace PraticeManagement.Controls
             SetMailToContactSupport();
 
             trAlert.Visible = !HasPermissionToEditCalender;
-            btnAddTimeOff.Visible = HasPermissionToEditCalender;
-
+            btnAddTimeOff.Visible =
+            btnExportExcel.Visible =
+            chbIncludeCompanyHolidays.Visible =
+            lblCompanyHolidaysCheckbox.Visible =
+            lblExport.Visible = HasPermissionToEditCalender;
 
             int? practiceManagerId = null;
 
@@ -346,7 +424,12 @@ namespace PraticeManagement.Controls
                         }
                     }
 
-                    btnAddTimeOff.Visible = isVisible;
+                    btnAddTimeOff.Visible = 
+                    btnExportExcel.Visible =
+                    chbIncludeCompanyHolidays.Visible =
+                    lblCompanyHolidaysCheckbox.Visible =
+                    lblExport.Visible = isVisible;
+
                 }
 
                 CalendarItems = days;
@@ -514,9 +597,9 @@ namespace PraticeManagement.Controls
                     hours = hours + (0.25 - hours % 0.25);
                 }
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
-               
-                  int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
-               
+
+                int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
+
 
                 var date = Convert.ToDateTime(hdnDateSingleDay.Value);
                 ServiceCallers.Custom.Calendar(
@@ -570,7 +653,7 @@ namespace PraticeManagement.Controls
         protected void btnCancelTimeOff_Click(object sender, EventArgs e)
         {
             SeriesStartDate = SeriesEndDate = DateTime.MinValue;
-            IsFromAddTimeOffBtn = false; 
+            IsFromAddTimeOffBtn = false;
         }
 
         protected void btncancel_EditCondtion_Click(object sender, EventArgs e)
@@ -596,7 +679,7 @@ namespace PraticeManagement.Controls
                         hours = hours + (0.25 - hours % 0.25);
                     }
                     var timeTypeSelectedItem = ddlTimeTypesTimeOff.SelectedItem;
-                       int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
+                    int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
 
                     DateTime? oldStartDate;
                     if (SeriesStartDate.Date == DateTime.MinValue)
@@ -617,7 +700,7 @@ namespace PraticeManagement.Controls
                                                                       IsFromAddTimeOffBtn
                                                                       )
                                                    );
-                  
+
                     if (!(SeriesStartDate <= dtpEndDateTimeOff.DateValue && dtpStartDateTimeOff.DateValue <= SeriesEndDate) && SeriesStartDate != DateTime.MinValue && SeriesEndDate != DateTime.MinValue)
                     {
                         ServiceCallers.Custom.Calendar(
@@ -1106,6 +1189,95 @@ namespace PraticeManagement.Controls
         private DateTime GetSubstituteDate(DateTime holidayDate, int personId)
         {
             return DataHelper.GetSubstituteDate(holidayDate, personId);
+        }
+
+        protected void btnExportExcel_Click(object sender, EventArgs e)
+        {
+            var yearStartDate = new DateTime(SelectedYear, 1, 1);
+            var yearEndDate = new DateTime(SelectedYear, 12, 31);
+            var filename = string.Format("PTOReport_{0}_{1}.xls", yearStartDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter), yearEndDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
+            var dataSetList = new List<DataSet>();
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+            var report = ServiceCallers.Custom.Person(p => p.GetPTOReport(yearStartDate, yearEndDate, chbIncludeCompanyHolidays.Checked)).ToArray();
+            if (report.Length > 0)
+            {
+                string dateRangeTitle = string.Format("PTO Report For the Period: {0} to {1}", yearStartDate.ToString(Constants.Formatting.EntryDateFormat), yearEndDate.ToString(Constants.Formatting.EntryDateFormat));
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                headerRowsCount = header.Rows.Count + 3;
+                var data = PrepareDataTable(report);
+                coloumnsCount = data.Columns.Count;
+                sheetStylesList.Add(HeaderSheetStyle);
+                sheetStylesList.Add(DataSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = "PTOReport";
+                dataset.Tables.Add(header);
+                dataset.Tables.Add(data);
+                dataSetList.Add(dataset);
+            }
+            else
+            {
+                string dateRangeTitle = "There are no PTO Entries towards this range selected.";
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = "PTOReport";
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
+            }
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+        }
+
+        private DataTable PrepareDataTable(Person[] personsList)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            data.Columns.Add("Person ID");
+            data.Columns.Add("Person Name");
+            data.Columns.Add("Time Off Type");
+            data.Columns.Add("Time Off Start Date");
+            data.Columns.Add("Time Off End Date");
+            data.Columns.Add("Project Number");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Project Status");
+            data.Columns.Add("Account");
+            data.Columns.Add("Business Group");
+            data.Columns.Add("Business Unit");
+            data.Columns.Add("Practice Area");
+            data.Columns.Add("Project Manager(s)");
+            data.Columns.Add("Senior Manager");
+            data.Columns.Add("Director");
+
+            foreach (var pro in personsList)
+            {
+                foreach (var timeHistory in pro.TimeOffHistory)
+                {
+                    foreach (var project in timeHistory.Projects)
+                    {
+                        row = new List<object>();
+                        row.Add(pro.EmployeeNumber);
+                        row.Add(pro.PersonLastFirstName);
+                        row.Add(timeHistory.TimeType.Name);
+                        row.Add(timeHistory.TimeOffStartDate);
+                        row.Add(timeHistory.TimeOffEndDate);
+                        row.Add((project != null && project.ProjectNumber != null) ? project.ProjectNumber : "");
+                        row.Add((project != null && project.Name != null) ? project.Name : "");
+                        row.Add((project != null && project.Status.Name != null) ? project.Status.Name : "");
+                        row.Add((project != null && project.Client.Id != null) ? project.Client.Name : "");
+                        row.Add((project != null && project.BusinessGroup.Id != null) ? project.BusinessGroup.Name : "");
+                        row.Add((project != null && project.Group.Id != null) ? project.Group.Name : "");
+                        row.Add((project != null && project.Practice.Id != null) ? project.Practice.Name : "");
+                        row.Add((project != null && project.ProjectManagerNames != null) ? project.ProjectManagerNames : "");
+                        row.Add((project != null && project.SeniorManagerName != null) ? project.SeniorManagerName : "");
+                        row.Add((project != null && project.Director.Id != null) ? project.Director.Name : "");
+                        data.Rows.Add(row.ToArray());
+                    }
+                }
+            }
+            return data;
         }
     }
 }
