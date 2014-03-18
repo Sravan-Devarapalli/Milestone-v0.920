@@ -17,7 +17,8 @@ AS
 		   pcal.TimeTypeId,
 		   pcal.Description,
 		   pcal.ApprovedBy,
-		   pcal.SubstituteDate
+		   pcal.SubstituteDate,
+		   pcal.SeriesId
 	  FROM dbo.Calendar AS cal
 		   INNER JOIN dbo.GetFutureDateTable() FD ON 1 = 1
 		   INNER JOIN dbo.GetHolidayTimeTypeIdTable() HTT ON 1 = 1
