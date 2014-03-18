@@ -462,6 +462,10 @@ TD.CompPerfPeriod TABLE TD
 {
     padding-right: 2px;
 }
+.PadRight20PImp
+{
+    padding-right: 20% !important;
+}
 .bScroll TABLE TD.CompPerfTotalSummary
 {
     min-width: 105px;
