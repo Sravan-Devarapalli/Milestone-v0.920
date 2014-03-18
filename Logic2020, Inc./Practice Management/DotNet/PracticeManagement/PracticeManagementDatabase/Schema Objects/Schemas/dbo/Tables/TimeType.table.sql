@@ -8,7 +8,8 @@
 	[IsActive]			BIT					NOT NULL,
 	[IsAdministrative]  BIT					NOT NULL CONSTRAINT [DF_TimeType_IsAdministrative] DEFAULT 0,
 	[IsW2SalaryAllowed] BIT					NOT NULL CONSTRAINT [DF_TimeType_IsW2SalaryAllowed] DEFAULT 0,
-	[IsW2HourlyAllowed] BIT					NOT NULL CONSTRAINT [DF_TimeType_IsW2HourlyAllowed] DEFAULT 0
+	[IsW2HourlyAllowed] BIT					NOT NULL CONSTRAINT [DF_TimeType_IsW2HourlyAllowed] DEFAULT 0,
+	[Acronym]			VARCHAR (50)		NOT NULL
 );
  
 
