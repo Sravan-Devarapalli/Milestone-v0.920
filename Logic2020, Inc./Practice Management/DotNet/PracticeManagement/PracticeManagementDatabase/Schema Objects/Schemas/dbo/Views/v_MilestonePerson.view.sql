@@ -52,7 +52,8 @@ AS
 				FROM dbo.v_PersonCalendar AS pcal
 				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 AND pcal.IsFloatingHoliday = 0
 					AND pcal.Date BETWEEN mpe.StartDate AND mpe.EndDate
-					AND pcal.PersonId = mp.PersonId ),0) as VacationDays
+					AND pcal.PersonId = mp.PersonId ),0) as VacationDays,
+		   m.GroupId
 	  FROM dbo.MilestonePerson AS mp
 	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
 	       INNER JOIN dbo.v_Milestone AS m ON mp.MilestoneId = m.MilestoneId
