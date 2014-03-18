@@ -105,6 +105,12 @@
   <wsdl:message name="IPersonService_GetAllCohortAssignments_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAllCohortAssignmentsResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPTOReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPTOReport" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPTOReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPTOReportResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -601,6 +607,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetAllCohortAssignments" message="tns:IPersonService_GetAllCohortAssignments_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetAllCohortAssignmentsResponse" message="tns:IPersonService_GetAllCohortAssignments_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPTOReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPTOReport" message="tns:IPersonService_GetPTOReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPTOReportResponse" message="tns:IPersonService_GetPTOReport_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -1021,6 +1031,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetAllCohortAssignments">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetAllCohortAssignments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPTOReport">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPTOReport" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
