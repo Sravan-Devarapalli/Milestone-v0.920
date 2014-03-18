@@ -466,6 +466,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<CohortAssignment> GetAllCohortAssignments();
+
+        [OperationContract]
+        List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays);
     }
 }
 
