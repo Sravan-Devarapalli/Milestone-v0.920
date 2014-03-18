@@ -3790,6 +3790,147 @@ namespace DataAccess
             return result;
         }
 
+        public static List<Person> GetPTOReport(DateTime startDate, DateTime endDate,bool includeCompanyHolidays)
+        {
+            List<Person> result = new List<Person>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Person.GetPTOReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IncludeCompanyHolidays, includeCompanyHolidays);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadPTOReport(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadPTOReport(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int timeTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeId);
+                int timeTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimeTypeName);
+                int timeOffStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.TimeOffStartDate);
+                int timeOffEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.TimeOffEndDate);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
+                int projectStatusNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+                int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitId);
+                int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
+                int businessGroupIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupIdColumn);
+                int businessGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupName);
+                int practiceIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                int practiceAreaNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeAreaName);
+                int projectManagersIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagers);
+                int seniorManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerId);
+                int seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
+                int directorIdColumnIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorIdColumn);
+                int directorFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorFirstNameColumn);
+                int directorLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorLastNameColumn);
+                while (reader.Read())
+                {
+                    var personId = reader.GetInt32(personIdIndex);
+                    var timetype = new TimeTypeRecord()
+                    {
+                        Id = reader.GetInt32(timeTypeIdIndex),
+                        Name = reader.GetString(timeTypeNameIndex)
+                    };
+                    var timeoffStartDate = reader.GetDateTime(timeOffStartDateIndex);
+                    var timeoffEndDate = reader.GetDateTime(timeOffEndDateIndex);
+                    var project = new Project()
+                    {
+                        ProjectNumber = reader.IsDBNull(projectNumberIndex) ? null : reader.GetString(projectNumberIndex),
+                        Name = reader.IsDBNull(projectNameIndex) ? null : reader.GetString(projectNameIndex),
+                        Status = new ProjectStatus()
+                        {
+                            Id = reader.IsDBNull(projectStatusIdIndex) ? -1 : reader.GetInt32(projectStatusIdIndex),
+                            Name = reader.IsDBNull(projectStatusNameColumnIndex) ? null : reader.GetString(projectStatusNameColumnIndex),
+                        },
+                        Client = new Client()
+                        {
+                            Id = reader.IsDBNull(clientIdIndex) ? (int?)null : reader.GetInt32(clientIdIndex),
+                            Name = reader.IsDBNull(clientNameIndex) ? null : reader.GetString(clientNameIndex)
+                        },
+                        Group = new ProjectGroup()
+                        {
+                            Id = reader.IsDBNull(businessUnitIdIndex) ? (int?)null : reader.GetInt32(businessUnitIdIndex),
+                            Name = reader.IsDBNull(businessUnitNameIndex) ? null : reader.GetString(businessUnitNameIndex)
+                        },
+                        BusinessGroup = new BusinessGroup()
+                        {
+                            Id = reader.IsDBNull(businessGroupIdColumnIndex) ? (int?)null : reader.GetInt32(businessGroupIdColumnIndex),
+                            Name = reader.IsDBNull(businessGroupNameIndex) ? null : reader.GetString(businessGroupNameIndex)
+                        },
+                        Practice = new Practice()
+                        {
+                            Id = reader.IsDBNull(practiceIdColumnIndex) ? -1 : reader.GetInt32(practiceIdColumnIndex),
+                            Name = reader.IsDBNull(practiceAreaNameIndex) ? null : reader.GetString(practiceAreaNameIndex)
+                        },
+                        ProjectManagerNames = reader.IsDBNull(projectManagersIndex) ? string.Empty : reader.GetString(projectManagersIndex),
+                        SeniorManagerId = reader.IsDBNull(seniorManagerIdIndex) ? -1 : reader.GetInt32(seniorManagerIdIndex),
+                        SeniorManagerName = reader.IsDBNull(seniorManagerNameIndex) ? string.Empty : reader.GetString(seniorManagerNameIndex),
+                        Director = new Person()
+                        {
+                            Id = reader.IsDBNull(directorIdColumnIndex) ? (int?)null : reader.GetInt32(directorIdColumnIndex),
+                            FirstName = reader.IsDBNull(directorFirstNameIndex) ? string.Empty : reader.GetString(directorFirstNameIndex),
+                            LastName = reader.IsDBNull(directorLastNameIndex) ? string.Empty : reader.GetString(directorLastNameIndex)
+                        }
+                    };
+                    if(result.Any(p => p.Id == personId && p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
+                    {
+                        var personTimeoff = (result.First(p => p.Id == personId && p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate && t.TimeOffEndDate == timeoffEndDate)));
+                        var projects = personTimeoff.TimeOffHistory.First(t => t.TimeOffStartDate == timeoffStartDate).Projects;
+                        projects.Add(project);
+                    }
+                    else if(result.Any(p => p.Id == personId && !p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
+                    {
+                        var personTimeOff = new PersonTimeOff()
+                        {
+                            TimeType = timetype,
+                            TimeOffStartDate = timeoffStartDate,
+                            TimeOffEndDate = timeoffEndDate,
+                            Projects = new List<Project>() { project}
+                        };
+                        var person = result.First(p => p.Id == personId);
+                        person.TimeOffHistory.Add(personTimeOff);
+                    }
+                    else
+                    {
+                        var personTimeOff = new PersonTimeOff()
+                        {
+                            TimeType = timetype,
+                            TimeOffStartDate = timeoffStartDate,
+                            TimeOffEndDate = timeoffEndDate,
+                            Projects = new List<Project>() { project }
+                        };
+                        Person person = new Person()
+                        {
+                            Id = personId,
+                            EmployeeNumber = reader.GetString(employeeNumberIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            TimeOffHistory = new List<PersonTimeOff>() { personTimeOff }
+                        };
+                        result.Add(person);
+                    }
+                }
+            }
+        }
+
         #region Cohort Assignments
 
         public static List<CohortAssignment> GetAllCohortAssignments()
