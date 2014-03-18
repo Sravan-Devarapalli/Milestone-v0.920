@@ -64,6 +64,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetAllCohortAssignments", ReplyAction="http://tempuri.org/IPersonService/GetAllCohortAssignmentsResponse")]
         DataTransferObjects.CohortAssignment[] GetAllCohortAssignments();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPTOReport", ReplyAction="http://tempuri.org/IPersonService/GetPTOReportResponse")]
+        DataTransferObjects.Person[] GetPTOReport(System.DateTime startDate, System.DateTime endDate, bool includeCompanyHolidays);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -317,7 +320,8 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-       
+        
+      
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -392,6 +396,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.CohortAssignment[] GetAllCohortAssignments() {
             return base.Channel.GetAllCohortAssignments();
+        }
+        
+        public DataTransferObjects.Person[] GetPTOReport(System.DateTime startDate, System.DateTime endDate, bool includeCompanyHolidays) {
+            return base.Channel.GetPTOReport(startDate, endDate, includeCompanyHolidays);
         }
         
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
