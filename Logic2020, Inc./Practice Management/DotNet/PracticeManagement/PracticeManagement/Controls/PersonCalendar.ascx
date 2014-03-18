@@ -21,7 +21,7 @@
             var lblDeleteSubstituteDay = document.getElementById('<%= lblDeleteSubstituteDay.ClientID %>');
             var lblDeleteSubstituteDescription = document.getElementById('<%= lblDeleteSubstituteDescription.ClientID %>');
             lblDeleteSubstituteDay.innerHTML = hdnHolidayDate.value = date.format('MM/dd/yyyy');
-            lblDeleteSubstituteDescription.innerHTML = EncodeString(dayLink.title.substring(0, dayLink.title.indexOf('Approved') != -1 ? dayLink.title.indexOf('Approved'):dayLink.title.indexOf('Entered')));
+            lblDeleteSubstituteDescription.innerHTML = EncodeString(dayLink.title.substring(0, dayLink.title.indexOf('Approved') != -1 ? dayLink.title.indexOf('Approved') : dayLink.title.indexOf('Entered')));
             var mpeDeleteSubstituteDay = $find('mpeDeleteSubstituteDay');
             mpeDeleteSubstituteDay.show();
         }
@@ -157,9 +157,23 @@
                                     </Animations>
                                 </AjaxControlToolkit:UpdatePanelAnimationExtender>
                             </td>
-                            <td class="BtnAddTimeOff">
+                            <td class="textRightImp PadRight20PImp">
                                 <asp:Button ID="btnAddTimeOff" runat="server" Text="Add Time Off" OnClick="btnAddTimeOff_Click"
                                     ToolTip="Add Time Off" />
+                            </td>
+                        </tr>
+                        <tr>
+                        <td colspan="2" class="width70P"></td>
+                            <td class="textRightImp PadRight20PImp">
+                               <asp:Label Text="Export" ID="lblExport" runat="server"></asp:Label> 
+                                <asp:Button ID="btnExportExcel" runat="server" Text="Excel" OnClick="btnExportExcel_Click"/>
+                            </td>
+                        </tr>
+                        <tr>
+                        <td colspan="2" class="width70P"></td>
+                            <td class="textRightImp PadRight20PImp">
+                                <asp:CheckBox ID="chbIncludeCompanyHolidays" runat="server"/>
+                                <asp:Label Text="Include Company Holidays" ID="lblCompanyHolidaysCheckbox" runat="server"></asp:Label>
                             </td>
                         </tr>
                         <tr>
@@ -309,7 +323,7 @@
                     <asp:HiddenField ID="hdEditCondtion" runat="server" />
                     <AjaxControlToolkit:ModalPopupExtender ID="mpeSelectEditCondtion" runat="server"
                         TargetControlID="hdEditCondtion" BackgroundCssClass="modalBackground" PopupControlID="pnlSelectEditCondtion"
-                        DropShadow="false" BehaviorID="mpeSelectEditCondtion"/>
+                        DropShadow="false" BehaviorID="mpeSelectEditCondtion" />
                     <asp:Panel ID="pnlSelectEditCondtion" runat="server" CssClass="ConfirmBoxClassError Height175Width320Px PanelPerson">
                         <table class="calendarPopup">
                             <tr>
@@ -340,7 +354,8 @@
                                 <td colspan="3">
                                     <asp:Button ID="btnOk_EditCondtion" Text="OK" runat="server" ToolTip="Ok" OnClientClick="return  btnOk_EditCondtion();" />&nbsp;
                                     &nbsp;
-                                    <asp:Button ID="btncancel_EditCondtion" Text="Cancel" runat="server" ToolTip="Cancel" OnClick="btncancel_EditCondtion_Click"/>
+                                    <asp:Button ID="btncancel_EditCondtion" Text="Cancel" runat="server" ToolTip="Cancel"
+                                        OnClick="btncancel_EditCondtion_Click" />
                                 </td>
                             </tr>
                         </table>
@@ -350,7 +365,7 @@
                             <asp:HiddenField ID="hfAddTimeOff" runat="server" />
                             <AjaxControlToolkit:ModalPopupExtender ID="mpeAddTimeOff" runat="server" TargetControlID="hfAddTimeOff"
                                 BackgroundCssClass="modalBackground" PopupControlID="pnlAddTimeOff" DropShadow="false"
-                                BehaviorID="mpeAddTimeOff"/>
+                                BehaviorID="mpeAddTimeOff" />
                             <asp:Panel ID="pnlAddTimeOff" runat="server" CssClass="ConfirmBoxClassError PanelPerson">
                                 <table class="calendarPopup">
                                     <tr>
@@ -498,7 +513,7 @@
                             <asp:HiddenField ID="hdEditSingleDay" runat="server" />
                             <AjaxControlToolkit:ModalPopupExtender ID="mpeEditSingleDay" runat="server" TargetControlID="hdEditSingleDay"
                                 BackgroundCssClass="modalBackground" PopupControlID="pnlEditSingleDay" DropShadow="false"
-                                BehaviorID="mpeEditSingleDay"/>
+                                BehaviorID="mpeEditSingleDay" />
                             <asp:Panel ID="pnlEditSingleDay" runat="server" CssClass="ConfirmBoxClassError PanelPerson"
                                 Style="display: none;">
                                 <table class="calendarPopup">
@@ -579,7 +594,8 @@
                                                 runat="server" />
                                             <asp:Button ID="btnDeleteSingleDay" OnClick="btnDeleteSingleDay_OnClick" Text="Delete"
                                                 ToolTip="Delete" runat="server" />
-                                            <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server" OnClick="btnCancelEditSingleDay_OnClick" />
+                                            <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server"
+                                                OnClick="btnCancelEditSingleDay_OnClick" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -774,6 +790,9 @@
                         </table>
                     </asp:Panel>
                 </ContentTemplate>
+                <Triggers>
+                <asp:PostBackTrigger ControlID="btnExportExcel"/>
+                </Triggers>
             </asp:UpdatePanel>
         </td>
     </tr>
