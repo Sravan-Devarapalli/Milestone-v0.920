@@ -76,6 +76,42 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.Button btnAddTimeOff;
         
         /// <summary>
+        /// lblExport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblExport;
+        
+        /// <summary>
+        /// btnExportExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportExcel;
+        
+        /// <summary>
+        /// chbIncludeCompanyHolidays control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbIncludeCompanyHolidays;
+        
+        /// <summary>
+        /// lblCompanyHolidaysCheckbox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCompanyHolidaysCheckbox;
+        
+        /// <summary>
         /// trAlert control.
         /// </summary>
         /// <remarks>
