@@ -9,6 +9,9 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string DirectorName = "DirectorName";
+            public const string TimeOffStartDate = "TimeOffStartDate";
+            public const string TimeOffEndDate = "TimeOffEndDate";
             public const string CohortAssignmentName = "CohortAssignmentName";
             public const string CohortAssignmentId = "CohortAssignmentId";
             public const string LengthOfTenureInDays = "LengthOfTenureInDays";
@@ -929,6 +932,7 @@
 
             public class Person
             {
+                public const string GetPTOReport = "dbo.GetPTOReport";
                 public const string GetAllCohortAssignments = "dbo.GetAllCohortAssignments";
                 public const string GetPersonsByPayTypesAndByStatusIds = "dbo.GetPersonsByPayTypesAndByStatusIds";
                 public const string CheckIfPersonEntriesOverlapps = "dbo.CheckIfPersonEntriesOverlapps";
