@@ -603,6 +603,10 @@
                                                 <asp:RequiredFieldValidator ID="reqBusinessUnit" runat="server" ControlToValidate="ddlProjectGroup"
                                                     EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Business Unit is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Business Unit is required."></asp:RequiredFieldValidator>
+                                                <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                                    ToolTip="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -935,7 +939,8 @@
                                     <table class="WholeWidth Height100Percent">
                                         <tr>
                                             <td class="InnerTdProjectNotes">
-                                                <u><asp:Label ID="lblOppLinking" runat="server" Text="Opportunity Linking"></asp:Label></u>
+                                                <u>
+                                                    <asp:Label ID="lblOppLinking" runat="server" Text="Opportunity Linking"></asp:Label></u>
                                                 <asp:ImageButton ID="imgLink" runat="server" AlternateText="Link Opportunity" ToolTip="Link Opportunity"
                                                     OnClick="imgLink_Click" Visible="true" ImageUrl="~/Images/link.png" />
                                             </td>
