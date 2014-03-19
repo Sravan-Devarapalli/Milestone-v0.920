@@ -424,12 +424,22 @@ namespace PraticeManagement.Controls
                         }
                     }
 
-                    btnAddTimeOff.Visible = 
-                    btnExportExcel.Visible =
-                    chbIncludeCompanyHolidays.Visible =
-                    lblCompanyHolidaysCheckbox.Visible =
-                    lblExport.Visible = isVisible;
-
+                    btnAddTimeOff.Visible = isVisible;
+                    var now = DateTime.Now;
+                    if(personPayHistory.Any(p => p.StartDate <= now && now <= p.EndDate && p.Timescale == TimescaleType.Salary))
+                    {
+                        btnExportExcel.Visible =
+                        chbIncludeCompanyHolidays.Visible =
+                        lblCompanyHolidaysCheckbox.Visible =
+                        lblExport.Visible = true;
+                    }
+                    else
+                    {
+                        btnExportExcel.Visible =
+                        chbIncludeCompanyHolidays.Visible =
+                        lblCompanyHolidaysCheckbox.Visible =
+                        lblExport.Visible = false;
+                    }
                 }
 
                 CalendarItems = days;
@@ -1210,7 +1220,7 @@ namespace PraticeManagement.Controls
                 sheetStylesList.Add(HeaderSheetStyle);
                 sheetStylesList.Add(DataSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = "PTOReport";
+                dataset.DataSetName = "PTO_Report";
                 dataset.Tables.Add(header);
                 dataset.Tables.Add(data);
                 dataSetList.Add(dataset);
@@ -1222,7 +1232,7 @@ namespace PraticeManagement.Controls
                 header.Columns.Add(dateRangeTitle);
                 sheetStylesList.Add(HeaderSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = "PTOReport";
+                dataset.DataSetName = "PTO_Report";
                 dataset.Tables.Add(header);
                 dataSetList.Add(dataset);
             }
