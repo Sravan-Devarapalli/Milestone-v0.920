@@ -157,21 +157,24 @@
                                     </Animations>
                                 </AjaxControlToolkit:UpdatePanelAnimationExtender>
                             </td>
-                            <td class="textRightImp PadRight20PImp">
+                            <td class="textRightImp">
                                 <asp:Button ID="btnAddTimeOff" runat="server" Text="Add Time Off" OnClick="btnAddTimeOff_Click"
                                     ToolTip="Add Time Off" />
                             </td>
+                            <td class="Width22Per">
+                             &nbsp;
+                            </td>
                         </tr>
                         <tr>
-                        <td colspan="2" class="width70P"></td>
-                            <td class="textRightImp PadRight20PImp">
-                               <asp:Label Text="Export" ID="lblExport" runat="server"></asp:Label> 
+                        <td colspan="2" class="Width67PImp no-wrap"></td>
+                            <td class="textRightImp">
+                               <asp:Label Text="Export:" ID="lblExport" runat="server"></asp:Label> 
                                 <asp:Button ID="btnExportExcel" runat="server" Text="Excel" OnClick="btnExportExcel_Click"/>
                             </td>
                         </tr>
                         <tr>
-                        <td colspan="2" class="width70P"></td>
-                            <td class="textRightImp PadRight20PImp">
+                        <td colspan="2" class="Width67PImp no-wrap"></td>
+                            <td class="textRightImp">
                                 <asp:CheckBox ID="chbIncludeCompanyHolidays" runat="server"/>
                                 <asp:Label Text="Include Company Holidays" ID="lblCompanyHolidaysCheckbox" runat="server"></asp:Label>
                             </td>
