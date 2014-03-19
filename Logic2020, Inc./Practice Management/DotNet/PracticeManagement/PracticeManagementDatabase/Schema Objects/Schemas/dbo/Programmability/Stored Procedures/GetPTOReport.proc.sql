@@ -40,7 +40,7 @@ BEGIN
 		   P.FirstName,
 		   P.LastName,
 		   PPT.TimeTypeId,
-		   CASE WHEN PPT.DayOff = 1 AND PPT.CompanyDayOff = 0 AND PPT.TimeTypeId = @HolidayTimeType THEN 'Substitute Holiday' ELSE TT.Acronym END AS TimeTypeName,
+		   CASE WHEN PPT.DayOff = 1 AND PPT.CompanyDayOff = 0 AND PPT.TimeTypeId = @HolidayTimeType THEN 'SUB HOL' ELSE TT.Acronym END AS TimeTypeName,
 		   PPT.StartDate AS TimeOffStartDate,
 		   PPT.EndDate AS TimeOffEndDate,
 		   pro.ProjectNumber,
@@ -65,6 +65,7 @@ BEGIN
 	LEFT JOIN v_MilestonePerson VMP ON PPT.PersonId = VMP.PersonId 
 									AND VMP.StartDate <= PPT.EndDate AND PPT.StartDate <= VMP.EndDate 
 									AND VMP.ProjectNumber <> 'P031000'
+									AND VMP.ProjectStatusId IN (2,3,4)
 	INNER JOIN dbo.Person P ON P.PersonId = PPT.PersonId
 	INNER JOIN dbo.TimeType TT ON TT.TimeTypeId = PPT.TimeTypeId
 	LEFT JOIN dbo.Project pro ON pro.ProjectId = VMP.ProjectId 
