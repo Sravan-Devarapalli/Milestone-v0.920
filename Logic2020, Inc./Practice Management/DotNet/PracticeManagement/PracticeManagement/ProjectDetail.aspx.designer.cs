@@ -274,6 +274,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBusinessUnit;
         
         /// <summary>
+        /// cvGroup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvGroup;
+        
+        /// <summary>
         /// txtSowBudget control.
         /// </summary>
         /// <remarks>
