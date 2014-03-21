@@ -517,8 +517,8 @@
                                                 <asp:RequiredFieldValidator ID="reqClientName" runat="server" ControlToValidate="ddlClientName"
                                                     ErrorMessage="The Account Name is required." ToolTip="The Account Name is required."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                                <asp:CustomValidator ID="cvClient" runat="server" ErrorMessage="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project."
-                                                    ToolTip="Project's account cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                                <asp:CustomValidator ID="cvClient" runat="server" ErrorMessage="The project's account designation cannot be changed as time has been entered towards the project."
+                                                    ToolTip="The project's account designation cannot be changed as time has been entered towards the project."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="cvClient_ServerValidate"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="cvClientOpportunityLinked" runat="server" ErrorMessage="Project's account cannot be modified as this project is linked to an Opportunity, Please unlink the Opportunity before account changed."
@@ -603,8 +603,8 @@
                                                 <asp:RequiredFieldValidator ID="reqBusinessUnit" runat="server" ControlToValidate="ddlProjectGroup"
                                                     EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Business Unit is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Business Unit is required."></asp:RequiredFieldValidator>
-                                                <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
-                                                    ToolTip="Project's business unit cannot be modified as some time entered towards this Account-BusinessUnit-Project."
+                                                <asp:CustomValidator ID="cvGroup" runat="server" ErrorMessage="The project's Business Unit designation cannot be changed as time has been entered towards the project."
+                                                    ToolTip="The project's Business Unit designation cannot be changed as time has been entered towards the project."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="cvGroup_ServerValidate"></asp:CustomValidator>
                                             </td>
