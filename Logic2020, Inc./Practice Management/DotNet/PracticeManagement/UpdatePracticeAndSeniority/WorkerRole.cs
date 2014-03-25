@@ -49,6 +49,7 @@ namespace UpdatePracticeAndSeniority
         public const string ProjectSummaryCacheScheduleTime_ConfigKey = "ProjectSummaryCacheScheduleTime";
         public const string LoginPagePath_ConfigKey = "LoginPagePath";
         public const string WelcomeMailScheduleTime_ConfigKey = "WelcomeMailScheduleTime";
+        public const string UATTestingMail_ConfigKey = "UATTestingMail";
 
         //Formats
         public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
@@ -259,6 +260,14 @@ namespace UpdatePracticeAndSeniority
             get
             {
                 return WorkerRole.GetConfigValue(LoginPagePath_ConfigKey) ?? "https://practice.logic2020.com/Login.aspx";
+            }
+        }
+
+        public static string UATTestingEmailReciever
+        {
+            get
+            {
+                return WorkerRole.GetConfigValue(UATTestingMail_ConfigKey);
             }
         }
 
@@ -1189,7 +1198,17 @@ namespace UpdatePracticeAndSeniority
                         message.Attachments.Add(item);
                     }
                 }
-
+                if(IsUATEnvironment)
+                {
+                    message.To.Clear();
+                    message.CC.Clear();
+                    message.Bcc.Clear();
+                    var uatToAddresses = UATTestingEmailReciever.Split(',');
+                    for (int i = 0; i < uatToAddresses.Length; i++)
+                    {
+                        message.To.Add(new MailAddress(uatToAddresses[i]));
+                    }
+                }
                 SmtpClient client = GetSmtpClient(smtpSettings);
 
                 message.From = new MailAddress(smtpSettings.PMSupportEmail);
