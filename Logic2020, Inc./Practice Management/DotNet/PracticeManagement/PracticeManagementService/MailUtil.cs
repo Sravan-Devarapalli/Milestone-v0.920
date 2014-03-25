@@ -72,6 +72,21 @@ namespace PracticeManagementService
             }
         }
 
+        private static string UATTestingMail
+        {
+            get
+            {
+                try
+                {
+                    return ConfigurationManager.AppSettings["UATTestingMail"];
+                }
+                catch
+                {
+                    return "";
+                }
+            }
+        }
+
         /// <summary>
         /// Sends a notification to user with his/her credentials.
         /// </summary>
@@ -266,6 +281,14 @@ namespace PracticeManagementService
                 if (IsUAT)
                 {
                     message.Subject = "(UAT) " + subject;
+                    message.To.Clear();
+                    message.CC.Clear();
+                    message.Bcc.Clear();
+                    var uatToAddresses = UATTestingMail.Split(',');
+                    for (int i = 0; i < uatToAddresses.Length; i++)
+                    {
+                        message.To.Add(new MailAddress(uatToAddresses[i]));
+                    }
                 }
                 else if(IsDemo)
                 {
