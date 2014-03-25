@@ -21,6 +21,7 @@
       <Setting name="DisableAllMails"/>      
       <Setting name="LoginPagePath"/>
       <Setting name="WelcomeMailScheduleTime"/>
+      <Setting name="UATTestingMail"/>
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
