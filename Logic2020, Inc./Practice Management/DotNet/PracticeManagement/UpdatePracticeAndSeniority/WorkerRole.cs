@@ -1356,8 +1356,8 @@ namespace UpdatePracticeAndSeniority
                 }
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_GetPersonsByTodayHireDate), nextRun);
                 //sending login credentials through email.
-                //According to the changes in defect #3121 WelComeEmails should not be sent in UAT.
-                if (persons.Count > 0 && !IsUATEnvironment)
+                //According to the changes in defect #3240 WelComeEmails can be sent in UAT also.
+                if (persons.Count > 0)
                 {
                     SendWelComeEmails(persons, currentWithTimeZone, nextRun);
                 }
