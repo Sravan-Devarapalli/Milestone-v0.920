@@ -606,7 +606,7 @@
                         <ext:ElementDisablerExtender ID="edeSave" runat="server" TargetControlID="btnSave"
                             ControlToDisableID="btnSave" />
                         <br />
-                        <asp:Label ID="lblDeleteActive" runat="server" ForeColor="Gray" Visible="false" Text="* There is time entry for this milestone-person. Administrator should first remove/reassign that time entries and then remove the person from the milestone." />
+                        <asp:Label ID="lblDeleteActive" runat="server" ForeColor="Gray" Visible="false" Text="* There is time entry for this milestone-person. System Administrator should first remove/reassign that time entries and then remove the person from the milestone." />
                     </td>
                 </tr>
             </table>
