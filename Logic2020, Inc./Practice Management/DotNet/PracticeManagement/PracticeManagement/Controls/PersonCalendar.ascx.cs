@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using DataTransferObjects;
-using PraticeManagement.CalendarService;
-using PraticeManagement.Controls;
-using System.ServiceModel;
-using System.Web.Security;
-using PraticeManagement.PersonService;
-using PraticeManagement.Utils;
 using AjaxControlToolkit;
+using DataTransferObjects;
+using PraticeManagement.Utils;
 using PraticeManagement.Utils.Excel;
-using System.Data;
 
 namespace PraticeManagement.Controls
 {
@@ -47,7 +43,7 @@ namespace PraticeManagement.Controls
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
 
-        #endregion
+        #endregion Constants
 
         #region Properties
 
@@ -94,8 +90,8 @@ namespace PraticeManagement.Controls
                 dataDateCellStyle.DataFormat = "mm/dd/yy;@";
 
                 CellStyles[] dataCellStylearray = { dataCellStyle,
-                                                    dataCellStyle, 
-                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
                                                    dataDateCellStyle,
                                                    dataDateCellStyle,
                                                    dataCellStyle,
@@ -122,11 +118,10 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         /// <summary>
         /// Gets or sets a year to be displayed within the calendar.
         /// </summary>
-        /// 
+        ///
 
         public DateTime SeriesStartDate
         {
@@ -175,6 +170,7 @@ namespace PraticeManagement.Controls
                 ViewState["SeriesEndDate_Key"] = value;
             }
         }
+
         public int SelectedYear
         {
             get
@@ -231,7 +227,6 @@ namespace PraticeManagement.Controls
                 }
 
                 return false;
-
             }
         }
 
@@ -282,7 +277,6 @@ namespace PraticeManagement.Controls
             {
                 ViewState["CalendarItems_Key"] = value;
             }
-
         }
 
         public bool IsUserHrORAdmin
@@ -305,7 +299,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        #endregion
+        #endregion Properties
 
         public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedById, string approvedByName)
         {
@@ -358,7 +352,6 @@ namespace PraticeManagement.Controls
             rbEditSeries.Checked = true;
             rbEditSingleDay.Checked = false;
             lbDate.Text = String.Format(Calendar.showEditSeriesOrSingleDayMessage, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat), selectedDate.ToString(Constants.Formatting.EntryDateFormat));
-
         }
 
         private void UpdateCalendar()
@@ -387,10 +380,8 @@ namespace PraticeManagement.Controls
             DateTime firstDisplayedDay = firstMonthDay.AddDays(-(double)firstMonthDay.DayOfWeek);
             DateTime lastDisplayedDay = lastMonthDay.AddDays(6.0 - (double)lastMonthDay.DayOfWeek);
 
-
             var days =
                  ServiceCallers.Custom.Calendar(c => c.GetPersonCalendar(firstDisplayedDay, lastDisplayedDay, SelectedPersonId, practiceManagerId));
-
 
             if (days != null)
             {
@@ -426,7 +417,7 @@ namespace PraticeManagement.Controls
 
                     btnAddTimeOff.Visible = isVisible;
                     var now = DateTime.Now;
-                    if(personPayHistory.Any(p => p.StartDate <= now && now <= p.EndDate && p.Timescale == TimescaleType.Salary))
+                    if (personPayHistory.Any(p => p.StartDate <= now && now <= p.EndDate && p.Timescale == TimescaleType.Salary))
                     {
                         btnExportExcel.Visible =
                         chbIncludeCompanyHolidays.Visible =
@@ -456,7 +447,6 @@ namespace PraticeManagement.Controls
                 mcOctober.UpdateMonthCalendar();
                 mcNovember.UpdateMonthCalendar();
                 mcDecember.UpdateMonthCalendar();
-
             }
             upnlBody.Update();
         }
@@ -475,7 +465,6 @@ namespace PraticeManagement.Controls
                  Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
             userIsHR =
                Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
-
 
             userIsDirector =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
@@ -503,7 +492,6 @@ namespace PraticeManagement.Controls
                 PopulateTimeTypesDropDown();
                 UpdateCalendar();
             }
-
         }
 
         private void PopulateTimeTypesDropDown()
@@ -551,11 +539,11 @@ namespace PraticeManagement.Controls
             }
         }
 
-
         protected void btnCancelEditSingleDay_OnClick(object sender, EventArgs e)
         {
             SeriesStartDate = SeriesEndDate = DateTime.MinValue;
         }
+
         protected void btnDeleteSingleDay_OnClick(object sender, EventArgs e)
         {
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
@@ -586,14 +574,11 @@ namespace PraticeManagement.Controls
                 mpeEditSingleDay.Show();
             }
 
-
             upnlErrorSingleDay.Update();
-
         }
 
         protected void btnOkSingleDay_OnClick(object sender, EventArgs e)
         {
-
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
             if (Page.IsValid)
             {
@@ -609,7 +594,6 @@ namespace PraticeManagement.Controls
                 var timeTypeSelectedItem = ddlTimeTypesSingleDay.SelectedItem;
 
                 int approvedBy = Convert.ToInt32(DataHelper.CurrentPerson.Id);
-
 
                 var date = Convert.ToDateTime(hdnDateSingleDay.Value);
                 ServiceCallers.Custom.Calendar(
@@ -644,7 +628,6 @@ namespace PraticeManagement.Controls
             }
 
             upnlErrorSingleDay.Update();
-
         }
 
         protected void btnAddTimeOff_Click(object sender, EventArgs e)
@@ -797,7 +780,6 @@ namespace PraticeManagement.Controls
                 mpeAddTimeOff.Show();
             }
 
-
             upnlTimeOff.Update();
         }
 
@@ -859,7 +841,6 @@ namespace PraticeManagement.Controls
                     return;
                 }
             }
-
         }
 
         protected void cvNotW2Salary_ServerValidate(object source, ServerValidateEventArgs args)
@@ -885,7 +866,6 @@ namespace PraticeManagement.Controls
 
                 startDate = startDate.AddDays(1);
             }
-
         }
 
         protected void cvNotW2Hourly_ServerValidate(object source, ServerValidateEventArgs args)
@@ -911,7 +891,6 @@ namespace PraticeManagement.Controls
 
                 startDate = startDate.AddDays(1);
             }
-
         }
 
         protected void cvSubstituteDayNotHavingW2Salary_ServerValidate(object source, ServerValidateEventArgs args)
@@ -922,7 +901,6 @@ namespace PraticeManagement.Controls
             if (!IsPersonNotHired(substituteDate) && !personPayHistory.Any(p => substituteDate >= p.StartDate && substituteDate <= p.EndDate && p.Timescale == TimescaleType.Salary))
             {
                 args.IsValid = false;
-
             }
         }
 
@@ -934,9 +912,7 @@ namespace PraticeManagement.Controls
             if (!IsPersonNotHired(modifiedSubDate) && !personPayHistory.Any(p => modifiedSubDate >= p.StartDate && modifiedSubDate <= p.EndDate && p.Timescale == TimescaleType.Salary))
             {
                 args.IsValid = false;
-
             }
-
         }
 
         protected void cvPersonNotHired_ServerValidate(object source, ServerValidateEventArgs args)
@@ -947,7 +923,6 @@ namespace PraticeManagement.Controls
             {
                 args.IsValid = false;
             }
-
         }
 
         protected void cvPersonTerminated_ServerValidate(object source, ServerValidateEventArgs args)
@@ -970,7 +945,6 @@ namespace PraticeManagement.Controls
                 args.IsValid = false;
             }
             //}
-
         }
 
         protected void cvValidateSubDateWithTermDate_ServerValidate(object source, ServerValidateEventArgs args)
@@ -1012,7 +986,6 @@ namespace PraticeManagement.Controls
                 return true;
             }
             return false;
-
         }
 
         public Boolean IsPersonTerminated(DateTime date)
@@ -1080,7 +1053,6 @@ namespace PraticeManagement.Controls
             }
 
             upnlValsummary.Update();
-
         }
 
         private bool SaveSubstituteDay(CalendarItem item, string validationGroup)
@@ -1291,4 +1263,3 @@ namespace PraticeManagement.Controls
         }
     }
 }
-
