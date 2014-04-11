@@ -136,7 +136,7 @@
     <value>LockedOutEmailTemplate</value>
   </data>
   <data name="OpportunityConversionMessage" xml:space="preserve">
-    <value>Only Administrators can convert an Opportunity.</value>
+    <value>Only System Administrators can convert an Opportunity.</value>
   </data>
   <data name="PasswordResetEmailTemplateName" xml:space="preserve">
     <value>Password Reset</value>
