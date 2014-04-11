@@ -446,9 +446,11 @@ namespace PracticeManagementService
         /// <param name="oldPerson">person's old data.</param>
         public void SendAdministratorAddedEmail(Person person, Person oldPerson)
         {
-            if (!person.RoleNames.Contains(DataTransferObjects.Constants.RoleNames.AdministratorRoleName)) return;
+            if (!person.RoleNames.Contains(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) && person.Seniority.Name != DataTransferObjects.Constants.SeniorityNames.AdminiSeniorityName) return;
             bool isOldPersonAdministrator = (oldPerson != null) && oldPerson.RoleNames.Contains(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-            if (!isOldPersonAdministrator || (oldPerson.Status.Id == (int)PersonStatusType.Terminated && person.Status.Id != (int)PersonStatusType.Terminated))
+            bool isPersonAdminSeniority = person.Seniority.Name == DataTransferObjects.Constants.SeniorityNames.AdminiSeniorityName;
+            bool isOldPersonAdminSeniority = (oldPerson != null) && oldPerson.Seniority.Name == DataTransferObjects.Constants.SeniorityNames.AdminiSeniorityName;
+            if (!isOldPersonAdministrator || (oldPerson.Status.Id == (int)PersonStatusType.Terminated && person.Status.Id != (int)PersonStatusType.Terminated) || (!isOldPersonAdminSeniority && isPersonAdminSeniority))
             {
                 MailUtil.SendAdministratorAddedEmail(person.FirstName, person.LastName);
             }
@@ -1142,4 +1144,3 @@ namespace PracticeManagementService
         #endregion IPersonService Members
     }
 }
-
