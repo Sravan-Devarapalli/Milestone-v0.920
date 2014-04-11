@@ -1,33 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
+using AjaxControlToolkit;
+using DataTransferObjects;
+using DataTransferObjects.TimeEntry;
+using PraticeManagement.Controls;
+using PraticeManagement.Controls.Generic.DuplicateOptionsRemove;
+using PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection;
+using PraticeManagement.Controls.Generic.MaxValueAllowedForTextBox;
+using PraticeManagement.Controls.Generic.TotalCalculator;
 using PraticeManagement.Controls.Persons;
 using PraticeManagement.Controls.TimeEntry;
-using PraticeManagement.Controls;
-using DataTransferObjects;
-using PraticeManagement.Utils;
-using System.Web.Security;
-using DataTransferObjects.TimeEntry;
-using PraticeManagement.Controls.Generic.TotalCalculator;
-using System.Text;
-using System.Data;
-using System.IO;
-using System.Xml.Linq;
-using System.Xml;
-using PraticeManagement.Controls.Generic.DuplicateOptionsRemove;
-using PraticeManagement.Controls.Generic.MaxValueAllowedForTextBox;
-using PraticeManagement.Controls.Generic.EnableDisableExtForAdminSection;
-using System.Drawing;
-using AjaxControlToolkit;
 
 namespace PraticeManagement
 {
     public partial class TimeEntry_New : PracticeManagementPageBase, IPostBackEventHandler
     {
-
         #region Constants
 
         #region XMLConstants
@@ -91,7 +85,7 @@ namespace PraticeManagement
         private const string NonBillableXmlClose = "</TimeEntryRecord>";
         private const string ApprovedByNameFormat = "{0}, {1}";
 
-        #endregion
+        #endregion XMLConstants
 
         #region ControlIds
 
@@ -128,9 +122,10 @@ namespace PraticeManagement
         public const string hdTargetApprovedManagersId = "hdTargetApprovedByClientId";
         private const string repAccountProjectSectionRepeater = "repAccountProjectSection";
         private const string PlaceHolderCell = "PlaceHolderCell";
-        #endregion
 
-        #region  Attributes
+        #endregion ControlIds
+
+        #region Attributes
 
         private const string addAttribute = "add";
         private const string recursiveSectionImageUrl = "~/Images/Recursive.png";
@@ -155,7 +150,7 @@ namespace PraticeManagement
         public const string RowsCountAttribute = "rowsCount";
         public const string PlusToolTipFormat = "Add additional Work Type to {0}";
 
-        #endregion
+        #endregion Attributes
 
         #region text
 
@@ -165,7 +160,7 @@ namespace PraticeManagement
         public const string WeekChangeAlertMessage = "{0} is not active for the selected time period (i.e. {1} - {2}).";
         public const string DDLProjectFirstItem = "- - Select Project - -";
 
-        #endregion
+        #endregion text
 
         #region ViewStateKey
 
@@ -177,9 +172,9 @@ namespace PraticeManagement
         private const string billableControlIdsKey = "billableControlIds";
         private const string nonBillableControlIdsKey = "nonBillableControlIds";
 
-        #endregion
+        #endregion ViewStateKey
 
-        #endregion
+        #endregion Constants
 
         #region variables
 
@@ -188,7 +183,7 @@ namespace PraticeManagement
         private string BusinessUnitId = "";
         private string ddlWorkTypeIdsList = "";
 
-        #endregion
+        #endregion variables
 
         #region properties
 
@@ -227,7 +222,6 @@ namespace PraticeManagement
                 if (_isPersonSalaryHourlyTypeList == null)
                 {
                     _isPersonSalaryHourlyTypeList = ServiceCallers.Custom.Person(p => p.IsPersonSalaryTypeListByPeriod(SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1])).ToList();
-
                 }
                 return _isPersonSalaryHourlyTypeList;
             }
@@ -246,7 +240,6 @@ namespace PraticeManagement
                 return _allAdministrativeTimeTypes;
             }
         }
-
 
         public Dictionary<DateTime, bool> IsHourlyRevenueList { get; set; }
 
@@ -474,6 +467,7 @@ namespace PraticeManagement
         }
 
         private bool? _isAdminstrator;
+
         public bool IsAdminstrator
         {
             get
@@ -487,6 +481,7 @@ namespace PraticeManagement
         }
 
         private bool? _isReadOnly;
+
         public bool IsReadOnly
         {
             get
@@ -504,6 +499,7 @@ namespace PraticeManagement
         }
 
         private Dictionary<DateTime, bool> _IsDateInPersonEmployeeHistoryList;
+
         public Dictionary<DateTime, bool> IsDateInPersonEmployeeHistoryList
         {
             get
@@ -520,9 +516,7 @@ namespace PraticeManagement
             }
         }
 
-
-
-        #endregion
+        #endregion properties
 
         #region Control events
 
@@ -563,7 +557,6 @@ namespace PraticeManagement
                 cpeAdministrative.Collapsed = !(xdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count > 0);
 
                 ScriptManager.RegisterStartupScript(updTimeEntries, updTimeEntries.GetType(), "RegisterStartupScript", "setFooterPlacementinLastItemTemplate();", true);
-
             }
 
             ddlAccountProjectSection.Attributes[personIdAttribute] =
@@ -589,7 +582,6 @@ namespace PraticeManagement
             DataBindSectionHeader(repInternalSections, pnlInternalSectionHeader, repInternalSectionHeader, Image2);
             DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader, Image1);
             DataBindSectionHeader(repAdministrativeTes, pnlAdministrativeSection, repAdministrativeTesHeader, btnAdmistrativeExpandCollapseFilter);
-
         }
 
         private void DataBindSectionHeader(Repeater sectionRepeater, Panel sectionHeaderPanel, Repeater sectionHeaderRepeater, System.Web.UI.WebControls.Image collapseImage)
@@ -608,9 +600,9 @@ namespace PraticeManagement
             }
         }
 
-        #endregion
+        #endregion Page lifecyle methods
 
-        #region  Validations
+        #region Validations
 
         protected void custWorkType_ServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -651,11 +643,10 @@ namespace PraticeManagement
             args.IsValid = IsValidNote;
         }
 
-        #endregion
+        #endregion Validations
 
         protected void repProjectSections_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var repAccountProjectSection = e.Item.FindControl(repAccountProjectSectionRepeater) as Repeater;
@@ -719,7 +710,6 @@ namespace PraticeManagement
                 repBusinessDevelopmentTes.DataSource = workTypeList;
                 repBusinessDevelopmentTes.DataBind();
 
-
                 if (workTypeList.Count > 0)
                 {
                     DataBindAccountProjectSectionRepeater(repAccountProjectSection);
@@ -761,7 +751,6 @@ namespace PraticeManagement
                 AccountId = teSectionDataItem.Attribute(XName.Get(AccountIdXname)).Value;
                 ProjectId = teSectionDataItem.Attribute(XName.Get(ProjectIdXname)).Value;
                 BusinessUnitId = teSectionDataItem.Attribute(XName.Get(BusinessUnitIdXname)).Value;
-
 
                 DdlWorkTypeIdsList = string.Empty;
                 var workTypeList = teSectionDataItem.Descendants(XName.Get(WorkTypeXname)).ToList();
@@ -843,7 +832,6 @@ namespace PraticeManagement
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-
                 var workTypeElement = ((XElement)e.Item.DataItem);
 
                 var bar = e.Item.FindControl(teBarId) as NonBillableTimeEntryBar;
@@ -870,7 +858,6 @@ namespace PraticeManagement
                 imgDropTes.Attributes[WorkTypeXname] = workTypeElement.Attribute(XName.Get(IdXname)).Value;
 
                 bar.UpdateTimeEntries();
-
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -881,7 +868,6 @@ namespace PraticeManagement
                 imgPlusBusinessDevelopmentSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, "Account");
             }
-
         }
 
         protected void repInternalTes_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -913,7 +899,6 @@ namespace PraticeManagement
                 imgDropTes.Attributes[WorkTypeXname] = workTypeElement.Attribute(XName.Get(IdXname)).Value;
 
                 bar.UpdateTimeEntries();
-
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -923,7 +908,6 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgPlusInternalSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
-
             }
         }
 
@@ -945,7 +929,6 @@ namespace PraticeManagement
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-
                 var teSectionDataItem = e.Item.DataItem as XElement;
                 var bar = e.Item.FindControl(teBarId) as AdministrativeTimeEntryBar;
                 var projectId = Convert.ToInt32(teSectionDataItem.Attribute(XName.Get(ProjectIdXname)).Value);
@@ -1050,7 +1033,6 @@ namespace PraticeManagement
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-
                 var index = e.Item.ItemIndex;
                 var controlIDList = "";
                 var extColumnDayTotalHours = (TotalCalculatorExtender)e.Item.FindControl(extDayTotalId);
@@ -1070,7 +1052,6 @@ namespace PraticeManagement
                     bar.AddAttributeToPTOTextBox(index);
                 }
 
-
                 foreach (RepeaterItem barItem in repProjectSections.Items)
                 {
                     var repProjectTes = barItem.FindControl(repProjectTesRepeater) as Repeater;
@@ -1086,7 +1067,6 @@ namespace PraticeManagement
 
                     var imgBtnDeleteProjectSection = barItem.FindControl(imgBtnDeleteProjectSectionImage) as ImageButton;
                     imgBtnDeleteProjectSection.Attributes["onclick"] = "return DeleteSection('" + cpeProjectSection.BehaviorID + "','" + repProjectSections.Items.Count.ToString() + "','" + imgBtnDeleteProjectSection.ClientID + "','1');";
-
                 }
 
                 foreach (RepeaterItem barItem in repBusinessDevelopmentSections.Items)
@@ -1103,7 +1083,6 @@ namespace PraticeManagement
 
                     var imgBtnDeleteBusinessDevelopmentSection = barItem.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
                     imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "return DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "','" + imgBtnDeleteBusinessDevelopmentSection.ClientID + "','2');";
-
                 }
 
                 foreach (RepeaterItem barItem in repInternalSections.Items)
@@ -1116,12 +1095,10 @@ namespace PraticeManagement
                         controlIDList += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
                         NonBillableControlIds += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
                         bar.UpdateVerticalTotalCalculatorExtenderId(index, extColumnDayTotalHours.ClientID);
-
                     }
 
                     var imgBtnDeleteInternalSection = barItem.FindControl(imgBtnDeleteInternalSectionImage) as ImageButton;
                     imgBtnDeleteInternalSection.Attributes["onclick"] = "return DeleteSection('" + cpeInternalSection.BehaviorID + "','" + repInternalSections.Items.Count.ToString() + "','" + imgBtnDeleteInternalSection.ClientID + "','3');";
-
                 }
 
                 extMaxValueAllowedForTextBoxExtender.ControlsToCheck = extColumnDayTotalHours.ControlsToCheck = controlIDList;
@@ -1142,8 +1119,6 @@ namespace PraticeManagement
 
             var xelem = xlist.First(element => element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId && element.Attribute(XName.Get(AccountIdXname)).Value == accountId && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId);
 
-
-
             int ttypeId = xelem.Descendants(XName.Get(WorkTypeXname)).ToList().Min(k => Convert.ToInt32(k.Attribute(XName.Get(IdXname)).Value));
 
             StringBuilder xml = new StringBuilder();
@@ -1153,7 +1128,6 @@ namespace PraticeManagement
                                ServiceCallers.Custom.Calendar(
                                                                 c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
                                                               );
-
 
             /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
             //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
@@ -1166,7 +1140,6 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
             IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(_projectId, personId, startDate, endDate));
-
 
             foreach (CalendarItem day in CalendarItems)
             {
@@ -1194,12 +1167,9 @@ namespace PraticeManagement
             var projectId = imgPlusProjectSection.Attributes[ProjectIdXname];
             var accountId = imgPlusProjectSection.Attributes[AccountIdXname];
 
-
             var xdoc = PrePareXmlForProjectSectionFromRepeater();
 
-
             List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
-
 
             var xelem = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId);
             var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
@@ -1222,7 +1192,6 @@ namespace PraticeManagement
             DateTime startDate = SelectedDates[0];
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
             IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(_projectId, personId, startDate, endDate));
-
 
             foreach (CalendarItem day in CalendarItems)
             {
@@ -1251,7 +1220,6 @@ namespace PraticeManagement
             var projectId = imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname] == String.Empty ? ((int)486).ToString() : imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname];
             var accountId = imgPlusBusinessDevelopmentSection.Attributes[AccountIdXname];
             var businessUnitId = imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname];
-
 
             var xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
 
@@ -1282,7 +1250,6 @@ namespace PraticeManagement
             DateTime endDate = SelectedDates[SelectedDates.Length - 1];
             IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(_projectId, personId, startDate, endDate));
 
-
             foreach (CalendarItem day in CalendarItems)
             {
                 var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
@@ -1310,7 +1277,6 @@ namespace PraticeManagement
 
             List<XElement> xelementsList = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-
             var teSection = new TimeEntrySection()
             {
                 Project = new Project() { Id = -1 },
@@ -1329,7 +1295,6 @@ namespace PraticeManagement
             DatabindRepeater(repAdministrativeTes, xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList());
 
             AdministrativeSectionXml = xdoc.ToString();
-
         }
 
         protected void imgBtnRecursiveSection_OnClick(object sender, EventArgs args)
@@ -1346,7 +1311,6 @@ namespace PraticeManagement
             bool isRecursive = !Convert.ToBoolean(imgBtnRecursiveSection.Attributes[IsRecursiveXname]);
             try
             {
-
                 ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntryRecursiveSelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, isRecursive, dates[0]));
 
                 imgBtnRecursiveSection.Attributes[IsRecursiveXname] = (isRecursive).ToString();
@@ -1377,7 +1341,6 @@ namespace PraticeManagement
                 XElement accountAndProjectSelectionElement = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId.ToString() && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId.ToString() && element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId.ToString());
                 accountAndProjectSelectionElement.SetAttributeValue(IsRecursiveXname, (isRecursive).ToString());
 
-
                 if ((int)TimeEntrySectionType.Project == timeEntrySectionId)
                 {
                     ProjectSectionXml = xdoc.ToString();
@@ -1400,8 +1363,6 @@ namespace PraticeManagement
                     mpeRecurringAllowed.Show();
                 }
             }
-
-
         }
 
         protected void imgBtnDeleteSection_OnClick(object sender, EventArgs args)
@@ -1453,7 +1414,6 @@ namespace PraticeManagement
             }
 
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, projectId, timeEntrySectionId, true, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
-
         }
 
         protected void btnSave_OnClick(object sender, EventArgs e)
@@ -1481,7 +1441,6 @@ namespace PraticeManagement
                     BusinessUnit = new ProjectGroup() { Id = project.Group.Id, Name = project.Group.Name },
                     SectionId = TimeEntrySectionType.Project,
                     IsRecursive = false
-
                 };
 
                 StringBuilder xml = new StringBuilder();
@@ -1499,12 +1458,10 @@ namespace PraticeManagement
                 int timeEntrySectionId = (int)TimeEntrySectionType.Project;
                 int projectGroupId = project.Group.Id.Value;
                 ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, projectGroupId, projectId, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
-
             }
 
             ddlProjectProjectSection.SelectedIndex = 0;
             ddlAccountProjectSection.SelectedIndex = 0;
-
         }
 
         protected void btnAddBusinessDevelopmentSection_OnClick(object sender, EventArgs e)
@@ -1538,9 +1495,7 @@ namespace PraticeManagement
 
                 BusinessDevelopmentSectionXml = xdoc.ToString();
 
-
                 DatabindRepeater(repBusinessDevelopmentSections, xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList());
-
             }
 
             ddlBusinessUnitBusinessDevlopmentSection.SelectedIndex = 0;
@@ -1550,7 +1505,6 @@ namespace PraticeManagement
             DateTime[] dates = SelectedDates;
             int timeEntrySectionId = (int)TimeEntrySectionType.BusinessDevelopment;
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, project.Id.Value, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
-
         }
 
         protected void btnAddInternalProjectSection_OnClick(object sender, EventArgs e)
@@ -1564,7 +1518,6 @@ namespace PraticeManagement
             XDocument xdoc = PrePareXmlForInternalSectionFromRepeater();
 
             List<XElement> xelementsList = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
-
 
             if (!xelementsList.Any(element => Convert.ToInt32(element.Attribute(XName.Get(AccountIdXname)).Value) == account.Id && Convert.ToInt32(element.Attribute(XName.Get(BusinessUnitIdXname)).Value) == businessUnitId && Convert.ToInt32(element.Attribute(XName.Get(ProjectIdXname)).Value) == projectId))
             {
@@ -1588,7 +1541,6 @@ namespace PraticeManagement
                 InternalSectionXml = xdoc.ToString();
             }
 
-
             ddlProjectInternal.SelectedIndex = 0;
             ddlBusinessUnitInternal.SelectedIndex = 0;
 
@@ -1596,7 +1548,6 @@ namespace PraticeManagement
             DateTime[] dates = SelectedDates;
             int timeEntrySectionId = (int)TimeEntrySectionType.Internal;
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, account.Id.Value, businessUnitId, projectId, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
-
         }
 
         protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
@@ -1677,7 +1628,7 @@ namespace PraticeManagement
             repAccountProjectSection.DataBind();
         }
 
-        #endregion
+        #endregion Control events
 
         #region Methods
 
@@ -1695,7 +1646,6 @@ namespace PraticeManagement
                     var bar = item.FindControl(teBarId) as BillableAndNonBillableTimeEntryBar;
                     bar.ValidateAll();
                 }
-
             }
 
             foreach (RepeaterItem barItem in repBusinessDevelopmentSections.Items)
@@ -1719,7 +1669,6 @@ namespace PraticeManagement
                     bar.ValidateAll();
                 }
             }
-
 
             foreach (RepeaterItem barItem in repAdministrativeTes.Items)
             {
@@ -1821,7 +1770,6 @@ namespace PraticeManagement
             StringBuilder xml = new StringBuilder();
             xml.Append(projectSectionXmlOpen);
 
-
             foreach (TimeEntrySection teSection in ProjectSection)
             {
                 PrePareXmlForAccountProjectSelection(xml, teSection, true);
@@ -1840,7 +1788,6 @@ namespace PraticeManagement
         {
             StringBuilder xml = new StringBuilder();
             xml.Append(busineeDevelopmentSectionXmlOpen);
-
 
             foreach (TimeEntrySection teSection in BusinessDevelopmentSection)
             {
@@ -1861,7 +1808,6 @@ namespace PraticeManagement
             StringBuilder xml = new StringBuilder();
             xml.Append(internalSectionXmlOpen);
 
-
             foreach (TimeEntrySection teSection in InternalSection)
             {
                 PrePareXmlForAccountProjectSelection(xml, teSection, true);
@@ -1880,7 +1826,6 @@ namespace PraticeManagement
         {
             StringBuilder xml = new StringBuilder();
             xml.Append(administrativeSectionXmlOpen);
-
 
             foreach (TimeEntrySection teSection in AdminiStrativeSection)
             {
@@ -1907,7 +1852,6 @@ namespace PraticeManagement
 
             xml.Append(string.Format(accountAndProjectSelectionXmlOpen, accountId, teSection.Account.HtmlEncodedName, projectId, teSection.Project.HtmlEncodedName, teSection.Project.ProjectNumber, businessUnitId, teSection.BusinessUnit.HtmlEncodedName, teSection.IsRecursive, teSection.Project.IsPTOProject.ToString(), teSection.Project.IsHolidayProject.ToString(), teSection.Project.IsORTProject.ToString(), teSection.Project.IsNoteRequired.ToString(), teSection.Project.IsUnpaidProject.ToString(), teSection.Project.IsSickLeaveProject.ToString()));
 
-
             foreach (KeyValuePair<TimeTypeRecord, List<TimeEntryRecord>> keyVal in teSection.TimeEntriesByTimeType)
             {
                 int timeTypeId = keyVal.Key.Id;
@@ -1931,7 +1875,6 @@ namespace PraticeManagement
                                           DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
                     ;
                 }
-
 
                 IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(projectId, personId, startDate, endDate));
                 Dictionary<DateTime, bool> isChargeCodeTurnOffList = ServiceCallers.Custom.TimeEntry(p => p.GetIsChargeCodeTurnOffByPeriod(personId, accountId, businessUnitId, projectId, timeTypeId, startDate, endDate));
@@ -2095,19 +2038,15 @@ namespace PraticeManagement
 
                 RepeaterItem repAdministrativeTesItem = repAdministrativeTes.Items[i];
 
-
                 var bar = repAdministrativeTesItem.FindControl(teBarId) as AdministrativeTimeEntryBar;
 
                 bar.UpdateAccountAndProjectWorkType(accountAndProjectSelectionElement, workTypeElement);
-
 
                 bar.UpdateNoteAndActualHours(calendarItemElements);
                 if (ifFromsaveall)
                 {
                     bar.RoundActualHours(calendarItemElements);
                 }
-
-
             }
 
             return xdoc;
@@ -2115,7 +2054,6 @@ namespace PraticeManagement
 
         private void UpdateTimeEntries()
         {
-
             var teSctions = ServiceCallers.Custom.TimeEntry(te => te.PersonTimeEntriesByPeriod(pcPersons.SelectedPerson.Id.Value, SelectedDates[0], SelectedDates[SelectedDates.Length - 1]));
 
             AdminiStrativeSection = teSctions.Where(ts => ts.SectionId == TimeEntrySectionType.Administrative).OrderByDescending(tes => tes.Project.IsHolidayProject).ThenByDescending(tes => tes.Project.IsPTOProject).ThenByDescending(tes => tes.Project.IsUnpaidProject).ThenByDescending(tes => tes.Project.IsSickLeaveProject).ToList();
@@ -2130,7 +2068,6 @@ namespace PraticeManagement
             var currentIsAdmin =
                 Roles.IsUserInRole(
                     DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-
 
             var isNoteRequiredList = DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
 
@@ -2218,7 +2155,6 @@ namespace PraticeManagement
                 bool.TryParse(eventArgument, out isFromWeekChange);
                 if (isFromWeekChange)
                 {
-
                 }
                 else
                 {
@@ -2229,7 +2165,6 @@ namespace PraticeManagement
                         var urlTemplate = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ?
                                             Constants.ApplicationPages.TimeEntry_NewForAdmin : Constants.ApplicationPages.TimeEntry_New;
                         eventArgument = string.Format(urlTemplate, SelectedDates[0].ToString("yyyy-MM-dd"), i);
-
                     }
                     Redirect(eventArgument);
                 }
@@ -2279,12 +2214,10 @@ namespace PraticeManagement
 
             ProjectSectionXml = xdoc.ToString();
             DatabindRepeater(repProjectSections, xlist);
-
         }
 
         public void RemoveWorktypeFromXMLForBusinessDevelopmentAndInternalSection(int accountId, int businessUnitId, int projectId, int workTypeindex, bool isBusinessDevelopment)
         {
-
             var xdoc = isBusinessDevelopment ? PrePareXmlForBusinessDevelopmentSectionFromRepeater() : PrePareXmlForInternalSectionFromRepeater();
 
             List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
@@ -2303,7 +2236,6 @@ namespace PraticeManagement
                                                                   );
                 /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
                 //var isNoteRequiredForProject = Convert.ToBoolean(accountAndProjectSelectionElement.Attribute(XName.Get(IsNoteRequiredXname)).Value);
-
 
                 IsNoteRequiredList = IsNoteRequiredList ??
                             DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
@@ -2339,7 +2271,6 @@ namespace PraticeManagement
                 InternalSectionXml = xdoc.ToString();
                 DatabindRepeater(repInternalSections, xlist);
             }
-
         }
 
         public void RemoveWorktypeFromXMLForAdminstrativeSection(int repindex)
@@ -2350,7 +2281,6 @@ namespace PraticeManagement
             accountAndProjectSelectionElement.Remove();
             AdministrativeSectionXml = xdoc.ToString();
             DatabindRepeater(repAdministrativeTes, xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList());
-
         }
 
         public void UpdateCalendarItemAndBind(CalendarItem[] calendarItems)
@@ -2400,8 +2330,6 @@ namespace PraticeManagement
             return xdoc;
         }
 
-        #endregion
-
+        #endregion Methods
     }
 }
-
