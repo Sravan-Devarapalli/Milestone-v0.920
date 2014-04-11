@@ -23,7 +23,8 @@ BEGIN
 	ReHiredate DATETIME,
 	TimeScaleName NVARCHAR(50),
 	TitleName NVARCHAR(100),
-	TelephoneNumber NCHAR(100)
+	TelephoneNumber NCHAR(100),
+	SeniorityName NVARCHAR(50)
 	)
 	
 	INSERT INTO @TerminatedPersons
@@ -37,7 +38,8 @@ BEGIN
 			NULL AS ReHiredate,
 			NULL AS TimeScaleName,
 			NULL AS TitleName,
-			NULL AS TelephoneNumber
+			NULL AS TelephoneNumber,
+			NULL AS SeniorityName
 	FROM dbo.Person AS P
 	WHERE   P.PersonStatusId <> 2
 			AND P.TerminationDate = (@Today-1)
@@ -54,13 +56,15 @@ BEGIN
 			MIN(Apay.StartDate) AS ReHiredate,
 			AT.Name AS TimeScaleName,
 			TT.Title AS TitleName,
-			P.TelephoneNumber			
+			P.TelephoneNumber,
+			S.Name AS SeniorityName
 	FROM dbo.Person P  
 	INNER JOIN dbo.Pay Bpay  ON Bpay.Person = P.PersonId AND (P.TerminationDate IS NULL OR P.TerminationDate > (@Today-1))  AND Bpay.EndDate = @Today
 	INNER JOIN dbo.Timescale BT ON BT.TimescaleId = Bpay.Timescale AND BT.IsContractType = 1 
 	INNER JOIN dbo.Pay Apay  ON Apay.Person = P.PersonId AND Apay.StartDate >= @Today 
 	INNER JOIN dbo.Timescale AT ON AT.TimescaleId = Apay.Timescale AND AT.IsContractType = 0
 	INNER JOIN dbo.Title TT ON TT.TitleId = P.TitleId
+	INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
 	GROUP BY p.PersonId,
 			p.FirstName,
 			p.LastName,
@@ -68,7 +72,8 @@ BEGIN
 			P.DefaultPractice,
 			AT.Name,
 			P.TelephoneNumber,
-			TT.Title
+			TT.Title,
+			S.Name
 
 	UPDATE pay
 	   SET pay.EndDate = P.TerminationDate + 1
@@ -179,8 +184,9 @@ BEGIN
 		CASE WHEN EXISTS(SELECT 1 FROM  @TerminatedPersons AS P 
 									 INNER JOIN aspnet_Users AS a ON LOWER(p.Alias) = a.LoweredUserName
 									 INNER JOIN aspnet_UsersInRoles AS ur ON a.UserId = ur.UserId
-									 INNER JOIN aspnet_Roles AS r ON ur.RoleId = r.RoleId WHERE r.RoleName = 'Administrator') THEN 1
-            ELSE 0 END As isAdministrator
+									 INNER JOIN aspnet_Roles AS r ON ur.RoleId = r.RoleId WHERE r.RoleName = 'System Administrator') THEN 1
+            ELSE 0 END As isAdministrator,
+		SeniorityName
 	FROM @TerminatedPersons 
 	 
 END
