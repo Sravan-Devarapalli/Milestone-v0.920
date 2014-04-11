@@ -6,6 +6,6 @@
 	Internal site error occurs
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
-	<h2>Error occurred. Please contact your administrator.</h2>
+	<h2>Error occurred. Please contact your system administrator.</h2>
 </asp:Content>
 
