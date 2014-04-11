@@ -4,8 +4,8 @@ using System.Data;
 using System.ServiceModel;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
-using DataTransferObjects.TimeEntry;
 using DataTransferObjects.Reports;
+using DataTransferObjects.TimeEntry;
 
 namespace PracticeManagementService
 {
@@ -471,4 +471,3 @@ namespace PracticeManagementService
         List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays);
     }
 }
-
