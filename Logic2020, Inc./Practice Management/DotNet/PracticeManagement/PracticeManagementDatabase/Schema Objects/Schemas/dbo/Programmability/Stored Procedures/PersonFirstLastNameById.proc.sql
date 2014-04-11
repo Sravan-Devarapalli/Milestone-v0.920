@@ -17,10 +17,13 @@ BEGIN
 			P.IsOffshore,
 			P.PersonStatusId,
 			ISNULL(P.Alias,'') AS Alias,
-			P.EmployeeNumber
+			P.EmployeeNumber,
+			P.SeniorityId,
+			S.Name AS Seniority
 	FROM dbo.Person P
 	LEFT JOIN dbo.Pay PA ON PA.Person = P.PersonId 
 							AND @NOW BETWEEN PA.StartDate  AND ISNULL(PA.EndDate-1,@FutureDate) 
 	LEFT JOIN dbo.Timescale TS ON PA.Timescale = TS.TimescaleId
+	LEFT JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
 	WHERE PersonId = @PersonId
 END
