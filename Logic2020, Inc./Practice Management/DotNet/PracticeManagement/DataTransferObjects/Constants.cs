@@ -7,7 +7,7 @@
     {
         public static class RoleNames
         {
-            public const string AdministratorRoleName = "Administrator";
+            public const string AdministratorRoleName = "System Administrator";
             public const string PracticeManagerRoleName = "Practice Area Manager";
             public const string BusinessUnitManagerRoleName = "Business Unit Manager";
             public const string SalespersonRoleName = "Salesperson";
@@ -17,6 +17,11 @@
             public const string DirectorRoleName = "Client Director";
             public const string HRRoleName = "HR";
             public const string SeniorLeadershipRoleName = "Senior Leadership";
+        }
+
+        public static class SeniorityNames
+        {
+            public const string AdminiSeniorityName = "System Admin";
         }
 
         public static class TitleNames
