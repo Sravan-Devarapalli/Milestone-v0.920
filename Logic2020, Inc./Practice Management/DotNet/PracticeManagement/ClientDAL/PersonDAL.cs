@@ -3162,6 +3162,8 @@ namespace DataAccess
             int aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
             int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
             int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+            int seniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityIdColumn);
+            int seniorityIndex = reader.GetOrdinal(Constants.ColumnNames.Seniority);
 
             while (reader.Read())
             {
@@ -3179,6 +3181,11 @@ namespace DataAccess
                 person.Status = new PersonStatus
                 {
                     Id = reader.GetInt32(personStatusIdIndex)
+                };
+                person.Seniority = new Seniority
+                {
+                    Id = reader.GetInt32(seniorityIdIndex),
+                    Name = reader.GetString(seniorityIndex)
                 };
                 if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
                 {
