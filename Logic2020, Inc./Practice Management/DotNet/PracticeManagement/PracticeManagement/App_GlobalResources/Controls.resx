@@ -205,7 +205,7 @@
     <value>N/A</value>
   </data>
   <data name="OpportunityInappropriatePersonMessage" xml:space="preserve">
-    <value>alert('Only the Salesperson designated or an Administrator can convert to a project.'); return false;</value>
+    <value>alert('Only the Salesperson designated or a System Administrator can convert to a project.'); return false;</value>
   </data>
   <data name="PageRowTitle" xml:space="preserve">
     <value>Page</value>
