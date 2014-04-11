@@ -16,15 +16,15 @@ namespace PraticeManagement
         #region Constants
 
         private string MessageLoginErrorUserDoesNotExist = "There is no user in the database with the username {0}";
-        private string MessageLoginErrorNotApproved = "Your account has not yet been approved by the site's administrators. Please try again later...";
+        private string MessageLoginErrorNotApproved = "Your account has not yet been approved by the site's system administrators. Please try again later...";
         private string MessageLoginErrorLockedOut = "You could not be logged in. Please see the System Administrator for help.";
         private string MessageLoginErrorLockedOutWithNotiFicationEmail = "The account for the user name you have entered has been locked out for {0} in PM and sent lock out notification Email.";
         private string MessageLoginErrorNotActive = "Failed - bad password";
         private string EmptyUserNameErrorMessage = "Please enter your User Name (your e-mail address) in the box above and select the \"Forgot your password?\" link again.";
         private string UserNameWrongFormatErrorMessage = "Your User Name is an e-mail address and should be entered as \"user@domain.com\".  Please correct in the box above and select the \"Forgot your password?\" link again.";
-        private string UserNameNotExistsErrorMessage = "The User Name you have entered does not exist in PM.  Please correct your entry or <a href='mailto:{0}'>contact your Administrator</a> to create a new account.";
-        private string UserNameLockedOutErrorMessage = "The account for the user name you have entered has been locked out in PM.  Please <a href='mailto:{0}'>contact your Administrator</a> to unlock it.";
-        private string ChangePwdAleadyRequestedErrorMessage = "A password reset has already been requested for this User Name within the last 24 hours.  If you have any questions, <a href='mailto:{0}'>please contact your Administrator.</a>";
+        private string UserNameNotExistsErrorMessage = "The User Name you have entered does not exist in PM.  Please correct your entry or <a href='mailto:{0}'>contact your System Administrator</a> to create a new account.";
+        private string UserNameLockedOutErrorMessage = "The account for the user name you have entered has been locked out in PM.  Please <a href='mailto:{0}'>contact your System Administrator</a> to unlock it.";
+        private string ChangePwdAleadyRequestedErrorMessage = "A password reset has already been requested for this User Name within the last 24 hours.  If you have any questions, <a href='mailto:{0}'>please contact your System Administrator.</a>";
         private string ChangePwdSuccessMessage = "Your password has been successfully reset and sent to your e-mail.";
 
         private const string LoginPageUrlWithQueryString = "/Login.aspx?UserName={0}&ForgotPassword=true";
