@@ -1430,7 +1430,7 @@ namespace UpdatePracticeAndSeniority
                     {
                         var activeAccountEmailBody = string.Format(activeAccountEmailTemplate.Body, person.FirstName, person.LastName, person.HireDate.ToString(DateFormat), person.Alias, person.Title.TitleName, person.CurrentPay.TimescaleName, person.TelephoneNumber);
                         Email(activeAccountEmailTemplate.Subject, activeAccountEmailBody, true, activeAccountEmailTemplate.EmailTemplateTo, string.Empty, null);
-                        if (person.IsAdmin)
+                        if (person.IsAdmin || person.Seniority.Name == Constants.SeniorityNames.AdminiSeniorityName)
                         {
                             var administartorAddedEmail = string.Format(administratorAddedEmailTemplate.Body, person.FirstName, person.LastName);
                             Email(administratorAddedEmailTemplate.Subject, administartorAddedEmail, true, administratorAddedEmailTemplate.EmailTemplateTo, string.Empty, null, true);
@@ -1514,6 +1514,7 @@ namespace UpdatePracticeAndSeniority
                 int personTimeScaleNameIndex;
                 int personTitleNameIndex;
                 int isAdministratorIndex;
+                int seniorityNameIndex;
 
                 try
                 {
@@ -1596,6 +1597,14 @@ namespace UpdatePracticeAndSeniority
                 {
                     isAdministratorIndex = -1;
                 }
+                try
+                {
+                    seniorityNameIndex = reader.GetOrdinal("SeniorityName");
+                }
+                catch
+                {
+                    seniorityNameIndex = -1;
+                }
 
                 while (reader.Read())
                 {
@@ -1652,7 +1661,13 @@ namespace UpdatePracticeAndSeniority
                     {
                         person.IsAdmin = reader.GetInt32(isAdministratorIndex) == 1;
                     }
-
+                    if (seniorityNameIndex != -1)
+                    {
+                        person.Seniority = new Seniority
+                        {
+                            Name = reader.IsDBNull(seniorityNameIndex) ? null : reader.GetString(seniorityNameIndex)
+                        };
+                    }
                     persons.Add(person);
                 }
             }
