@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Web.Security;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
 using DataTransferObjects.TimeEntry;
@@ -577,4 +575,3 @@ namespace PraticeManagement.Controls.TimeEntry
         #endregion Methods
     }
 }
-
