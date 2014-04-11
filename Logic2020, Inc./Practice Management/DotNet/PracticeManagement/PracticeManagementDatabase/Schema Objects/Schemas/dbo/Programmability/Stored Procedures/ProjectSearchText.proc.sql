@@ -9,9 +9,9 @@ AS
 	DECLARE @PersonRole NVARCHAR(50)
 	SELECT @PersonRole = uir.RoleName
 	FROM v_UsersInRoles AS uir
-    WHERE uir.PersonId = @PersonId and uir.RoleName = 'Administrator' 
+    WHERE uir.PersonId = @PersonId and uir.RoleName = 'System Administrator' 
 
-	IF @PersonRole = 'Administrator' 
+	IF @PersonRole = 'System Administrator' 
 		SET @PersonId = null
 
 	DECLARE @SearchText NVARCHAR(257)
@@ -40,7 +40,7 @@ AS
 		JOIN aspnet_Roles R ON R.RoleId = UR.RoleId
 		JOIN Person P ON P.Alias = U.UserName
 		WHERE P.PersonId = @PersonId
-			AND R.LoweredRoleName IN ('administrator','client director','business unit manager','salesperson','practice area manager','senior leadership')		
+			AND R.LoweredRoleName IN ('system administrator','client director','business unit manager','salesperson','practice area manager','senior leadership')		
 	END
 
 
