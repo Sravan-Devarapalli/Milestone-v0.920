@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
 using DataAccess;
 using DataTransferObjects;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using System.IO;
 
 namespace PracticeManagementService
 {
@@ -198,14 +198,14 @@ namespace PracticeManagementService
             return true;
         }
 
-        internal static void SendResourceExceptionReportsEmail(DateTime startDate,DateTime endDate,byte[] attachmentByteArray)
+        internal static void SendResourceExceptionReportsEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray)
         {
             MemoryStream attachmentStream = new MemoryStream(attachmentByteArray);
-            var attachment = new Attachment(attachmentStream, string.Format("ExceptionReporting_{0}_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");            
+            var attachment = new Attachment(attachmentStream, string.Format("ExceptionReporting_{0}_{1}.xls", startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat)), "application/vnd.ms-excel");
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.ResourceExceptionReportsTemplateName);
             var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
             var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
-            Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment});
+            Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
         }
 
         internal static void SendRecruitingMetricsReportEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray)
@@ -290,7 +290,7 @@ namespace PracticeManagementService
                         message.To.Add(new MailAddress(uatToAddresses[i]));
                     }
                 }
-                else if(IsDemo)
+                else if (IsDemo)
                 {
                     message.Subject = "(Demo) " + subject;
                 }
@@ -327,4 +327,3 @@ namespace PracticeManagementService
         #endregion Methods
     }
 }
-
