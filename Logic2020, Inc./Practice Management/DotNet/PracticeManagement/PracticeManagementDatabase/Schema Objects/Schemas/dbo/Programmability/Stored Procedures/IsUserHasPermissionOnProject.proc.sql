@@ -45,7 +45,7 @@ AS
 				FROM aspnet_Users u
 				INNER JOIN aspnet_UsersInRoles ur on ur.UserId = u.UserId
 				INNER JOIN aspnet_Roles r ON r.RoleId = ur.RoleId
-				WHERE u.UserName = @UserLogin AND r.LoweredRoleName = 'administrator' )
+				WHERE u.UserName = @UserLogin AND r.LoweredRoleName = 'system administrator' )
 	BEGIN
 		SELECT 'True'
 	END
