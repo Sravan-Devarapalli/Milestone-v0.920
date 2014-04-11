@@ -302,7 +302,6 @@
                         }
                     }
 
-
                     function ReplaceHTML(imgPlusList) {
                         for (var i = 0; i < imgPlusList.length; i++) {
 
@@ -353,8 +352,6 @@
                     function endRequestHandle(sender, Args) {
                         setFooterPlacementinLastItemTemplate();
 
-
-
                         if (getDirty()) {
                             EnableSaveButton(true);
                         }
@@ -373,7 +370,6 @@
                             hdIsWeekOrPersonChanged.value = 'false';
                         }
                     }
-
                 </script>
                 <uc:MessageLabel ID="mlErrors" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                     WarningColor="Orange" EnableViewState="false" />
