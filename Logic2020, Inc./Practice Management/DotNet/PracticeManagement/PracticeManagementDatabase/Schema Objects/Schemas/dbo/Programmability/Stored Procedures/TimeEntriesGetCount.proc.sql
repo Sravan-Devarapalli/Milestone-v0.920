@@ -43,7 +43,7 @@ AS
     )
     SELECT @IsAdminOrPM = 1
     FROM RequestersRoles AS roles 
-    WHERE roles.RoleName = 'Administrator' OR roles.RoleName = 'Practice Manager'
+    WHERE roles.RoleName = 'System Administrator' OR roles.RoleName = 'Practice Manager'
     
     IF ISNULL(@IsAdminOrPM, 0) = 0
     BEGIN    
