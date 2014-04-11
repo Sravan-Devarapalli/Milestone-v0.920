@@ -471,7 +471,7 @@
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="custProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
-                                                    ErrorMessage="Only administrators can make projects Active or Completed." ToolTip="Only administrators can make projects Active or Completed."
+                                                    ErrorMessage="Only system administrators can make projects Active or Completed." ToolTip="Only system administrators can make projects Active or Completed."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="custProjectStatus_ServerValidate"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
