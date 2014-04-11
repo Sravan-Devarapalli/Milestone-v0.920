@@ -294,7 +294,7 @@ namespace PraticeManagement.Sandbox
             var personRoles = Roles.GetRolesForUser(currentPerson.Alias);
             string statusIdsList = GetStatusIds();
             int? personId = null;
-            if (!personRoles.Any(s => s == "Administrator" || s == "HR"))
+            if (!personRoles.Any(s => s == "System Administrator" || s == "HR"))
             {
                 personId = currentPerson.Id;
                 if (enableDisableChevron)
