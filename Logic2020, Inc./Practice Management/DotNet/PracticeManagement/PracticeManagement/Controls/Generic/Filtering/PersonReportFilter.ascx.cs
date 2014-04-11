@@ -25,7 +25,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
                 var personRoles = Roles.GetRolesForUser(currentPerson.Alias);
                 string statusIdsList = GetStatusIds();
                 int? personId = null;
-                if(!personRoles.Any(s => s=="Administrator"))
+                if(!personRoles.Any(s => s=="System Administrator"))
                 {
                     personId = currentPerson.Id;
                 }
@@ -62,7 +62,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
             var personRoles = Roles.GetRolesForUser(currentPerson.Alias);
             string statusIdsList = GetStatusIds();
             int? personId = null;
-            if (!personRoles.Any(s => s == "Administrator"))
+            if (!personRoles.Any(s => s == "System Administrator"))
             {
                 personId = currentPerson.Id;
             }
