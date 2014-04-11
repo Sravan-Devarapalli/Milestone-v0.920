@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using DataTransferObjects.Reports;
-using System.Web.UI.HtmlControls;
 using System.Text;
 using System.Web.Security;
-using PraticeManagement.Controls.Reports.ByPerson;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using AjaxControlToolkit;
-using PraticeManagement.Utils.Excel;
-using System.Data;
+using DataTransferObjects.Reports;
 using PraticeManagement.Utils;
+using PraticeManagement.Utils.Excel;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -50,7 +47,7 @@ namespace PraticeManagement.Controls.Reports
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
                 datarowStyle.Height = 350;
 
-                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle};
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
 
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
                 sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
@@ -76,15 +73,15 @@ namespace PraticeManagement.Controls.Reports
                 dataPercentageCellStyle.DataFormat = "0.00%";
 
                 CellStyles[] dataCellStylearray = { dataCellStyle,
-                                                    dataCellStyle, 
                                                     dataCellStyle,
                                                     dataCellStyle,
                                                     dataCellStyle,
-                                                    dataCellStyle, 
                                                     dataCellStyle,
                                                     dataCellStyle,
                                                     dataCellStyle,
-                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
                                                     dataCellStyle,
                                                     dataCellStyle,
                                                     dataPercentageCellStyle
@@ -108,7 +105,6 @@ namespace PraticeManagement.Controls.Reports
             get
             {
                 return mpePersonDetailReport;
-
             }
         }
 
@@ -169,6 +165,7 @@ namespace PraticeManagement.Controls.Reports
         {
             return value.ToString(Constants.Formatting.DoubleValue) + "%";
         }
+
         protected string GetPercentageFormatForExcel(double value)
         {
             var result = (double)(value / 100);
@@ -303,7 +300,6 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
-
         }
 
         protected void btnPayCheckExport_OnClick(object sender, EventArgs e)
@@ -420,13 +416,12 @@ namespace PraticeManagement.Controls.Reports
                         sb.Append("\t");
                         sb.AppendLine();
                     }
-
                 }
                 else
                 {
                     sb.Append("There are no Time Entries by any Employee  for the selected range.");
                 }
-                //“Paychex_[StartOfRange]_[EndOfRange].xls”.  
+                //“Paychex_[StartOfRange]_[EndOfRange].xls”.
                 var filename = string.Format("{0}_{1}-{2}.xls", "Paychex", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
                 GridViewExportUtil.Export(filename, sb);
             }
@@ -536,7 +531,6 @@ namespace PraticeManagement.Controls.Reports
                    cblPersonStatusType.SelectedIndexes, cblPersonStatusType.CheckBoxListObject.ClientID, cblPersonStatusType.WaterMarkTextBoxBehaviorID);
 
                 PopulateSumLabels(reportDataList);
-
             }
             else
             {
@@ -549,7 +543,6 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulateSumLabels(List<PersonLevelGroupedHours> reportData)
         {
-
             LblTotalBillable.Attributes[OnMouseOver] = string.Format(ShowPanel, LblTotalBillable.ClientID, pnlTotalBillableHours.ClientID, 0);
             LblTotalBillable.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableHours.ClientID);
 
@@ -574,7 +567,6 @@ namespace PraticeManagement.Controls.Reports
             LblHeaderBillableUtilization.Attributes[OnMouseOver] = string.Format(ShowPanel, LblHeaderBillableUtilization.ClientID, pnlTotalBillableUtilization.ClientID, 0);
             LblHeaderBillableUtilization.Attributes[OnMouseOut] = string.Format(HidePanel, pnlTotalBillableUtilization.ClientID);
 
-
             lblBillable.Text =
             pthLblBillable.Text = reportData.Sum(p => p.BillableHours).ToString(Constants.Formatting.DoubleValue);
 
@@ -593,7 +585,6 @@ namespace PraticeManagement.Controls.Reports
             pthLblGrandTotal.Text = reportData.Sum(p => p.TotalHours).ToString(Constants.Formatting.DoubleValue);
 
             lblPanelTotalAvailableHours.Text = reportData.Sum(p => p.AvailableHours).ToString(Constants.Formatting.NumberFormatWithCommas);
-
         }
 
         private void PopulateFilterPanels(List<PersonLevelGroupedHours> reportData)
@@ -711,7 +702,5 @@ namespace PraticeManagement.Controls.Reports
             lblBillableUtilization.Attributes[OnMouseOver] = string.Format(ShowPanel, lblBillableUtilization.ClientID, pnlBillableUtilizationCalculation.ClientID, 50);
             lblBillableUtilization.Attributes[OnMouseOut] = string.Format(HidePanel, pnlBillableUtilizationCalculation.ClientID);
         }
-
     }
 }
-
