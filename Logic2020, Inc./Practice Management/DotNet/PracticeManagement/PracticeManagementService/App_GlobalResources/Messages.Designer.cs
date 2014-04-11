@@ -169,7 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only Administrators can convert an Opportunity..
+        ///   Looks up a localized string similar to Only System Administrators can convert an Opportunity..
         /// </summary>
         internal static string OpportunityConversionMessage {
             get {
