@@ -8,5 +8,5 @@
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
 	<h2>Page does not exist or has been removed.</h2>
-	<p>Please contact your administrator.</p>
+	<p>Please contact your system administrator.</p>
 </asp:Content>
