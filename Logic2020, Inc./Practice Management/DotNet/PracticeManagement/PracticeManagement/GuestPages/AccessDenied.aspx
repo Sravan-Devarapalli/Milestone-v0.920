@@ -8,6 +8,6 @@
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
 	<h2>An access to the requested resource was denied.</h2>
 	<p>Please try to click <asp:HyperLink ID="lnkAppRoot" runat="server" Text="here"/> to navigate to your Dashboard page.
-	If you believe you should have permission to this page, Contact your administrator.</p>
+	If you believe you should have permission to this page, Contact your system administrator.</p>
 </asp:Content>
 
