@@ -2,7 +2,7 @@
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
   <siteMapNode url="" roles="*">
     <siteMapNode url="~/Temp.aspx?from=toolbar"   title="Projects" description="Company Performance page" >
-      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar"  VirtualPath="~/ProjectDetail.aspx" QuickLinkTitle="Add Project" title="Add Project" roles="Administrator, Salesperson, Practice Area Manager, Business Unit Manager, Client Director, Senior Leadership" description="Add Project" ShowURL="true"  />
+      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar"  VirtualPath="~/ProjectDetail.aspx" QuickLinkTitle="Add Project" title="Add Project" roles="System Administrator, Salesperson, Practice Area Manager, Business Unit Manager, Client Director, Senior Leadership" description="Add Project" ShowURL="true"  />
       <siteMapNode url="~/ProjectSearch.aspx" VirtualPath="~/ProjectSearch.aspx" QuickLinkTitle="Project Search" title="Search" description="Project Search" ShowURL="true" />
       <siteMapNode url="~/Projects.aspx"  VirtualPath="~/Projects.aspx" QuickLinkTitle="Project Summary"  title="Summary" description="Project Summary" ShowURL="true" />
       <siteMapNode url="~/GroupBy.aspx"  VirtualPath="~/GroupBy.aspx" QuickLinkTitle="Group By..."  title="Group By..."  description="Group By..." ShowURL="true"/>
@@ -16,8 +16,8 @@
     </siteMapNode>
     <siteMapNode url="Temp.aspx?from=Reports" title="Reports" description="Reports">
       <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
-        <siteMapNode url="~/Reports/BenchCosts.aspx" VirtualPath="~/Reports/BenchCosts.aspx" QuickLinkTitle="Bench Costs"  title="Bench Costs" roles="Administrator" description="Bench Costs" ShowURL="true" />
-        <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="Administrator" />
+        <siteMapNode url="~/Reports/BenchCosts.aspx" VirtualPath="~/Reports/BenchCosts.aspx" QuickLinkTitle="Bench Costs"  title="Bench Costs" roles="System Administrator" description="Bench Costs" ShowURL="true" />
+        <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="System Administrator" />
         <siteMapNode url="~/Reports/AttainmentReport.aspx" title="Attainment"  VirtualPath="~/Reports/AttainmentReport.aspx" QuickLinkTitle="Attainment"  description="Attainment"/>
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
