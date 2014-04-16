@@ -1163,10 +1163,10 @@ namespace PraticeManagement
         protected void cvFNAllowSpace_ServerValidate(object source, ServerValidateEventArgs args)
         {
             var isValid = valRegFirstName.IsValid;
-            if(isValid)
+            if (isValid)
             {
                 var inputString = txtFirstName.Text;
-                var spacesRemovedInputString = inputString.Replace(" ","");
+                var spacesRemovedInputString = inputString.Replace(" ", "");
                 args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) < 2) ? true : false;
             }
             else
@@ -2969,7 +2969,7 @@ namespace PraticeManagement
             DataHelper.FillCohortAssignments(ddlCohortAssignment);
             DataHelper.FillDomainsList(ddlDomain);
             txtFirstName.Focus();
-	    ddlCohortAssignment.SelectedValue = "1";
+            ddlCohortAssignment.SelectedValue = "1";
             chblRoles.DataSource = Roles.GetAllRoles();
             chblRoles.DataBind();
 
@@ -3196,7 +3196,7 @@ namespace PraticeManagement
             hdTitleChanged.Value = 0.ToString();
             hdcvSLTApproval.Value = person.SLTApproval.ToString();
             hdcvSLTPTOApproval.Value = person.SLTPTOApproval.ToString();
-	    ddlCohortAssignment.SelectedValue = person.CohortAssignment != null?person.CohortAssignment.Id.ToString():"1";
+            ddlCohortAssignment.SelectedValue = person.CohortAssignment != null ? person.CohortAssignment.Id.ToString() : "1";
         }
 
         private void PopulatePracticeDropDown(Person person)
@@ -3313,7 +3313,11 @@ namespace PraticeManagement
             // Role/Seniority
             if (!string.IsNullOrEmpty(ddlSeniority.SelectedValue))
             {
-                person.Seniority = new Seniority { Id = int.Parse(ddlSeniority.SelectedValue) };
+                person.Seniority = new Seniority
+                {
+                    Id = int.Parse(ddlSeniority.SelectedValue),
+                    Name = ddlSeniority.SelectedItem.Text
+                };
             }
 
             // Roles
@@ -3354,7 +3358,7 @@ namespace PraticeManagement
             person.CohortAssignment = new CohortAssignment()
             {
                 Id = Convert.ToInt32(ddlCohortAssignment.SelectedValue),
-                Name= ddlCohortAssignment.SelectedItem.Text
+                Name = ddlCohortAssignment.SelectedItem.Text
             };
         }
 
