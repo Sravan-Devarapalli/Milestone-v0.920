@@ -57,7 +57,7 @@
                         'auto': false,
                         'allowSpecialChars': false,
                         'ValidChars': '._',
-                        'sizeLimit': 10485760, //10MB - 10485760bytes
+                        'sizeLimit': 4294656, //4194kb - 4294656bytes
                         onComplete: function (event, queueID, fileObj, reponse, data) {
                             var div = document.getElementById('<%= uploadedFiles.ClientID%>');
                             var lblUplodedFilesMsg = document.getElementById('<%= lblUplodedFilesMsg.ClientID%>');
