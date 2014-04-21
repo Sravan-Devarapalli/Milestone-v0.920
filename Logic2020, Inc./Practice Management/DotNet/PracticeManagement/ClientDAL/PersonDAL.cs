@@ -1999,9 +1999,9 @@ namespace DataAccess
                         }
                     }
 
-                    if (jobSeekerStatusIdIndex>-1&& !reader.IsDBNull(jobSeekerStatusIdIndex))
+                    if (jobSeekerStatusIdIndex > -1 && !reader.IsDBNull(jobSeekerStatusIdIndex))
                     {
-                        person.JobSeekersStatusId = !reader.IsDBNull(jobSeekerStatusIdIndex)? reader.GetInt32(jobSeekerStatusIdIndex):0;
+                        person.JobSeekersStatusId = !reader.IsDBNull(jobSeekerStatusIdIndex) ? reader.GetInt32(jobSeekerStatusIdIndex) : 0;
                     }
 
                     if (sourceIdIndex > -1 && !reader.IsDBNull(sourceIdIndex))
@@ -3184,8 +3184,8 @@ namespace DataAccess
                 };
                 person.Seniority = new Seniority
                 {
-                    Id = reader.GetInt32(seniorityIdIndex),
-                    Name = reader.GetString(seniorityIndex)
+                    Id = reader.IsDBNull(seniorityIdIndex) ? -1 : reader.GetInt32(seniorityIdIndex),
+                    Name = reader.IsDBNull(seniorityIndex) ? string.Empty : reader.GetString(seniorityIndex)
                 };
                 if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
                 {
@@ -3797,7 +3797,7 @@ namespace DataAccess
             return result;
         }
 
-        public static List<Person> GetPTOReport(DateTime startDate, DateTime endDate,bool includeCompanyHolidays)
+        public static List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays)
         {
             List<Person> result = new List<Person>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -3897,20 +3897,20 @@ namespace DataAccess
                             LastName = reader.IsDBNull(directorLastNameIndex) ? string.Empty : reader.GetString(directorLastNameIndex)
                         }
                     };
-                    if(result.Any(p => p.Id == personId && p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
+                    if (result.Any(p => p.Id == personId && p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
                     {
                         var personTimeoff = (result.First(p => p.Id == personId && p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate && t.TimeOffEndDate == timeoffEndDate)));
                         var projects = personTimeoff.TimeOffHistory.First(t => t.TimeOffStartDate == timeoffStartDate).Projects;
                         projects.Add(project);
                     }
-                    else if(result.Any(p => p.Id == personId && !p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
+                    else if (result.Any(p => p.Id == personId && !p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
                     {
                         var personTimeOff = new PersonTimeOff()
                         {
                             TimeType = timetype,
                             TimeOffStartDate = timeoffStartDate,
                             TimeOffEndDate = timeoffEndDate,
-                            Projects = new List<Project>() { project}
+                            Projects = new List<Project>() { project }
                         };
                         var person = result.First(p => p.Id == personId);
                         person.TimeOffHistory.Add(personTimeOff);
