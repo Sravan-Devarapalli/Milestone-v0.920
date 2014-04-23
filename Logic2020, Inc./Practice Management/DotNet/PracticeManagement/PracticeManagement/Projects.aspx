@@ -265,8 +265,8 @@
                 }
             }
             else {
-                var btnddlPeriodChanged = document.getElementById('<%= btnddlPeriodChanged.ClientID %>');
-                btnddlPeriodChanged.click();
+                imgCalender.attributes["class"].value = "displayNone";
+                lblCustomDateRange.attributes["class"].value = "displayNone";
             }
         }
 
@@ -301,8 +301,6 @@
                                     <asp:ListItem Text="Current FY" Value="13"></asp:ListItem>
                                     <asp:ListItem Text="Custom Dates" Value="0"></asp:ListItem>
                                 </asp:DropDownList>
-                                <asp:Button ID="btnddlPeriodChanged" runat="server" OnClick="ddlPeriod_SelectedIndexChanged"
-                                    class="displayNone" />
                                 <AjaxControlToolkit:ModalPopupExtender ID="mpeCustomDates" runat="server" TargetControlID="imgCalender"
                                     CancelControlID="btnCustDatesCancel" OkControlID="btnCustDatesClose" BackgroundCssClass="modalBackground"
                                     PopupControlID="pnlCustomDates" BehaviorID="bhCustomDates" DropShadow="false"
@@ -316,8 +314,8 @@
                                 <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                 <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             </td>
-                            <td class="Width22Per" align="right">
-                                <asp:DropDownList ID="ddlView" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlView_SelectedIndexChanged">
+                            <td class="Width26Percent" align="right">
+                                <asp:DropDownList ID="ddlView" runat="server">
                                     <asp:ListItem Text="View 10" Value="10"></asp:ListItem>
                                     <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
                                     <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
@@ -326,6 +324,11 @@
                                 &nbsp;&nbsp;
                                 <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn"
                                     NavigateUrl="~/ProjectDetail.aspx?from=sub_toolbar&returnTo=Projects.aspx" />
+                               
+                            </td>
+                            <td>
+                             <asp:Button ID="btnUpdateFilters" runat="server" Text="Update" OnClick="btnUpdateView_Click"
+                                    ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
                             </td>
                         </tr>
                         <tr>
@@ -333,8 +336,7 @@
                                 &nbsp;
                             </td>
                             <td colspan="4" class="buttons-blockCheckBox PaddingTop4Px">
-                                <asp:CheckBox ID="chbUseActuals" runat="server" Checked="true" Text="Use Actual Time Entry data for Previous Month calculations"
-                                    AutoPostBack="true" OnCheckedChanged="cbUseActuals_CheckedChanged" />
+                                <asp:CheckBox ID="chbUseActuals" runat="server" Checked="true" Text="Use Actual Time Entry data for Previous Month calculations" />
                             </td>
                         </tr>
                     </table>
@@ -401,8 +403,6 @@
                                                 <table class="textRight WholeWidth">
                                                     <tr>
                                                         <td>
-                                                            <asp:Button ID="btnUpdateFilters" runat="server" Text="Update" OnClick="btnUpdateView_Click"
-                                                                ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -489,8 +489,7 @@
                                                 <table class="textRight WholeWidth">
                                                     <tr>
                                                         <td>
-                                                            <asp:Button ID="btnUpdateCalculations" runat="server" Text="Update" OnClick="btnUpdateView_Click"
-                                                                ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
+                                                            
                                                         </td>
                                                     </tr>
                                                     <tr>
