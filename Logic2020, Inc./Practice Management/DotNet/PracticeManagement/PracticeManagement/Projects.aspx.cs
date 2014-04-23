@@ -471,31 +471,11 @@ namespace PraticeManagement
             imgExportAllToExcel.Visible = userIsAdministrator;
         }
 
-        public void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        public void ddlPeriod_SelectedIndexChanged()
         {
             int periodSelected = Convert.ToInt32(ddlPeriod.SelectedValue);
 
             SetPeriodSelection(periodSelected);
-
-            ValidateAndDisplay();
-        }
-
-        public void ddlView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SetddlView();
-
-            lvProjects.DataSource = ProjectList;
-            lvProjects.DataBind();
-
-            StyledUpdatePanel.Update();
-        }
-
-        public void cbUseActuals_CheckedChanged(object sender, EventArgs e)
-        {
-            lvProjects.DataSource = ProjectList;
-            lvProjects.DataBind();
-
-            StyledUpdatePanel.Update();
         }
 
         private void SetddlView()
@@ -570,10 +550,6 @@ namespace PraticeManagement
                 }
                 diRange.FromDate = startMonth;
                 diRange.ToDate = new DateTime(endMonth.Year, endMonth.Month, DateTime.DaysInMonth(endMonth.Year, endMonth.Month));
-            }
-            else
-            {
-                mpeCustomDates.Show();
             }
         }
 
@@ -946,6 +922,7 @@ namespace PraticeManagement
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            ddlPeriod_SelectedIndexChanged();
             ValidateAndDisplay();
         }
 
