@@ -58,15 +58,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlPeriod;
         
         /// <summary>
-        /// btnddlPeriodChanged control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnddlPeriodChanged;
-        
-        /// <summary>
         /// mpeCustomDates control.
         /// </summary>
         /// <remarks>
@@ -148,13 +139,22 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddProject;
         
         /// <summary>
-        /// chbUseActuals  control.
+        /// btnUpdateFilters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbUseActuals ;
+        protected global::System.Web.UI.WebControls.Button btnUpdateFilters;
+        
+        /// <summary>
+        /// chbUseActuals control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbUseActuals;
         
         /// <summary>
         /// pnlFilters control.
@@ -245,15 +245,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divProjectFilter;
-        
-        /// <summary>
-        /// btnUpdateFilters control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateFilters;
         
         /// <summary>
         /// btnResetFilters control.
@@ -362,15 +353,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.TabPanel tpMainFilters;
-        
-        /// <summary>
-        /// btnUpdateCalculations control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateCalculations;
         
         /// <summary>
         /// btnResetCalculations control.
