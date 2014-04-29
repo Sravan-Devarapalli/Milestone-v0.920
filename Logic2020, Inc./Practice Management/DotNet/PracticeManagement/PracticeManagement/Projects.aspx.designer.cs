@@ -139,15 +139,6 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddProject;
         
         /// <summary>
-        /// btnUpdateFilters control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateFilters;
-        
-        /// <summary>
         /// chbUseActuals control.
         /// </summary>
         /// <remarks>
@@ -155,6 +146,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chbUseActuals;
+        
+        /// <summary>
+        /// btnUpdateFilters control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUpdateFilters;
         
         /// <summary>
         /// pnlFilters control.
