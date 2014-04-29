@@ -314,7 +314,7 @@
                                 <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                 <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             </td>
-                            <td class="Width26Percent" align="right">
+                            <td class="alignRight">
                                 <asp:DropDownList ID="ddlView" runat="server">
                                     <asp:ListItem Text="View 10" Value="10"></asp:ListItem>
                                     <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -324,19 +324,18 @@
                                 &nbsp;&nbsp;
                                 <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn"
                                     NavigateUrl="~/ProjectDetail.aspx?from=sub_toolbar&returnTo=Projects.aspx" />
-                               
-                            </td>
-                            <td>
-                             <asp:Button ID="btnUpdateFilters" runat="server" Text="Update" OnClick="btnUpdateView_Click"
-                                    ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 &nbsp;
                             </td>
-                            <td colspan="4" class="buttons-blockCheckBox PaddingTop4Px">
+                            <td colspan="3" class="buttons-blockCheckBox PaddingTop4Px">
                                 <asp:CheckBox ID="chbUseActuals" runat="server" Checked="true" Text="Use Actual Time Entry data for Previous Month calculations" />
+                            </td>
+                            <td class="PaddingTop5">
+                            <asp:Button ID="btnUpdateFilters" runat="server" Text="Refresh Summary" OnClick="btnUpdateView_Click"
+                                    ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
                             </td>
                         </tr>
                     </table>
