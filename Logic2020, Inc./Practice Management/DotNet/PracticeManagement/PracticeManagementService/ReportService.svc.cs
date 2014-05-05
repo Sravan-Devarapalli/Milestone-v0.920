@@ -102,24 +102,24 @@ namespace PracticeManagementService
             return ReportDAL.TimeEntryAuditReportByProject(startDate, endDate);
         }
 
-        public GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
+            return ReportDAL.AccountSummaryReportByBusinessUnit(clientDirectorId, accountIds, businessUnitIds, startDate, endDate);
         }
 
-        public GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
+        public List<GroupByAccount> AccountSummaryReportByProject(int? directorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
         {
-            return ReportDAL.AccountSummaryReportByProject(accountId, businessUnitIds, startDate, endDate, projectStatusIds, projectBillingTypes);
+            return ReportDAL.AccountSummaryReportByProject(directorId,accountIds, businessUnitIds, startDate, endDate, projectStatusIds, projectBillingTypes);
         }
 
-        public List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
+            return ReportDAL.AccountReportGroupByBusinessUnit(accountIds, businessUnitIds, startDate, endDate);
         }
 
-        public List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public List<GroupByPerson> AccountReportGroupByPerson(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate);
+            return ReportDAL.AccountReportGroupByPerson(accountIds, businessUnitIds, startDate, endDate);
         }
 
         public List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string titleIds, string hireDates, string recruiterIds)
@@ -242,3 +242,4 @@ namespace PracticeManagementService
         }
     }
 }
+
