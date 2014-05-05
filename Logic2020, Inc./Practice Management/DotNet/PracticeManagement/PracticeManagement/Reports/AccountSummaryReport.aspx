@@ -65,30 +65,35 @@
                     <td class="width60P">
                     </td>
                 </tr>
-                <tr class="height30P">
+                <tr class="height30P WholeWidth">
                     <td class="ReportFilterLabels">
                         Account:&nbsp;
                     </td>
-                    <td class="textLeft">
-                        <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" CssClass="Width220Px"
-                            OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
-                        </asp:DropDownList>
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr class="height30P">
-                    <td class="ReportFilterLabels vTop lineHeight30Px">
-                        Business Unit:&nbsp;
-                    </td>
-                    <td class="textLeft">
+                    <td class="textLeft Width90Percent">
+                        <pmc:ScrollingDropDown ID="cblAccount" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            OnSelectedIndexChanged="cblAccount_SelectedIndexChanged" NoItemsType="All" onclick="scrollingDropdown_onclick('cblAccount','Account')"
+                            AutoPostBack="true" DropDownListType="Account" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
+                        <ext:ScrollableDropdownExtender ID="sdeAccount" runat="server" TargetControlID="cblAccount"
+                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="fontBold">Business Unit:</span> &nbsp;
                         <pmc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
                             onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')" AutoPostBack="true"
                             DropDownListType="Business Unit" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
-                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
+                    </td>
+                </tr>
+                <tr class="height30P">
+                    <td class="ReportFilterLabels">
+                        Client Director:&nbsp;
+                    </td>
+                    <td class="textLeft">
+                        <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width220Px" AutoPostBack="true"
+                            OnSelectedIndexChanged="ddlDirector_SelectedIndexChanged">
+                        </asp:DropDownList>
                     </td>
                     <td>
                     </td>
