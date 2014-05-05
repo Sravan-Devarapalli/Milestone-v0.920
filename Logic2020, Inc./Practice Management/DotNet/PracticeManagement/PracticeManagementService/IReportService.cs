@@ -59,16 +59,16 @@ namespace PracticeManagementService
         List<ProjectLevelTimeEntriesHistory> TimeEntryAuditReportByProject(DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
+        List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes);
+        List<GroupByAccount> AccountSummaryReportByProject(int? directorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes);
 
         [OperationContract]
-        List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
+        List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
+        List<GroupByPerson> AccountReportGroupByPerson(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate);
 
         [OperationContract]
         List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string titleIds, string hireDates, string recruiterIds);
