@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[AccountSummaryByProject]
 (
-	@AccountId	INT,
+	@DirectorId	INT,
+	@AccountIds	NVARCHAR(MAX),
 	@BusinessUnitIds	NVARCHAR(MAX) = NULL,
 	@StartDate	DATETIME,
 	@EndDate	DATETIME,
@@ -20,6 +21,7 @@ BEGIN
 	DECLARE @ProjectBillingTypesTable TABLE( BillingType NVARCHAR(100) )
 	DECLARE @BusinessUnitIdsTable TABLE ( Ids INT )
 	DECLARE @ProjectStatusIdsTable TABLE ( Ids INT )
+	DECLARE @AccountIdsTable TABLE ( Ids INT )
 
 	INSERT INTO @ProjectBillingTypesTable(BillingType)
 	SELECT ResultString
@@ -33,6 +35,9 @@ BEGIN
 	SELECT ResultId
 	FROM dbo.ConvertStringListIntoTable(@ProjectStatusIds)
 
+	INSERT INTO @AccountIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@AccountIds)
 
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 		 , @EndDateLocal = CONVERT(DATE, @EndDate)
@@ -56,10 +61,11 @@ BEGIN
 					INNER JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
 											AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate	
 					LEFT  JOIN dbo.PersonRole AS PR ON PR.PersonRoleId = MPE.PersonRoleId
-			WHERE    Pro.ClientId = @AccountId
+			WHERE    Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 					 AND (@BusinessUnitIds IS NULL OR (Pro.GroupId IN (SELECT Ids FROM @BusinessUnitIdsTable)))
 					 AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
 					 AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal 
+					 AND (@DirectorId IS NULL OR Pro.DirectorId = @DirectorId)
 					
 			GROUP BY MP.PersonId,Pro.ProjectId,PC.Date 
 		),
@@ -98,7 +104,7 @@ BEGIN
 													)
 											)
 			INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
-			WHERE  CC.ClientId = @AccountId
+			WHERE  CC.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 					AND (@BusinessUnitIds IS NULL
 							OR CC.ProjectGroupId IN (SELECT Ids
 													FROM @BusinessUnitIdsTable )
@@ -107,6 +113,7 @@ BEGIN
 							 OR PRO.ProjectStatusId IN (SELECT Ids
 														FROM @ProjectStatusIdsTable )
 						)
+					AND (@DirectorId IS NULL OR PRO.DirectorId = @DirectorId)
 			GROUP BY TE.PersonId,PRO.ProjectId,TE.ChargeCodeDate
 		),
 	EstimatedBillingsByProject
@@ -145,8 +152,9 @@ BEGIN
 					OR P.GroupId IN (SELECT Ids
 											FROM @BusinessUnitIdsTable )
 				)
-		   AND P.ClientId = @AccountId
+		   AND P.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 	       AND M.StartDate <= @EndDateLocal AND @StartDateLocal <= M.ProjectedDeliveryDate
+		   AND (@DirectorId IS NULL OR P.DirectorId = @DirectorId)
 	 GROUP BY p.ProjectId,p.GroupId,p.ClientId,P.ProjectStatusId,P.StartDate,P.EndDate
 	 )
 	 ,
@@ -169,7 +177,7 @@ BEGIN
 				LEFT JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
 						  
 		WHERE Pro.ProjectStatusId IN (3,4) --Active and Completed status as per #3201 
-			  AND Pro.ClientId = @AccountId
+			  AND Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 			   AND (@BusinessUnitIds IS NULL
 					OR Pro.GroupId IN (SELECT Ids
 											FROM @BusinessUnitIdsTable )
@@ -177,6 +185,7 @@ BEGIN
 			  AND Pro.StartDate IS NOT NULL AND Pro.EndDate IS NOT NULL
 		 AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
 						   AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal   
+						   AND (@DirectorId IS NULL OR Pro.DirectorId = @DirectorId)
 		GROUP BY
 			Pro.ProjectId,Pro.ClientId
 	)
@@ -220,7 +229,7 @@ BEGIN
 			 INNER JOIN dbo.Project PRO
 				 ON PRO.ProjectId = CC.ProjectId
 		 WHERE
-			 CC.ClientId = @AccountId
+			 CC.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 			 AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, @FutureDate)
 			 AND (CC.timeTypeId != @HolidayTimeType
 			 OR (CC.timeTypeId = @HolidayTimeType
@@ -235,6 +244,7 @@ BEGIN
 												FROM @ProjectStatusIdsTable )
 				)
 			 AND PRO.ProjectStatusId IN (3,4) --Active and Completed status as per #3201 
+			 AND (@DirectorId IS NULL OR PRO.DirectorId = @DirectorId)
 		 GROUP BY
 			 PRO.ProjectId
 		   , CC.ClientId
@@ -333,9 +343,7 @@ BEGIN
 												FROM @ProjectStatusIdsTable )
 				)
 		AND P.ProjectNumber != 'P031000'	
-	ORDER BY
-		HD.TimeEntrySectionId
-	  , HD.ProjectNumber
+	ORDER BY  C.Name,PG.Name
 
 	;WITH ProjectForeCastedHoursUntilToday
 	AS (
@@ -346,10 +354,10 @@ BEGIN
 					dbo.Milestone AS M
 				GROUP BY
 					M.ProjectId
-	),
-	PersonsCountCTE
-	AS ( SELECT 
-	            COUNT(DISTINCT P.PersonId) AS PersonsCount
+	)
+	
+	SELECT 
+	            COUNT(DISTINCT MP.PersonId) AS PersonsCount
 		 FROM dbo.Project Pro
 			  INNER JOIN dbo.Milestone AS M ON M.ProjectId = Pro.ProjectId
 			  INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestoneId = M.MilestoneId
@@ -360,7 +368,7 @@ BEGIN
 				 ON pfh.ProjectId = PRO.ProjectId 
 		 WHERE  MPE.StartDate <= @EndDateLocal AND @StartDateLocal <= MPE.EndDate
 			     AND Pro.ProjectStatusId IN (3,4) --Active AND Completed Status
-				 AND Pro.ClientId = @AccountId
+				 AND Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 				 AND (
 						@BusinessUnitIds IS NULL
 						 OR Pro.GroupId IN (SELECT Ids
@@ -385,16 +393,8 @@ BEGIN
 					 END) IN (SELECT PBT.BillingType
 							  FROM @ProjectBillingTypesTable PBT )
 					)
-			)
-	)
+					
+			)  AND (@DirectorId IS NULL OR PRO.DirectorId = @DirectorId)
 
-	SELECT C.Name AS ClientName
-		 , C.Code AS ClientCode
-		 , C.ClientId AS ClientId
-		 , PC.PersonsCount
-	FROM dbo.Client C
-		INNER JOIN PersonsCountCTE AS PC ON 1 = 1
-	WHERE C.ClientId = @AccountId
-	
 END
 
