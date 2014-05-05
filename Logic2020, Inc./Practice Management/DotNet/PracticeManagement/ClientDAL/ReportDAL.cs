@@ -466,14 +466,15 @@ namespace DataAccess
             }
         }
 
-        public static GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
+        public static List<GroupByAccount> AccountSummaryReportByProject(int? directorId, string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByProject, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam, directorId.HasValue ? (object)directorId.Value : (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
@@ -485,15 +486,95 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    var result = new GroupByAccount();
-                    var groupedByProject = new List<ProjectLevelGroupedHours>();
-                    ReadTimePeriodSummaryReportByProject(reader, groupedByProject);
-
-                    result.GroupedProjects = groupedByProject;
+                    var result = new List<GroupByAccount>();
+                    ReadByProject(reader, result);
 
                     reader.NextResult();
                     ReadByAccountDetails(reader, result);
                     return result;
+                }
+            }
+        }
+
+        private static void ReadByProject(SqlDataReader reader, List<GroupByAccount> result)
+        {
+            if (!reader.HasRows) return;
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+            int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+            int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupNameColumn);
+            int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
+            int groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
+            int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+            int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+            int projectNumberindex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+            int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+            int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+            int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+            int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+            int billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
+            int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
+            int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
+            int forecastedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+            int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
+            int estimatedBillingsIndex = reader.GetOrdinal(Constants.ColumnNames.EstimatedBillings);
+            while (reader.Read())
+            {
+                var clientId = reader.GetInt32(clientIdIndex);
+                Project project = new Project
+                {
+                    Id = reader.GetInt32(projectIdIndex),
+                    Name = reader.GetString(projectNameIndex),
+                    ProjectNumber = reader.GetString(projectNumberindex),
+                    Client = new Client
+                    {
+                        Id = reader.GetInt32(clientIdIndex),
+                        Name = reader.GetString(clientNameIndex),
+                        Code = reader.GetString(clientCodeIndex)
+                    },
+                    Group = new ProjectGroup
+                    {
+                        Id = reader.GetInt32(groupIdIndex),
+                        Name = reader.GetString(groupNameIndex),
+                        Code = reader.GetString(groupCodeIndex)
+                    },
+                    Status = new ProjectStatus
+                    {
+                        Id = reader.GetInt32(projectStatusIdIndex),
+                        Name = reader.GetString(projectStatusNameIndex)
+                    },
+                    TimeEntrySectionId = reader.GetInt32(timeEntrySectionIdIndex)
+                };
+
+                ProjectLevelGroupedHours plgh = new ProjectLevelGroupedHours();
+                plgh.Project = project;
+                plgh.BillableHours = reader.GetDouble(billableHoursIndex);
+                plgh.NonBillableHours = reader.GetDouble(nonBillableHoursIndex);
+                plgh.BillableHoursUntilToday = reader.GetDouble(billableHoursUntilTodayIndex);
+                plgh.ForecastedHoursUntilToday = Convert.ToDouble(reader.GetDecimal(forecastedHoursUntilTodayIndex));
+                plgh.BillingType = reader.GetString(billingTypeIndex);
+                plgh.ForecastedHours = Convert.ToDouble(reader.GetDecimal(forecastedHoursIndex));
+                plgh.EstimatedBillings = reader.GetDouble(estimatedBillingsIndex);
+
+                if (result.Any(c => c.Account.Id == clientId))
+                {
+                    var groupbyProject = result.First(c => c.Account.Id == clientId);
+                    groupbyProject.GroupedProjects.Add(plgh);
+                }
+                else
+                {
+                    var groupAccount = new GroupByAccount()
+                    {
+                        Account = new Client()
+                        {
+                            Id = reader.GetInt32(clientIdIndex),
+                            Name = reader.GetString(clientNameIndex),
+                            Code = reader.GetString(clientCodeIndex)
+                        },
+                        GroupedProjects = new List<ProjectLevelGroupedHours>()
+                    };
+                    groupAccount.GroupedProjects.Add(plgh);
+                    result.Add(groupAccount);
                 }
             }
         }
@@ -624,14 +705,14 @@ namespace DataAccess
             }
         }
 
-        public static GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public static List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByBusinessUnit, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-
-                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam, clientDirectorId.HasValue ? (object)clientDirectorId.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
@@ -642,56 +723,51 @@ namespace DataAccess
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    var result = new GroupByAccount();
-                    var groupedBusinessUnits = new List<BusinessUnitLevelGroupedHours>();
-                    ReadByBusinessUnit(reader, groupedBusinessUnits);
-                    PopulateBusinessUnitTotalHoursPercent(groupedBusinessUnits);
+                    var result = new List<GroupByAccount>();
+
+                    ReadByBusinessUnit(reader, result);
+                    PopulateBusinessUnitTotalHoursPercent(result);
 
                     reader.NextResult();
                     ReadByAccountDetails(reader, result);
 
-                    result.GroupedBusinessUnits = groupedBusinessUnits;
                     return result;
                 }
             }
         }
 
-        private static void ReadByAccountDetails(SqlDataReader reader, GroupByAccount result)
+        private static void ReadByAccountDetails(SqlDataReader reader, List<GroupByAccount> result)
         {
             if (!reader.HasRows) return;
             while (reader.Read())
             {
                 int personsCountIndex = reader.GetOrdinal(Constants.ColumnNames.PersonsCountColumn);
-                int accountNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
-                int accountCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
-                int accountIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
 
                 int personsCount = reader.GetInt32(personsCountIndex);
-                result.PersonsCount = personsCount;
-                var account = new Client
-                    {
-                        Id = reader.GetInt32(accountIdIndex),
-                        Name = reader.GetString(accountNameIndex),
-                        Code = reader.GetString(accountCodeIndex)
-                    };
 
-                result.Account = account;
+                foreach (var item in result)
+                {
+                    item.PersonsCount = personsCount;
+                }
             }
         }
 
-        private static void PopulateBusinessUnitTotalHoursPercent(List<BusinessUnitLevelGroupedHours> reportData)
+        private static void PopulateBusinessUnitTotalHoursPercent(List<GroupByAccount> reportData)
         {
-            double grandTotal = reportData.Sum(t => t.TotalHours);
-            grandTotal = Math.Round(grandTotal, 2);
-
-            if (!(grandTotal > 0)) return;
-            foreach (BusinessUnitLevelGroupedHours buLevelGroupedHours in reportData)
+            foreach (var item in reportData)
             {
-                buLevelGroupedHours.BusinessUnitTotalHoursPercent = Convert.ToInt32((buLevelGroupedHours.TotalHours / grandTotal) * 100);
+                double grandTotal = item.GroupedBusinessUnits.Sum(t => t.TotalHours);
+                grandTotal = Math.Round(grandTotal, 2);
+
+                if (!(grandTotal > 0)) return;
+                foreach (BusinessUnitLevelGroupedHours buLevelGroupedHours in item.GroupedBusinessUnits)
+                {
+                    buLevelGroupedHours.BusinessUnitTotalHoursPercent = Convert.ToInt32((buLevelGroupedHours.TotalHours / grandTotal) * 100);
+                }
             }
         }
 
-        private static void ReadByBusinessUnit(SqlDataReader reader, List<BusinessUnitLevelGroupedHours> result)
+        private static void ReadByBusinessUnit(SqlDataReader reader, List<GroupByAccount> result)
         {
             if (!reader.HasRows) return;
             int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
@@ -706,12 +782,14 @@ namespace DataAccess
             int completedProjectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.CompletedProjectsCount);
             int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
             int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
-
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+            int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
 
             while (reader.Read())
             {
                 int businessUnitId = reader.GetInt32(businessUnitIdIndex);
-
+                int clientId = reader.GetInt32(clientIdIndex);
                 var pg = new ProjectGroup
                     {
                         Id = businessUnitId,
@@ -738,19 +816,37 @@ namespace DataAccess
                         CompletedProjectsCount = !reader.IsDBNull(completedProjectsCountIndex) ? reader.GetInt32(completedProjectsCountIndex) : 0,
                         BusinessUnit = pg
                     };
-
-                result.Add(buLGH);
+                if (result.Exists(p => p.Account.Id == clientId))
+                {
+                    var client = result.First(p => p.Account.Id == clientId);
+                    client.GroupedBusinessUnits.Add(buLGH);
+                }
+                else
+                {
+                    var client = new GroupByAccount()
+                        {
+                            Account = new Client()
+                            {
+                                Id = clientId,
+                                Name = reader.GetString(clientNameIndex),
+                                Code = reader.GetString(clientCodeIndex)
+                            }
+                        };
+                    client.GroupedBusinessUnits = new List<BusinessUnitLevelGroupedHours>();
+                    client.GroupedBusinessUnits.Add(buLGH);
+                    result.Add(client);
+                }
             }
         }
 
-        public static List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public static List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryByBusinessDevelopment, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
@@ -768,14 +864,14 @@ namespace DataAccess
             }
         }
 
-        public static List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public static List<GroupByPerson> AccountReportGroupByPerson(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryByBusinessDevelopment, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
@@ -809,6 +905,10 @@ namespace DataAccess
             int businessUnitIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitId);
             int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
             int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
+
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+            int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
 
             while (reader.Read())
             {
@@ -848,7 +948,13 @@ namespace DataAccess
                     {
                         Id = businessUnitId,
                         Name = reader.GetString(businessUnitNameIndex),
-                        IsActive = reader.GetBoolean(isActiveIndex)
+                        IsActive = reader.GetBoolean(isActiveIndex),
+                        Client = new Client()
+                        {
+                             Id = reader.GetInt32(clientIdIndex),
+                             Name = reader.GetString(clientNameIndex),
+                             Code = reader.GetString(clientCodeIndex)
+                        }
                     };
 
                 GroupByBusinessUnit businessUnitTimeEntries = new GroupByBusinessUnit
@@ -905,6 +1011,10 @@ namespace DataAccess
             int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
             int businessUnitCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCodeColumn);
             int isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.Active);
+
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+            int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
 
             while (reader.Read())
             {
@@ -974,7 +1084,13 @@ namespace DataAccess
                                     Id = businessUnitId,
                                     Name = reader.GetString(businessUnitNameIndex),
                                     Code = reader.GetString(businessUnitCodeIndex),
-                                    IsActive = reader.GetBoolean(isActiveIndex)
+                                    IsActive = reader.GetBoolean(isActiveIndex),
+                                    Client = new Client()
+                                    {
+                                        Id = reader.GetInt32(clientIdIndex),
+                                        Name = reader.GetString(clientNameIndex),
+                                        Code = reader.GetString(clientCodeIndex)
+                                    }
                                 },
                             PersonLevelGroupedHoursList = new List<PersonLevelGroupedHours> { PLGH }
                         };
@@ -3741,7 +3857,7 @@ namespace DataAccess
                     RecruiterFirstName = reader.GetString(RecruiterFirstNameColumnIndex),
                     RecruiterLastName = reader.GetString(RecruiterLastNameColumnIndex),
                     JobSeekersStatusId = !reader.IsDBNull(JobSeekerStatusIdIndex) ? (int?)reader.GetInt32(JobSeekerStatusIdIndex) : null,
-                   
+
                     TargetedCompanyRecruitingMetrics = new RecruitingMetrics()
                     {
                         RecruitingMetricsId = !reader.IsDBNull(TargetedCompanyIdIndex) ? (int?)reader.GetInt32(TargetedCompanyIdIndex) : null,
@@ -3754,8 +3870,8 @@ namespace DataAccess
                         Name = !reader.IsDBNull(SourceRecruitingMetricsNameIndex) ? reader.GetString(SourceRecruitingMetricsNameIndex) : ""
                     },
                     EmployeeReferralId = !reader.IsDBNull(EmployeeReferralIdIndex) ? (int?)reader.GetInt32(EmployeeReferralIdIndex) : null,
-                    EmployeeReferralFirstName =!reader.IsDBNull(EmployeeReferralIdIndex) ? reader.GetString(EmployeeReferralFirstNameIndex):"",
-                    EmployeeReferralLastName = !reader.IsDBNull(EmployeeReferralIdIndex) ?reader.GetString(EmployeeReferralLastNameIndex):"",
+                    EmployeeReferralFirstName = !reader.IsDBNull(EmployeeReferralIdIndex) ? reader.GetString(EmployeeReferralFirstNameIndex) : "",
+                    EmployeeReferralLastName = !reader.IsDBNull(EmployeeReferralIdIndex) ? reader.GetString(EmployeeReferralLastNameIndex) : "",
                     LengthOfTenture = reader.GetInt32(LengthOfTenureInDaysIndex)
                 };
                 result.Add(person);
