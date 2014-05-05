@@ -31,7 +31,7 @@
                                     CollapseControlID="imgBusinessUnit" ExpandControlID="imgBusinessUnit" TextLabelID="lbBusinessUnit" />
                                 <asp:Image ID="imgBusinessUnit" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
                                 <asp:Label ID="lbBusinessUnit" Style="display: none;" runat="server"></asp:Label>
-                                <%# Eval("BusinessUnit.HtmlEncodedName")%>
+                                <asp:Label ID="lblAccountName" runat="server"></asp:Label> <%# Eval("BusinessUnit.HtmlEncodedName")%>
                                 <b class="fontStyleNormal">
                                     <%# GetBusinessUnitStatus((bool)Eval("BusinessUnit.IsActive"))%></b>
                             </td>
@@ -207,7 +207,7 @@
                                     CollapseControlID="imgBusinessUnit" ExpandControlID="imgBusinessUnit" TextLabelID="lbBusinessUnit" />
                                 <asp:Image ID="imgBusinessUnit" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Person Details" />
                                 <asp:Label ID="lbBusinessUnit" Style="display: none;" runat="server"></asp:Label>
-                                <%# Eval("BusinessUnit.Name")%>
+                                <asp:Label ID="lblAccountName" runat="server"></asp:Label> <%# Eval("BusinessUnit.Name")%>
                                 <b class="fontStyleNormal">
                                     <%# GetBusinessUnitStatus((bool)Eval("BusinessUnit.IsActive"))%></b>
                             </td>
