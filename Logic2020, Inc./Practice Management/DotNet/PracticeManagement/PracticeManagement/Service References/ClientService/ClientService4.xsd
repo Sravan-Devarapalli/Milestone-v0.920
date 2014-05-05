@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://www.logic2020.com" elementFormDefault="qualified" targetNamespace="http://www.logic2020.com" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://system80.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ClientService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
   <xs:element name="SaveClientDetail">
     <xs:complexType>
       <xs:sequence>
@@ -234,6 +234,34 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPricingListsResult" nillable="true" type="q14:ArrayOfPricingList" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetClientsForClientDirector">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientDirectorId" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetClientsForClientDirectorResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetClientsForClientDirectorResult" nillable="true" type="q15:ArrayOfClient" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBusinessUnitsForClients">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBusinessUnitsForClientsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBusinessUnitsForClientsResult" nillable="true" type="q16:ArrayOfProjectGroup" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
