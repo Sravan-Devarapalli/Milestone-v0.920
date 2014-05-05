@@ -34,6 +34,22 @@ namespace DataTransferObjects.Reports.ByAccount
             }
         }
 
+        public int ActiveProjectsCount
+        {
+            get
+            {
+                return GroupedBusinessUnits.Sum(g => g.ActiveProjectsCount);
+            }
+        }
+
+        public int CompletedProjectsCount
+        {
+            get
+            {
+                return GroupedBusinessUnits.Sum(g => g.CompletedProjectsCount);
+            }
+        }
+
         [DataMember]
         public int PersonsCount { get; set; }
 
@@ -74,6 +90,14 @@ namespace DataTransferObjects.Reports.ByAccount
             get
             {
                 return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.BusinessDevelopmentHours) : GroupedProjects.Where(p => p.Project.TimeEntrySectionId == (int)TimeEntrySectionType.BusinessDevelopment).Sum(p => p.NonBillableHours);
+            }
+        }
+
+        public Double TotalActualHours
+        {
+            get
+            {
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ActualHours) : GroupedProjects.Sum(p => p.TotalHours);
             }
         }
     }
