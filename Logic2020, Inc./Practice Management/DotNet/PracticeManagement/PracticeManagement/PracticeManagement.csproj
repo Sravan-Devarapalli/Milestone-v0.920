@@ -628,6 +628,9 @@
     <None Include="Service References\CalendarService\CalendarService7.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ClientService\ClientService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ClientService\ClientService2.wsdl" />
     <None Include="Service References\ClientService\ClientService3.wsdl" />
     <None Include="Service References\ClientService\ClientService3.xsd">
@@ -1010,11 +1013,11 @@
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
-    <None Include="Service References\ClientService\ClientService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="Scripts\UploaderRemovedFolder1.js" />
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
+    <None Include="Service References\ClientService\ClientService1.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
@@ -3731,3 +3734,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
