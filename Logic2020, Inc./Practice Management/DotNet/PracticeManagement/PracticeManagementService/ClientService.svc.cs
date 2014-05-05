@@ -166,6 +166,17 @@ namespace PracticeManagementService
             return ClientDAL.GetPricingLists(clientId);
         }
 
+        public List<Client> GetClientsForClientDirector(int? clientDirectorId)
+        {
+            return ClientDAL.GetClientsForClientDirector(clientDirectorId);
+        }
+
+        public List<ProjectGroup> GetBusinessUnitsForClients(string clientIds)
+        {
+            return ClientDAL.GetBusinessUnitsForClients(clientIds);
+        }
+
         #endregion IClientService Members
     }
 }
+
