@@ -9,6 +9,9 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string GroupName = "GroupName";
+            public const string GroupCode = "GroupCode";
+            public const string GroupId = "GroupId";
             public const string DirectorName = "DirectorName";
             public const string TimeOffStartDate = "TimeOffStartDate";
             public const string TimeOffEndDate = "TimeOffEndDate";
@@ -1406,6 +1409,8 @@
                 public const string PricingListUpdate = "dbo.PricingListUpdate";
                 public const string GetPricingList = "dbo.GetPricingList";
                 public const string GetBusinessTypes = "dbo.GetBusinessTypes";
+                public const string GetClientsForClientDirector = "dbo.GetClientsForClientDirector";
+                public const string GetBusinessUnitsForClients = "dbo.GetBusinessUnitsForClients";
             }
 
             #endregion Nested type: Client
