@@ -8,8 +8,9 @@ namespace PraticeManagement.FilterObjects
     [Serializable]
     public class ByAccountReportFilter
     {
-        public String AccountId { get; set; }
-        public String BusinessUnitIds { get; set; }
+        public String ClientDirectorId { get; set; }
+        public String AccountIds { get; set; }
+        public String BusinessUnitIds { get; set; } 
         public String RangeSelected { get; set; } 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
