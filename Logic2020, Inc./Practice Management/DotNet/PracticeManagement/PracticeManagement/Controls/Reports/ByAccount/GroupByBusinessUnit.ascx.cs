@@ -27,9 +27,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
         }
 
-        public double PopulateData(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public double PopulateData(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate)).ToList();
+            List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountIds, businessUnitIds, startDate, endDate)).ToList();
             DatabindbyBusinessUnitDetails(data);
 
 
@@ -52,6 +52,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 hostingPage.BDHours = hostingPage.TotalProjectHours = reportData.Sum(p => p.TotalHours);
                 hostingPage.BillableHours = 0d;
                 hostingPage.NonBillableHours = hostingPage.TotalProjectHours;
+                hostingPage.AccountsCount = reportData.Select(r => r.BusinessUnit.Client.Id.Value).Distinct().Count();
             }
         }
 
@@ -96,12 +97,21 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 if (Page is AccountSummaryReport)
                 {
                     var hostingPage = (AccountSummaryReport)Page;
-                    hostingPage.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output);
+                    hostingPage.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output); 
                 }
                 else
                 {
                     var hostingPage = (TimePeriodSummaryReport)Page;
                     hostingPage.ByProjectControl.ByBusinessDevelopmentControl.SetExpandCollapseIdsTohiddenField(output);
+                }
+            }
+            else
+            {
+                var lblAccountName = e.Item.FindControl("lblAccountName") as Label;
+                var dataItem = (DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours)e.Item.DataItem;
+                if (Page is AccountSummaryReport)
+                {
+                    lblAccountName.Text = dataItem.BusinessUnit.Client.HtmlEncodedName + " - ";
                 }
             }
         }
