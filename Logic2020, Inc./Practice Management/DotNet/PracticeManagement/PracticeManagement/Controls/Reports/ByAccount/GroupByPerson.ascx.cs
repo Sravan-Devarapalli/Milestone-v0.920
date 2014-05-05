@@ -82,7 +82,13 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var cpeBusinessUnit = e.Item.FindControl("cpeBusinessUnit") as CollapsiblePanelExtender;
+                var lblAccountName = e.Item.FindControl("lblAccountName") as Label;
                 CollapsiblePanelExtenderClientIds.Add(cpeBusinessUnit.BehaviorID);
+                var dataItem = (DataTransferObjects.Reports.ByAccount.GroupByBusinessUnit)e.Item.DataItem;
+                if (Page is AccountSummaryReport)
+                {
+                    lblAccountName.Text = dataItem.BusinessUnit.Client.HtmlEncodedName + " - ";
+                }
             }            
         }
 
@@ -122,9 +128,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             return date.ToString(Constants.Formatting.ReportDateFormat);
         }
 
-        public double PopulateData(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public double PopulateData(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            var data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate)).ToList();
+            var data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByPerson(accountIds, businessUnitIds, startDate, endDate)).ToList();
             DatabindbyBusinessUnitDetails(data);
 
             SetHeaderSectionValues(data);
@@ -140,12 +146,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 hostingPage.UpdateHeaderSection = true;
 
                 hostingPage.BusinessUnitsCount = reportData.SelectMany(p => p.BusinessUnitLevelGroupedHoursList.Select(g => g.BusinessUnit.Id.Value)).Distinct().Count();
-                hostingPage.ProjectsCount = reportData.Count > 0 ? 1 : 0;
                 hostingPage.PersonsCount = reportData.Select(p => p.Person.Id.Value).Distinct().Count();
                 hostingPage.TotalProjectedHours = 0;
                 hostingPage.BDHours = hostingPage.TotalProjectHours = reportData.Sum(p => p.TotalHours);
                 hostingPage.BillableHours = 0d;
                 hostingPage.NonBillableHours = reportData.Sum(g => g.TotalHours);
+                hostingPage.AccountsCount = reportData.SelectMany(p => p.BusinessUnitLevelGroupedHoursList.Select(g => g.BusinessUnit.Client.Id.Value)).Distinct().Count();
             }
         }
 
