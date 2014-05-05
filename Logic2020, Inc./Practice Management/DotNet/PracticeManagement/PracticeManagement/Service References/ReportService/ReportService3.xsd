@@ -366,7 +366,8 @@
   <xs:element name="AccountSummaryReportByBusinessUnit">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="clientDirectorId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
@@ -376,14 +377,15 @@
   <xs:element name="AccountSummaryReportByBusinessUnitResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q23:GroupByAccount" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q23:ArrayOfGroupByAccount" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AccountSummaryReportByProject">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="directorId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
@@ -395,14 +397,14 @@
   <xs:element name="AccountSummaryReportByProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q24:GroupByAccount" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q24:ArrayOfGroupByAccount" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AccountReportGroupByBusinessUnit">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
@@ -419,7 +421,7 @@
   <xs:element name="AccountReportGroupByPerson">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
