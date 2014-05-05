@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[AccountSummaryByBusinessUnit]
 (
-	@AccountId	INT,
+	@DirectorId INT=NULL,
+	@AccountIds	NVARCHAR(MAX),
 	@BusinessUnitIds	NVARCHAR(MAX) = NULL,
 	@StartDate	DATETIME,
 	@EndDate	DATETIME
@@ -14,6 +15,12 @@ BEGIN
 		@HolidayTimeType INT,
 		@FutureDate DATETIME,
 		@Today DATE
+	
+	DECLARE @AccountIdsTable TABLE ( Ids INT )
+	
+	INSERT INTO @AccountIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@AccountIds)
 
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate), @EndDateLocal = CONVERT(DATE, @EndDate), @HolidayTimeType = dbo.GetHolidayTimeTypeId(),@FutureDate = dbo.GetFutureDate(), 
 							 @Today = dbo.GettingPMTime(GETUTCDATE())
@@ -39,11 +46,12 @@ BEGIN
 			LEFT JOIN dbo.MilestonePersonEntry AS MPE ON MP.MilestonePersonId = MPE.MilestonePersonId
 			LEFT JOIN dbo.person AS P ON P.PersonId = MP.PersonId 
 			LEFT JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
-			WHERE (@BusinessUnitIds IS NULL OR (Pro.GroupId IN (SELECT Id FROM @BusinessUnitIdsTable))) AND Pro.ClientId = @AccountId
+			WHERE (@BusinessUnitIds IS NULL OR (Pro.GroupId IN (SELECT Id FROM @BusinessUnitIdsTable))) AND Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 				   AND Pro.ProjectStatusId IN (3,4) --Active and Completed status as per #3201 
 				   AND Pro.StartDate IS NOT NULL AND Pro.EndDate IS NOT NULL
 				   AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal
 				   AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
+				   AND (@DirectorId IS NULL OR Pro.DirectorId = @DirectorId)
 			GROUP BY  Pro.ProjectId,Pro.GroupId
 		),
 		 ProjectsDoNotHaveMilestonePersonEntries
@@ -59,8 +67,9 @@ BEGIN
 				(MPE.Id IS NULL OR MP.MilestoneId IS NULL)
 				AND P.ProjectStatusId IN (3,4) 
 				AND (@BusinessUnitIds IS NULL OR (P.GroupId IN (SELECT Id FROM @BusinessUnitIdsTable)))
-				AND P.ClientId = @AccountId
+				AND P.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 				AND M.StartDate <= @EndDateLocal AND @StartDateLocal <= M.ProjectedDeliveryDate
+				AND (@DirectorId IS NULL OR P.DirectorId = @DirectorId)
 		)
 		 ,TimeEntryHours
 		 AS
@@ -99,7 +108,7 @@ BEGIN
 																				AND ISNULL(PTSH.EndDate,@FutureDate)
 					INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = CC.ProjectGroupId
 					INNER JOIN dbo.Project Pro ON Pro.ProjectId = CC.ProjectId
-			WHERE CC.ClientId = @AccountId
+			WHERE CC.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 					AND	TE.ChargeCodeDate <= ISNULL(P.TerminationDate,
 												@FutureDate)
 					AND ( CC.timeTypeId != @HolidayTimeType
@@ -113,6 +122,7 @@ BEGIN
 												)
 						)
 					AND	Pro.ProjectStatusId IN (3,4) -- Active and Completed status as per #3201 
+					AND (@DirectorId IS NULL OR Pro.DirectorId = @DirectorId)
 			GROUP BY  Pro.ProjectId,CC.ProjectGroupId
 		)
 	
@@ -120,6 +130,9 @@ BEGIN
 				PG.Name AS GroupName, 
 				PG.Active, 
 				PG.Code AS GroupCode,
+				C.ClientId,
+				C.Name AS ClientName,
+				c.Code AS ClientCode,
 				SUM(CASE WHEN P.ProjectStatusId = 4 THEN 1 ELSE 0 END) AS CompletedProjectsCount,
 				SUM(CASE WHEN P.ProjectStatusId = 3 THEN 1 ELSE 0 END) AS ActiveProjectsCount,
 			    CAST((ROUND(ISNULL(SUM(PH.ForecastedHours),0), 2)) AS float) as ForecastedHours,
@@ -133,21 +146,20 @@ BEGIN
 		FULL JOIN ProjectsDoNotHaveMilestonePersonEntries PNP ON PNP.ProjectId = PH.ProjectId OR PNP.ProjectId = TH.ProjectId 
 		LEFT JOIN ProjectGroup PG ON PG.GroupId = ISNULL(ISNULL(PH.GroupId, TH.ProjectGroupId),PNP.GroupId)
 		LEFT JOIN dbo.Project P ON P.ProjectId =  ISNULL(ISNULL(PH.ProjectId, TH.ProjectId),PNP.ProjectId)
+		LEFT JOIN dbo.Client C ON C.ClientId = PG.ClientId
 		WHERE P.ProjectNumber != 'P031000'	
-		GROUP BY ISNULL(ISNULL(PH.GroupId, TH.ProjectGroupId),PNP.GroupId),PG.Name,PG.Active,PG.Code
+		GROUP BY ISNULL(ISNULL(PH.GroupId, TH.ProjectGroupId),PNP.GroupId),PG.Name,PG.Active,PG.Code,C.ClientId,C.Name,c.Code
+		ORDER BY C.Name,PG.Name
 	
 
-		SELECT COUNT(DISTINCT p.PersonId) as PersonsCount,
-				c.Name AS ClientName,
-				c.Code AS ClientCode,
-				c.ClientId AS ClientId
+		SELECT COUNT(DISTINCT (MP.PersonId)) as PersonsCount
 		FROM dbo.Project Pro
 				INNER JOIN dbo.Milestone AS M ON M.ProjectId = Pro.ProjectId
 				INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestoneId = M.MilestoneId
 				INNER JOIN dbo.MilestonePersonEntry AS MPE ON MP.MilestonePersonId = MPE.MilestonePersonId
 				INNER JOIN dbo.person AS P ON P.PersonId = MP.PersonId
 				INNER JOIN dbo.Client C ON C.ClientId = Pro.ClientId
-		WHERE C.ClientId = @AccountId
+		WHERE C.ClientId IN (SELECT * FROM @AccountIdsTable)
 				AND MPE.StartDate <= @EndDateLocal AND @StartDateLocal <= MPE.EndDate
 				AND Pro.ProjectStatusId IN (3,4) --Active AND Completed Status
 				AND (@BusinessUnitIds IS NULL
@@ -155,8 +167,6 @@ BEGIN
 											FROM @BusinessUnitIdsTable
 											)
 					)
-		GROUP BY C.ClientId, C.Name, C.Code
-		
-
+				AND (@DirectorId IS NULL OR Pro.DirectorId = @DirectorId)
 END
 
