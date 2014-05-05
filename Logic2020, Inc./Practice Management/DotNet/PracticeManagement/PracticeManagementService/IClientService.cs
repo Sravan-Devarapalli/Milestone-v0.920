@@ -86,5 +86,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<PricingList> GetPricingLists(int? clientId);
+
+        [OperationContract]
+        List<Client> GetClientsForClientDirector(int? clientDirectorId);
+
+        [OperationContract]
+        List<ProjectGroup> GetBusinessUnitsForClients(string clientIds);
     }
 }
+
