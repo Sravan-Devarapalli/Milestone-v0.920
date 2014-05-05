@@ -1644,6 +1644,23 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillBusinessUnitsByClients(ListControl control, string clientIds, string firstItemText = null, bool noFirstItem = true)
+        {
+            using (var serviceClient = new ClientServiceClient())
+            {
+                try
+                {
+                    ProjectGroup[] groups = serviceClient.GetBusinessUnitsForClients(clientIds).OrderBy(g => g.Client.Name).ThenBy(g=>g.Name).ToArray();
+                    FillListDefault(control, firstItemText, groups, noFirstItem, "Id", "ClientProjectGroupFormat");
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         /// <summary>
         /// Fills the list control with the list of active clients.
         /// </summary>
