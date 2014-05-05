@@ -803,5 +803,98 @@ namespace DataAccess
                 result.Add(pricinglist);
             }
         }
+
+        public static List<Client> GetClientsForClientDirector(int? clientDirectorId)
+        {
+            List<Client> result = new List<Client>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Client.GetClientsForClientDirector, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam, clientDirectorId.HasValue ? (object)clientDirectorId.Value : DBNull.Value);
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+
+                        ReadClientDirectorClients(reader, result);
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static void ReadClientDirectorClients(SqlDataReader reader, List<Client> result)
+        {
+            if (!reader.HasRows) return;
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+
+            while (reader.Read())
+            {
+                Client client = new Client
+                {
+                    Id = reader.GetInt32(clientIdIndex),
+                    Name = reader.GetString(clientNameIndex),
+                    Code = reader.GetString(clientCodeIndex)
+                };
+
+                result.Add(client);
+            }
+        }
+
+        public static List<ProjectGroup> GetBusinessUnitsForClients(string clientIds)
+        {
+            List<ProjectGroup> result = new List<ProjectGroup>();
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Client.GetBusinessUnitsForClients, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, clientIds);
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+
+                        ReadClientsGroups(reader, result);
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static void ReadClientsGroups(SqlDataReader reader, List<ProjectGroup> result)
+        {
+            if (!reader.HasRows) return;
+            int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+            int clientCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ClientCodeColumn);
+            int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+            int groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.GroupId);
+            int groupCodeIndex = reader.GetOrdinal(Constants.ColumnNames.GroupCode);
+            int groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.GroupName);
+
+            while (reader.Read())
+            {
+                ProjectGroup group = new ProjectGroup
+                {
+                    Id = reader.GetInt32(groupIdIndex),
+                    Name = reader.GetString(groupNameIndex),
+                    Code = reader.GetString(groupCodeIndex),
+                    Client = new Client()
+                    {
+                        Id = reader.GetInt32(clientIdIndex),
+                        Name = reader.GetString(clientNameIndex),
+                        Code = reader.GetString(clientCodeIndex)
+                    }
+                };
+                result.Add(group);
+            }
+        }
     }
 }
+
