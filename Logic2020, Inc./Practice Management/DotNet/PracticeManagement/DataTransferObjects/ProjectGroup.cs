@@ -85,6 +85,17 @@ namespace DataTransferObjects
         [DataMember]
         public int ClientId { get; set; }
 
+        [DataMember]
+        public Client Client { get; set; }
+
+        public string ClientProjectGroupFormat
+        {
+            get
+            {
+                return Client.HtmlEncodedName + '-' + HtmlEncodedName;
+            }
+        }
+
         #endregion Properties
     }
 }
