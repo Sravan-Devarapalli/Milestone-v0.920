@@ -321,8 +321,8 @@
                                     <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
                                     <asp:ListItem Text="View ALL" Value="1"></asp:ListItem>
                                 </asp:DropDownList>
-                                &nbsp;&nbsp;
-                                <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn"
+                            &nbsp; &nbsp;
+                                <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn padRight10"
                                     NavigateUrl="~/ProjectDetail.aspx?from=sub_toolbar&returnTo=Projects.aspx" />
                             </td>
                         </tr>
@@ -334,7 +334,7 @@
                                 <asp:CheckBox ID="chbUseActuals" runat="server" Checked="true" Text="Use Actual Time Entry data for Previous Month calculations" />
                             </td>
                             <td class="PaddingTop5">
-                            <asp:Button ID="btnUpdateFilters" runat="server" Text="Refresh Summary" OnClick="btnUpdateView_Click"
+                                <asp:Button ID="btnUpdateFilters" runat="server" Text="Refresh Report" OnClick="btnUpdateView_Click"
                                     ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
                             </td>
                         </tr>
@@ -488,7 +488,6 @@
                                                 <table class="textRight WholeWidth">
                                                     <tr>
                                                         <td>
-                                                            
                                                         </td>
                                                     </tr>
                                                     <tr>
