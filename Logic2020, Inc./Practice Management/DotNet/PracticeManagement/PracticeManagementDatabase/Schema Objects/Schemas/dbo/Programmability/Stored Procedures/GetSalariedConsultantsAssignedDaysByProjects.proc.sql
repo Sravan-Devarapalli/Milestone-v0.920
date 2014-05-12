@@ -36,7 +36,8 @@ BEGIN
 				PS.Name AS Status,
 				C.Date,
 				Pers.PersonId,
-				Po.LastName + ', '+ Po.FirstName AS ProjectOwner
+				Po.LastName + ', '+ Po.FirstName AS ProjectOwner,
+				director.LastName + ', '+ director.FirstName AS ClientDirector
 		FROM dbo.Project P
 		INNER JOIN dbo.Milestone M ON M.ProjectId = P.ProjectId
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestoneId = M.MilestoneId
@@ -53,10 +54,11 @@ BEGIN
 		INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
 		LEFT JOIN dbo.Person PO ON PO.PersonId = P.ProjectOwnerId
 		LEFT JOIN dbo.Person Mngr ON Mngr.PersonId = Pers.ManagerId
+		LEFT JOIN dbo.Person director ON director.PersonId = P.DirectorId
 		LEFT JOIN dbo.Title Ttle ON Ttle.TitleId = Pers.TitleId
 		WHERE P.ProjectStatusId NOT IN (1,5) -- not in inactive and experimental
 		 AND PerS.PersonStatusId IN(1,5)  AND P.ProjectId !=174 AND MPE.StartDate <= @Enddate AND @StartDate <= MPE.EndDate
-		GROUP BY P.ProjectId,P.ProjectNumber,P.Name,Pers.LastName ,Ttle.Title,Pers.FirstName ,C.Date,P.Name,Mngr.FirstName,Mngr.LastName,Pers.PersonId,T.Name,PD.DivisionName,Pers.HireDate,Pers.EmployeeNumber,Cli.Name,BG.Name,PG.Name,Po.LastName,Po.FirstName,P.ProjectStatusId,PS.Name
+		GROUP BY P.ProjectId,P.ProjectNumber,P.Name,Pers.LastName ,Ttle.Title,Pers.FirstName ,C.Date,P.Name,Mngr.FirstName,Mngr.LastName,Pers.PersonId,T.Name,PD.DivisionName,Pers.HireDate,Pers.EmployeeNumber,Cli.Name,BG.Name,PG.Name,Po.LastName,Po.FirstName,P.ProjectStatusId,PS.Name,director.FirstName,director.LastName
 	) 
 
 	SELECT	P.PayType AS [Pay Type],
@@ -73,11 +75,12 @@ BEGIN
 			P.ProjectNumber AS [Project Number],
 			P.Status,
 			P.ProjectName AS [Project Name],
+			ISNULL(P.ClientDirector,'') AS [Client Director],
 			ISNULL(P.ProjectOwner,'') AS [Project Owner],
+			dbo.GetProjectManagerNames(P.ProjectId) AS [Project Managers],
 			P.Manager AS [Career Counselor],
 			CONVERT(DATE,MIN(P.Date))[Roll on Date],
 			CONVERT(DATE,MAX(P.Date))[Roll off Date],
-			--dbo.GetProjectManagerNames(P.ProjectId) AS ProjectManagers,
 			COUNT(*) AS [Days]
 	FROM CTE AS P
 	GROUP BY P.PayType,
@@ -94,7 +97,9 @@ BEGIN
 			P.ProjectNumber,
 			P.Status,
 			P.ProjectName,
-			P.ProjectOwner
+			P.ProjectOwner,
+			P.ProjectId,
+			P.ClientDirector
 	ORDER BY P.FirstName, P.LastName,P.ProjectNumber
 END
 
