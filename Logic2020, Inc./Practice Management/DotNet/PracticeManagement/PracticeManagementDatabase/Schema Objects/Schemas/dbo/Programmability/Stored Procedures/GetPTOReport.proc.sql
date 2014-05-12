@@ -96,7 +96,7 @@ BEGIN
 			   BG.Name,
 			   pro.PracticeId,
 			   pra.Name,
-			   dbo.GetProjectManagerNames(pro.ProjectId),
+			   pro.ProjectId,
 			   pro.SeniorManagerId,
 			   smanager.LastName+', '+smanager.FirstName,
 			   pro.DirectorId,
