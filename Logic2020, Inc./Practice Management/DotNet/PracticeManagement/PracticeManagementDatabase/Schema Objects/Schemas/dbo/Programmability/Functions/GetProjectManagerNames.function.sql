@@ -20,11 +20,6 @@ BEGIN
 	JOIN Person Pers ON Pers.Personid = PM.ProjectManagerId
 	WHERE P.ProjectId = @ProjectId
 
-	SELECT @Temp = @Temp + Pers.LastName + ', ' +Pers.FirstName +'; '
-	FROM Project P
-	JOIN Person Pers ON Pers.Personid = P.ProjectOwnerId
-	WHERE P.ProjectId = @ProjectId
-
 	RETURN @Temp
 END
 
