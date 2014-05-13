@@ -174,8 +174,8 @@
                                 Enabled="false" UseSubmitBehavior="false" ToolTip="Export To PDF" />
                         </td>
                         <td>
-                            <asp:Button ID="btnPayCheckExport" runat="server" Text="PayChex" OnClick="btnPayCheckExport_OnClick"
-                                UseSubmitBehavior="false" ToolTip="Export PayChex" />
+                            <asp:Button ID="btnPayCheckExport" runat="server" Text="ADP" OnClick="btnPayCheckExport_OnClick"
+                                UseSubmitBehavior="false" ToolTip="Export ADP" />
                         </td>
                     </tr>
                 </table>
