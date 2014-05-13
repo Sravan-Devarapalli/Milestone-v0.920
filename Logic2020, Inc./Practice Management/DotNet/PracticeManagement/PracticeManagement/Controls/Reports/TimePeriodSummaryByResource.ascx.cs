@@ -17,7 +17,7 @@ namespace PraticeManagement.Controls.Reports
     {
         private string TimePeriodSummaryReportExport = "TimePeriod Summary Report By Resource";
 
-        private string TimePeriodSummaryReportPayCheckExport = "TimePeriod Summary Report By Resource(Pay Chex)";
+        private string TimePeriodSummaryReportPayCheckExport = "TimePeriod Summary Report By Resource(ADP)";
 
         private string ShowPanel = "ShowPanel('{0}', '{1}','{2}');";
         private string HidePanel = "HidePanel('{0}');";
@@ -100,6 +100,48 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        private SheetStyles DataSheetStyleForADP
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+                CellStyles dataDecimalCellStyle = new CellStyles();
+                dataDecimalCellStyle.DataFormat = "0.00";
+                bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                var dataCellStylearray = new List<CellStyles>() {dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle };
+                if (isUserAdminstrator)
+                    dataCellStylearray.Add(dataCellStyle);
+                dataCellStylearray.Add(dataDecimalCellStyle);
+                for (int i = 0; i < WorkTypeCount; i++)
+                    dataCellStylearray.Add(dataDecimalCellStyle);
+                dataCellStylearray.Add(dataDecimalCellStyle);
+                
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
+
         public ModalPopupExtender PersonDetailPopup
         {
             get
@@ -145,6 +187,8 @@ namespace PraticeManagement.Controls.Reports
         private Label LblAvailableHours { get; set; }
 
         private Label LblHeaderBillableUtilization { get; set; }
+
+        private int WorkTypeCount { get; set; }
 
         private PraticeManagement.Reporting.TimePeriodSummaryReport HostingPage
         {
@@ -305,7 +349,8 @@ namespace PraticeManagement.Controls.Reports
         protected void btnPayCheckExport_OnClick(object sender, EventArgs e)
         {
             DataHelper.InsertExportActivityLogMessage(TimePeriodSummaryReportPayCheckExport);
-
+            var dataSetList = new List<DataSet>();
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 List<PersonLevelPayCheck> personLevelPayCheckList = ServiceCallers.Custom.Report(r => r.TimePeriodSummaryByResourcePayCheck(HostingPage.StartDate.Value, HostingPage.EndDate.Value,
@@ -325,106 +370,96 @@ namespace PraticeManagement.Controls.Reports
                 {
                     filteredColoums.Add("Pay Type");
                 }
-
-                StringBuilder sb = new StringBuilder();
-                sb.Append(" Paychex ");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(personLevelPayCheckList.Count.ToString() + " Employees");
-                sb.Append("\t");
-                sb.AppendLine();
-                sb.Append(HostingPage.Range);
-                sb.Append("\t");
-                if (filteredColoums.Count > 0)
-                {
-                    sb.AppendLine();
-                    for (int i = 0; i < filteredColoums.Count; i++)
-                    {
-                        if (i == filteredColoums.Count - 1)
-                            filterApplied = filterApplied + filteredColoums[i] + ".";
-                        else
-                            filterApplied = filterApplied + filteredColoums[i] + ",";
-                    }
-                    sb.Append(filterApplied);
-                    sb.Append("\t");
-                }
-                sb.AppendLine();
-                sb.AppendLine();
-                bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-
                 if (personLevelPayCheckList.Count > 0)
                 {
-                    Dictionary<string, double> workTypeLevelTimeOffHours = personLevelPayCheckList[0].WorkTypeLevelTimeOffHours;
-
-                    //Header
-                    sb.Append("BranchID");
-                    sb.Append("\t");
-                    sb.Append("DeptID");
-                    sb.Append("\t");
-                    sb.Append("EmployeeID");
-                    sb.Append("\t");
-                    if (isUserAdminstrator)
+                    DataTable header1 = new DataTable();
+                    header1.Columns.Add("ADP");
+                    header1.Rows.Add(personLevelPayCheckList.Count.ToString() + " Employees");
+                    header1.Rows.Add(HostingPage.RangeForExcel);
+                    if (filteredColoums.Count > 0)
                     {
-                        sb.Append("PaychexID");
-                        sb.Append("\t");
-                    }
-                    sb.Append("Last Name");
-                    sb.Append("\t");
-                    sb.Append("First Name");
-                    sb.Append("\t");
-                    sb.Append("Pay Types");
-                    sb.Append("\t");
-                    sb.Append("Hours");
-                    sb.Append("\t");
-                    foreach (string worktype in workTypeLevelTimeOffHours.Keys)
-                    {
-                        sb.Append(worktype);
-                        sb.Append("\t");
-                    }
-                    sb.Append("Total");
-                    sb.Append("\t");
-                    sb.AppendLine();
-
-                    //Data
-                    foreach (var personLevelPayCheck in personLevelPayCheckList)
-                    {
-                        sb.Append(personLevelPayCheck.BranchID);
-                        sb.Append("\t");
-                        sb.Append(personLevelPayCheck.DeptID);
-                        sb.Append("\t");
-                        sb.Append(personLevelPayCheck.Person.EmployeeNumber);
-                        sb.Append("\t");
-                        if (isUserAdminstrator)
+                        for (int i = 0; i < filteredColoums.Count; i++)
                         {
-                            sb.Append(personLevelPayCheck.Person.PaychexID);
-                            sb.Append("\t");
+                            if (i == filteredColoums.Count - 1)
+                                filterApplied = filterApplied + filteredColoums[i] + ".";
+                            else
+                                filterApplied = filterApplied + filteredColoums[i] + ",";
                         }
-                        sb.Append(personLevelPayCheck.Person.LastName);
-                        sb.Append("\t");
-                        sb.Append(personLevelPayCheck.Person.FirstName);
-                        sb.Append("\t");
-                        sb.Append(personLevelPayCheck.Person.CurrentPay.TimescaleName);
-                        sb.Append("\t");
-                        sb.Append(GetDoubleFormat(personLevelPayCheck.TotalHoursExcludingTimeOff));
-                        sb.Append("\t");
-                        foreach (string worktype in workTypeLevelTimeOffHours.Keys)
-                        {
-                            sb.Append(personLevelPayCheck.WorkTypeLevelTimeOffHours[worktype]);
-                            sb.Append("\t");
-                        }
-                        sb.Append(GetDoubleFormat(personLevelPayCheck.TotalHoursIncludingTimeOff));
-                        sb.Append("\t");
-                        sb.AppendLine();
+                        header1.Rows.Add(filterApplied);
                     }
+
+                    WorkTypeCount = personLevelPayCheckList[0].WorkTypeLevelTimeOffHours.Keys.Count;
+                    headerRowsCount = header1.Rows.Count + 3;
+                    var data = PrepareDataTableForADP(personLevelPayCheckList);
+                    coloumnsCount = data.Columns.Count;
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(DataSheetStyleForADP);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "TimePeriod_ByResource_ADP";
+                    dataset.Tables.Add(header1);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
                 }
                 else
                 {
-                    sb.Append("There are no Time Entries by any Employee  for the selected range.");
+                    string dateRangeTitle = "There are no Time Entries by any Employee  for the selected range.";
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "TimePeriod_ByResource_ADP";
+                    dataset.Tables.Add(header);
+                    dataSetList.Add(dataset);
                 }
-                //“Paychex_[StartOfRange]_[EndOfRange].xls”.
-                var filename = string.Format("{0}_{1}-{2}.xls", "Paychex", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
-                GridViewExportUtil.Export(filename, sb);
+
+                //“ADP_[StartOfRange]_[EndOfRange].xls”.
+                var filename = string.Format("{0}_{1}-{2}.xls", "ADP", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+
             }
+        }
+
+        public DataTable PrepareDataTableForADP(List<PersonLevelPayCheck> report)
+        {
+            DataTable data = new DataTable();
+            List<object> rownew;
+            List<object> row;
+
+            bool isUserAdminstrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            Dictionary<string, double> workTypeLevelTimeOffHours = report[0].WorkTypeLevelTimeOffHours;
+            data.Columns.Add("Branch ID");
+            data.Columns.Add("Dept ID");
+            data.Columns.Add("Employee ID");
+            if (isUserAdminstrator)
+                data.Columns.Add("ADP ID");
+            data.Columns.Add("Last Name");
+            data.Columns.Add("First Name");
+            data.Columns.Add("Pay Types");
+            data.Columns.Add("Hours");
+            foreach (string worktype in workTypeLevelTimeOffHours.Keys)
+            {
+                data.Columns.Add(worktype);
+            }
+            data.Columns.Add("Total");
+
+            foreach (var item in report)
+            {
+                row = new List<object>();
+                row.Add(item.BranchID);
+                row.Add(item.DeptID);
+                row.Add(item.Person.EmployeeNumber);
+                if (isUserAdminstrator)
+                    row.Add(item.Person.PaychexID);
+                row.Add(item.Person.LastName);
+                row.Add(item.Person.FirstName);
+                row.Add(item.Person.CurrentPay.TimescaleName);
+                row.Add(item.TotalHoursExcludingTimeOff);
+                foreach (string worktype in workTypeLevelTimeOffHours.Keys)
+                    row.Add(item.WorkTypeLevelTimeOffHours[worktype]);
+                row.Add(item.TotalHoursIncludingTimeOff);
+                data.Rows.Add(row.ToArray());
+            }
+            return data;
         }
 
         protected void btnFilterOK_OnClick(object sender, EventArgs e)
