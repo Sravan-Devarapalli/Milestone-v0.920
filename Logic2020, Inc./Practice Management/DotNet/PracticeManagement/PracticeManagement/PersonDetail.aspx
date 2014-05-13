@@ -673,7 +673,7 @@
                                         Display="Dynamic" ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>&nbsp;
                                 </td>
                                 <td>
-                                    <asp:Label ID="lbPayChexID" runat="server" Text="PayChexID" Visible="false"></asp:Label>
+                                    <asp:Label ID="lbPayChexID" runat="server" Text="ADP ID" Visible="false"></asp:Label>
                                 </td>
                                 <td>
                                     <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="Width250Px" onchange="setDirty();"
