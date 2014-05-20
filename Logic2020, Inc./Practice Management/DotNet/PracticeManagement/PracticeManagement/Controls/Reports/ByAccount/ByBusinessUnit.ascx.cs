@@ -23,6 +23,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         private const string ByAccountByBusinessUnitReportExport = "Account Report By Business Unit";
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
+        private string sortOrder_Key = "sortOrder_Key";
 
         private SheetStyles HeaderSheetStyle
         {
@@ -44,7 +45,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
                 datarowStyle.Height = 350;
 
-                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle};
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
 
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
                 sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
@@ -138,6 +139,22 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             set;
         }
 
+        public bool sortAscend
+        {
+            get
+            {
+                if (ViewState[sortOrder_Key] == null)
+                {
+                    ViewState[sortOrder_Key] = true;
+                }
+                return (bool)ViewState[sortOrder_Key];
+            }
+            set
+            {
+                ViewState[sortOrder_Key] = value;
+            }
+        }
+
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -158,6 +175,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             {
                 CollapsiblePanelDateExtenderClientIds = new List<string>();
                 CollapsiblePanelDateExtenderList = new List<CollapsiblePanelExtender>();
+                ImgBusinessUnitFilter = e.Item.FindControl("imgBusinessUnitFilter") as HtmlImage;
             }
 
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -212,7 +230,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             List<GroupByAccount> report;
             if (isPopulateFilters)
             {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.ClientdirectorId,HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
             }
             else
             {
@@ -229,9 +247,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             HostingPage.UpdateHeaderSection = true;
 
             HostingPage.AccountsCount = reportData.Count;
-            HostingPage.BusinessUnitsCount = reportData.Sum(pg=>pg.BusinessUnitsCount);
+            HostingPage.BusinessUnitsCount = reportData.Sum(pg => pg.BusinessUnitsCount);
             HostingPage.ProjectsCount = reportData.Sum(pg => pg.ProjectsCount);
-            HostingPage.PersonsCount = reportData.Count > 0 ? reportData[0].PersonsCount:0;
+            HostingPage.PersonsCount = reportData.Count > 0 ? reportData[0].PersonsCount : 0;
 
             HostingPage.TotalProjectHours = (reportData.Sum(pg => pg.TotalProjectHours) - reportData.Sum(pg => pg.BusinessDevelopmentHours)) > 0 ? (reportData.Sum(pg => pg.TotalProjectHours) - reportData.Sum(pg => pg.BusinessDevelopmentHours)) : 0d;
             HostingPage.TotalProjectedHours = reportData.Sum(pg => pg.TotalProjectedHours);
@@ -245,7 +263,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             var reportDataList = reportData.ToList();
             if (isPopulateFilters)
             {
-                //PopulateFilterPanels(reportDataList);
+                PopulateFilterPanels(reportDataList);
             }
             if (reportDataList.Count > 0 || cblBusinessUnits.Items.Count > 1)
             {
@@ -267,52 +285,49 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                     repClientsByBusinessUnit.DataBind();
                 }
                 cblBusinessUnits.SaveSelectedIndexesInViewState();
-                //ImgBusinessUnitFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblBusinessUnits.FilterPopupClientID,
-                //  cblBusinessUnits.SelectedIndexes, cblBusinessUnits.CheckBoxListObject.ClientID, cblBusinessUnits.WaterMarkTextBoxBehaviorID);
+                ImgBusinessUnitFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblBusinessUnits.FilterPopupClientID,
+                  cblBusinessUnits.SelectedIndexes, cblBusinessUnits.CheckBoxListObject.ClientID, cblBusinessUnits.WaterMarkTextBoxBehaviorID);
             }
             else
             {
                 divEmptyMessage.Style["display"] = "";
                 repBusinessUnit.Visible = btnExpandOrCollapseAll.Visible = btnExportToExcel.Enabled = repClientsByBusinessUnit.Visible = false;
-                
             }
         }
 
-        private void PopulateFilterPanels(List<BusinessUnitLevelGroupedHours> reportData)
+        private void PopulateFilterPanels(List<GroupByAccount> reportData)
         {
-            //if (HostingPage.SetSelectedFilters)
-            //{
+            if (HostingPage.SetSelectedFilters)
+            {
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.ClientdirectorId, HostingPage.AccountIds, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
 
-            //    var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.ClientdirectorId, HostingPage.AccountIds, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                var businessUnitList = report.SelectMany(b => b.GroupedBusinessUnits.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id, Client = new Client() { Id = r.BusinessUnit.Client.Id, Name = r.BusinessUnit.Client.Name } }).Distinct().ToList().OrderBy(s => s.ClientProjectGroupFormat)).ToArray();
 
-            //    var businessUnitList = report.GroupedBusinessUnits.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
+                PopulateBusinessUnitFilter(businessUnitList);
 
-            //    PopulateBusinessUnitFilter(businessUnitList);
-
-            //    foreach (ListItem item in cblBusinessUnits.Items)
-            //    {
-            //        if (reportData.Any(r => r.BusinessUnit.Id.Value.ToString() == item.Value))
-            //        {
-            //            item.Selected = true;
-            //        }
-            //        else
-            //        {
-            //            item.Selected = false;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    var businessUnitList = reportData.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
-            //    PopulateBusinessUnitFilter(businessUnitList);
-            //    cblBusinessUnits.SelectAllItems(true);
-            //}
+                foreach (ListItem item in cblBusinessUnits.Items)
+                {
+                    if (reportData.SelectMany(b => b.GroupedBusinessUnits).Any(r => r.BusinessUnit.Id.Value.ToString() == item.Value))
+                    {
+                        item.Selected = true;
+                    }
+                    else
+                    {
+                        item.Selected = false;
+                    }
+                }
+            }
+            else
+            {
+                var businessUnitList = reportData.SelectMany(b => b.GroupedBusinessUnits.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id, Client = new Client() { Id = r.BusinessUnit.Client.Id, Name = r.BusinessUnit.Client.Name } }).Distinct().ToList().OrderBy(s => s.ClientProjectGroupFormat)).ToArray();
+                PopulateBusinessUnitFilter(businessUnitList);
+                cblBusinessUnits.SelectAllItems(true);
+            }
         }
 
         private void PopulateBusinessUnitFilter(ProjectGroup[] businessUnits)
         {
-            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "HtmlEncodedName");
-
+            DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "ClientProjectGroupFormat");
         }
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
@@ -325,7 +340,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
                 var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
-              
+
                 string filterApplied = "Filters applied to columns: ";
                 List<string> filteredColoums = new List<string>();
                 if (!cblBusinessUnits.AllItemsSelected)
@@ -429,9 +444,9 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
                     row = new List<object>();
                     row.Add(account.Account.Code);
-                    row.Add(account.Account.HtmlEncodedName);
+                    row.Add(account.Account.Name);
                     row.Add(businessUnitLevelGroupedHours.BusinessUnit.Code);
-                    row.Add(businessUnitLevelGroupedHours.BusinessUnit.HtmlEncodedName);
+                    row.Add(businessUnitLevelGroupedHours.BusinessUnit.Name);
                     row.Add(businessUnitLevelGroupedHours.ActiveProjectsCount);
                     row.Add(businessUnitLevelGroupedHours.CompletedProjectsCount);
                     row.Add(GetDoubleFormat(businessUnitLevelGroupedHours.ForecastedHours));
@@ -450,6 +465,275 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         protected void btnExportToPDF_OnClick(object sender, EventArgs e)
         {
 
+        }
+
+        protected void btnAccount_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+                report = report.OrderBy(b => b.Account.Name).ToList();
+            else
+                report = report.OrderByDescending(b => b.Account.Name).ToList();
+            BindData(report);
+        }
+
+        protected void btnBusinessUnit_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.BusinessUnitsCount).ThenBy(p => p.GroupedBusinessUnits[0].BusinessUnit.Name).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.BusinessUnit.Name).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.BusinessUnitsCount).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.BusinessUnit.Name).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnActiveProjects_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.ActiveProjectsCount).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.ActiveProjectsCount).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.ActiveProjectsCount).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.ActiveProjectsCount).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnCompletedProjects_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.CompletedProjectsCount).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.CompletedProjectsCount).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.CompletedProjectsCount).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.CompletedProjectsCount).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnProjectedHours_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.TotalProjectedHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.ForecastedHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.TotalProjectedHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.ForecastedHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnBillableHours_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.BillableHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.BillableHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.BillableHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.BillableHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnNonBillableHours_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.NonBillableHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.NonBillableHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.NonBillableHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.NonBillableHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnActualHours_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.TotalActualHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.ActualHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.TotalActualHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.ActualHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnBDHours_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.BusinessDevelopmentHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.BusinessDevelopmentHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.BusinessDevelopmentHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.BusinessDevelopmentHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnTotalBUHours_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.TotalProjectHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.TotalHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.TotalProjectHours).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.TotalHours).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected void btnBillableHoursVariance_Command(object sender, CommandEventArgs e)
+        {
+            var report = PopulateData();
+            if (sortAscend)
+            {
+                report = report.OrderBy(b => b.TotalBillableHoursVariance).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderBy(p => p.BillableHoursVariance).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            else
+            {
+                report = report.OrderByDescending(b => b.TotalBillableHoursVariance).ToList();
+                foreach (var item in report)
+                {
+                    var group = item.GroupedBusinessUnits.OrderByDescending(p => p.BillableHoursVariance).ToList();
+                    item.GroupedBusinessUnits = group;
+                }
+            }
+            BindData(report);
+        }
+
+        protected List<GroupByAccount> PopulateData()
+        {
+            return ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value)).ToList();
+        }
+
+        public void BindData(List<GroupByAccount> report)
+        {
+            sortAscend = !sortAscend;
+            DataBindBusinesUnit(report.ToArray(), true);
+            SetHeaderSectionValues(report);
+            if (hdnCollapsed.Value.ToLower() != "true")
+            {
+                foreach (var cpe in CollapsiblePanelDateExtenderList)
+                {
+                    cpe.Collapsed = false;
+                }
+            }
         }
     }
 }
