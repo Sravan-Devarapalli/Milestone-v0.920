@@ -179,70 +179,87 @@
                 <table class="ConsultingDemandDetails">
                     <thead>
                         <tr class="headerRow">
-                            <th class="Width10Per">
-                                <%--<asp:LinkButton ID="btnTitleSkill" runat="server" CausesValidation="false" CommandArgument="TitleSkill"
-                                    Style="text-decoration: none; color: Black; width: 100%;" OnCommand="btnTitleSkill_Command">--%>
+                            <th class="Width13Percent">
+                                <asp:LinkButton ID="btnAccount" runat="server" CausesValidation="false" CommandArgument="Account"
+                                    Style="text-decoration: none; color: Black; width: 100%;" OnCommand="btnAccount_Command">
                                 Account
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
-                            <th class="Width20Percent">
-                                <%--<asp:LinkButton ID="btnSalesStage" runat="server" CausesValidation="false" CommandArgument="SalesStage"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnSalesStage_Command">--%>
+                            <th class="Width17Per">
+                                <asp:LinkButton ID="btnProjectNumber" runat="server" CausesValidation="false" Style="text-decoration: none;
+                                    color: Black;" OnCommand="btnProjectNumber_Command">
                                 Project
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
+                                <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
+                                    id="imgBusinessUnitFilter" class="PosAbsolute padLeft2" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceBusinessUnit" runat="server" TargetControlID="imgBusinessUnitFilter"
+                                    PopupControlID="pnlFilterResource" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th class="Width10Per">
-                                <%--  <asp:LinkButton ID="btnOpportunityNumber" runat="server" CausesValidation="false"
-                                    CommandArgument="OpportunityNumber" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnOpportunityNumber_Command">--%>
+                                <asp:LinkButton ID="btnStatus" runat="server" CausesValidation="false" Style="text-decoration: none;
+                                    color: Black;" OnCommand="btnStatus_Command">
                                 Status
-                                <%-- </asp:LinkButton>--%>
+                                </asp:LinkButton>
+                                <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
+                                    id="imgProjectStatusFilter" class="PosAbsolute padLeft2" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceStatus" runat="server" TargetControlID="imgProjectStatusFilter"
+                                    PopupControlID="pnlFilterProjectStatus" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width10Per">
-                                <%-- <asp:LinkButton ID="btnProjectNumber" runat="server" CausesValidation="false" CommandArgument="ProjectNumber"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnProjectNumber_Command">--%>
+                            <th class="Width7Percent">
+                                <asp:LinkButton ID="btnBillingType" runat="server" CausesValidation="false" Style="text-decoration: none;
+                                    color: Black;" OnCommand="btnBillingType_Command">
                                 BillingType
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
+                                <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
+                                    id="imgBilling" class="PosAbsolute padLeft2" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceBilling" runat="server" TargetControlID="imgBilling"
+                                    PopupControlID="pnlBilling" Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width10Per">
-                                <%-- <asp:LinkButton ID="btnAccountName" runat="server" CausesValidation="false" CommandArgument="AccountName"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnAccountName_Command">--%>
+                            <th class="Width13Percent">
+                                <asp:LinkButton ID="btnProjectedHours" runat="server" CausesValidation="false" Style="text-decoration: none;
+                                    color: Black;" OnCommand="btnProjectedHours_Command">
                                 Projected Hours
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
                             <th class="Width5Percent">
-                                <%-- <asp:LinkButton ID="btnProjectName" runat="server" CausesValidation="false" CommandArgument="ProjectName"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnProjectName_Command">--%>
+                                <asp:LinkButton ID="btnBillableHours" runat="server" CausesValidation="false" Style="text-decoration: none;
+                                    color: Black;" OnCommand="btnBillableHours_Command">
                                 Billable
-                                <%-- </asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
-                            <th class="Width5Percent">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                            <th class="Width8Per">
+                                <asp:LinkButton ID="btnNonBillableHours" runat="server" CausesValidation="false"
+                                    Style="text-decoration: none; color: Black;" OnCommand="btnNonBillableHours_Command">
                                 Non Billable
-                                <%-- </asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
-                            <th class="Width10Per">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                            <th class="Width6Percent">
+                                <asp:LinkButton ID="btnActualHours" runat="server" CausesValidation="false" Style="text-decoration: none;
+                                    color: Black;" OnCommand="btnActualHours_Command">
                                 Actual Hours
-                                <%-- </asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
-                            <th class="Width10Per">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                            <th class="Width11Percent">
+                                <asp:LinkButton ID="btnTotalEstBillings" runat="server" CausesValidation="false"
+                                    Style="text-decoration: none; color: Black;" OnCommand="btnTotalEstBillings_Command">
                                 Total Estimated Billings
-                                <%-- </asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
                             <th class="Width10Per">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                                <asp:LinkButton ID="btnBillableHoursVariance" runat="server" CausesValidation="false"
+                                    CommandArgument="btnBillableHoursVariance" Style="text-decoration: none; color: Black;"
+                                    OnCommand="btnBillableHoursVariance_Command">
                                 Billable Hours Variance
-                                <%-- </asp:LinkButton>--%>
+                                </asp:LinkButton>
+                                <asp:Image alt="Billable Hours Variance Hint" ImageUrl="~/Images/hint1.png" runat="server"
+                                    ID="imgBillableHoursVarianceHint" CssClass="CursorPointer" ToolTip="Billable Hours Variance Calculation" />
+                                <AjaxControlToolkit:ModalPopupExtender ID="mpeBillableUtilization" runat="server"
+                                    TargetControlID="imgBillableHoursVarianceHint" CancelControlID="btnCancel" BehaviorID="pnlBillableUtilization"
+                                    BackgroundCssClass="modalBackground" PopupControlID="pnlBillableUtilization"
+                                    DropShadow="false" />
                             </th>
                         </tr>
                     </thead>
@@ -251,32 +268,40 @@
         <ItemTemplate>
             <table class="ConsultingDemandDetails">
                 <tr class="bgColorD4D0C9 textCenter">
-                    <td colspan="4" class="textLeft Width50Percent padLeft20Imp no-wrap">
+                    <td class="textLeft Width3Per padLeft20Imp WhiteSpaceNormal">
                         <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Account Details"
                             ExpandedText="Collapse Account Details" EnableViewState="true" BehaviorID="cpeDetails"
                             Collapsed="true" TargetControlID="pnlAccountDetails" ImageControlID="imgDetails"
                             CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDetails"
                             ExpandControlID="imgDetails" TextLabelID="lbTitleSkill" />
                         <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Account Details" />
+                    </td>
+                    <td class="Width10Per textLeft">
                         <asp:Label ID="lblAccount" CssClass="displayNone" runat="server"></asp:Label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <%# ((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).Account.HtmlEncodedName %>
+                        <span class="Width10Px"></span>
+                        <asp:Label ID="lblAccountName" runat="server" Text='<%# ((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).Account.HtmlEncodedName %>'></asp:Label>
                     </td>
-                    <td class="Width10Per">
-                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalProjectedHours)%>
+                    <td class="Width17Per">
+                        <%# ((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).ProjectsCount%>
+                    </td>
+                    <td colspan="2" class="Width17Per">
+                    </td>
+                    <td class="Width13Percent">
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalProjectedHours)%>
                     </td>
                     <td class="Width5Percent">
-                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).BillableHours)%>
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).BillableHours)%>
                     </td>
-                    <td class="Width5Percent">
-                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).NonBillableHours)%>
+                    <td class="Width8Per">
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).NonBillableHours)%>
                     </td>
-                    <td class="Width10Per">
+                    <td class="Width6Percent">
                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalActualHours)%>
                     </td>
-                    <td class="Width10Per">
+                    <td class="Width11Percent">
                     </td>
                     <td class="Width10Per">
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalBillableHoursVariance)%>
                     </td>
                 </tr>
             </table>
@@ -287,12 +312,12 @@
                     <ItemTemplate>
                         <table class="ConsultingDemandDetails">
                             <tr class="bgcolorwhite textCenter">
-                                 <td class="Width10Per">
+                                <td class="Width13Percent">
                                 </td>
-                                <td class="Width20Percent">
+                                <td class="Width17Per">
                                     <table>
                                         <tr>
-                                            <td>
+                                            <td class="padLeft30 t-left">
                                                 <%# Eval("Project.ProjectNumber")%>
                                                 -
                                                 <asp:Label ID="lblProjectName" runat="server" Visible="false" Text=' <%# Eval("Project.HtmlEncodedName")%> '></asp:Label>
@@ -306,26 +331,26 @@
                                 <td class="Width10Per">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).Project.Status.StatusType.ToString()%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width7Percent">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillingType%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width13Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).ForecastedHours)%>
                                 </td>
                                 <td class="Width5Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillableHours)%>
                                 </td>
-                                <td class="Width5Percent">
+                                <td class="Width8Per">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).NonBillableHours)%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width6Percent">
                                     <asp:Label ID="lblActualHours" runat="server" Visible="false" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '></asp:Label>
                                     <asp:HyperLink ID="hlActualHours" runat="server" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '
                                         Target="_blank" NavigateUrl='<%# GetReportByProjectLink((string)Eval("Project.ProjectNumber"))%>'>
                                     </asp:HyperLink>
                                 </td>
-                                <td class="Width10Per">
-                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%> 
+                                <td class="Width11Percent">
+                                    <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%>
                                 </td>
                                 <td class="Width10Per">
                                     <table class="WholeWidth TdLevelNoBorder">
@@ -346,12 +371,12 @@
                     <AlternatingItemTemplate>
                         <table class="ConsultingDemandDetails">
                             <tr class="alterrow textCenter">
-                                 <td class="Width10Per">
+                                <td class="Width13Percent">
                                 </td>
-                                <td class="Width20Percent">
+                                <td class="Width17Per">
                                     <table>
                                         <tr>
-                                            <td>
+                                            <td class="padLeft30 t-left">
                                                 <%# Eval("Project.ProjectNumber")%>
                                                 -
                                                 <asp:Label ID="lblProjectName" runat="server" Visible="false" Text=' <%# Eval("Project.HtmlEncodedName")%> '></asp:Label>
@@ -365,26 +390,26 @@
                                 <td class="Width10Per">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).Project.Status.StatusType.ToString()%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width7Percent">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillingType%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width13Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).ForecastedHours)%>
                                 </td>
                                 <td class="Width5Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillableHours)%>
                                 </td>
-                                <td class="Width5Percent">
+                                <td class="Width8Per">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).NonBillableHours)%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width6Percent">
                                     <asp:Label ID="lblActualHours" runat="server" Visible="false" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '></asp:Label>
                                     <asp:HyperLink ID="hlActualHours" runat="server" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '
                                         Target="_blank" NavigateUrl='<%# GetReportByProjectLink((string)Eval("Project.ProjectNumber"))%>'>
                                     </asp:HyperLink>
                                 </td>
-                                <td class="Width10Per">
-                                    <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%> 
+                                <td class="Width11Percent">
+                                    <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%>
                                 </td>
                                 <td class="Width10Per">
                                     <table class="WholeWidth TdLevelNoBorder">
@@ -410,48 +435,56 @@
         <AlternatingItemTemplate>
             <table class="ConsultingDemandDetails">
                 <tr class="bgcolor_ECE9D9 textCenter">
-                    <td colspan="4" class="textLeft Width50Percent padLeft20Imp no-wrap">
+                    <td class="textLeft Width3Per padLeft20Imp WhiteSpaceNormal">
                         <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Account Details"
                             ExpandedText="Collapse Account Details" EnableViewState="true" BehaviorID="cpeDetails"
                             Collapsed="true" TargetControlID="pnlAccountDetails" ImageControlID="imgDetails"
                             CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg" CollapseControlID="imgDetails"
                             ExpandControlID="imgDetails" TextLabelID="lbTitleSkill" />
                         <asp:Image ID="imgDetails" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Account Details" />
+                    </td>
+                    <td class="Width10Per textLeft">
                         <asp:Label ID="lblAccount" CssClass="displayNone" runat="server"></asp:Label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <%# ((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).Account.HtmlEncodedName %>
+                        <span class="Width10Px"></span>
+                        <asp:Label ID="lblAccountName" runat="server" Text='<%# ((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).Account.HtmlEncodedName %>'></asp:Label>
                     </td>
-                    <td class="Width10Per">
-                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalProjectedHours)%>
+                    <td class="Width17Per">
+                        <%# ((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).ProjectsCount%>
+                    </td>
+                    <td colspan="2" class="Width17Per">
+                    </td>
+                    <td class="Width13Percent">
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalProjectedHours)%>
                     </td>
                     <td class="Width5Percent">
-                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).BillableHours)%>
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).BillableHours)%>
                     </td>
-                    <td class="Width5Percent">
-                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).NonBillableHours)%>
+                    <td class="Width8Per">
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).NonBillableHours)%>
                     </td>
-                    <td class="Width10Per">
+                    <td class="Width6Percent">
                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalActualHours)%>
                     </td>
-                    <td class="Width10Per">
+                    <td class="Width11Percent">
                     </td>
                     <td class="Width10Per">
+                        <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalBillableHoursVariance)%>
                     </td>
                 </tr>
             </table>
             <asp:Panel ID="pnlAccountDetails" runat="server">
-                <asp:Repeater ID="repAccountDetails" runat="server">
+                <asp:Repeater ID="repAccountDetails" runat="server" OnItemDataBound="repAccountDetails_ItemDataBound">
                     <HeaderTemplate>
                     </HeaderTemplate>
                     <ItemTemplate>
                         <table class="ConsultingDemandDetails">
                             <tr class="bgcolorwhite textCenter">
-                               <td class="Width10Per">
+                                <td class="Width13Percent">
                                 </td>
-                                <td class="Width20Percent">
+                                <td class="Width17Per">
                                     <table>
                                         <tr>
-                                            <td>
+                                            <td class="padLeft30 t-left">
                                                 <%# Eval("Project.ProjectNumber")%>
                                                 -
                                                 <asp:Label ID="lblProjectName" runat="server" Visible="false" Text=' <%# Eval("Project.HtmlEncodedName")%> '></asp:Label>
@@ -465,26 +498,26 @@
                                 <td class="Width10Per">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).Project.Status.StatusType.ToString()%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width7Percent">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillingType%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width13Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).ForecastedHours)%>
                                 </td>
                                 <td class="Width5Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillableHours)%>
                                 </td>
-                                <td class="Width5Percent">
+                                <td class="Width8Per">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).NonBillableHours)%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width6Percent">
                                     <asp:Label ID="lblActualHours" runat="server" Visible="false" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '></asp:Label>
                                     <asp:HyperLink ID="hlActualHours" runat="server" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '
                                         Target="_blank" NavigateUrl='<%# GetReportByProjectLink((string)Eval("Project.ProjectNumber"))%>'>
                                     </asp:HyperLink>
                                 </td>
-                                <td class="Width10Per">
-                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%> 
+                                <td class="Width11Percent">
+                                    <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%>
                                 </td>
                                 <td class="Width10Per">
                                     <table class="WholeWidth TdLevelNoBorder">
@@ -505,12 +538,12 @@
                     <AlternatingItemTemplate>
                         <table class="ConsultingDemandDetails">
                             <tr class="alterrow textCenter">
-                                <td class="Width10Per">
+                                <td class="Width13Percent">
                                 </td>
-                                <td class="Width20Percent">
+                                <td class="Width17Per">
                                     <table>
                                         <tr>
-                                            <td>
+                                            <td class="padLeft30 t-left">
                                                 <%# Eval("Project.ProjectNumber")%>
                                                 -
                                                 <asp:Label ID="lblProjectName" runat="server" Visible="false" Text=' <%# Eval("Project.HtmlEncodedName")%> '></asp:Label>
@@ -524,26 +557,26 @@
                                 <td class="Width10Per">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).Project.Status.StatusType.ToString()%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width7Percent">
                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillingType%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width13Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).ForecastedHours)%>
                                 </td>
                                 <td class="Width5Percent">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).BillableHours)%>
                                 </td>
-                                <td class="Width5Percent">
+                                <td class="Width8Per">
                                     <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).NonBillableHours)%>
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width6Percent">
                                     <asp:Label ID="lblActualHours" runat="server" Visible="false" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '></asp:Label>
                                     <asp:HyperLink ID="hlActualHours" runat="server" Text=' <%# GetDoubleFormat((double)Eval("TotalHours"))%> '
                                         Target="_blank" NavigateUrl='<%# GetReportByProjectLink((string)Eval("Project.ProjectNumber"))%>'>
                                     </asp:HyperLink>
                                 </td>
-                                <td class="Width10Per">
-                                     <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%> 
+                                <td class="Width11Percent">
+                                    <%# ((DataTransferObjects.Reports.ProjectLevelGroupedHours)Container.DataItem).EstimatedBillingsWithFormat%>
                                 </td>
                                 <td class="Width10Per">
                                     <table class="WholeWidth TdLevelNoBorder">
