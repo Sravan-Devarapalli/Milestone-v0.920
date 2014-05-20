@@ -82,30 +82,8 @@ BEGIN
 	WHERE C.DATE between @StartDateLocal and @EndDateLocal
 	GROUP BY C.MonthStartDate,C.MonthEndDate,C.MonthNumber
 	END
-	
-	IF (@CalculateQuarterValues = 1)
-	BEGIN
-		INSERT INTO @Ranges 
-		SELECT QuarterStartDate,CASE WHEN @RefinedEndDate < QuarterEndDate THEN @RefinedEndDate ELSE QuarterEndDate END,'Q'+CONVERT(NVARCHAR,DATEPART(Q,QuarterStartDate)),DATEPART(Q,QuarterStartDate)+12 FROM dbo.Calendar C
-		WHERE C.DATE between @RefinedStarDate and @RefinedEndDate 
-		GROUP BY C.QuarterStartDate,C.QuarterEndDate
-	END
 
-	IF (@CalculateYearToDateValues = 1 AND @IsSummaryCache = 0)
-	BEGIN
-	
-		IF @StartDateLocal <= @CurrentYearEndDate AND @CurrentYearStartDate <= @EndDateLocal
-		BEGIN
-			INSERT INTO @Ranges 
-			SELECT @RefinedStarDate ,@CurrentMonthEndDate,'YTD',17
-		END
-		ELSE 
-		BEGIN
-			INSERT INTO @Ranges 
-			SELECT @RefinedStarDate ,@RefinedEndDate,'YTD',17
-		END
-	END
-	ELSE IF (@CalculateYearToDateValues = 1 AND @IsSummaryCache = 1)
+	IF (@IsSummaryCache = 1)
 	BEGIN 
 		INSERT INTO @Ranges 
 		SELECT CONVERT(NVARCHAR(4),C.Year) + '0101' AS QuarterStartDate,
@@ -207,7 +185,7 @@ BEGIN
 	INNER JOIN @Ranges C ON CT.Date BETWEEN C.StartDate AND C.EndDate
 	GROUP BY CT.ProjectId, C.StartDate, C.EndDate,C.RangeType
 	)
-	SELECT
+	   SELECT
 		ISNULL(APV.ProjectId,PEM.ProjectId) ProjectId,
 		ISNULL(APV.FinancialDate,PEM.FinancialDate) AS FinancialDate,
 		ISNULL(APV.MonthEnd,PEM.MonthEnd) MonthEnd,
@@ -233,6 +211,7 @@ BEGIN
 	FROM ActualAndProjectedValuesMonthly APV
 	FULL JOIN ProjectExpensesMonthly PEM 
 	ON PEM.ProjectId = APV.ProjectId AND APV.FinancialDate = PEM.FinancialDate  AND APV.MonthEnd = PEM.MonthEnd
-	ORDER BY ProjectId
+	ORDER BY ProjectId 
+
 END
 
