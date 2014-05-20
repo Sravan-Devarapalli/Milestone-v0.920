@@ -1898,6 +1898,10 @@ TABLE.Section td
 {
     padding-left: 40%;
 }
+.padLeft180Imp
+{
+    padding-left: 180px !important;
+}
 .padLeft60
 {
     padding-left: 60px;
@@ -2109,6 +2113,10 @@ TABLE.Section td
 .Width35Percent
 {
     width: 35%;
+}
+.Width37Percent
+{
+    width: 37%;
 }
 /* Used in new hire report */
 .ParametersTable .FirstTd38
