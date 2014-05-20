@@ -2948,7 +2948,7 @@ namespace DataAccess
                 actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
             }
             catch { }
-
+            var quarterList = new List<QuarterRange>();
             while (reader.Read())
             {
                 var project = new Project { Id = reader.GetInt32(projectIdIndex) };
@@ -2964,6 +2964,142 @@ namespace DataAccess
                         actualGrossMarginIndex);
                 var i = projects.IndexOf(project);
                 projects[i].ProjectedFinancialsByRange.Add(financials.FinancialRange, financials);
+                bool isCurrentYear = financials.FinancialRange.StartDate.Year == DateTime.Now.Year; 
+                if (quarterList.Any(p => p.ProjectId == project.Id.Value))
+                {
+                    if (financials.FinancialRange.Range.Substring(1) == "1" || financials.FinancialRange.Range.Substring(1) == "2" || financials.FinancialRange.Range.Substring(1) == "3")
+                    {
+                        quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q1").FinancialsList.Add(financials);
+                    }
+                    else if (financials.FinancialRange.Range.Substring(1) == "4" || financials.FinancialRange.Range.Substring(1) == "5" || financials.FinancialRange.Range.Substring(1) == "6")
+                    {
+                        quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q2").FinancialsList.Add(financials);
+                    }
+                    else if (financials.FinancialRange.Range.Substring(1) == "7" || financials.FinancialRange.Range.Substring(1) == "8" || financials.FinancialRange.Range.Substring(1) == "9")
+                    {
+                        quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q3").FinancialsList.Add(financials);
+                    }
+                    else if (financials.FinancialRange.Range.Substring(1) == "10" || financials.FinancialRange.Range.Substring(1) == "11" || financials.FinancialRange.Range.Substring(1) == "12")
+                    {
+                        quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q4").FinancialsList.Add(financials);
+                    }
+                    var item = quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "YTD");
+                    if (item.QuarterRangeType.EndDate >= financials.FinancialRange.EndDate) 
+                    {
+                        quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "YTD").FinancialsList.Add(financials);
+                    }
+                }
+                else
+                {
+                    var rangeQ1forProject = new QuarterRange()
+                    {
+                        ProjectId = project.Id.Value,
+                        QuarterRangeType = new RangeType()
+                        {
+                            Range = "Q1",
+                            StartDate = new DateTime(financials.FinancialRange.StartDate.Year, 01, 01),
+                            EndDate = new DateTime(financials.FinancialRange.StartDate.Year, 03, 31)
+                        },
+                        FinancialsList = new List<ComputedFinancials>()
+                    };
+
+                    var rangeQ2forProject = new QuarterRange()
+                    {
+                        ProjectId = project.Id.Value,
+                        QuarterRangeType = new RangeType()
+                        {
+                            Range = "Q2",
+                            StartDate = new DateTime(financials.FinancialRange.StartDate.Year, 04, 01),
+                            EndDate = new DateTime(financials.FinancialRange.StartDate.Year, 06, 30)
+                        },
+                        FinancialsList = new List<ComputedFinancials>()
+                    };
+
+                    var rangeQ3forProject = new QuarterRange()
+                     {
+                         ProjectId = project.Id.Value,
+                         QuarterRangeType = new RangeType()
+                         {
+                             Range = "Q3",
+                             StartDate = new DateTime(financials.FinancialRange.StartDate.Year, 07, 01),
+                             EndDate = new DateTime(financials.FinancialRange.StartDate.Year, 09, 30)
+                         },
+                         FinancialsList = new List<ComputedFinancials>()
+                     };
+
+                    var rangeQ4forProject = new QuarterRange()
+                    {
+                        ProjectId = project.Id.Value,
+                        QuarterRangeType = new RangeType()
+                        {
+                            Range = "Q4",
+                            StartDate = new DateTime(financials.FinancialRange.StartDate.Year, 10, 01),
+                            EndDate = new DateTime(financials.FinancialRange.StartDate.Year, 12, 31)
+                        },
+                        FinancialsList = new List<ComputedFinancials>()
+                    };
+                    var ytdforProject = new QuarterRange()
+                    {
+                        ProjectId = project.Id.Value,
+                        QuarterRangeType = new RangeType()
+                        {
+                            Range = "YTD",
+                            StartDate = new DateTime(financials.FinancialRange.StartDate.Year, 01, 01),
+                            EndDate = new DateTime(financials.FinancialRange.StartDate.Year, isCurrentYear ? DateTime.Now.Month : 12, isCurrentYear ? DateTime.DaysInMonth(financials.FinancialRange.StartDate.Year, DateTime.Now.Month) : 31)
+                        },
+                        FinancialsList = new List<ComputedFinancials>()
+                    };
+
+                    if (financials.FinancialRange.Range.Substring(1) == "1" || financials.FinancialRange.Range.Substring(1) == "2" || financials.FinancialRange.Range.Substring(1) == "3")
+                    {
+                        rangeQ1forProject.FinancialsList.Add(financials);
+                    }
+                    else if (financials.FinancialRange.Range.Substring(1) == "4" || financials.FinancialRange.Range.Substring(1) == "5" || financials.FinancialRange.Range.Substring(1) == "6")
+                    {
+                        rangeQ2forProject.FinancialsList.Add(financials);
+                    }
+                    else if (financials.FinancialRange.Range.Substring(1) == "7" || financials.FinancialRange.Range.Substring(1) == "8" || financials.FinancialRange.Range.Substring(1) == "9")
+                    {
+                        rangeQ3forProject.FinancialsList.Add(financials);
+                    }
+                    else if (financials.FinancialRange.Range.Substring(1) == "10" || financials.FinancialRange.Range.Substring(1) == "11" || financials.FinancialRange.Range.Substring(1) == "12")
+                    {
+                        rangeQ4forProject.FinancialsList.Add(financials);
+                    }
+                    if (ytdforProject.QuarterRangeType.EndDate >= financials.FinancialRange.EndDate) 
+                    {
+                        ytdforProject.FinancialsList.Add(financials);
+                    }
+                    quarterList.Add(rangeQ1forProject);
+                    quarterList.Add(rangeQ2forProject);
+                    quarterList.Add(rangeQ3forProject);
+                    quarterList.Add(rangeQ4forProject);
+                    quarterList.Add(ytdforProject);
+                }
+                //q1,q2,q3,q4
+            }
+            foreach (var project in projects)
+            {
+                var quarter1 = new QuarterRange();
+                var quarter2 = new QuarterRange();
+                var quarter3 = new QuarterRange();
+                var quarter4 = new QuarterRange();
+                var ytd = new QuarterRange();
+                quarter1 = quarterList.FirstOrDefault(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q1");
+                quarter2 = quarterList.FirstOrDefault(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q2");
+                quarter3 = quarterList.FirstOrDefault(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q3");
+                quarter4 = quarterList.FirstOrDefault(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q4");
+                ytd = quarterList.FirstOrDefault(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "YTD");
+                if (quarter1 != null)
+                    project.ProjectedFinancialsByRange.Add(quarter1.QuarterRangeType, quarter1.getSummedComputedFinancials());
+                if (quarter2 != null)
+                    project.ProjectedFinancialsByRange.Add(quarter2.QuarterRangeType, quarter2.getSummedComputedFinancials());
+                if (quarter3 != null)
+                    project.ProjectedFinancialsByRange.Add(quarter3.QuarterRangeType, quarter3.getSummedComputedFinancials());
+                if (quarter4 != null)
+                    project.ProjectedFinancialsByRange.Add(quarter4.QuarterRangeType, quarter4.getSummedComputedFinancials());
+                if (ytd != null)
+                    project.ProjectedFinancialsByRange.Add(ytd.QuarterRangeType, ytd.getSummedComputedFinancials());
             }
         }
 
