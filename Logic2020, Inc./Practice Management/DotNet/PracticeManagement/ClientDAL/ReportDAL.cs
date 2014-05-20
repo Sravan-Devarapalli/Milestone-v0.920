@@ -790,12 +790,19 @@ namespace DataAccess
             {
                 int businessUnitId = reader.GetInt32(businessUnitIdIndex);
                 int clientId = reader.GetInt32(clientIdIndex);
+                Client clientDetails = new Client()
+                            {
+                                Id = clientId,
+                                Name = reader.GetString(clientNameIndex),
+                                Code = reader.GetString(clientCodeIndex)
+                            };
                 var pg = new ProjectGroup
                     {
                         Id = businessUnitId,
                         Name = reader.GetString(businessUnitNameIndex),
                         IsActive = reader.GetBoolean(businessUnitStatusIndex),
-                        Code = reader.GetString(businessUnitCodeIndex)
+                        Code = reader.GetString(businessUnitCodeIndex),
+                        Client = clientDetails
                     };
 
                 BusinessUnitLevelGroupedHours buLGH = new BusinessUnitLevelGroupedHours
@@ -825,12 +832,7 @@ namespace DataAccess
                 {
                     var client = new GroupByAccount()
                         {
-                            Account = new Client()
-                            {
-                                Id = clientId,
-                                Name = reader.GetString(clientNameIndex),
-                                Code = reader.GetString(clientCodeIndex)
-                            }
+                            Account = clientDetails
                         };
                     client.GroupedBusinessUnits = new List<BusinessUnitLevelGroupedHours>();
                     client.GroupedBusinessUnits.Add(buLGH);
@@ -951,9 +953,9 @@ namespace DataAccess
                         IsActive = reader.GetBoolean(isActiveIndex),
                         Client = new Client()
                         {
-                             Id = reader.GetInt32(clientIdIndex),
-                             Name = reader.GetString(clientNameIndex),
-                             Code = reader.GetString(clientCodeIndex)
+                            Id = reader.GetInt32(clientIdIndex),
+                            Name = reader.GetString(clientNameIndex),
+                            Code = reader.GetString(clientCodeIndex)
                         }
                     };
 
