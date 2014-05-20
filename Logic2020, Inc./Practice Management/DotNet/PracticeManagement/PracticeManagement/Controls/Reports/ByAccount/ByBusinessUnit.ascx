@@ -152,76 +152,88 @@
                     <thead>
                         <tr class="headerRow">
                             <th class="FirstTD">
-                                <%--<asp:LinkButton ID="btnTitleSkill" runat="server" CausesValidation="false" CommandArgument="TitleSkill"
-                                    Style="text-decoration: none; color: Black; width: 100%;" OnCommand="btnTitleSkill_Command">--%>
+                               <asp:LinkButton ID="btnAccount" runat="server" CausesValidation="false" CommandArgument="Account"
+                                    Style="text-decoration: none; color: Black; width: 100%;" OnCommand="btnAccount_Command">
                                 Account
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
                             <th class="Width10Per">
-                                <%--<asp:LinkButton ID="btnSalesStage" runat="server" CausesValidation="false" CommandArgument="SalesStage"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnSalesStage_Command">--%>
+                                <asp:LinkButton ID="btnBusinessUnit" runat="server" CausesValidation="false" CommandArgument="BusinessUnit"
+                                    Style="text-decoration: none; color: Black;" OnCommand="btnBusinessUnit_Command">
                                 Business Unit
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
+                                <img alt="Filter" title="Filter" src="../../../Images/search_filter.png" class="PosAbsolute"
+                                    runat="server" id="imgBusinessUnitFilter" />
+                                <AjaxControlToolkit:PopupControlExtender ID="pceBusinessUnitFilter" runat="server"
+                                    TargetControlID="imgBusinessUnitFilter" BehaviorID="pceBusinessUnitFilter" PopupControlID="pnlFilterBusinessUnit"
+                                    Position="Bottom">
+                                </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th class="Width10Per">
-                                <%--  <asp:LinkButton ID="btnOpportunityNumber" runat="server" CausesValidation="false"
-                                    CommandArgument="OpportunityNumber" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnOpportunityNumber_Command">--%>
+                                  <asp:LinkButton ID="btnActiveProjects" runat="server" CausesValidation="false"
+                                    CommandArgument="ActiveProjects" Style="text-decoration: none; color: Black;"
+                                    OnCommand="btnActiveProjects_Command">
                                 # of Active projects
-                                <%-- </asp:LinkButton>--%>
+                                 </asp:LinkButton>
                             </th>
                             <th class="Width10Per">
-                                <%-- <asp:LinkButton ID="btnProjectNumber" runat="server" CausesValidation="false" CommandArgument="ProjectNumber"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnProjectNumber_Command">--%>
+                                 <asp:LinkButton ID="btnCompletedProjects" runat="server" CausesValidation="false" CommandArgument="CompletedProjects"
+                                    Style="text-decoration: none; color: Black;" OnCommand="btnCompletedProjects_Command">
                                 # of Completed projects
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
                             <th class="Width10Per">
-                                <%-- <asp:LinkButton ID="btnAccountName" runat="server" CausesValidation="false" CommandArgument="AccountName"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnAccountName_Command">--%>
+                                 <asp:LinkButton ID="btnProjectedHours" runat="server" CausesValidation="false" CommandArgument="ProjectedHours"
+                                    Style="text-decoration: none; color: Black;" OnCommand="btnProjectedHours_Command">
                                 Projected Hours
-                                <%--</asp:LinkButton>--%>
+                                </asp:LinkButton>
                             </th>
                             <th class="Width5Percent">
-                                <%-- <asp:LinkButton ID="btnProjectName" runat="server" CausesValidation="false" CommandArgument="ProjectName"
-                                    Style="text-decoration: none; color: Black;" OnCommand="btnProjectName_Command">--%>
+                                 <asp:LinkButton ID="btnBillableHours" runat="server" CausesValidation="false" CommandArgument="BillableHours"
+                                    Style="text-decoration: none; color: Black;" OnCommand="btnBillableHours_Command">
                                 Billable
-                                <%-- </asp:LinkButton>--%>
+                                 </asp:LinkButton>
                             </th>
                             <th class="Width5Percent">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                                   <asp:LinkButton ID="btnNonBillableHours" runat="server" CausesValidation="false"
+                                    CommandArgument="NonBillableHours" Style="text-decoration: none; color: Black;"
+                                    OnCommand="btnNonBillableHours_Command">
                                 Non Billable
-                                <%-- </asp:LinkButton>--%>
+                                 </asp:LinkButton>
                             </th>
                             <th class="Width10Per">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                                   <asp:LinkButton ID="btnActualHours" runat="server" CausesValidation="false"
+                                    CommandArgument="ActualHours" Style="text-decoration: none; color: Black;"
+                                    OnCommand="btnActualHours_Command">
                                 Actual Hours
-                                <%-- </asp:LinkButton>--%>
+                                 </asp:LinkButton>
                             </th>
                             <th class="Width5Percent">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                                   <asp:LinkButton ID="btnBDHours" runat="server" CausesValidation="false"
+                                    CommandArgument="btnBDHours" Style="text-decoration: none; color: Black;"
+                                    OnCommand="btnBDHours_Command">
                                 BD
-                                <%-- </asp:LinkButton>--%>
+                                 </asp:LinkButton>
                             </th>
                             <th class="Width10Per">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                                   <asp:LinkButton ID="btnTotalBUHours" runat="server" CausesValidation="false"
+                                    CommandArgument="btnTotalBUHours" Style="text-decoration: none; color: Black;"
+                                    OnCommand="btnTotalBUHours_Command">
                                 Total BU Hours
-                                <%-- </asp:LinkButton>--%>
+                                 </asp:LinkButton>
                             </th>
                             <th class="Width10Per">
-                                <%--   <asp:LinkButton ID="btnResourceStartDate" runat="server" CausesValidation="false"
-                                    CommandArgument="ResourceStartDate" Style="text-decoration: none; color: Black;"
-                                    OnCommand="btnResourceStartDate_Command">--%>
+                                   <asp:LinkButton ID="btnBillableHoursVariance" runat="server" CausesValidation="false"
+                                    CommandArgument="btnBillableHoursVariance" Style="text-decoration: none; color: Black;"
+                                    OnCommand="btnBillableHoursVariance_Command">
                                 Billable Hours Variance
-                                <%-- </asp:LinkButton>--%>
+                                 </asp:LinkButton>
+                                <asp:Image alt="Billable Hours Variance Hint" ImageUrl="~/Images/hint1.png" runat="server"
+                                    ID="imgBillableHoursVarianceHint" CssClass="CursorPointer" ToolTip="Billable Hours Variance Calculation" />
+                                <AjaxControlToolkit:ModalPopupExtender ID="mpeBillableUtilization" runat="server"
+                                    TargetControlID="imgBillableHoursVarianceHint" CancelControlID="btnCancel" BehaviorID="pnlBillableUtilization"
+                                    BackgroundCssClass="modalBackground" PopupControlID="pnlBillableUtilization"
+                                    DropShadow="false" />
                             </th>
                         </tr>
                     </thead>
@@ -230,7 +242,7 @@
         <ItemTemplate>
             <table class="ConsultingDemandDetails">
                 <tr class="bgColorD4D0C9 textCenter">
-                    <td class="textLeft padLeft20Imp no-wrap Width16Percent">
+                    <td class="textLeft padLeft20Imp WhiteSpaceNormal Width16Percent">
                         <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Account Details"
                             ExpandedText="Collapse Account Details" EnableViewState="true" BehaviorID="cpeDetails"
                             Collapsed="true" TargetControlID="pnlAccountDetails" ImageControlID="imgDetails"
@@ -269,6 +281,7 @@
                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalProjectHours)%>
                     </td>
                     <td class="Width10Per">
+                       <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalBillableHoursVariance)%>
                     </td>
                 </tr>
             </table>
@@ -281,7 +294,7 @@
                             <tr class="bgcolorwhite textCenter">
                                 <td class="Width16Percent">
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width10Per WhiteSpaceNormal">
                                     <%# ((DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours)Container.DataItem).BusinessUnit.HtmlEncodedName%>
                                 </td>
                                 <td class="Width10Per">
@@ -319,7 +332,7 @@
                             <tr class="alterrow textCenter">
                                 <td class="Width16Percent">
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width10Per WhiteSpaceNormal">
                                     <%# ((DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours)Container.DataItem).BusinessUnit.HtmlEncodedName%>
                                 </td>
                                 <td class="Width10Per">
@@ -360,7 +373,7 @@
         <AlternatingItemTemplate>
             <table class="ConsultingDemandDetails">
                 <tr class="bgcolor_ECE9D9 textCenter">
-                    <td class="textLeft padLeft20Imp no-wrap Width16Percent">
+                    <td class="textLeft padLeft20Imp WhiteSpaceNormal Width16Percent">
                         <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeDetails" runat="Server" CollapsedText="Expand Account Details"
                             ExpandedText="Collapse Account Details" EnableViewState="true" BehaviorID="cpeDetails"
                             Collapsed="true" TargetControlID="pnlAccountDetails" ImageControlID="imgDetails"
@@ -399,6 +412,7 @@
                         <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalProjectHours)%>
                     </td>
                     <td class="Width10Per">
+                            <%# GetDoubleFormat((double)((DataTransferObjects.Reports.ByAccount.GroupByAccount)Container.DataItem).TotalBillableHoursVariance)%>
                     </td>
                 </tr>
             </table>
@@ -411,7 +425,7 @@
                             <tr class="bgcolorwhite textCenter">
                                 <td class="Width16Percent">
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width10Per WhiteSpaceNormal">
                                     <%# ((DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours)Container.DataItem).BusinessUnit.HtmlEncodedName%>
                                 </td>
                                 <td class="Width10Per">
@@ -449,7 +463,7 @@
                             <tr class="alterrow textCenter">
                                 <td class="Width16Percent">
                                 </td>
-                                <td class="Width10Per">
+                                <td class="Width10Per WhiteSpaceNormal">
                                     <%# ((DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours)Container.DataItem).BusinessUnit.HtmlEncodedName%>
                                 </td>
                                 <td class="Width10Per">
