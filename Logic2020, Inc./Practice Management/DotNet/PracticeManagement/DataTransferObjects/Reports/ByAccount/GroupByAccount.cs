@@ -7,7 +7,7 @@ namespace DataTransferObjects.Reports.ByAccount
 {
     [DataContract]
     [Serializable]
-    public class GroupByAccount
+    public class GroupByAccount : IComparer<GroupByAccount>
     {
         [DataMember]
         public List<BusinessUnitLevelGroupedHours> GroupedBusinessUnits { get; set; }
@@ -17,6 +17,13 @@ namespace DataTransferObjects.Reports.ByAccount
 
         [DataMember]
         public Client Account { get; set; }
+
+        //Sort Type = 1 for status,2 for Billing Type and 3 for Total Est Billings
+        public int SortType
+        {
+            get;
+            set;
+        }
 
         public int BusinessUnitsCount
         {
@@ -30,7 +37,7 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ActiveProjectsCount) + GroupedBusinessUnits.Sum(g=>g.CompletedProjectsCount) : GroupedProjects.Count;
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ActiveProjectsCount) + GroupedBusinessUnits.Sum(g => g.CompletedProjectsCount) : GroupedProjects.Count;
             }
         }
 
@@ -99,6 +106,63 @@ namespace DataTransferObjects.Reports.ByAccount
             {
                 return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ActualHours) : GroupedProjects.Sum(p => p.TotalHours);
             }
+        }
+
+        public Double TotalBillableHoursVariance
+        {
+            get
+            {
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.BillableHoursVariance) : GroupedProjects.Sum(p => p.BillableHoursVariance);
+            }
+        }
+
+        public int Compare(GroupByAccount first, GroupByAccount second)
+        {
+            int i,returnVal = 0;
+            int min = Math.Min(first.GroupedProjects.Count, second.GroupedProjects.Count);
+            for(i=0;i<min;i++)
+            {
+                if(first.SortType == 1)
+                {
+                    if(first.GroupedProjects[i].Project.Status.Name.CompareTo(second.GroupedProjects[i].Project.Status.Name)==0)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        returnVal = first.GroupedProjects[i].Project.Status.Name.CompareTo(second.GroupedProjects[i].Project.Status.Name);
+                        break;
+                    }
+                }
+                if (first.SortType == 2)
+                {
+                    if (first.GroupedProjects[i].BillingType.CompareTo(second.GroupedProjects[i].BillingType) == 0)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        returnVal = first.GroupedProjects[i].BillingType.CompareTo(second.GroupedProjects[i].BillingType);
+                        break;
+                    }
+                }
+                if (first.SortType == 3)
+                {
+                    if (first.GroupedProjects[i].EstimatedBillings.CompareTo(second.GroupedProjects[i].EstimatedBillings) == 0)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        returnVal = first.GroupedProjects[i].EstimatedBillings.CompareTo(second.GroupedProjects[i].EstimatedBillings);
+                        break;
+                    }
+                }
+            }
+            if(i==min && first.GroupedProjects.Count != second.GroupedProjects.Count)
+                return -1;
+            else 
+                return returnVal;
         }
     }
 }
