@@ -235,7 +235,7 @@
 
                 function ConfirmToDeleteProject() {
                     var hdnProject = document.getElementById('<%= hdnProjectDelete.ClientID %>');
-                    var result = confirm("Do you really want to delete the project?");
+                    var result = confirm("Do you really want to delete the project? The deletion cannot be undone");
                     hdnProject.value = result ? 1 : 0;
                 }
 
