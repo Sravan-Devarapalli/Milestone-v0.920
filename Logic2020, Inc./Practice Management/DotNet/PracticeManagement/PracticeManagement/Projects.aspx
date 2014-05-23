@@ -1,5 +1,6 @@
 <%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Projects.aspx.cs" Inherits="PraticeManagement.Projects"
-    Title="Projects Summary | Practice Management" MasterPageFile="~/PracticeManagementMain.Master" %>
+    Title="Projects Summary | Practice Management" MasterPageFile="~/PracticeManagementMain.Master"
+    EnableEventValidation="false" EnableViewState="true" %>
 
 <%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
@@ -8,6 +9,7 @@
 <%@ Register Src="Controls/PracticeFilter.ascx" TagName="PracticeFilter" TagPrefix="uc1" %>
 <%@ Register Src="Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc3" %>
+<%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
@@ -89,6 +91,12 @@
             else {
                 return url;
             }
+        }
+
+        function ConfirmToDeleteProject() {
+            var hdnProject = document.getElementById('<%= hdnProjectDelete.ClientID %>');
+            var result = confirm("Do you really want to delete the project? The deletion cannot be undone");
+            hdnProject.value = result ? 1 : 0;
         }
 
         function correctMonthMiniReportPosition(reportPanelId, headerId, scrollPanelId) {
@@ -271,6 +279,35 @@
         }
 
     </script>
+    <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
+    <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
+        TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
+        OkControlID="btnOKErrorPanel" CancelControlID="btnOKErrorPanel" DropShadow="false" />
+    <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
+        <table class="Width100Per">
+            <tr>
+                <th align="center" class="TextAlignCenter BackGroundColorGray vBottom">
+                    <b class="BtnClose">Attention!</b>
+                </th>
+            </tr>
+            <tr>
+                <td class="Padding10Px">
+                    <asp:Label ID="lblErrorMessage" CssClass="error-message" runat="server" Text='This project cannot be deleted because of the following reasons:'></asp:Label>
+                    <br />&nbsp;&nbsp;&nbsp;&nbsp;<span class="error-message">1.This project may have time entries</span>
+                    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    <span class="error-message textCenter">OR/AND</span>
+                    <br />&nbsp;&nbsp;&nbsp;&nbsp;<span class="error-message">2.This project may have expenses added to it.</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="Padding10Px TextAlignCenter">
+                    <asp:Button ID="btnOKErrorPanel" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp"
+                        OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
+                </td>
+            </tr>
+        </table>
+    </asp:Panel>
     <asp:UpdatePanel ID="flrPanel" runat="server">
         <ContentTemplate>
             <div class="filters">
@@ -321,7 +358,7 @@
                                     <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
                                     <asp:ListItem Text="View ALL" Value="1"></asp:ListItem>
                                 </asp:DropDownList>
-                            &nbsp; &nbsp;
+                                &nbsp; &nbsp;
                                 <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn padRight10"
                                     NavigateUrl="~/ProjectDetail.aspx?from=sub_toolbar&returnTo=Projects.aspx" />
                             </td>
@@ -336,6 +373,7 @@
                             <td class="PaddingTop5">
                                 <asp:Button ID="btnUpdateFilters" runat="server" Text="Refresh Report" OnClick="btnUpdateView_Click"
                                     ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
+                                <asp:HiddenField ID="hdnProjectDelete" runat="server" />
                             </td>
                         </tr>
                     </table>
@@ -554,10 +592,14 @@
             <asp:Panel runat="server" ID="horisontalScrollDiv" CssClass="xScrollAuto">
                 <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound"
                     OnSorted="lvProjects_Sorted" OnDataBound="lvProjects_OnDataBound" OnSorting="lvProjects_Sorting"
-                    OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
+                    OnItemDeleting="lvProjects_ItemDeleting" OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
                     <LayoutTemplate>
                         <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
                             <tr runat="server" id="lvHeader" class="CompPerfHeader">
+                                <td class="CompPerfProjectState">
+                                    <div class="ie-bg">
+                                    </div>
+                                </td>
                                 <td class="CompPerfProjectState">
                                     <div class="ie-bg">
                                     </div>
@@ -632,6 +674,10 @@
                     </LayoutTemplate>
                     <ItemTemplate>
                         <tr runat="server" id="boundingRow" class="bgcolorwhite">
+                            <td>
+                                <asp:ImageButton ID="imgProjectDelete" runat="server" ToolTip="Delete Project" CommandName="Delete"
+                                    ImageUrl="~/Images/icon-delete.png" OnClientClick="ConfirmToDeleteProject()" />
+                            </td>
                             <td class="CompPerfProjectState">
                             </td>
                             <td class="CompPerfProjectNumber">
@@ -652,6 +698,10 @@
                     </ItemTemplate>
                     <AlternatingItemTemplate>
                         <tr runat="server" id="boundingRow" class="rowEven">
+                            <td>
+                                <asp:ImageButton ID="imgProjectDelete" runat="server" ToolTip="Delete Project" CommandName="Delete"
+                                    ImageUrl="~/Images/icon-delete.png" OnClientClick="ConfirmToDeleteProject()" />
+                            </td>
                             <td class="CompPerfProjectState">
                             </td>
                             <td class="CompPerfProjectNumber">
