@@ -18,6 +18,7 @@ using System.Linq;
 using PraticeManagement.PersonRoleService;
 using PraticeManagement.Controls.Milestones;
 using System.Data;
+using PraticeManagement.ProjectService;
 
 namespace PraticeManagement.Controls.Milestones
 {
@@ -44,6 +45,7 @@ namespace PraticeManagement.Controls.Milestones
         private const string txtHoursPerDayInsert = "txtHoursPerDayInsert";
         private const string txtHoursInPeriodInsert = "txtHoursInPeriodInsert";
         private const string milestoneHasTimeEntries = "Cannot delete milestone person because this person has already entered time for this milestone.";
+        private const string milestoneHasFeedbackEntries = "This person cannot be deleted from this milestone because project feedback has been marked as completed.  The person can be deleted from the milestone if the status of the feedback is changed to 'Not Completed' or 'Canceled'. Please navigate to the 'Project Feedback' tab for more information to make the necessary adjustments.";
         private const string allMilestoneHasTimeEntries = "Cannot delete all milestone person entries because this person has already entered time for this milestone.";
         private const string milestonePersonEntry = "MilestonePersonEntry";
         public const string BothDatesEmployementError = "{0} cannot be assigned to the project due to his/her hire date-{1} and termination date-{2} from the company. Please update his/her start and end dates to align with that date.";
@@ -1843,6 +1845,12 @@ namespace PraticeManagement.Controls.Milestones
                     lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
                     return;
                 }
+                //if there are any project feedback records
+                if(CheckFeedbackExists(entry.MilestonePersonId))
+                {
+                    lblResultMessage.ShowErrorMessage(milestoneHasFeedbackEntries);
+                    return;
+                }
             }
 
             // Delete mPersonEntry 
@@ -2385,6 +2393,23 @@ namespace PraticeManagement.Controls.Milestones
                 try
                 {
                     return serviceClient.CheckTimeEntriesForMilestonePerson(MilestonePersonId, startDate, endDate, checkStartDateEquality, checkEndDateEquality);
+
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        private bool CheckFeedbackExists(int MilestonePersonId)
+        {
+            using (var serviceClient = new ProjectServiceClient())
+            {
+                try
+                {
+                    return serviceClient.CheckIfFeedbackExists(MilestonePersonId,null,null);
 
                 }
                 catch (CommunicationException)
