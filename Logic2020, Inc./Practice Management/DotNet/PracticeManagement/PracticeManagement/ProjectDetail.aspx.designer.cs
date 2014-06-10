@@ -670,6 +670,24 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.LinkButton btnMilestones;
         
         /// <summary>
+        /// cellFeedback control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableCell cellFeedback;
+        
+        /// <summary>
+        /// btnFeedback control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnFeedback;
+        
+        /// <summary>
         /// cellProjectTimeTypes control.
         /// </summary>
         /// <remarks>
@@ -875,6 +893,33 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Projects.ProjectMilestonesFinancials milestones;
+        
+        /// <summary>
+        /// vwFeedback control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View vwFeedback;
+        
+        /// <summary>
+        /// pnlFeedback control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlFeedback;
+        
+        /// <summary>
+        /// projectFeedback control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Projects.ProjectFeedback projectFeedback;
         
         /// <summary>
         /// View1 control.
