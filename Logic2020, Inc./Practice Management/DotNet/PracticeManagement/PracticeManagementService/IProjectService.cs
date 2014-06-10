@@ -353,5 +353,17 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Project> GetAttributionForGivenIds(string attributionIds);
+
+        [OperationContract]
+        List<ProjectFeedback> GetProjectFeedbackByProjectId(int projectId);
+
+        [OperationContract]
+        List<ProjectFeedbackStatus> GetAllFeedbackStatuses();
+
+        [OperationContract]
+        void SaveFeedbackCancelationDetails(int feedbackId, int? statusId, bool isCanceled, string cancelationReason, string userLogin, bool sendReactivationMail);
+
+        [OperationContract]
+        bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, int? projectId);
     }
 }
