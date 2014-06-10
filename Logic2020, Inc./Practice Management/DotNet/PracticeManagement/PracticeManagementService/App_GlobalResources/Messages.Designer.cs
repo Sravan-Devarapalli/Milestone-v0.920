@@ -160,6 +160,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IntialProjectFeedbackNotification.
+        /// </summary>
+        internal static string IntialProjectFeedbackNotification {
+            get {
+                return ResourceManager.GetString("IntialProjectFeedbackNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LockedOutEmailTemplate.
         /// </summary>
         internal static string LockedOutEmailTemplateName {
@@ -196,6 +205,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ProjectReviewCanceledNotification.
+        /// </summary>
+        internal static string ProjectReviewCanceledNotification {
+            get {
+                return ResourceManager.GetString("ProjectReviewCanceledNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Raw Hourly Rate (RHR).
         /// </summary>
         internal static string RawHourlyRateTitle {
@@ -210,6 +228,15 @@ namespace Resources {
         internal static string RecruitingMetricsReportTemplateName {
             get {
                 return ResourceManager.GetString("RecruitingMetricsReportTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RemainderProjectFeedbackNotification.
+        /// </summary>
+        internal static string RemainderProjectFeedbackNotification {
+            get {
+                return ResourceManager.GetString("RemainderProjectFeedbackNotification", resourceCulture);
             }
         }
         
