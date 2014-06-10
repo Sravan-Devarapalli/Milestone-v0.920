@@ -941,6 +941,23 @@ namespace PraticeManagement
             e.IsValid = (MilestoneCSATAttributionCount[0] != 1 || MilestoneCSATAttributionCount[2] <= 0);
         }
 
+        protected void custFeedback_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            using (var serviceClient = new ProjectServiceClient())
+            {
+                try
+                {
+                    e.IsValid = !serviceClient.CheckIfFeedbackExists(null, MilestoneId.Value, null);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         protected void btnMoveMilestone_Click(object sender, EventArgs e)
         {
             lblResult.ClearMessage();
