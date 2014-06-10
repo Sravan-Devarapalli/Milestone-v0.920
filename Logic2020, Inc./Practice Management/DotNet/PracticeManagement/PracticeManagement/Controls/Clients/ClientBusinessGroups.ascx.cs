@@ -34,7 +34,7 @@ namespace PraticeManagement.Controls.Clients
                     }
                     else
                     {
-                        groups = ServiceCallers.Custom.Group(g => g.GetBusinessGroupList(ClientId, null).ToList());
+                        groups = ServiceCallers.Custom.Group(g => g.GetBusinessGroupList(ClientId.ToString(), null).ToList());
                     }
                     ViewState[CLIENT_GROUPS_KEY] = groups.ToList();
                 }
