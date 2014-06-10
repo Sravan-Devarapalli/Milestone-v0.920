@@ -3346,6 +3346,284 @@ namespace DataAccess
                 throw ex;
             }
         }
+
+        #region Project Feedback
+
+        public static List<ProjectFeedback> GetProjectFeedbackByProjectId(int projectId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectFeedbackByProjectId, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<ProjectFeedback> result = new List<ProjectFeedback>();
+                    ReadProjectFeedback(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadProjectFeedback(SqlDataReader reader, List<ProjectFeedback> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int feedbackIdIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackId);
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int reviewStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewStartDate);
+                int reviewEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewEndDate);
+                int dueDateIndex = reader.GetOrdinal(Constants.ColumnNames.DueDate);
+                int feedbackStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackStatusId);
+                int feedbackStatusIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackStatus);
+                int completionCertificateByIndex = reader.GetOrdinal(Constants.ColumnNames.CompletionCertificateBy);
+                int completionCertificateDateIndex = reader.GetOrdinal(Constants.ColumnNames.CompletionCertificateDate);
+                int isCanceledIndex = reader.GetOrdinal(Constants.ColumnNames.IsCanceled);
+                int cancelationReasonIndex = reader.GetOrdinal(Constants.ColumnNames.CancelationReason);
+
+                while (reader.Read())
+                {
+                    ProjectFeedback feedback = new ProjectFeedback()
+                    {
+                        Id = reader.GetInt32(feedbackIdIndex),
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            Title = new Title()
+                            {
+                                TitleId = !reader.IsDBNull(titleIdIndex) ? reader.GetInt32(titleIdIndex) : -1,
+                                TitleName = !reader.IsDBNull(titleIndex) ? reader.GetString(titleIndex) : string.Empty
+                            }
+                        },
+                        ReviewStartDate = reader.GetDateTime(reviewStartDateIndex),
+                        ReviewEndDate = reader.GetDateTime(reviewEndDateIndex),
+                        DueDate = reader.GetDateTime(dueDateIndex),
+                        Status = new ProjectFeedbackStatus()
+                        {
+                            Id = reader.GetInt32(feedbackStatusIdIndex),
+                            Name = reader.GetString(feedbackStatusIndex)
+                        },
+                        CompletionCertificateBy = !reader.IsDBNull(completionCertificateByIndex) ? reader.GetString(completionCertificateByIndex) : string.Empty,
+                        CompletionCertificateDate = !reader.IsDBNull(completionCertificateDateIndex) ? reader.GetDateTime(completionCertificateDateIndex) : DateTime.MinValue,
+                        IsCanceled = reader.GetBoolean(isCanceledIndex),
+                        CancelationReason = !reader.IsDBNull(cancelationReasonIndex) ? reader.GetString(cancelationReasonIndex) : string.Empty
+                    };
+                    result.Add(feedback);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<ProjectFeedbackStatus> GetAllFeedbackStatuses()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetAllFeedbackStatuses, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<ProjectFeedbackStatus> result = new List<ProjectFeedbackStatus>();
+                    ReadProjectFeedbackStatus(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadProjectFeedbackStatus(SqlDataReader reader, List<ProjectFeedbackStatus> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int feedbackStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackStatusId);
+                int feedbackStatusIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                
+                while (reader.Read())
+                {
+                    ProjectFeedbackStatus feedback = new ProjectFeedbackStatus()
+                    {
+                        Id = reader.GetInt32(feedbackStatusIdIndex),
+                        Name = reader.GetString(feedbackStatusIndex)
+                    };
+                    result.Add(feedback);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void SaveFeedbackCancelationDetails(int feedbackId,int? statusId,bool isCanceled, string cancelationReason, string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.SaveFeedbackCancelationDetails, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.FeedbackId, feedbackId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StatusId, statusId.HasValue ? (object)statusId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsCanceled, isCanceled);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CancelationReason, cancelationReason);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static bool CheckIfFeedbackExists(int? milestonePersonId,int? milestoneId,int? projectId)
+        {
+            bool result;
+            try
+            {
+                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Project.CheckIfFeedbackExists
+                                                    , connection
+                                                   )
+                      )
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.MilestonePersonId, milestonePersonId.HasValue ? (object)milestonePersonId : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId.HasValue ? (object)projectId : DBNull.Value);
+
+                    connection.Open();
+                    result = Convert.ToBoolean(command.ExecuteScalar());
+                }
+            }
+            catch (Exception ex)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public static List<ProjectFeedbackMail> GetPersonsForIntialMailForProjectFeedback(int? feedbackId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetPersonsForIntialMailForProjectFeedback, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.FeedbackId, feedbackId.HasValue ? (object)feedbackId : DBNull.Value);
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<ProjectFeedbackMail> result = new List<ProjectFeedbackMail>();
+                    ReadProjectFeedback(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static List<ProjectFeedbackMail> GetPersonsForProjectReviewCanceled(int personId,string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetPersonsForProjectReviewCanceled, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<ProjectFeedbackMail> result = new List<ProjectFeedbackMail>();
+                    ReadProjectFeedback(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadProjectFeedback(SqlDataReader reader, List<ProjectFeedbackMail> feedbacks)
+        {
+            if (reader.HasRows)
+            {
+                int firstNameIndex = reader.GetOrdinal("FirstName");
+                int lastNameIndex = reader.GetOrdinal("LastName");
+                int personIdIndex = reader.GetOrdinal("PersonId");
+                int titleIdIndex = reader.GetOrdinal("TitleId");
+                int titleIndex = reader.GetOrdinal("Title");
+                int reviewStartDateIndex = reader.GetOrdinal("ReviewPeriodStartDate");
+                int reviewEndDateIndex = reader.GetOrdinal("ReviewPeriodEndDate");
+                int dueDateIndex = reader.GetOrdinal("DueDate");
+                int projectIdIndex = reader.GetOrdinal("ProjectId");
+                int projectNameIndex = reader.GetOrdinal("ProjectName");
+                int projectNumberIndex = reader.GetOrdinal("ProjectNumber");
+                int projectManagersAliasesIndex = reader.GetOrdinal("ToAddressList");
+                int directorAliasIndex = reader.GetOrdinal("DirectorAlias");
+                int projectOwnerAliasIndex = reader.GetOrdinal("ProjectOwnerAlias");
+                int seniorManagerAliasIndex = reader.GetOrdinal("SeniorManagerAlias");
+
+                while (reader.Read())
+                {
+                    var projectId = reader.GetInt32(projectIdIndex);
+                    var feedback = new ProjectFeedback
+                    {
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            Title = new Title()
+                            {
+                                TitleId = !reader.IsDBNull(titleIdIndex) ? reader.GetInt32(titleIdIndex) : -1,
+                                TitleName = !reader.IsDBNull(titleIndex) ? reader.GetString(titleIndex) : string.Empty
+                            }
+                        },
+                        ReviewStartDate = reader.GetDateTime(reviewStartDateIndex),
+                        ReviewEndDate = reader.GetDateTime(reviewEndDateIndex),
+                        DueDate = reader.GetDateTime(dueDateIndex)
+                    };
+                    if (feedbacks.Any(p => p.Project.Id.Value == projectId))
+                    {
+                        var mail = feedbacks.FirstOrDefault(p => p.Project.Id.Value == projectId);
+                        mail.Resources.Add(feedback);
+                    }
+                    else
+                    {
+                        var feedbackMail = new ProjectFeedbackMail()
+                        {
+                            Project = new Project()
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                ProjectNumber = reader.GetString(projectNumberIndex)
+                            },
+                            ProjectManagersAliasList = !reader.IsDBNull(projectManagersAliasesIndex) ? reader.GetString(projectManagersAliasesIndex) : string.Empty,
+                            ClientDirectorAlias = !reader.IsDBNull(directorAliasIndex) ? reader.GetString(directorAliasIndex) : string.Empty,
+                            ProjectOwnerAlias = !reader.IsDBNull(projectOwnerAliasIndex) ? reader.GetString(projectOwnerAliasIndex) : string.Empty,
+                            SeniorManagerAlias = !reader.IsDBNull(seniorManagerAliasIndex) ? reader.GetString(seniorManagerAliasIndex) : string.Empty,
+                            Resources = new List<ProjectFeedback>()
+                            {
+                                feedback
+                            }
+                        };
+                        feedbacks.Add(feedbackMail);
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
 
