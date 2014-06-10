@@ -334,7 +334,7 @@ namespace DataAccess
             }
         }
 
-        public static List<BusinessGroup> GetBusinessGroupList(int? clientId, int? businessUnitId)
+        public static List<BusinessGroup> GetBusinessGroupList(string clientIds, int? businessUnitId)
         {
             List<BusinessGroup> BusinessGroupList = new List<BusinessGroup>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -343,9 +343,7 @@ namespace DataAccess
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdParam,
-                        clientId.HasValue ? (object)clientId.Value : DBNull.Value);
-
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIds ?? (Object)DBNull.Value);
                     command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdParam,
                         businessUnitId.HasValue ? (object)businessUnitId.Value : DBNull.Value);
 
@@ -377,7 +375,12 @@ namespace DataAccess
                 IsActive = (bool)reader[Constants.ColumnNames.Active],
                 InUse = (bool)reader[Constants.ColumnNames.InUse],
                 Code = (string)reader[Constants.ColumnNames.CodeColumn],
-                ClientId = (int)reader[Constants.ColumnNames.ClientId]
+                ClientId = (int)reader[Constants.ColumnNames.ClientId],
+                Client = new Client()
+                {
+                    Id = (int)reader[Constants.ColumnNames.ClientId],
+                    Name = !reader.IsDBNull(reader.GetOrdinal(Constants.ColumnNames.ClientName)) ? (string)reader[Constants.ColumnNames.ClientName] : string.Empty
+                }
             };
         }
 
