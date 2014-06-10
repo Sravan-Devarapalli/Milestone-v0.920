@@ -61,6 +61,9 @@ BEGIN
 
 	END 
 
+	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = @MilestonePersonId,@MilestoneId = NULL
+
+
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
