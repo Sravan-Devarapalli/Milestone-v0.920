@@ -488,6 +488,15 @@
             public const string RecruitingMetrics = "RecruitingMetrics";
             public const string RecruitingMetricsTypeId = "RecruitingMetricsTypeId";
             public const string RecruitingMetricsInUse = "RecruitingMetricsInUse";
+            public const string FeedbackId = "FeedbackId";
+            public const string DueDate = "DueDate";
+            public const string FeedbackStatusId = "FeedbackStatusId";
+            public const string FeedbackStatus = "FeedbackStatus";
+            public const string CompletionCertificateBy = "CompletionCertificateBy";
+            public const string CompletionCertificateDate = "CompletionCertificateDate";
+            public const string IsCanceled = "IsCanceled";
+            public const string CancelationReason = "CancelationReason"; 
+            
         }
 
         #endregion Nested type: ColumnNames
@@ -863,6 +872,19 @@
             public static string CSATOwnerId = "@CSATOwnerId";
             public static string IsSeniorManagerUnassigned = "@IsSeniorManagerUnassigned";
             public static string IsAttainmentReportParam = "@IsAttainmentReport";
+            public static string FeedbackId = "@FeedbackId";
+            public static string IsCanceled = "@IsCanceled";
+            public static string CancelationReason = "@CancelationReason";
+            public static string BusinessGroupIds = "@BusinessGroupIds";
+            public static string ClientDirectorIds = "@ClientDirectorIds";
+            public static string Practices = "@Practices";
+            public static string ReviewStartDateMonths = "@ReviewStartDateMonths";
+            public static string ReviewEndDateMonths = "@ReviewEndDateMonths";
+            public static string ProjectManagers = "@ProjectManagers";
+            public static string Statuses = "@Statuses";
+            public static string ProjectIds = "@ProjectIds";
+            public static string ProjectStatus = "@ProjectStatus";
+            public static string StatusId = "@StatusId"; 
         }
 
         #endregion Nested type: ParameterNames
@@ -1236,6 +1258,9 @@
 
             public class Project
             {
+                public const string GetPersonsForProjectReviewCanceled = "dbo.GetPersonsForProjectReviewCanceled";
+                public const string GetPersonsForIntialMailForProjectFeedback = "dbo.GetPersonsForIntialMailForProjectFeedback";
+                public const string CheckIfFeedbackExists = "dbo.CheckIfFeedbackExists";
                 public const string GetAttributionForGivenIds = "dbo.GetAttributionForGivenIds";
                 public const string SetProjectAttributionValues = "dbo.SetProjectAttributionValues";
                 public const string GetProjectAttributionValues = "dbo.GetProjectAttributionValues";
@@ -1291,6 +1316,10 @@
                 public const string CSATUpdate = "dbo.CSATUpdate";
                 public const string CSATDelete = "dbo.CSATDelete";
                 public const string CSATList = "dbo.CSATList";
+                public const string GetProjectFeedbackByProjectId = "dbo.GetProjectFeedbackByProjectId";
+                public const string GetAllFeedbackStatuses = "dbo.GetAllFeedbackStatuses";
+                public const string SaveFeedbackCancelationDetails = "dbo.SaveFeedbackCancelationDetails";
+                public const string ProjectFeedbackReport = "dbo.ProjectFeedbackReport";
             }
 
             #endregion Nested type: Project
