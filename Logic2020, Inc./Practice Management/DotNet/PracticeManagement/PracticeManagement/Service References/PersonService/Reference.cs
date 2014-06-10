@@ -269,7 +269,7 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SavePersonDetail", ReplyAction="http://tempuri.org/IPersonService/SavePersonDetailResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DataTransferObjects.DataAccessFault), Action="http://tempuri.org/IPersonService/SavePersonDetailDataAccessFaultFault", Name="DataAccessFault", Namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        int SavePersonDetail(DataTransferObjects.Person person, string currentUser, string loginPageUrl, bool saveCurrentPay);
+        int SavePersonDetail(DataTransferObjects.Person person, string currentUser, string loginPageUrl, bool saveCurrentPay, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonValidations", ReplyAction="http://tempuri.org/IPersonService/PersonValidationsResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -321,7 +321,6 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-      
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -638,8 +637,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetPersonByAlias(alias);
         }
         
-        public int SavePersonDetail(DataTransferObjects.Person person, string currentUser, string loginPageUrl, bool saveCurrentPay) {
-            return base.Channel.SavePersonDetail(person, currentUser, loginPageUrl, saveCurrentPay);
+        public int SavePersonDetail(DataTransferObjects.Person person, string currentUser, string loginPageUrl, bool saveCurrentPay, string userLogin) {
+            return base.Channel.SavePersonDetail(person, currentUser, loginPageUrl, saveCurrentPay, userLogin);
         }
         
         public void PersonValidations(DataTransferObjects.Person person) {
