@@ -56,6 +56,25 @@ namespace PraticeManagement.ReportService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/RecruitingMetricsReport", ReplyAction="http://tempuri.org/IReportService/RecruitingMetricsReportResponse")]
         DataTransferObjects.Person[] RecruitingMetricsReport(System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectFeedbackReport", ReplyAction="http://tempuri.org/IReportService/ProjectFeedbackReportResponse")]
+        DataTransferObjects.ProjectFeedback[] ProjectFeedbackReport(
+                    string accountIds, 
+                    string businessGroupIds, 
+                    System.DateTime startDate, 
+                    System.DateTime endDate, 
+                    string projectStatus, 
+                    string projectIds, 
+                    string directorIds, 
+                    string practiceIds, 
+                    bool excludeInternalPractices, 
+                    string personIds, 
+                    string titleIds, 
+                    string reviewStartdateMonths, 
+                    string reviewEnddateMonths, 
+                    string projectmanagerIds, 
+                    string statusIds, 
+                    bool isExport);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
         
@@ -162,7 +181,7 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-       
+        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -221,6 +240,26 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Person[] RecruitingMetricsReport(System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.RecruitingMetricsReport(startDate, endDate);
+        }
+        
+        public DataTransferObjects.ProjectFeedback[] ProjectFeedbackReport(
+                    string accountIds, 
+                    string businessGroupIds, 
+                    System.DateTime startDate, 
+                    System.DateTime endDate, 
+                    string projectStatus, 
+                    string projectIds, 
+                    string directorIds, 
+                    string practiceIds, 
+                    bool excludeInternalPractices, 
+                    string personIds, 
+                    string titleIds, 
+                    string reviewStartdateMonths, 
+                    string reviewEnddateMonths, 
+                    string projectmanagerIds, 
+                    string statusIds, 
+                    bool isExport) {
+            return base.Channel.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus, projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
