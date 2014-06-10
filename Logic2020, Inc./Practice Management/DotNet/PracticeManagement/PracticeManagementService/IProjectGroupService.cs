@@ -60,6 +60,6 @@ namespace PracticeManagementService
         void BusinessGroupDelete(int businessGroupId, string userLogin);
 
         [OperationContract]
-        List<BusinessGroup> GetBusinessGroupList(int? clientId, int? businessUnitId);
+        List<BusinessGroup> GetBusinessGroupList(string clientIds, int? businessUnitId);
     }
 }
