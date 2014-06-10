@@ -12,6 +12,7 @@ CREATE PROCEDURE [dbo].[MilestonePersonDelete]
 AS
 	SET NOCOUNT ON
 	DECLARE @ErrorMessage NVARCHAR(2048)
+
 	IF EXISTS (SELECT TOP 1 1 FROM dbo.TimeEntries AS te WHERE te.MilestonePersonId = @MilestonePersonId)
 	BEGIN
 		SELECT @ErrorMessage = [dbo].[GetErrorMessage](70019)
@@ -19,6 +20,11 @@ AS
 	END
 	ELSE
 	BEGIN
+	    
+		--DELETE 
+		--FROM dbo.ProjectFeedback 
+		--WHERE MilestonePersonId = @MilestonePersonId
+
 		EXEC dbo.MilestonePersonDeleteEntries @MilestonePersonId = @MilestonePersonId
 		
 		DELETE
