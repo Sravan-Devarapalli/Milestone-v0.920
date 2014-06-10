@@ -204,6 +204,14 @@ AS
 					 )
 				  OR ( (@EventSource = 'DeletedTitle' OR @EventSource = 'All') AND a.LogData.exist('/Title') = 1 AND t.ActivityName = 'Deleted'
 					 )
+				  OR ( (@EventSource = 'PerformanceManagement' OR @EventSource = 'All') AND a.LogData.exist('/ProjectFeedback') = 1
+					 )
+				  OR ( (@EventSource = 'AddedFeedback' OR @EventSource = 'All') AND a.LogData.exist('/ProjectFeedback') = 1 AND t.ActivityName = 'Added'
+					 )
+				  OR ( (@EventSource = 'ChangedFeedback' OR @EventSource = 'All') AND a.LogData.exist('/ProjectFeedback') = 1 AND t.ActivityName = 'Changed'
+					 )
+			      OR ( (@EventSource = 'DeletedFeedback' OR @EventSource = 'All') AND a.LogData.exist('/ProjectFeedback') = 1 AND t.ActivityName = 'Deleted'
+					 )
 					)
 					AND (@ProjectId IS NULL 
 						 OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
