@@ -116,6 +116,14 @@ namespace PraticeManagement
             }
         }
 
+        public string Feedback
+        {
+            get
+            {
+                return Request.QueryString["Feedback"];
+            }
+        }
+
         private List<AttachmentService.ProjectAttachment> AttachmentsForNewProject
         {
             get
@@ -481,6 +489,7 @@ namespace PraticeManagement
                 cellProjectTools.Visible = true;
                 cellProjectCSAT.Visible = true;
                 cellCommissions.Visible = true;
+                cellFeedback.Visible = true;
             }
         }
 
@@ -510,7 +519,11 @@ namespace PraticeManagement
 
             if (!IsPostBack && !string.IsNullOrEmpty(CSAT) && CSAT == "true" && cellProjectCSAT.Visible)
             {
-                btnView_Command(btnProjectCSAT, new CommandEventArgs("", "9"));
+                btnView_Command(btnProjectCSAT, new CommandEventArgs("", "10"));
+            }
+            if (!IsPostBack && !string.IsNullOrEmpty(Feedback) && Feedback == "true" && cellFeedback.Visible)
+            {
+                btnView_Command(btnFeedback, new CommandEventArgs("", "1"));
             }
         }
 
@@ -1286,7 +1299,7 @@ namespace PraticeManagement
                 ucProjectTimeTypes.PopulateControls();
             }
             int viewIndex = mvProjectDetailTab.ActiveViewIndex;
-            btnView_Command(btnProjectTimeTypes, new CommandEventArgs("", "1"));
+            btnView_Command(btnProjectTimeTypes, new CommandEventArgs("", "2"));
             Page.Validate(vsumProject.ValidationGroup);
             if (!Page.IsValid)
             {
@@ -1302,7 +1315,7 @@ namespace PraticeManagement
             if (!ProjectId.HasValue || Project == null || Project.Milestones == null || Project.Milestones.Count <= 0)
                 return isValid;
             int viewIndex = mvProjectDetailTab.ActiveViewIndex;
-            btnView_Command(btnCommissions, new CommandEventArgs("", "4"));
+            btnView_Command(btnCommissions, new CommandEventArgs("", "5"));
             projectAttribution.ValidateCommissionsTab();
             if (!Page.IsValid)
             {
@@ -1334,7 +1347,7 @@ namespace PraticeManagement
                     IsErrorPanelDisplay = true;
                 }
                 int viewIndex = mvProjectDetailTab.ActiveViewIndex;
-                if (viewIndex == 9 && ProjectId.HasValue)
+                if (viewIndex == 10 && ProjectId.HasValue)
                 {
                     ucCSAT.PopulateData(null);
                 }
@@ -1608,7 +1621,7 @@ namespace PraticeManagement
                     ddlProjectOwner.SelectedValue = project.ProjectOwner.Id.ToString();
                 }
                 int viewIndex = mvProjectDetailTab.ActiveViewIndex;
-                if (viewIndex == 7) //History
+                if (viewIndex == 8) //History
                 {
                     activityLog.Update();
                 }
@@ -1870,15 +1883,15 @@ namespace PraticeManagement
             int viewIndex = int.Parse((string)e.CommandArgument);
             SelectView((Control)sender, viewIndex, false);
             tblProjectDetailTabViewSwitch_ActiveViewIndex = viewIndex;
-            if (viewIndex == 7) //History
+            if (viewIndex == 8) //History
             {
                 activityLog.Update();
             }
-            else if (viewIndex == 3 && ProjectId.HasValue)
+            else if (viewIndex == 4 && ProjectId.HasValue)
             {
                 financials.Project = GetCurrentProject(ProjectId.Value);
             }
-            else if (viewIndex == 9 && ProjectId.HasValue)
+            else if (viewIndex == 10 && ProjectId.HasValue)
             {
                 ucCSAT.PopulateData(null);
             }
