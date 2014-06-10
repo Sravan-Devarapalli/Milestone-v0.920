@@ -193,7 +193,19 @@ namespace DataTransferObjects
         ChangedCalendar = 61,
 
         [EnumMember]
-        DeletedCalendar = 62
+        DeletedCalendar = 62,
+
+        [EnumMember]
+        PerformanceManagement = 63,
+
+        [EnumMember]
+        AddedFeedback = 64,
+
+        [EnumMember]
+        ChangedFeedback = 65,
+
+        [EnumMember]
+        DeletedFeedback = 66
 
     }
 }
