@@ -76,6 +76,20 @@ namespace DataTransferObjects
         [DataMember]
         public int ClientId { get; set; }
 
+        [DataMember]
+        public Client Client { get; set; }
+
+        public string ClientBusinessGroupFormat
+        {
+            get
+            {
+                if (Client != null && Client.Id.HasValue)
+                    return Client.Name + "-" + HtmlEncodedName;
+                else
+                    return "";
+            }
+        }
+
         #endregion Properties
     }
 }
