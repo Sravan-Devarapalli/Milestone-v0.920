@@ -81,7 +81,7 @@ namespace PraticeManagement.Controls.Clients
                     }
                     else
                     {
-                        businessGroupList = ServiceCallers.Custom.Group(g => g.GetBusinessGroupList(ClientId, null)).ToList();
+                        businessGroupList = ServiceCallers.Custom.Group(g => g.GetBusinessGroupList(ClientId.ToString(), null)).ToList();
                     }
                     ViewState[BUSINESS_GROUPS_KEY] = businessGroupList.ToList();
                 }
