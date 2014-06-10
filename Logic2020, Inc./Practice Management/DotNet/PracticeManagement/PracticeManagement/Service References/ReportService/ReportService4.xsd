@@ -385,6 +385,7 @@
       <xs:element minOccurs="0" name="Director" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="Discount" type="xs:decimal" />
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="FeedbackList" nillable="true" type="tns:ArrayOfProjectFeedback" />
       <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
       <xs:element minOccurs="0" name="HasAttachments" type="xs:boolean" />
       <xs:element minOccurs="0" name="HasMultipleCSATs" type="xs:boolean" />
@@ -522,6 +523,7 @@
   <xs:element name="TitleType" nillable="true" type="tns:TitleType" />
   <xs:complexType name="BusinessGroup">
     <xs:sequence>
+      <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
       <xs:element minOccurs="0" name="ClientId" type="xs:int" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
@@ -531,34 +533,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BusinessGroup" nillable="true" type="tns:BusinessGroup" />
-  <xs:simpleType name="BusinessType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Undefined" />
-      <xs:enumeration value="NewBusiness" />
-      <xs:enumeration value="Extension" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="BusinessType" nillable="true" type="tns:BusinessType" />
-  <xs:complexType name="ArrayOfProjectCSAT">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectCSAT" nillable="true" type="tns:ProjectCSAT" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProjectCSAT" nillable="true" type="tns:ArrayOfProjectCSAT" />
-  <xs:complexType name="ProjectCSAT">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Comments" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CompletionDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="ProjectId" type="xs:int" />
-      <xs:element minOccurs="0" name="ReferralScore" type="xs:int" />
-      <xs:element minOccurs="0" name="ReviewEndDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ReviewStartDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ReviewerId" type="xs:int" />
-      <xs:element minOccurs="0" name="ReviewerName" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ProjectCSAT" nillable="true" type="tns:ProjectCSAT" />
   <xs:complexType name="Client">
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientMarginInfo" nillable="true" type="tns:ArrayOfClientMarginColorInfo" />
@@ -614,6 +588,7 @@
   <xs:complexType name="ProjectGroup">
     <xs:sequence>
       <xs:element minOccurs="0" name="BusinessGroupId" type="xs:int" />
+      <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
       <xs:element minOccurs="0" name="ClientId" type="xs:int" />
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
@@ -623,6 +598,63 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectGroup" nillable="true" type="tns:ProjectGroup" />
+  <xs:simpleType name="BusinessType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="NewBusiness" />
+      <xs:enumeration value="Extension" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="BusinessType" nillable="true" type="tns:BusinessType" />
+  <xs:complexType name="ArrayOfProjectCSAT">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectCSAT" nillable="true" type="tns:ProjectCSAT" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectCSAT" nillable="true" type="tns:ArrayOfProjectCSAT" />
+  <xs:complexType name="ProjectCSAT">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Comments" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompletionDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectId" type="xs:int" />
+      <xs:element minOccurs="0" name="ReferralScore" type="xs:int" />
+      <xs:element minOccurs="0" name="ReviewEndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ReviewStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ReviewerId" type="xs:int" />
+      <xs:element minOccurs="0" name="ReviewerName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectCSAT" nillable="true" type="tns:ProjectCSAT" />
+  <xs:complexType name="ArrayOfProjectFeedback">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectFeedback" nillable="true" type="tns:ArrayOfProjectFeedback" />
+  <xs:complexType name="ProjectFeedback">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CancelationReason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompletionCertificateBy" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompletionCertificateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsCanceled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
+      <xs:element minOccurs="0" name="ReviewEndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ReviewStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectFeedbackStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
+  <xs:complexType name="ProjectFeedbackStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectFeedbackStatus" nillable="true" type="tns:ProjectFeedbackStatus" />
   <xs:complexType name="ArrayOfMilestone">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Milestone" nillable="true" type="tns:Milestone" />
