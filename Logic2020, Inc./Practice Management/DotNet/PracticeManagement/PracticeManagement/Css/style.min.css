@@ -505,6 +505,7 @@ Width99PercentImp{width:99%!important}
 .Width180Px{width:180px}
 .Width200Px,.lblOverheadsBenchCostTd{width:200px}
 .Width220Px{width:220px}
+.Width232PxImp{width:232px!important}
 .Width235Px{width:235px}
 .Width250Px{width:250px}
 .Width220PxImp{width:220px!important}
@@ -624,6 +625,8 @@ TABLE.PaddingTenPx td{padding:0 5px}
 .ReportHeaderBandNBGraph{vertical-align:bottom;width:8%;padding:0!important}
 .ReportHeaderBandNBGraph table,consultngDetailPanel table{width:100%}
 .ReportHeaderBandNBGraph td{padding:0!important;text-align:center}
+.ReportHeaderBandNBGraph .CompledStatusGraph{background-color:#5A5455;border:1px solid Gray}
+.ReportHeaderBandNBGraph .NotCompletedStatusGraph{background-color:#A09A9B;border:1px solid Gray}
 .ReportHeaderBandNBGraph .billingGraph{background-color:#7FD13B;border:1px solid Gray}
 .ReportHeaderBandNBGraph .nonBillingGraph{background-color:#BEBEBE;border:1px solid Gray}
 TABLE.PersonSummaryReport TD,TABLE.TerminationReport TD{border-bottom:1px solid #000;text-align:center;height:24px;vertical-align:middle;padding:2px}
@@ -1522,3 +1525,5 @@ table#ctl00_body_login tr td label{float:left}
 .tblCSATHeader td{width:25%;vertical-align:top;font-size:14px;text-align:center}
 .attributionHeader{font-size:16px;font-weight:bold;text-align:center}
 .attributionFirstTd{width:47%;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;text-align:right;padding-bottom:5px;padding-right:5px;padding-top:5px}
+.colorWhite{color:white}
+}
