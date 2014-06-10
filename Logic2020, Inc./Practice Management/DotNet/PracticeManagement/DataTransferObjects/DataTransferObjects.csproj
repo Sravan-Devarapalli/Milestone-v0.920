@@ -150,6 +150,9 @@
     <Compile Include="PracticeCapability.cs" />
     <Compile Include="PricingList.cs" />
     <Compile Include="ProjectCSAT.cs" />
+    <Compile Include="ProjectFeedback.cs" />
+    <Compile Include="ProjectFeedbackMail.cs" />
+    <Compile Include="ProjectFeedbackStatus.cs" />
     <Compile Include="RecruitingMetrics.cs" />
     <Compile Include="Reports\AttainmentBillableutlizationReport.cs" />
     <Compile Include="Reports\BillableUtlizationByRange.cs" />
