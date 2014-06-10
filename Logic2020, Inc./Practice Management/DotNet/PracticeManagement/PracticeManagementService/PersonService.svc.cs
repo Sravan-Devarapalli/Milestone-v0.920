@@ -329,12 +329,12 @@ namespace PracticeManagementService
         /// is placed in the <paramref name="person"/>
         /// </remarks>
         /// <returns>An ID of the saved record.</returns>
-        public int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay)
+        public int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay,string userLogin)
         {
             Person oldPerson = person.Id.HasValue ? PersonDAL.GetById(person.Id.Value) : null;
             try
             {
-                ProcessPersonData(person, currentUser, oldPerson, loginPageUrl, saveCurrentPay);
+                ProcessPersonData(person, currentUser, oldPerson, loginPageUrl, saveCurrentPay, userLogin);
                 if (person.Id != null) return person.Id.Value;
             }
             catch (Exception ex)
@@ -403,7 +403,7 @@ namespace PracticeManagementService
         /// <param name="person">Present person data.</param>
         /// <param name="isRehireDueToPay">Is person rehire due to compensation change of contract to employee.</param>
         /// <param name="loginPageUrl">Login page url of site.</param>
-        public static void SendMailsAfterProcessPersonData(Person oldPerson, Person person, bool isRehireDueToPay, string loginPageUrl)
+        public static void SendMailsAfterProcessPersonData(Person oldPerson, Person person, bool isRehireDueToPay, string loginPageUrl,string userLogin)
         {
             int personStatusId = person.Status.Id;
             bool isPersonActive = (personStatusId == (int)PersonStatusType.Active || personStatusId == (int)PersonStatusType.TerminationPending);
@@ -415,7 +415,13 @@ namespace PracticeManagementService
                 if (personStatusId == (int)PersonStatusType.Terminated && isOldPersonActive)
                 {
                     if (person.TerminationDate != null)
+                    {
                         MailUtil.SendDeactivateAccountEmail(person.FirstName, person.LastName, person.TerminationDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+                    }
+                }
+                if ((personStatusId == (int)PersonStatusType.Terminated || personStatusId == (int)PersonStatusType.TerminationPending) && (oldPerson.Status.Id == (int)PersonStatusType.Active))
+                {
+                    //SendReviewCancelationMail(person.Id.Value, userLogin);
                 }
                 if (isOldPersonActive && isPersonActive && oldPerson.HireDate.Date != person.HireDate)
                 {
@@ -439,6 +445,14 @@ namespace PracticeManagementService
             }
         }
 
+        public static void SendReviewCancelationMail(int personId,string userLogin)
+        {
+            var feedbacks = ProjectDAL.GetPersonsForProjectReviewCanceled(personId, userLogin);
+            if (feedbacks.Count > 0)
+            {
+                MailUtil.SendReviewCanceledMailNotification(feedbacks);
+            }
+        }
         /// <summary>
         /// Sends administrator added email.
         /// </summary>
@@ -510,7 +524,7 @@ namespace PracticeManagementService
         /// <param name="person">The data to be stored.</param>
         /// <param name="currentUser">A currently logged user.</param>
         /// <param name="oldPerson">Old person data.</param>
-        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson, string loginPageUrl, bool saveCurrentPay)
+        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson, string loginPageUrl, bool saveCurrentPay,string userLogin)
         {
             bool isReHireDueToPay = false;
             bool isAdministrator = Roles.IsUserInRole(currentUser, DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
@@ -590,7 +604,7 @@ namespace PracticeManagementService
                 }
                 if (person.Id != null) person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
             }
-            SendMailsAfterProcessPersonData(oldPerson, person, isReHireDueToPay, loginPageUrl);
+            SendMailsAfterProcessPersonData(oldPerson, person, isReHireDueToPay, loginPageUrl,userLogin);
         }
 
         /// <summary>
@@ -715,7 +729,7 @@ namespace PracticeManagementService
                 person.EmploymentHistory = PersonDAL.GetPersonEmploymentHistoryById(person.Id.Value);
             }
             person.RoleNames = Roles.GetRolesForUser(person.Alias);
-            SendMailsAfterProcessPersonData(null, person, true, loginPageUrl);
+            SendMailsAfterProcessPersonData(null, person, true, loginPageUrl, user);
         }
 
         /// <summary>
