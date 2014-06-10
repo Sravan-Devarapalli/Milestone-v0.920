@@ -2538,6 +2538,10 @@ Width99PercentImp
 {
     width: 220px;
 }
+.Width232PxImp
+{
+    width: 232px !important;
+}
 .Width235Px
 {
     width: 235px;
@@ -3083,6 +3087,16 @@ TABLE.PaddingTenPx td
 {
     padding: 0px !important;
     text-align: center;
+}
+.ReportHeaderBandNBGraph .CompledStatusGraph
+{
+    background-color: #5A5455;
+    border: 1px solid Gray;
+}
+.ReportHeaderBandNBGraph .NotCompletedStatusGraph
+{
+    background-color: #A09A9B;
+    border: 1px solid Gray;
 }
 .ReportHeaderBandNBGraph .billingGraph
 {
@@ -8202,4 +8216,8 @@ table#ctl00_body_login tr td label
     padding-right: 5px;
     padding-top: 5px;
 }
-
+.colorWhite
+{
+    color: white;
+}
+}
