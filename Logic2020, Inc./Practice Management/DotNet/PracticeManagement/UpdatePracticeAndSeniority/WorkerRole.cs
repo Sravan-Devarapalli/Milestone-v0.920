@@ -50,6 +50,7 @@ namespace UpdatePracticeAndSeniority
         public const string LoginPagePath_ConfigKey = "LoginPagePath";
         public const string WelcomeMailScheduleTime_ConfigKey = "WelcomeMailScheduleTime";
         public const string UATTestingMail_ConfigKey = "UATTestingMail";
+        public const string FeedbackMailsScheduleTime_ConfigKey = "FeedbackMailsScheduleTime";
 
         //Formats
         public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
@@ -106,6 +107,13 @@ namespace UpdatePracticeAndSeniority
         public const string M_RecruitingMetricsReportEmailed = "Emailed the Recruiting Metrics Report.";
         public const string RecruitingMetricsReportFailedFormat = "Failed to send an email of Recruiting Metrics Report due to: {0}";
 
+        public const string M_StartedFeedbackInitialEmails = "Started to send Feedback Initials emails.";
+        public const string M_FinishedFeedbackInitialEmails = "Finished to send the feedback initial Emails.";
+        public const string FeedbackIntialMailFailedFormat = "Failed to send the feedback initial Emails due to: {0}";
+        public const string M_StartedFeedbackRemainderEmails = "Started to send Feedback remainder emails.";
+        public const string M_FinishedFeedbackRemainderEmails = "Finished to send the feedback remainder Emails.";
+        public const string FeedbackRemainderMailFailedFormat = "Failed to send the feedback remainder Emails due to: {0}";
+
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
 
@@ -114,6 +122,8 @@ namespace UpdatePracticeAndSeniority
         public const string SP_InsertProjectSummaryCacheValue = "dbo.InsertProjectSummaryCacheValue";
         public const string SP_DatabaseCleanUpObjects = "dbo.DatabaseCleanUp";
         public const string SP_ReBuildIndexes = "dbo.ReBuildIndexes";
+        public const string SP_GetPersonsForIntialMailForProjectFeedback = "dbo.GetPersonsForIntialMailForProjectFeedback";
+        public const string SP_GetPersonsForRemainderMailForProjectFeedback = "dbo.GetPersonsForRemainderMailForProjectFeedback";
 
         //Parameters
         public const string NextRun = "@NextRun";
@@ -127,6 +137,8 @@ namespace UpdatePracticeAndSeniority
         public const string ActivateAccountTemplate = "ActivateAccountTemplate";
         public const string WelcomeEmailTemplate = "WelcomeEmailTemplate";
         public const string AdministratorAddedTemplate = "AdministratorAddedTemplate";
+        public const string IntialProjectFeedbackNotification = "IntialProjectFeedbackNotification";
+        public const string RemainderProjectFeedbackNotification = "RemainderProjectFeedbackNotification";
 
         #endregion Constants
 
@@ -223,6 +235,14 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static TimeSpan FeedbackMailsScheduleTime
+        {
+            get
+            {
+                return TimeSpan.Parse(GetConfigValue(FeedbackMailsScheduleTime_ConfigKey));
+            }
+        }
+
         public static string PayrollDistributionReportReciever
         {
             get
@@ -297,8 +317,10 @@ namespace UpdatePracticeAndSeniority
                 WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, SuccessStatus, M_SchedularStarted, currentDateTimeWithTimeZone);
                 if (currentDateTimeWithTimeZone.TimeOfDay > FirstSchedularTime)
                 {
+
+
                     currentDateTimeWithTimeZone = CurrentPMTime;
-                   //For the starting of the schedular if we update schedular binaries between 00:01:00 and 02:00:00, then we need to run Project Summary Cache Task.
+                    //For the starting of the schedular if we update schedular binaries between 00:01:00 and 02:00:00, then we need to run Project Summary Cache Task.
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
@@ -306,9 +328,11 @@ namespace UpdatePracticeAndSeniority
                     //Runs at 07:00:00 on every monday.
                     RunResourceExceptionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on 1st of every month.
-                RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
+                    RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
-                   RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
+                    RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
+                    //Runs at 08:00:00 every day.
+                    RunFeedbackMails(currentDateTimeWithTimeZone);
                 }
 
                 while (true)
@@ -337,6 +361,8 @@ namespace UpdatePracticeAndSeniority
                     RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
+                    //Runs at 08:00:00 every day.
+                    RunFeedbackMails(currentDateTimeWithTimeZone);
                 }
             }
             catch (Exception ex)
@@ -515,6 +541,22 @@ namespace UpdatePracticeAndSeniority
                     Thread.Sleep(sleeptime);
                 }
                 WorkerRole.GetTodaysHireDatePersonsAndSenEmails(CurrentPMTime, nextRun);
+            }
+        }
+
+        public static void RunFeedbackMails(DateTime currentDateTimeWithTimeZone)
+        {
+            if (currentDateTimeWithTimeZone.TimeOfDay < FeedbackMailsScheduleTime)
+            {
+                currentDateTimeWithTimeZone = CurrentPMTime;
+                var nextRun = GetNextRunDate(currentDateTimeWithTimeZone, FeedbackMailsScheduleTime);
+                if (currentDateTimeWithTimeZone.TimeOfDay < FeedbackMailsScheduleTime)
+                {
+                    var sleeptime = FeedbackMailsScheduleTime - currentDateTimeWithTimeZone.TimeOfDay;
+                    Thread.Sleep(sleeptime);
+                }
+                WorkerRole.GetPersonsForIntialFeedbackMailAndSendEmails(CurrentPMTime, nextRun);
+                WorkerRole.GetPersonsForRemainderFeedbackMailAndSendEmails(CurrentPMTime, nextRun);
             }
         }
 
@@ -747,7 +789,7 @@ namespace UpdatePracticeAndSeniority
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportStartedReadingData, nextRunTime);
                     Person[] recruitingMetricsReportList = ReportDAL.RecruitingMetricsReport(StartDate, EndDate, connection).ToArray();
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "RecrutingMetricsReport"), nextRunTime);
-                    
+
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportReadDataSuccess, nextRunTime);
                     WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_RecruitingMetricsReportAttachmentPreparationStarted, nextRunTime);
                     RecruitingMetricsReportExcelUtil recruitingMetricsReport = new RecruitingMetricsReportExcelUtil(StartDate, EndDate, recruitingMetricsReportList);
@@ -787,7 +829,7 @@ namespace UpdatePracticeAndSeniority
             WorkerRole.SaveSchedularLog(currentTime, SuccessStatus, M_PayrollDistributionReportStartedEmailing, nextRunTime);
             var subject = string.Format(PayRollDistributionReportEmailSubjectFormat, range);
             var body = string.Format(PayRollDistributionReportEmailBodyFormat, range);
-            Email(subject, body, true, PayrollDistributionReportReciever, string.Empty, attachments);
+            Email(subject, body, true, PayrollDistributionReportReciever, string.Empty, string.Empty, attachments);
         }
 
         /// <summary>
@@ -803,7 +845,7 @@ namespace UpdatePracticeAndSeniority
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName("ResourceExceptionReports", connection);
             var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
             var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
-            WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
+            WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, string.Empty, new List<Attachment>() { attachment });
         }
 
         private static void EmailRecruitingMetricsReport(DateTime startDate, DateTime endDate, byte[] attachmentByteArray, SqlConnection connection)
@@ -813,7 +855,7 @@ namespace UpdatePracticeAndSeniority
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName("RecruitingMetricsReport", connection);
             var subject = string.Format(emailTemplate.Subject, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
             var body = string.Format(emailTemplate.Body, startDate.ToString(Constants.Formatting.EntryDateFormat), endDate.ToString(Constants.Formatting.EntryDateFormat));
-            WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, new List<Attachment>() { attachment });
+            WorkerRole.Email(subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, string.Empty, new List<Attachment>() { attachment });
         }
 
         protected static void gvExp_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -1142,7 +1184,7 @@ namespace UpdatePracticeAndSeniority
                 if (list != null && list.Count() > 0)
                 {
                     string body = GetUpdatedProfilesListEmailBody(list);
-                    Email(EmailSubjectForProfilesUpdatedList, body, true, UpdatedProfilesListEmailReciever, string.Empty, null);
+                    Email(EmailSubjectForProfilesUpdatedList, body, true, UpdatedProfilesListEmailReciever, string.Empty, string.Empty, null);
                     WorkerRole.SaveSchedularLog(currentWithTimeZone, "Emailed", "Emailed the updated profiles list.", nextRun);
                 }
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Finished emailing updated profiles list.", nextRun);
@@ -1162,7 +1204,7 @@ namespace UpdatePracticeAndSeniority
         /// <param name="commaSeperatedToAddresses"></param>
         /// <param name="commaSeperatedBccAddresses"></param>
         /// <param name="attachments"></param>
-        public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, List<Attachment> attachments, bool isHighPriority = false)
+        public static void Email(string subject, string body, bool isBodyHtml, string commaSeperatedToAddresses, string commaSeperatedBccAddresses, string commaSeperatedCcAddresses, List<Attachment> attachments, bool isHighPriority = false)
         {
             if (!IsUATEnvironment || !DisableAllMails)
             {
@@ -1182,6 +1224,15 @@ namespace UpdatePracticeAndSeniority
                     foreach (var address in bccAddresses)
                     {
                         message.Bcc.Add(new MailAddress(address));
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(commaSeperatedCcAddresses))
+                {
+                    var ccAddresses = commaSeperatedCcAddresses.Split(',');
+                    foreach (var address in ccAddresses)
+                    {
+                        message.CC.Add(new MailAddress(address));
                     }
                 }
 
@@ -1375,6 +1426,162 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static void GetPersonsForIntialFeedbackMailAndSendEmails(DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+
+                if (string.IsNullOrEmpty(connectionString))
+                    return;
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand(SP_GetPersonsForIntialMailForProjectFeedback, connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+
+                List<ProjectFeedbackMail> feedbacks = new List<ProjectFeedbackMail>();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    ReadProjectFeedback(reader, feedbacks);
+                }
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_GetPersonsForIntialMailForProjectFeedback), nextRun);
+
+                if (feedbacks.Count > 0)
+                {
+                    SendFeedbackIntialMails(feedbacks, currentWithTimeZone, nextRun);
+                }
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FailedRunningProcedureFormat, SP_GetPersonsForIntialMailForProjectFeedback) + ex.Message, nextRun);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public static void GetPersonsForRemainderFeedbackMailAndSendEmails(DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            SqlConnection connection = null;
+            try
+            {
+                var connectionString = WorkerRole.GetConnectionString();
+
+                if (string.IsNullOrEmpty(connectionString))
+                    return;
+                connection = new SqlConnection(connectionString);
+                SqlCommand cmd = new SqlCommand(SP_GetPersonsForRemainderMailForProjectFeedback, connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+
+                List<ProjectFeedbackMail> feedbacks = new List<ProjectFeedbackMail>();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    ReadProjectFeedback(reader, feedbacks);
+                }
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningProcedureFormat, SP_GetPersonsForRemainderMailForProjectFeedback), nextRun);
+
+                if (feedbacks.Count > 0)
+                {
+                    SendFeedbackRemainderMails(feedbacks, currentWithTimeZone, nextRun);
+                }
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FailedRunningProcedureFormat, SP_GetPersonsForRemainderMailForProjectFeedback) + ex.Message, nextRun);
+            }
+            finally
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        private static void SendFeedbackIntialMails(List<ProjectFeedbackMail> feedbacks, DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            try
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedFeedbackInitialEmails, nextRun);
+                var feedbackMailTemplate = GetEmailTemplate(IntialProjectFeedbackNotification);
+                foreach (var feedback in feedbacks)
+                {
+                    foreach (var resource in feedback.Resources)
+                    {
+                        string url = IsUATEnvironment ? "http://65.52.17.100/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString();
+                        var subject = String.Format(feedbackMailTemplate.Subject, resource.DueDate.ToString(Constants.Formatting.EntryDateFormat), resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Project.Name);
+                        var emailBody = String.Format(feedbackMailTemplate.Body, resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, resource.DueDate.ToString(Constants.Formatting.EntryDateFormat), resource.Person.Title.TitleName, resource.ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat), resource.ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Project.Name, url);
+                        var ccAddressList = "";
+                        if (!string.IsNullOrEmpty(feedback.ProjectOwnerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ProjectOwnerAlias))
+                        {
+                            ccAddressList += feedback.ProjectOwnerAlias + ",";
+                        }
+                        if (!string.IsNullOrEmpty(feedback.SeniorManagerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.SeniorManagerAlias) && !ccAddressList.Contains(feedback.SeniorManagerAlias))
+                        {
+                            ccAddressList += feedback.SeniorManagerAlias + ",";
+                        }
+                        if (!string.IsNullOrEmpty(feedback.ClientDirectorAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ClientDirectorAlias) && !ccAddressList.Contains(feedback.ClientDirectorAlias))
+                        {
+                            ccAddressList += feedback.ClientDirectorAlias + ",";
+                        }
+                        Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, ccAddressList==""?"": ccAddressList.Substring(0, ccAddressList.Length - 1), null);
+                    }
+                }
+
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FinishedFeedbackInitialEmails, nextRun);
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FeedbackIntialMailFailedFormat, ex.Message), nextRun);
+            }
+        }
+
+        private static void SendFeedbackRemainderMails(List<ProjectFeedbackMail> feedbacks, DateTime currentWithTimeZone, DateTime nextRun)
+        {
+            try
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedFeedbackRemainderEmails, nextRun);
+                var feedbackMailTemplate = GetEmailTemplate(RemainderProjectFeedbackNotification);
+
+                foreach (var feedback in feedbacks)
+                {
+                    foreach (var resource in feedback.Resources)
+                    {
+                        string url = IsUATEnvironment ? "http://65.52.17.100/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString();
+                        var subject = String.Format(feedbackMailTemplate.Subject, resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Project.Name);
+                        var emailBody = String.Format(feedbackMailTemplate.Body, resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, resource.DueDate.ToString(Constants.Formatting.EntryDateFormat), resource.Person.Title.TitleName, resource.ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat), resource.ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Project.Name, url);
+                        var ccAddressList = "";
+                        if (!string.IsNullOrEmpty(feedback.ProjectOwnerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ProjectOwnerAlias))
+                        {
+                            ccAddressList += feedback.ProjectOwnerAlias + ",";
+                        }
+                        if (!string.IsNullOrEmpty(feedback.SeniorManagerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.SeniorManagerAlias))
+                        {
+                            ccAddressList += feedback.SeniorManagerAlias + ",";
+                        }
+                        if (!string.IsNullOrEmpty(feedback.ClientDirectorAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ClientDirectorAlias))
+                        {
+                            ccAddressList += feedback.ClientDirectorAlias+",";
+                        }
+                        Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, ccAddressList == "" ? "" : ccAddressList.Substring(0, ccAddressList.Length - 1), null);
+                    }
+                }
+
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FinishedFeedbackRemainderEmails, nextRun);
+                //should update next remainder date
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FeedbackRemainderMailFailedFormat, ex.Message), nextRun);
+            }
+        }
+
         /// <summary>
         /// Sends login credentials to the persons.
         /// </summary>
@@ -1396,7 +1603,7 @@ namespace UpdatePracticeAndSeniority
                     PersonEncodedPasswordInsert(person.Id.Value, encodedPassword);
 
                     var emailBody = String.Format(welcomeEmailTemplate.Body, person.FirstName, companyName, person.Alias, password, LoginPagePath, smtpSettings.PMSupportEmail);
-                    Email(welcomeEmailTemplate.Subject, emailBody, true, person.Alias, EmailBccRecieverList, null);
+                    Email(welcomeEmailTemplate.Subject, emailBody, true, person.Alias, EmailBccRecieverList, string.Empty, null);
                     UpdateIsWelcomeEmailSentForPerson(person.Id.Value);
                 }
 
@@ -1424,16 +1631,16 @@ namespace UpdatePracticeAndSeniority
                 foreach (Person person in terminatedPersons)
                 {
                     var emailBody = string.Format(deactivateAccountEmailTemplates.Body, person.FirstName, person.LastName, person.TerminationDate.Value.ToString(DateFormat));
-                    Email(deactivateAccountEmailTemplates.Subject, emailBody, true, deactivateAccountEmailTemplates.EmailTemplateTo, string.Empty, null);
+                    Email(deactivateAccountEmailTemplates.Subject, emailBody, true, deactivateAccountEmailTemplates.EmailTemplateTo, string.Empty, string.Empty, null);
 
                     if (person.IsTerminatedDueToPay)//rehire due to compensation change from contract to employee
                     {
                         var activeAccountEmailBody = string.Format(activeAccountEmailTemplate.Body, person.FirstName, person.LastName, person.HireDate.ToString(DateFormat), person.Alias, person.Title.TitleName, person.CurrentPay.TimescaleName, person.TelephoneNumber);
-                        Email(activeAccountEmailTemplate.Subject, activeAccountEmailBody, true, activeAccountEmailTemplate.EmailTemplateTo, string.Empty, null);
+                        Email(activeAccountEmailTemplate.Subject, activeAccountEmailBody, true, activeAccountEmailTemplate.EmailTemplateTo, string.Empty, string.Empty, null);
                         if (person.IsAdmin || person.Seniority.Name == Constants.SeniorityNames.AdminiSeniorityName)
                         {
                             var administartorAddedEmail = string.Format(administratorAddedEmailTemplate.Body, person.FirstName, person.LastName);
-                            Email(administratorAddedEmailTemplate.Subject, administartorAddedEmail, true, administratorAddedEmailTemplate.EmailTemplateTo, string.Empty, null, true);
+                            Email(administratorAddedEmailTemplate.Subject, administartorAddedEmail, true, administratorAddedEmailTemplate.EmailTemplateTo, string.Empty, string.Empty, null, true);
                         }
                     }
                 }
@@ -1669,6 +1876,76 @@ namespace UpdatePracticeAndSeniority
                         };
                     }
                     persons.Add(person);
+                }
+            }
+        }
+
+        private static void ReadProjectFeedback(SqlDataReader reader, List<ProjectFeedbackMail> feedbacks)
+        {
+            if (reader.HasRows)
+            {
+                int firstNameIndex = reader.GetOrdinal("FirstName");
+                int lastNameIndex = reader.GetOrdinal("LastName");
+                int personIdIndex = reader.GetOrdinal("PersonId");
+                int titleIdIndex = reader.GetOrdinal("TitleId");
+                int titleIndex = reader.GetOrdinal("Title");
+                int reviewStartDateIndex = reader.GetOrdinal("ReviewPeriodStartDate");
+                int reviewEndDateIndex = reader.GetOrdinal("ReviewPeriodEndDate");
+                int dueDateIndex = reader.GetOrdinal("DueDate");
+                int projectIdIndex = reader.GetOrdinal("ProjectId");
+                int projectNameIndex = reader.GetOrdinal("ProjectName");
+                int projectNumberIndex = reader.GetOrdinal("ProjectNumber");
+                int projectManagersAliasesIndex = reader.GetOrdinal("ToAddressList");
+                int directorAliasIndex = reader.GetOrdinal("DirectorAlias");
+                int projectOwnerAliasIndex = reader.GetOrdinal("ProjectOwnerAlias");
+                int seniorManagerAliasIndex = reader.GetOrdinal("SeniorManagerAlias");
+
+                while (reader.Read())
+                {
+                    var projectId = reader.GetInt32(projectIdIndex);
+                    var feedback = new ProjectFeedback
+                    {
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            Title = new Title()
+                            {
+                                TitleId = !reader.IsDBNull(titleIdIndex) ? reader.GetInt32(titleIdIndex) : -1,
+                                TitleName = !reader.IsDBNull(titleIndex) ? reader.GetString(titleIndex) : string.Empty
+                            }
+                        },
+                        ReviewStartDate = reader.GetDateTime(reviewStartDateIndex),
+                        ReviewEndDate = reader.GetDateTime(reviewEndDateIndex),
+                        DueDate = reader.GetDateTime(dueDateIndex)
+                    };
+                    if (feedbacks.Any(p => p.Project.Id.Value == projectId))
+                    {
+                        var mail = feedbacks.FirstOrDefault(p => p.Project.Id.Value == projectId);
+                        mail.Resources.Add(feedback);
+                    }
+                    else
+                    {
+                        var feedbackMail = new ProjectFeedbackMail()
+                        {
+                            Project = new Project()
+                            {
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                ProjectNumber = reader.GetString(projectNumberIndex)
+                            },
+                            ProjectManagersAliasList = !reader.IsDBNull(projectManagersAliasesIndex) ? reader.GetString(projectManagersAliasesIndex) : string.Empty,
+                            ClientDirectorAlias = !reader.IsDBNull(directorAliasIndex) ? reader.GetString(directorAliasIndex) : string.Empty,
+                            ProjectOwnerAlias = !reader.IsDBNull(projectOwnerAliasIndex) ? reader.GetString(projectOwnerAliasIndex) : string.Empty,
+                            SeniorManagerAlias = !reader.IsDBNull(seniorManagerAliasIndex) ? reader.GetString(seniorManagerAliasIndex) : string.Empty,
+                            Resources = new List<ProjectFeedback>()
+                            {
+                                feedback
+                            }
+                        };
+                        feedbacks.Add(feedbackMail);
+                    }
                 }
             }
         }
