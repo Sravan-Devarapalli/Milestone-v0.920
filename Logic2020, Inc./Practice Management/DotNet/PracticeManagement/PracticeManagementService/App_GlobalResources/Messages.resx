@@ -186,4 +186,13 @@
   <data name="CohortAssignmentChangeTemplateName" xml:space="preserve">
     <value>CohortAssignmentChangeTemplate</value>
   </data>
+  <data name="IntialProjectFeedbackNotification" xml:space="preserve">
+    <value>IntialProjectFeedbackNotification</value>
+  </data>
+  <data name="RemainderProjectFeedbackNotification" xml:space="preserve">
+    <value>RemainderProjectFeedbackNotification</value>
+  </data>
+  <data name="ProjectReviewCanceledNotification" xml:space="preserve">
+    <value>ProjectReviewCanceledNotification</value>
+  </data>
 </root>
