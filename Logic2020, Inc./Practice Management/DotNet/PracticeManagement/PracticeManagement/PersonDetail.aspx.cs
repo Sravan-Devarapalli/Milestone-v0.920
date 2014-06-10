@@ -3392,7 +3392,7 @@ namespace PraticeManagement
                             currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
                         oldPerson.RoleNames = currentRoles;
                     }
-                    int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, IsWizards);
+                    int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, IsWizards,Page.User.Identity.Name);
                     SaveRoles(person, currentRoles);
 
                     serviceClient.SendAdministratorAddedEmail(person, oldPerson);
