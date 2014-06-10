@@ -146,6 +146,9 @@ namespace PracticeManagementService
         
         [OperationContract]
         List<Person> RecruitingMetricsReport(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<ProjectFeedback> ProjectFeedbackReport(string accountIds, string businessGroupIds, DateTime startDate, DateTime endDate, string projectStatus, string projectIds, string directorIds, string practiceIds, bool excludeInternalPractices, string personIds, string titleIds, string reviewStartdateMonths, string reviewEnddateMonths, string projectmanagerIds, string statusIds, bool isExport);
     }
 }
 
