@@ -240,6 +240,11 @@ namespace PracticeManagementService
         {
             return ReportDAL.RecruitingMetricsReport(startDate, endDate);
         }
+
+        public List<ProjectFeedback> ProjectFeedbackReport(string accountIds, string businessGroupIds, DateTime startDate, DateTime endDate,string projectStatus, string projectIds,string directorIds, string practiceIds, bool excludeInternalPractices, string personIds, string titleIds, string reviewStartdateMonths, string reviewEnddateMonths, string projectmanagerIds, string statusIds, bool isExport)
+        {
+            return ReportDAL.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus,projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport);
+        }
     }
 }
 
