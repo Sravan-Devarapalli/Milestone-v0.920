@@ -82,9 +82,9 @@ namespace PracticeManagementService
             ProjectGroupDAL.BusinessGroupDelete(businessGroupId, userLogin);
         }
 
-        public List<BusinessGroup> GetBusinessGroupList(int? clientId, int? businessUnitId)
+        public List<BusinessGroup> GetBusinessGroupList(string clientIds, int? businessUnitId)
         {
-            return ProjectGroupDAL.GetBusinessGroupList(clientId, businessUnitId);
+            return ProjectGroupDAL.GetBusinessGroupList(clientIds, businessUnitId);
         }
 
         #endregion IProjectGroupService Members
