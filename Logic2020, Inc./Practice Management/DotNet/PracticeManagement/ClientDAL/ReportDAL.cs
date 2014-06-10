@@ -2964,7 +2964,7 @@ namespace DataAccess
                         actualGrossMarginIndex);
                 var i = projects.IndexOf(project);
                 projects[i].ProjectedFinancialsByRange.Add(financials.FinancialRange, financials);
-                bool isCurrentYear = financials.FinancialRange.StartDate.Year == DateTime.Now.Year; 
+                bool isCurrentYear = financials.FinancialRange.StartDate.Year == DateTime.Now.Year;
                 if (quarterList.Any(p => p.ProjectId == project.Id.Value))
                 {
                     if (financials.FinancialRange.Range.Substring(1) == "1" || financials.FinancialRange.Range.Substring(1) == "2" || financials.FinancialRange.Range.Substring(1) == "3")
@@ -2984,7 +2984,7 @@ namespace DataAccess
                         quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "Q4").FinancialsList.Add(financials);
                     }
                     var item = quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "YTD");
-                    if (item.QuarterRangeType.EndDate >= financials.FinancialRange.EndDate) 
+                    if (item.QuarterRangeType.EndDate >= financials.FinancialRange.EndDate)
                     {
                         quarterList.First(p => p.ProjectId == project.Id.Value && p.QuarterRangeType.Range == "YTD").FinancialsList.Add(financials);
                     }
@@ -3066,7 +3066,7 @@ namespace DataAccess
                     {
                         rangeQ4forProject.FinancialsList.Add(financials);
                     }
-                    if (ytdforProject.QuarterRangeType.EndDate >= financials.FinancialRange.EndDate) 
+                    if (ytdforProject.QuarterRangeType.EndDate >= financials.FinancialRange.EndDate)
                     {
                         ytdforProject.FinancialsList.Add(financials);
                     }
@@ -4013,6 +4013,175 @@ namespace DataAccess
                     LengthOfTenture = reader.GetInt32(LengthOfTenureInDaysIndex)
                 };
                 result.Add(person);
+            }
+        }
+
+        public static List<ProjectFeedback> ProjectFeedbackReport(string accountIds, string businessGroupIds, DateTime startDate, DateTime endDate, string projectStatus, string projectIds, string directorIds, string practiceIds, bool excludeInternalPractices, string personIds, string titleIds, string reviewStartdateMonths, string reviewEnddateMonths, string projectmanagerIds, string statusIds, bool isExport)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.ProjectFeedbackReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessGroupIds, businessGroupIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIds, projectIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatus, projectStatus ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientDirectorIds, directorIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Practices, practiceIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternalPractices);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIds, personIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TitleIdsParam, titleIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ReviewStartDateMonths, reviewStartdateMonths ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ReviewEndDateMonths, reviewEnddateMonths ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagers, projectmanagerIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Statuses, statusIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsExport, isExport);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<ProjectFeedback> result = new List<ProjectFeedback>();
+                    ReadProjectFeedbackReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadProjectFeedbackReport(SqlDataReader reader, List<ProjectFeedback> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int feedbackIdIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackId);
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int cliendIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int cliendNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+                int projectstatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
+                int projectstatusIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatus);
+                int groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.GroupId);
+                int businessUnitIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnit);
+                int businessGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupIdColumn);
+                int businessGroupIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroup);
+                int directorIdIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorIdColumn);
+                int directorFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorFirstNameColumn);
+                int directorLastNameColumnIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorLastNameColumn);
+                int seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
+                int projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                int projectManagerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
+                int projectManagerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
+                int projectOwnerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerId);
+                int projectOwnerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerLastName);
+                int projectOwnerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerFirstName);
+                int reviewStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewStartDate);
+                int reviewEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewEndDate);
+                int feedbackStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackStatusId);
+                int feedbackStatusIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackStatus);
+                int completionCertificateByIndex = reader.GetOrdinal(Constants.ColumnNames.CompletionCertificateBy);
+                int completionCertificateDateIndex = reader.GetOrdinal(Constants.ColumnNames.CompletionCertificateDate);
+                int cancelationReasonIndex = reader.GetOrdinal(Constants.ColumnNames.CancelationReason);
+
+                while (reader.Read())
+                {
+                    var feedbackId = reader.GetInt32(feedbackIdIndex);
+                    var projectManager = new Person()
+                       {
+                           Id = reader.GetInt32(projectManagerIdIndex),
+                           FirstName = reader.GetString(projectManagerFirstNameIndex),
+                           LastName = reader.GetString(projectManagerLastNameIndex),
+                       };
+                    if(result.Any(f=>f.Id.Value == feedbackId))
+                    {
+                        var feedback = result.First(f => f.Id.Value == feedbackId);
+                        feedback.Project.ProjectManagers.Add(projectManager);
+                    }
+                    else
+                    {
+                        ProjectFeedback feedback = new ProjectFeedback()
+                        {
+                            Id = feedbackId,
+                            Person = new Person()
+                            {
+                                Id = reader.GetInt32(personIdIndex),
+                                FirstName = reader.GetString(firstNameIndex),
+                                LastName = reader.GetString(lastNameIndex),
+                                EmployeeNumber =reader.GetString(employeeNumberIndex),
+                                Title = new Title()
+                                {
+                                    TitleId = !reader.IsDBNull(titleIdIndex) ? reader.GetInt32(titleIdIndex) : -1,
+                                    TitleName = !reader.IsDBNull(titleIndex) ? reader.GetString(titleIndex) : string.Empty
+                                }
+                            },
+                            Project = new Project()
+                            {
+                              Id = reader.GetInt32(projectIdIndex),
+                              Name = reader.GetString(projectNameIndex),   
+                              ProjectNumber = reader.GetString(projectNumberIndex),
+                              Status = new ProjectStatus()
+                              {
+                                  Id = reader.GetInt32(projectstatusIdIndex),
+                                  Name = reader.GetString(projectstatusIndex)
+                              },
+                              Client = new Client()
+                              {
+                                Id = reader.GetInt32(cliendIdIndex),
+                                Name = reader.GetString(cliendNameIndex)                                
+                              },
+                              Group = new ProjectGroup()
+                              {
+                                 Id =  reader.GetInt32(groupIdIndex),
+                                Name = reader.GetString(businessUnitIndex)         
+                              },
+                              BusinessGroup = new BusinessGroup()
+                              {
+                                Id = reader.GetInt32(businessGroupIdIndex),
+                                Name = reader.GetString(businessGroupIndex)         
+                              },
+                              Director = new Person()
+                              {
+                                  Id = !reader.IsDBNull(directorIdIndex) ? (int?)reader.GetInt32(directorIdIndex) : null,
+                                FirstName = !reader.IsDBNull(directorFirstNameIndex) ? reader.GetString(directorFirstNameIndex) : string.Empty,
+                                LastName = !reader.IsDBNull(directorLastNameColumnIndex) ? reader.GetString(directorLastNameColumnIndex) : string.Empty
+                              },
+                              SeniorManagerName = !reader.IsDBNull(seniorManagerNameIndex) ? reader.GetString(seniorManagerNameIndex) : string.Empty,
+                              ProjectManagers = new List<Person>()
+                              {
+                                projectManager
+                              },
+                              ProjectOwner = new Person()
+                              {
+                                  Id = !reader.IsDBNull(projectOwnerIdIndex) ? (int?)reader.GetInt32(projectOwnerIdIndex) : null,
+                                  FirstName = !reader.IsDBNull(projectOwnerFirstNameIndex) ? reader.GetString(projectOwnerFirstNameIndex) : string.Empty,
+                                  LastName = !reader.IsDBNull(projectOwnerLastNameIndex) ? reader.GetString(projectOwnerLastNameIndex) : string.Empty
+                              }
+                            },
+                            ReviewStartDate = reader.GetDateTime(reviewStartDateIndex),
+                            ReviewEndDate = reader.GetDateTime(reviewEndDateIndex),
+                            Status = new ProjectFeedbackStatus()
+                            {
+                                Id = reader.GetInt32(feedbackStatusIdIndex),
+                                Name = reader.GetString(feedbackStatusIndex)
+                            },
+                            CompletionCertificateBy = !reader.IsDBNull(completionCertificateByIndex) ? reader.GetString(completionCertificateByIndex) : string.Empty,
+                            CompletionCertificateDate = !reader.IsDBNull(completionCertificateDateIndex) ? reader.GetDateTime(completionCertificateDateIndex) : DateTime.MinValue,
+                            CancelationReason = !reader.IsDBNull(cancelationReasonIndex) ? reader.GetString(cancelationReasonIndex) : string.Empty
+                        };
+                    result.Add(feedback);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
