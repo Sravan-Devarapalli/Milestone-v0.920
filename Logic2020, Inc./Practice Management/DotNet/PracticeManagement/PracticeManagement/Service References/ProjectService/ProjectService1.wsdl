@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProjectService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProjectService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://system64.ggk.com/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -120,6 +120,30 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_GetAttributionForGivenIds_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAttributionForGivenIdsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectFeedbackByProjectId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectFeedbackByProjectId" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectFeedbackByProjectId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectFeedbackByProjectIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetAllFeedbackStatuses_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllFeedbackStatuses" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetAllFeedbackStatuses_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllFeedbackStatusesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_SaveFeedbackCancelationDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveFeedbackCancelationDetails" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_SaveFeedbackCancelationDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveFeedbackCancelationDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CheckIfFeedbackExists_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfFeedbackExists" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_CheckIfFeedbackExists_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfFeedbackExistsResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
@@ -409,6 +433,22 @@
     <wsdl:operation name="GetAttributionForGivenIds">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetAttributionForGivenIds" message="tns:IProjectService_GetAttributionForGivenIds_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetAttributionForGivenIdsResponse" message="tns:IProjectService_GetAttributionForGivenIds_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectFeedbackByProjectId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectFeedbackByProjectId" message="tns:IProjectService_GetProjectFeedbackByProjectId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectFeedbackByProjectIdResponse" message="tns:IProjectService_GetProjectFeedbackByProjectId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllFeedbackStatuses">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetAllFeedbackStatuses" message="tns:IProjectService_GetAllFeedbackStatuses_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetAllFeedbackStatusesResponse" message="tns:IProjectService_GetAllFeedbackStatuses_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveFeedbackCancelationDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/SaveFeedbackCancelationDetails" message="tns:IProjectService_SaveFeedbackCancelationDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/SaveFeedbackCancelationDetailsResponse" message="tns:IProjectService_SaveFeedbackCancelationDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfFeedbackExists">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CheckIfFeedbackExists" message="tns:IProjectService_CheckIfFeedbackExists_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CheckIfFeedbackExistsResponse" message="tns:IProjectService_CheckIfFeedbackExists_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
@@ -712,6 +752,42 @@
     </wsdl:operation>
     <wsdl:operation name="GetAttributionForGivenIds">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetAttributionForGivenIds" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectFeedbackByProjectId">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectFeedbackByProjectId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllFeedbackStatuses">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetAllFeedbackStatuses" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveFeedbackCancelationDetails">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/SaveFeedbackCancelationDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfFeedbackExists">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/CheckIfFeedbackExists" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
