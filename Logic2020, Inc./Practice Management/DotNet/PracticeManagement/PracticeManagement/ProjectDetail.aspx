@@ -13,6 +13,7 @@
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectTimeTypes.ascx" TagName="ProjectTimeTypes" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/CommissionsAttribution.ascx"
     TagName="ProjectAttribution" %>
+<%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectFeedback.ascx" TagName="ProjectFeedback" %>
 <%@ Register Src="Controls/ProjectExpenses/ProjectExpensesControl.ascx" TagName="ProjectExpenses"
     TagPrefix="uc2" %>
 <%@ Register TagPrefix="uc" Src="~/Controls/Projects/ProjectFinancials.ascx" TagName="ProjectFinancials" %>
@@ -471,9 +472,10 @@
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic"></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="custProjectStatus" runat="server" ControlToValidate="ddlProjectStatus"
-                                                    ErrorMessage="Only system administrators can make projects Active or Completed." ToolTip="Only system administrators can make projects Active or Completed."
-                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" OnServerValidate="custProjectStatus_ServerValidate"></asp:CustomValidator>
+                                                    ErrorMessage="Only system administrators can make projects Active or Completed."
+                                                    ToolTip="Only system administrators can make projects Active or Completed." ValidationGroup="Project"
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    OnServerValidate="custProjectStatus_ServerValidate"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="cvIsInternal" runat="server" EnableClientScript="false"
                                                     ErrorMessage="Can not change project status as some work types are already in use."
                                                     ValidateEmptyText="true" Text="*" ToolTip="Can not change project status as some timetypes are already in use."></asp:CustomValidator>
@@ -993,58 +995,64 @@
                                             OnCommand="btnView_Command" CommandArgument="0"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
+                                <asp:TableCell ID="cellFeedback" runat="server" Visible="false">
+                                    <span class="bg"><span>
+                                        <asp:LinkButton ID="btnFeedback" runat="server" Text="Project Feedback" CausesValidation="false"
+                                            OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                    </span>
+                                </asp:TableCell>
                                 <asp:TableCell ID="cellProjectTimeTypes" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTimeTypes" runat="server" Text="Project Time Types"
-                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="1"></asp:LinkButton></span>
+                                            CausesValidation="false" OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="CellAttachments" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnAttachments" runat="server" Text="Attachments" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="2"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellFinancials" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnFinancials" runat="server" Text="Financial Summary" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="3"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellCommissions" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnCommissions" runat="server" Text="Commissions" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="4"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellExpenses" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnExpenses" runat="server" Text="Expenses" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="5"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellPersons" runat="server">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnPersons" runat="server" Text="Persons" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="6"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="TableCellHistoryg" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnHstory" runat="server" Text="History" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjectTools" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectTools" runat="server" Text="Clone Project" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                                 <asp:TableCell ID="cellProjectCSAT" runat="server" Visible="false">
                                     <span class="bg"><span>
                                         <asp:LinkButton ID="btnProjectCSAT" runat="server" Text="CSAT" CausesValidation="false"
-                                            OnCommand="btnView_Command" CommandArgument="9"></asp:LinkButton></span>
+                                            OnCommand="btnView_Command" CommandArgument="10"></asp:LinkButton></span>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -1058,6 +1066,11 @@
                                             Text="Add Milestone" />
                                     </div>
                                     <uc:ProjectMilestonesFinancials ID="milestones" runat="server" ValidationGroup="MilestoneTab" />
+                                </asp:Panel>
+                            </asp:View>
+                            <asp:View ID="vwFeedback" runat="server">
+                                <asp:Panel ID="pnlFeedback" runat="server" CssClass="tab-pane">
+                                    <uc:ProjectFeedback ID="projectFeedback" runat="server" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="View1" runat="server">
