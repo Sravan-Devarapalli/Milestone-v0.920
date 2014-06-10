@@ -22,6 +22,7 @@
       <Setting name="LoginPagePath"/>
       <Setting name="WelcomeMailScheduleTime"/>
       <Setting name="UATTestingMail"/>
+      <Setting name="FeedbackMailsScheduleTime"/>
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
