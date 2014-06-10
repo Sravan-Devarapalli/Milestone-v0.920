@@ -33,6 +33,12 @@ AS
 		DELETE FROM dbo.Note
 			  WHERE TargetId = @MilestoneId 
 						AND NoteTargetId = 1
+		DELETE PF
+		FROM dbo.ProjectFeedback PF 
+		INNER JOIN dbo.MilestonePersonEntry AS MPE ON MPE.MilestonePersonId = PF.MilestonePersonId
+		INNER JOIN  dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+		INNER JOIN  dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+		WHERE M.MilestoneId = @MilestoneId
 
 		DELETE MPE
 	    FROM dbo.MilestonePersonEntry AS MPE
