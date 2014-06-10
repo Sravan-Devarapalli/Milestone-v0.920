@@ -997,6 +997,38 @@ namespace PracticeManagementService
             return ProjectDAL.GetAttributionForGivenIds(attributionIds);
         }
 
+        public List<ProjectFeedback> GetProjectFeedbackByProjectId(int projectId)
+        {
+            return ProjectDAL.GetProjectFeedbackByProjectId(projectId);
+        }
+
+        public List<ProjectFeedbackStatus> GetAllFeedbackStatuses()
+        {
+            return ProjectDAL.GetAllFeedbackStatuses();
+        }
+
+        public void SaveFeedbackCancelationDetails(int feedbackId, int? statusId, bool isCanceled, string cancelationReason, string userLogin,bool sendReactivationMail)
+        {
+            ProjectDAL.SaveFeedbackCancelationDetails(feedbackId, statusId, isCanceled, cancelationReason, userLogin);
+            if (sendReactivationMail)
+                SendReactivationMail((int?)feedbackId);
+        }
+
+        public bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, int? projectId)
+        {
+            return ProjectDAL.CheckIfFeedbackExists(milestonePersonId, milestoneId, projectId);
+        }
+
+        public void SendReactivationMail(int? feedbackId)
+        {
+            var feedbacks = ProjectDAL.GetPersonsForIntialMailForProjectFeedback(feedbackId);
+            var now = DateTime.Now;
+            if (feedbacks.Count > 0 && now.Date >= feedbacks[0].Resources[0].ReviewEndDate.Date)
+            {
+                MailUtil.SendProjectFeedbackInitialMailNotification(feedbacks[0]);
+            }
+        }
+
         #endregion IProjectService Members
     }
 }
