@@ -874,9 +874,8 @@
                                                     days. (e.g. 3)
                                                 </td>
                                             </tr>
-                                              <tr>
-                                               <td class="height19Px">
-                                                    
+                                            <tr>
+                                                <td class="height19Px">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -918,7 +917,10 @@
                             OnServerValidate="custCSATValidate_OnServerValidate" Display="Dynamic"></asp:CustomValidator><br />
                         <asp:CustomValidator ID="custAttribution" ValidationGroup="MilestoneDelete" runat="server"
                             ErrorMessage="Milestone cannot be deleted as project has Attribution data added to it."
-                            OnServerValidate="custAttribution_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
+                            OnServerValidate="custAttribution_OnServerValidate" Display="Dynamic"></asp:CustomValidator><br />
+                        <asp:CustomValidator ID="custFeedback" ValidationGroup="MilestoneDelete" runat="server"
+                            ErrorMessage="The milestone cannot be deleted because there are project feedback records has been marked as completed.  The milestone can be deleted if the status of all the feedbacks changed to 'Not Completed' or 'Canceled'. Please navigate to the 'Project Feedback' tab for more information to make the necessary adjustments."
+                            OnServerValidate="custFeedback_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
                         <asp:ValidationSummary ID="vsumShiftDays" runat="server" EnableClientScript="false"
                             ValidationGroup="ShiftDays" />
                         <asp:ValidationSummary ID="vsumClone" runat="server" EnableClientScript="false" ValidationGroup="Clone" />
@@ -1077,74 +1079,87 @@
                     <tr id="trAttributionRecord" runat="server">
                         <td>
                             <p>
-                               &nbsp;&nbsp;&nbsp; This action cannot be done as the following attribution records have the person start
-                            date and end date out of the project's start date and project's end date in commissions
-                            tab.</p>
-                            <br/>
+                                &nbsp;&nbsp;&nbsp; This action cannot be done as the following attribution records
+                                have the person start date and end date out of the project's start date and project's
+                                end date in commissions tab.</p>
+                            <br />
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <asp:Repeater runat="server" ID="repDeliveryPersons">
-                                <HeaderTemplate>&nbsp;&nbsp;Delivery Attribution: </HeaderTemplate>
-                                <ItemTemplate><br/>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <b>
+                                <HeaderTemplate>
+                                    &nbsp;&nbsp;Delivery Attribution:
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp; <b>
                                         <%# Eval("TargetName") %></b>&nbsp;has&nbsp;startdate&nbsp;<b><%# ((DateTime)Eval("StartDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%></b>&nbsp;and
                                     enddate&nbsp;<b><%# ((DateTime)Eval("EndDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat) %></b>.
                                 </ItemTemplate>
-                                <FooterTemplate><br/><br/></FooterTemplate>
+                                <FooterTemplate>
+                                    <br />
+                                    <br />
+                                </FooterTemplate>
                             </asp:Repeater>
                             <asp:HiddenField runat="server" ID="hdnIsUpdate" />
                         </td>
                     </tr>
-                     <tr>
+                    <tr>
                         <td>
                             <asp:Repeater runat="server" ID="repSalesPersons">
-                                <HeaderTemplate>&nbsp;&nbsp;Sales Attribution:</HeaderTemplate>
+                                <HeaderTemplate>
+                                    &nbsp;&nbsp;Sales Attribution:</HeaderTemplate>
                                 <ItemTemplate>
-                                    <br/>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <b>
+                                    <br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp; <b>
                                         <%# Eval("TargetName") %></b>&nbsp;has&nbsp;startdate&nbsp;<b><%# ((DateTime)Eval("StartDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat)%></b>&nbsp;and
                                     enddate&nbsp;<b><%# ((DateTime)Eval("EndDate")).ToString(PraticeManagement.Constants.Formatting.EntryDateFormat) %></b>.
                                 </ItemTemplate>
-                                <FooterTemplate><br/><br/></FooterTemplate>
+                                <FooterTemplate>
+                                    <br />
+                                    <br />
+                                </FooterTemplate>
                             </asp:Repeater>
                         </td>
                     </tr>
-                        <tr id="trCommissionsStartDateExtend" runat="server">
+                    <tr id="trCommissionsStartDateExtend" runat="server">
                         <td>
                             <p>
-                               &nbsp;&nbsp;&nbsp; <asp:Label runat="server" ID="lblCommissionsStartDateExtendMessage"></asp:Label> </p>
-                            <br/>
+                                &nbsp;&nbsp;&nbsp;
+                                <asp:Label runat="server" ID="lblCommissionsStartDateExtendMessage"></asp:Label>
+                            </p>
+                            <br />
                         </td>
                     </tr>
                     <tr id="trCommissionsEndDateExtend" runat="server">
                         <td>
                             <p>
-                               &nbsp;&nbsp;&nbsp; <asp:Label runat="server" ID="lblCommissionsEndDateExtendMessage"></asp:Label> </p>
-                            <br/>
+                                &nbsp;&nbsp;&nbsp;
+                                <asp:Label runat="server" ID="lblCommissionsEndDateExtendMessage"></asp:Label>
+                            </p>
+                            <br />
                         </td>
                     </tr>
-                         <tr>
+                    <tr>
                         <td>
                             <p>
-                               &nbsp;&nbsp;&nbsp; Please Click "OK" to accept the change. </p>
-                            <br/>
+                                &nbsp;&nbsp;&nbsp; Please Click "OK" to accept the change.
+                            </p>
+                            <br />
                         </td>
                     </tr>
                     <tr>
                         <td class="textCenter">
                             <asp:Button ID="btnOkAttribution" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp"
-                                OnClick="btnOkAttribution_Click" /> &nbsp;&nbsp;
-                                 <asp:Button ID="btnCancelAttribution" runat="server" ToolTip="Cancel" Text="Cancel"
+                                OnClick="btnOkAttribution_Click" />
+                            &nbsp;&nbsp;
+                            <asp:Button ID="btnCancelAttribution" runat="server" ToolTip="Cancel" Text="Cancel"
                                 OnClick="btnCancelAttribution_Click" CssClass="Width100PxImp" />
                         </td>
                     </tr>
                 </table>
             </asp:Panel>
-
             <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
