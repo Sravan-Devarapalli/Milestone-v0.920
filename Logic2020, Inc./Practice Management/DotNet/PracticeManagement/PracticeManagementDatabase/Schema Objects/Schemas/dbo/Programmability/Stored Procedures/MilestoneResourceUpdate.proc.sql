@@ -146,5 +146,7 @@ BEGIN
 				   INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId
 			 WHERE mp.MilestoneId = @MilestoneId AND (@IsStartDateChangeReflectedForMilestoneAndPersons = 1 OR @IsEndDateChangeReflectedForMilestoneAndPersons = 1 )
 
+		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = @MilestoneId
+
  END
 
