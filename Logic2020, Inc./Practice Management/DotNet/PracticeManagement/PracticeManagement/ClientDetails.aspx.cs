@@ -710,7 +710,7 @@ namespace PraticeManagement
                                 }
                                 else if (g.Code == BusinessGroup.DefaultBusinessGroupCode && g.Name != BusinessGroup.DefaultBusinessGroupName)
                                 {
-                                    int groupId = ServiceCallers.Custom.Group(s => s.GetBusinessGroupList(id.Value, null).ToList()).First(s => s.Code == BusinessGroup.DefaultBusinessGroupCode).Id.Value;
+                                    int groupId = ServiceCallers.Custom.Group(s => s.GetBusinessGroupList(id.Value.ToString(), null).ToList()).First(s => s.Code == BusinessGroup.DefaultBusinessGroupCode).Id.Value;
                                     BusinessGroup businessGroup = new BusinessGroup();
                                     businessGroup.Name = g.Name;
                                     businessGroup.Id = groupId;
