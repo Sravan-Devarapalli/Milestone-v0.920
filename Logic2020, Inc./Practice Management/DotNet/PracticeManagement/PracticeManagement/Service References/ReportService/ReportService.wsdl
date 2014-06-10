@@ -51,6 +51,12 @@
   <wsdl:message name="IReportService_RecruitingMetricsReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:RecruitingMetricsReportResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_ProjectFeedbackReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectFeedbackReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectFeedbackReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectFeedbackReportResponse" />
+  </wsdl:message>
   <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetails" />
   </wsdl:message>
@@ -268,6 +274,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/RecruitingMetricsReport" message="tns:IReportService_RecruitingMetricsReport_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/RecruitingMetricsReportResponse" message="tns:IReportService_RecruitingMetricsReport_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ProjectFeedbackReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectFeedbackReport" message="tns:IReportService_ProjectFeedbackReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectFeedbackReportResponse" message="tns:IReportService_ProjectFeedbackReport_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse" message="tns:IReportService_PersonTimeEntriesDetails_OutputMessage" />
@@ -446,6 +456,15 @@
     </wsdl:operation>
     <wsdl:operation name="RecruitingMetricsReport">
       <soap:operation soapAction="http://tempuri.org/IReportService/RecruitingMetricsReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectFeedbackReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectFeedbackReport" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
