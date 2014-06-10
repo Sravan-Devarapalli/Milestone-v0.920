@@ -16,3 +16,6 @@ AS
 		  FROM dbo.MilestonePersonEntry
 		 WHERE MilestonePersonId = @MilestonePersonId
 
+		 DELETE 
+		 FROM dbo.ProjectFeedback
+		 WHERE MilestonePersonId = @MilestonePersonId
