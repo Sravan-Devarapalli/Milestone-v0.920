@@ -554,7 +554,7 @@ namespace PraticeManagement
                                     currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
                                 oldPerson.RoleNames = currentRoles;
                             }
-                            int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, true);
+                            int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, true,Page.User.Identity.Name);
 
                             PersonDetail.SaveRoles(person, currentRoles);
                             serviceClient.SendAdministratorAddedEmail(person, oldPerson);
