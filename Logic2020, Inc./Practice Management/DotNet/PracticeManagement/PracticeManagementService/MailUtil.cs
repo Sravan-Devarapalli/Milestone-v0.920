@@ -157,6 +157,53 @@ namespace PracticeManagementService
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
         }
 
+        internal static void SendProjectFeedbackInitialMailNotification(ProjectFeedbackMail feedback)
+        {
+            string url = IsUAT ? "http://65.52.17.100/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString();
+            var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.IntialProjectFeedbackNotification);
+            var subject = String.Format(emailTemplate.Subject, feedback.Resources[0].DueDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Resources[0].Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Project.Name);
+            var emailBody = String.Format(emailTemplate.Body, feedback.Resources[0].Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Resources[0].DueDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Resources[0].Person.Title.TitleName, feedback.Resources[0].ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Resources[0].ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Project.Name, url);
+            var ccAddressList = "";
+            if (!string.IsNullOrEmpty(feedback.ProjectOwnerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ProjectOwnerAlias))
+            {
+                ccAddressList += feedback.ProjectOwnerAlias + ",";
+            }
+            if (!string.IsNullOrEmpty(feedback.SeniorManagerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.SeniorManagerAlias) && !ccAddressList.Contains(feedback.SeniorManagerAlias))
+            {
+                ccAddressList += feedback.SeniorManagerAlias + ",";
+            }
+            if (!string.IsNullOrEmpty(feedback.ClientDirectorAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ClientDirectorAlias) && !ccAddressList.Contains(feedback.ClientDirectorAlias))
+            {
+                ccAddressList += feedback.ClientDirectorAlias + ",";
+            }
+            Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, null, false, string.Empty, ccAddressList == "" ? "" : ccAddressList.Substring(0, ccAddressList.Length - 1));
+        }
+
+        internal static void SendReviewCanceledMailNotification(List<ProjectFeedbackMail> feedbacks)
+        {
+            foreach(var feedback in feedbacks)
+            {
+                string url = IsUAT ? "http://65.52.17.100/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString();
+                var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.ProjectReviewCanceledNotification);
+                var subject = String.Format(emailTemplate.Subject, feedback.Resources[0].Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Project.Name);
+                var emailBody = String.Format(emailTemplate.Body, feedback.Resources[0].Person.FirstName, feedback.Project.ProjectNumber,feedback.Project.Name, url);
+                var ccAddressList = "";
+                if (!string.IsNullOrEmpty(feedback.ProjectOwnerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ProjectOwnerAlias))
+                {
+                    ccAddressList += feedback.ProjectOwnerAlias + ",";
+                }
+                if (!string.IsNullOrEmpty(feedback.SeniorManagerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.SeniorManagerAlias) && !ccAddressList.Contains(feedback.SeniorManagerAlias))
+                {
+                    ccAddressList += feedback.SeniorManagerAlias + ",";
+                }
+                if (!string.IsNullOrEmpty(feedback.ClientDirectorAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ClientDirectorAlias) && !ccAddressList.Contains(feedback.ClientDirectorAlias))
+                {
+                    ccAddressList += feedback.ClientDirectorAlias + ",";
+                }
+                Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, null, false, string.Empty, ccAddressList == "" ? "" : ccAddressList.Substring(0, ccAddressList.Length - 1));
+            }
+        }
+
         internal static void SendCohortAssignmentChangeEmail(string personName, string oldCohort, string newCohort)
         {
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.CohortAssignmentChangeTemplateName);
@@ -327,3 +374,4 @@ namespace PracticeManagementService
         #endregion Methods
     }
 }
+
