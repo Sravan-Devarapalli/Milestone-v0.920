@@ -17,8 +17,6 @@ AS
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-
-
 	INSERT INTO dbo.MilestonePersonEntry
 	            (MilestonePersonId, StartDate, EndDate, PersonRoleId, Amount, HoursPerDay, Location)
 	     VALUES (@MilestonePersonId, @StartDate, @EndDate, @PersonRoleId, @Amount, @HoursPerDay, @Location)
@@ -30,7 +28,9 @@ AS
 		UPDATE dbo.MilestonePerson
 		SET PersonId = @PersonId
 		WHERE MilestonePersonId = @MilestonePersonId
-	END 
+	END
+	
+	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = @MilestonePersonId,@MilestoneId = NULL
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
