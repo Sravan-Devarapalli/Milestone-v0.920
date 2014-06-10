@@ -384,6 +384,7 @@
     <Content Include="Controls\PersonMonthCalendar.ascx" />
     <Content Include="Controls\Projects\CommissionsAttribution.ascx" />
     <Content Include="Controls\Projects\ProjectCSAT.ascx" />
+    <Content Include="Controls\Projects\ProjectFeedback.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
@@ -408,6 +409,7 @@
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
     <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
     <Content Include="Controls\Reports\ProjectDetailTabByResource.ascx" />
+    <Content Include="Controls\Reports\ProjectFeedbackSummaryReport.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryByResource.ascx" />
     <Content Include="Controls\Reports\ProjectSummaryTabByResource.ascx" />
     <Content Include="Controls\Reports\TimeEntriesByPerson.ascx" />
@@ -542,6 +544,7 @@
     <Content Include="Reports\HumanCapital.aspx" />
     <Content Include="Reports\NewHireReport.aspx" />
     <Content Include="Reports\PersonDetailTimeReport.aspx" />
+    <Content Include="Reports\ProjectFeedbackReport.aspx" />
     <Content Include="Reports\ProjectSummaryReport.aspx" />
     <Content Include="Reports\TerminationReport.aspx" />
     <Content Include="Reports\TimeEntryReport_new.aspx" />
@@ -559,6 +562,10 @@
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PricingList.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.ProjectCSAT.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectFeedback.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectFeedback1.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectFeedbackStatus.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ProjectFeedbackStatus1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.RecruitingMetrics.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.AttainmentBillableutlizationReport.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
@@ -1543,6 +1550,13 @@
     <Compile Include="Controls\Projects\ProjectCSAT.ascx.designer.cs">
       <DependentUpon>ProjectCSAT.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Projects\ProjectFeedback.ascx.cs">
+      <DependentUpon>ProjectFeedback.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectFeedback.ascx.designer.cs">
+      <DependentUpon>ProjectFeedback.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Projects\ProjectTimeTypes.ascx.cs">
       <DependentUpon>ProjectTimeTypes.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1710,6 +1724,13 @@
     </Compile>
     <Compile Include="Controls\Reports\ProjectDetailTabByResource.ascx.designer.cs">
       <DependentUpon>ProjectDetailTabByResource.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectFeedbackSummaryReport.ascx.cs">
+      <DependentUpon>ProjectFeedbackSummaryReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ProjectFeedbackSummaryReport.ascx.designer.cs">
+      <DependentUpon>ProjectFeedbackSummaryReport.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\ProjectSummaryByResource.ascx.cs">
       <DependentUpon>ProjectSummaryByResource.ascx</DependentUpon>
@@ -2155,6 +2176,13 @@
     </Compile>
     <Compile Include="Reports\PersonDetailTimeReport.aspx.designer.cs">
       <DependentUpon>PersonDetailTimeReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ProjectFeedbackReport.aspx.cs">
+      <DependentUpon>ProjectFeedbackReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ProjectFeedbackReport.aspx.designer.cs">
+      <DependentUpon>ProjectFeedbackReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\ProjectSummaryReport.aspx.cs">
       <DependentUpon>ProjectSummaryReport.aspx</DependentUpon>
