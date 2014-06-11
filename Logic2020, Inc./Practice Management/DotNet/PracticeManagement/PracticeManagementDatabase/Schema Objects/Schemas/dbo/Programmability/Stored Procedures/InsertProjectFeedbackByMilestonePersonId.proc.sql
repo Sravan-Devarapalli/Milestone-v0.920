@@ -86,7 +86,7 @@ WHERE (@MilestonePersonId IS NULL OR MP.MilestonePersonId = @MilestonePersonId)
 	)
 	INSERT INTO dbo.ProjectFeedback
 	SELECT M.ProjectId,MP.PersonId,C.[Date],CASE WHEN DATEADD(MONTH,3,C.Date) > P.EndDate THEN P.EndDate ELSE DATEADD(MONTH,3,C.Date)-1 END,CASE WHEN DATEADD(MONTH,3,C.Date) > P.EndDate THEN DATEADD(WEEK,2,P.EndDate) ELSE DATEADD(WEEK,2,DATEADD(MONTH,3,C.Date)-1) END,
-	       2,0,NULL,NULL,NULL,P.MilestonePersonId,  CASE WHEN DATEADD(MONTH,3,C.Date) > P.EndDate THEN P.EndDate ELSE DATEADD(MONTH,3,C.Date)-1 END,CASE WHEN DATEADD(MONTH,3,C.Date) > P.EndDate THEN DATEADD(WEEK,1,P.EndDate) ELSE DATEADD(WEEK,1,DATEADD(MONTH,3,C.Date)-1) END
+	       2,0,NULL,NULL,NULL,P.MilestonePersonId,  CASE WHEN DATEADD(MONTH,3,C.Date) > P.EndDate THEN P.EndDate ELSE DATEADD(MONTH,3,C.Date)-1 END
 	FROM FinalRanges p
 	JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = p.MilestonePersonId
 	JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
