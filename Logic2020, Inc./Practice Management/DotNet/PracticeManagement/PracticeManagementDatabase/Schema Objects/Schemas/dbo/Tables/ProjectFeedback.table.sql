@@ -12,7 +12,6 @@
 	[CompletionCertificateDate] DATETIME,
 	[CancelationReason] NVARCHAR(MAX),
 	[MilestonePersonId]	INT,
-	[NextIntialMailSendDate] DATETIME,
-	[NextRemainderMailSendDate] DATETIME
+	[NextIntialMailSendDate] DATETIME
 )
 
