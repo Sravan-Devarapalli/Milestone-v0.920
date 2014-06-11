@@ -30,12 +30,9 @@ BEGIN
 	LEFT JOIN dbo.Person owner ON owner.PersonId = Pro.ProjectOwnerId
 	LEFT JOIN dbo.Person seniorManager ON seniorManager.PersonId = Pro.SeniorManagerId
 	LEFT JOIN dbo.Title T ON T.TitleId = P.TitleId
-	WHERE CONVERT(NVARCHAR(10), PF.NextRemainderMailSendDate, 101) = CONVERT(NVARCHAR(10), @Today, 101)
+	WHERE CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), @SendAfter, 101)
+	AND CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 101)
 	AND PF.IsCanceled = 0 AND PF.FeedbackStatusId = 2 --Not Completed Status
-	AND CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), @SendAfter, 101)
-
-	UPDATE ProjectFeedback 
-	SET NextRemainderMailSendDate = DATEADD(WEEK,1,@Today)
-	WHERE  CONVERT(NVARCHAR(10), NextRemainderMailSendDate, 101) = CONVERT(NVARCHAR(10), @Today, 101)
+	AND DATEPART(WEEKDAY,PF.ReviewPeriodEndDate) = DATEPART(WEEKDAY,@Today)
 
 END
