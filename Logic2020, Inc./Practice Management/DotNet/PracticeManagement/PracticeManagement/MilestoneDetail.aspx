@@ -327,11 +327,6 @@
                                             ToolTip="The Project Start has an incorrect format. It must be 'MM/dd/yyyy'."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="DataTypeCheck" Type="Date" ValidationGroup="Milestone"></asp:CompareValidator>
-                                        <asp:CustomValidator ID="cstCheckStartDateForExpensesExistance" runat="server" ErrorMessage="From Date cannot be changed because Project has Expenses earlier than selected From Date."
-                                            ToolTip="From Date cannot be changed because Project has Expenses earlier than selected From Date."
-                                            ValidationGroup="Milestone" Text="*" OnServerValidate="cstCheckStartDateForExpensesExistance_OnServerValidate"
-                                            Display="Dynamic">
-                                        </asp:CustomValidator>
                                     </td>
                                     <td>
                                         &nbsp;to&nbsp;
@@ -354,11 +349,6 @@
                                             ToolTip="The Project To has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
                                             EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                             Type="Date" ValidationGroup="Milestone"></asp:CompareValidator>
-                                        <asp:CustomValidator ID="cstCheckEndDateForExpensesExistance" runat="server" ErrorMessage="To Date cannot be changed because Project has Expenses beyond selected To Date."
-                                            ToolTip="To Date cannot be changed because Project has Expenses beyond selected To Date."
-                                            ValidationGroup="Milestone" Text="*" OnServerValidate="cstCheckEndDateForExpensesExistance_OnServerValidate"
-                                            Display="Dynamic">
-                                        </asp:CustomValidator>
                                     </td>
                                 </tr>
                             </table>
@@ -487,7 +477,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Reimbursed Expenses (net of discount), $
+                                    Reimbursed Expenses
                                 </td>
                                 <td class="textRight">
                                     <asp:Label ID="lblReimbursedExpenses" runat="server" class="fontBold"></asp:Label>
@@ -520,7 +510,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Expenses (net of discount), $
+                                     Total Project Expenses
                                 </td>
                                 <td class="textRight">
                                     <asp:Label ID="lblExpenses" runat="server" class="fontBold" />
