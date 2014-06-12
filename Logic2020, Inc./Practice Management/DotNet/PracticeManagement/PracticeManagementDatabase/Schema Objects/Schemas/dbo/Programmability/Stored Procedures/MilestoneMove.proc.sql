@@ -13,7 +13,10 @@ CREATE PROCEDURE [dbo].[MilestoneMove]
 )
 AS
 	SET NOCOUNT ON
-
+	DECLARE @ProjectNewStartDate	DATETIME,
+			@ProjectNewEndDate		DATETIME,
+			@ProjectId	INT
+    SELECT @ProjectId=ProjectId FROM dbo.Milestone WHERE MilestoneId = @MilestoneId
 	IF @MoveFutureMilestones = 1
 	BEGIN
 		UPDATE mpe
@@ -41,8 +44,25 @@ AS
 	       INNER JOIN dbo.Milestone AS sh ON mp.MilestoneId = sh.MilestoneId
 	 WHERE sh.MilestoneId = @MilestoneId
 
-	UPDATE dbo.Milestone
-	   SET StartDate = DATEADD(dd, @ShiftDays, StartDate),
-	       ProjectedDeliveryDate = DATEADD(dd, @ShiftDays, ProjectedDeliveryDate)
+	 UPDATE dbo.Milestone
+	 SET StartDate = DATEADD(dd, @ShiftDays, StartDate),
+	     ProjectedDeliveryDate = DATEADD(dd, @ShiftDays, ProjectedDeliveryDate)
 	 WHERE MilestoneId = @MilestoneId
 
+	 SELECT @ProjectNewStartDate=MIN(M.StartDate),
+	        @ProjectNewEndDate = MAX(M.ProjectedDeliveryDate)
+	 FROM dbo.Milestone M 
+	 WHERE M.ProjectId = @ProjectId
+	 GROUP BY M.ProjectId 
+
+	 UPDATE dbo.ProjectExpense 
+	 SET StartDate = CASE WHEN StartDate <= @ProjectNewStartDate THEN @ProjectNewStartDate ELSE StartDate END,
+	     EndDate = CASE WHEN EndDate <= @ProjectNewEndDate THEN EndDate ELSE @ProjectNewEndDate END
+	 WHERE StartDate <= @ProjectNewEndDate AND @ProjectNewStartDate <= EndDate
+	 AND ProjectId = @ProjectId
+
+	 UPDATE dbo.ProjectExpense 
+	 SET StartDate = @ProjectNewStartDate,
+		 EndDate = @ProjectNewEndDate
+	 WHERE StartDate > @ProjectNewEndDate OR @ProjectNewStartDate > EndDate
+	 AND ProjectId = @ProjectId
