@@ -15,7 +15,7 @@
         </tr>
         <tr>
             <td>
-                Reimbursed Expenses (net of discount), $
+                Reimbursed Expenses
             </td>
             <td class="textRightImp">
                 <asp:Label ID="lblReimbursedExpenses" runat="server" Font-Bold="true">Unavailable</asp:Label>
@@ -59,7 +59,7 @@
         </tr>
         <tr>
             <td>
-                Expenses (net of discount), $
+                 Total Project Expenses
             </td>
             <td class="textRightImp">
                 <asp:Label ID="lblExpenses" runat="server" Font-Bold="true">Unavailable</asp:Label>
