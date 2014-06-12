@@ -410,41 +410,6 @@ namespace PraticeManagement
             }
         }
 
-        protected void cstCheckStartDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            if (MilestoneId.HasValue && Milestone != null && Milestone.StartDate < dtpPeriodFrom.DateValue
-                && Milestone.Project.StartDate == Milestone.StartDate)
-            {
-                using (var service = new MilestoneServiceClient())
-                {
-                    args.IsValid = !(service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, dtpPeriodFrom.DateValue, null));
-                }
-            }
-            else
-            {
-                args.IsValid = true;
-            }
-        }
-
-        protected void cstCheckEndDateForExpensesExistance_OnServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            if (reqPeriodTo.IsValid && compPeriodTo.IsValid)
-            {
-                if (MilestoneId.HasValue && Milestone != null && Milestone.EndDate > dtpPeriodTo.DateValue
-                    && Milestone.Project.EndDate == Milestone.EndDate)
-                {
-                    using (var service = new MilestoneServiceClient())
-                    {
-                        args.IsValid = !(service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, null, dtpPeriodTo.DateValue));
-                    }
-                }
-                else
-                {
-                    args.IsValid = true;
-                }
-            }
-        }
-
         /// <summary>
         /// Initializes 'Previous Milestone' and 'Next Milestone' buttons
         /// </summary>
@@ -967,41 +932,7 @@ namespace PraticeManagement
                 var shiftDays = int.Parse(txtShiftDays.Text);
                 var newStartDate = Milestone.StartDate.AddDays(shiftDays);
                 var newEndDate = Milestone.EndDate.AddDays(shiftDays);
-                if (Milestone.Project.StartDate.Value == Milestone.StartDate)
-                {
-                    using (var service = new MilestoneServiceClient())
-                    {
-                        if (service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, newStartDate, null))
-                        {
-                            lblError.ShowErrorMessage("This milestone cannot be moved because the project has expenses earlier than new start date.\nPlease change the expenses first.");
-                            return;
-                        }
-                    }
-                }
-                if (Milestone.Project.EndDate.Value == Milestone.EndDate)
-                {
-                    using (var service = new MilestoneServiceClient())
-                    {
-                        if (service.CheckIfExpensesExistsForMilestonePeriod(MilestoneId.Value, newStartDate, null))
-                        {
-                            lblError.ShowErrorMessage("This milestone cannot be moved because the project has expenses beyond new end date.\nPlease change the expenses first.");
-                            return;
-                        }
-                    }
-                }
-
-                if (shiftDays < 0)
-                {
-                    using (var service = new MilestoneServiceClient())
-                    {
-                        if (!service.CanMoveFutureMilestones(MilestoneId.Value, shiftDays))
-                        {
-                            lblError.ShowErrorMessage("Cannot move future milestones because it leads to change in its project end date, but the project has expenses beyond new end date.\n Please change expenses first.");
-                            return;
-                        }
-                    }
-                }
-
+               
                 DataHelper.ShiftMilestone(
                     shiftDays,
                     MilestoneId.Value,
@@ -1499,13 +1430,13 @@ namespace PraticeManagement
             //Fill Expenses Cell
             SetFooterLabelWithSeniority(
                 milestone.ComputedFinancials == null ? string.Empty :
-                        ((PracticeManagementCurrency)milestone.ComputedFinancials.Expenses * ((100 - Milestone.Project.Discount) / 100)).ToString(),
+                        ((PracticeManagementCurrency)milestone.ComputedFinancials.Expenses).ToString(),
                 lblExpenses);
 
             //Fill Final Milestone Margin Cell
             SetFooterLabelWithSeniority(
                 milestone.ComputedFinancials == null ? string.Empty :
-                        ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses * ((100 - Milestone.Project.Discount) / 100)).ToString(),
+                        ((PracticeManagementCurrency)milestone.ComputedFinancials.ReimbursedExpenses).ToString(),
                 lblReimbursedExpenses);
         }
 
