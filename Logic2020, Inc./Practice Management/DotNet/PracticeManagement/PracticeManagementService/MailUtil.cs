@@ -8,12 +8,15 @@ using System.Web;
 using DataAccess;
 using DataTransferObjects;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using System.Threading;
 
 namespace PracticeManagementService
 {
     internal static class MailUtil
     {
         #region Methods
+
+        private static string PersonLastNameFormat = "{0}'s";
 
         private static bool IsAzureWebRole()
         {
@@ -181,12 +184,14 @@ namespace PracticeManagementService
 
         internal static void SendReviewCanceledMailNotification(List<ProjectFeedbackMail> feedbacks)
         {
+            int count = 0;
             foreach(var feedback in feedbacks)
             {
+                count++;
                 string url = IsUAT ? "http://65.52.17.100/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString();
                 var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.ProjectReviewCanceledNotification);
                 var subject = String.Format(emailTemplate.Subject, feedback.Resources[0].Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Project.Name);
-                var emailBody = String.Format(emailTemplate.Body, feedback.Resources[0].Person.FirstName, feedback.Project.ProjectNumber,feedback.Project.Name, url);
+                var emailBody = String.Format(emailTemplate.Body, string.Format(PersonLastNameFormat, feedback.Resources[0].Person.LastName), feedback.Project.ProjectNumber, feedback.Project.Name, url);
                 var ccAddressList = "";
                 if (!string.IsNullOrEmpty(feedback.ProjectOwnerAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ProjectOwnerAlias))
                 {
@@ -201,6 +206,10 @@ namespace PracticeManagementService
                     ccAddressList += feedback.ClientDirectorAlias + ",";
                 }
                 Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, null, false, string.Empty, ccAddressList == "" ? "" : ccAddressList.Substring(0, ccAddressList.Length - 1));
+                if (count % 13 == 0)
+                {
+                    Thread.Sleep(60 * 1000);
+                }
             }
         }
 
