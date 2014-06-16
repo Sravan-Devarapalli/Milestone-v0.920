@@ -509,9 +509,9 @@ namespace PraticeManagement.Reports
         public void PopulateHeaderSection()
         {
             int totalStatusCount = CanceledCount + NotCompletedCount + CompletedCount;
-            ltrlCanceledCount.Text = CanceledCount.ToString();
-            ltrlNotCompletedCount.Text = NotCompletedCount.ToString();
-            ltrlCompletedCount.Text = CompletedCount.ToString();
+            ltrlCanceledCount.Text = ltrlCanceled.Text = CanceledCount.ToString();
+            ltrlNotCompletedCount.Text = ltrlNotCompleted.Text = NotCompletedCount.ToString();
+            ltrlCompletedCount.Text = ltrlCompleted.Text = CompletedCount.ToString();
 
             if (CanceledCount == 0)
                 trCancel.Height = "1px";
