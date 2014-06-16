@@ -291,6 +291,8 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
+        public static int MailsCount=0;
+
         #endregion Properties
 
         #region Override Methods
@@ -1261,7 +1263,6 @@ namespace UpdatePracticeAndSeniority
                     }
                 }
                 SmtpClient client = GetSmtpClient(smtpSettings);
-
                 message.From = new MailAddress(smtpSettings.PMSupportEmail);
                 client.Send(message);
             }
@@ -1510,10 +1511,12 @@ namespace UpdatePracticeAndSeniority
             {
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedFeedbackInitialEmails, nextRun);
                 var feedbackMailTemplate = GetEmailTemplate(IntialProjectFeedbackNotification);
+                
                 foreach (var feedback in feedbacks)
                 {
                     foreach (var resource in feedback.Resources)
                     {
+                        WorkerRole.MailsCount++;
                         string url = IsUATEnvironment ? "http://65.52.17.100/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString();
                         var subject = String.Format(feedbackMailTemplate.Subject, resource.DueDate.ToString(Constants.Formatting.EntryDateFormat), resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Project.Name);
                         var emailBody = String.Format(feedbackMailTemplate.Body, resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, resource.DueDate.ToString(Constants.Formatting.EntryDateFormat), resource.Person.Title.TitleName, resource.ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat), resource.ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Project.Name, url);
@@ -1531,6 +1534,10 @@ namespace UpdatePracticeAndSeniority
                             ccAddressList += feedback.ClientDirectorAlias + ",";
                         }
                         Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, ccAddressList==""?"": ccAddressList.Substring(0, ccAddressList.Length - 1), null);
+                        if (WorkerRole.MailsCount % 12 == 0)
+                        {
+                            Thread.Sleep(65 * 1000);
+                        }
                     }
                 }
 
@@ -1548,11 +1555,12 @@ namespace UpdatePracticeAndSeniority
             {
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedFeedbackRemainderEmails, nextRun);
                 var feedbackMailTemplate = GetEmailTemplate(RemainderProjectFeedbackNotification);
-
+               
                 foreach (var feedback in feedbacks)
                 {
                     foreach (var resource in feedback.Resources)
                     {
+                        WorkerRole.MailsCount++;
                         string url = IsUATEnvironment ? "http://65.52.17.100/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + feedback.Project.Id.Value.ToString();
                         var subject = String.Format(feedbackMailTemplate.Subject, resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, feedback.Project.Name);
                         var emailBody = String.Format(feedbackMailTemplate.Body, resource.Person.PersonFirstLastName, feedback.Project.ProjectNumber, resource.DueDate.ToString(Constants.Formatting.EntryDateFormat), resource.Person.Title.TitleName, resource.ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat), resource.ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat), feedback.Project.Name, url);
@@ -1570,6 +1578,10 @@ namespace UpdatePracticeAndSeniority
                             ccAddressList += feedback.ClientDirectorAlias+",";
                         }
                         Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, ccAddressList == "" ? "" : ccAddressList.Substring(0, ccAddressList.Length - 1), null);
+                        if (WorkerRole.MailsCount % 12 == 0)
+                        {
+                            Thread.Sleep(65 * 1000);
+                        }
                     }
                 }
 
