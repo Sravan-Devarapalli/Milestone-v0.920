@@ -220,6 +220,33 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divWholePage;
         
         /// <summary>
+        /// ltrlCompleted control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlCompleted;
+        
+        /// <summary>
+        /// ltrlNotCompleted control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlNotCompleted;
+        
+        /// <summary>
+        /// ltrlCanceled control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltrlCanceled;
+        
+        /// <summary>
         /// ltrlCompletedCount control.
         /// </summary>
         /// <remarks>
