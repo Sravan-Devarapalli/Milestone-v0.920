@@ -33,8 +33,8 @@ BEGIN
 	LEFT JOIN dbo.Person seniorManager ON seniorManager.PersonId = Pro.SeniorManagerId
 	LEFT JOIN dbo.Title T ON T.TitleId = P.TitleId
 	WHERE (@FeedbackId IS NOT NULL AND PF.FeedbackId = @FeedbackId)
-		   OR (@FeedbackId IS NULL AND CONVERT(NVARCHAR(10), PF.NextIntialMailSendDate, 101) = CONVERT(NVARCHAR(10), @Today, 101)
+		   OR (@FeedbackId IS NULL AND CONVERT(NVARCHAR(10), PF.NextIntialMailSendDate, 111) = CONVERT(NVARCHAR(10), @Today, 111)
 				AND PF.IsCanceled = 0 AND PF.FeedbackStatusId = 2) --Not Completed Status
-				AND CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), @SendAfter, 101)
-
+				AND CONVERT(NVARCHAR(10), @Today, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111)
+	ORDER BY PF.ReviewPeriodEndDate DESC			
 END
