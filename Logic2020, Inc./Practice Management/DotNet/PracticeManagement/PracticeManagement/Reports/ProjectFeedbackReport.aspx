@@ -208,11 +208,42 @@
             <div id="divWholePage" runat="server">
                 <table class="PaddingTenPx AccountSummaryReportHeader">
                     <tr>
-                        <td style="width: 90%">
+                        <td style="width: 80%">
                         </td>
-                        <td style="width: 10%">
+                        <td style="width: 20%">
                             <table class="ReportHeaderTotals">
                                 <tr>
+                                <td class="Width24Percent">
+                                        <table class="font14Px">
+                                            <tr>
+                                                <td class="alignRight">
+                                                    Completed:
+                                                </td>
+                                            
+                                                <td>
+                                                    <asp:Literal ID="ltrlCompleted" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="alignRight">
+                                                    Not Completed:
+                                                </td>
+                                            
+                                                <td>
+                                                    <asp:Literal ID="ltrlNotCompleted" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="alignRight">
+                                                    Canceled:
+                                                </td>
+                                            
+                                                <td>
+                                                    <asp:Literal ID="ltrlCanceled" runat="server"></asp:Literal>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
                                     <td class="ReportHeaderBandNBGraph">
                                         <table>
                                             <tr>
