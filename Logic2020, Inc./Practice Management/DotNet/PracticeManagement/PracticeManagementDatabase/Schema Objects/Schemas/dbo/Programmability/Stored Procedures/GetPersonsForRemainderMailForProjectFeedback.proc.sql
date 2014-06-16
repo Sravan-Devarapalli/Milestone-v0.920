@@ -30,9 +30,9 @@ BEGIN
 	LEFT JOIN dbo.Person owner ON owner.PersonId = Pro.ProjectOwnerId
 	LEFT JOIN dbo.Person seniorManager ON seniorManager.PersonId = Pro.SeniorManagerId
 	LEFT JOIN dbo.Title T ON T.TitleId = P.TitleId
-	WHERE CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), @SendAfter, 101)
-	AND CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 101)
-	AND PF.IsCanceled = 0 AND PF.FeedbackStatusId = 2 --Not Completed Status
-	AND DATEPART(WEEKDAY,PF.ReviewPeriodEndDate) = DATEPART(WEEKDAY,@Today)
-
+	WHERE   CONVERT(NVARCHAR(10), @Today, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111) AND 
+			CONVERT(NVARCHAR(10), @Today, 111) > CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111)
+			AND PF.IsCanceled = 0 AND PF.FeedbackStatusId = 2 --Not Completed Status
+			AND DATEPART(WEEKDAY,PF.ReviewPeriodEndDate) = DATEPART(WEEKDAY,@Today)
+	ORDER BY PF.ReviewPeriodEndDate DESC
 END
