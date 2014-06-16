@@ -678,8 +678,6 @@
                                 <td>
                                     <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="Width250Px" onchange="setDirty();"
                                         Visible="false"></asp:TextBox>
-                                    <AjaxControlToolkit:FilteredTextBoxExtender ID="ftePayCheckId" TargetControlID="txtPayCheckId"
-                                        FilterType="Numbers" FilterMode="ValidChars" runat="server" />
                                 </td>
                                 <td>
                                     &nbsp;
