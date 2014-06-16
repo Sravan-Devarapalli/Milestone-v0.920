@@ -421,7 +421,7 @@ namespace PracticeManagementService
                 }
                 if ((personStatusId == (int)PersonStatusType.Terminated || personStatusId == (int)PersonStatusType.TerminationPending) && (oldPerson.Status.Id == (int)PersonStatusType.Active))
                 {
-                    //SendReviewCancelationMail(person.Id.Value, userLogin);
+                    SendReviewCancelationMail(person.Id.Value, userLogin);
                 }
                 if (isOldPersonActive && isPersonActive && oldPerson.HireDate.Date != person.HireDate)
                 {
@@ -453,6 +453,7 @@ namespace PracticeManagementService
                 MailUtil.SendReviewCanceledMailNotification(feedbacks);
             }
         }
+
         /// <summary>
         /// Sends administrator added email.
         /// </summary>
