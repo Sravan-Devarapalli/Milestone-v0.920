@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -419,31 +420,19 @@ namespace PraticeManagement.Controls
         public bool isSelected
         {
             get
-            {
-                foreach (ListItem item in Items)
-                {
-                    if (item.Selected)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            { return Items.Cast<ListItem>().Any(item => item.Selected); }
         }
 
         public bool areAllSelected
         {
             get
-            {
-                foreach (ListItem item in Items)
-                {
-                    if (!item.Selected)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
+            { return Items.Cast<ListItem>().All(item => item.Selected); }
+        }
+
+        public bool AllNotSelected
+        {
+            get
+            { return Items.Cast<ListItem>().All(item => !item.Selected); }
         }
 
         public string SelectedString
