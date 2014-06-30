@@ -110,18 +110,19 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected void btnGroupBy_Click(object sender, EventArgs e)
         {
+            var btnGroupBy = sender as Button;
             if (btnGroupBy.Text == Text_GroupByPerson)
             {
-                btnGroupBy.Text = Text_GroupByBusinessUnit;
-                btnGroupBy.ToolTip = Text_GroupByBusinessUnit;
+                btnGroupByBU.Visible = true;
+                btnGroupByPerson.Visible = false;
                 mvBusinessDevelopmentReport.ActiveViewIndex = 1;
                 PopulateGroupByPerson();
             }
             else
             {
                 mvBusinessDevelopmentReport.ActiveViewIndex = 0;
-                btnGroupBy.Text = Text_GroupByPerson;
-                btnGroupBy.ToolTip = Text_GroupByPerson;
+                btnGroupByBU.Visible = false;
+                btnGroupByPerson.Visible = true;
                 PopulateGroupByBusinessUnit();
             }
         }
@@ -158,8 +159,10 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         public void ApplyAttributes(int count)
         {
-            btnGroupBy.Visible = btnExpandOrCollapseAll.Visible =
+            btnExpandOrCollapseAll.Visible =
                           btnExportToExcel.Enabled = count > 0;
+            if (count == 0)
+                btnGroupByBU.Visible = btnGroupByPerson.Visible = false;
         }
 
         public void SetExpandCollapseIdsTohiddenField(string output)
@@ -232,7 +235,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 businessUnitsCount = hostingPage.BusinessUnitsCount;
                 projectsCount = hostingPage.ProjectsCount;
                 personsCount = hostingPage.PersonsCount;
-                accountsCount = data.GroupBy(p => p.BusinessUnit.ClientId).ToList().Count;
+                accountsCount = hostingPage.AccountsCount;
                 clientDirectorName = hostingPage.ClientdirectorName;
             }
             var filename = "AccountReport_ByBusinessDevlopment.xls";
