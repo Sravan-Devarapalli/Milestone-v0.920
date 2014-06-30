@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
 using System.Web.UI.HtmlControls;
-using System.Text;
 using DataTransferObjects;
 using DataTransferObjects.Reports.ByAccount;
 using PraticeManagement.Utils.Excel;
@@ -20,11 +17,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
     public partial class ByProject : System.Web.UI.UserControl
     {
         private const string ByAccountByProjectReportExport = "Account Report By Project";
-        private string ProjectDetailUrl = "ProjectDetail.aspx?id={0}";
-        private string ByProjectUrl = "~/Reports/ProjectSummaryReport.aspx?ProjectNumber={0}&StartDate={1}&EndDate={2}&PeriodSelected={3}";
+
+        private const string ByProjectUrl = "~/Reports/ProjectSummaryReport.aspx?ProjectNumber={0}&StartDate={1}&EndDate={2}&PeriodSelected={3}";
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
-        private string sortOrder_Key = "sortOrder_Key";
+        private const string sortOrder_Key = "sortOrder_Key";
 
         public bool sortAscend
         {
@@ -46,25 +43,25 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             get
             {
-                CellStyles cellStyle = new CellStyles();
+                var cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
                 cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
-                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                var headerrowStyle = new RowStyles(cellStylearray);
                 headerrowStyle.Height = 500;
 
-                CellStyles dataCellStyle = new CellStyles();
+                var dataCellStyle = new CellStyles();
                 dataCellStyle.IsBold = true;
                 dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
                 dataCellStyle.FontHeight = 200;
                 CellStyles[] dataCellStylearray = { dataCellStyle };
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                var datarowStyle = new RowStyles(dataCellStylearray);
                 datarowStyle.Height = 350;
 
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
 
-                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                var sheetStyle = new SheetStyles(rowStylearray);
                 sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
                 sheetStyle.IsAutoResize = false;
 
@@ -76,17 +73,17 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             get
             {
-                CellStyles headerCellStyle = new CellStyles();
-                headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                headerCellStyleList.Add(headerCellStyle);
-                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+                var headerCellStyle = new CellStyles
+                {
+                    IsBold = true,
+                    HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER
+                };
+                var headerCellStyleList = new List<CellStyles> { headerCellStyle };
+                var headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
-                CellStyles dataCellStyle = new CellStyles();
+                var dataCellStyle = new CellStyles();
 
-                CellStyles dataCurrancyCellStyle = new CellStyles();
-                dataCurrancyCellStyle.DataFormat = "$#,##0.00_);($#,##0.00)";
+                var dataCurrancyCellStyle = new CellStyles { DataFormat = "$#,##0.00_);($#,##0.00)" };
 
                 CellStyles[] dataCellStylearray = { dataCellStyle, 
                                                     dataCellStyle,
@@ -104,14 +101,16 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                                                     dataCellStyle
                                                   };
 
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                var datarowStyle = new RowStyles(dataCellStylearray);
 
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
-                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
-                sheetStyle.TopRowNo = headerRowsCount;
-                sheetStyle.IsFreezePane = true;
-                sheetStyle.FreezePanColSplit = 0;
-                sheetStyle.FreezePanRowSplit = headerRowsCount;
+                var sheetStyle = new SheetStyles(rowStylearray)
+                {
+                    TopRowNo = headerRowsCount,
+                    IsFreezePane = true,
+                    FreezePanColSplit = 0,
+                    FreezePanRowSplit = headerRowsCount
+                };
 
                 return sheetStyle;
             }
@@ -196,103 +195,102 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             //“TimePeriod_ByProject_DateRange.xls”.  
-            var filename = string.Format("Account_ByProject_{0}-{1}.xls", HostingPage.StartDate.Value.ToString("MM_dd_yyyy"), HostingPage.EndDate.Value.ToString("MM_dd_yyyy"));
+            var filename = string.Format("Account_ByProject_{0}-{1}.xls",
+                HostingPage.StartDate.Value.ToString("MM_dd_yyyy"), HostingPage.EndDate.Value.ToString("MM_dd_yyyy"));
             DataHelper.InsertExportActivityLogMessage(ByAccountByProjectReportExport);
-            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+            var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
+            var report =
+                ServiceCallers.Custom.Report(
+                    r =>
+                        r.AccountSummaryReportByProject(HostingPage.ClientdirectorId, HostingPage.AccountIds,
+                            BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value,
+                            cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat)).ToList();
+
+            var filterApplied = "Filters applied to columns: ";
+            var filteredColoums = new List<string>();
+            if (!cblBusinessUnits.AllItemsSelected)
             {
-                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value,
-                     cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat)).ToList();
+                filteredColoums.Add("Project");
+            }
+            if (!cblProjectStatus.AllItemsSelected)
+            {
+                filteredColoums.Add("Status");
+            }
+            if (!cblBilling.AllItemsSelected)
+            {
+                filteredColoums.Add("Billing");
+            }
 
-                string filterApplied = "Filters applied to columns: ";
-                List<string> filteredColoums = new List<string>();
-                if (!cblBusinessUnits.AllItemsSelected)
+            if (filteredColoums.Count > 0)
+            {
+                for (var i = 0; i < filteredColoums.Count; i++)
                 {
-                    filteredColoums.Add("Project");
+                    if (i == filteredColoums.Count - 1)
+                        filterApplied = filterApplied + filteredColoums[i] + ".";
+                    else
+                        filterApplied = filterApplied + filteredColoums[i] + ",";
                 }
-                if (!cblProjectStatus.AllItemsSelected)
-                {
-                    filteredColoums.Add("Status");
-                }
-                if (!cblBilling.AllItemsSelected)
-                {
-                    filteredColoums.Add("Billing");
-                }
+            }
 
+            if (report.Count > 0)
+            {
+                var header1 = new DataTable();
+                header1.Columns.Add("Account By Project Report");
+                header1.Columns.Add(" ");
+                header1.Columns.Add("  ");
+                header1.Columns.Add("   ");
+
+                var row1 = new List<object> { HostingPage.ClientdirectorName };
+                header1.Rows.Add(row1.ToArray());
+
+                var row2 = new List<object>
+                {
+                    HostingPage.AccountsCount + " Account(s)",
+                    HostingPage.BusinessUnitsCount + " Business Unit(s)",
+                    HostingPage.ProjectsCount + " Project(s)",
+                    HostingPage.PersonsCount == 1
+                        ? HostingPage.PersonsCount + " Person"
+                        : HostingPage.PersonsCount + " People"
+                };
+                header1.Rows.Add(row2.ToArray());
+
+                var row3 = new List<object> { HostingPage.RangeForExcel };
+                header1.Rows.Add(row3.ToArray());
+
+                var row4 = new List<object>();
                 if (filteredColoums.Count > 0)
                 {
-
-                    for (int i = 0; i < filteredColoums.Count; i++)
-                    {
-                        if (i == filteredColoums.Count - 1)
-                            filterApplied = filterApplied + filteredColoums[i] + ".";
-                        else
-                            filterApplied = filterApplied + filteredColoums[i] + ",";
-                    }
+                    row4.Add(filterApplied);
+                    header1.Rows.Add(row4.ToArray());
                 }
-
-                if (report.Count > 0)
-                {
-                    DataTable header1 = new DataTable();
-                    header1.Columns.Add("Account By Project Report");
-                    header1.Columns.Add(" ");
-                    header1.Columns.Add("  ");
-                    header1.Columns.Add("   ");
-
-                    List<object> row1 = new List<object>();
-                    row1.Add(HostingPage.ClientdirectorName);
-                    header1.Rows.Add(row1.ToArray());
-
-                    List<object> row2 = new List<object>();
-                    row2.Add(HostingPage.AccountsCount + " Account(s)");
-                    row2.Add(HostingPage.BusinessUnitsCount + " Business Unit(s)");
-                    row2.Add(HostingPage.ProjectsCount + " Project(s)");
-                    row2.Add(HostingPage.PersonsCount.ToString() == "1" ? HostingPage.PersonsCount + " Person" : HostingPage.PersonsCount + " People");
-                    header1.Rows.Add(row2.ToArray());
-
-                    List<object> row3 = new List<object>();
-                    row3.Add(HostingPage.RangeForExcel);
-                    header1.Rows.Add(row3.ToArray());
-
-                    List<object> row4 = new List<object>();
-                    if (filteredColoums.Count > 0)
-                    {
-                        row4.Add(filterApplied);
-                        header1.Rows.Add(row4.ToArray());
-                    }
-                    headerRowsCount = header1.Rows.Count + 3;
-                    var data = PrepareDataTable(report);
-                    coloumnsCount = data.Columns.Count;
-                    sheetStylesList.Add(HeaderSheetStyle);
-                    sheetStylesList.Add(DataSheetStyle);
-                    var dataset = new DataSet();
-                    dataset.DataSetName = "Account_ByProject";
-                    dataset.Tables.Add(header1);
-                    dataset.Tables.Add(data);
-                    dataSetList.Add(dataset);
-                }
-                else
-                {
-                    string dateRangeTitle = "There are no Time Entries towards this range selected.";
-                    DataTable header = new DataTable();
-                    header.Columns.Add(dateRangeTitle);
-                    sheetStylesList.Add(HeaderSheetStyle);
-                    var dataset = new DataSet();
-                    dataset.DataSetName = "Account_ByProject";
-                    dataset.Tables.Add(header);
-                    dataSetList.Add(dataset);
-                }
-
-                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+                headerRowsCount = header1.Rows.Count + 3;
+                var data = PrepareDataTable(report);
+                coloumnsCount = data.Columns.Count;
+                sheetStylesList.Add(HeaderSheetStyle);
+                sheetStylesList.Add(DataSheetStyle);
+                var dataset = new DataSet { DataSetName = "Account_ByProject" };
+                dataset.Tables.Add(header1);
+                dataset.Tables.Add(data);
+                dataSetList.Add(dataset);
             }
+            else
+            {
+                const string dateRangeTitle = "There are no Time Entries towards this range selected.";
+                var header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet { DataSetName = "Account_ByProject" };
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
+            }
+
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
         }
 
         public DataTable PrepareDataTable(List<GroupByAccount> reportData)
         {
-            DataTable data = new DataTable();
-            List<object> rownew;
-            List<object> row;
+            var data = new DataTable();
 
             data.Columns.Add("Account");
             data.Columns.Add("Account Name");
@@ -312,21 +310,25 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             {
                 foreach (var projectLevelGroupedHours in report.GroupedProjects)
                 {
-                    row = new List<object>();
-                    row.Add(projectLevelGroupedHours.Project.Client.Code);
-                    row.Add(projectLevelGroupedHours.Project.Client.Name);
-                    row.Add(projectLevelGroupedHours.Project.Group.Code);
-                    row.Add(projectLevelGroupedHours.Project.Group.Name);
-                    row.Add(projectLevelGroupedHours.Project.ProjectNumber);
-                    row.Add(projectLevelGroupedHours.Project.Name);
-                    row.Add(projectLevelGroupedHours.Project.Status.Name);
-                    row.Add(projectLevelGroupedHours.BillingType);
-                    row.Add(GetDoubleFormat(projectLevelGroupedHours.ForecastedHours));
-                    row.Add(GetDoubleFormat(projectLevelGroupedHours.BillableHours));
-                    row.Add(GetDoubleFormat(projectLevelGroupedHours.NonBillableHours));
-                    row.Add(GetDoubleFormat(projectLevelGroupedHours.TotalHours));
-                    row.Add(projectLevelGroupedHours.BillingType == "Fixed" ? "FF" : projectLevelGroupedHours.EstimatedBillings.ToString());
-                    row.Add(GetDoubleFormat(projectLevelGroupedHours.BillableHoursVariance));
+                    var row = new List<object>
+                    {
+                        projectLevelGroupedHours.Project.Client.Code,
+                        projectLevelGroupedHours.Project.Client.Name,
+                        projectLevelGroupedHours.Project.Group.Code,
+                        projectLevelGroupedHours.Project.Group.Name,
+                        projectLevelGroupedHours.Project.ProjectNumber,
+                        projectLevelGroupedHours.Project.Name,
+                        projectLevelGroupedHours.Project.Status.Name,
+                        projectLevelGroupedHours.BillingType,
+                        GetDoubleFormat(projectLevelGroupedHours.ForecastedHours),
+                        GetDoubleFormat(projectLevelGroupedHours.BillableHours),
+                        GetDoubleFormat(projectLevelGroupedHours.NonBillableHours),
+                        GetDoubleFormat(projectLevelGroupedHours.TotalHours),
+                        projectLevelGroupedHours.BillingType == "Fixed"
+                            ? "FF"
+                            : projectLevelGroupedHours.EstimatedBillings.ToString(),
+                        GetDoubleFormat(projectLevelGroupedHours.BillableHoursVariance)
+                    };
                     data.Rows.Add(row.ToArray());
                 }
             }
@@ -340,15 +342,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         public void PopulateByProjectData(bool isPopulateFilters = true)
         {
-            GroupByAccount[] report;
-            if (isPopulateFilters)
-            {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
-            }
-            else
-            {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
-            }
+            GroupByAccount[] report = isPopulateFilters ? ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null)) : ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.ClientdirectorId, HostingPage.AccountIds, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblBilling.SelectedItemsXmlFormat));
 
             DataBindProject(report, isPopulateFilters);
 
@@ -430,7 +424,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                Repeater repDetails = (Repeater)e.Item.FindControl("repAccountDetails");
+                var repDetails = (Repeater)e.Item.FindControl("repAccountDetails");
                 var dataitem = (GroupByAccount)e.Item.DataItem;
                 var result = dataitem.GroupedProjects;
                 repDetails.DataSource = result;
@@ -442,7 +436,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             }
             else if (e.Item.ItemType == ListItemType.Footer)
             {
-                JavaScriptSerializer jss = new JavaScriptSerializer();
+                var jss = new JavaScriptSerializer();
                 var output = jss.Serialize(CollapsiblePanelDateExtenderClientIds);
                 hdncpeExtendersIds.Value = output;
             }
@@ -453,8 +447,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (projectId.HasValue)
                 return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.DetailRedirectFormat, Constants.ApplicationPages.ProjectDetail, projectId.Value),
                                                             Constants.ApplicationPages.AccountSummaryReport);
-            else
-                return string.Empty;
+            return string.Empty;
         }
 
         protected string GetReportByProjectLink(string projectNumber)
@@ -462,8 +455,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (projectNumber != null)
                 return String.Format(ByProjectUrl, projectNumber, (HostingPage.StartDate.HasValue) ? HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : null,
                     (HostingPage.EndDate.HasValue) ? HostingPage.EndDate.Value.Date.ToString(Constants.Formatting.EntryDateFormat) : null, "0");
-            else
-                return string.Empty;
+            return string.Empty;
         }
 
         public void DataBindProject(GroupByAccount[] reportData, bool isPopulateFilters)
@@ -511,54 +503,29 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateFilterPanels(GroupByAccount[] reportData)
         {
+            var businessUnitList = new List<ProjectGroup>();
+            foreach (var item in reportData)
+            {
+                var businessunits = item.GroupedProjects.Select(r => new { Name = r.Project.Group.Name, Id = r.Project.Group.Id, ClientId = item.Account.Id, ClientName = item.Account.Name }).Distinct().Select(a => new ProjectGroup { Id = a.Id, Name = a.Name, Client = new Client() { Id = a.ClientId, Name = a.ClientName } }).ToList();
+                businessUnitList.AddRange(businessunits);
+            }
+            PopulateBusinessUnitFilter(businessUnitList.ToArray());
+            PopulateProjectStatusFilter(reportData);
+            PopulateBillingFilter(reportData);
             if (HostingPage.SetSelectedFilters)
             {
-                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.ClientdirectorId, HostingPage.AccountIds, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
-                var businessUnitList = new List<ProjectGroup>();
-                foreach (var item in reportData)
-                {
-                    var businessunits = item.GroupedProjects.Select(r => new { Name = r.Project.Group.Name, Id = r.Project.Group.Id, ClientId = item.Account.Id, ClientName = item.Account.Name }).Distinct().Select(a => new ProjectGroup { Id = a.Id, Name = a.Name, Client = new Client() { Id = a.ClientId, Name = a.ClientName } }).ToList();
-                    businessUnitList.AddRange(businessunits);
-                }
-
-                PopulateBusinessUnitFilter(businessUnitList.ToArray());
                 foreach (ListItem item in cblBusinessUnits.Items)
                 {
-                    
-                    foreach (var reportItem in reportData)
-                    {
-                        if (reportData.SelectMany(b => b.GroupedProjects).Any(r => r.Project.Group.Id.Value.ToString() == item.Value))
-                        {
-                            item.Selected = true;
-                        }
-                        else
-                        {
-                            item.Selected = false;
-                        }
-                    }
+                    item.Selected = reportData.SelectMany(b => b.GroupedProjects).Any(r => r.Project.Group.Id.Value.ToString() == item.Value);
                 }
-               
-                PopulateProjectStatusFilter(reportData);
-                PopulateBillingFilter(reportData);
             }
             else
             {
-                var businessUnits = new List<ProjectGroup>();
-                foreach (var item in reportData)
-                {
-                    var businessunit = item.GroupedProjects.Select(r => new { Id = r.Project.Group.Id, Name = r.Project.Group.Name, ClientId = item.Account.Id, ClientName = item.Account.Name }).Distinct().ToList().OrderBy(s => s.Name).Select(pg => new ProjectGroup { Id = pg.Id, Name = pg.Name, Client = new Client() { Id = pg.ClientId, Name = pg.ClientName } }).ToList();
-                    businessUnits.AddRange(businessunit);
-                }
-
-                PopulateBusinessUnitFilter(businessUnits.ToArray());
                 cblBusinessUnits.SelectAllItems(true);
-
-                PopulateProjectStatusFilter(reportData);
-                PopulateBillingFilter(reportData);
             }
         }
 
-        private void PopulateBillingFilter(GroupByAccount[] reportData)
+        private void PopulateBillingFilter(IEnumerable<GroupByAccount> reportData)
         {
             var billingtypes = new List<ProjectGroup>();
             foreach (var item in reportData)
@@ -576,14 +543,14 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         private void PopulateBusinessUnitFilter(ProjectGroup[] businessUnits)
         {
-            int height = 17 * businessUnits.Length;
-            Unit unitHeight = new Unit((height + 17) > 50 ? 50 : height + 17);
+            var height = 17 * businessUnits.Length;
+            var unitHeight = new Unit((height + 17) > 50 ? 50 : height + 17);
             DataHelper.FillListDefault(cblBusinessUnits.CheckBoxListObject, "All Business Units", businessUnits, false, "Id", "ClientProjectGroupFormat");
             cblBusinessUnits.Height = unitHeight;
 
         }
 
-        private void PopulateProjectStatusFilter(GroupByAccount[] reportData)
+        private void PopulateProjectStatusFilter(IEnumerable<GroupByAccount> reportData)
         {
             var projectStatusIds = new List<ProjectStatus>();
             foreach (var item in reportData)
@@ -604,10 +571,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         protected void btnAccount_Command(object sender, CommandEventArgs e)
         {
             var report = PopulateData();
-            if (sortAscend)
-                report = report.OrderBy(b => b.Account.Name).ToList();
-            else
-                report = report.OrderByDescending(b => b.Account.Name).ToList();
+            report = sortAscend ? report.OrderBy(b => b.Account.Name).ToList() : report.OrderByDescending(b => b.Account.Name).ToList();
             BindData(report);
         }
 
