@@ -11,19 +11,22 @@ BEGIN
 	DECLARE @StartDateLocal DATETIME ,
 		@EndDateLocal DATETIME,
 		@BusinessUnitIdsLocal	NVARCHAR(MAX),
+		@AccountIdsLocal NVARCHAR(MAX),
 		@FutureDate DATETIME
 
     DECLARE @AccountIdsTable TABLE ( Ids INT )
 
-	INSERT INTO @AccountIdsTable( Ids)
-	SELECT ResultId
-	FROM dbo.ConvertStringListIntoTable(@AccountIds)
-
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 		 , @EndDateLocal = CONVERT(DATE, @EndDate)
 		 , @BusinessUnitIdsLocal = @BusinessUnitIds
+		 , @AccountIdsLocal = @AccountIds
 		 , @FutureDate = dbo.GetFutureDate()
 
+	INSERT INTO @AccountIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@AccountIdsLocal)
+
+	
 	SELECT PG.GroupId AS [BusinessUnitId]
 		 , PG.Name AS [BusinessUnitName]
 		 ,C.ClientId
