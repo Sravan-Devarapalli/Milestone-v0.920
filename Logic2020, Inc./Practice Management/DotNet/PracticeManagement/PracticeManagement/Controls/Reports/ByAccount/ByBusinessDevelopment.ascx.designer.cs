@@ -40,13 +40,22 @@ namespace PraticeManagement.Controls.Reports.ByAccount {
         protected global::System.Web.UI.WebControls.Button btnExpandOrCollapseAll;
         
         /// <summary>
-        /// btnGroupBy control.
+        /// btnGroupByPerson control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGroupBy;
+        protected global::System.Web.UI.WebControls.Button btnGroupByPerson;
+        
+        /// <summary>
+        /// btnGroupByBU control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGroupByBU;
         
         /// <summary>
         /// btnExportToExcel control.
