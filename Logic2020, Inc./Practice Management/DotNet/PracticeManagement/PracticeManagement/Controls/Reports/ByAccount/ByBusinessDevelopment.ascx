@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ByBusinessDevelopment.ascx.cs"
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ByBusinessDevelopment.ascx.cs" EnableViewState="false"
     Inherits="PraticeManagement.Controls.Reports.ByAccount.ByBusinessDevelopment" %>
 <%@ Register Src="~/Controls/Reports/ByAccount/GroupByBusinessUnit.ascx" TagName="GroupByBusinessUnit"
     TagPrefix="UC" %>
@@ -12,7 +12,9 @@
             <td colspan="4" class="Width90Percent">
                 <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
                     CssClass="Width100Px" ToolTip="Collapse All" />
-                <asp:Button ID="btnGroupBy" runat="server" Text="Group by Person" ToolTip="Group by Person"
+                <asp:Button ID="btnGroupByPerson" runat="server" Text="Group by Person" ToolTip="Group by Person" Visible="True"
+                    OnClick="btnGroupBy_Click" />
+                    <asp:Button ID="btnGroupByBU" runat="server" Text="Group by Business Unit" ToolTip="Group by Business Unit" Visible="False"
                     OnClick="btnGroupBy_Click" />
             </td>
             <td class="textRight Width10Percent padRight5">
