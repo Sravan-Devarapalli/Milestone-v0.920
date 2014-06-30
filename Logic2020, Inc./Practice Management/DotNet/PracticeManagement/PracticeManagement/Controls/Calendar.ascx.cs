@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
-using PraticeManagement.CalendarService;
-using PraticeManagement.Controls;
-using System.ServiceModel;
-using System.Web.Security;
-using PraticeManagement.PersonService;
-using PraticeManagement.Utils;
-using AjaxControlToolkit;
 
 namespace PraticeManagement.Controls
 {
@@ -21,7 +13,6 @@ namespace PraticeManagement.Controls
 
         private const string YearKey = "Year";
         private const string ViewStatePreviousRecurringList = "ViewStatePreviousRecurringHolidaysList";
-        private const string MailToSubjectFormat = "mailto:{0}?subject=Permissions for {1}'s calendar";
         public const string showEditSeriesOrSingleDayMessage = "Do you want to edit the series ({0} – {1}) or edit the single day ({2})?";
         public const string HoursFormat = "0.00";
         public const string TimeOffValidationMessage = "Selected day(s) are not working day(s). Please select any working day(s).";
@@ -46,10 +37,8 @@ namespace PraticeManagement.Controls
             set
             {
                 ViewState[YearKey] = value;
-                UpdateCalendar();
             }
         }
-
 
         public CalendarItem[] CalendarItems
         {
@@ -90,6 +79,11 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public bool AllHolidaysSelected
+        {
+            get { return (bool) ViewState["AllHolidaysSelected_Key"]; }
+            set { ViewState["AllHolidaysSelected_Key"] = value; }
+        }
 
         #endregion
 
@@ -99,11 +93,11 @@ namespace PraticeManagement.Controls
 
             lblYear.Text = SelectedYear.ToString();
 
-            DateTime firstMonthDay = new DateTime(SelectedYear, 1, 1);
-            DateTime lastMonthDay = new DateTime(SelectedYear, 12, DateTime.DaysInMonth(SelectedYear, 12));
+            var firstMonthDay = new DateTime(SelectedYear, 1, 1);
+            var lastMonthDay = new DateTime(SelectedYear, 12, DateTime.DaysInMonth(SelectedYear, 12));
 
-            DateTime firstDisplayedDay = firstMonthDay.AddDays(-(double)firstMonthDay.DayOfWeek);
-            DateTime lastDisplayedDay = lastMonthDay.AddDays(6.0 - (double)lastMonthDay.DayOfWeek);
+            var firstDisplayedDay = firstMonthDay.AddDays(-(double)firstMonthDay.DayOfWeek);
+            var lastDisplayedDay = lastMonthDay.AddDays(6.0 - (double)lastMonthDay.DayOfWeek);
 
 
             var days =
@@ -140,6 +134,7 @@ namespace PraticeManagement.Controls
                 FillRecurringHolidaysList(cblRecurringHolidays, "All Recurring Holidays");
                 SelectedYear = DateTime.Today.Year;
                 UpdateCalendar();
+                AllHolidaysSelected = cblRecurringHolidays.Items[0].Selected;
             }
 
             if (tdRecurringHolidaysDetails.Visible)
@@ -149,7 +144,7 @@ namespace PraticeManagement.Controls
 
         }
 
-        protected void FillRecurringHolidaysList(CheckBoxList cblRecurringHolidays, string firstItem)
+        protected void FillRecurringHolidaysList(CheckBoxList cblRecurringHolidaysList, string firstItem)
         {
             using (var serviceClient = new CalendarService.CalendarServiceClient())
             {
@@ -159,11 +154,11 @@ namespace PraticeManagement.Controls
                 if (!string.IsNullOrEmpty(firstItem))
                 {
                     var firstListItem = new ListItem(firstItem, "-1");
-                    cblRecurringHolidays.Items.Add(firstListItem);
+                    cblRecurringHolidaysList.Items.Add(firstListItem);
 
-                    if (PreviousRecurringHolidaysList.Count() == PreviousRecurringHolidaysList.Where(p => p.Third == true).Count())
+                    if (PreviousRecurringHolidaysList.Count() == PreviousRecurringHolidaysList.Count(p => p.Third))
                     {
-                        var listItem = cblRecurringHolidays.Items[0];
+                        var listItem = cblRecurringHolidaysList.Items[0];
                         listItem.Selected = true;
                     }
                 }
@@ -172,7 +167,7 @@ namespace PraticeManagement.Controls
                 {
                     var listItem = new ListItem(item.Second, item.First.ToString());
 
-                    cblRecurringHolidays.Items.Add(listItem);
+                    cblRecurringHolidaysList.Items.Add(listItem);
 
                     listItem.Selected = item.Third;
                 }
@@ -200,13 +195,18 @@ namespace PraticeManagement.Controls
         {
             var item = (ScrollingDropDown)sender;
             var user = HttpContext.Current.User.Identity.Name;
-
-            if (PreviousRecurringHolidaysList != null)
+            if ((item.Items[0].Selected && AllHolidaysSelected != item.Items[0].Selected) || (!item.Items[0].Selected && item.AllNotSelected && AllHolidaysSelected != item.Items[0].Selected))
+            {
+                SetRecurringHoliday(null, item.Items[0].Selected, user);
+                foreach (var pre in PreviousRecurringHolidaysList)
+                    pre.Third = item.Items[0].Selected;
+            }
+            else if (PreviousRecurringHolidaysList != null)
             {
                 foreach (var previousItem in PreviousRecurringHolidaysList)
                 {
-                    bool check = previousItem.Third;
-                    int id = previousItem.First;
+                    var check = previousItem.Third;
+                    var id = previousItem.First;
 
                     var selectedItems = item.SelectedItems.Split(',');
 
@@ -224,8 +224,7 @@ namespace PraticeManagement.Controls
                     }
                 }
             }
-
-
+            AllHolidaysSelected = item.Items[0].Selected;
             UpdateCalendar();
         }
 
