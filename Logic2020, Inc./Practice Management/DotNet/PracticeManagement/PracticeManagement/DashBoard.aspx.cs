@@ -304,7 +304,7 @@ namespace PraticeManagement
         {
             if (virtualPath == "mailto:{0}?subject=Time Off Request")
             {
-                var personAlias = DataHelper.CurrentPerson.Manager.Alias;
+                var personAlias = DataHelper.CurrentPerson.Manager == null ? string.Empty : DataHelper.CurrentPerson.Manager.Alias;
                 var modified = string.Format(virtualPath, personAlias);
 
                 return modified;
@@ -428,7 +428,7 @@ namespace PraticeManagement
 
         protected bool IsShowSearchSection()
         {
-            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger  || _userIsBusinessUnitManager || _userIsProjectLead || _userIsRecruiter || _userIsHR || _userIsSalesperson;
+            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger || _userIsBusinessUnitManager || _userIsProjectLead || _userIsRecruiter || _userIsHR || _userIsSalesperson;
 
             return result;
         }
