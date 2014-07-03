@@ -32,7 +32,6 @@
             });
         });
 
-
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
         function endRequestHandle(sender, Args) {
 
@@ -147,7 +146,8 @@
                     <td class="ReportFilterLabels">
                     </td>
                     <td class="textLeft">
-                        <asp:CheckBox ID="chbExcludeInternal" runat="server" Text="Exclude Internal Practice Areas" AutoPostBack="true" OnCheckedChanged="chbExcludeInternal_CheckedChanged"/>
+                        <asp:CheckBox ID="chbExcludeInternal" runat="server" Text="Exclude Internal Practice Areas"
+                            AutoPostBack="true" OnCheckedChanged="chbExcludeInternal_CheckedChanged" />
                     </td>
                     <td>
                     </td>
@@ -212,14 +212,13 @@
                         </td>
                         <td style="width: 20%">
                             <table class="ReportHeaderTotals">
-                                <tr>
-                                <td class="Width24Percent">
+                                <tr class="vBottomImp">
+                                    <td class="Width24Percent">
                                         <table class="font14Px">
                                             <tr>
                                                 <td class="alignRight">
                                                     Completed:
                                                 </td>
-                                            
                                                 <td>
                                                     <asp:Literal ID="ltrlCompleted" runat="server"></asp:Literal>
                                                 </td>
@@ -228,7 +227,6 @@
                                                 <td class="alignRight">
                                                     Not Completed:
                                                 </td>
-                                            
                                                 <td>
                                                     <asp:Literal ID="ltrlNotCompleted" runat="server"></asp:Literal>
                                                 </td>
@@ -237,7 +235,6 @@
                                                 <td class="alignRight">
                                                     Canceled:
                                                 </td>
-                                            
                                                 <td>
                                                     <asp:Literal ID="ltrlCanceled" runat="server"></asp:Literal>
                                                 </td>
