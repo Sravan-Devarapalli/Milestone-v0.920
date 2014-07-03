@@ -34,5 +34,6 @@ BEGIN
 			CONVERT(NVARCHAR(10), @Today, 111) > CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111)
 			AND PF.IsCanceled = 0 AND PF.FeedbackStatusId = 2 --Not Completed Status
 			AND DATEPART(WEEKDAY,PF.ReviewPeriodEndDate) = DATEPART(WEEKDAY,@Today)
+			AND CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111)
 	ORDER BY PF.ReviewPeriodEndDate DESC
 END
