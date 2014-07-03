@@ -39,6 +39,7 @@ BEGIN
 				AND PF.IsCanceled = 0 AND PF.FeedbackStatusId = 2 --Not Completed Status
 				AND P.PersonId = @PersonId
 				AND CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), @SendAfter, 101)
+				AND CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111)
 	--Cancel feedback records for the person if the status is 'not completed' as per #3271
 	
 	UPDATE dbo.ProjectFeedback
@@ -48,4 +49,5 @@ BEGIN
 		CompletionCertificateBy = @ModifiedBy,
 		CompletionCertificateDate = @Today
 	WHERE PersonId = @PersonId AND FeedbackStatusId = 2 --Status 2 = not completed
+	AND CONVERT(NVARCHAR(10), ReviewPeriodEndDate, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111)
 END
