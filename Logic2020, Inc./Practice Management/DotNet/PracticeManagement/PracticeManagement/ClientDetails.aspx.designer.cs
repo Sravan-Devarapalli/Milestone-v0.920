@@ -67,13 +67,13 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.HiddenField hdnchbActive;
         
         /// <summary>
-        /// chbHouseAccount  control.
+        /// chbHouseAccount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbHouseAccount ;
+        protected global::System.Web.UI.WebControls.CheckBox chbHouseAccount;
         
         /// <summary>
         /// chbIsChar control.
@@ -371,6 +371,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::AjaxControlToolkit.TabPanel tpProjects;
+        
+        /// <summary>
+        /// lnkProjects control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkProjects;
         
         /// <summary>
         /// UpdatePanel1 control.
