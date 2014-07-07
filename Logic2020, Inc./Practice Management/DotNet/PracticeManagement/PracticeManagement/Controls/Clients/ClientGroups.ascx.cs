@@ -16,9 +16,9 @@ namespace PraticeManagement.Controls.Clients
 
         #region ProjectGroupsProperties
 
-        private PraticeManagement.ClientDetails HostingPage
+        private ClientDetails HostingPage
         {
-            get { return ((PraticeManagement.ClientDetails)Page); }
+            get { return ((ClientDetails)Page); }
         }
 
         public int BusinessGroupId { get; set; }
@@ -29,15 +29,7 @@ namespace PraticeManagement.Controls.Clients
             {
                 if (ViewState[CLIENT_GROUPS_KEY] == null)
                 {
-                    List<ProjectGroup> groups;
-                    if (ClientId == 0)
-                    {
-                        groups = new List<ProjectGroup>() { new ProjectGroup() { Id = -1, Name = ProjectGroup.DefaultGroupName, Code = ProjectGroup.DefaultGroupCode, IsActive = true, BusinessGroupId = -1 } };
-                    }
-                    else
-                    {
-                        groups = ServiceCallers.Custom.Group(g => g.GroupListAll(ClientId, null).OrderBy(p => p.Name).ToList());
-                    }
+                    List<ProjectGroup> groups = ClientId == 0 ? new List<ProjectGroup>() { new ProjectGroup() { Id = -1, Name = ProjectGroup.DefaultGroupName, Code = ProjectGroup.DefaultGroupCode, IsActive = true, BusinessGroupId = -1 } } : ServiceCallers.Custom.Group(g => g.GroupListAll(ClientId, null).OrderBy(p => p.Name).ToList());
                     ViewState[CLIENT_GROUPS_KEY] = groups.ToList();
                 }
 
@@ -74,15 +66,7 @@ namespace PraticeManagement.Controls.Clients
             {
                 if (ViewState[BUSINESS_GROUPS_KEY] == null)
                 {
-                    List<BusinessGroup> businessGroupList;
-                    if (ClientId == 0)
-                    {
-                        businessGroupList = new List<BusinessGroup>() { new BusinessGroup() { Id = -1, Name = BusinessGroup.DefaultBusinessGroupName, Code = BusinessGroup.DefaultBusinessGroupCode, IsActive = true } };
-                    }
-                    else
-                    {
-                        businessGroupList = ServiceCallers.Custom.Group(g => g.GetBusinessGroupList(ClientId.ToString(), null)).ToList();
-                    }
+                    List<BusinessGroup> businessGroupList = ClientId == 0 ? new List<BusinessGroup>() { new BusinessGroup() { Id = -1, Name = BusinessGroup.DefaultBusinessGroupName, Code = BusinessGroup.DefaultBusinessGroupCode, IsActive = true } } : ServiceCallers.Custom.Group(g => g.GetBusinessGroupList(ClientId.ToString(), null)).ToList();
                     ViewState[BUSINESS_GROUPS_KEY] = businessGroupList.ToList();
                 }
 
@@ -104,7 +88,7 @@ namespace PraticeManagement.Controls.Clients
 
         private bool ValidateProjectGroupName(string projectGroupName, int groupId)
         {
-            return ClientGroupsList.Where(p => p.Name.Replace(" ", "").ToLowerInvariant() == projectGroupName.Replace(" ", "").ToLowerInvariant() && (groupId != p.Id || groupId == -1)).Count() == 0;
+            return !ClientGroupsList.Any(p => p.Name.Replace(" ", "").ToLowerInvariant() == projectGroupName.Replace(" ", "").ToLowerInvariant() && (groupId != p.Id || groupId == -1));
         }
 
         protected void custNewGroupName_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -127,11 +111,10 @@ namespace PraticeManagement.Controls.Clients
             var imgEdit = sender as ImageButton;
             var row = imgEdit.NamingContainer as GridViewRow;
 
-            CustomValidator custGroupName = (CustomValidator)row.FindControl("custNewGroupName");
+            var custGroupName = (CustomValidator)row.FindControl("custNewGroupName");
             List<ProjectGroup> tmp = ClientGroupsList;
             int groupId = int.Parse(((HiddenField)row.FindControl("hidKey")).Value);
             string oldGroupName = tmp.Any(g => g.Id == groupId) ? tmp.First(g => g.Id == groupId).Name : string.Empty;
-            int oldBusinessGroupId = tmp.Any(g => g.Id == groupId) ? tmp.First(g => g.Id == groupId).BusinessGroupId : 0;
             string groupName = ((TextBox)row.FindControl("txtGroupName")).Text;
             Page.Validate("UpdateGroup");
 
@@ -139,23 +122,21 @@ namespace PraticeManagement.Controls.Clients
             {
                 custGroupName.IsValid = ValidateProjectGroupName(groupName, groupId);
             }
-            DropDownList businessGroupName = (DropDownList)row.FindControl("ddlBusinessGroup");
+            var businessGroupName = (DropDownList)row.FindControl("ddlBusinessGroup");
             BusinessGroupId = Convert.ToInt32(businessGroupName.SelectedValue);
 
-            if (Page.IsValid)
-            {
-                bool isActive = ((CheckBox)row.FindControl("chbIsActiveEd")).Checked;
-                ProjectGroupUpdate(groupId, groupName, isActive, BusinessGroupId);
-                ProjectGroup pg =  tmp.First(g => g.Id == groupId);
-                pg.BusinessGroupId = BusinessGroupId;
-                pg.Name = groupName;
-                pg.IsActive = isActive;
-                ClientGroupsList = tmp;
-                HostingPage.ProjectsControl.DataBind();
-                gvGroups.EditIndex = -1;
-                gvGroups.DataSource = ClientGroupsList;
-                gvGroups.DataBind();
-            }
+            if (!Page.IsValid) return;
+            var isActive = ((CheckBox)row.FindControl("chbIsActiveEd")).Checked;
+            ProjectGroupUpdate(groupId, groupName, isActive, BusinessGroupId);
+            var pg = tmp.First(g => g.Id == groupId);
+            pg.BusinessGroupId = BusinessGroupId;
+            pg.Name = groupName;
+            pg.IsActive = isActive;
+            ClientGroupsList = tmp;
+            HostingPage.ProjectsControl.DataBind();
+            gvGroups.EditIndex = -1;
+            gvGroups.DataSource = ClientGroupsList;
+            gvGroups.DataBind();
         }
 
         protected void imgDelete_OnClick(object sender, EventArgs e)
@@ -206,10 +187,10 @@ namespace PraticeManagement.Controls.Clients
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                HiddenField hdnBusinessGroupId = (HiddenField)e.Row.FindControl("hdnBusinessGroupId");
+                var hdnBusinessGroupId = (HiddenField)e.Row.FindControl("hdnBusinessGroupId");
                 if (e.Row.RowIndex == gvGroups.EditIndex)
                 {
-                    DropDownList ddlBusinessGroup = (DropDownList)e.Row.FindControl("ddlBusinessGroup");
+                    var ddlBusinessGroup = (DropDownList)e.Row.FindControl("ddlBusinessGroup");
                     BusinessGroupList = null;
                     var activeBusinessGroupList = BusinessGroupList.Where(b => b.IsActive || int.Parse(hdnBusinessGroupId.Value) == b.Id).ToArray();
                     DataHelper.FillListDefault(ddlBusinessGroup, null, activeBusinessGroupList.ToArray(), true, "Id", "Name");
@@ -217,8 +198,8 @@ namespace PraticeManagement.Controls.Clients
                 }
                 else
                 {
-                    Label lblBusinessGroup = (Label)e.Row.FindControl("lblBusinessGroup");
-                    BusinessGroup businessGroup = BusinessGroupList.Any(g => g.Id == Convert.ToInt32(hdnBusinessGroupId.Value)) ? BusinessGroupList.First(g => g.Id == Convert.ToInt32(hdnBusinessGroupId.Value)) : null;
+                    var lblBusinessGroup = (Label)e.Row.FindControl("lblBusinessGroup");
+                    BusinessGroup businessGroup = BusinessGroupList.FirstOrDefault(g => g.Id == Convert.ToInt32(hdnBusinessGroupId.Value));
                     string name = businessGroup != null ? businessGroup.HtmlEncodedName : BusinessGroup.DefaultBusinessGroupName;
                     lblBusinessGroup.Text = name.Length > 36 ? name.Substring(0, 34) + "...." : name;
                     lblBusinessGroup.ToolTip = businessGroup.Name;
@@ -230,25 +211,21 @@ namespace PraticeManagement.Controls.Clients
         {
             Page.Validate("NewGroup");
 
-            if (Page.IsValid)
+            if (!Page.IsValid) return;
+            string groupName = txtNewGroupName.Text;
+            if (ClientId == 0)
             {
-                string groupName = txtNewGroupName.Text;
-                ProjectGroup group;
-                if (ClientId == 0)
-                {
-                    List<ProjectGroup> tmp = ClientGroupsList;
-                    group = new ProjectGroup { Id = (ClientGroupsList.Count() > 0 ? ClientGroupsList.Min(g => g.Id) - 1 : 0), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
-                    plusMakeVisible(true);
-                    tmp.Add(group);
-                    ClientGroupsList = tmp;
-                }
-                else
-                {
-                    group = new ProjectGroup { Id = AddProjectGroup(groupName, chbGroupActive.Checked), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
-                    ClientGroupsList = null;
-                }
-                DisplayGroups(ClientGroupsList);
+                var tmp = ClientGroupsList;
+                var group = new ProjectGroup { Id = (ClientGroupsList.Any() ? ClientGroupsList.Min(g => g.Id) - 1 : 0), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
+                plusMakeVisible(true);
+                tmp.Add(@group);
+                ClientGroupsList = tmp;
             }
+            else
+            {
+                ClientGroupsList = null;
+            }
+            DisplayGroups(ClientGroupsList);
         }
 
         public void DisplayGroups(List<ProjectGroup> groups, bool fromMainPage = false)
@@ -268,53 +245,29 @@ namespace PraticeManagement.Controls.Clients
             gvGroups.DataBind();
         }
 
-        private int AddProjectGroup(string groupName, bool isActive)
-        {
-            if (ClientId.HasValue)
-                using (var serviceGroups = new ProjectGroupServiceClient())
-                {
-                    try
-                    {
-                        ProjectGroup projectGroup = new ProjectGroup();
-                        projectGroup.Name = groupName;
-                        projectGroup.IsActive = isActive;
-                        projectGroup.ClientId = ClientId.Value;
-                        projectGroup.BusinessGroupId = Convert.ToInt32(ddlAddBusinessGroup.SelectedValue);
-                        int result = serviceGroups.ProjectGroupInsert(projectGroup, HostingPage.User.Identity.Name);
-                        plusMakeVisible(true);
-                        return result;
-                    }
-                    catch (FaultException<ExceptionDetail>)
-                    {
-                        serviceGroups.Abort();
-                        throw;
-                    }
-                }
-
-            return -1;
-        }
-
         private void ProjectGroupUpdate(int groupId, string groupName, bool isActive, int businessGroupId)
         {
-            if (ClientId.HasValue)
-                using (var serviceClient = new ProjectGroupServiceClient())
+            if (!ClientId.HasValue) return;
+            using (var serviceClient = new ProjectGroupServiceClient())
+            {
+                try
                 {
-                    try
+                    var projectGroup = new ProjectGroup
                     {
-                        ProjectGroup projectGroup = new ProjectGroup();
-                        projectGroup.Name = groupName;
-                        projectGroup.Id = groupId;
-                        projectGroup.IsActive = isActive;
-                        projectGroup.ClientId = ClientId.Value;
-                        projectGroup.BusinessGroupId = businessGroupId;
-                        serviceClient.ProjectGroupUpdate(projectGroup, HostingPage.User.Identity.Name);
-                    }
-                    catch (FaultException<ExceptionDetail>)
-                    {
-                        serviceClient.Abort();
-                        throw;
-                    }
+                        Name = groupName,
+                        Id = groupId,
+                        IsActive = isActive,
+                        ClientId = ClientId.Value,
+                        BusinessGroupId = businessGroupId
+                    };
+                    serviceClient.ProjectGroupUpdate(projectGroup, HostingPage.User.Identity.Name);
                 }
+                catch (FaultException<ExceptionDetail>)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
         }
 
         protected void btnPlus_Click(object sender, EventArgs e)
