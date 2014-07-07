@@ -30,9 +30,7 @@ namespace PraticeManagement
         private bool userIsSeniorLeadership;
         #endregion
 
-        private ExceptionDetail InnerException { get; set; }
-
-        public PraticeManagement.Controls.Clients.ClientProjects ProjectsControl
+        public Controls.Clients.ClientProjects ProjectsControl
         {
             get
             {
@@ -46,8 +44,7 @@ namespace PraticeManagement
             {
                 if (ddlDefaultSalesperson.SelectedValue != "")
                     return ddlDefaultSalesperson.SelectedItem.Text;
-                else
-                    return string.Empty;
+                return string.Empty;
             }
         }
 
@@ -57,8 +54,7 @@ namespace PraticeManagement
             {
                 if (ddlDefaultDirector.SelectedValue != "")
                     return ddlDefaultDirector.SelectedItem.Text;
-                else
-                    return string.Empty;
+                return string.Empty;
             }
         }
 
@@ -73,59 +69,55 @@ namespace PraticeManagement
                     var output = ViewState[CLIENT_THRESHOLDS_LIST_KEY] as List<ClientMarginColorInfo>;
                     return output;
                 }
-                else
+                var isDeaultMarginInfoEnabled = Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey));
+
+                if (ClientId.HasValue)
                 {
-                    var IsDeaultMarginInfoEnabled = Convert.ToBoolean(SettingsHelper.GetResourceValueByTypeAndKey(SettingsType.Application, Constants.ResourceKeys.IsDefaultMarginInfoEnabledForAllClientsKey));
-
-                    if (ClientId.HasValue)
+                    var client = GetClient(ClientId.Value);
+                    if (client.IsMarginColorInfoEnabled != null && client.IsMarginColorInfoEnabled.HasValue)
                     {
-                        var client = GetClient(ClientId.Value);
-                        if (client.IsMarginColorInfoEnabled != null && client.IsMarginColorInfoEnabled.HasValue)
+                        using (var serviceClient = new ClientServiceClient())
                         {
-                            using (var serviceClient = new ClientServiceClient())
+                            try
                             {
-                                try
-                                {
-                                    var result = serviceClient.GetClientMarginColorInfo(ClientId.Value);
+                                var result = serviceClient.GetClientMarginColorInfo(ClientId.Value);
 
-                                    if (result != null)
-                                    {
-                                        var clientInfoList = result.AsQueryable().ToList();
-                                        ViewState[CLIENT_THRESHOLDS_LIST_KEY] = clientInfoList;
-                                        return clientInfoList;
-                                    }
-                                    else
-                                    {
-                                        return SetSingleRowDataSource();
-                                    }
-                                }
-                                catch (FaultException<ExceptionDetail> ex)
+                                if (result != null)
                                 {
-                                    serviceClient.Abort();
-                                    throw;
+                                    var clientInfoList = result.AsQueryable().ToList();
+                                    ViewState[CLIENT_THRESHOLDS_LIST_KEY] = clientInfoList;
+                                    return clientInfoList;
                                 }
+                                return SetSingleRowDataSource();
+                            }
+                            catch (FaultException<ExceptionDetail>)
+                            {
+                                serviceClient.Abort();
+                                throw;
                             }
                         }
-                        else if (IsDeaultMarginInfoEnabled)
-                        {
-                            return SetDefaultClientDataSource();
-                        }
                     }
-                    else if (IsDeaultMarginInfoEnabled)
+                    if (isDeaultMarginInfoEnabled)
                     {
                         return SetDefaultClientDataSource();
                     }
-
-                    return SetSingleRowDataSource();
                 }
+                else if (isDeaultMarginInfoEnabled)
+                {
+                    return SetDefaultClientDataSource();
+                }
+
+                return SetSingleRowDataSource();
             }
             set { ViewState[CLIENT_THRESHOLDS_LIST_KEY] = value; }
         }
 
         private List<ClientMarginColorInfo> SetSingleRowDataSource()
         {
-            var cmciList = new List<ClientMarginColorInfo>();
-            cmciList.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
+            var cmciList = new List<ClientMarginColorInfo>
+            {
+                new ClientMarginColorInfo {ColorInfo = new ColorInformation()}
+            };
             ViewState[CLIENT_THRESHOLDS_LIST_KEY] = cmciList;
             return cmciList;
         }
@@ -139,10 +131,7 @@ namespace PraticeManagement
                 ViewState[CLIENT_THRESHOLDS_LIST_KEY] = clientInfoList;
                 return clientInfoList;
             }
-            else
-            {
-                return SetSingleRowDataSource();
-            }
+            return SetSingleRowDataSource();
         }
 
         private bool IntialchbMarginThresholdsValue
@@ -167,18 +156,12 @@ namespace PraticeManagement
                 {
                     return SelectedId;
                 }
-                else
+                int id;
+                if (Int32.TryParse(hdnClientId.Value, out id))
                 {
-                    int id;
-                    if (Int32.TryParse(hdnClientId.Value, out id))
-                    {
-                        return id;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return id;
                 }
+                return null;
             }
             set
             {
@@ -253,9 +236,9 @@ namespace PraticeManagement
 
             if (e.Row.RowType == DataControlRowType.DataRow && (e.Row.RowState & DataControlRowState.Edit) == 0)
             {
-                DropDownList ddlSR = e.Row.FindControl(gvddlStartRange) as DropDownList;
-                DropDownList ddlER = e.Row.FindControl(gvddlEndRange) as DropDownList;
-                DropDownList ddcolor = e.Row.FindControl(gvddlColor) as DropDownList;
+                var ddlSR = e.Row.FindControl(gvddlStartRange) as DropDownList;
+                var ddlER = e.Row.FindControl(gvddlEndRange) as DropDownList;
+                var ddcolor = e.Row.FindControl(gvddlColor) as DropDownList;
 
                 FillRangeDropdown(ddlSR);
                 FillRangeDropdown(ddlER);
@@ -286,7 +269,7 @@ namespace PraticeManagement
                 ddlRange.Items.Add(
                                         new ListItem()
                                         {
-                                            Text = string.Format("{0}%", i.ToString()),
+                                            Text = string.Format("{0}%", i),
                                             Value = i.ToString()
                                         }
                                   );
@@ -298,7 +281,7 @@ namespace PraticeManagement
         {
             if (!String.IsNullOrEmpty(ExMessage))
             {
-                args.IsValid = !(ExMessage == DuplClientName);
+                args.IsValid = ExMessage != DuplClientName;
             }
             else
             {
@@ -364,39 +347,31 @@ namespace PraticeManagement
 
         protected void cvgvddlColor_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            CustomValidator cvcolor = source as CustomValidator;
-            GridViewRow row = cvcolor.NamingContainer as GridViewRow;
-            DropDownList ddcolor = row.FindControl(gvddlColor) as DropDownList;
+            var cvcolor = source as CustomValidator;
+            var row = cvcolor.NamingContainer as GridViewRow;
+            var ddcolor = row.FindControl(gvddlColor) as DropDownList;
 
             args.IsValid = true;
-            if (chbMarginThresholds.Checked)
-            {
-                if (ddcolor.SelectedIndex == 0)
-                {
-                    args.IsValid = false;
-                    cvgvddlColorClone.IsValid = false;
-                }
-            }
+            if (!chbMarginThresholds.Checked) return;
+            if (ddcolor.SelectedIndex != 0) return;
+            args.IsValid = false;
+            cvgvddlColorClone.IsValid = false;
         }
 
         protected void cvgvRange_OnServerValidate(object source, ServerValidateEventArgs args)
         {
-            if (chbMarginThresholds.Checked)
-            {
-                CustomValidator cvgvRange = source as CustomValidator;
-                GridViewRow row = cvgvRange.NamingContainer as GridViewRow;
-                DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
-                DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
+            if (!chbMarginThresholds.Checked) return;
+            var cvgvRange = source as CustomValidator;
+            var row = cvgvRange.NamingContainer as GridViewRow;
+            var ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
+            var ddlER = row.FindControl(gvddlEndRange) as DropDownList;
 
-                args.IsValid = true;
-                int start = Convert.ToInt32(ddlSR.SelectedValue);
-                int end = Convert.ToInt32(ddlER.SelectedValue);
-                if (start > end)
-                {
-                    args.IsValid = false;
-                    cvgvRangeClone.IsValid = false;
-                }
-            }
+            args.IsValid = true;
+            var start = Convert.ToInt32(ddlSR.SelectedValue);
+            var end = Convert.ToInt32(ddlER.SelectedValue);
+            if (start <= end) return;
+            args.IsValid = false;
+            cvgvRangeClone.IsValid = false;
         }
 
         protected void cvgvOverLapRange_OnServerValidate(object source, ServerValidateEventArgs args)
@@ -404,32 +379,20 @@ namespace PraticeManagement
             args.IsValid = true;
             if (chbMarginThresholds.Checked)
             {
-                CustomValidator cvgvOverLapRange = source as CustomValidator;
-                GridViewRow row = cvgvOverLapRange.NamingContainer as GridViewRow;
+                var cvgvOverLapRange = source as CustomValidator;
+                var row = cvgvOverLapRange.NamingContainer as GridViewRow;
 
-                DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
-                DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
+                var ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
+                var ddlER = row.FindControl(gvddlEndRange) as DropDownList;
 
-                int start = Convert.ToInt32(ddlSR.SelectedValue);
-                int end = Convert.ToInt32(ddlER.SelectedValue);
-                if (ClientMarginColorInfoList != null)
-                {
-                    List<ClientMarginColorInfo> cmciList = new List<ClientMarginColorInfo>();
-                    for (int i = 0; i < ClientMarginColorInfoList.Count; i++)
-                    {
-                        if (i != row.RowIndex)
-                        {
-                            cmciList.Add(ClientMarginColorInfoList[i]);
-                        }
+                var start = Convert.ToInt32(ddlSR.SelectedValue);
+                var end = Convert.ToInt32(ddlER.SelectedValue);
+                if (ClientMarginColorInfoList == null) return;
+                var cmciList = ClientMarginColorInfoList.Where((t, i) => i != row.RowIndex).ToList();
 
-                    }
-
-                    if (cmciList.Any(k => k.StartRange >= start && k.StartRange <= end))
-                    {
-                        args.IsValid = false;
-                        cvgvOverLapRangeClone.IsValid = false;
-                    }
-                }
+                if (!cmciList.Any(k => k.StartRange >= start && k.StartRange <= end)) return;
+                args.IsValid = false;
+                cvgvOverLapRangeClone.IsValid = false;
             }
 
         }
@@ -438,7 +401,7 @@ namespace PraticeManagement
         {
             if (!String.IsNullOrEmpty(ExMessage))
             {
-                args.IsValid = !(ExMessage != DuplClientName);
+                args.IsValid = ExMessage == DuplClientName;
             }
             else
             {
@@ -472,25 +435,23 @@ namespace PraticeManagement
         {
             GetLatestMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
-            if (Page.IsValid)
+            if (!Page.IsValid) return;
+            if (!ClientId.HasValue)
             {
-                if (!ClientId.HasValue)
-                {
-                    int? clientId = SaveData();
-                    var targetUrl = string.Format(Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
-                                                  Constants.ApplicationPages.ProjectDetail,
-                                                  clientId.Value);
+                int? clientId = SaveData();
+                var targetUrl = string.Format(Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
+                    Constants.ApplicationPages.ProjectDetail,
+                    clientId.Value);
 
-                    Redirect(targetUrl, clientId.Value.ToString());
-                }
-                else if (!SaveDirty || ValidateAndSave())
-                {
-                    var targetUrl = string.Format(Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
-                                                  Constants.ApplicationPages.ProjectDetail,
-                                                  this.ClientId);
+                Redirect(targetUrl, clientId.Value.ToString());
+            }
+            else if (!SaveDirty || ValidateAndSave())
+            {
+                var targetUrl = string.Format(Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
+                    Constants.ApplicationPages.ProjectDetail,
+                    ClientId);
 
-                    Redirect(targetUrl, ClientId.Value.ToString());
-                }
+                Redirect(targetUrl, ClientId.Value.ToString());
             }
         }
 
@@ -503,15 +464,15 @@ namespace PraticeManagement
 
             foreach (GridViewRow row in gvClientThrsholds.Rows)
             {
-                DropDownList ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
-                DropDownList ddlER = row.FindControl(gvddlEndRange) as DropDownList;
-                DropDownList ddcolor = row.FindControl(gvddlColor) as DropDownList;
+                var ddlSR = row.FindControl(gvddlStartRange) as DropDownList;
+                var ddlER = row.FindControl(gvddlEndRange) as DropDownList;
+                var ddcolor = row.FindControl(gvddlColor) as DropDownList;
 
-                int start = Convert.ToInt32(ddlSR.SelectedValue);
-                int end = Convert.ToInt32(ddlER.SelectedValue);
-                int colorId = Convert.ToInt32(ddcolor.SelectedValue);
-                string colorValue = ddcolor.SelectedItem.Attributes["colorValue"];
-                string colorDescription = ddcolor.SelectedItem.Attributes["Description"];
+                var start = Convert.ToInt32(ddlSR.SelectedValue);
+                var end = Convert.ToInt32(ddlER.SelectedValue);
+                var colorId = Convert.ToInt32(ddcolor.SelectedValue);
+                var colorValue = ddcolor.SelectedItem.Attributes["colorValue"];
+                var colorDescription = ddcolor.SelectedItem.Attributes["Description"];
                 ClientMarginColorInfoList.Add(
                     new ClientMarginColorInfo()
                     {
@@ -532,10 +493,9 @@ namespace PraticeManagement
         protected void btnAddThreshold_OnClick(object sender, EventArgs e)
         {
             GetLatestMarginInfoValues();
-            var clientMarginColorInfo = new ClientMarginColorInfo();
-            clientMarginColorInfo.ColorInfo = new ColorInformation();
+            var clientMarginColorInfo = new ClientMarginColorInfo { ColorInfo = new ColorInformation() };
 
-            int end = ClientMarginColorInfoList.Max(m => m.EndRange);
+            var end = ClientMarginColorInfoList.Max(m => m.EndRange);
             if (end != 150)
             {
                 end = end + 1;
@@ -552,14 +512,16 @@ namespace PraticeManagement
         protected void btnDeleteRow_OnClick(object sender, EventArgs e)
         {
             GetLatestMarginInfoValues();
-            ImageButton imgDelete = sender as ImageButton;
-            GridViewRow gvRow = imgDelete.NamingContainer as GridViewRow;
+            var imgDelete = sender as ImageButton;
+            var gvRow = imgDelete.NamingContainer as GridViewRow;
             ClientMarginColorInfoList.RemoveAt(gvRow.RowIndex);
 
             if (gvClientThrsholds.Rows.Count == 1)
             {
-                var cmci = new List<ClientMarginColorInfo>();
-                cmci.Add(new ClientMarginColorInfo() { ColorInfo = new ColorInformation() });
+                var cmci = new List<ClientMarginColorInfo>
+                {
+                    new ClientMarginColorInfo {ColorInfo = new ColorInformation()}
+                };
                 ClientMarginColorInfoList = cmci;
             }
 
@@ -619,13 +581,10 @@ namespace PraticeManagement
                 HtmlTextWriterAttribute.Onclick.ToString(),
                 onClickAction);
 
-            if (string.IsNullOrEmpty(clientId))
-            {
-                var isUserSalesPerson = Roles.IsUserInRole(DTO.Constants.RoleNames.SalespersonRoleName);
-                ListItem item = ddlDefaultSalesperson.Items.FindByValue(DataHelper.CurrentPerson.Id.ToString());
-                if (item != null)
-                    ddlDefaultSalesperson.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
-            }
+            if (!string.IsNullOrEmpty(clientId)) return;
+            var item = ddlDefaultSalesperson.Items.FindByValue(DataHelper.CurrentPerson.Id.ToString());
+            if (item != null)
+                ddlDefaultSalesperson.SelectedValue = DataHelper.CurrentPerson.Id.ToString();
         }
 
         /// <summary>
@@ -648,26 +607,30 @@ namespace PraticeManagement
                     {
                         foreach (var g in ucProjectGoups.ClientGroupsList)
                         {
-                            using (var serviceGroups = new PraticeManagement.ProjectGroupService.ProjectGroupServiceClient())
+                            using (var serviceGroups = new ProjectGroupService.ProjectGroupServiceClient())
                             {
                                 if (g.Code != ProjectGroup.DefaultGroupCode)
                                 {
-                                    ProjectGroup projectGroup = new ProjectGroup();
-                                    projectGroup.Name = g.Name;
-                                    projectGroup.IsActive = g.IsActive;
-                                    projectGroup.BusinessGroupId = businessGroupId;
-                                    projectGroup.ClientId = id.Value;
+                                    var projectGroup = new ProjectGroup
+                                    {
+                                        Name = g.Name,
+                                        IsActive = g.IsActive,
+                                        BusinessGroupId = businessGroupId,
+                                        ClientId = id.Value
+                                    };
                                     int result = serviceGroups.ProjectGroupInsert(projectGroup, Page.User.Identity.Name);
                                 }
                                 else if (g.Code == ProjectGroup.DefaultGroupCode)
                                 {
                                     int groupId = ServiceCallers.Custom.Group(s => s.GroupListAll(id.Value, null).ToList()).First(s => s.Code == ProjectGroup.DefaultGroupCode).Id.Value;
-                                    ProjectGroup projectGroup = new ProjectGroup();
-                                    projectGroup.Name = g.Name;
-                                    projectGroup.Id = groupId;
-                                    projectGroup.IsActive = g.IsActive;
-                                    projectGroup.ClientId = id.Value;
-                                    BusinessGroup[] businessGroupList = serviceGroups.GetBusinessGroupList(null, groupId);
+                                    var projectGroup = new ProjectGroup
+                                    {
+                                        Name = g.Name,
+                                        Id = groupId,
+                                        IsActive = g.IsActive,
+                                        ClientId = id.Value
+                                    };
+                                    var businessGroupList = serviceGroups.GetBusinessGroupList(null, groupId);
                                     projectGroup.BusinessGroupId = businessGroupList.First().Id.Value;
                                     businessGroupId = projectGroup.BusinessGroupId;
                                     serviceGroups.ProjectGroupUpdate(projectGroup, Page.User.Identity.Name);
@@ -676,45 +639,49 @@ namespace PraticeManagement
                         }
                         foreach (var g in ucPricingList.ClientPricingLists)
                         {
-                            using (var serviceGroups = new PraticeManagement.ClientService.ClientServiceClient())
+                            using (var serviceGroups = new ClientServiceClient())
                             {
                                 if (!g.IsDefault)
                                 {
-                                    PricingList pricingList = new PricingList();
-                                    pricingList.ClientId = id.Value;
-                                    pricingList.Name = g.Name;
+                                    var pricingList = new PricingList { ClientId = id.Value, Name = g.Name };
                                     int result = serviceGroups.PricingListInsert(pricingList, User.Identity.Name);
                                 }
                                 else if (g.IsDefault && g.Name != PricingList.DefaultPricingListName)
                                 {
-                                    int pricingListId = ServiceCallers.Custom.Client(s => s.GetPricingLists(id.Value).ToList()).First(s => s.IsDefault == true).PricingListId.Value;
-                                    PricingList pricingList = new PricingList();
-                                    pricingList.ClientId = id.Value;
-                                    pricingList.Name = g.Name;
-                                    pricingList.PricingListId = pricingListId;
+                                    int pricingListId = ServiceCallers.Custom.Client(s => s.GetPricingLists(id.Value).ToList()).First(s => s.IsDefault).PricingListId.Value;
+                                    var pricingList = new PricingList
+                                    {
+                                        ClientId = id.Value,
+                                        Name = g.Name,
+                                        PricingListId = pricingListId
+                                    };
                                     serviceGroups.PricingListUpdate(pricingList, User.Identity.Name);
                                 }
                             }
                         }
                         foreach (var g in ucBusinessGroups.ClientGroupsList)
                         {
-                            using (var serviceGroups = new PraticeManagement.ProjectGroupService.ProjectGroupServiceClient())
+                            using (var serviceGroups = new ProjectGroupService.ProjectGroupServiceClient())
                             {
                                 if (g.Code != BusinessGroup.DefaultBusinessGroupCode)
                                 {
-                                    BusinessGroup businessGroup = new BusinessGroup();
-                                    businessGroup.Name = g.Name;
-                                    businessGroup.IsActive = g.IsActive;
-                                    businessGroup.ClientId = id.Value;
+                                    var businessGroup = new BusinessGroup
+                                    {
+                                        Name = g.Name,
+                                        IsActive = g.IsActive,
+                                        ClientId = id.Value
+                                    };
                                     int result = serviceGroups.BusinessGroupInsert(businessGroup, User.Identity.Name);
                                 }
                                 else if (g.Code == BusinessGroup.DefaultBusinessGroupCode && g.Name != BusinessGroup.DefaultBusinessGroupName)
                                 {
                                     int groupId = ServiceCallers.Custom.Group(s => s.GetBusinessGroupList(id.Value.ToString(), null).ToList()).First(s => s.Code == BusinessGroup.DefaultBusinessGroupCode).Id.Value;
-                                    BusinessGroup businessGroup = new BusinessGroup();
-                                    businessGroup.Name = g.Name;
-                                    businessGroup.Id = groupId;
-                                    businessGroup.IsActive = g.IsActive;
+                                    var businessGroup = new BusinessGroup
+                                    {
+                                        Name = g.Name,
+                                        Id = groupId,
+                                        IsActive = g.IsActive
+                                    };
                                     serviceGroups.BusinessGroupUpdate(businessGroup, User.Identity.Name);
                                 }
                             }
@@ -757,10 +724,10 @@ namespace PraticeManagement
             chbIsNoteRequired.Checked = client.IsNoteRequired;
             if (client.DefaultDirectorId.HasValue)
             {
-                ListItem selectedDefaultDirector = ddlDefaultDirector.Items.FindByValue(client.DefaultDirectorId.Value.ToString());
+                var selectedDefaultDirector = ddlDefaultDirector.Items.FindByValue(client.DefaultDirectorId.Value.ToString());
                 if (selectedDefaultDirector == null)
                 {
-                    Person selectedPerson = PersonById(client.DefaultDirectorId.Value);
+                    var selectedPerson = PersonById(client.DefaultDirectorId.Value);
                     selectedDefaultDirector = new ListItem(selectedPerson.PersonLastFirstName, client.DefaultDirectorId.Value.ToString());
                     ddlDefaultDirector.Items.Add(selectedDefaultDirector);
                     ddlDefaultDirector.SortByText();
@@ -840,9 +807,17 @@ namespace PraticeManagement
 
         private void LoadAllView()
         {
-            ucProjectGoups.DisplayGroups(null, true);
-            ucBusinessGroups.DisplayGroups(null, true);
-            ucPricingList.DisplayPricingList(null, true);
+            switch (tcFilters.ActiveTabIndex)
+            {
+                case 0: ucProjects.DisplayProjects();
+                    break;
+                case 1: ucProjectGoups.DisplayGroups(null, true);
+                    break;
+                case 2: ucBusinessGroups.DisplayGroups(null, true);
+                    break;
+                case 3: ucPricingList.DisplayPricingList(null, true);
+                    break;
+            }
         }
 
         #region Projects
@@ -856,27 +831,29 @@ namespace PraticeManagement
 
         }
 
+        protected void lnkProjects_Click(object sender, EventArgs e)
+        {
+            ucProjects.DisplayProjects();
+            tcFilters.ActiveTabIndex = 0;
+        }
+
         protected void lnkBusinessUnit_Click(object sender, EventArgs e)
         {
-            LoadAllView();
+            ucProjectGoups.DisplayGroups(null, true);
             tcFilters.ActiveTabIndex = 1;
         }
 
         protected void lnkBusinessGroup_Click(object sender, EventArgs e)
         {
-            LoadAllView();
+            ucBusinessGroups.DisplayGroups(null, true);
             tcFilters.ActiveTabIndex = 2;
         }
 
         protected void lnkPricingList_Click(object sender, EventArgs e)
         {
-            LoadAllView();
+            ucPricingList.DisplayPricingList(null, true);
             tcFilters.ActiveTabIndex = 3;
         }
-
-
-
-
         #endregion
 
 
@@ -888,36 +865,32 @@ namespace PraticeManagement
         {
             GetLatestMarginInfoValues();
             Page.Validate(vsumClient.ValidationGroup);
-            if (Page.IsValid)
-            {
-                var clientId = SaveData();
-                if (clientId.HasValue)
-                {
-                    var query = Request.QueryString.ToString();
-                    string backUrl = string.Format(Constants.ApplicationPages.ClientDetailsWithoutClientIdFormat,
-                                                    Constants.ApplicationPages.ClientDetails, query);
-                    backUrl = GetBackUrlWithId(backUrl, clientId.Value.ToString());
+            if (!Page.IsValid) return;
+            var clientId = SaveData();
+            if (!clientId.HasValue) return;
+            var query = Request.QueryString.ToString();
+            var backUrl = string.Format(Constants.ApplicationPages.ClientDetailsWithoutClientIdFormat,
+                Constants.ApplicationPages.ClientDetails, query);
+            backUrl = GetBackUrlWithId(backUrl, clientId.Value.ToString());
 
-                    var id = -1;
-                    if (string.IsNullOrEmpty(eventArgument) || int.TryParse(eventArgument, out id))
-                    {
-                        RedirectWithBack(
-                            string.Format(
-                                Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
-                                Constants.ApplicationPages.ProjectDetail,
-                                clientId.Value),
-                            backUrl);
-                    }
-                    else
-                    {
-                        RedirectWithBack(
-                            string.Format(
-                                Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
-                                eventArgument,
-                                clientId.Value),
-                            backUrl);
-                    }
-                }
+            int id;
+            if (string.IsNullOrEmpty(eventArgument) || int.TryParse(eventArgument, out id))
+            {
+                RedirectWithBack(
+                    string.Format(
+                        Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
+                        Constants.ApplicationPages.ProjectDetail,
+                        clientId.Value),
+                    backUrl);
+            }
+            else
+            {
+                RedirectWithBack(
+                    string.Format(
+                        Constants.ApplicationPages.ProjectDetailRedirectWithReturnFormat,
+                        eventArgument,
+                        clientId.Value),
+                    backUrl);
             }
         }
 
