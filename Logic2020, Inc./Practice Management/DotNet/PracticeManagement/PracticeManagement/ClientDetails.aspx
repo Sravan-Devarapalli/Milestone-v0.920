@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientDetails.aspx.cs"
     Inherits="PraticeManagement.ClientDetails" Title="Account Details | Practice Management"
     MasterPageFile="~/PracticeManagementMain.Master" %>
-
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register TagPrefix="cc2" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register TagPrefix="cc" Namespace="PraticeManagement.Controls.Generic.Buttons"
@@ -16,13 +16,28 @@
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
-    <title>Account Details | Practice Management</title>
 </asp:Content>
-<asp:Content ID="cntHeader" ContentPlaceHolderID="header" runat="server">
-    Account Details
+<asp:Content ID="cntHeader" ContentPlaceHolderID="head" runat="server">
+        <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
+              type="text/css" />
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+     <script src="Scripts/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#tblAccountSummaryByProject").tablesorter({
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
+        });
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        function endRequestHandle(sender, Args) {
+            $("#tblAccountSummaryByProject").tablesorter({
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
+        }
         function setClassForAddProject() {
             var button = document.getElementById("<%= btnAddProject.ClientID%>");
             var chbActive = document.getElementById("<%= chbActive.ClientID%>");
@@ -73,7 +88,7 @@
 
         window.onload = SetBackGroundColorForDdls;
     </script>
-  <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
+    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upClientPage" runat="server">
         <ContentTemplate>
             <div class="filters">
@@ -366,7 +381,9 @@
                 CssClass="CustomTabStyle">
                 <ajaxToolkit:TabPanel runat="server" ID="tpProjects">
                     <HeaderTemplate>
-                        <span class="bg"><a href="#"><span>Projects</span></a> </span>
+                        <span class="bg">
+                            <asp:LinkButton ID="lnkProjects" Text="Projects" runat="server" OnClick="lnkProjects_Click"></asp:LinkButton>
+                        </span>
                     </HeaderTemplate>
                     <ContentTemplate>
                         <div class="project-filter">
@@ -396,7 +413,9 @@
                 </ajaxToolkit:TabPanel>
                 <ajaxToolkit:TabPanel runat="server" ID="tpBusinessGroup">
                     <HeaderTemplate>
-                        <span class="bg"><asp:LinkButton ID="lnkBusinessGroup" Text="Business Group" runat="server" OnClick="lnkBusinessGroup_Click"></asp:LinkButton> </span>
+                        <span class="bg">
+                            <asp:LinkButton ID="lnkBusinessGroup" Text="Business Group" runat="server" OnClick="lnkBusinessGroup_Click"></asp:LinkButton>
+                        </span>
                     </HeaderTemplate>
                     <ContentTemplate>
                         <div class="project-filter">
@@ -410,7 +429,8 @@
                 </ajaxToolkit:TabPanel>
                 <ajaxToolkit:TabPanel runat="server" ID="tpPricingList">
                     <HeaderTemplate>
-                        <span class="bg"><asp:LinkButton ID="lnkPricingList" Text="Pricing List" runat="server" OnClick="lnkPricingList_Click"> </asp:LinkButton></span>
+                        <span class="bg">
+                            <asp:LinkButton ID="lnkPricingList" Text="Pricing List" runat="server" OnClick="lnkPricingList_Click"> </asp:LinkButton></span>
                     </HeaderTemplate>
                     <ContentTemplate>
                         <div class="project-filter">
