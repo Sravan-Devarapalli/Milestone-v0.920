@@ -8,6 +8,11 @@ namespace PraticeManagement.Controls.Clients
 {
     public partial class ClientProjects : System.Web.UI.UserControl
     {
+        public string ClientId
+        {
+            get { return Request.QueryString["id"]; }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -17,8 +22,8 @@ namespace PraticeManagement.Controls.Clients
         {
             ((PracticeManagementPageBase)Page).Redirect(
                 string.Format(Constants.ApplicationPages.DetailRedirectFormat,
-                                   Constants.ApplicationPages.ProjectDetail,
-                                   e.CommandArgument));
+                    Constants.ApplicationPages.ProjectDetail,
+                    e.CommandArgument));
         }
 
         public bool CheckIfDefaultProject(object projectIdObj)
@@ -28,21 +33,30 @@ namespace PraticeManagement.Controls.Clients
             return defaultProjectId.HasValue && defaultProjectId.Value == projectId;
         }
 
-        protected void gvProjects_OnRowDataBound(object sender, GridViewRowEventArgs e)
+        protected void repProjects_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Row.RowType == DataControlRowType.DataRow)
+            if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
+            var proj = (Project)e.Item.DataItem;
+            if (proj.ProjectManagers.Count <= 1)
             {
-                var proj = e.Row.DataItem as Project;
-
-                if (proj.ProjectManagers.Count <= 1)
-                {
-                    var control = e.Row.FindControl("cpe") as CollapsiblePanelExtender;
-                    var control2 = e.Row.FindControl("btnExpandCollapseFilter") as Image;
-                    control.Collapsed = false;
-                    control2.Style["display"] = "none";
-                }
+                var cpe = e.Item.FindControl("cpe") as CollapsiblePanelExtender;
+                var btnExpandCollapseFilter = e.Item.FindControl("btnExpandCollapseFilter") as Image;
+                cpe.Collapsed = false;
+                btnExpandCollapseFilter.Style["display"] = "none";
             }
+        }
 
+        public void DisplayProjects()
+        {
+            var projects = DataHelper.ListProjectsByClient(Convert.ToInt32(ClientId), string.Empty);
+            if (projects.Length == 0)
+            {
+                divEmptyMessage.Style["display"] = "";
+                return;
+            }
+            repProjects.DataSource = projects;
+            repProjects.DataBind();
+            divEmptyMessage.Style["display"] = "none";
         }
     }
 }
