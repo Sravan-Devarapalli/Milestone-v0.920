@@ -42,7 +42,27 @@
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <script type="text/javascript">
-
+                var currentSort = [[1, 0]];
+                $(document).ready(function () {
+                    $("#tblMilestones").tablesorter({
+                        headers: {
+                            0: {
+                                sorter: false
+                            }
+                        },
+                        sortList: currentSort,
+                        sortForce: [[1, 0]]
+                    }).bind("sortEnd", function (sorter) {
+                        currentSort = sorter.target.config.sortList;
+                        var spanName = $("#tblMilestones #name");
+                        if (currentSort != '1,0' && currentSort != '1,1') {
+                            spanName[0].setAttribute('class', 'backGroundNone');
+                        }
+                        else {
+                            spanName[0].setAttribute('class', '');
+                        }
+                    });
+                });
                 var fileError = 0;
                 function pageLoad() {
 
@@ -293,7 +313,7 @@
                     var startDate = new Date(txtStartDate.value);
                     var endDate = new Date(txtEndDate.value);
                     if (txtStartDate.value != '' && txtEndDate.value != ''
-            && startDate <= endDate) {
+                        && startDate <= endDate) {
                         var btnCustDatesClose = document.getElementById('<%= activityLog.ClientID %>_btnCustDatesClose');
                         hdnStartDate = document.getElementById('<%= activityLog.ClientID %>_hdnStartDate');
                         hdnEndDate = document.getElementById('<%= activityLog.ClientID %>_hdnEndDate');
@@ -362,10 +382,27 @@
                 function endRequestHandle(sender, Args) {
                     SetTooltipsForallDropDowns();
                     $("#tblProjectAttachments").tablesorter(
-                {
-                    sortList: [[0, 0]]
-                }
-                );
+                    {
+                        sortList: [[0, 0]]
+                    });
+                    $("#tblMilestones").tablesorter({
+                        headers: {
+                            0: {
+                                sorter: false
+                            }
+                        },
+                        sortList: [[1, 0]],
+                        sortForce: [[1, 0]]
+                    }).bind("sortEnd", function (sorter) {
+                        currentSort = sorter.target.config.sortList;
+                        var spanName = $("#tblMilestones #name");
+                        if (currentSort != '1,0' && currentSort != '1,1') {
+                            spanName[0].setAttribute('class', 'backGroundNone');
+                        }
+                        else {
+                            spanName[0].setAttribute('class', '');
+                        }
+                    });
                     var activityLog = document.getElementById('<%= activityLog.ClientID%>');
                     if (activityLog != null) {
                         imgCalender = document.getElementById('<%= activityLog.ClientID %>_imgCalender');
