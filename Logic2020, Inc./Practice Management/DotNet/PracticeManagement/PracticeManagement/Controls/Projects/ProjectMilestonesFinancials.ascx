@@ -2,146 +2,110 @@
     Inherits="PraticeManagement.Controls.Projects.ProjectMilestonesFinancials" %>
 <%@ Import Namespace="DataTransferObjects" %>
 <%@ Register TagPrefix="uc" TagName="MessageLabel" Src="~/Controls/MessageLabel.ascx" %>
-<asp:GridView ID="gvRevenueMilestones" runat="server" AutoGenerateColumns="false"
-    AllowSorting="true" EmptyDataText="No milestones have been created for this project."
-    OnRowDataBound="gvRevenueMilestones_RowDataBound" CssClass="CompPerfTable WholeWidth"
-    GridLines="None" BackColor="White" DataSourceID="odsMilestones" OnSorting="gvRevenueMilestones_Sorting">
-    <AlternatingRowStyle CssClass="alterrow" />
-    <Columns>
-        <asp:TemplateField>
-            <ItemStyle CssClass="Width3Percent" />
-            <ItemTemplate>
+<asp:Repeater ID="repMilestones" runat="server" OnItemDataBound="repMilestones_ItemDataBound" OnItemCommand="repMilestones_ItemCommand">
+    <HeaderTemplate>
+        <div class="minheight250Px">
+            <table id="tblMilestones" class="gvStrawmen CompPerfTable WholeWidth">
+                <thead>
+                    <tr class="MilestoneHeaderText CursorPointer">
+                        <th class="Width3Percent">
+                        </th>
+                        <th class="wrapMilestoneName ie-bg NoBorder">
+                            Milestone Name<span id="name"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </th>
+                        <th class="Width9Percent ie-bg NoBorder">
+                            Start Date<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </th>
+                        <th class="Width9Percent ie-bg NoBorder">
+                            End Date<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </th>
+                        <th class="ie-bg NoBorder Width7Percent"> 
+                            Revenue<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </th>
+                        <th class="ie-bg NoBorder Width11Percent">
+                            Contribution Margin<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </th>
+                        <th class="ie-bg NoBorder Width7Percent">
+                            Margin %<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </th>
+                        <th class="Width7Percent ie-bg NoBorder">
+                            Billable<span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+    </HeaderTemplate>
+    <ItemTemplate>
+        <tr>
+            <td class="Width3Percent">
                 <asp:ImageButton ID="imgbtnEdit" CommandName="edit" runat="server" ToolTip="Edit Milestone Name"
                     ImageUrl="~/Images/icon-edit.png" />
                 <asp:ImageButton ID="imgMilestoneDelete" ToolTip="Delete" runat="server" MilestoneId='<%# Eval("MilestoneId") %>'
                     OnClientClick="if (!confirm('Do you really want to delete the milestone?')) return false;"
                     OnClick="imgMilestoneDelete_Click" ImageUrl="~/Images/icon-delete.png" />
                 <asp:CustomValidator ID="custExpenseValidate" ValidationGroup="MilestoneDelete" runat="server"
-                    ErrorMessage="This milestone cannot be deleted, because project has expenses during the milestone period." Text="*"
-                    ToolTip= "This milestone cannot be deleted, because project has expenses during the milestone period."
+                    ErrorMessage="This milestone cannot be deleted, because project has expenses during the milestone period."
+                    Text="*" ToolTip="This milestone cannot be deleted, because project has expenses during the milestone period."
                     OnServerValidate="custExpenseValidate_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
                 <asp:CustomValidator ID="custProjectStatus" ValidationGroup="MilestoneDelete" runat="server"
-                    ErrorMessage="Projects with Active status should have atleast one milestone added to it." Text="*"
-                    ToolTip="Projects with Active status should have atleast one milestone added to it."
+                    ErrorMessage="Projects with Active status should have atleast one milestone added to it."
+                    Text="*" ToolTip="Projects with Active status should have atleast one milestone added to it."
                     OnServerValidate="custProjectStatus_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
                 <asp:CustomValidator ID="custCSATValidate" ValidationGroup="MilestoneDelete" runat="server"
-                    ErrorMessage="Milestone cannot be deleted as project has CSAT data added to it." Text="*"
-                    ToolTip="Milestone cannot be deleted as project has CSAT data added to it."
+                    ErrorMessage="Milestone cannot be deleted as project has CSAT data added to it."
+                    Text="*" ToolTip="Milestone cannot be deleted as project has CSAT data added to it."
                     OnServerValidate="custCSATValidate_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
                 <asp:CustomValidator ID="custAttribution" ValidationGroup="MilestoneDelete" runat="server"
-                    ErrorMessage="Milestone cannot be deleted as project has Attribution data added to it." Text="*"
-                    ToolTip="Milestone cannot be deleted as project has Attribution data added to it."
+                    ErrorMessage="Milestone cannot be deleted as project has Attribution data added to it."
+                    Text="*" ToolTip="Milestone cannot be deleted as project has Attribution data added to it."
                     OnServerValidate="custAttribution_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
-                <asp:CustomValidator ID="custFeedback" ValidationGroup="MilestoneDelete" runat="server" Text="*"
-                    ErrorMessage="The milestone cannot be deleted because there are project feedback records has been marked as completed.  The milestone can be deleted if the status of all the feedbacks changed to 'Not Completed' or 'Canceled'. Please navigate to the 'Project Feedback' tab for more information to make the necessary adjustments."
+                <asp:CustomValidator ID="custFeedback" ValidationGroup="MilestoneDelete" runat="server"
+                    Text="*" ErrorMessage="The milestone cannot be deleted because there are project feedback records has been marked as completed.  The milestone can be deleted if the status of all the feedbacks changed to 'Not Completed' or 'Canceled'. Please navigate to the 'Project Feedback' tab for more information to make the necessary adjustments."
                     ToolTip="The milestone cannot be deleted because there are project feedback records has been marked as completed.  The milestone can be deleted if the status of all the feedbacks changed to 'Not Completed' or 'Canceled'. Please navigate to the 'Project Feedback' tab for more information to make the necessary adjustments."
                     OnServerValidate="custFeedback_OnServerValidate" Display="Dynamic"></asp:CustomValidator>
-            </ItemTemplate>
-            <EditItemTemplate>
-                <asp:ImageButton ID="imgbtnUpdate" runat="server" ToolTip="Save" OnClick="imgbtnUpdate_OnClick"
+                <asp:ImageButton ID="imgbtnUpdate" runat="server" ToolTip="Save" OnClick="imgbtnUpdate_OnClick" Visible="false" CommandName="edit"
                     ImageUrl="~/Images/icon-check.png" />
-                <asp:ImageButton ID="imgbtnCancel" runat="server" ToolTip="Cancel" OnClick="imgbtnCancel_OnClick"
+                <asp:ImageButton ID="imgbtnCancel" runat="server" ToolTip="Cancel" OnClick="imgbtnCancel_OnClick" Visible="false"
                     ImageUrl="~/Images/no.png" />
-            </EditItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField HeaderText="Milestone Name">
-            <ItemStyle CssClass="wrapMilestoneName Width35Percent" />
-            <HeaderTemplate>
-                <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbMilestoneName" runat="server" Text="Milestone Name" CommandName="Sort"
-                        CommandArgument="MilestoneName" />
-                </div>
-            </HeaderTemplate>
-            <ItemTemplate>
+            </td>
+            <td class="Width35Percent TextAlignLeftImp">
                 <asp:HyperLink ID="hlMilestoneName" runat="server" NavigateUrl='<%# GetMilestoneRedirectUrl(Eval("MilestoneId")) %>'
                     Text='<%# GetWrappedTest(HttpUtility.HtmlEncode((string)Eval("MilestoneName"))) %>'
                     onclick='<%# "return checkDirty(\"" + MILESTONE_TARGET + "\", " + Eval("MilestoneId") + ")" %>' />
-            </ItemTemplate>
-            <EditItemTemplate>
-                <asp:TextBox ID="tbMilestoneName" runat="server" MilestoneId='<%# Eval("MilestoneId") %>'
-                    Text='<%# Bind("MilestoneName") %>'></asp:TextBox>
-                <asp:RequiredFieldValidator ID="rfvMilestoneName" runat="server" ControlToValidate="tbMilestoneName"
+                <asp:TextBox ID="tbMilestoneName" runat="server" MilestoneId='<%# Eval("MilestoneId") %>' Visible="false"
+                    Text='<%# Bind("MilestoneName") %>'></asp:TextBox> 
+                <asp:RequiredFieldValidator ID="rfvMilestoneName" runat="server" ControlToValidate="tbMilestoneName" 
                     EnableClientScript="false" Text="*" ErrorMessage="Milestone Name Required" ToolTip="Milestone Name Required"></asp:RequiredFieldValidator>
-            </EditItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField HeaderText="Start Date">
-            <ItemStyle HorizontalAlign="Center" CssClass="Width9Percent" />
-            <HeaderTemplate>
-                <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbStartDate" runat="server" Text="Start Date" CommandName="Sort"
-                        CommandArgument="StartDate" /></div>
-            </HeaderTemplate>
-            <ItemTemplate>
+            </td>
+            <td class="Width9Percent">
                 <asp:Label ID="lblStartDate" runat="server" Text='<%# ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") %>' />
-            </ItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField HeaderText="End Date">
-            <ItemStyle HorizontalAlign="Center" CssClass="Width9Percent" />
-            <HeaderTemplate>
-                <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbEndDate" runat="server" Text="End Date" CommandName="Sort"
-                        CommandArgument="ProjectedDeliveryDate" /></div>
-            </HeaderTemplate>
-            <ItemTemplate>
+            </td>
+            <td class="Width9Percent">
                 <asp:Label ID="lblEndDate" runat="server" Text='<%# ((DateTime)Eval("ProjectedDeliveryDate")).ToString("MM/dd/yyyy") %>' />
-            </ItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField HeaderText="Revenue">
-            <HeaderTemplate>
-                <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbRevenue" runat="server" Text="Revenue" CommandName="Sort" CommandArgument="Revenue" />
-                </div>
-            </HeaderTemplate>
-            <ItemStyle HorizontalAlign="Center" CssClass="Width7Percent" />
-            <ItemTemplate>
+            </td>
+            <td>
                 <asp:Label ID="lblRevenue" runat="server" Text='<%# ((PracticeManagementCurrency) (decimal) Eval("Revenue")).ToString() %>'
                     CssClass="Revenue"></asp:Label>
-            </ItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField HeaderText="Contribution Margin">
-            <HeaderTemplate>
-                <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbGrossMargin" runat="server" Text="Contribution Margin" CommandName="Sort"
-                        CommandArgument="GrossMargin" />
-                </div>
-            </HeaderTemplate>
-            <ItemStyle HorizontalAlign="Center" CssClass="Width11Percent" />
-            <ItemTemplate>
+            </td>
+            <td>
                 <asp:Label ID="lblEstimatedMargin" runat="server" Text='<%# ((PracticeManagementCurrency) (decimal) Eval("GrossMargin")).ToString() %>'
                     NegativeValue='<%# (decimal) Eval("GrossMargin") < 0 %>' CssClass="Margin" />
-            </ItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField HeaderText="Margin %">
-            <HeaderTemplate>
-                <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbMargin" runat="server" Text="Margin %" CommandName="Sort" CommandArgument="TargetMargin" />
-                </div>
-            </HeaderTemplate>
-            <ItemStyle HorizontalAlign="Center" CssClass="Width7Percent" />
-            <ItemTemplate>
+            </td>
+            <td>
                 <asp:Label ID="lblTargetMargin" runat="server" Text='<%# string.Format(PraticeManagement.Constants.Formatting.PercentageFormat, Eval("TargetMargin") ?? 0) %>'></asp:Label>
-            </ItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField HeaderText="Billable">
-            <ItemStyle HorizontalAlign="Center" CssClass="Width7Percent" />
-            <HeaderTemplate>
-                <div class="ie-bg NoBorder MilestoneHeaderText">
-                    <asp:LinkButton ID="lbBillable" runat="server" Text="Billable" CommandName="Sort"
-                        CommandArgument="IsChargeable" />
-                </div>
-            </HeaderTemplate>
-            <ItemTemplate>
+            </td>
+            <td class="Width7Percent">
                 <%# ((bool) Eval("IsChargeable")) ? "Yes" : "No" %>
-            </ItemTemplate>
-        </asp:TemplateField>
-    </Columns>
-</asp:GridView>
-<asp:ObjectDataSource ID="odsMilestones" runat="server" SelectMethod="GetProjectMilestonesFinancials"
-    TypeName="PraticeManagement.ProjectService.ProjectServiceClient">
-    <SelectParameters>
-        <asp:QueryStringParameter Name="projectId" QueryStringField="id" Type="Int32" />
-    </SelectParameters>
-</asp:ObjectDataSource>
+            </td>
+        </tr>
+    </ItemTemplate>
+    <FooterTemplate>
+        </tbody></table></div>
+    </FooterTemplate>
+</asp:Repeater>
+<div id="divEmptyMessage" style="display: none;" class="EmptyMessagediv" runat="server">
+    No milestones have been created for this project.
+</div>
 <asp:CustomValidator runat="server" ID="cvAttributionPopup" OnServerValidate="cvAttributionPopup_ServerValidate"
     ValidationGroup="AttributionPopup"></asp:CustomValidator>
 <asp:HiddenField ID="hdnAttribution" Value="false" runat="server" />
@@ -254,8 +218,9 @@
         </tr>
         <tr>
             <td class="Padding10Px">
-                <asp:ValidationSummary ID="vsumMilestoneDelete" runat="server" DisplayMode="BulletList" CssClass="ApplyStyleForDashBoardLists"
-                    ShowMessageBox="false" ShowSummary="true" EnableClientScript="false" HeaderText="Following errors occurred while saving a project."
+                <asp:ValidationSummary ID="vsumMilestoneDelete" runat="server" DisplayMode="BulletList"
+                    CssClass="ApplyStyleForDashBoardLists" ShowMessageBox="false" ShowSummary="true"
+                    EnableClientScript="false" HeaderText="Following errors occurred while saving a project."
                     ValidationGroup="MilestoneDelete" />
             </td>
         </tr>
