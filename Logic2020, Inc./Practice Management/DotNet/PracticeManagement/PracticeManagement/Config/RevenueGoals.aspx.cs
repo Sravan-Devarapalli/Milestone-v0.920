@@ -205,29 +205,29 @@ namespace PraticeManagement.Config
                 }
 
                 GroupedDirectors = groupedDirectors;
-                grdDirectorBudgetEntries.DataSource = groupedDirectors;
-                grdDirectorBudgetEntries.DataBind();
+                repDirectors.DataSource = groupedDirectors;
+                repDirectors.DataBind();
 
                 GroupedBDManagers = groupedBDMs;
-                grdBDMBudgetEntries.DataSource = groupedBDMs;
-                grdBDMBudgetEntries.DataBind();
+                repBDMBudgetEntries.DataSource = groupedBDMs;
+                repBDMBudgetEntries.DataBind();
 
                 GroupedPracticeAreas = groupedPAs;
-                grdPraticeAreaBugetEntries.DataSource = groupedPAs;
-                grdPraticeAreaBugetEntries.DataBind();
+                repPracticeBudgetEntries.DataSource = groupedPAs;
+                repPracticeBudgetEntries.DataBind();
             }
         }
 
         public void LoadRevenueGoals()
         {
-            grdDirectorBudgetEntries.DataSource = GroupedDirectors;
-            grdDirectorBudgetEntries.DataBind();
+            repDirectors.DataSource = GroupedDirectors;
+            repDirectors.DataBind();
 
-            grdBDMBudgetEntries.DataSource = GroupedBDManagers;
-            grdBDMBudgetEntries.DataBind();
+            repBDMBudgetEntries.DataSource = GroupedBDManagers;
+            repBDMBudgetEntries.DataBind();
 
-            grdPraticeAreaBugetEntries.DataSource = GroupedPracticeAreas;
-            grdPraticeAreaBugetEntries.DataBind();
+            repPracticeBudgetEntries.DataSource = GroupedPracticeAreas;
+            repPracticeBudgetEntries.DataBind();
         }
 
         public void SaveGoals_Clicked(object sender, EventArgs e)
@@ -249,10 +249,10 @@ namespace PraticeManagement.Config
             {
                 int year = int.Parse(lblYear.Text);
 
-                List<CategoryItemBudget> categoryItemBudgetList = new List<CategoryItemBudget>();
+                var categoryItemBudgetList = new List<CategoryItemBudget>();
 
-                List<CategoryItemBudget> DirectorEntriesList = SaveDirectorEntries();
-                List<CategoryItemBudget> PracticeAreaEntriesList = SavePracticeAreaEntries();
+                var DirectorEntriesList = SaveDirectorEntries();
+                var PracticeAreaEntriesList = SavePracticeAreaEntries();
                 List<CategoryItemBudget> BDMEntriesList = SaveBDMEntries();
 
                 if (DirectorEntriesList.Count > 0)
@@ -300,7 +300,6 @@ namespace PraticeManagement.Config
                     this.ClearDirty();
                 }
             }
-
             var button = sender as ImageButton;
             int selectedYear = int.Parse(lblYear.Text);
             if (button.ID == "imgbtnPrevious")
@@ -317,105 +316,14 @@ namespace PraticeManagement.Config
                 groupedBDMs = serviceClient.PersonBudgetListByYear(selectedYear, BudgetCategoryType.BusinessDevelopmentManager);
                 groupedPAs = serviceClient.PracticeBudgetListByYear(selectedYear);
             }
-            grdDirectorBudgetEntries.DataSource = groupedDirectors;
-            grdDirectorBudgetEntries.DataBind();
+            repDirectors.DataSource = groupedDirectors;
+            repDirectors.DataBind();
 
-            grdBDMBudgetEntries.DataSource = groupedBDMs;
-            grdBDMBudgetEntries.DataBind();
+            repBDMBudgetEntries.DataSource = groupedBDMs;
+            repBDMBudgetEntries.DataBind();
 
-            grdPraticeAreaBugetEntries.DataSource = groupedPAs;
-            grdPraticeAreaBugetEntries.DataBind();
-        }
-
-        protected void BudgetEntries_Sorting(object sender, GridViewSortEventArgs e)
-        {
-            if (this.IsDirty)
-            {
-                if (SaveDirty)
-                {
-                    if (!ValidateAndSaveRevenueGoals())
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    LoadRevenueGoals();
-                    ClearDirty();
-                }
-            }
-
-            var gvBudgetEntries = (GridView)sender;
-            var id = gvBudgetEntries.ID;
-            var newOrder = e.SortExpression;
-
-            int selectedYear = int.Parse(lblYear.Text);
-            switch (id)
-            {
-                case grdDirectorBudgetEntriesId:
-                    DirectorSorting(newOrder, selectedYear);
-                    break;
-                case grdBDMBudgetEntriesId:
-                    BDMSorting(newOrder, selectedYear);
-                    break;
-                case grdPraticeAreaBugetEntriesId:
-                    PracticeAreaSorting(newOrder, selectedYear);
-                    break;
-            }
-        }
-
-        protected void BudgetEntries_Sorted(object sender, EventArgs e)
-        {
-            if (IsDirty)
-            {
-                if (SaveDirty)
-                {
-                    if (!ValidateAndSaveRevenueGoals())
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    ClearDirty();
-                }
-            }
-
-            var gvBudgetEntries = (GridView)sender;
-            string id = gvBudgetEntries.ID;
-            TableRow headerRow = gvBudgetEntries.HeaderRow;
-
-            if (headerRow.HasControls())
-            {
-                TableCell cell = headerRow.Cells[0];
-
-                if (cell.HasControls())
-                {
-                    foreach (var ctrl in cell.Controls)
-                    {
-                        if (ctrl is LinkButton)
-                        {
-                            var lb = (LinkButton)ctrl;
-
-                            lb.CssClass = CssArrowClass;
-
-                            lb.Attributes["Width"] = "30%";
-                            if (id == grdDirectorBudgetEntriesId)
-                            {
-                                lb.CssClass += string.Format(" sort-{0}", DirectorSortDirection == SortDirection.Ascending ? "up" : "down");
-                            }
-                            else if (id == grdBDMBudgetEntriesId)
-                            {
-                                lb.CssClass += string.Format(" sort-{0}", BDMSortDirection == SortDirection.Ascending ? "up" : "down");
-                            }
-                            else if (id == grdPraticeAreaBugetEntriesId)
-                            {
-                                lb.CssClass += string.Format(" sort-{0}", PracticeAreaSortDirection == SortDirection.Ascending ? "up" : "down");
-                            }
-                        }
-                    }
-                }
-            }
+            repPracticeBudgetEntries.DataSource = groupedPAs;
+            repPracticeBudgetEntries.DataBind();
         }
 
         protected void Amount_OnServerValidate(object sender, ServerValidateEventArgs e)
@@ -428,9 +336,9 @@ namespace PraticeManagement.Config
 
             var cv = (CustomValidator)sender;
 
-            TableCell parent = (TableCell)cv.Parent;
+            var parent = (RepeaterItem)cv.Parent;
 
-            TextBox item = (TextBox)parent.FindControl(cv.ControlToValidate);
+            var item = (TextBox)parent.FindControl(cv.ControlToValidate);
 
             if (item.Enabled)
             {
@@ -442,21 +350,6 @@ namespace PraticeManagement.Config
         #endregion
 
         #region Methods
-
-        private Dictionary<DateTime, ComputedFinancials> GetProjectedFinancials(DateTime monthBegin, int periodLength)
-        {
-            var projectedFinancials = new Dictionary<DateTime, ComputedFinancials>();
-
-            for (int k = 0; k < periodLength; k++, monthBegin = monthBegin.AddMonths(1))
-            {
-                var computedFinancials = new ComputedFinancials();
-                computedFinancials.FinancialDate = monthBegin;
-                computedFinancials.Revenue += 0;
-                computedFinancials.GrossMargin += 0;
-                projectedFinancials.Add(monthBegin, computedFinancials);
-            }
-            return projectedFinancials;
-        }
 
         public string GetMonthAmount(object projectedFinancials, int Month)
         {
@@ -491,267 +384,149 @@ namespace PraticeManagement.Config
             return "bgcolor_CCCCCC";
         }
 
-        private void DirectorSorting(string newOrder, int selectedYear)
-        {
-            if (newOrder == DirectorOrderBy)
-            {
-                DirectorSortDirection =
-                    DirectorSortDirection == SortDirection.Ascending ?
-                        SortDirection.Descending : SortDirection.Ascending;
-            }
-            else
-            {
-                DirectorOrderBy = newOrder;
-                DirectorSortDirection = SortDirection.Ascending;
-            }
-
-            using (var serviceClient = new ProjectService.ProjectServiceClient())
-            {
-                if (DirectorSortDirection == SortDirection.Ascending)
-                {
-                    var dataSource = serviceClient.PersonBudgetListByYear(selectedYear, BudgetCategoryType.ClientDirector).OrderBy(i => i.LastName + ',' + i.FirstName);
-
-                    grdDirectorBudgetEntries.DataSource = dataSource;
-                    grdDirectorBudgetEntries.DataBind();
-                }
-                else
-                {
-                    var dataSource = serviceClient.PersonBudgetListByYear(selectedYear, BudgetCategoryType.ClientDirector).OrderByDescending(i => i.LastName + ',' + i.FirstName);
-
-                    grdDirectorBudgetEntries.DataSource = dataSource;
-                    grdDirectorBudgetEntries.DataBind();
-                }
-            }
-        }
-
-        private void BDMSorting(string newOrder, int selectedYear)
-        {
-            if (newOrder == BDMOrderBy)
-            {
-                BDMSortDirection =
-                    BDMSortDirection == SortDirection.Ascending ?
-                        SortDirection.Descending : SortDirection.Ascending;
-            }
-            else
-            {
-                BDMOrderBy = newOrder;
-                BDMSortDirection = SortDirection.Ascending;
-            }
-
-            using (var serviceClient = new ProjectService.ProjectServiceClient())
-            {
-                if (BDMSortDirection == SortDirection.Ascending)
-                {
-                    var dataSource = serviceClient.PersonBudgetListByYear(selectedYear, BudgetCategoryType.BusinessDevelopmentManager).OrderBy(i => i.LastName + ',' + i.FirstName);
-                    grdBDMBudgetEntries.DataSource = dataSource;
-                    grdBDMBudgetEntries.DataBind();
-                }
-                else
-                {
-                    var dataSource = serviceClient.PersonBudgetListByYear(selectedYear, BudgetCategoryType.BusinessDevelopmentManager).OrderByDescending(i => i.LastName + ',' + i.FirstName);
-                    grdBDMBudgetEntries.DataSource = dataSource;
-                    grdBDMBudgetEntries.DataBind();
-                }
-            }
-        }
-
-        private void PracticeAreaSorting(string newOrder, int selectedYear)
-        {
-            if (newOrder == PracticeAreaOrderBy)
-            {
-                PracticeAreaSortDirection =
-                    PracticeAreaSortDirection == SortDirection.Ascending ?
-                        SortDirection.Descending : SortDirection.Ascending;
-            }
-            else
-            {
-                PracticeAreaOrderBy = newOrder;
-                PracticeAreaSortDirection = SortDirection.Ascending;
-            }
-
-            using (var serviceClient = new ProjectService.ProjectServiceClient())
-            {
-                if (PracticeAreaSortDirection == SortDirection.Ascending)
-                {
-                    var dataSource = serviceClient.PracticeBudgetListByYear(selectedYear).OrderBy(i => i.Name);
-                    grdPraticeAreaBugetEntries.DataSource = dataSource;
-                    grdPraticeAreaBugetEntries.DataBind();
-                }
-                else
-                {
-                    var dataSource = serviceClient.PracticeBudgetListByYear(selectedYear).OrderByDescending(i => i.Name);
-                    grdPraticeAreaBugetEntries.DataSource = dataSource;
-                    grdPraticeAreaBugetEntries.DataBind();
-                }
-            }
-        }
-
-        //private bool ValidAmount(string amount)
-        //{
-        //    Decimal result;
-        //    bool isDecimal = Decimal.TryParse(amount, out result);
-
-        //    return (isDecimal && result >= 0);
-        //}
-
         private List<CategoryItemBudget> SaveDirectorEntries()
         {
-            List<CategoryItemBudget> categoryItemBudgetList = new List<CategoryItemBudget>();
-            foreach (TableRow row in grdDirectorBudgetEntries.Rows)
+            var categoryItemBudgetList = new List<CategoryItemBudget>();
+            foreach (RepeaterItem row in repDirectors.Items)
             {
-                for (int i = 1; i < row.Cells.Count; i++)
+                var ctrlTextBox = new TextBox();
+                HiddenField ctrlHiddenField;
+                foreach (var ctrl in row.Controls)
                 {
-                    TableCell cell = row.Cells[i];
-                    if (cell.HasControls())
+                    if (ctrl is TextBox)
                     {
-                        TextBox ctrlTextBox = new TextBox();
-                        HiddenField ctrlHiddenField = new HiddenField();
-
-                        foreach (var ctrl in cell.Controls)
-                        {
-                            if (ctrl is TextBox)
-                            {
-                                ctrlTextBox = (TextBox)ctrl;
-                            }
-                            if (ctrl is HiddenField)
-                            {
-                                ctrlHiddenField = (HiddenField)ctrl;
-                            }
-                        }
-
-                        if (ctrlTextBox != null && ctrlHiddenField != null)
-                        {
-                            var txtBudget = (TextBox)ctrlTextBox;
-                            var hdntxtBudget = (HiddenField)ctrlHiddenField;
-                            if (txtBudget.Enabled)
-                            {
-                                if (hdntxtBudget.Value == "true")
-                                {
-                                    if (string.IsNullOrEmpty(txtBudget.Text))
-                                        txtBudget.Text = "0";
-                                    CategoryItemBudget categoryItemBudget = new CategoryItemBudget();
-                                    categoryItemBudget.ItemId = int.Parse(txtBudget.Attributes["PersonId"]);
-                                    categoryItemBudget.Amount = decimal.Parse(txtBudget.Text);
-                                    categoryItemBudget.Month = int.Parse(txtBudget.Attributes["MonthIndex"]);
-                                    categoryItemBudget.CategoryTypeId = BudgetCategoryType.ClientDirector;
-
-                                    categoryItemBudgetList.Add(categoryItemBudget);
-
-                                    hdntxtBudget.Value = "false";
-                                }
-                            }
-                        }
+                        ctrlTextBox = (TextBox)ctrl;
+                    }
+                    if (ctrl is HiddenField)
+                    {
+                        ctrlHiddenField = (HiddenField)ctrl;
+                        var directorItem = GetDirectorBudgetItem(ctrlTextBox, ctrlHiddenField);
+                        if (directorItem != null) categoryItemBudgetList.Add(directorItem);
                     }
                 }
             }
             return categoryItemBudgetList;
+        }
+
+        private CategoryItemBudget GetDirectorBudgetItem(TextBox ctrlTextBox,HiddenField ctrlHiddenField)
+        {
+            if (ctrlTextBox == null || ctrlHiddenField == null) return null;
+            var txtBudget = ctrlTextBox;
+            var hdntxtBudget = ctrlHiddenField;
+            if (txtBudget.Enabled)
+            {
+                if (hdntxtBudget.Value == "true")
+                {
+                    if (string.IsNullOrEmpty(txtBudget.Text))
+                        txtBudget.Text = "0";
+                    var categoryItemBudget = new CategoryItemBudget();
+                    categoryItemBudget.ItemId = int.Parse(txtBudget.Attributes["PersonId"]);
+                    categoryItemBudget.Amount = decimal.Parse(txtBudget.Text);
+                    categoryItemBudget.Month = int.Parse(txtBudget.Attributes["MonthIndex"]);
+                    categoryItemBudget.CategoryTypeId = BudgetCategoryType.ClientDirector;
+                    hdntxtBudget.Value = "false";
+                    return categoryItemBudget;
+                }
+            }
+            return null;
         }
 
         private List<CategoryItemBudget> SavePracticeAreaEntries()
         {
-            List<CategoryItemBudget> categoryItemBudgetList = new List<CategoryItemBudget>();
-            foreach (TableRow row in grdPraticeAreaBugetEntries.Rows)
+            var categoryItemBudgetList = new List<CategoryItemBudget>();
+            foreach (RepeaterItem row in repPracticeBudgetEntries.Items)
             {
-                string itemNode = string.Empty;
-                for (int i = 1; i < row.Cells.Count; i++)
+                var ctrlTextBox = new TextBox();
+                HiddenField ctrlHiddenField;
+                foreach (var ctrl in row.Controls)
                 {
-                    TableCell cell = row.Cells[i];
-                    if (cell.HasControls())
+                    if (ctrl is TextBox)
                     {
-                        TextBox ctrlTextBox = new TextBox();
-                        HiddenField ctrlHiddenField = new HiddenField();
-
-                        foreach (var ctrl in cell.Controls)
-                        {
-                            if (ctrl is TextBox)
-                            {
-                                ctrlTextBox = (TextBox)ctrl;
-                            }
-                            if (ctrl is HiddenField)
-                            {
-                                ctrlHiddenField = (HiddenField)ctrl;
-                            }
-                        }
-
-                        if (ctrlTextBox != null && ctrlHiddenField != null)
-                        {
-                            var txtBudget = (TextBox)ctrlTextBox;
-                            var hdntxtBudget = (HiddenField)ctrlHiddenField;
-                            if (txtBudget.Enabled)
-                            {
-                                if (hdntxtBudget.Value == "true")
-                                {
-                                    if (string.IsNullOrEmpty(txtBudget.Text))
-                                        txtBudget.Text = "0";
-                                    CategoryItemBudget categoryItemBudget = new CategoryItemBudget();
-                                    categoryItemBudget.ItemId = int.Parse(txtBudget.Attributes["PracticeId"]);
-                                    categoryItemBudget.Amount = decimal.Parse(txtBudget.Text);
-                                    categoryItemBudget.Month = int.Parse(txtBudget.Attributes["MonthIndex"]);
-                                    categoryItemBudget.CategoryTypeId = BudgetCategoryType.PracticeArea;
-
-                                    categoryItemBudgetList.Add(categoryItemBudget);
-
-                                    hdntxtBudget.Value = "false";
-                                }
-                            }
-                        }
+                        ctrlTextBox = (TextBox)ctrl;
+                    }
+                    if (ctrl is HiddenField)
+                    {
+                        ctrlHiddenField = (HiddenField)ctrl;
+                        var practiceItem = GetPracticeBudgetItem(ctrlTextBox, ctrlHiddenField);
+                        if (practiceItem != null) categoryItemBudgetList.Add(practiceItem);
                     }
                 }
             }
             return categoryItemBudgetList;
         }
 
+        private CategoryItemBudget GetPracticeBudgetItem(TextBox ctrlTextBox, HiddenField ctrlHiddenField)
+        {
+            if (ctrlTextBox == null || ctrlHiddenField == null) return null;
+            var txtBudget = ctrlTextBox;
+            var hdntxtBudget = ctrlHiddenField;
+            if (txtBudget.Enabled)
+            {
+                if (hdntxtBudget.Value == "true")
+                {
+                    if (string.IsNullOrEmpty(txtBudget.Text))
+                        txtBudget.Text = "0";
+                    var categoryItemBudget = new CategoryItemBudget
+                    {
+                        ItemId = int.Parse(txtBudget.Attributes["PracticeId"]),
+                        Amount = decimal.Parse(txtBudget.Text),
+                        Month = int.Parse(txtBudget.Attributes["MonthIndex"]),
+                        CategoryTypeId = BudgetCategoryType.PracticeArea
+                    };
+                    hdntxtBudget.Value = "false";
+                    return categoryItemBudget;
+                }
+            }
+            return null;
+        }
+
         private List<CategoryItemBudget> SaveBDMEntries()
         {
-            List<CategoryItemBudget> categoryItemBudgetList = new List<CategoryItemBudget>();
-            foreach (TableRow row in grdBDMBudgetEntries.Rows)
+            var categoryItemBudgetList = new List<CategoryItemBudget>();
+            foreach (RepeaterItem row in repBDMBudgetEntries.Items)
             {
-                for (int i = 1; i < row.Cells.Count; i++)
+                var ctrlTextBox = new TextBox();
+                HiddenField ctrlHiddenField;
+                foreach (var ctrl in row.Controls)
                 {
-                    TableCell cell = row.Cells[i];
-                    if (cell.HasControls())
+                    if (ctrl is TextBox)
                     {
-                        TextBox ctrlTextBox = new TextBox();
-                        HiddenField ctrlHiddenField = new HiddenField();
-
-                        foreach (var ctrl in cell.Controls)
-                        {
-                            if (ctrl is TextBox)
-                            {
-                                ctrlTextBox = (TextBox)ctrl;
-                            }
-                            if (ctrl is HiddenField)
-                            {
-                                ctrlHiddenField = (HiddenField)ctrl;
-                            }
-                        }
-
-                        if (ctrlTextBox != null && ctrlHiddenField != null)
-                        {
-                            var txtBudget = (TextBox)ctrlTextBox;
-                            var hdntxtBudget = (HiddenField)ctrlHiddenField;
-                            if (txtBudget.Enabled)
-                            {
-                                if (hdntxtBudget.Value == "true")
-                                {
-                                    if (string.IsNullOrEmpty(txtBudget.Text))
-                                        txtBudget.Text = "0";
-                                    CategoryItemBudget categoryItemBudget = new CategoryItemBudget();
-                                    categoryItemBudget.ItemId = int.Parse(txtBudget.Attributes["PersonId"]);
-                                    categoryItemBudget.Amount = decimal.Parse(txtBudget.Text);
-                                    categoryItemBudget.Month = int.Parse(txtBudget.Attributes["MonthIndex"]);
-                                    categoryItemBudget.CategoryTypeId = BudgetCategoryType.BusinessDevelopmentManager;
-
-                                    categoryItemBudgetList.Add(categoryItemBudget);
-
-                                    hdntxtBudget.Value = "false";
-                                }
-                            }
-                        }
+                        ctrlTextBox = (TextBox)ctrl;
+                    }
+                    if (ctrl is HiddenField)
+                    {
+                        ctrlHiddenField = (HiddenField)ctrl;
+                        var bdMItem = GetBDMBudgetItem(ctrlTextBox, ctrlHiddenField);
+                        if (bdMItem != null) categoryItemBudgetList.Add(bdMItem);
                     }
                 }
             }
             return categoryItemBudgetList;
+        }
+
+        private CategoryItemBudget GetBDMBudgetItem(TextBox ctrlTextBox, HiddenField ctrlHiddenField)
+        {
+            if (ctrlTextBox == null || ctrlHiddenField == null) return null;
+            var txtBudget = ctrlTextBox;
+            var hdntxtBudget = ctrlHiddenField;
+            if (txtBudget.Enabled)
+            {
+                if (hdntxtBudget.Value == "true")
+                {
+                    if (string.IsNullOrEmpty(txtBudget.Text))
+                        txtBudget.Text = "0";
+                    var categoryItemBudget = new CategoryItemBudget
+                    {
+                        ItemId = int.Parse(txtBudget.Attributes["PersonId"]),
+                        Amount = decimal.Parse(txtBudget.Text),
+                        Month = int.Parse(txtBudget.Attributes["MonthIndex"]),
+                        CategoryTypeId = BudgetCategoryType.BusinessDevelopmentManager
+                    };
+                    hdntxtBudget.Value = "false";
+                    return categoryItemBudget;
+                }
+            }
+            return null;
         }
 
         public void RaisePostBackEvent(string eventArgument)
