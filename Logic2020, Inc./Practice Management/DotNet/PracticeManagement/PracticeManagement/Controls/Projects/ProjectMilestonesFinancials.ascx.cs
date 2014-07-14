@@ -129,7 +129,7 @@ namespace PraticeManagement.Controls.Projects
         {
             get
             {
-                if(ViewState["MilestoneId_Key"] == null)
+                if (ViewState["MilestoneId_Key"] == null)
                 {
                     ViewState["MilestoneId_Key"] = -1;
                 }
@@ -148,34 +148,32 @@ namespace PraticeManagement.Controls.Projects
         protected void Page_Load(object sender, EventArgs e)
         {
             milestonesSeniorityAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
-
             if (!IsPostBack)
             {
-                gvRevenueMilestones.Sort("StartDate", SortDirection.Ascending);
-                PreviousSortExpression = "StartDate";
+                PopulateData();
             }
         }
 
         protected void imgbtnUpdate_OnClick(object sender, EventArgs e)
         {
-            ImageButton imgEdit = sender as ImageButton;
-            GridViewRow row = imgEdit.NamingContainer as GridViewRow;
+            var imgEdit = sender as ImageButton;
+            var row = imgEdit.NamingContainer as RepeaterItem;
             var tbMilesonename = row.FindControl("tbMilestoneName") as TextBox;
             var rfvMilestoneName = row.FindControl("rfvMilestoneName") as RequiredFieldValidator;
             rfvMilestoneName.ValidationGroup = ValidationGroup;
             rfvMilestoneName.Validate();
-            if (rfvMilestoneName.IsValid)
+            if (!rfvMilestoneName.IsValid)
+                return;
+            var milestone = new Milestone
             {
-                var milestone = new Milestone
-                {
-                    Id = Convert.ToInt32(tbMilesonename.Attributes["MilestoneId"]),
-                    Description = tbMilesonename.Text
-                };
-
-                //Save Milestone Name.
-                ServiceCallers.Custom.Milestone(m => m.MilestoneUpdateShortDetails(milestone, HttpContext.Current.User.Identity.Name));
-                gvRevenueMilestones.EditIndex = -1;
-            }
+                Id = Convert.ToInt32(tbMilesonename.Attributes["MilestoneId"]),
+                Description = tbMilesonename.Text
+            };
+            //Save Milestone Name.
+            ServiceCallers.Custom.Milestone(
+                m => m.MilestoneUpdateShortDetails(milestone, HttpContext.Current.User.Identity.Name));
+            imgEdit.CommandName = "";
+            PopulateData();
         }
 
         protected void cvAttributionPopup_ServerValidate(object sender, ServerValidateEventArgs e)
@@ -184,8 +182,8 @@ namespace PraticeManagement.Controls.Projects
             if (IsAttributionPanelDisplayed)
                 return;
             var milestone = GetMilestoneById(MilestoneId);
-            List<Attribution> attributionList = new List<Attribution>();
-            List<bool> extendAttributionDates = new List<bool>();
+            var attributionList = new List<Attribution>();
+            var extendAttributionDates = new List<bool>();
             using (var service = new MilestoneServiceClient())
             {
                 if (milestone != null)
@@ -232,13 +230,13 @@ namespace PraticeManagement.Controls.Projects
             }
         }
 
-        public void MilestoneValidate(GridViewRow row)
+        public void MilestoneValidate(RepeaterItem row)
         {
-            CustomValidator custExpenseValidate = row.FindControl("custExpenseValidate") as CustomValidator;
-            CustomValidator custProjectStatus = row.FindControl("custProjectStatus") as CustomValidator;
-            CustomValidator custCSATValidate = row.FindControl("custCSATValidate") as CustomValidator;
-            CustomValidator custAttribution = row.FindControl("custAttribution") as CustomValidator;
-            CustomValidator custFeedback = row.FindControl("custFeedback") as CustomValidator;
+            var custExpenseValidate = row.FindControl("custExpenseValidate") as CustomValidator;
+            var custProjectStatus = row.FindControl("custProjectStatus") as CustomValidator;
+            var custCSATValidate = row.FindControl("custCSATValidate") as CustomValidator;
+            var custAttribution = row.FindControl("custAttribution") as CustomValidator;
+            var custFeedback = row.FindControl("custFeedback") as CustomValidator;
             custExpenseValidate.Validate();
             custProjectStatus.Validate();
             custCSATValidate.Validate();
@@ -254,14 +252,14 @@ namespace PraticeManagement.Controls.Projects
 
         public void CallAppropriateDelete()
         {
-            foreach(GridViewRow row in gvRevenueMilestones.Rows)
+            foreach (RepeaterItem row in repMilestones.Items)
             {
                 var imgDeleteBtn = row.FindControl("imgMilestoneDelete") as ImageButton;
                 int milestoneId;
                 int.TryParse(imgDeleteBtn.Attributes["MilestoneId"], out milestoneId);
-                if(milestoneId == MilestoneId)
+                if (milestoneId == MilestoneId)
                 {
-                    imgMilestoneDelete_Click(imgDeleteBtn,new EventArgs());
+                    imgMilestoneDelete_Click(imgDeleteBtn, new EventArgs());
                     break;
                 }
             }
@@ -275,9 +273,9 @@ namespace PraticeManagement.Controls.Projects
 
         protected void imgMilestoneDelete_Click(object sender, EventArgs e)
         {
-            ImageButton imgDeletebtn = sender as ImageButton;
-            GridViewRow row = imgDeletebtn.NamingContainer as GridViewRow;
-            ImageButton btnDelete = row.FindControl("imgMilestoneDelete") as ImageButton;
+            var imgDeletebtn = sender as ImageButton;
+            var row = imgDeletebtn.NamingContainer as RepeaterItem;
+            var btnDelete = row.FindControl("imgMilestoneDelete") as ImageButton;
             int milestoneId;
             int.TryParse(btnDelete.Attributes["MilestoneId"], out milestoneId);
             MilestoneId = milestoneId;
@@ -347,9 +345,9 @@ namespace PraticeManagement.Controls.Projects
 
         protected void custExpenseValidate_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
-            CustomValidator custExpense = sender as CustomValidator;
-            GridViewRow row = custExpense.NamingContainer as GridViewRow;
-            ImageButton btnDelete = row.FindControl("imgMilestoneDelete") as ImageButton;
+            var custExpense = sender as CustomValidator;
+            var row = custExpense.NamingContainer as RepeaterItem;
+            var btnDelete = row.FindControl("imgMilestoneDelete") as ImageButton;
             int milestoneId;
             int.TryParse(btnDelete.Attributes["MilestoneId"], out milestoneId);
             var milestone = GetMilestoneById(milestoneId);
@@ -392,9 +390,9 @@ namespace PraticeManagement.Controls.Projects
         protected void custFeedback_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
-            CustomValidator custFeedback = sender as CustomValidator;
-            GridViewRow row = custFeedback.NamingContainer as GridViewRow;
-            ImageButton btnDelete = row.FindControl("imgMilestoneDelete") as ImageButton;
+            var custFeedback = sender as CustomValidator;
+            var row = custFeedback.NamingContainer as RepeaterItem;
+            var btnDelete = row.FindControl("imgMilestoneDelete") as ImageButton;
             int milestoneId;
             int.TryParse(btnDelete.Attributes["MilestoneId"], out milestoneId);
             using (var serviceClient = new ProjectServiceClient())
@@ -410,10 +408,10 @@ namespace PraticeManagement.Controls.Projects
                 }
             }
         }
+
         protected void imgbtnCancel_OnClick(object sender, EventArgs e)
         {
-            gvRevenueMilestones.EditIndex = -1;
-            gvRevenueMilestones.DataBind();
+            PopulateData();
         }
 
         protected string GetMilestoneRedirectUrl(object milestoneId)
@@ -421,81 +419,13 @@ namespace PraticeManagement.Controls.Projects
             return Urls.GetMilestoneRedirectUrl(milestoneId, Request.Url.AbsoluteUri.Replace("&CSAT=true", ""), ProjectId.Value);
         }
 
-        private static void HideCell(GridViewRowEventArgs e, int cellIndex)
+        private static void HideCell(RepeaterItemEventArgs e, int cellIndex)
         {
             // This code is applicable only if the cell contains label in it.
-            var label = e.Row.Cells[cellIndex].Controls[1] as System.Web.UI.WebControls.Label;
-            if (label != null)
-            {
-                label.Text = Resources.Controls.HiddenCellText;
-                if (cellIndex == GROSS_MARGIN_CELL_INDEX)
-                {
-                    label.CssClass = Convert.ToBoolean(label.Attributes["NegativeValue"]) ? Resources.Controls.BenchCssClass : Resources.Controls.MarginCssClass;
-                }
-            }
-        }
-
-        protected void gvRevenueMilestones_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                HostingPage.noMileStones = false;
-                var milestoneId = Int32.Parse(((System.Data.DataRowView)(e.Row.DataItem)).Row.ItemArray[0].ToString());
-                var milestone = new Milestone { Id = milestoneId };
-                if (milestonesSeniorityAnalyzer.OneWithGreaterSeniorityExists(
-                    DataHelper.GetPersonsInMilestone(milestone)))
-                {
-                    HideCell(e, GROSS_MARGIN_CELL_INDEX);
-                    HideCell(e, MARGIN_PERCENT_CELL_INDEX);
-                }
-            }
-            if (e.Row.RowType == DataControlRowType.EmptyDataRow)
-            {
-                HostingPage.noMileStones = true;
-            }
-            if (e.Row.RowType == DataControlRowType.Header)
-            {
-                GridViewRow row = e.Row;
-
-                if (row.HasControls())
-                {
-                    foreach (TableCell cell in row.Controls)
-                    {
-                        if (cell.HasControls())
-                        {
-                            foreach (var ctrl in cell.Controls)
-                            {
-                                if (ctrl is LinkButton)
-                                {
-                                    var lb = (LinkButton)ctrl;
-
-                                    lb.CssClass = CssArrowClass;
-
-                                    if (lb.CommandArgument == PreviousSortExpression)
-                                    {
-                                        lb.CssClass += string.Format(" sort-{0}", PreviousSortDirection == SortDirection.Ascending ? "up" : "down");
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        protected void gvRevenueMilestones_Sorting(object sender, GridViewSortEventArgs e)
-        {
-            string newExpression = e.SortExpression;
-            if (newExpression == PreviousSortExpression)
-            {
-                PreviousSortDirection = PreviousSortDirection == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
-            }
-            else
-            {
-                PreviousSortExpression = newExpression;
-                PreviousSortDirection = SortDirection.Ascending;
-            }
+            var lblEstimatedMargin = e.Item.FindControl("lblEstimatedMargin") as Label;
+            var lblTargetMargin = e.Item.FindControl("lblTargetMargin") as Label;
+            lblTargetMargin.Text = lblEstimatedMargin.Text = Resources.Controls.HiddenCellText;
+            lblEstimatedMargin.CssClass = Convert.ToBoolean(lblEstimatedMargin.Attributes["NegativeValue"]) ? Resources.Controls.BenchCssClass : Resources.Controls.MarginCssClass;
         }
 
         public string GetWrappedTest(string text)
@@ -505,6 +435,63 @@ namespace PraticeManagement.Controls.Projects
                 text = text.Insert(30, WordBreak);
             }
             return text;
+        }
+
+        public void PopulateData()
+        {
+            using (var client = new ProjectServiceClient())
+            {
+                if (!ProjectId.HasValue) return;
+                var data = client.GetProjectMilestonesFinancials(ProjectId.Value);
+                if (data.Tables[0].Rows.Count > 0)
+                {
+                    repMilestones.DataSource = data;
+                    repMilestones.DataBind();
+                    divEmptyMessage.Style["display"] = "none";
+                    return;
+                }
+                divEmptyMessage.Style["display"] = "";
+            }
+        }
+
+        protected void repMilestones_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            var imgbtnUpdate = e.Item.FindControl("imgbtnUpdate");
+            var imgbtnCancel = e.Item.FindControl("imgbtnCancel");
+            var tbMilestoneName = e.Item.FindControl("tbMilestoneName");
+            var hlMilestoneName = e.Item.FindControl("hlMilestoneName");
+            var imgMilestoneDelete = e.Item.FindControl("imgMilestoneDelete");
+            var imgbtnEdit = e.Item.FindControl("imgbtnEdit");
+            if (e.CommandName == "edit")
+            {
+                imgbtnUpdate.Visible = imgbtnCancel.Visible = tbMilestoneName.Visible = true;
+                hlMilestoneName.Visible = imgMilestoneDelete.Visible = imgbtnEdit.Visible = false;
+                return;
+            }
+            imgbtnUpdate.Visible = imgbtnCancel.Visible = tbMilestoneName.Visible = false;
+            hlMilestoneName.Visible = imgMilestoneDelete.Visible = imgbtnEdit.Visible = true;
+        }
+
+        protected void repMilestones_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Header)
+            {
+                HostingPage.noMileStones = true;
+            }
+            else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                HostingPage.noMileStones = false;
+                var imgMilestoneDelete = e.Item.FindControl("imgMilestoneDelete") as ImageButton;
+                int milestoneId;
+                int.TryParse(imgMilestoneDelete.Attributes["MilestoneId"], out milestoneId);
+                var milestone = new Milestone { Id = milestoneId };
+                if (milestonesSeniorityAnalyzer.OneWithGreaterSeniorityExists(
+                    DataHelper.GetPersonsInMilestone(milestone)))
+                {
+                    HideCell(e, GROSS_MARGIN_CELL_INDEX);
+                    HideCell(e, MARGIN_PERCENT_CELL_INDEX);
+                }
+            }
         }
     }
 }
