@@ -103,6 +103,7 @@ namespace PraticeManagement
                         try
                         {
                             _selectedPersonValue = serviceCLient.GetPersonById(int.Parse(ddlPersonName.SelectedValue));
+                            _selectedPersonValue.EmploymentHistory = serviceCLient.GetPersonEmploymentHistoryById(int.Parse(ddlPersonName.SelectedValue)).ToList();
                         }
                         catch (CommunicationException)
                         {
@@ -258,15 +259,17 @@ namespace PraticeManagement
 
             foreach (MilestonePersonEntry entry in MilestonePerson.Entries)
             {
-                if (person == null ||
-                    person.HireDate > entry.StartDate ||
-                    (person.TerminationDate.HasValue && entry.EndDate.HasValue &&
-                     person.TerminationDate.Value < entry.EndDate))
+                if (person == null || !entry.EndDate.HasValue || !IsPersonInRange(person, entry))
                 {
                     args.IsValid = false;
                     break;
                 }
             }
+        }
+
+        public bool IsPersonInRange(Person person,MilestonePersonEntry entry)
+        {
+            return person.EmploymentHistory.Any(empHistory => empHistory.HireDate <= entry.StartDate && (!empHistory.TerminationDate.HasValue || empHistory.TerminationDate.Value >= entry.EndDate.Value));
         }
 
         protected void custEntries_ServerValidate(object source, ServerValidateEventArgs args)
