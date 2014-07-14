@@ -58,13 +58,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.Button btnSaveGoals;
         
         /// <summary>
-        /// grdDirectorBudgetEntries control.
+        /// repDirectors control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdDirectorBudgetEntries;
+        protected global::System.Web.UI.WebControls.Repeater repDirectors;
         
         /// <summary>
         /// valSummaryDirector control.
@@ -76,13 +76,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.ValidationSummary valSummaryDirector;
         
         /// <summary>
-        /// grdPraticeAreaBugetEntries control.
+        /// repPracticeBudgetEntries control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdPraticeAreaBugetEntries;
+        protected global::System.Web.UI.WebControls.Repeater repPracticeBudgetEntries;
         
         /// <summary>
         /// valSummaryPracticeArea control.
@@ -94,13 +94,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.ValidationSummary valSummaryPracticeArea;
         
         /// <summary>
-        /// grdBDMBudgetEntries control.
+        /// repBDMBudgetEntries control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdBDMBudgetEntries;
+        protected global::System.Web.UI.WebControls.Repeater repBDMBudgetEntries;
         
         /// <summary>
         /// valSummaryBDM control.
