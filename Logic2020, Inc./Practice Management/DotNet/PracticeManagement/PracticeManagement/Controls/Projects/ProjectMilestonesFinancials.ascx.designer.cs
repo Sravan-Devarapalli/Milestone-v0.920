@@ -13,22 +13,22 @@ namespace PraticeManagement.Controls.Projects {
     public partial class ProjectMilestonesFinancials {
         
         /// <summary>
-        /// gvRevenueMilestones control.
+        /// repMilestones control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvRevenueMilestones;
+        protected global::System.Web.UI.WebControls.Repeater repMilestones;
         
         /// <summary>
-        /// odsMilestones control.
+        /// divEmptyMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsMilestones;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyMessage;
         
         /// <summary>
         /// cvAttributionPopup control.
