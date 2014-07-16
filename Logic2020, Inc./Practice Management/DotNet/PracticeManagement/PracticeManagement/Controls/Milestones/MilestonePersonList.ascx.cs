@@ -1361,27 +1361,6 @@ namespace PraticeManagement.Controls.Milestones
                     {
                         lableTargetMargin.Text = Resources.Controls.HiddenCellText;
                     }
-
-                    if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
-                    {
-                        if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
-                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName)
-                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead)//added Project Lead as per #2941.
-                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)// #2817: DirectorRoleName is added as per the requirement.
-                            || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName))// #2913: userIsSeniorLeadership is added as per the requirement.
-                        {
-
-                            if (imgMilestonePersonEntryEdit != null)
-                            {
-                                imgMilestonePersonEntryEdit.Enabled = false;
-                            }
-                            else
-                            {
-                                e.Row.Enabled = false;
-                            }
-
-                        }
-                    }
                 }
                 else if (lableTargetMargin != null && !entry.IsEditMode)
                 {
