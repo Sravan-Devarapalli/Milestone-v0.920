@@ -52,7 +52,11 @@ namespace PraticeManagement
 
         protected override void Display()
         {
-
+            if (PreviousPage != null)
+            {
+                txtSearchText.Text = PreviousPage.SearchText;
+                DisplaySearch();
+            }
         }
     }
 }
