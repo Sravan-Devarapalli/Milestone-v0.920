@@ -74,6 +74,18 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.LoadingProgress loadingProgress;
+        
+        /// <summary>
+        /// PreviousPage property.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated property.
+        /// </remarks>
+        public new PraticeManagement.Controls.PracticeManagementSearchPageBase PreviousPage {
+            get {
+                return ((PraticeManagement.Controls.PracticeManagementSearchPageBase)(base.PreviousPage));
+            }
+        }
     }
 }
 
