@@ -5,6 +5,7 @@
     TagPrefix="uc1" %>
 <%@ Register Src="Controls/Generic/OpportunityList.ascx" TagName="OpportunityList"
     TagPrefix="uc2" %>
+<%@ PreviousPageType TypeName="PraticeManagement.Controls.PracticeManagementSearchPageBase" %>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Opportunity Search Results | Practice Management</title>
 </asp:Content>
