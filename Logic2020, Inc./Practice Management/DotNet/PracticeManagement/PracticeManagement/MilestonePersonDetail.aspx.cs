@@ -504,26 +504,10 @@ namespace PraticeManagement
                         var rowSa = new SeniorityAnalyzer(DataHelper.CurrentPerson);
                         if (rowSa.IsOtherGreater(entry.ThisPerson))
                         {
-
                             var label = e.Row.FindControl(lblTargetMargin) as Label;
                             if (label != null)
                                 label.Text = Resources.Controls.HiddenCellText;
-
-                            if (!(IsUserisOwnerOfProject.HasValue && IsUserisOwnerOfProject.Value))
-                            {
-                                if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName)
-                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName)
-                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead)//added Project Lead as per #2941.
-                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName)// #2817: DirectorRoleName is added as per the requirement.
-                                    || !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName))// #2913: userIsSeniorLeadership is added as per the requirement.
-                                {
-                                    e.Row.Enabled = false;
-                                }
-                            }
-
-
                         }
-
                     }
                 }
             }
