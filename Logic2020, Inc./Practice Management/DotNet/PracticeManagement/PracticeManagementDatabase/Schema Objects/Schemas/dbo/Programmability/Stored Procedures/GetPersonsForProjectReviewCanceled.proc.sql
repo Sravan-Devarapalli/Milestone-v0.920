@@ -40,6 +40,7 @@ BEGIN
 				AND P.PersonId = @PersonId
 				AND CONVERT(NVARCHAR(10), @Today, 101) > CONVERT(NVARCHAR(10), @SendAfter, 101)
 				AND CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111)
+				AND Pro.ProjectStatusId IN (3,4)
 	--Cancel feedback records for the person if the status is 'not completed' as per #3271
 	
 	UPDATE dbo.ProjectFeedback
