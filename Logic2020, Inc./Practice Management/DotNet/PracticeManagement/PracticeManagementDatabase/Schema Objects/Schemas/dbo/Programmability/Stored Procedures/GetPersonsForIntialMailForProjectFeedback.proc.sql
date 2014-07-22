@@ -37,5 +37,6 @@ BEGIN
 				AND PF.IsCanceled = 0 AND PF.FeedbackStatusId = 2) --Not Completed Status
 				AND CONVERT(NVARCHAR(10), @Today, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111)
 				AND CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111) > CONVERT(NVARCHAR(10), @SendAfter, 111)
+				AND Pro.ProjectStatusId IN (3,4)
 	ORDER BY PF.ReviewPeriodEndDate DESC			
 END
