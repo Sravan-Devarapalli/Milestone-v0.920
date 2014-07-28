@@ -102,9 +102,9 @@ namespace PracticeManagementService
             return ReportDAL.TimeEntryAuditReportByProject(startDate, endDate);
         }
 
-        public List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds,string projectStatusIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountSummaryReportByBusinessUnit(clientDirectorId, accountIds, businessUnitIds, startDate, endDate);
+            return ReportDAL.AccountSummaryReportByBusinessUnit(clientDirectorId, accountIds, businessUnitIds, projectStatusIds, startDate, endDate);
         }
 
         public List<GroupByAccount> AccountSummaryReportByProject(int? directorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
@@ -203,6 +203,7 @@ namespace PracticeManagementService
          bool showActive,
          bool showInternal,
          bool showExperimental,
+            bool showProposed,
          bool showInactive,
          DateTime periodStart,
          DateTime periodEnd,
@@ -218,7 +219,7 @@ namespace PracticeManagementService
          bool IsYearToDateColoumnsShown,
          bool getFinancialsFromCache)
         {
-            return ReportDAL.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+            return ReportDAL.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
         }
 
         public List<Project> ProjectAttributionReport(DateTime startDate, DateTime endDate)
