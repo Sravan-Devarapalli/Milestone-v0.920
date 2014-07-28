@@ -30,6 +30,7 @@
         <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
         <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
@@ -398,6 +399,7 @@
         <xs:element minOccurs="0" name="clientDirectorId" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectStatusIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
       </xs:sequence>
