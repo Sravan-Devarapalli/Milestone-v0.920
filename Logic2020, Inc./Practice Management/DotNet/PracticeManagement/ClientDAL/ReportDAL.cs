@@ -705,7 +705,7 @@ namespace DataAccess
             }
         }
 
-        public static List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public static List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds,string projectStatusIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByBusinessUnit, connection))
@@ -714,6 +714,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.DirecterIdParam, clientDirectorId.HasValue ? (object)clientDirectorId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusIdsParam, projectStatusIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
 
@@ -2837,6 +2838,7 @@ namespace DataAccess
           bool showActive,
           bool showInternal,
           bool showExperimental,
+            bool showProposed,
           bool showInactive,
           DateTime periodStart,
           DateTime periodEnd,
@@ -2860,6 +2862,7 @@ namespace DataAccess
                 showActive,
                 showInternal,
                 showExperimental,
+                showProposed,
                 showInactive,
                 periodStart,
                 periodEnd,
@@ -3153,6 +3156,7 @@ namespace DataAccess
           bool showActive,
           bool showInternal,
           bool showExperimental,
+            bool showProposed,
           bool showInactive,
           DateTime periodStart,
           DateTime periodEnd,
@@ -3177,6 +3181,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ShowInternalParam, showInternal);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowProposedParam, showProposed);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
                     command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdsParam, salespersonIdsList);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdsParam, practiceManagerIdsList);
