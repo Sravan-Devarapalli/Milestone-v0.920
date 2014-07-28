@@ -6,6 +6,7 @@ CREATE PROCEDURE  [dbo].[AttainmentProjectList]
 	@ShowActive			BIT = 0,
 	@showInternal		BIT = 0,
 	@ShowExperimental	BIT = 0,
+	@ShowProposed		BIT = 0,
 	@ShowInactive		BIT = 0,
 	@SalespersonIds		NVARCHAR(MAX) = NULL,
 	@ProjectOwnerIds	NVARCHAR(MAX) = NULL,
@@ -149,6 +150,7 @@ AS
 				  OR ( @ShowCompleted = 1 AND P.ProjectStatusId = 4 )
 				  OR ( @showInternal = 1 AND P.ProjectStatusId = 6 ) -- Internal
 				  OR ( @ShowExperimental = 1 AND P.ProjectStatusId = 5 )
+				  OR ( @ShowProposed = 1 AND P.ProjectStatusId = 7 ) -- Proposed
 				  OR ( @ShowInactive = 1 AND P.ProjectStatusId = 1 ) -- Inactive
 			)
 			AND  (ISNULL(pr.IsCompanyInternal, 0) = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)
