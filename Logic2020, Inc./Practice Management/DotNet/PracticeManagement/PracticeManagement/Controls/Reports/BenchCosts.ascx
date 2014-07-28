@@ -211,7 +211,7 @@
                     <%--<uc:ReportFilter ID="rpReportFilter" runat="server" />--%>
                     <table cellpadding="5" cellspacing="2" border="0">
                         <tr class="textCenter">
-                            <td class="BenchcostProjectTypeTd" colspan="2">
+                            <td class="BenchcostProjectTypeTd" colspan="3">
                                 Project Type
                             </td>
                             <td class="Width30Px">
@@ -230,6 +230,10 @@
                             <td>
                                 <asp:CheckBox ID="chbCompletedProjects" runat="server" AutoPostBack="false" Checked="True"
                                     onclick="EnableResetButton();" Text="Completed" ToolTip="Include Completed projects into report" />
+                            </td>
+                                                        <td>
+                                <asp:CheckBox ID="chbProposed" runat="server" AutoPostBack="false" Checked="True"
+                                    onclick="EnableResetButton();" Text="Proposed" ToolTip="Include Proposed projects into report" />
                             </td>
                             <td>
                             </td>
@@ -251,6 +255,7 @@
                                 <asp:CheckBox ID="chbExperimentalProjects" runat="server" AutoPostBack="false" Text="Experimental"
                                     ToolTip="Include experimental projects into report" onclick="EnableResetButton();" />
                             </td>
+                            <td></td>
                             <td>
                             </td>
                             <td>
