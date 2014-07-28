@@ -90,10 +90,18 @@
                     <td class="ReportFilterLabels">
                         Client Director:&nbsp;
                     </td>
-                    <td class="textLeft">
+                    <td class="textLeft Width90Percent">
                         <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width220Px" AutoPostBack="true"
                             OnSelectedIndexChanged="ddlDirector_SelectedIndexChanged">
-                        </asp:DropDownList>
+                        </asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp;
+                         <span class="fontBold">Project Status:</span> &nbsp;
+                        <pmc:ScrollingDropDown ID="cblProjectStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            OnSelectedIndexChanged="cblProjectStatus_OnSelectedIndexChanged" NoItemsType="All"
+                            onclick="scrollingDropdown_onclick('cblProjectStatus','Project Status','es')" AutoPostBack="true" PluralForm="es"
+                            DropDownListType="Project Status" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
+                        <ext:ScrollableDropdownExtender ID="sdeProjectStatus" runat="server" TargetControlID="cblProjectStatus"
+                            UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
                     </td>
                     <td>
                     </td>
