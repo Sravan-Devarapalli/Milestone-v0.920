@@ -235,6 +235,7 @@ namespace PraticeManagement.Controls
             bool projectedProjects,
             bool experimentalProjects,
             bool internalProjects,
+            bool proposedProjects,
             string timescaleIds,
             string practiceIdList,
             int avgUtil,
@@ -245,7 +246,7 @@ namespace PraticeManagement.Controls
             var consultants =
                 ReportsHelper.GetConsultantsTimelineReport(
                     startDate, duration, step, activePersons, projectedPersons,
-                    activeProjects, projectedProjects, experimentalProjects, internalProjects,
+                    activeProjects, projectedProjects, experimentalProjects, internalProjects,proposedProjects,
                     timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, isSampleReport);
 
             return consultants.FindAll(Q => Q.AverageUtilization < avgUtil);
@@ -258,6 +259,7 @@ namespace PraticeManagement.Controls
             bool projectedProjects,
             bool internalProjects,
             bool experimentalProjects,
+            bool proposedProjects,
             int personId)
         {
             var context = new ConsultantTimelineReportContext
@@ -267,7 +269,8 @@ namespace PraticeManagement.Controls
                 ActiveProjects = activeProjects,
                 ProjectedProjects = projectedProjects,
                 InternalProjects = internalProjects,
-                ExperimentalProjects = experimentalProjects
+                ExperimentalProjects = experimentalProjects,
+                ProposedProjects = proposedProjects
             };
 
             var consultants = ServiceCallers.Custom.Person(
@@ -279,7 +282,7 @@ namespace PraticeManagement.Controls
             return consultantsList;
         }
 
-        public static List<DetailedUtilizationReportBaseItem> GetMilestonePersons(int personId, DateTime startDate, DateTime endDate, bool incActive, bool incProjected, bool incInternal, bool incExperimental, bool isCapacityMode = false)
+        public static List<DetailedUtilizationReportBaseItem> GetMilestonePersons(int personId, DateTime startDate, DateTime endDate, bool incActive, bool incProjected, bool incInternal, bool incExperimental,bool incProposed, bool isCapacityMode = false)
         {
             var result = new List<DetailedUtilizationReportBaseItem>();
 
@@ -293,6 +296,7 @@ namespace PraticeManagement.Controls
                 IncludeCompletedProjects = false,
                 IncludeInternalProjects = incInternal,
                 IncludeExperimentalProjects = incExperimental,
+                IncludeProposedProjects = incProposed,
                 IncludeInactiveProjects = false,
                 IncludeDefaultMileStone = false
             };
