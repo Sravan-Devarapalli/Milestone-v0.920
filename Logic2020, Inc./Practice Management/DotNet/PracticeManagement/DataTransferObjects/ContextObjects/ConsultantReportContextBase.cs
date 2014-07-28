@@ -27,6 +27,9 @@ namespace DataTransferObjects.ContextObjects
         public bool ProjectedProjects { get; set; }
 
         [DataMember]
+        public bool ProposedProjects { get; set; }
+
+        [DataMember]
         public bool InternalProjects { get; set; }
 
         [DataMember]
