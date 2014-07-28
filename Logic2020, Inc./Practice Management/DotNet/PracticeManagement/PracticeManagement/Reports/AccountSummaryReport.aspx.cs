@@ -51,6 +51,23 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        public string ProjectStatusIds
+        {
+            get
+            {
+                if (cblProjectStatus.Items.Count == 0)
+                    return null;
+                else
+                {
+                    var clientList = new StringBuilder();
+                    foreach (ListItem item in cblProjectStatus.Items)
+                        if (item.Selected)
+                            clientList.Append(item.Value).Append(',');
+                    return clientList.ToString();
+                }
+            }
+        }
+
         public bool UpdateHeaderSection { get; set; }
 
         public int AccountsCount { get { return Convert.ToInt32(ViewState["ACCOUNTSCOUNT_Key"]); } set { ViewState["ACCOUNTSCOUNT_Key"] = value; } }
@@ -324,6 +341,8 @@ namespace PraticeManagement.Reporting
                 DataHelper.FillDirectorsList(ddlDirector, "All Client Directors", null);
                 FillInitAccountsList();
                 FillInitProjectGroupList();
+                DataHelper.FillProjectStatusList(cblProjectStatus, "All Project Statuses", null);
+                cblProjectStatus.SelectAll();
             }
         }
 
@@ -391,7 +410,11 @@ namespace PraticeManagement.Reporting
             ddlPeriod.SelectedValue = "Please Select";
             SelectView();
         }
-
+        protected void cblProjectStatus_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            ddlPeriod.SelectedValue = "Please Select";
+            SelectView();
+        }
         protected void cblAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
             using (var serviceClient = new ClientServiceClient())
@@ -490,6 +513,7 @@ namespace PraticeManagement.Reporting
                 ClientDirectorId = ddlDirector.SelectedValue,
                 AccountIds = cblAccount.SelectedItems,
                 BusinessUnitIds = cblProjectGroup.SelectedItems,
+                ProjectStatusIds = cblProjectStatus.SelectedItems,
                 RangeSelected = ddlPeriod.SelectedValue,
                 StartDate = StartDate,
                 EndDate = EndDate
