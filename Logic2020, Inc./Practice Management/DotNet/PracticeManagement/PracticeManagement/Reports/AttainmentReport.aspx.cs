@@ -414,6 +414,7 @@ namespace PraticeManagement.Reports
                      ShowProjected = true,
                      ShowInternal = false,
                      ShowExperimental = false,
+                     ShowProposed = true,
                      ShowInactive = false,
                      PeriodSelected = Convert.ToInt32(ddlPeriod.SelectedValue),
                      ViewSelected = -1,
