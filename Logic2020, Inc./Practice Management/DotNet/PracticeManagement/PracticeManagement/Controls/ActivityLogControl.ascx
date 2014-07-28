@@ -317,6 +317,7 @@
                             <asp:Parameter DefaultValue="true" Name="completed" Type="Boolean" />
                             <asp:Parameter DefaultValue="true" Name="active" Type="Boolean" />
                             <asp:Parameter DefaultValue="true" Name="experimantal" Type="Boolean" />
+                            <asp:Parameter DefaultValue="true" Name="proposed" Type="Boolean" />
                         </SelectParameters>
                     </asp:ObjectDataSource>
                     <asp:ObjectDataSource ID="odsPersons" runat="server" SelectMethod="GetAllPersons"
