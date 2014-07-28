@@ -8,6 +8,7 @@
 	@ShowCompleted		 BIT = NULL,
     @ShowActive			 BIT = NULL,
 	@ShowExperimental	 BIT = NULL,
+	@ShowProposed		 BIT = NULL,
 	@ShowInternal		 BIT = NULL,
 	@ShowInactive		 BIT = NULL,
 	@UseActuals			 BIT = 0
@@ -26,6 +27,7 @@ AS
 	@ShowExperimentalLocal	 BIT = NULL,
 	@ShowInternalLocal		 BIT = NULL,
 	@ShowInactiveLocal		 BIT = NULL,
+	@ShowProposedLocal		 BIT = NULL,
 	@UseActualsLocal			 BIT = 0
 
 	SELECT 	@StartDateLocal      =@StartDate,
@@ -38,7 +40,8 @@ AS
 	@ShowExperimentalLocal	=@ShowExperimental,
 	@ShowInternalLocal		=@ShowInternal,
 	@ShowInactiveLocal		=@ShowInactive,
-	@UseActualsLocal		=@UseActuals
+	@UseActualsLocal		=@UseActuals,
+	@ShowProposedLocal      = @ShowProposed
 
 	DECLARE @Today DATETIME, @CurrentMonthStartDate DATETIME
 	SELECT @Today = CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE()))
@@ -72,6 +75,7 @@ AS
 											WHEN (p.ProjectStatusId = 5 AND @ShowExperimentalLocal = 'TRUE') OR @ShowExperimentalLocal IS NULL THEN CT.ActualDayRevenue
 											WHEN (p.ProjectStatusId = 6 AND @ShowInternalLocal = 'TRUE') OR @ShowInternalLocal IS NULL THEN CT.ActualDayRevenue
 											WHEN (p.ProjectStatusId = 1 AND @ShowInactiveLocal = 'TRUE') OR @ShowInactiveLocal IS NULL THEN CT.ActualDayRevenue
+											WHEN (p.ProjectStatusId = 7 AND @ShowProposedLocal = 'TRUE') OR @ShowProposedLocal IS NULL THEN CT.ActualDayRevenue
 											ELSE 0 
 										END
 									)
@@ -84,6 +88,7 @@ AS
 											WHEN (p.ProjectStatusId = 5 AND @ShowExperimentalLocal = 'TRUE') OR @ShowExperimentalLocal IS NULL THEN CT.PersonMilestoneDailyAmount 
 											WHEN (p.ProjectStatusId = 6 AND @ShowInternalLocal = 'TRUE') OR @ShowInternalLocal IS NULL THEN CT.PersonMilestoneDailyAmount
 											WHEN (p.ProjectStatusId = 1 AND @ShowInactiveLocal = 'TRUE') OR @ShowInactiveLocal IS NULL THEN CT.PersonMilestoneDailyAmount 
+											WHEN (p.ProjectStatusId = 7 AND @ShowProposedLocal = 'TRUE') OR @ShowProposedLocal IS NULL THEN CT.PersonMilestoneDailyAmount
 											ELSE 0 
 										END
 									)
