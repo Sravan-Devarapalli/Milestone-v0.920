@@ -10,7 +10,8 @@ namespace PraticeManagement.FilterObjects
     {
         public String ClientDirectorId { get; set; }
         public String AccountIds { get; set; }
-        public String BusinessUnitIds { get; set; } 
+        public String BusinessUnitIds { get; set; }
+        public String ProjectStatusIds { get; set; }
         public String RangeSelected { get; set; } 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
