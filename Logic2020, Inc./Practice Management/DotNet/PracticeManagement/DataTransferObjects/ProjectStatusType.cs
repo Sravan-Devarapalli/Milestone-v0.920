@@ -24,6 +24,9 @@ namespace DataTransferObjects
         Experimental = 5,
 
         [EnumMember]
-        Internal = 6
+        Internal = 6,
+
+        [EnumMember]
+        Proposed = 7
     }
 }
