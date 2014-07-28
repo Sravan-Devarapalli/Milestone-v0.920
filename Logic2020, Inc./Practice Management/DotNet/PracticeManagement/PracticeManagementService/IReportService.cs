@@ -59,7 +59,7 @@ namespace PracticeManagementService
         List<ProjectLevelTimeEntriesHistory> TimeEntryAuditReportByProject(DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate);
+        List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId,string accountIds, string businessUnitIds,string projectStatusIds, DateTime startDate, DateTime endDate);
 
         [OperationContract]
         List<GroupByAccount> AccountSummaryReportByProject(int? directorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes);
@@ -120,6 +120,7 @@ namespace PracticeManagementService
         bool showActive,
         bool showInternal,
         bool showExperimental,
+            bool showProposed,
         bool showInactive,
         DateTime periodStart,
         DateTime periodEnd,
