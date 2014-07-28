@@ -202,6 +202,7 @@ namespace PraticeManagement.Controls
                                         filterSet.ShowActive,
                                         filterSet.ShowInternal,
                                         filterSet.ShowExperimental,
+                                        filterSet.ShowProposed,
                                         filterSet.ShowInactive,
                                         filterSet.PeriodStart,
                                         filterSet.PeriodEnd,
@@ -291,6 +292,7 @@ namespace PraticeManagement.Controls
                                         filterSet.ShowActive,
                                         filterSet.ShowInternal,
                                         filterSet.ShowExperimental,
+                                        filterSet.ShowProposed,
                                         filterSet.ShowInactive,
                                         filterSet.PeriodStart,
                                         filterSet.PeriodEnd,
@@ -435,7 +437,7 @@ namespace PraticeManagement.Controls
                 try
                 {
                     return serviceClient.PersonStartsReport(periodStart, periodEnd, identityName, salesPersonId,
-                                                            projectOwnerId, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive, false);
+                                                            projectOwnerId, showProjected, showCompleted, showActive, showExperimental,false, showInternal, showInactive, false);
 
                 }
                 catch (CommunicationException)
