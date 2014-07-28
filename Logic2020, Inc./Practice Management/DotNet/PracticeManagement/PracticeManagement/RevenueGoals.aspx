@@ -136,9 +136,13 @@
                                                 <asp:CheckBox ID="chbInternal" runat="server" AutoPostBack="false" Checked="True"
                                                     onclick="EnableResetButton();" Text="Internal" ToolTip="Include internal projects into report" />
                                             </td>
-                                            <td>
+                                            <td class="Width100Px">
                                                 <asp:CheckBox ID="chbInactive" runat="server" AutoPostBack="false" Checked="false"
                                                     onclick="EnableResetButton();" Text="Inactive" ToolTip="Include Inactive projects into report" />
+                                            </td>
+                                              <td class="Width100Px">
+                                                <asp:CheckBox ID="chbProposed" runat="server" AutoPostBack="false" Checked="true"
+                                                    onclick="EnableResetButton();" Text="Proposed" ToolTip="Include proposed projects into report" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -154,6 +158,7 @@
                                                 <asp:CheckBox ID="chbExperimental" runat="server" AutoPostBack="false" Checked="false"
                                                     onclick="EnableResetButton();" Text="Experimental" ToolTip="Include Experimental projects into report" />
                                             </td>
+                                            <td></td>
                                         </tr>
                                     </table>
                                 </td>
