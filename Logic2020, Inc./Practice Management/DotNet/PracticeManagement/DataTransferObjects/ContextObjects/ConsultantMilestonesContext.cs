@@ -22,6 +22,8 @@ namespace DataTransferObjects.ContextObjects
 
         public bool IncludeExperimentalProjects { get; set; }
 
+        public bool IncludeProposedProjects { get; set; }
+
         public bool IncludeDefaultMileStone { get; set; }
     }
 }
