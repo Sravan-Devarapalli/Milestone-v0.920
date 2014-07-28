@@ -25,6 +25,7 @@ namespace PraticeManagement
             public const string ProjectedProjectsKey = "ProjectedProjectsKey";
             public const string ActivePersonsKey = "ActivePersonsKey";
             public const string ActiveProjectsKey = "ActiveProjectsKey";
+            public const string ProposedProjectsKey = "ProposedProjectsKey";
             public const string ExperimentalProjectsKey = "ExperimentalProjectsKey";
             public const string TimescaleIdListKey = "TimescaleIdListKey";
             public const string PracticeIdListKey = "PracticeIdListKey";
