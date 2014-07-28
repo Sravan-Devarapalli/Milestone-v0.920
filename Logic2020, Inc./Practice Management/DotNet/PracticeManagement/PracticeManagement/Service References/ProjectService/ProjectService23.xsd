@@ -30,7 +30,6 @@
       <xs:element minOccurs="0" name="Director" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="Discount" type="xs:decimal" />
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="FeedbackList" nillable="true" type="tns:ArrayOfProjectFeedback" />
       <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
       <xs:element minOccurs="0" name="HasAttachments" type="xs:boolean" />
       <xs:element minOccurs="0" name="HasMultipleCSATs" type="xs:boolean" />
@@ -626,35 +625,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectCSAT" nillable="true" type="tns:ProjectCSAT" />
-  <xs:complexType name="ArrayOfProjectFeedback">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProjectFeedback" nillable="true" type="tns:ArrayOfProjectFeedback" />
-  <xs:complexType name="ProjectFeedback">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="CancelationReason" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CompletionCertificateBy" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CompletionCertificateDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="IsCanceled" type="xs:boolean" />
-      <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
-      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
-      <xs:element minOccurs="0" name="ReviewEndDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="ReviewStartDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectFeedbackStatus" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
-  <xs:complexType name="ProjectFeedbackStatus">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ProjectFeedbackStatus" nillable="true" type="tns:ProjectFeedbackStatus" />
   <xs:complexType name="ArrayOfMilestone">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Milestone" nillable="true" type="tns:Milestone" />
@@ -755,6 +725,35 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
+  <xs:complexType name="ArrayOfProjectFeedback">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectFeedback" nillable="true" type="tns:ArrayOfProjectFeedback" />
+  <xs:complexType name="ProjectFeedback">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CancelationReason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompletionCertificateBy" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompletionCertificateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsCanceled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
+      <xs:element minOccurs="0" name="ReviewEndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ReviewStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectFeedbackStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
+  <xs:complexType name="ProjectFeedbackStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectFeedbackStatus" nillable="true" type="tns:ProjectFeedbackStatus" />
   <xs:complexType name="ArrayOfProjectFeedbackStatus">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectFeedbackStatus" nillable="true" type="tns:ProjectFeedbackStatus" />
