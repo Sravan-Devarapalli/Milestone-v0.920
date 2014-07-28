@@ -3,6 +3,7 @@
 	@DirectorId INT=NULL,
 	@AccountIds	NVARCHAR(MAX),
 	@BusinessUnitIds	NVARCHAR(MAX) = NULL,
+	@ProjectStatusIds	NVARCHAR(MAX) = NULL,
 	@StartDate	DATETIME,
 	@EndDate	DATETIME
 )
@@ -31,7 +32,12 @@ BEGIN
 	SELECT BU.ResultId
 	FROM dbo.ConvertStringListIntoTable(@BusinessUnitIds) BU
 	
+	DECLARE @ProjectStatusIdsTable TABLE ( Ids INT )
 	
+	INSERT INTO @ProjectStatusIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@ProjectStatusIds)
+
 	     ;WITH ProjectedHours
 		AS
 		(
@@ -47,7 +53,7 @@ BEGIN
 			LEFT JOIN dbo.person AS P ON P.PersonId = MP.PersonId 
 			LEFT JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
 			WHERE (@BusinessUnitIds IS NULL OR (Pro.GroupId IN (SELECT Id FROM @BusinessUnitIdsTable))) AND Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)
-				   AND Pro.ProjectStatusId IN (3,4) --Active and Completed status as per #3201 
+				   AND (@ProjectStatusIds IS NULL OR Pro.ProjectStatusId IN (SELECT Ids FROM @ProjectStatusIdsTable))
 				   AND Pro.StartDate IS NOT NULL AND Pro.EndDate IS NOT NULL
 				   AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal
 				   AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate
@@ -65,7 +71,7 @@ BEGIN
 											AND MPE.StartDate <= @EndDateLocal AND @StartDateLocal <= MPE.EndDate
 			WHERE 
 				(MPE.Id IS NULL OR MP.MilestoneId IS NULL)
-				AND P.ProjectStatusId IN (3,4) 
+				AND (@ProjectStatusIds IS NULL OR P.ProjectStatusId IN (SELECT Ids FROM @ProjectStatusIdsTable))
 				AND (@BusinessUnitIds IS NULL OR (P.GroupId IN (SELECT Id FROM @BusinessUnitIdsTable)))
 				AND P.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 				AND M.StartDate <= @EndDateLocal AND @StartDateLocal <= M.ProjectedDeliveryDate
@@ -121,7 +127,7 @@ BEGIN
 												FROM @BusinessUnitIdsTable
 												)
 						)
-					AND	Pro.ProjectStatusId IN (3,4) -- Active and Completed status as per #3201 
+					AND (@ProjectStatusIds IS NULL OR Pro.ProjectStatusId IN (SELECT Ids FROM @ProjectStatusIdsTable))
 					AND (@DirectorId IS NULL OR Pro.DirectorId = @DirectorId)
 			GROUP BY  Pro.ProjectId,CC.ProjectGroupId
 		)
@@ -161,7 +167,7 @@ BEGIN
 				INNER JOIN dbo.Client C ON C.ClientId = Pro.ClientId
 		WHERE C.ClientId IN (SELECT * FROM @AccountIdsTable)
 				AND MPE.StartDate <= @EndDateLocal AND @StartDateLocal <= MPE.EndDate
-				AND Pro.ProjectStatusId IN (3,4) --Active AND Completed Status
+				AND (@ProjectStatusIds IS NULL OR Pro.ProjectStatusId IN (SELECT Ids FROM @ProjectStatusIdsTable))
 				AND (@BusinessUnitIds IS NULL
 					OR Pro.GroupId IN (SELECT *
 											FROM @BusinessUnitIdsTable
