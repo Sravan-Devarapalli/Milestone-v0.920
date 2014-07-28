@@ -48,6 +48,8 @@ namespace PraticeManagement.Controls
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool showExperimentalValue;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool showProposedValue;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool showProjectedValue;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private int? startDayValue;
@@ -220,6 +222,15 @@ namespace PraticeManagement.Controls
         {
             get { return showExperimentalValue; }
             set { showExperimentalValue = value; }
+        }
+
+        /// <summary>
+        /// 	Gets or sets whether the Proposed projects are shown.
+        /// </summary>
+        public bool ShowProposed
+        {
+            get { return showProposedValue; }
+            set { showProposedValue = value; }
         }
 
         /// <summary>
@@ -439,6 +450,7 @@ namespace PraticeManagement.Controls
             ShowCompleted = true;
             ShowProjected = true;
             ShowInternal = true;
+            ShowProposed = true;
 
             HideAdvancedFilter = true;
             ExcludeInternalPractices = false;
