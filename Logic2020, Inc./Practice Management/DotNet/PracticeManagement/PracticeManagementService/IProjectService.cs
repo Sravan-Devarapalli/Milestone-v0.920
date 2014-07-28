@@ -78,7 +78,7 @@ namespace PracticeManagementService
         /// Enlists the requested projects.
         /// </summary>
         [OperationContract]
-        List<Project> GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal);
+        List<Project> GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal,bool proposed);
 
         /// <summary>
         /// Enlists the requested projects.
@@ -107,6 +107,7 @@ namespace PracticeManagementService
             bool showActive,
             bool showInternal,
             bool showExperimental,
+            bool showProposed,
             bool showInactive,
             DateTime periodStart,
             DateTime periodEnd,
@@ -149,6 +150,7 @@ namespace PracticeManagementService
             bool showActive,
             bool showInternal,
             bool showExperimental,
+            bool showProposed,
             bool showInactive,
             DateTime periodStart,
             DateTime periodEnd,
@@ -206,6 +208,7 @@ namespace PracticeManagementService
             bool showCompleted,
             bool showActive,
             bool showExperimental,
+            bool showProposed,
             bool showInternal,
             bool showInactive,
             bool useActuals);
@@ -230,6 +233,7 @@ namespace PracticeManagementService
             bool showCompleted,
             bool showActive,
             bool showExperimental,
+            bool showProposed,
             bool showInternal,
             bool showInactive,
             bool useActuals);
@@ -260,6 +264,7 @@ namespace PracticeManagementService
                                                                 bool showActive,
                                                                 bool showInternal,
                                                                 bool showExperimental,
+            bool showProposed,
                                                                 bool showInactive,
                                                                 string practiceIdsList,
                                                                 bool excludeInternalPractices,
@@ -275,6 +280,7 @@ namespace PracticeManagementService
                                                                     bool showActive,
                                                                     bool showInternal,
                                                                     bool showExperimental,
+                                                                    bool showProposed,
                                                                     bool showInactive,
                                                                     string practiceIdsList,
                                                                     bool excludeInternalPractices);
