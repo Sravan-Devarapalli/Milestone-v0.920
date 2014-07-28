@@ -11,7 +11,8 @@
 <%@ Register TagPrefix="uc" TagName="LoadingProgress" Src="~/Controls/Generic/LoadingProgress.ascx" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <asp:Content ID="ctrlhead" ContentPlaceHolderID="head" runat="server">
-    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>" type="text/javascript"></script>
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="cntTitle" ContentPlaceHolderID="title" runat="server">
     <title>Projects Group by | Practice Management</title>
@@ -177,7 +178,7 @@
             }
         }
     </script>
-    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
+    <uc:loadingprogress id="LoadingProgress1" runat="server" />
     <div class="filters Margin-Bottom10Px">
         <div class="buttons-block">
             <table class="WholeWidth">
@@ -223,8 +224,8 @@
                     <td class="textLeft Width120Px">
                         <asp:UpdatePanel ID="updFilters" runat="server">
                             <ContentTemplate>
-                                <uc:MonthPicker ID="mpFromControl" runat="server" OnClientChange="EnableResetButton();"
-                                    OnSelectedValueChanged="mpFromControl_OnSelectedValueChanged" />
+                                <uc:monthpicker id="mpFromControl" runat="server" onclientchange="EnableResetButton();"
+                                    onselectedvaluechanged="mpFromControl_OnSelectedValueChanged" />
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </td>
@@ -234,8 +235,8 @@
                     <td class="textLeft Width120Px">
                         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                             <ContentTemplate>
-                                <uc:MonthPicker ID="mpToControl" runat="server" OnClientChange="EnableResetButton();"
-                                    OnSelectedValueChanged="mpToControl_OnSelectedValueChanged" />
+                                <uc:monthpicker id="mpToControl" runat="server" onclientchange="EnableResetButton();"
+                                    onselectedvaluechanged="mpToControl_OnSelectedValueChanged" />
                             </ContentTemplate>
                         </asp:UpdatePanel>
                     </td>
@@ -292,9 +293,13 @@
                                                 <asp:CheckBox ID="chbInternal" runat="server" AutoPostBack="false" Checked="True"
                                                     onclick="EnableResetButton();" Text="Internal" ToolTip="Include internal projects into report" />
                                             </td>
-                                            <td>
+                                            <td class="Width110Px">
                                                 <asp:CheckBox ID="chbInactive" runat="server" AutoPostBack="false" Checked="false"
                                                     onclick="EnableResetButton();" Text="Inactive" ToolTip="Include Inactive projects into report" />
+                                            </td>
+                                            <td>
+                                                <asp:CheckBox ID="chbProposed" runat="server" AutoPostBack="false" Checked="false"
+                                                    onclick="EnableResetButton();" Text="Proposed" ToolTip="Include Proposed projects into report" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -309,6 +314,8 @@
                                             <td>
                                                 <asp:CheckBox ID="chbExperimental" runat="server" AutoPostBack="false" Checked="false"
                                                     onclick="EnableResetButton();" Text="Experimental" ToolTip="Include Experimental projects into report" />
+                                            </td>
+                                            <td>
                                             </td>
                                         </tr>
                                     </table>
@@ -356,19 +363,19 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <uc:CascadingMsdd ID="cblClient" runat="server" TargetControlId="cblProjectGroup"
-                                            SetDirty="false" CssClass="AdvancedTabUc" />
+                                        <uc:cascadingmsdd id="cblClient" runat="server" targetcontrolid="cblProjectGroup"
+                                            setdirty="false" cssclass="AdvancedTabUc" />
                                     </td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" CssClass="AdvancedTabUc" />
+                                        <uc:scrollingdropdown id="cblProjectGroup" runat="server" setdirty="false" cssclass="AdvancedTabUc" />
                                     </td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblSalesperson" runat="server" CssClass="scroll-y AdvancedTabUc"
-                                            SetDirty="false" />
+                                        <uc:scrollingdropdown id="cblSalesperson" runat="server" cssclass="scroll-y AdvancedTabUc"
+                                            setdirty="false" />
                                     </td>
                                     <td>
-                                        <uc:ScrollingDropDown ID="cblProjectOwner" runat="server" CssClass="scroll-y AdvancedTabUc"
-                                            SetDirty="false" />
+                                        <uc:scrollingdropdown id="cblProjectOwner" runat="server" cssclass="scroll-y AdvancedTabUc"
+                                            setdirty="false" />
                                     </td>
                                 </tr>
                             </table>
