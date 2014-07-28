@@ -23,13 +23,10 @@ BEGIN
 	(
 		ResultId INT
 	)
-	DECLARE @Today DATETIME, @CurrentMonthStartDate DATETIME,@InsertingTime DATETIME
+	DECLARE @InsertingTime DATETIME
 
-	SELECT @Today = CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE())),@InsertingTime = dbo.InsertingTime()
-	SELECT @CurrentMonthStartDate = C.MonthStartDate
-	FROM dbo.Calendar C
-	WHERE C.Date = @Today
-
+	SELECT @InsertingTime = dbo.InsertingTime()
+	
 	INSERT INTO @ProjectIDs
 	SELECT * FROM dbo.ConvertStringListIntoTable(@ProjectIdLocal)
 
@@ -288,14 +285,8 @@ FinancialsRetro AS
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedHoursPerMonth,0)) Hours,
 		CONVERT(DECIMAL(18,2),ISNULL(PEM.Expense,0)) Expense,
 		CONVERT(DECIMAL(18,2),ISNULL(PEM.Reimbursement,0)) ReimbursedExpense,
-		CASE WHEN ISNULL(APV.FinancialDate,PEM.FinancialDate) < @CurrentMonthStartDate 
-			 THEN CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenue,0))
-			 ELSE CONVERT(DECIMAL(18,6), ISNULL(APV.ProjectedRevenue,0))
-			 END ActualRevenue,
-		CASE WHEN ISNULL(APV.FinancialDate,PEM.FinancialDate) < @CurrentMonthStartDate 
-			 THEN CONVERT(DECIMAL(18,6), ISNULL(APV.ActualMargin,0) - (ISNULL(APV.ActualRevenue,0) * ISNULL(APV.Discount,0)/100) + ((ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)) * (1 - ISNULL(APV.Discount,0)/100)))
-			 ELSE CONVERT(DECIMAL(18,6), ISNULL(APV.ProjectedGrossMargin,0) + (ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)) * (1 - ISNULL(APV.Discount,0)/100))
-			 END ActualGrossMargin,
+		CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenue,0)) ActualRevenue,
+		CONVERT(DECIMAL(18,6), ISNULL(APV.ActualMargin,0) - (ISNULL(APV.ActualRevenue,0) * ISNULL(APV.Discount,0)/100) + ((ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)) * (1 - ISNULL(APV.Discount,0)/100))) ActualGrossMargin,
 		CONVERT(BIT,1) AS IsMonthlyRecord,
 		@InsertingTime AS  CreatedDate,	
 		CONVERT(DATE,@InsertingTime)  AS CacheDate
