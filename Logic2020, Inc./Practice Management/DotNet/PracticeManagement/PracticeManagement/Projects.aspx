@@ -184,6 +184,7 @@
             document.getElementById("<%= chbProjected.ClientID %>").checked = true;
             document.getElementById("<%= chbCompleted.ClientID %>").checked = true;
             document.getElementById("<%= chbExperimental.ClientID %>").checked = false;
+            document.getElementById("<%= chbProposed.ClientID %>").checked = true;
             document.getElementById("<%= chbInactive.ClientID %>").checked = false;
 
             document.getElementById("<%= ddlCalculateRange.ClientID %>").selectedIndex = 0;
@@ -514,7 +515,7 @@
                                 <div class="project-filter">
                                     <table class="WholeWidth Height80Px" cellpadding="5">
                                         <tr class="tb-header">
-                                            <td colspan="2" class="ProjectSummaryProjectTypeTd">
+                                            <td colspan="3" class="ProjectSummaryProjectTypeTd">
                                                 Project Types Included
                                             </td>
                                             <td class="Width20Px" rowspan="4">
@@ -544,6 +545,9 @@
                                             </td>
                                             <td class="ProjectSummaryCheckboxTd">
                                                 <asp:CheckBox ID="chbInternal" runat="server" Text="Internal" Checked="True" EnableViewState="False" />
+                                            </td>
+                                            <td class="ProjectSummaryCheckboxTd">
+                                                <asp:CheckBox ID="chbProposed" runat="server" Text="Proposed" Checked="True" EnableViewState="False" />
                                             </td>
                                             <td rowspan="2" class="ProjectSummaryCalculateRangeTd">
                                                 <asp:DropDownList ID="ddlCalculateRange" runat="server" AutoPostBack="false">
