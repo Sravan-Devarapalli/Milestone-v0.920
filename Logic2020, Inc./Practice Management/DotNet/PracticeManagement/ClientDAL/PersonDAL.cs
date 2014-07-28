@@ -241,6 +241,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Granularity, context.Granularity);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Period, context.Period);
@@ -283,6 +284,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedPersons, context.ProjectedPersons);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Granularity, context.Granularity);
@@ -313,6 +315,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DaysForward, context.Period);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
@@ -1207,6 +1210,7 @@ namespace DataAccess
                 }
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
                 if (context.IncludeOverheads.HasValue)
                     command.Parameters.AddWithValue(Constants.ParameterNames.IncludeOverheads, context.IncludeOverheads.Value);
