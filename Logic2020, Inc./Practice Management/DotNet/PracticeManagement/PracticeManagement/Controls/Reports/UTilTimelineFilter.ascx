@@ -396,7 +396,8 @@
             </tr>
         </table>
     </div>
-    <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" style="display:none;">
+    <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp"
+        Style="display: none;">
         <table class="WholeWidth">
             <tr>
                 <td align="center" class="no-wrap">
@@ -452,7 +453,7 @@
                             </td>
                             <td class="Width30Px">
                             </td>
-                            <td class="Width320Px BorderBottom1px vTop" colspan="2">
+                            <td class="Width320Px BorderBottom1px vTop" colspan="3">
                                 Project Type
                             </td>
                             <td class="Width30Px">
@@ -486,6 +487,8 @@
                                 <asp:CheckBox ID="chbInternalProjects" runat="server" AutoPostBack="false" Checked="True"
                                     onclick="EnableResetButton();" Text="Internal" ToolTip="Include internal projects into report" />
                             </td>
+                            <td><asp:CheckBox ID="chbProposedProjects" runat="server" AutoPostBack="false" Checked="True" onclick="EnableResetButton();"
+                                    Text="Proposed" ToolTip="Include proposed projects into report" /></td>
                             <td>
                             </td>
                             <td class="floatRight PaddingTop5 padLeft3">
@@ -517,8 +520,10 @@
                             <td>
                             </td>
                             <td>
-                                <asp:CheckBox ID="chkExcludeInternalPractices" runat="server" Text="Exclude Internal Practice Areas" Checked="true"
-                                    onclick="EnableResetButton();" />
+                            </td>
+                            <td>
+                                <asp:CheckBox ID="chkExcludeInternalPractices" runat="server" Text="Exclude Internal Practice Areas"
+                                    Checked="true" onclick="EnableResetButton();" />
                             </td>
                         </tr>
                     </table>
