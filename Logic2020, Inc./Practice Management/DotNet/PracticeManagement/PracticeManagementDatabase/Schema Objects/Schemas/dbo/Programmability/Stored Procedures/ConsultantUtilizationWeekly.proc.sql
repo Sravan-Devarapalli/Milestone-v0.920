@@ -6,6 +6,7 @@
     @ActiveProjects BIT = 1,
     @ProjectedPersons BIT = 1,
     @ProjectedProjects BIT = 1,
+	@ProposedProjects BIT=1,
     @ExperimentalProjects BIT = 1,
 	@InternalProjects	BIT = 1,
 	@TimescaleIds NVARCHAR(4000) = NULL,
@@ -26,7 +27,7 @@ AS
 		SET @PracticeIds = ','+@PracticeIds+','
         END
         
-        DECLARE @OrderBy NVARCHAR(4000),@Query NVARCHAR(4000)
+        DECLARE @OrderBy NVARCHAR(4000),@Query NVARCHAR(MAX)
         SET @OrderBy = ' ORDER BY    '
         
 		IF(@SortId = 1) --Alphabetical  Last name
@@ -74,11 +75,10 @@ AS
     ---------------------------------------------------------
     -- Retrieve all consultants working at current month
 		SET @Query = @Query + '
-        DECLARE @CurrentConsultants TABLE ( ConsId INT, TimeScaleId INT, TimeScaleName NVARCHAR(50) ) ;
-        INSERT  INTO @CurrentConsultants ( ConsId, TimeScaleId, TimeScaleName )
-                SELECT  p.PersonId, T.TimescaleId, T.Name
-                FROM    dbo.Person AS p
-				INNER JOIN dbo.Timescale T ON T.TimescaleId IN ( SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))
+        DECLARE @CurrentConsultants TABLE (ConsId INT, TimeScaleId INT, TimeScaleName NVARCHAR(50) ) ;
+        INSERT  INTO @CurrentConsultants (ConsId, TimeScaleId, TimeScaleName )
+                SELECT  p.PersonId, T.TimescaleId, T.Name FROM dbo.Person AS p
+				INNER JOIN dbo.Timescale T ON T.TimescaleId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@TimescaleIds))
 				INNER JOIN dbo.[GetLatestPayWithInTheGivenRange](@StartDate,@EndDate) AS PCPT ON PCPT.PersonId = p.PersonId AND T.TimescaleId = PCPT.Timescale  
                 LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
 				LEFT JOIN dbo.[TerminationReasons] TR ON TR.TerminationReasonId = P.TerminationReasonId
@@ -98,9 +98,7 @@ AS
     ---------------------------------------------------------
     
     SET @Query = @Query + '
-        SELECT  p.PersonId,
-                p.EmployeeNumber,
-                p.FirstName,
+        SELECT  p.PersonId,p.EmployeeNumber,p.FirstName,
                 p.LastName,
                 p.HireDate,
 				p.TerminationDate,
@@ -116,10 +114,10 @@ AS
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
 				INNER JOIN dbo.Title AS T ON T.TitleId = P.TitleId
-				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
+				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
 		LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 LEFT JOIN dbo.GetPersonVacationDaysTable(@StartDate,@Enddate) VactionDaysTable ON VactionDaysTable.PersonId = c.ConsId
-				LEFT JOIN dbo.GetAvgUtilizationTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects) AS AvgUT ON AvgUT.PersonId =  p.PersonId'
+				LEFT JOIN dbo.GetAvgUtilizationTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects) AS AvgUT ON AvgUT.PersonId =  p.PersonId'
 
      SET @Query = @Query+@OrderBy
 	SET @Query = @Query+	
@@ -134,11 +132,9 @@ AS
 	--if a person has added Timeoff  for complete 8 hr then the day is treated as vacation day.
 	SET @Query = @Query+	
 		'  
-		SELECT	PC.PersonId,
-				PC.Date,
+		SELECT	PC.PersonId,PC.Date,
 				CASE WHEN PC.DayOff=1 AND PC.CompanyDayOff=0 THEN 1
-				ELSE 0 END AS IsTimeOff,
-				Cal.HolidayDescription
+				ELSE 0 END AS IsTimeOff,Cal.HolidayDescription
 		FROM dbo.PersonCalendarAuto PC 
 		INNER JOIN @CurrentConsultants AS c ON c.ConsId=PC.PersonId AND PC.[Date] BETWEEN @StartDate AND @EndDate
 		LEFT JOIN dbo.Calendar AS Cal ON Cal.Date=PC.Date
@@ -153,6 +149,7 @@ AS
 								 @ActiveProjects		BIT,
 								 @ProjectedPersons		BIT,
 								 @ProjectedProjects		BIT,
+								 @ProposedProjects		BIT,
 								 @ExperimentalProjects	BIT,
 								 @InternalProjects		BIT,
 								 @TimescaleIds			NVARCHAR(4000),
@@ -165,6 +162,7 @@ AS
 								 @ActiveProjects	=	@ActiveProjects,
 								 @ProjectedPersons	=	@ProjectedPersons,
 								 @ProjectedProjects	=	@ProjectedProjects,
+								 @ProposedProjects	=	@ProposedProjects,
 								 @ExperimentalProjects = @ExperimentalProjects,
 								 @InternalProjects	=	@InternalProjects,
 								 @TimescaleIds	=	@TimescaleIds,
