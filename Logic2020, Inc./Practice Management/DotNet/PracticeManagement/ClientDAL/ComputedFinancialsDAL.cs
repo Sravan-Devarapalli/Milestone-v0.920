@@ -371,6 +371,7 @@ namespace DataAccess
             bool showCompleted,
             bool showActive,
             bool showExperimental,
+            bool showProposed,
             bool showInternal,
             bool showInactive,
             bool useActuals)
@@ -395,6 +396,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowInternalParam, showInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowProposedParam, showProposed);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UseActualsParam, useActuals);
 
