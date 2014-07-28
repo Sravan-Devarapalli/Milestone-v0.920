@@ -43,6 +43,7 @@
       <xs:element minOccurs="0" name="InternalProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="ProjectedPersons" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="ProjectedProjects" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ProposedProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="Start" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
