@@ -27,6 +27,7 @@ namespace PraticeManagement.ReportService {
                     bool showActive, 
                     bool showInternal, 
                     bool showExperimental, 
+                    bool showProposed, 
                     bool showInactive, 
                     System.DateTime periodStart, 
                     System.DateTime periodEnd, 
@@ -121,7 +122,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory[] TimeEntryAuditReportByProject(System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnit", ReplyAction="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnitResponse")]
-        DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByBusinessUnit(System.Nullable<int> clientDirectorId, string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
+        DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByBusinessUnit(System.Nullable<int> clientDirectorId, string accountIds, string businessUnitIds, string projectStatusIds, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountSummaryReportByProject", ReplyAction="http://tempuri.org/IReportService/AccountSummaryReportByProjectResponse")]
         DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByProject(System.Nullable<int> directorId, string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes);
@@ -182,6 +183,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
+        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -209,6 +211,7 @@ namespace PraticeManagement.ReportService {
                     bool showActive, 
                     bool showInternal, 
                     bool showExperimental, 
+                    bool showProposed, 
                     bool showInactive, 
                     System.DateTime periodStart, 
                     System.DateTime periodEnd, 
@@ -223,7 +226,7 @@ namespace PraticeManagement.ReportService {
                     bool IsQuarterColoumnsShown, 
                     bool IsYearToDateColoumnsShown, 
                     bool getFinancialsFromCache) {
-            return base.Channel.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+            return base.Channel.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
         }
         
         public DataTransferObjects.Project[] ProjectAttributionReport(System.DateTime startDate, System.DateTime endDate) {
@@ -322,8 +325,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.TimeEntryAuditReportByProject(startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByBusinessUnit(System.Nullable<int> clientDirectorId, string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.AccountSummaryReportByBusinessUnit(clientDirectorId, accountIds, businessUnitIds, startDate, endDate);
+        public DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByBusinessUnit(System.Nullable<int> clientDirectorId, string accountIds, string businessUnitIds, string projectStatusIds, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.AccountSummaryReportByBusinessUnit(clientDirectorId, accountIds, businessUnitIds, projectStatusIds, startDate, endDate);
         }
         
         public DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByProject(System.Nullable<int> directorId, string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes) {
