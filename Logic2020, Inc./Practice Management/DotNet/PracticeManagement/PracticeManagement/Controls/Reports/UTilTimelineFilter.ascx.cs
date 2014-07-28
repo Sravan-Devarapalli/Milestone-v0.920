@@ -33,6 +33,8 @@ namespace PraticeManagement.Controls.Reports
 
         public bool InternalProjects { get { return chbInternalProjects.Checked; } }
 
+        public bool ProposedProjects { get { return chbProposedProjects.Checked; } }
+
         public string TimescalesSelected { get { return cblTimeScales.SelectedItems; } }
 
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
@@ -312,6 +314,7 @@ namespace PraticeManagement.Controls.Reports
                 chbActiveProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ActiveProjectsKey]);
                 chbProjectedProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ProjectedProjectsKey]);
                 chbExperimentalProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExperimentalProjectsKey]);
+                chbProposedProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ProposedProjectsKey]);
                 chbInternalProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.InternalProjectsKey]);
                 chkExcludeInternalPractices.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExcludeInternalPracticesKey]);
                 rbSortbyAsc.Checked = resoureDictionary[Constants.ResourceKeys.SortDirectionKey] == "Desc" ? true : false;
@@ -346,6 +349,7 @@ namespace PraticeManagement.Controls.Reports
             chbProjectedPersons.Checked = cookie.ProjectedPersons;
             chbActiveProjects.Checked = cookie.ActiveProjects;
             chbProjectedProjects.Checked = cookie.ProjectedProjects;
+            chbProposedProjects.Checked = cookie.ProposedProjects;
             chbExperimentalProjects.Checked = cookie.ExperimentalProjects;
             chbInternalProjects.Checked = cookie.InternalProjects;
             chkExcludeInternalPractices.Checked = cookie.ExcludeInternalPractices;
@@ -417,6 +421,7 @@ namespace PraticeManagement.Controls.Reports
             this.chbActiveProjects.Checked = true;
             this.chbInternalProjects.Checked = true;
             this.chbProjectedProjects.Checked = true;
+            this.chbProposedProjects.Checked = true;
             this.chbExperimentalProjects.Checked = false;
             this.chkExcludeInternalPractices.Checked = true;
             SelectAllItems(this.cblPractices);
@@ -539,6 +544,7 @@ namespace PraticeManagement.Controls.Reports
             reportFilterDictionary.Add(Constants.ResourceKeys.ProjectedProjectsKey, ProjectedProjects.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.ActivePersonsKey, ActivePersons.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.ActiveProjectsKey, ActiveProjects.ToString());
+            reportFilterDictionary.Add(Constants.ResourceKeys.ProposedProjectsKey, ProposedProjects.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.ExperimentalProjectsKey, ExperimentalProjects.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.TimescaleIdListKey, TimescalesSelected.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.PracticeIdListKey, PracticesSelected.ToString());
@@ -558,6 +564,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 ActivePersons = ActivePersons,
                 ActiveProjects = ActiveProjects,
+                ProposedProjects = ProposedProjects,
                 AvgUtil = AvgUtil,
                 BegPeriod = BegPeriod,
                 DetalizationSelectedValue = DetalizationSelectedValue,
