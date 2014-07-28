@@ -82,6 +82,7 @@ namespace PraticeManagement
                             chbActive.Checked,
                             chbInternal.Checked,
                             chbExperimental.Checked,
+                            chbProposed.Checked,
                             chbInactive.Checked,
                             SelectedPracticeIds,
                             chbExcludeInternalPractices.Checked,
@@ -116,6 +117,7 @@ namespace PraticeManagement
                                                     chbActive.Checked,
                                                     chbInternal.Checked,
                                                     chbExperimental.Checked,
+                                                    chbProposed.Checked,
                                                     chbInactive.Checked,
                                                     SelectedPracticeIds,
                                                     chbExcludeInternalPractices.Checked,
@@ -150,6 +152,7 @@ namespace PraticeManagement
                                                                 chbActive.Checked,
                                                                 chbInternal.Checked,
                                                                 chbExperimental.Checked,
+                                                                chbProposed.Checked,
                                                                 chbInactive.Checked,
                                                                 SelectedPracticeIds,
                                                                 chbExcludeInternalPractices.Checked
