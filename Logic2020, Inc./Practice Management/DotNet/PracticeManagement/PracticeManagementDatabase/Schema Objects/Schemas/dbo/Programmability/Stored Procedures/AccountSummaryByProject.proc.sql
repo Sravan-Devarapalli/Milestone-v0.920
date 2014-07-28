@@ -77,7 +77,9 @@ BEGIN
 						AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate 
 						AND PC.Date BETWEEN @StartDateLocal AND @EndDateLocal 
 						  
-		WHERE Pro.ProjectStatusId IN (3,4) --Active and Completed status as per #3201 
+		WHERE (@ProjectStatusIds IS NULL
+					 OR Pro.ProjectStatusId IN (SELECT Ids
+												FROM @ProjectStatusIdsTable))
 			  AND Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 			   AND (@BusinessUnitIds IS NULL
 					OR Pro.GroupId IN (SELECT Ids
@@ -131,7 +133,6 @@ BEGIN
 											)
 			INNER JOIN dbo.Project PRO ON PRO.ProjectId = CC.ProjectId
 			WHERE  CC.ClientId IN (SELECT Ids FROM @AccountIdsTable)
-					AND PRO.ProjectStatusId IN (3,4) --Active and Completed status as per #3201 
 					AND (@BusinessUnitIds IS NULL
 							OR CC.ProjectGroupId IN (SELECT Ids
 													FROM @BusinessUnitIdsTable )
@@ -292,7 +293,6 @@ BEGIN
 			  LEFT JOIN ProjectForeCastedHoursUntilToday pfh
 				 ON pfh.ProjectId = PRO.ProjectId 
 		 WHERE  MPE.StartDate <= @EndDateLocal AND @StartDateLocal <= MPE.EndDate
-			     AND Pro.ProjectStatusId IN (3,4) --Active AND Completed Status
 				 AND Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)
 				 AND (
 						@BusinessUnitIds IS NULL
