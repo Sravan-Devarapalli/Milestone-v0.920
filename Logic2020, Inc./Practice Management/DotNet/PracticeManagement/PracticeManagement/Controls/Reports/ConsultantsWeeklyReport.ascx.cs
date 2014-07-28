@@ -37,7 +37,7 @@ namespace PraticeManagement.Controls.Reports
         private const string TITLE_FORMAT_WITHOUT_REPORT_ForPdf = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
         private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
         private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
-        private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}";
+        private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}";
         private const char DELIMITER = '+';
         private const string TOOLTIP_FORMAT = "{0}-{1} {2},{3}";
         private const string TOOLTIP_FORMAT_FOR_SINGLEDAY = "{0} {1},{2}";
@@ -282,7 +282,7 @@ namespace PraticeManagement.Controls.Reports
             if (cookie.PersonId.HasValue)
             {
                 ShowDetailedReport(cookie.PersonId.Value, cookie.BegPeriod.Date, cookie.EndPeriod.Date, cookie.ChartTitle,
-                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects);
+                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects,cookie.ProposedProjects);
 
                 System.Web.UI.ScriptManager.RegisterStartupScript(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
             }
@@ -298,7 +298,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices);
+                    utf.InternalProjects,utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices);
             ConsultantUtilizationPerson = report;
             foreach (var quadruple in report)
                 AddPerson(quadruple);
@@ -493,7 +493,7 @@ namespace PraticeManagement.Controls.Reports
             }
 
             if (utf.ActiveProjects && utf.ProjectedProjects
-                && utf.InternalProjects && utf.ExperimentalProjects)
+                && utf.InternalProjects && utf.ExperimentalProjects && utf.ProposedProjects)
             {
                 projectsPlaceHolder = "All";
             }
@@ -533,6 +533,17 @@ namespace PraticeManagement.Controls.Reports
                     else
                     {
                         projectsPlaceHolder += "/Experimental";
+                    }
+                }
+                if (utf.ProposedProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Proposed";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Proposed";
                     }
                 }
             }
@@ -593,9 +604,10 @@ namespace PraticeManagement.Controls.Reports
             var projectedProjects = bool.Parse(query[5]);
             var internalProjects = bool.Parse(query[6]);
             var experimentalProjects = bool.Parse(query[7]);
+            var proposedProjects = bool.Parse(query[8]);
 
             ShowDetailedReport(personId, repStartDate, repEndDate, query[3],
-            activeProjects, projectedProjects, internalProjects, experimentalProjects);
+            activeProjects, projectedProjects, internalProjects, experimentalProjects, proposedProjects);
 
             System.Web.UI.ScriptManager.RegisterClientScriptBlock(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
 
@@ -611,7 +623,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
         private void ShowDetailedReport(int personId, DateTime repStartDate, DateTime repEndDate, string chartTitle,
-            bool activeProjects, bool projectedProjects, bool internalProjects, bool experimentalProjects)
+            bool activeProjects, bool projectedProjects, bool internalProjects, bool experimentalProjects, bool proposedProjects)
         {
             chartDetails.Visible = true;
 
@@ -629,10 +641,11 @@ namespace PraticeManagement.Controls.Reports
                     projectedProjects,
                     internalProjects,
                     experimentalProjects,
+                    proposedProjects,
                     IsCapacityMode);
 
             var utilizationDaily = DataHelper.ConsultantUtilizationDailyByPerson(repStartDate, ParseInt(repEndDate.Subtract(repStartDate).Days.ToString(), DAYS_FORWARD),
-                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, personId);
+                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects,utf.ProposedProjects, personId);
             var avgUtils = utilizationDaily.First().Second;
             for (int index = 0; index < avgUtils.Length; index++)
             {
@@ -1143,7 +1156,8 @@ namespace PraticeManagement.Controls.Reports
                               utf.ActiveProjects.ToString(),
                               utf.ProjectedProjects.ToString(),
                               utf.InternalProjects.ToString(),
-                              utf.ExperimentalProjects.ToString()
+                              utf.ExperimentalProjects.ToString(),
+                              utf.ProposedProjects.ToString()
                               );
         }
 
