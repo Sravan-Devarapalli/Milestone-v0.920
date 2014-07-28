@@ -37,6 +37,7 @@ namespace PraticeManagement.Controls.Reports
                         ActiveProjects = chbActiveProjects.Checked,
                         ProjectedProjects = chbProjectedProjects.Checked,
                         ExperimentalProjects = chbExperimentalProjects.Checked,
+                        ProposedProjects = chbProposed.Checked,
                         CompletedProjects = chbCompletedProjects.Checked,
                         UserName = DataHelper.CurrentPerson.Alias,
                         PracticeIds = string.IsNullOrEmpty(cblPractices.SelectedItems) ? string.Empty : cblPractices.SelectedItems,
@@ -710,7 +711,7 @@ namespace PraticeManagement.Controls.Reports
             ddlPeriod.SelectedValue = "1";
             diRange.FromDate = BegPeriod;
             diRange.ToDate = EndPeriod;
-            chbActiveProjects.Checked = chbProjectedProjects.Checked = chbProjectedProjects.Checked = true;
+            chbActiveProjects.Checked = chbProjectedProjects.Checked = chbProjectedProjects.Checked = chbProposed.Checked = true;
             chbExperimentalProjects.Checked = false;
             chbIncludeZeroCostEmps.Checked = false;
             chbIncludeOverHeads.Checked = true;
