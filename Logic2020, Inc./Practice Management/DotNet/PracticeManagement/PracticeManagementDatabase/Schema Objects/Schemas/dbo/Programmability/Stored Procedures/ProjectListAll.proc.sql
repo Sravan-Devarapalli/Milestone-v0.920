@@ -3,7 +3,8 @@
 	@ShowProjected         BIT = 0,
 	@ShowCompleted         BIT = 0,
     @ShowActive            BIT = 0,
-	@ShowExperimental      BIT = 0
+	@ShowExperimental      BIT = 0,
+	@ShowProposed		   BIT = 0
 )
 AS
 BEGIN
@@ -41,6 +42,7 @@ BEGIN
 				(@ShowProjected = 1 AND p.ProjectStatusId = 2)
             OR	(@ShowActive = 1 AND p.ProjectStatusId = 3)
             OR	(@ShowCompleted = 1 AND p.ProjectStatusId = 4)
+			OR	(@ShowProposed = 1 AND p.ProjectStatusId = 7) --proposed
 	        OR	(@ShowExperimental = 1 AND (p.ProjectStatusId = 5 OR p.ProjectStatusId = 1))
 			)
     
