@@ -637,6 +637,7 @@ namespace PraticeManagement
                      ShowProjected = chbProjected.Checked,
                      ShowInternal = chbInternal.Checked,
                      ShowExperimental = chbExperimental.Checked,
+                     ShowProposed = chbProposed.Checked,
                      ShowInactive = chbInactive.Checked,
                      PeriodSelected = Convert.ToInt32(ddlPeriod.SelectedValue),
                      ViewSelected = Convert.ToInt32(ddlView.SelectedValue),
@@ -1193,6 +1194,7 @@ namespace PraticeManagement
                 chbProjected.Checked = filter.ShowProjected;
                 chbInternal.Checked = filter.ShowInternal;
                 chbInactive.Checked = filter.ShowInactive;
+                chbProposed.Checked = filter.ShowProposed;
 
                 SelectedClientIds = filter.ClientIdsList;
                 SelectedPracticeIds = filter.PracticeIdsList;
@@ -1371,6 +1373,7 @@ namespace PraticeManagement
                                 this.chbCompleted.Checked.ToString() + "," +
                                 this.chbActive.Checked.ToString() + "," +
                                 this.chbExperimental.Checked.ToString() + "," +
+                                this.chbProposed.Checked.ToString() + "," +
                                 this.chbInternal.Checked.ToString() + "," +
                                 this.chbInactive.Checked.ToString() + "," +
                                 this.chbUseActuals.Checked.ToString(),
@@ -1427,6 +1430,7 @@ namespace PraticeManagement
                 showCompleted = false,
                 showActive = false,
                 showExperimental = false,
+                showProposed=false,
                 showInternal = false,
                 showInactive = false,
                 useActuals = false;
@@ -1438,6 +1442,7 @@ namespace PraticeManagement
                                 ref showCompleted,
                                 ref showActive,
                                 ref showExperimental,
+                                ref showProposed,
                                 ref showInternal,
                                 ref showInactive,
                                 ref useActuals);
@@ -1460,6 +1465,7 @@ namespace PraticeManagement
                             showCompleted,
                             showActive,
                             showExperimental,
+                            showProposed,
                             showInternal,
                             showInactive,
                             useActuals);
@@ -1493,6 +1499,7 @@ namespace PraticeManagement
                                                 ref bool showCompleted,
                                                 ref bool showActive,
                                                 ref bool showExperimental,
+                                                ref bool showProposed,
                                                 ref bool showInternal,
                                                 ref bool showInactive,
                                                 ref bool useActuals
@@ -1505,9 +1512,10 @@ namespace PraticeManagement
             showCompleted = Boolean.Parse(parameters[2]);
             showActive = Boolean.Parse(parameters[3]);
             showExperimental = Boolean.Parse(parameters[4]);
-            showInternal = Boolean.Parse(parameters[5]);
-            showInactive = Boolean.Parse(parameters[6]);
-            useActuals = Boolean.Parse(parameters[7]);
+            showProposed = Boolean.Parse(parameters[5]);
+            showInternal = Boolean.Parse(parameters[6]);
+            showInactive = Boolean.Parse(parameters[7]);
+            useActuals = Boolean.Parse(parameters[8]);
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
