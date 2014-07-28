@@ -67,6 +67,24 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.WebControls.DropDownList ddlDirector;
         
         /// <summary>
+        /// cblProjectStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblProjectStatus;
+        
+        /// <summary>
+        /// sdeProjectStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectStatus;
+        
+        /// <summary>
         /// ddlPeriod control.
         /// </summary>
         /// <remarks>
