@@ -528,6 +528,7 @@
         <xs:element minOccurs="0" name="completed" type="xs:boolean" />
         <xs:element minOccurs="0" name="active" type="xs:boolean" />
         <xs:element minOccurs="0" name="experimantal" type="xs:boolean" />
+        <xs:element minOccurs="0" name="proposed" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -547,6 +548,7 @@
         <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
         <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
@@ -617,6 +619,7 @@
         <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
         <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
@@ -717,6 +720,7 @@
         <xs:element minOccurs="0" name="showCompleted" type="xs:boolean" />
         <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="useActuals" type="xs:boolean" />
@@ -742,6 +746,7 @@
         <xs:element minOccurs="0" name="showCompleted" type="xs:boolean" />
         <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="useActuals" type="xs:boolean" />
@@ -823,6 +828,7 @@
         <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
@@ -848,6 +854,7 @@
         <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
         <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
         <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
         <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
