@@ -26,6 +26,8 @@ namespace PraticeManagement.FilterObjects
 
         public bool InternalProjects { get; set; }
 
+        public bool ProposedProjects { get; set; }
+
         public string TimescalesSelected { get; set; }
 
         public bool ExcludeInternalPractices { get; set; }
