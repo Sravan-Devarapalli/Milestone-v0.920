@@ -7,6 +7,7 @@
     @ProjectedPersons BIT = 1,
     @ProjectedProjects BIT = 1,
     @ExperimentalProjects BIT = 1,
+	@ProposedProjects BIT = 1,
 	@InternalProjects	BIT = 1,
 	@TimescaleIds NVARCHAR(4000) = NULL,
 	@PracticeIds NVARCHAR(4000) = NULL,
@@ -62,7 +63,7 @@ AS
 		END
 
 		SELECT WUT.PersonId,WUT.WeeklyUtlization,WUT.AvailableHours,WUT.ProjectedHours,WUT.Timescale,WUT.VacationDays
-		FROM dbo.GetWeeklyUtilizationTable(@StartDate,@EndRange, @Step, @ActivePersons, @ActiveProjects, @ProjectedPersons, @ProjectedProjects,@ExperimentalProjects,@InternalProjects,@TimescaleIds,@PracticeIds,@ExcludeInternalPractices) AS WUT 
+		FROM dbo.GetWeeklyUtilizationTable(@StartDate,@EndRange, @Step, @ActivePersons, @ActiveProjects, @ProjectedPersons, @ProjectedProjects,@ExperimentalProjects,@ProposedProjects,@InternalProjects,@TimescaleIds,@PracticeIds,@ExcludeInternalPractices) AS WUT 
 		ORDER BY WUT.PersonId,WUT.StartDate
 				 
     END
