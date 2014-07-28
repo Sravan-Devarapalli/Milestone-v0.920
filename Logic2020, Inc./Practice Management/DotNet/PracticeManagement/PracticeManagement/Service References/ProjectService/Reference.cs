@@ -126,7 +126,7 @@ namespace PraticeManagement.ProjectService {
         int CloneProject(DataTransferObjects.ContextObjects.ProjectCloningContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListCustom", ReplyAction="http://tempuri.org/IProjectService/GetProjectListCustomResponse")]
-        DataTransferObjects.Project[] GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal);
+        DataTransferObjects.Project[] GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal, bool proposed);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectListAllMultiParameters", ReplyAction="http://tempuri.org/IProjectService/ProjectListAllMultiParametersResponse")]
         DataTransferObjects.Project[] ProjectListAllMultiParameters(
@@ -136,6 +136,7 @@ namespace PraticeManagement.ProjectService {
                     bool showActive, 
                     bool showInternal, 
                     bool showExperimental, 
+                    bool showProposed, 
                     bool showInactive, 
                     System.DateTime periodStart, 
                     System.DateTime periodEnd, 
@@ -156,7 +157,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project[] GetProjectListWithFinancials(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectListGroupByPracticeManagers", ReplyAction="http://tempuri.org/IProjectService/GetProjectListGroupByPracticeManagersResponse")]
-        DataTransferObjects.MilestonePerson[] GetProjectListGroupByPracticeManagers(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices);
+        DataTransferObjects.MilestonePerson[] GetProjectListGroupByPracticeManagers(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetBenchList", ReplyAction="http://tempuri.org/IProjectService/GetBenchListResponse")]
         DataTransferObjects.Project[] GetBenchList(DataTransferObjects.ContextObjects.BenchReportContext context);
@@ -179,10 +180,10 @@ namespace PraticeManagement.ProjectService {
         int SaveProjectDetail(DataTransferObjects.Project project, string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/MonthMiniReport", ReplyAction="http://tempuri.org/IProjectService/MonthMiniReportResponse")]
-        string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals);
+        string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showProposed, bool showInternal, bool showInactive, bool useActuals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/PersonStartsReport", ReplyAction="http://tempuri.org/IProjectService/PersonStartsReportResponse")]
-        DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals);
+        DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showProposed, bool showInternal, bool showInactive, bool useActuals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectId", ReplyAction="http://tempuri.org/IProjectService/GetProjectIdResponse")]
         System.Nullable<int> GetProjectId(string projectNumber);
@@ -197,10 +198,10 @@ namespace PraticeManagement.ProjectService {
         void CategoryItemBudgetSave(int itemId, DataTransferObjects.BudgetCategoryType categoryType, System.DateTime monthStartDate, DataTransferObjects.PracticeManagementCurrency amount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CalculateBudgetForPersons", ReplyAction="http://tempuri.org/IProjectService/CalculateBudgetForPersonsResponse")]
-        DataTransferObjects.ProjectsGroupedByPerson[] CalculateBudgetForPersons(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, string practiceIdsList, bool excludeInternalPractices, string personIds, DataTransferObjects.BudgetCategoryType categoryType);
+        DataTransferObjects.ProjectsGroupedByPerson[] CalculateBudgetForPersons(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, string practiceIdsList, bool excludeInternalPractices, string personIds, DataTransferObjects.BudgetCategoryType categoryType);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CalculateBudgetForPractices", ReplyAction="http://tempuri.org/IProjectService/CalculateBudgetForPracticesResponse")]
-        DataTransferObjects.ProjectsGroupedByPractice[] CalculateBudgetForPractices(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, string practiceIdsList, bool excludeInternalPractices);
+        DataTransferObjects.ProjectsGroupedByPractice[] CalculateBudgetForPractices(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, string practiceIdsList, bool excludeInternalPractices);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CategoryItemsSaveFromXML", ReplyAction="http://tempuri.org/IProjectService/CategoryItemsSaveFromXMLResponse")]
         void CategoryItemsSaveFromXML(DataTransferObjects.CategoryItemBudget[] categoryItems, int year);
@@ -383,8 +384,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.CloneProject(context);
         }
         
-        public DataTransferObjects.Project[] GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal) {
-            return base.Channel.GetProjectListCustom(projected, completed, active, experimantal);
+        public DataTransferObjects.Project[] GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal, bool proposed) {
+            return base.Channel.GetProjectListCustom(projected, completed, active, experimantal, proposed);
         }
         
         public DataTransferObjects.Project[] ProjectListAllMultiParameters(
@@ -394,6 +395,7 @@ namespace PraticeManagement.ProjectService {
                     bool showActive, 
                     bool showInternal, 
                     bool showExperimental, 
+                    bool showProposed, 
                     bool showInactive, 
                     System.DateTime periodStart, 
                     System.DateTime periodEnd, 
@@ -406,7 +408,7 @@ namespace PraticeManagement.ProjectService {
                     string userLogin, 
                     bool useActuals, 
                     bool getFinancialsFromCache) {
-            return base.Channel.ProjectListAllMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, useActuals, getFinancialsFromCache);
+            return base.Channel.ProjectListAllMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, useActuals, getFinancialsFromCache);
         }
         
         public bool IsProjectSummaryCachedToday() {
@@ -417,8 +419,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetProjectListWithFinancials(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, excludeInternalPractices);
         }
         
-        public DataTransferObjects.MilestonePerson[] GetProjectListGroupByPracticeManagers(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices) {
-            return base.Channel.GetProjectListGroupByPracticeManagers(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, periodStart, periodEnd, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, excludeInternalPractices);
+        public DataTransferObjects.MilestonePerson[] GetProjectListGroupByPracticeManagers(string clientIds, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string projectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, bool excludeInternalPractices) {
+            return base.Channel.GetProjectListGroupByPracticeManagers(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, projectOwnerIdsList, practiceIdsList, projectGroupIdsList, excludeInternalPractices);
         }
         
         public DataTransferObjects.Project[] GetBenchList(DataTransferObjects.ContextObjects.BenchReportContext context) {
@@ -441,12 +443,12 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.SaveProjectDetail(project, userName);
         }
         
-        public string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals) {
-            return base.Channel.MonthMiniReport(month, userName, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive, useActuals);
+        public string MonthMiniReport(System.DateTime month, string userName, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showProposed, bool showInternal, bool showInactive, bool useActuals) {
+            return base.Channel.MonthMiniReport(month, userName, showProjected, showCompleted, showActive, showExperimental, showProposed, showInternal, showInactive, useActuals);
         }
         
-        public DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showInternal, bool showInactive, bool useActuals) {
-            return base.Channel.PersonStartsReport(startDate, endDate, userName, salespersonId, practiceManagerId, showProjected, showCompleted, showActive, showExperimental, showInternal, showInactive, useActuals);
+        public DataTransferObjects.PersonStats[] PersonStartsReport(System.DateTime startDate, System.DateTime endDate, string userName, System.Nullable<int> salespersonId, System.Nullable<int> practiceManagerId, bool showProjected, bool showCompleted, bool showActive, bool showExperimental, bool showProposed, bool showInternal, bool showInactive, bool useActuals) {
+            return base.Channel.PersonStartsReport(startDate, endDate, userName, salespersonId, practiceManagerId, showProjected, showCompleted, showActive, showExperimental, showProposed, showInternal, showInactive, useActuals);
         }
         
         public System.Nullable<int> GetProjectId(string projectNumber) {
@@ -465,12 +467,12 @@ namespace PraticeManagement.ProjectService {
             base.Channel.CategoryItemBudgetSave(itemId, categoryType, monthStartDate, amount);
         }
         
-        public DataTransferObjects.ProjectsGroupedByPerson[] CalculateBudgetForPersons(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, string practiceIdsList, bool excludeInternalPractices, string personIds, DataTransferObjects.BudgetCategoryType categoryType) {
-            return base.Channel.CalculateBudgetForPersons(startDate, endDate, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, practiceIdsList, excludeInternalPractices, personIds, categoryType);
+        public DataTransferObjects.ProjectsGroupedByPerson[] CalculateBudgetForPersons(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, string practiceIdsList, bool excludeInternalPractices, string personIds, DataTransferObjects.BudgetCategoryType categoryType) {
+            return base.Channel.CalculateBudgetForPersons(startDate, endDate, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, practiceIdsList, excludeInternalPractices, personIds, categoryType);
         }
         
-        public DataTransferObjects.ProjectsGroupedByPractice[] CalculateBudgetForPractices(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showInactive, string practiceIdsList, bool excludeInternalPractices) {
-            return base.Channel.CalculateBudgetForPractices(startDate, endDate, showProjected, showCompleted, showActive, showInternal, showExperimental, showInactive, practiceIdsList, excludeInternalPractices);
+        public DataTransferObjects.ProjectsGroupedByPractice[] CalculateBudgetForPractices(System.DateTime startDate, System.DateTime endDate, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, string practiceIdsList, bool excludeInternalPractices) {
+            return base.Channel.CalculateBudgetForPractices(startDate, endDate, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, practiceIdsList, excludeInternalPractices);
         }
         
         public void CategoryItemsSaveFromXML(DataTransferObjects.CategoryItemBudget[] categoryItems, int year) {
