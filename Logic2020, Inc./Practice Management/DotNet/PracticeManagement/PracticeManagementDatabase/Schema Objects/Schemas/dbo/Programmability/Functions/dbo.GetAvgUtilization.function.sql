@@ -6,6 +6,7 @@
 	@ActiveProjects BIT = 1,
 	@ProjectedProjects BIT = 1,
 	@ExperimentalProjects BIT = 1,
+	@ProposedProjects BIT=1,
 	@InternalProjects	BIT = 1  
 )
 RETURNS INT
@@ -22,13 +23,13 @@ BEGIN
     -- Iterate through all days
 
 		BEGIN
-			SET @av = dbo.GetNumberAvaliableHours(@PersonId, @StartDate, @EndRange, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@InternalProjects)
+			SET @av = dbo.GetNumberAvaliableHours(@PersonId, @StartDate, @EndRange, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@ProposedProjects,@InternalProjects)
 			
 			IF (@av = 0 OR @av IS NULL)
 				SET @wUtil = 0
 			ELSE 		
 				SET @wUtil = CEILING(
-					100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @StartDate, @EndRange, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects, @InternalProjects), 0) / 
+					100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @StartDate, @EndRange, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@ProposedProjects, @InternalProjects), 0) / 
 						@av)
 		END 
  
