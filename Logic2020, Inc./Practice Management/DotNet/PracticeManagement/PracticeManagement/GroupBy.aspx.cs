@@ -126,6 +126,7 @@ namespace PraticeManagement
                                 filterSet.ShowActive,
                                 filterSet.ShowInternal,
                                 filterSet.ShowExperimental,
+                                filterSet.ShowProposed,
                                 filterSet.ShowInactive,
                                 filterSet.PeriodStart,
                                 filterSet.PeriodEnd,
@@ -619,6 +620,7 @@ namespace PraticeManagement
                      ShowActive = chbActive.Checked,
                      ShowCompleted = chbCompleted.Checked,
                      ShowProjected = chbProjected.Checked,
+                     ShowProposed = chbProposed.Checked,
                      ShowInternal = chbInternal.Checked,
                      ShowExperimental = chbExperimental.Checked,
                      ShowInactive = chbInactive.Checked,
@@ -725,6 +727,7 @@ namespace PraticeManagement
                 chbProjected.Checked = filter.ShowProjected;
                 chbInternal.Checked = filter.ShowInternal;
                 chbInactive.Checked = filter.ShowInactive;
+                chbProposed.Checked = filter.ShowProposed;
 
                 SelectedClientIds = filter.ClientIdsList;
                 SelectedPracticeIds = filter.PracticeIdsList;
