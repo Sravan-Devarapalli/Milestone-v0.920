@@ -516,6 +516,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string ProposedProjects = "@ProposedProjects";
             public static string CohortAssignmentId = "@CohortAssignmentId";
             public static string EmployeeReferralId = "@EmployeeReferralId";
             public static string TargetRecruitingMetricsId = "@TargetRecruitingMetricsId";
@@ -709,6 +710,7 @@
             public const string ShowActiveParam = "@ShowActive";
             public const string ShowInternalParam = "@showInternal";
             public const string ShowExperimentalParam = "@ShowExperimental";
+            public const string ShowProposedParam = "@ShowProposed";
             public const string ShowInactiveParam = "@showInactive";
             public const string UserParam = "@User";
             public const string LookedParam = "@Looked";
