@@ -173,6 +173,7 @@ namespace PraticeManagement
             public const string CSATReport = "~/Reports/CSATReport.aspx";
             public const string SkillsProfile = "~/SkillsProfile.aspx";
             public const string ProjectFeedbackReport = "~/Reports/ProjectFeedbackReport.aspx";
+            public const string BillingReport = "~/Reports/BillingReport.aspx";
 
         }
 
