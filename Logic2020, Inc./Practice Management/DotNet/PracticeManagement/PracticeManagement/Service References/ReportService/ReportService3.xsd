@@ -145,6 +145,50 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BillingReportByCurrency">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="directorIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesPersonIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectManagerIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="seniorManagerIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BillingReportByCurrencyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="BillingReportByCurrencyResult" nillable="true" type="q9:ArrayOfBillingReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BillingReportByHours">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="directorIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesPersonIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectManagerIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="seniorManagerIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BillingReportByHoursResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="BillingReportByHoursResult" nillable="true" type="q10:ArrayOfBillingReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="PersonTimeEntriesDetails">
     <xs:complexType>
       <xs:sequence>
@@ -157,7 +201,7 @@
   <xs:element name="PersonTimeEntriesDetailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonTimeEntriesDetailsResult" nillable="true" type="q9:ArrayOfTimeEntriesGroupByClientAndProject" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonTimeEntriesDetailsResult" nillable="true" type="q11:ArrayOfTimeEntriesGroupByClientAndProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -173,7 +217,7 @@
   <xs:element name="PersonTimeEntriesSummaryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonTimeEntriesSummaryResult" nillable="true" type="q10:ArrayOfTimeEntriesGroupByClientAndProject" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonTimeEntriesSummaryResult" nillable="true" type="q12:ArrayOfTimeEntriesGroupByClientAndProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -189,7 +233,7 @@
   <xs:element name="GetPersonTimeEntriesTotalsByPeriodResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetPersonTimeEntriesTotalsByPeriodResult" nillable="true" type="q11:PersonTimeEntriesTotals" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetPersonTimeEntriesTotalsByPeriodResult" nillable="true" type="q13:PersonTimeEntriesTotals" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -210,7 +254,7 @@
   <xs:element name="TimePeriodSummaryReportByResourceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByResourceResult" nillable="true" type="q12:ArrayOfPersonLevelGroupedHours" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByResourceResult" nillable="true" type="q14:ArrayOfPersonLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -227,7 +271,7 @@
   <xs:element name="TimePeriodSummaryReportByProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByProjectResult" nillable="true" type="q13:ArrayOfProjectLevelGroupedHours" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByProjectResult" nillable="true" type="q15:ArrayOfProjectLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -242,7 +286,7 @@
   <xs:element name="TimePeriodSummaryReportByWorkTypeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByWorkTypeResult" nillable="true" type="q14:ArrayOfWorkTypeLevelGroupedHours" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByWorkTypeResult" nillable="true" type="q16:ArrayOfWorkTypeLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -260,7 +304,7 @@
   <xs:element name="ProjectSummaryReportByResourceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByResourceResult" nillable="true" type="q15:ArrayOfPersonLevelGroupedHours" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByResourceResult" nillable="true" type="q17:ArrayOfPersonLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -278,7 +322,7 @@
   <xs:element name="ProjectDetailReportByResourceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectDetailReportByResourceResult" nillable="true" type="q16:ArrayOfPersonLevelGroupedHours" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectDetailReportByResourceResult" nillable="true" type="q18:ArrayOfPersonLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -296,7 +340,7 @@
   <xs:element name="ProjectSummaryReportByWorkTypeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q17:ArrayOfWorkTypeLevelGroupedHours" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q19:ArrayOfWorkTypeLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -310,7 +354,7 @@
   <xs:element name="GetProjectsByClientIdResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsByClientIdResult" nillable="true" type="q18:ArrayOfProject" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsByClientIdResult" nillable="true" type="q20:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -324,7 +368,7 @@
   <xs:element name="ProjectSearchByNameResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchByNameResult" nillable="true" type="q19:ArrayOfProject" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchByNameResult" nillable="true" type="q21:ArrayOfProject" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -338,7 +382,7 @@
   <xs:element name="GetMilestonesForProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonesForProjectResult" nillable="true" type="q20:ArrayOfMilestone" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonesForProjectResult" nillable="true" type="q22:ArrayOfMilestone" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -359,7 +403,7 @@
   <xs:element name="TimePeriodSummaryByResourcePayCheckResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryByResourcePayCheckResult" nillable="true" type="q21:ArrayOfPersonLevelPayCheck" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryByResourcePayCheckResult" nillable="true" type="q23:ArrayOfPersonLevelPayCheck" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -374,7 +418,7 @@
   <xs:element name="TimeEntryAuditReportByPersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimeEntryAuditReportByPersonResult" nillable="true" type="q22:ArrayOfPersonLevelTimeEntriesHistory" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimeEntryAuditReportByPersonResult" nillable="true" type="q24:ArrayOfPersonLevelTimeEntriesHistory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -389,7 +433,7 @@
   <xs:element name="TimeEntryAuditReportByProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimeEntryAuditReportByProjectResult" nillable="true" type="q23:ArrayOfProjectLevelTimeEntriesHistory" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimeEntryAuditReportByProjectResult" nillable="true" type="q25:ArrayOfProjectLevelTimeEntriesHistory" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -408,7 +452,7 @@
   <xs:element name="AccountSummaryReportByBusinessUnitResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q24:ArrayOfGroupByAccount" />
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q26:ArrayOfGroupByAccount" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -428,7 +472,7 @@
   <xs:element name="AccountSummaryReportByProjectResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q25:ArrayOfGroupByAccount" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q27:ArrayOfGroupByAccount" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -445,7 +489,7 @@
   <xs:element name="AccountReportGroupByBusinessUnitResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByBusinessUnitResult" nillable="true" type="q26:ArrayOfBusinessUnitLevelGroupedHours" />
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByBusinessUnitResult" nillable="true" type="q28:ArrayOfBusinessUnitLevelGroupedHours" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -462,7 +506,7 @@
   <xs:element name="AccountReportGroupByPersonResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByPersonResult" nillable="true" type="q27:ArrayOfGroupByPerson" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByPersonResult" nillable="true" type="q29:ArrayOfGroupByPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -485,7 +529,7 @@
   <xs:element name="NewHireReportResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="NewHireReportResult" nillable="true" type="q28:ArrayOfPerson" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="NewHireReportResult" nillable="true" type="q30:ArrayOfPerson" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -510,7 +554,7 @@
   <xs:element name="TerminationReportResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" minOccurs="0" name="TerminationReportResult" nillable="true" type="q29:TerminationPersonsInRange" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" minOccurs="0" name="TerminationReportResult" nillable="true" type="q31:TerminationPersonsInRange" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -525,7 +569,7 @@
   <xs:element name="TerminationReportGraphResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" minOccurs="0" name="TerminationReportGraphResult" nillable="true" type="q30:ArrayOfTerminationPersonsInRange" />
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" minOccurs="0" name="TerminationReportGraphResult" nillable="true" type="q32:ArrayOfTerminationPersonsInRange" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -542,7 +586,7 @@
   <xs:element name="ConsultingDemandSummaryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandSummaryResult" nillable="true" type="q31:ArrayOfConsultantGroupbyTitleSkill" />
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandSummaryResult" nillable="true" type="q33:ArrayOfConsultantGroupbyTitleSkill" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -560,7 +604,7 @@
   <xs:element name="ConsultingDemandDetailsByTitleSkillResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByTitleSkillResult" nillable="true" type="q32:ArrayOfConsultantGroupbyTitleSkill" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByTitleSkillResult" nillable="true" type="q34:ArrayOfConsultantGroupbyTitleSkill" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -578,7 +622,7 @@
   <xs:element name="ConsultingDemandDetailsBySalesStageResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsBySalesStageResult" nillable="true" type="q33:ArrayOfConsultantGroupBySalesStage" />
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsBySalesStageResult" nillable="true" type="q35:ArrayOfConsultantGroupBySalesStage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -598,7 +642,7 @@
   <xs:element name="ConsultingDemandDetailsByMonthResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByMonthResult" nillable="true" type="q34:ArrayOfConsultantGroupByMonth" />
+        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByMonthResult" nillable="true" type="q36:ArrayOfConsultantGroupByMonth" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -615,7 +659,7 @@
   <xs:element name="ConsultingDemandGraphsByTitleResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q35="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsByTitleResult" nillable="true" type="q35:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q37="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsByTitleResult" nillable="true" type="q37:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -632,7 +676,7 @@
   <xs:element name="ConsultingDemandGraphsBySkillsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q36="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsBySkillsResult" nillable="true" type="q36:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q38="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsBySkillsResult" nillable="true" type="q38:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -650,7 +694,7 @@
   <xs:element name="ConsultingDemandTransactionReportByTitleResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportByTitleResult" nillable="true" type="q37:ArrayOfConsultantGroupbyTitle" />
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportByTitleResult" nillable="true" type="q39:ArrayOfConsultantGroupbyTitle" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -668,7 +712,7 @@
   <xs:element name="ConsultingDemandTransactionReportBySkillResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportBySkillResult" nillable="true" type="q38:ArrayOfConsultantGroupbySkill" />
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportBySkillResult" nillable="true" type="q40:ArrayOfConsultantGroupbySkill" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -684,7 +728,7 @@
   <xs:element name="ConsultingDemandGrphsGroupsByTitleResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q39="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsByTitleResult" nillable="true" type="q39:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q41="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsByTitleResult" nillable="true" type="q41:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -700,7 +744,7 @@
   <xs:element name="ConsultingDemandGrphsGroupsBySkillResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q40="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsBySkillResult" nillable="true" type="q40:ArrayOfKeyValueOfstringint" />
+        <xs:element xmlns:q42="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsBySkillResult" nillable="true" type="q42:ArrayOfKeyValueOfstringint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
