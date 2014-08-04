@@ -246,6 +246,16 @@ namespace PracticeManagementService
         {
             return ReportDAL.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus,projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport);
         }
+
+        public List<BillingReport> BillingReportByCurrency(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds,string salesPersonIds,string projectManagerIds,string seniorManagerIds)
+        {
+            return ReportDAL.BillingReportByCurrency( startDate,  endDate, practiceIds,accountIds, businessUnitIds, directorIds,salesPersonIds, projectManagerIds, seniorManagerIds);
+        }
+
+        public List<BillingReport> BillingReportByHours(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds)
+        {
+            return ReportDAL.BillingReportByHours(startDate,endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
+        }
     }
 }
 
