@@ -705,7 +705,7 @@ namespace DataAccess
             }
         }
 
-        public static List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds,string projectStatusIds, DateTime startDate, DateTime endDate)
+        public static List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds, string projectStatusIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByBusinessUnit, connection))
@@ -4104,7 +4104,7 @@ namespace DataAccess
                            FirstName = reader.GetString(projectManagerFirstNameIndex),
                            LastName = reader.GetString(projectManagerLastNameIndex),
                        };
-                    if(result.Any(f=>f.Id.Value == feedbackId))
+                    if (result.Any(f => f.Id.Value == feedbackId))
                     {
                         var feedback = result.First(f => f.Id.Value == feedbackId);
                         feedback.Project.ProjectManagers.Add(projectManager);
@@ -4119,7 +4119,7 @@ namespace DataAccess
                                 Id = reader.GetInt32(personIdIndex),
                                 FirstName = reader.GetString(firstNameIndex),
                                 LastName = reader.GetString(lastNameIndex),
-                                EmployeeNumber =reader.GetString(employeeNumberIndex),
+                                EmployeeNumber = reader.GetString(employeeNumberIndex),
                                 Title = new Title()
                                 {
                                     TitleId = !reader.IsDBNull(titleIdIndex) ? reader.GetInt32(titleIdIndex) : -1,
@@ -4128,46 +4128,46 @@ namespace DataAccess
                             },
                             Project = new Project()
                             {
-                              Id = reader.GetInt32(projectIdIndex),
-                              Name = reader.GetString(projectNameIndex),   
-                              ProjectNumber = reader.GetString(projectNumberIndex),
-                              Status = new ProjectStatus()
-                              {
-                                  Id = reader.GetInt32(projectstatusIdIndex),
-                                  Name = reader.GetString(projectstatusIndex)
-                              },
-                              Client = new Client()
-                              {
-                                Id = reader.GetInt32(cliendIdIndex),
-                                Name = reader.GetString(cliendNameIndex)                                
-                              },
-                              Group = new ProjectGroup()
-                              {
-                                 Id =  reader.GetInt32(groupIdIndex),
-                                Name = reader.GetString(businessUnitIndex)         
-                              },
-                              BusinessGroup = new BusinessGroup()
-                              {
-                                Id = reader.GetInt32(businessGroupIdIndex),
-                                Name = reader.GetString(businessGroupIndex)         
-                              },
-                              Director = new Person()
-                              {
-                                  Id = !reader.IsDBNull(directorIdIndex) ? (int?)reader.GetInt32(directorIdIndex) : null,
-                                FirstName = !reader.IsDBNull(directorFirstNameIndex) ? reader.GetString(directorFirstNameIndex) : string.Empty,
-                                LastName = !reader.IsDBNull(directorLastNameColumnIndex) ? reader.GetString(directorLastNameColumnIndex) : string.Empty
-                              },
-                              SeniorManagerName = !reader.IsDBNull(seniorManagerNameIndex) ? reader.GetString(seniorManagerNameIndex) : string.Empty,
-                              ProjectManagers = new List<Person>()
+                                Id = reader.GetInt32(projectIdIndex),
+                                Name = reader.GetString(projectNameIndex),
+                                ProjectNumber = reader.GetString(projectNumberIndex),
+                                Status = new ProjectStatus()
+                                {
+                                    Id = reader.GetInt32(projectstatusIdIndex),
+                                    Name = reader.GetString(projectstatusIndex)
+                                },
+                                Client = new Client()
+                                {
+                                    Id = reader.GetInt32(cliendIdIndex),
+                                    Name = reader.GetString(cliendNameIndex)
+                                },
+                                Group = new ProjectGroup()
+                                {
+                                    Id = reader.GetInt32(groupIdIndex),
+                                    Name = reader.GetString(businessUnitIndex)
+                                },
+                                BusinessGroup = new BusinessGroup()
+                                {
+                                    Id = reader.GetInt32(businessGroupIdIndex),
+                                    Name = reader.GetString(businessGroupIndex)
+                                },
+                                Director = new Person()
+                                {
+                                    Id = !reader.IsDBNull(directorIdIndex) ? (int?)reader.GetInt32(directorIdIndex) : null,
+                                    FirstName = !reader.IsDBNull(directorFirstNameIndex) ? reader.GetString(directorFirstNameIndex) : string.Empty,
+                                    LastName = !reader.IsDBNull(directorLastNameColumnIndex) ? reader.GetString(directorLastNameColumnIndex) : string.Empty
+                                },
+                                SeniorManagerName = !reader.IsDBNull(seniorManagerNameIndex) ? reader.GetString(seniorManagerNameIndex) : string.Empty,
+                                ProjectManagers = new List<Person>()
                               {
                                 projectManager
                               },
-                              ProjectOwner = new Person()
-                              {
-                                  Id = !reader.IsDBNull(projectOwnerIdIndex) ? (int?)reader.GetInt32(projectOwnerIdIndex) : null,
-                                  FirstName = !reader.IsDBNull(projectOwnerFirstNameIndex) ? reader.GetString(projectOwnerFirstNameIndex) : string.Empty,
-                                  LastName = !reader.IsDBNull(projectOwnerLastNameIndex) ? reader.GetString(projectOwnerLastNameIndex) : string.Empty
-                              }
+                                ProjectOwner = new Person()
+                                {
+                                    Id = !reader.IsDBNull(projectOwnerIdIndex) ? (int?)reader.GetInt32(projectOwnerIdIndex) : null,
+                                    FirstName = !reader.IsDBNull(projectOwnerFirstNameIndex) ? reader.GetString(projectOwnerFirstNameIndex) : string.Empty,
+                                    LastName = !reader.IsDBNull(projectOwnerLastNameIndex) ? reader.GetString(projectOwnerLastNameIndex) : string.Empty
+                                }
                             },
                             ReviewStartDate = reader.GetDateTime(reviewStartDateIndex),
                             ReviewEndDate = reader.GetDateTime(reviewEndDateIndex),
@@ -4180,7 +4180,7 @@ namespace DataAccess
                             CompletionCertificateDate = !reader.IsDBNull(completionCertificateDateIndex) ? reader.GetDateTime(completionCertificateDateIndex) : DateTime.MinValue,
                             CancelationReason = !reader.IsDBNull(cancelationReasonIndex) ? reader.GetString(cancelationReasonIndex) : string.Empty
                         };
-                    result.Add(feedback);
+                        result.Add(feedback);
                     }
                 }
             }
@@ -4190,6 +4190,215 @@ namespace DataAccess
             }
         }
 
+        public static List<BillingReport> BillingReportByCurrency(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.BillingReportByCurrency, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DirectorIds, directorIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdsParam, salesPersonIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIds, projectManagerIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerIds, seniorManagerIds ?? (Object)DBNull.Value);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<BillingReport> result = new List<BillingReport>();
+                    ReadBillingReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static List<BillingReport> BillingReportByHours(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.BillingReportByHours, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DirectorIds, directorIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdsParam, salesPersonIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagerIds, projectManagerIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SeniorManagerIds, seniorManagerIds ?? (Object)DBNull.Value);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<BillingReport> result = new List<BillingReport>();
+                    ReadBillingReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadBillingReport(SqlDataReader reader, List<BillingReport> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+                int projectnumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectnameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                int practicenameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+                int actualRevenueinRangeIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenueInRange);
+
+                int salespersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonIdColumn);
+                int salesPersonNameIndex = reader.GetOrdinal(Constants.ColumnNames.SalesPersonName);
+                int projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                int projectManagerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerFirstName);
+                int projectManagerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerLastName);
+                int directorIdIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorIdColumn);
+                int directorFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorFirstNameColumn);
+                int directorLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorLastNameColumn);
+
+                int poNumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
+                int seniorManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerId);
+                int seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
+
+                int forecastedhoursIndex = -1;
+                int actualHoursIndex = -1;
+                int sowBudgetIndex = -1;
+                int actualRevenueIndex = -1;
+                try
+                {
+                    forecastedhoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
+                }
+                catch
+                { }
+                try
+                {
+                    actualHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHours);
+                }
+                catch
+                { }
+                try
+                {
+                    sowBudgetIndex = reader.GetOrdinal(Constants.ColumnNames.SowBudgetColumn);
+                }
+                catch
+                { }
+
+                try
+                {
+                    actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
+                }
+                catch
+                { }
+                while (reader.Read())
+                { 
+                    var projectManger = new Person()
+                    {
+                        Id = reader.IsDBNull(projectManagerIdIndex) ? null : (int?)reader.GetInt32(projectManagerIdIndex),
+                        FirstName = reader.IsDBNull(projectManagerFirstNameIndex) ? "" : reader.GetString(projectManagerFirstNameIndex),
+                        LastName = reader.IsDBNull(projectManagerLastNameIndex) ? "" : reader.GetString(projectManagerLastNameIndex)
+                    };
+                    var projectId = reader.GetInt32(projectIdIndex);
+                    if(result.Any(p=>p.Project.Id == projectId))
+                    {
+                        var billingItem = result.FirstOrDefault(p=>p.Project.Id == projectId);
+                        billingItem.Project.ProjectManagers.Add(projectManger);
+                    }
+                    else
+                    {
+                        var billingItem = new BillingReport();
+                        var project = new Project()
+                            {
+                                Id = projectId,
+                                Client = new Client()
+                                {
+                                    Id = reader.GetInt32(clientIdIndex),
+                                    Name = reader.GetString(clientNameIndex)
+                                },
+                                ProjectNumber = reader.GetString(projectnumberIndex),
+                                Name = reader.GetString(projectnameIndex),
+                                Practice = new Practice()
+                                {
+                                    Id = reader.GetInt32(practiceIdIndex),
+                                    Name = reader.GetString(practicenameIndex)
+                                },
+                                SalesPersonId = reader.IsDBNull(salespersonIdIndex) ? -1 : reader.GetInt32(salespersonIdIndex),
+                                SalesPersonName = reader.IsDBNull(salesPersonNameIndex) ?"":reader.GetString(salesPersonNameIndex),
+                                ProjectManagers = new List<Person>(),
+                                Director = new Person()
+                                {
+                                    Id = reader.IsDBNull(directorIdIndex) ? null : (int?)reader.GetInt32(directorIdIndex),
+                                    FirstName = reader.IsDBNull(directorFirstNameIndex) ?"": reader.GetString(directorFirstNameIndex),
+                                    LastName = reader.IsDBNull(directorLastNameIndex) ?"": reader.GetString(directorLastNameIndex)
+                                },
+                                PONumber = reader.IsDBNull(poNumberIndex) ? "" : reader.GetString(poNumberIndex),
+                                SeniorManagerId = reader.IsDBNull(seniorManagerIdIndex) ? -1 : reader.GetInt32(seniorManagerIdIndex),
+                                SeniorManagerName = reader.IsDBNull(seniorManagerNameIndex) ?"":reader.GetString(seniorManagerNameIndex),
+                            };
+                        if (projectManger.Id != null)
+                            project.ProjectManagers.Add(projectManger);
+                       billingItem.Project = project;
+                       billingItem.RangeProjected = reader.GetDecimal(revenueIndex);
+                       billingItem.RangeActual =  reader.GetDecimal(actualRevenueinRangeIndex);
+                       if (forecastedhoursIndex >= 0)
+                         {
+                            try
+                            {
+                                billingItem.ForecastedHours = Convert.ToDouble(reader.GetDecimal(forecastedhoursIndex));
+                            }
+                            catch
+                            {
+                            }
+                         }
+                        if (actualHoursIndex >= 0)
+                          {
+                            try
+                            {
+                                billingItem.ActualHours = reader.GetDouble(actualHoursIndex);
+                            }
+                            catch
+                            {
+                            }
+                          }
+                        if (sowBudgetIndex >= 0)
+                          {
+                            try
+                            {
+                                billingItem.SOWBudget = reader.IsDBNull(sowBudgetIndex) ? 0 : reader.GetDecimal(sowBudgetIndex);
+                            }
+                            catch
+                            {
+                            }
+                          }
+                          if (actualRevenueIndex >= 0)
+                           {
+                            try
+                            {
+                                billingItem.ActualToDate = reader.GetDecimal(actualRevenueIndex);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                            result.Add(billingItem);
+                    }
+              }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
