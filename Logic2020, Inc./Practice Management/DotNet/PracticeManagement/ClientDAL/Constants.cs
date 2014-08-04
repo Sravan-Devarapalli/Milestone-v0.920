@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string SalesPersonName = "SalesPersonName";
+            public const string ActualRevenueInRange = "ActualRevenueInRange";
             public const string GroupName = "GroupName";
             public const string GroupCode = "GroupCode";
             public const string GroupId = "GroupId";
@@ -516,6 +518,9 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string SeniorManagerIds = "@SeniorManagerIds";
+            public static string ProjectManagerIds = "@ProjectManagerIds";
+            public static string DirectorIds = "@DirectorIds";
             public static string ProposedProjects = "@ProposedProjects";
             public static string CohortAssignmentId = "@CohortAssignmentId";
             public static string EmployeeReferralId = "@EmployeeReferralId";
@@ -1168,6 +1173,8 @@
 
             public class Reports
             {
+                public const string BillingReportByHours = "dbo.BillingReportByHours";
+                public const string BillingReportByCurrency = "dbo.BillingReportByCurrency";
                 public const string RecruitingMetricsReport = "dbo.RecruitingMetricsReport";
                 public const string ResourceAssignedOrUnassignedChargingExceptionReport = "dbo.ResourceAssignedOrUnassignedChargingExceptionReport";
                 public const string ZeroHourlyRateExceptionReport = "dbo.ZeroHourlyRateExceptionReport";
