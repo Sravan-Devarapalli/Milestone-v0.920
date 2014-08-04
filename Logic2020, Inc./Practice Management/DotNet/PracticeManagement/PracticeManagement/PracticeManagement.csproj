@@ -388,6 +388,7 @@
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
+    <Content Include="Controls\Reports\BillingReportSummary.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessUnit.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByProject.ascx" />
@@ -537,6 +538,7 @@
     <Content Include="Reports\AccountSummaryReport.aspx" />
     <Content Include="Reports\AttainmentReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
+    <Content Include="Reports\BillingReport.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\ConsultingDemand_New.aspx" />
@@ -1578,6 +1580,13 @@
     <Compile Include="Controls\Reports\AuditByProject.ascx.designer.cs">
       <DependentUpon>AuditByProject.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\BillingReportSummary.ascx.cs">
+      <DependentUpon>BillingReportSummary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\BillingReportSummary.ascx.designer.cs">
+      <DependentUpon>BillingReportSummary.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx.cs">
       <DependentUpon>ByBusinessDevelopment.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2127,6 +2136,13 @@
     </Compile>
     <Compile Include="Reports\Audit.aspx.designer.cs">
       <DependentUpon>Audit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\BillingReport.aspx.cs">
+      <DependentUpon>BillingReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\BillingReport.aspx.designer.cs">
+      <DependentUpon>BillingReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\ConsultingCapacity.aspx.cs">
       <DependentUpon>ConsultingCapacity.aspx</DependentUpon>
@@ -3762,4 +3778,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
