@@ -13,6 +13,15 @@ namespace PraticeManagement.Controls.Generic.Filtering {
     public partial class DateInterval1 {
         
         /// <summary>
+        /// lblFrom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblFrom;
+        
+        /// <summary>
         /// tbFrom control.
         /// </summary>
         /// <remarks>
@@ -56,6 +65,15 @@ namespace PraticeManagement.Controls.Generic.Filtering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RangeValidator rangeValFrom;
+        
+        /// <summary>
+        /// lblTo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTo;
         
         /// <summary>
         /// tbTo control.
