@@ -78,6 +78,10 @@ span.highlighted
 {
     background-color: #E2EBFF;
 }
+.bgcolorE2EBFFImp
+{
+    background-color: #E2EBFF !important;
+}
 .bgcolorwhite
 {
     background-color: White;
@@ -795,6 +799,10 @@ TD.CompPerfProject DIV.ToolTip
 .ToolTip table td .bgColorTransparent
 {
     background-color: transparent;
+}
+.bgColorTransparentImp
+{
+    background-color: transparent !important;
 }
 .tail
 {
@@ -8220,4 +8228,4 @@ table#ctl00_body_login tr td label
 {
     color: white;
 }
-}
+
