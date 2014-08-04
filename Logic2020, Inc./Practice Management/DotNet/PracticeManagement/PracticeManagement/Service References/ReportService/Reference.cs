@@ -76,6 +76,12 @@ namespace PraticeManagement.ReportService {
                     string statusIds, 
                     bool isExport);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BillingReportByCurrency", ReplyAction="http://tempuri.org/IReportService/BillingReportByCurrencyResponse")]
+        DataTransferObjects.Reports.BillingReport[] BillingReportByCurrency(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BillingReportByHours", ReplyAction="http://tempuri.org/IReportService/BillingReportByHoursResponse")]
+        DataTransferObjects.Reports.BillingReport[] BillingReportByHours(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
         
@@ -182,8 +188,7 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-        
-        
+      
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -263,6 +268,14 @@ namespace PraticeManagement.ReportService {
                     string statusIds, 
                     bool isExport) {
             return base.Channel.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus, projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport);
+        }
+        
+        public DataTransferObjects.Reports.BillingReport[] BillingReportByCurrency(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds) {
+            return base.Channel.BillingReportByCurrency(startDate, endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
+        }
+        
+        public DataTransferObjects.Reports.BillingReport[] BillingReportByHours(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds) {
+            return base.Channel.BillingReportByHours(startDate, endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
