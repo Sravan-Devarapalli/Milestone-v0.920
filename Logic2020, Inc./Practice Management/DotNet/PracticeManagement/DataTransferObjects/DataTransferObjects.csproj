@@ -156,6 +156,7 @@
     <Compile Include="RecruitingMetrics.cs" />
     <Compile Include="Reports\AttainmentBillableutlizationReport.cs" />
     <Compile Include="Reports\BillableUtlizationByRange.cs" />
+    <Compile Include="Reports\BillingReport.cs" />
     <Compile Include="Reports\ByPerson\GroupByDateByPerson.cs" />
     <Compile Include="Reports\ByPerson\GroupByPersonByWorktype.cs" />
     <Compile Include="Reports\ByAccount\BusinessUnitLevelGroupedHours.cs" />
