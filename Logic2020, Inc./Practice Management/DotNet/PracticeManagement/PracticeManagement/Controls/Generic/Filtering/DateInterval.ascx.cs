@@ -9,6 +9,7 @@ namespace PraticeManagement.Controls.Generic.Filtering
         public string FromToDateFieldCssClass { get; set; }
         public bool IsFromDateRequired { get; set; }
         public bool IsToDateRequired { get; set; }
+        public bool IsBillingReport { get; set; }
 
         public string OnClientChange
         {
@@ -37,6 +38,26 @@ namespace PraticeManagement.Controls.Generic.Filtering
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if(this.IsBillingReport)
+            {
+                lblFrom.Text = "Start date";
+                lblTo.Text = "End date";
+                reqValFrom.ToolTip = reqValFrom.ErrorMessage = "Start date is required.";
+                reqValTo.ToolTip = reqValTo.ErrorMessage = "End date is required";
+                rangeValFrom.ToolTip = rangeValFrom.ErrorMessage = "Start date should be between 1/1/1985 and 12/31/2100";
+                rangeValTo.ToolTip = rangeValTo.ErrorMessage = "End date date should be between 1/1/1985 and 12/31/2100";
+                compToDate.ToolTip = compToDate.ErrorMessage = "End date must be greater or equal to the Start date.";
+            }
+            else
+            {
+                lblFrom.Text = "from";
+                lblTo.Text = "to";
+                reqValFrom.ToolTip = reqValFrom.ErrorMessage = "From date is required.";
+                reqValTo.ToolTip = reqValTo.ErrorMessage = "To date is required";
+                rangeValFrom.ToolTip = rangeValFrom.ErrorMessage = "From date should be between 1/1/1985 and 12/31/2100";
+                rangeValTo.ToolTip = rangeValTo.ErrorMessage = "To date should be between 1/1/1985 and 12/31/2100";
+                compToDate.ToolTip = compToDate.ErrorMessage = "To date must be greater or equal to the from date.";
+            }
             if (this.FromToDateFieldWidth.HasValue)
             {
                 this.tbFrom.Width = this.FromToDateFieldWidth.Value;
