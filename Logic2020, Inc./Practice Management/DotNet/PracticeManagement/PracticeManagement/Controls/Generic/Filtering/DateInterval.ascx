@@ -3,10 +3,10 @@
 <table class="no-wrap fontsize100P">
     <tr>
         <td class="no-wrap">
-            &nbsp;from&nbsp;
+            &nbsp;<asp:Label ID="lblFrom" runat="server"></asp:Label>&nbsp;
         </td>
         <td>
-            <asp:TextBox ID="tbFrom" runat="server" CssClass="MarginClass width50Px" />
+            <asp:TextBox ID="tbFrom" runat="server" CssClass="MarginClass width50Px" />&nbsp;&nbsp;
         </td>
         <td class="vMiddle">
             <asp:HyperLink ID="lnkCalendarFrom" runat="server" ImageUrl="~/Images/calendar.gif"
@@ -14,7 +14,7 @@
         </td>
         <td>
             <asp:RequiredFieldValidator ID="reqValFrom" runat="server" ControlToValidate="tbFrom"
-                Enabled="false" ErrorMessage="From Date Is Required." ToolTip="From Date Is Required."
+                Enabled="false" ErrorMessage="From Date is Required." ToolTip="From Date Is Required."
                 ValidationGroup='<%# ClientID %>'>*</asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator ID="valFrom" runat="server" ControlToValidate="tbFrom"
                 ToolTip="The Date has an incorrect format. It must be 'MM/dd/yyyy'." ErrorMessage="The Date has an incorrect format. It must be 'MM/dd/yyyy'."
@@ -26,10 +26,10 @@
                 Type="Date">*</asp:RangeValidator>
         </td>
         <td class="no-wrap">
-            &nbsp;to&nbsp;
+            &nbsp;<asp:Label ID="lblTo" runat="server"></asp:Label>&nbsp;
         </td>
         <td>
-            <asp:TextBox ID="tbTo" runat="server" CssClass="MarginClass width50Px" />
+            <asp:TextBox ID="tbTo" runat="server" CssClass="MarginClass width50Px" />&nbsp;&nbsp;
         </td>
         <td class="vMiddle">
             <asp:HyperLink ID="lnkCalendarTo" runat="server" ImageUrl="~/Images/calendar.gif"
@@ -37,7 +37,7 @@
         </td>
         <td>
             <asp:RequiredFieldValidator ID="reqValTo" runat="server" ControlToValidate="tbTo"
-                Display="Dynamic" Enabled="false" ErrorMessage="To Date Is Required." ToolTip="To Date Is Required."
+                Display="Dynamic" Enabled="false" ErrorMessage="To Date is Required." ToolTip="To Date Is Required."
                 ValidationGroup='<%# ClientID %>'>*</asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator ID="valTo" runat="server" ControlToValidate="tbTo"
                 Display="Dynamic" ToolTip="The Date has an incorrect format. It must be 'MM/dd/yyyy'."
