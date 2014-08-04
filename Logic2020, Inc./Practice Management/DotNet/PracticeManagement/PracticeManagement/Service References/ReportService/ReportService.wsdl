@@ -57,6 +57,18 @@
   <wsdl:message name="IReportService_ProjectFeedbackReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectFeedbackReportResponse" />
   </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByCurrency_InputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByCurrency" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByCurrency_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByCurrencyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByHours_InputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByHours" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByHours_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByHoursResponse" />
+  </wsdl:message>
   <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetails" />
   </wsdl:message>
@@ -278,6 +290,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectFeedbackReport" message="tns:IReportService_ProjectFeedbackReport_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectFeedbackReportResponse" message="tns:IReportService_ProjectFeedbackReport_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BillingReportByCurrency">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/BillingReportByCurrency" message="tns:IReportService_BillingReportByCurrency_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/BillingReportByCurrencyResponse" message="tns:IReportService_BillingReportByCurrency_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BillingReportByHours">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/BillingReportByHours" message="tns:IReportService_BillingReportByHours_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/BillingReportByHoursResponse" message="tns:IReportService_BillingReportByHours_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse" message="tns:IReportService_PersonTimeEntriesDetails_OutputMessage" />
@@ -465,6 +485,24 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectFeedbackReport">
       <soap:operation soapAction="http://tempuri.org/IReportService/ProjectFeedbackReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BillingReportByCurrency">
+      <soap:operation soapAction="http://tempuri.org/IReportService/BillingReportByCurrency" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BillingReportByHours">
+      <soap:operation soapAction="http://tempuri.org/IReportService/BillingReportByHours" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
