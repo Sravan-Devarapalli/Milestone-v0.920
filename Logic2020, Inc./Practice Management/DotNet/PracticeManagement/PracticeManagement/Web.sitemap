@@ -19,7 +19,8 @@
         <siteMapNode url="~/Reports/BenchCosts.aspx" VirtualPath="~/Reports/BenchCosts.aspx" QuickLinkTitle="Bench Costs"  title="Bench Costs" roles="System Administrator" description="Bench Costs" ShowURL="true" />
         <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="System Administrator" />
         <siteMapNode url="~/Reports/AttainmentReport.aspx" title="Attainment"  VirtualPath="~/Reports/AttainmentReport.aspx" QuickLinkTitle="Attainment"  description="Attainment"/>
-      </siteMapNode>
+        <siteMapNode url="~/Reports/BillingReport.aspx" title="Billing"  VirtualPath="~/Reports/BillingReport.aspx" QuickLinkTitle="Billing Report"  description="Billing Report" ShowURL="true"/>      
+</siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
         <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consulting Utilization"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consulting Utilization"  description="Consulting Utilization" ShowURL="true" />
         <siteMapNode url="~/Reports/ConsultingCapacity.aspx" title="Consulting Capacity"  VirtualPath="~/Reports/ConsultingCapacity.aspx" QuickLinkTitle="Consulting Capacity"  description="Consulting Capacity" ShowURL="true" />
@@ -35,6 +36,7 @@
       <siteMapNode url="Temp.aspx?from=Performance Management" title="Performance Management">
         <siteMapNode url="~/Reports/ProjectFeedbackReport.aspx" title="Project Feedback"  VirtualPath="~/Reports/ProjectFeedbackReport.aspx" QuickLinkTitle="Project Feedback"  description="Project Feedback" ShowURL="true"/>
       </siteMapNode>
+      
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
