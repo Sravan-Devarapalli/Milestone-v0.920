@@ -535,6 +535,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvPersonTerminated;
         
         /// <summary>
+        /// custLockdownDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockdownDates;
+        
+        /// <summary>
         /// ddlTimeTypesTimeOff control.
         /// </summary>
         /// <remarks>
@@ -632,6 +641,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnDeleteTimeOff;
+        
+        /// <summary>
+        /// custLockdownDelete control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockdownDelete;
         
         /// <summary>
         /// btnCancelTimeOff control.
@@ -769,6 +787,15 @@ namespace PraticeManagement.Controls {
         protected global::AjaxControlToolkit.FilteredTextBoxExtender fteHoursSingleDay;
         
         /// <summary>
+        /// custLockdownDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockdownDetails;
+        
+        /// <summary>
         /// valSumErrorSingleDay control.
         /// </summary>
         /// <remarks>
@@ -803,6 +830,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnDeleteSingleDay;
+        
+        /// <summary>
+        /// custSingleDayDelete control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custSingleDayDelete;
         
         /// <summary>
         /// btnCancelEditSingleDay control.
