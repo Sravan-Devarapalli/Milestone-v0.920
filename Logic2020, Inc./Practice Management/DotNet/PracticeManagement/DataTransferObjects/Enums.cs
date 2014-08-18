@@ -276,4 +276,27 @@ namespace DataTransferObjects
         PassiveCandidate = 2
     }
 
+    [DataContract]
+    public enum LockoutPages
+    {
+        [EnumMember]
+        [Description("Undefined")]
+        Undefined = 0,
+
+        [EnumMember]
+        [Description("Time Entry")]
+        TimeEntry = 1,
+
+        [EnumMember]
+        [Description("Calendar")]
+        Calendar = 2,
+
+        [EnumMember]
+        [Description("Person detail")]
+        Persondetail = 3,
+
+        [EnumMember]
+        [Description("Project detail")]
+        Projectdetail = 4
+    }
 }
