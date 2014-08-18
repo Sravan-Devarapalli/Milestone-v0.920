@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Linq;
 using System.Web.UI.WebControls;
 using PraticeManagement.Utils;
 using DataTransferObjects;
 using PraticeManagement.Configuration;
+using System.Collections.Generic;
 
 namespace PraticeManagement.Controls
 {
     public partial class PersonnelCompensation : System.Web.UI.UserControl
     {
+        public const string lockdownDatesMessage = "Start date and End dates in Compensation tab were locked down by System Administrator for dates on and before '{0}'.";
+        public const string lockdownTitlesMessage = "Title field  in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+        public const string lockdownBasisMessage = "Basis field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+        public const string lockdownPracticeMessage = "Practice Area field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+        public const string lockdownAmountMessage = "Amount field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+        public const string lockdownPTOAccrualsMessage = "PTO Accruals field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+
         #region Properties
 
         /// <summary>
@@ -573,8 +582,14 @@ namespace PraticeManagement.Controls
                 rfvVacationDays.ValidationGroup =
                 rfvTitle.ValidationGroup =
                 cvSLTApprovalValidation.ValidationGroup =
-                cvVacationDays.ValidationGroup = 
+                cvVacationDays.ValidationGroup =
                 cvSLTPTOApprovalValidation.ValidationGroup =
+                custValLockoutDates.ValidationGroup =
+                custLockoutBasis.ValidationGroup =
+                custLockoutAmount.ValidationGroup =
+                custLockoutPTO.ValidationGroup =
+                custLockoutTitle.ValidationGroup =
+                custLockOutPractice.ValidationGroup =
                 rfvPractice.ValidationGroup = value;
             }
         }
@@ -596,6 +611,62 @@ namespace PraticeManagement.Controls
         }
 
         public bool IsMarginTestPage { get; set; }
+
+        public bool IsCompensationPage { get; set; }
+
+        public string PreviousPractice
+        {
+            get { return (string)ViewState["PreviousPracticeId"]; }
+            set { ViewState["PreviousPracticeId"] = value; }
+        }
+
+        public string PreviousTitle
+        {
+            get { return (string)ViewState["PreviousTitleId"]; }
+            set { ViewState["PreviousTitleId"] = value; }
+        }
+
+        public string PreviousPtoAccrual
+        {
+            get { return (string)ViewState["PreviousPtoAccrual"]; }
+            set { ViewState["PreviousPtoAccrual"] = value; }
+        }
+
+        public decimal? PreviousAmount
+        {
+            get { return (decimal?)ViewState["PreviousAmount"]; }
+            set { ViewState["PreviousAmount"] = value; }
+        }
+
+        public string PreviousBasis
+        {
+            get { return (string)ViewState["PreviousBasis"]; }
+            set { ViewState["PreviousBasis"] = value; }
+        }
+
+        public List<DataTransferObjects.Lockout> Lockouts
+        {
+            get;
+            set;
+        }
+
+        public bool IsAllLockout
+        {
+            get;
+            set;
+        }
+
+        public bool IsLockout
+        {
+            get;
+            set;
+        }
+
+        public DateTime? LockoutDate
+        {
+            get;
+            set;
+        }
 
         #endregion
 
@@ -624,6 +695,12 @@ namespace PraticeManagement.Controls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            LockdownCompensation();
+            if (!IsPostBack && IsCompensationPage)
+            {
+                SaveAllLockdownViewStates();
+            }
+            //SetAmountandBasis();
             if (IsStrawmanMode)
             {
                 CompensationDateVisible =
@@ -634,6 +711,15 @@ namespace PraticeManagement.Controls
 
             }
             UpdateCompensationState();
+        }
+
+        public void SaveAllLockdownViewStates()
+        {
+            PreviousPractice = ddlPractice.SelectedItem.Text;
+            PreviousTitle = ddlTitle.SelectedItem.Text;
+            PreviousPtoAccrual = txtVacationDays.Text;
+            PreviousBasis = Timescale.ToString();
+            PreviousAmount = Amount;
         }
 
         protected void Compensation_CheckedChanged(object sender, EventArgs e)
@@ -692,7 +778,7 @@ namespace PraticeManagement.Controls
             txtPercRevenue.Enabled = reqPercRevenue.Enabled = compPercRevenue.Enabled = compPercRevenueGreaterThanZero.Enabled = rbtnPercentRevenue.Checked;
             //txtVacationDays.Enabled = !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked);
             // Bonus and vacation are  available for the w2-salary employess.
-            if(IsStrawmanMode)
+            if (IsStrawmanMode)
             {
                 compSalaryWageGreaterThanZero.Enabled = compHourlyWageGreaterThanZero.Enabled = compHourlyGreaterThanZero.Enabled = compPercRevenueGreaterThanZero.Enabled = false;
             }
@@ -770,7 +856,7 @@ namespace PraticeManagement.Controls
                 CompensationChanged(this, e);
             }
         }
-        
+
         protected void btnCancel_OnClick(object sender, EventArgs e)
         {
             mpeSLTApprovalPopUp.Hide();
@@ -875,10 +961,180 @@ namespace PraticeManagement.Controls
             }
         }
 
+        protected void custValLockoutDates_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (IsCompensationPage && Lockouts.Any(p => p.Name == "Dates" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+                DateTime startDate;
+                DateTime? endDate;
+                DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date) && !OldStartDate.HasValue && !OldEndDate.HasValue)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDatesMessage, LockoutDate.Value.ToShortDateString());
+                }
+                if (OldStartDate.HasValue && (startDate.Date != OldStartDate.Value.Date || endDate.HasValue && endDate.Value.Date != OldEndDate.Value.Date))
+                {
+                    if ((startDate.Date != OldStartDate.Value.Date && startDate.Date <= LockoutDate.Value.Date) || (endDate.HasValue && OldEndDate.HasValue && endDate.Value.Date != OldEndDate.Value.Date && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDatesMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+            }
+        }
+
+        protected void custLockOutPractice_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (IsCompensationPage && Lockouts.Any(p => p.Name == "Practice Area" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+                if (!OldStartDate.HasValue && !OldEndDate.HasValue)
+                {
+                    DateTime startDate;
+                    DateTime? endDate;
+                    DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                    endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                    if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownPracticeMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+                else if (OldStartDate.HasValue && (OldStartDate.Value.Date <= LockoutDate.Value.Date || (OldEndDate.HasValue && OldEndDate.Value.Date <= LockoutDate.Value.Date)) && ddlPractice.SelectedItem.Text != PreviousPractice)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownPracticeMessage, LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
+        protected void custLockoutTitle_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (IsCompensationPage && Lockouts.Any(p => p.Name == "Title" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+                GridViewRow row = custLockdown.NamingContainer as GridViewRow;
+                CustomDropDown ddlTitle = row.FindControl("ddlTitle") as CustomDropDown;
+                if (!OldStartDate.HasValue && !OldEndDate.HasValue)
+                {
+                    DatePicker dpStartDate = row.FindControl("dpStartDate") as DatePicker;
+                    DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
+                    DateTime startDate;
+                    DateTime? endDate;
+                    DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                    endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                    if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownTitlesMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+                else if (OldStartDate.HasValue && (OldStartDate.Value.Date <= LockoutDate.Value.Date || (OldEndDate.HasValue && OldEndDate.Value.Date <= LockoutDate.Value.Date)) && ddlTitle.SelectedItem.Text != PreviousTitle)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownTitlesMessage, LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
+        protected void custLockoutBasis_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (IsCompensationPage && Lockouts.Any(p => p.Name == "Basis" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+
+                if (!OldStartDate.HasValue && !OldEndDate.HasValue)
+                {
+                    DateTime startDate;
+                    DateTime? endDate;
+                    DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                    endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                    if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownBasisMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+                else if (OldStartDate.HasValue && (OldStartDate.Value.Date <= LockoutDate.Value.Date || (OldEndDate.HasValue && OldEndDate.Value.Date <= LockoutDate.Value.Date)) && Timescale.ToString() != PreviousBasis)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownBasisMessage, LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
+        protected void custLockoutAmount_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (IsCompensationPage && Lockouts.Any(p => p.Name == "Amount" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+                if (!OldStartDate.HasValue && !OldEndDate.HasValue)
+                {
+                    DateTime startDate;
+                    DateTime? endDate;
+                    DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                    endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                    if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownAmountMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+                else if (OldStartDate.HasValue && (OldStartDate.Value.Date <= LockoutDate.Value.Date || (OldEndDate.HasValue && OldEndDate.Value.Date <= LockoutDate.Value.Date)) && Amount != PreviousAmount)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownAmountMessage, LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
+        protected void custLockoutPTO_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (IsCompensationPage && Lockouts.Any(p => p.Name == "PTO Accrual" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+
+                if (!OldStartDate.HasValue && !OldEndDate.HasValue)
+                {
+
+                    DateTime startDate;
+                    DateTime? endDate;
+                    DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                    endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                    if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownPTOAccrualsMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+                else if (OldStartDate.HasValue && (OldStartDate.Value.Date <= LockoutDate.Value.Date || (OldEndDate.HasValue && OldEndDate.Value.Date <= LockoutDate.Value.Date)) && txtVacationDays.Text != PreviousPtoAccrual)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownPTOAccrualsMessage, LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
         public void ShowDates()
         {
             trCompensationDate.Visible = true;
         }
+
+        public void LockdownCompensation()
+        {
+            using (var service = new ConfigurationService.ConfigurationServiceClient())
+            {
+                List<DataTransferObjects.Lockout> persondetailItems = service.GetLockoutDetails((int)LockoutPages.Persondetail).ToList();
+                IsLockout = persondetailItems.Any(p => p.IsLockout == true);
+                LockoutDate = persondetailItems[0].LockoutDate;
+                Lockouts = persondetailItems;
+                IsAllLockout = !persondetailItems.Any(p => p.IsLockout == false);
+            }
+        }
+
     }
 }
 
