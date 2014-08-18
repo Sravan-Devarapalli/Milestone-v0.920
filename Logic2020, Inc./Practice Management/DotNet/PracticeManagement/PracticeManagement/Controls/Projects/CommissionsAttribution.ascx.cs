@@ -25,6 +25,7 @@ namespace PraticeManagement.Controls.Projects
         private const string salesPersonAttribution = "SalesPerson";
         private const string salesPracticeAttribution = "SalesPractice";
         private const string divisionChangeMessage = "{0} Attribution: The individual's division is {1} from {2}";
+        private const string lockdownMessage = "Commissions tab was locked down by System Administrator for the dates on and before '{0}'.";
 
         #endregion Constants
 
@@ -64,9 +65,59 @@ namespace PraticeManagement.Controls.Projects
 
         #region Properities
 
+        public bool IsEnableLeftbtn
+        {
+            get
+            { return (bool)ViewState["IsEnableLeftbtnKey"]; }
+            set
+            { ViewState["IsEnableLeftbtnKey"] = value; }
+        }
+
+        public bool IsEnableRightbtn
+        {
+            get
+            {
+                return (bool)ViewState["IsEnableRightbtnKey"];
+            }
+            set
+            {
+                ViewState["IsEnableRightbtnKey"] = value;
+            }
+        }
+
+        public DateTime? PreviousStartDate
+        {
+            get { return (DateTime?)ViewState["PreviousStartDate"]; }
+            set { ViewState["PreviousStartDate"] = value; }
+        }
+
+        public DateTime? PreviousEndDate
+        {
+            get { return (DateTime?)ViewState["PreviousEndDate"]; }
+            set { ViewState["PreviousEndDate"] = value; }
+        }
+
+        public string PreviousPersonId
+        {
+            get { return (string)ViewState["PreviousPersonId"]; }
+            set { ViewState["PreviousPersonId"] = value; }
+        }
+
         private PraticeManagement.ProjectDetail HostingPage
         {
             get { return ((PraticeManagement.ProjectDetail)Page); }
+        }
+
+        public bool IsLockout
+        {
+            get;
+            set;
+        }
+
+        public DateTime? LockoutDate
+        {
+            get;
+            set;
         }
 
         public string ValidationGroup
@@ -155,14 +206,15 @@ namespace PraticeManagement.Controls.Projects
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            LockdownCommission();
             if (TitleList == null)
             {
                 TitleList = new Dictionary<int, string>();
                 TitleList.Add(0, string.Empty);
             }
             if (IsPostBack) return;
+            IsEnableRightbtn = IsEnableLeftbtn = false;
             if (!HostingPage.ProjectId.HasValue) return;
-
             if (HostingPage.ValidateAndSaveFromOtherChildControls())
                 BindAttributions();
         }
@@ -230,7 +282,23 @@ namespace PraticeManagement.Controls.Projects
                 dpStartDate.TextValue = lblStartDate.Text;
                 dpEndDate.TextValue = lblEndDate.Text;
                 ddlPerson.SortByText();
-            }  
+            }
+            DateTime endDate;
+            DateTime.TryParse(item.Attribute(XName.Get(EndDateXname)).Value, out endDate);
+            DateTime startDate;
+            DateTime.TryParse(item.Attribute(XName.Get(StartDateXname)).Value, out startDate);
+            if (IsLockout)
+            {
+                if (endDate.Date <= LockoutDate.Value.Date)
+                {
+                    imgDeliveryPersonAttributeEdit.Enabled = imgDeliveryAttributionPersonDelete.Enabled = chbAttribution.Enabled = btnCopyAlltoRight.Enabled = false;
+                    btnCopyAlltoRight.OnClientClick = null;
+                }
+                if (startDate.Date <= LockoutDate.Value.Date)
+                    imgDeliveryAttributionPersonDelete.Enabled = chbAttribution.Enabled = false;
+                if(endDate.Date >LockoutDate.Value.Date && startDate.Date > LockoutDate.Value.Date)
+                    IsEnableRightbtn = true;
+            }   
         }
 
         protected void gvSalesAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -369,6 +437,22 @@ namespace PraticeManagement.Controls.Projects
                 dpEndDate.TextValue = lblEndDate.Text;
                 ddlPerson.SortByText();
             }
+            DateTime endDate;
+            DateTime.TryParse(item.Attribute(XName.Get(EndDateXname)).Value, out endDate);
+            DateTime startDate;
+            DateTime.TryParse(item.Attribute(XName.Get(StartDateXname)).Value, out startDate);
+            if (IsLockout)
+            {
+                if (endDate.Date <= LockoutDate.Value.Date)
+                {
+                    imgSalesPersonAttributeEdit.Enabled = imgSalesAttributionPersonDelete.Enabled = chbAttribution.Enabled = btnCopyAlltoLeft.Enabled = false;
+                    btnCopyAlltoLeft.OnClientClick = null;
+                }
+                if (startDate.Date <= LockoutDate.Value.Date)
+                    imgSalesAttributionPersonDelete.Enabled =chbAttribution.Enabled = false;
+                if(endDate.Date >LockoutDate.Value.Date && startDate.Date > LockoutDate.Value.Date)
+                    IsEnableLeftbtn = true;
+            }   
         }
 
         protected void gvDeliveryAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -458,8 +542,12 @@ namespace PraticeManagement.Controls.Projects
             HiddenField hdnPersonId = gv.Rows[row.DataItemIndex].FindControl("hdnPersonId") as HiddenField;
             HiddenField hdnTitleId = gv.Rows[row.DataItemIndex].FindControl("hdnTitleId") as HiddenField;
             Label lblStartDate = gv.Rows[row.DataItemIndex].FindControl("lblStartDate") as Label;
+            Label lblEndDate = gv.Rows[row.DataItemIndex].FindControl("lblEndDate") as Label;
             Label lblTitleName = gv.Rows[row.DataItemIndex].FindControl("lblTitleName") as Label;
             XDocument xdoc;
+            PreviousStartDate = Convert.ToDateTime(lblStartDate.Text);
+            PreviousEndDate = Convert.ToDateTime(lblEndDate.Text);
+            PreviousPersonId = hdnPersonId.Value;
             if (attribution == AttributionCategory.DeliveryPersonAttribution)
             {
                 xdoc = OnEditClick(DeliveryPersonAttributionXML, true, hdnPersonId.Value, lblStartDate.Text, hdnTitleId.Value);
@@ -687,6 +775,7 @@ namespace PraticeManagement.Controls.Projects
                         DatabindGridView(gvDeliveryAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
                         DeliveryPersonAttributionXML = xdoc.ToString();
                         gvDeliveryAttributionPerson.Attributes["AttributionId"] = (attributionIdNum - 1).ToString();
+                        PreviousEndDate = PreviousStartDate = null;
                     }
                     break;
 
@@ -700,6 +789,7 @@ namespace PraticeManagement.Controls.Projects
                         DatabindGridView(gvSalesAttributionPerson, latestXdoc.Descendants(XName.Get(AttributionXname)).ToList());
                         SalesPersonAttributionXML = xdoc.ToString();
                         gvSalesAttributionPerson.Attributes["AttributionId"] = (attributionIdNum - 1).ToString();
+                        PreviousEndDate = PreviousStartDate = null;
                     }
                     break;
 
@@ -994,7 +1084,7 @@ namespace PraticeManagement.Controls.Projects
                 DateTime.TryParse(dpStartDate.DateValue.ToShortDateString(), out startDate);
                 DateTime.TryParse(dpEndDate.DateValue.ToShortDateString(), out endDate);
                 Person person = ServiceCallers.Custom.Person(p => p.CheckIfValidDivision(personId, startDate, endDate));
-                if (person !=null)
+                if (person != null)
                 {
                     custValidRang.ErrorMessage =
                         custValidRang.ToolTip =
@@ -1007,6 +1097,38 @@ namespace PraticeManagement.Controls.Projects
                 }
                 args.IsValid = person == null;
             }
+        }
+
+        protected void custLockdown_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var custLockdown = source as CustomValidator;
+            var row = custLockdown.NamingContainer as GridViewRow;
+            var dpStartDate = row.FindControl("dpStartDate") as DatePicker;
+            var dpEndDate = row.FindControl("dpEndDate") as DatePicker;
+            var ddlPerson = row.FindControl("ddlPerson") as DropDownList;
+            DateTime startDate;
+            DateTime endDate;
+            DateTime.TryParse(dpStartDate.TextValue, out startDate);
+            DateTime.TryParse(dpEndDate.DateValue.ToShortDateString(), out endDate);
+            if (IsLockout && (startDate.Date <= LockoutDate.Value.Date || endDate.Date <= LockoutDate.Value.Date) && !PreviousStartDate.HasValue && !PreviousEndDate.HasValue)
+            {
+                args.IsValid = false;
+                custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, LockoutDate.Value.ToShortDateString());
+            }
+            if (IsLockout && PreviousStartDate.HasValue && PreviousEndDate.HasValue && (startDate.Date != PreviousStartDate.Value.Date || endDate.Date != PreviousEndDate.Value.Date || ddlPerson.SelectedItem.Value != PreviousPersonId))
+            {
+                if ((startDate.Date != PreviousStartDate.Value.Date && startDate.Date <= LockoutDate.Value.Date) || (endDate.Date != PreviousEndDate.Value.Date && endDate.Date <= LockoutDate.Value.Date) || (ddlPerson.SelectedItem.Value != PreviousPersonId && startDate.Date <= LockoutDate.Value.Date))
+                {
+                    args.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs eventArgs)
+        {
+            btnCopySelectedItemstoRight.Enabled = IsEnableRightbtn;
+            btnCopySelectedItemstoLeft.Enabled = IsEnableLeftbtn;
         }
 
         #endregion Events
@@ -1273,6 +1395,10 @@ namespace PraticeManagement.Controls.Projects
                                     .ThenBy(x => x.Attribute(XName.Get(SortingStartDateXname)).Value).ToList();
             gridView.DataSource = xlistLatest;
             gridView.DataBind();
+            if (gridView == gvSalesAttributionPerson && xlistLatest.Count == 0)
+                IsEnableLeftbtn = true;
+            if (gridView == gvDeliveryAttributionPerson && xlistLatest.Count == 0)
+                IsEnableRightbtn = true;
         }
 
         private void BindAttributions()
@@ -1655,18 +1781,19 @@ namespace PraticeManagement.Controls.Projects
                 CustomValidator custPaytypeValidation = row.FindControl("custPaytypeValidation") as CustomValidator;
                 CustomValidator custDivision = row.FindControl("custDivision") as CustomValidator;
                 CustomValidator custPersonEnd = row.FindControl("custPersonEnd") as CustomValidator;
+                CustomValidator custLockdown = row.FindControl("custLockdown") as CustomValidator;
                 CustomValidator custTitleValidation = gridView.HeaderRow.FindControl("custTitleValidation") as CustomValidator;
                 CustomValidator custPersonDatesOverlapping = row.FindControl("custPersonDatesOverlapping") as CustomValidator;
-                reqPersonName.ValidationGroup = reqPersonStart.ValidationGroup = compPersonStartType.ValidationGroup = custPersonStart.ValidationGroup = custTitleValidation.ValidationGroup = custValidRange.ValidationGroup = reqPersonEnd.ValidationGroup = compPersonEndType.ValidationGroup = custPersonEnd.ValidationGroup = compPersonEnd.ValidationGroup = custPaytypeValidation.ValidationGroup = custDivision.ValidationGroup = custPersonDatesOverlapping.ValidationGroup = ValidationGroup;
+                reqPersonName.ValidationGroup = reqPersonStart.ValidationGroup = compPersonStartType.ValidationGroup = custPersonStart.ValidationGroup = custTitleValidation.ValidationGroup = custValidRange.ValidationGroup = reqPersonEnd.ValidationGroup = compPersonEndType.ValidationGroup = custPersonEnd.ValidationGroup = compPersonEnd.ValidationGroup = custPaytypeValidation.ValidationGroup = custDivision.ValidationGroup = custPersonDatesOverlapping.ValidationGroup = custLockdown.ValidationGroup = ValidationGroup;
                 if (item.Attribute(XName.Get(IsEditModeXname)).Value == true.ToString())
                 {
-                    reqPersonName.Enabled = reqPersonStart.Enabled = custValidRange.Enabled = compPersonStartType.Enabled = custPersonStart.Enabled = reqPersonEnd.Enabled = compPersonEndType.Enabled = custPersonEnd.Enabled = compPersonEnd.Enabled = custPersonDatesOverlapping.Enabled = custPaytypeValidation.Enabled = custDivision.Enabled = true; 
+                    reqPersonName.Enabled = reqPersonStart.Enabled = custValidRange.Enabled = compPersonStartType.Enabled = custPersonStart.Enabled = reqPersonEnd.Enabled = compPersonEndType.Enabled = custPersonEnd.Enabled = compPersonEnd.Enabled = custPersonDatesOverlapping.Enabled = custPaytypeValidation.Enabled = custDivision.Enabled = true;
                 }
                 else
                 {
                     reqPersonName.Enabled = reqPersonStart.Enabled = custValidRange.Enabled = compPersonStartType.Enabled = custPersonStart.Enabled = reqPersonEnd.Enabled = compPersonEndType.Enabled = custPersonEnd.Enabled = compPersonEnd.Enabled = custPersonDatesOverlapping.Enabled = custPaytypeValidation.Enabled = custDivision.Enabled = false;
                 }
-                custTitleValidation.Enabled = true;
+                custLockdown.Enabled = custTitleValidation.Enabled = true;
             }
             else
             {
@@ -1703,6 +1830,7 @@ namespace PraticeManagement.Controls.Projects
                 CustomValidator custDivision = row.FindControl("custDivision") as CustomValidator;
                 CompareValidator compPersonEnd = row.FindControl("compPersonEnd") as CompareValidator;
                 CustomValidator custPersonDatesOverlapping = row.FindControl("custPersonDatesOverlapping") as CustomValidator;
+                CustomValidator custLockdown = row.FindControl("custLockdown") as CustomValidator;
                 reqPersonName.Validate();
                 reqPersonStart.Validate();
                 compPersonStartType.Validate();
@@ -1721,6 +1849,7 @@ namespace PraticeManagement.Controls.Projects
                 {
                     custPaytypeValidation.Validate();
                     custDivision.Validate();
+                    custLockdown.Validate();
                 }
             }
             else
@@ -1962,6 +2091,18 @@ namespace PraticeManagement.Controls.Projects
             }
             SalesPersonAttributionXML = xdocSales.ToString();
             DatabindGridView(gvSalesAttributionPerson, xlistS);
+        }
+
+        public void LockdownCommission()
+        {
+            DataTransferObjects.Lockout commission = new DataTransferObjects.Lockout();
+            using (var service = new ConfigurationService.ConfigurationServiceClient())
+            {
+                List<DataTransferObjects.Lockout> projectdetailItems = service.GetLockoutDetails((int)LockoutPages.Projectdetail).ToList();
+                commission = projectdetailItems.FirstOrDefault(p => p.Name == "Commissions");
+                IsLockout = commission.IsLockout;
+                LockoutDate = commission.LockoutDate;
+            }
         }
 
         #endregion Methods
