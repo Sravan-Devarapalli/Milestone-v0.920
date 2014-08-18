@@ -42,10 +42,17 @@ namespace PraticeManagement.Controls
         public const string EmployeeVoliationForMessage = "Invalid Pay Type: Employee is not a W2-Salary/W2-Hourly employee for the selected day(s).";
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
+        public const string lockdownMessage = "'{0}' functionality in Calendar page was locked down by System Administrator for dates on and before '{1}'";
 
         #endregion Constants
 
         #region Properties
+
+        public List<DataTransferObjects.Lockout> Lockouts
+        {
+            get;
+            set;
+        }
 
         private SheetStyles HeaderSheetStyle
         {
@@ -299,6 +306,46 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public DateTime PreviousStartDate
+        {
+            get { return (DateTime)ViewState["PreviousStartDate"]; }
+            set { ViewState["PreviousStartDate"] = value; }
+        }
+
+        public DateTime PreviousEndDate
+        {
+            get { return (DateTime)ViewState["PreviousEndDate"]; }
+            set { ViewState["PreviousEndDate"] = value; }
+        }
+
+        public string PreviousTimeType
+        {
+            get { return (string)ViewState["PreviousTimeType"]; }
+            set { ViewState["PreviousTimeType"] = value; }
+        }
+
+        public string PreviousHours
+        {
+            get { return (string)ViewState["PreviousHours"]; }
+            set { ViewState["PreviousHours"] = value; }
+        }
+
+        public DropDownList TimeTypeDdlSingleday
+        {
+            get
+            {
+                return ddlTimeTypesSingleDay;
+            }
+        }
+
+        public TextBox TxtHoursSingleDay
+        {
+            get
+            {
+                return txtHoursSingleDay;
+            }
+        }
+
         #endregion Properties
 
         public void PopulateSingleDayPopupControls(DateTime date, string timeTypeId, string hours, int? approvedById, string approvedByName)
@@ -475,6 +522,7 @@ namespace PraticeManagement.Controls
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            LockdownCalendar();
             SetMailToContactSupport();
 
             UpdateRoleFields();
@@ -546,6 +594,8 @@ namespace PraticeManagement.Controls
 
         protected void btnDeleteSingleDay_OnClick(object sender, EventArgs e)
         {
+            custSingleDayDelete.Enabled = true;
+            custLockdownDates.Enabled = custLockdownDetails.Enabled = false;
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
             if (Page.IsValid)
             {
@@ -579,6 +629,8 @@ namespace PraticeManagement.Controls
 
         protected void btnOkSingleDay_OnClick(object sender, EventArgs e)
         {
+            custLockdownDetails.Enabled = true;
+            custLockdownDelete.Enabled = custSingleDayDelete.Enabled = false;
             Page.Validate(valSumErrorSingleDay.ValidationGroup);
             if (Page.IsValid)
             {
@@ -655,8 +707,34 @@ namespace PraticeManagement.Controls
             SeriesStartDate = SeriesEndDate = DateTime.MinValue;
         }
 
+        protected void btnOkEditCondtion_Click(object sender, EventArgs e)
+        {
+            mpeSelectEditCondtionPopUp.Hide();
+            if (rbEditSeries.Checked)
+            {
+                mpeAddTimeOff.Show();
+                PreviousStartDate = dtpStartDateTimeOff.DateValue;
+                PreviousEndDate = dtpEndDateTimeOff.DateValue;
+                PreviousTimeType = ddlTimeTypesTimeOff.SelectedItem.Text;
+                PreviousHours = txthoursTimeOff.Text;
+            }
+            if (rbEditSingleDay.Checked)
+            {
+                mpeEditSingleDayPopUp.Show();
+                DateTime singleDate;
+                DateTime.TryParse(lbdateSingleDay.Text, out singleDate);
+                PreviousStartDate = PreviousEndDate = singleDate;
+                PreviousTimeType = ddlTimeTypesSingleDay.SelectedItem.Text;
+                PreviousHours = txtHoursSingleDay.Text;
+                custLockdownDetails.Enabled = true;
+                custSingleDayDelete.Enabled = custLockdownDelete.Enabled = false;
+            }
+        }
+
         protected void btnOkTimeOff_Click(object sender, EventArgs e)
         {
+            custLockdownDates.Enabled = true;
+            custLockdownDelete.Enabled = false;
             Page.Validate(valSumTimeOff.ValidationGroup);
             if (Page.IsValid)
             {
@@ -754,6 +832,8 @@ namespace PraticeManagement.Controls
 
         protected void btnDeleteTimeOff_Click(object sender, EventArgs e)
         {
+            custLockdownDelete.Enabled = true;
+            custLockdownDates.Enabled = custLockdownDetails.Enabled = false;
             Page.Validate(valSumTimeOff.ValidationGroup);
             if (Page.IsValid)
             {
@@ -976,6 +1056,61 @@ namespace PraticeManagement.Controls
             if (IsPersonTerminated(modifiedSubDate))
             {
                 args.IsValid = false;
+            }
+        }
+
+        protected void custLockdownDates_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var custLockdown = source as CustomValidator;
+            var startDate = dtpStartDateTimeOff.DateValue.Date;
+            var endDate = dtpEndDateTimeOff.DateValue.Date;
+            var lockout = Lockouts.FirstOrDefault(p => p.Name == "Add Time off");
+            var editLockout = Lockouts.FirstOrDefault(p => p.Name == "Edit Time off");
+            if (IsFromAddTimeOffBtn && lockout.IsLockout)
+            {
+                if ((startDate.Date <= lockout.LockoutDate.Value.Date || endDate.Date <= lockout.LockoutDate.Value.Date))
+                {
+                    args.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, lockout.HtmlEncodedName, lockout.LockoutDate.Value.ToShortDateString());
+                }
+            }
+            if (!IsFromAddTimeOffBtn && editLockout.IsLockout)
+            {
+                if ((startDate.Date != PreviousStartDate.Date && PreviousStartDate.Date <= editLockout.LockoutDate.Value.Date) || (endDate != PreviousEndDate.Date && PreviousEndDate.Date <= editLockout.LockoutDate.Value.Date) || (ddlTimeTypesTimeOff.SelectedItem.Text != PreviousTimeType && PreviousStartDate.Date <= editLockout.LockoutDate.Value.Date) || (txthoursTimeOff.Text != PreviousHours && PreviousStartDate.Date <= editLockout.LockoutDate.Value.Date))
+                {
+                    args.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, editLockout.HtmlEncodedName, editLockout.LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
+        protected void custLockdownDetails_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var custLockdown = source as CustomValidator;
+            DateTime singleDate;
+            DateTime.TryParse(lbdateSingleDay.Text, out singleDate);
+            var editLockout = Lockouts.FirstOrDefault(p => p.Name == "Edit Time off");
+            if (!IsFromAddTimeOffBtn && editLockout.IsLockout)
+            {
+                if (PreviousStartDate.Date <= editLockout.LockoutDate.Value.Date && ((ddlTimeTypesSingleDay.SelectedItem.Text != PreviousTimeType && PreviousStartDate.Date <= editLockout.LockoutDate.Value.Date) || (txtHoursSingleDay.Text != PreviousHours && PreviousStartDate.Date <= editLockout.LockoutDate.Value.Date)))
+                {
+                    args.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, editLockout.HtmlEncodedName, editLockout.LockoutDate.Value.ToShortDateString());
+                }
+            }
+        }
+
+        protected void custLockdownDelete_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var custLockdown = source as CustomValidator;
+            var deleteLockout = Lockouts.FirstOrDefault(p => p.Name == "Delete Time off");
+            if (deleteLockout.IsLockout && PreviousStartDate != null && PreviousEndDate != null)
+            {
+                if ((PreviousStartDate.Date <= deleteLockout.LockoutDate.Value.Date) || (PreviousEndDate.Date <= deleteLockout.LockoutDate.Value.Date))
+                {
+                    args.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, deleteLockout.HtmlEncodedName, deleteLockout.LockoutDate.Value.ToShortDateString());
+                }
             }
         }
 
@@ -1261,5 +1396,15 @@ namespace PraticeManagement.Controls
             }
             return data;
         }
+
+        public void LockdownCalendar()
+        {
+            using (var service = new ConfigurationService.ConfigurationServiceClient())
+            {
+                var calendarItems = service.GetLockoutDetails((int)LockoutPages.Calendar).ToList();
+                Lockouts = calendarItems;
+            }
+        }
     }
 }
+
