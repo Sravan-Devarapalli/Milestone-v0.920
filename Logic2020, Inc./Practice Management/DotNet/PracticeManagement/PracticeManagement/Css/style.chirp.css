@@ -1914,6 +1914,12 @@ TABLE.Section td
 {
     padding-left: 60px;
 }
+
+.padLeft120
+{
+    padding-left: 120px;
+}
+
 .padLeft3P
 {
     padding-left: 3%;
