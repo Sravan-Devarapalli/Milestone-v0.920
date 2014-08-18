@@ -27,7 +27,7 @@
                 <tr>
                     <td>
                         <uc1:PersonnelCompensation ID="personnelCompensation" runat="server" OnCompensationMethodChanged="personnelCompensation_CompensationMethodChanged"
-                            ValidationGroup="CompensationDetail" OnSaveDetails="personnelCompensation_SaveDetails"
+                            ValidationGroup="CompensationDetail" OnSaveDetails="personnelCompensation_SaveDetails" IsCompensationPage="true"
                             OnPeriodChanged="personnelCompensation_PeriodChanged" />
                     </td>
                 </tr>
