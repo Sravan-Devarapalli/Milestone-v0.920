@@ -114,6 +114,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 imgDropTes.Visible =
                 ddlTimeTypes.Enabled = !HostingPage.IsReadOnly;
             }
+            LockdownTimetypes();
         }
 
         protected void repEntries_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -390,6 +391,14 @@ namespace PraticeManagement.Controls.TimeEntry
                 HostingPage.IsValidWorkType = false;
             }
 
+        }
+
+        public void LockdownTimetypes()
+        {
+            if (HostingPage.Lockouts.Any(p => (p.HtmlEncodedName == "Add Time entries" || p.HtmlEncodedName == "Edit Time entries") && p.IsLockout && HostingPage.SelectedDates[6].Date <= p.LockoutDate.Value.Date))
+                ddlTimeTypes.Enabled = false;
+            if (HostingPage.Lockouts.Any(p => (p.HtmlEncodedName == "Delete Time entries" || p.HtmlEncodedName == "Edit Time entries") && p.IsLockout && HostingPage.SelectedDates[0].Date <= p.LockoutDate.Value.Date))
+                imgDropTes.Enabled = false;
         }
 
         #endregion
