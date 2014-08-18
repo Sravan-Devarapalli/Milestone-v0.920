@@ -162,20 +162,22 @@
                                     ToolTip="Add Time Off" />
                             </td>
                             <td class="Width22Per">
-                             &nbsp;
+                                &nbsp;
                             </td>
                         </tr>
                         <tr>
-                        <td colspan="2" class="Width67PImp no-wrap"></td>
+                            <td colspan="2" class="Width67PImp no-wrap">
+                            </td>
                             <td class="textRightImp">
-                               <asp:Label Text="Export:" ID="lblExport" runat="server"></asp:Label> 
-                                <asp:Button ID="btnExportExcel" runat="server" Text="Excel" OnClick="btnExportExcel_Click"/>
+                                <asp:Label Text="Export:" ID="lblExport" runat="server"></asp:Label>
+                                <asp:Button ID="btnExportExcel" runat="server" Text="Excel" OnClick="btnExportExcel_Click" />
                             </td>
                         </tr>
                         <tr>
-                        <td colspan="2" class="Width67PImp no-wrap"></td>
+                            <td colspan="2" class="Width67PImp no-wrap">
+                            </td>
                             <td class="textRightImp">
-                                <asp:CheckBox ID="chbIncludeCompanyHolidays" runat="server"/>
+                                <asp:CheckBox ID="chbIncludeCompanyHolidays" runat="server" />
                                 <asp:Label Text="Include Company Holidays" ID="lblCompanyHolidaysCheckbox" runat="server"></asp:Label>
                             </td>
                         </tr>
@@ -355,7 +357,7 @@
                             </tr>
                             <tr>
                                 <td colspan="3">
-                                    <asp:Button ID="btnOk_EditCondtion" Text="OK" runat="server" ToolTip="Ok" OnClientClick="return  btnOk_EditCondtion();" />&nbsp;
+                                    <asp:Button ID="btnOk_EditCondtion" Text="OK" runat="server" ToolTip="Ok" OnClick="btnOkEditCondtion_Click" />&nbsp;
                                     &nbsp;
                                     <asp:Button ID="btncancel_EditCondtion" Text="Cancel" runat="server" ToolTip="Cancel"
                                         OnClick="btncancel_EditCondtion_Click" />
@@ -435,6 +437,8 @@
                                                         <asp:CustomValidator ID="cvPersonTerminated" runat="server" ErrorMessage="Person terminated in the selected day(s)."
                                                             ToolTip="Person terminated in the selected day(s)." Text="*" EnableClientScript="false"
                                                             SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff" OnServerValidate="cvPersonTerminated_ServerValidate"></asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockdownDates" runat="server" Text="*" EnableClientScript="false"
+                                                            SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff" OnServerValidate="custLockdownDates_ServerValidate"></asp:CustomValidator>
                                                     </td>
                                                     <td class="PaddingBottomTop0PxImp">
                                                     </td>
@@ -504,6 +508,8 @@
                                             <asp:HiddenField ID="hdIsTimeOffPopUpDirty" runat="server" />
                                             <asp:Button ID="btnOkTimeOff" Text="OK" runat="server" ToolTip="Ok" OnClick="btnOkTimeOff_Click" />
                                             <asp:Button ID="btnDeleteTimeOff" Text="Delete" runat="server" ToolTip="Delete" OnClick="btnDeleteTimeOff_Click" />
+                                            <asp:CustomValidator ID="custLockdownDelete" runat="server" Text="*" EnableClientScript="false" Enabled="false"
+                                                SetFocusOnError="true" Display="Dynamic" ValidationGroup="TimeOff" OnServerValidate="custLockdownDelete_ServerValidate"></asp:CustomValidator>
                                             <asp:Button ID="btnCancelTimeOff" Text="Cancel" runat="server" ToolTip="Cancel" OnClick="btnCancelTimeOff_Click" />
                                         </td>
                                     </tr>
@@ -579,6 +585,8 @@
                                                 TargetControlID="txtHoursSingleDay" FilterMode="ValidChars" FilterType="Custom,Numbers"
                                                 ValidChars=".">
                                             </AjaxControlToolkit:FilteredTextBoxExtender>
+                                            <asp:CustomValidator ID="custLockdownDetails" runat="server" Text="*" EnableClientScript="false" Enabled="false"
+                                                SetFocusOnError="true" Display="Dynamic" ValidationGroup="SingleDay" OnServerValidate="custLockdownDetails_ServerValidate"></asp:CustomValidator>
                                         </td>
                                     </tr>
                                     <tr>
@@ -597,6 +605,8 @@
                                                 runat="server" />
                                             <asp:Button ID="btnDeleteSingleDay" OnClick="btnDeleteSingleDay_OnClick" Text="Delete"
                                                 ToolTip="Delete" runat="server" />
+                                                  <asp:CustomValidator ID="custSingleDayDelete" runat="server" Text="*" EnableClientScript="false" Enabled="false"
+                                                SetFocusOnError="true" Display="Dynamic" ValidationGroup="SingleDay" OnServerValidate="custLockdownDelete_ServerValidate"></asp:CustomValidator>
                                             <asp:Button ID="btnCancelEditSingleDay" Text="Cancel" ToolTip="Cancel" runat="server"
                                                 OnClick="btnCancelEditSingleDay_OnClick" />
                                         </td>
@@ -794,7 +804,7 @@
                     </asp:Panel>
                 </ContentTemplate>
                 <Triggers>
-                <asp:PostBackTrigger ControlID="btnExportExcel"/>
+                    <asp:PostBackTrigger ControlID="btnExportExcel" />
                 </Triggers>
             </asp:UpdatePanel>
         </td>
