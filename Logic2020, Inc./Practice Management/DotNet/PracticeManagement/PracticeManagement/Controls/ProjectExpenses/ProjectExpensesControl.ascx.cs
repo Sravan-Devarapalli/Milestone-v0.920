@@ -2,6 +2,8 @@
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace PraticeManagement.Controls.ProjectExpenses
 {
@@ -18,12 +20,25 @@ namespace PraticeManagement.Controls.ProjectExpenses
         private const string LblTotalreimbursementamount = "lblTotalReimbursementAmount";
         private const string tbStartDate = "txtStartDate";
         private const string tbEndDate = "txtEndDate";
+        private const string lockdownMessage = "Expenses tab was locked down by System Administrator for the dates on and before '{0}'.";
 
         #endregion
 
         public PraticeManagement.ProjectDetail HostingPage
         {
             get { return ((PraticeManagement.ProjectDetail)Page); }
+        }
+
+        public bool IsLockout
+        {
+            get;
+            set;
+        }
+
+        public DateTime? LockoutDate
+        {
+            get;
+            set;
         }
 
         #region Fields
@@ -37,7 +52,7 @@ namespace PraticeManagement.Controls.ProjectExpenses
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            LockdownExpenses();
         }
 
         protected void lnkAdd_OnClick(object sender, EventArgs e)
@@ -57,7 +72,7 @@ namespace PraticeManagement.Controls.ProjectExpenses
                 HostingPage.IsOtherPanelDisplay = true;
                 return;
             }
-           
+
             else if (HostingPage.Project.StartDate.HasValue && HostingPage.Project.EndDate.HasValue)
             {
                 var isValid = true;
@@ -73,7 +88,15 @@ namespace PraticeManagement.Controls.ProjectExpenses
                     CustomValidator cstEndDateShouldbewithinProjectPeriod = footerRow.FindControl("cstEndDateShouldbewithinProjectPeriod") as CustomValidator;
                     cstEndDateShouldbewithinProjectPeriod.IsValid = isValid = false;
                 }
-
+                if (isValid && IsLockout)
+                {
+                    CustomValidator custLockdown = footerRow.FindControl("custLockdown") as CustomValidator;
+                    if (!ValidateLockdown(custLockdown,true,true,false,false,false))
+                    {
+                        custLockdown.IsValid = isValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
                 if (!isValid)
                 {
                     HostingPage.IsOtherPanelDisplay = true;
@@ -100,7 +123,8 @@ namespace PraticeManagement.Controls.ProjectExpenses
             {
                 case DataControlRowType.DataRow:
                     var expense = row.DataItem as ProjectExpense;
-
+                    var lnkEdit = row.FindControl("lnkEdit") as LinkButton;
+                    var lnkDelete = row.FindControl("lnkDelete") as LinkButton;
                     if (expense != null)
                     {
                         _totalAmount += expense.Amount;
@@ -114,6 +138,11 @@ namespace PraticeManagement.Controls.ProjectExpenses
                         //      empty data grid message
                         if (!expense.Id.HasValue)
                             row.Visible = false;
+                        if (IsLockout && expense.EndDate <= LockoutDate)
+                        {
+                            lnkEdit.Enabled = lnkDelete.Enabled = false;
+                            lnkDelete.OnClientClick = null;
+                        }
                     }
 
                     break;
@@ -153,6 +182,13 @@ namespace PraticeManagement.Controls.ProjectExpenses
                 string newEndDate = e.NewValues["EndDate"].ToString().Trim();
                 string oldStartDate = e.OldValues["StartDate"].ToString().Trim();
                 string oldEndDate = e.OldValues["EndDate"].ToString().Trim();
+                string oldAmount = e.OldValues["Amount"].ToString().Trim();
+                string newAmount = e.NewValues["Amount"].ToString().Trim();
+                string oldReimbursement = e.OldValues["Reimbursement"].ToString().Trim();
+                string newReimbursement = e.NewValues["Reimbursement"].ToString().Trim();
+                string oldName = e.OldValues["Name"].ToString().Trim();
+                string newName = e.NewValues["Name"].ToString().Trim();
+                
 
                 if (newStartDate != oldStartDate || newEndDate != oldEndDate)
                 {
@@ -195,7 +231,47 @@ namespace PraticeManagement.Controls.ProjectExpenses
                         }
                     }
                 }
+                if (newStartDate != oldStartDate || newEndDate != oldEndDate || oldName != newName || oldAmount != newAmount || oldReimbursement != newReimbursement)
+                {
+                    var isValid = true;
+                    var startDate = Convert.ToDateTime(newStartDate);
+                    var endDate = Convert.ToDateTime(newEndDate);
+                    if (isValid && IsLockout)
+                    {
+                        CustomValidator custLockdown = gvProjectExpenses.Rows[e.RowIndex].FindControl("custLockdown") as CustomValidator;
+                        if (!ValidateLockdown(custLockdown, newStartDate != oldStartDate, newEndDate != oldEndDate, oldName != newName, oldAmount != newAmount, oldReimbursement != newReimbursement))
+                        {
+                            HostingPage.IsOtherPanelDisplay = true;
+                            custLockdown.IsValid = isValid = false;
+                            custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownMessage, LockoutDate.Value.ToShortDateString());
+                        }
+                    }
+                    if (!isValid)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
             }
+        }
+
+        public bool ValidateLockdown(object sender,bool isStartDateChanged, bool isEndDateChanged,bool isNameChanged,bool isExpenseChanged,bool isReimberseChanged)
+        {
+            bool isValid = true;
+            var source = sender as CustomValidator;
+            var gridRow = source.NamingContainer as GridViewRow;
+            var txtEndDate = gridRow.FindControl("txtEndDate") as TextBox;
+            var txtStartDate = gridRow.FindControl("txtStartDate") as TextBox;
+            if (!string.IsNullOrEmpty(txtEndDate.Text) && !string.IsNullOrEmpty(txtStartDate.Text))
+            {
+                var endDate = DateTime.Parse(txtEndDate.Text);
+                var startDate = DateTime.Parse(txtStartDate.Text);
+                if ((isEndDateChanged && endDate.Date <= LockoutDate.Value.Date) || (isStartDateChanged && startDate.Date <= LockoutDate.Value.Date) || (isNameChanged && startDate.Date <= LockoutDate.Value.Date) || (isExpenseChanged && startDate.Date <= LockoutDate.Value.Date) || (isReimberseChanged && startDate.Date <= LockoutDate.Value.Date))
+                {
+                    isValid = false;
+                }
+            }
+            return isValid;
         }
 
         private bool IsPeriodOverlaps(string startDateStr, string endDateStr, object expenseIdObj)
@@ -238,5 +314,18 @@ namespace PraticeManagement.Controls.ProjectExpenses
         {
             gvProjectExpenses.DataBind();
         }
+
+        public void LockdownExpenses()
+        {
+            DataTransferObjects.Lockout expenseItem = new DataTransferObjects.Lockout();
+            using (var service = new ConfigurationService.ConfigurationServiceClient())
+            {
+                List<DataTransferObjects.Lockout> projectdetailItems = service.GetLockoutDetails((int)LockoutPages.Projectdetail).ToList();
+                expenseItem = projectdetailItems.FirstOrDefault(p => p.Name == "Expenses");
+                IsLockout = expenseItem.IsLockout;
+                LockoutDate = expenseItem.LockoutDate;
+            }
+        }
     }
 }
+
