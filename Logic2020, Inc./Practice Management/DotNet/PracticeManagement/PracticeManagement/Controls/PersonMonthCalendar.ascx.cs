@@ -119,6 +119,9 @@ namespace PraticeManagement.Controls
                 if (series.First == series.Second)
                 {
                     HostingControl.mpeEditSingleDayPopUp.Show();
+                    HostingControl.PreviousStartDate = HostingControl.PreviousEndDate = series.First;
+                    HostingControl.PreviousTimeType = HostingControl.TimeTypeDdlSingleday.SelectedItem.Text;
+                    HostingControl.PreviousHours = HostingControl.TxtHoursSingleDay.Text;
                 }
                 else
                 {
