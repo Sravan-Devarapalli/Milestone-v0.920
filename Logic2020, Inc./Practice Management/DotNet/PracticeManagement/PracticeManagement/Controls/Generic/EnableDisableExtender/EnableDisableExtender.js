@@ -60,6 +60,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                         var isPersonSalaryTypeDisable = 0;
                         var isPersonHourlyTypeDisable = 0;
                         var isEmpDisable = 0;
+                        var isLockout = 0;
                         if (control != null) {
                             if (control.getAttribute('isHourlyRevenueDisable') != undefined && control.getAttribute('isHourlyRevenueDisable') != null) {
                                 isHourlyRevenueDisable = control.getAttribute('isHourlyRevenueDisable');
@@ -70,6 +71,9 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                             if (control.getAttribute('IsEmpDisable') != undefined && control.getAttribute('IsEmpDisable') != null) {
                                 isEmpDisable = control.getAttribute('IsEmpDisable');
                             }
+                            if (control.getAttribute('IsLockout') != undefined && control.getAttribute('IsLockout') != null) {
+                                isLockout = control.getAttribute('IsLockout');
+                            }
                             if (control.getAttribute('IsPersonSalaryTypeDisable') != undefined && control.getAttribute('IsPersonSalaryTypeDisable') != null) {
                                 isPersonSalaryTypeDisable = control.getAttribute('IsPersonSalaryTypeDisable');
                             }
@@ -79,7 +83,10 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                         }
                         var enable = 0;
                         if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isEmpDisable == 0) {
-                            if (isW2HourlyTimeType == 0 && isW2SalaryTimeType == 0) {
+                            if (isLockout == 1) {
+                                enable = 0;
+                            }
+                            else if (isW2HourlyTimeType == 0 && isW2SalaryTimeType == 0) {
                                 enable = 1;
                             }
                             else if (isW2HourlyTimeType == 1 && isPersonHourlyTypeDisable == 0) {
@@ -96,7 +103,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                             }
                         } else {
                             control.setAttribute('disabled', 'disabled');
-                            if (control.value == '')
+                            if (isLockout == 0 && control.value == '')
                                 control.style.backgroundColor = 'gray';
                         }
                     }
@@ -206,6 +213,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                 var isPersonSalaryTypeDisable = 0;
                 var isPersonHourlyTypeDisable = 0;
                 var isEmpDisable = 0;
+                var isLockout = 0;
                 if (control != null) {
                     if (control.getAttribute('isHourlyRevenueDisable') != undefined && control.getAttribute('isHourlyRevenueDisable') != null) {
                         isHourlyRevenueDisable = control.getAttribute('isHourlyRevenueDisable');
@@ -216,6 +224,9 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                     if (control.getAttribute('IsEmpDisable') != undefined && control.getAttribute('IsEmpDisable') != null) {
                         isEmpDisable = control.getAttribute('IsEmpDisable');
                     }
+                    if (control.getAttribute('IsLockout') != undefined && control.getAttribute('IsLockout') != null) {
+                        isLockout = control.getAttribute('IsLockout');
+                    }
                     if (control.getAttribute('IsPersonSalaryTypeDisable') != undefined && control.getAttribute('IsPersonSalaryTypeDisable') != null) {
                         isPersonSalaryTypeDisable = control.getAttribute('IsPersonSalaryTypeDisable');
                     }
@@ -225,7 +236,10 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                 }
                 var enable = 0;
                 if (isHourlyRevenueDisable == 0 && isChargeCodeTurnOffDisable == 0 && isEmpDisable == 0) {
-                    if (isW2HourlyTimeType == 0 && isW2SalaryTimeType == 0) {
+                    if (isLockout == 1) {
+                        enable = 0;
+                    }
+                    else if (isW2HourlyTimeType == 0 && isW2SalaryTimeType == 0) {
                         enable = 1;
                     }
                     else if (isW2HourlyTimeType == 1 && isPersonHourlyTypeDisable == 0) {
@@ -245,7 +259,7 @@ PraticeManagement.Controls.Generic.EnableDisableExtender.EnableDisableExtenderBe
                     }
                 } else {
                     control.setAttribute('disabled', 'disabled');
-                    if (control.value == '')
+                    if (isLockout == 0 && control.value == '')
                         control.style.backgroundColor = 'gray';
                 }
             }
