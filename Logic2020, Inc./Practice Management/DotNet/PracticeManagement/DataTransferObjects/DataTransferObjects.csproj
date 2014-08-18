@@ -143,6 +143,7 @@
     <Compile Include="Employment.cs" />
     <Compile Include="Financials\QuarterRange.cs" />
     <Compile Include="Financials\RangeType.cs" />
+    <Compile Include="Lockout.cs" />
     <Compile Include="OpurtunityPerson.cs" />
     <Compile Include="PersonPassword.cs" />
     <Compile Include="PersonTimeOff.cs" />
