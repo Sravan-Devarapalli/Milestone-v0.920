@@ -6,6 +6,7 @@ using DataTransferObjects.TimeEntry;
 using PraticeManagement.Utils;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace PraticeManagement.Controls.TimeEntry
 {
@@ -15,6 +16,8 @@ namespace PraticeManagement.Controls.TimeEntry
 
         private const string DateBehindViewstate = "7555B3A7-8713-490F-8D5B-368A02E6A205";
         private const string IsEmpDisableAttribute = "IsEmpDisable";
+        private const string IsLockoutAttribute = "IsLockout";
+        private const string IsLockoutDeleteAttribute = "IsLockoutDelete";
 
         #endregion
 
@@ -130,6 +133,7 @@ namespace PraticeManagement.Controls.TimeEntry
         {
 
             tbNotes.Attributes["imgNoteClientId"] = imgNote.ClientID;
+            tbActualHours.Attributes[IsLockoutDeleteAttribute] = "0";
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -169,6 +173,7 @@ namespace PraticeManagement.Controls.TimeEntry
             ApplyControlStyle();
 
             MaintainEditedtbActualHoursStyle();
+            LockdownHours();
         }
 
         private void MaintainEditedtbActualHoursStyle()
@@ -360,6 +365,29 @@ namespace PraticeManagement.Controls.TimeEntry
             return false;
         }
 
+        public void LockdownHours()
+        {
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                if (tbActualHours.Text == string.Empty)
+                {
+                    tbActualHours.Attributes[IsLockoutAttribute] = "1";
+                }
+            }
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Edit Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                if (tbActualHours.Text != string.Empty)
+                {
+                    tbNotes.Enabled = false;
+                    tbActualHours.Attributes[IsLockoutAttribute] = "1";
+                    tbActualHours.Attributes[IsLockoutDeleteAttribute] = "1";
+                }
+            }
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Delete Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                tbActualHours.Attributes[IsLockoutDeleteAttribute] = "1";
+            }
+        }
 
         #endregion
 
