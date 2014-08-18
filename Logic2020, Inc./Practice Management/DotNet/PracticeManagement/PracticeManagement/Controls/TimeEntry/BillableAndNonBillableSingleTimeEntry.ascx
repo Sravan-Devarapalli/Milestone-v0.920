@@ -29,7 +29,7 @@
                 <tr>
                     <td>
                         <image src='Images/trash-icon.gif' id='imgClear' class='PaddingTop5' title="Clear time and notes entered for this day only."
-                            onclick='<%# "javaScript:$find(\"" + deBillableHours.ClientID + "\").clearData(); $find(\"" + deNonBillableHours.ClientID + "\").clearData(); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\");"%>' />
+                            runat="server" onclick='<%# "javaScript:$find(\"" + deBillableHours.ClientID + "\").clearData(); $find(\"" + deNonBillableHours.ClientID + "\").clearData(); changeIcon(\"" + tbNotes.ClientID + "\",\"" + imgNote.ClientID + "\");"%>' />
                     </td>
                 </tr>
             </table>
