@@ -112,6 +112,42 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CompareValidator compEndDate;
         
         /// <summary>
+        /// custValLockoutDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custValLockoutDates;
+        
+        /// <summary>
+        /// custLockoutBasis control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockoutBasis;
+        
+        /// <summary>
+        /// custLockoutAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockoutAmount;
+        
+        /// <summary>
+        /// custLockoutPTO control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockoutPTO;
+        
+        /// <summary>
         /// rbtnSalaryAnnual control.
         /// </summary>
         /// <remarks>
@@ -526,6 +562,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTitle;
         
         /// <summary>
+        /// custLockoutTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockoutTitle;
+        
+        /// <summary>
         /// ddlPractice control.
         /// </summary>
         /// <remarks>
@@ -542,6 +587,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPractice;
+        
+        /// <summary>
+        /// custLockOutPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockOutPractice;
         
         /// <summary>
         /// hdSLTApproval control.
