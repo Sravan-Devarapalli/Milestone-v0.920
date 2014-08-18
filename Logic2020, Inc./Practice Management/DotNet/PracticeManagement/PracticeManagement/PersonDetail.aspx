@@ -540,11 +540,11 @@
                                     </asp:UpdatePanel>
                                 </td>
                                 <td>
-                                Cohort Assignment
+                                    Cohort Assignment
                                     <asp:DropDownList ID="ddlCohortAssignment" runat="server">
                                     </asp:DropDownList>
-                                        <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Counselor to Practice Area Owner</asp:LinkButton>
-                                        <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
+                                    <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Counselor to Practice Area Owner</asp:LinkButton>
+                                    <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
                                 </td>
                             </tr>
                             <tr>
@@ -668,9 +668,10 @@
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic" OnServerValidate="custEmailAddress_ServerValidate"></asp:CustomValidator>
                                     <asp:CustomValidator ID="custUserName" runat="server" ControlToValidate="txtEmailAddress"
-                                        ErrorMessage="Unknown error occures. Please contact your system administrator." ToolTip="Unknown error occures. Please contact your system administrator."
-                                        ValidateEmptyText="true" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                        Display="Dynamic" ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>&nbsp;
+                                        ErrorMessage="Unknown error occures. Please contact your system administrator."
+                                        ToolTip="Unknown error occures. Please contact your system administrator." ValidateEmptyText="true"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                        ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>&nbsp;
                                 </td>
                                 <td>
                                     <asp:Label ID="lbPayChexID" runat="server" Text="ADP ID" Visible="false"></asp:Label>
@@ -1069,6 +1070,8 @@
                                                                 ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
                                                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                                                 Type="Date"></asp:CompareValidator>
+                                                            <asp:CustomValidator ID="custValLockoutDates" runat="server" ValidationGroup="CompensationUpdate"
+                                                                Display="Dynamic" Text="*" OnServerValidate="custValLockoutDates_OnServerValidate"></asp:CustomValidator>
                                                         </span>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
@@ -1086,6 +1089,8 @@
                                                                 ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
                                                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                                                                 Type="Date"></asp:CompareValidator>
+                                                            <asp:CustomValidator ID="custValLockoutDates" runat="server" ValidationGroup="CompensationUpdate"
+                                                                Display="Dynamic" Text="*" OnServerValidate="custValLockoutDates_OnServerValidate"></asp:CustomValidator>
                                                         </span>
                                                     </FooterTemplate>
                                                     <HeaderStyle CssClass="Width11Percent" />
@@ -1105,6 +1110,8 @@
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
                                                             OnServerValidate="custValPractice_OnServerValidate">
                                                         </asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockOutPractice" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockOutPractice_OnServerValidate"></asp:CustomValidator>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
                                                         <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlPractice" runat="server"
@@ -1114,6 +1121,8 @@
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Practice Area"
                                                             OnServerValidate="custValPractice_OnServerValidate">
                                                         </asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockOutPractice" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockOutPractice_OnServerValidate"></asp:CustomValidator>
                                                     </FooterTemplate>
                                                     <HeaderStyle CssClass="Width23Percent" HorizontalAlign="Center" />
                                                 </asp:TemplateField>
@@ -1134,6 +1143,9 @@
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select title"
                                                             OnServerValidate="custValTitle_OnServerValidate">
                                                         </asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockoutTitle" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockoutTitle_OnServerValidate">
+                                                        </asp:CustomValidator>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
                                                         <pmc:CustomDropDown ValidationGroup="CompensationUpdate" ID="ddlTitle" runat="server"
@@ -1144,6 +1156,8 @@
                                                             ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select title"
                                                             OnServerValidate="custValTitle_OnServerValidate">
                                                         </asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockoutTitle" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockoutTitle_OnServerValidate"></asp:CustomValidator>
                                                     </FooterTemplate>
                                                     <HeaderStyle CssClass="Width20Percent" HorizontalAlign="Center" />
                                                 </asp:TemplateField>
@@ -1164,6 +1178,8 @@
                                                         </asp:DropDownList>
                                                         <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
                                                             ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockoutBasis" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockoutBasis_OnServerValidate"></asp:CustomValidator>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
                                                         <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" OnSelectedIndexChanged="ddlBasis_OnSelectedIndexChanged"
@@ -1175,6 +1191,8 @@
                                                         </asp:DropDownList>
                                                         <asp:CustomValidator ID="cvSalaryToContractVoilation" runat="server" ErrorMessage="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"
                                                             ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockoutBasis" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockoutBasis_OnServerValidate"></asp:CustomValidator>
                                                     </FooterTemplate>
                                                     <HeaderStyle CssClass="Width10Percent" />
                                                 </asp:TemplateField>
@@ -1212,6 +1230,8 @@
                                                                 ValueToCompare="0" EnableClientScript="false" Text="*" ValidationGroup="CompensationUpdate"
                                                                 ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
                                                             </asp:CompareValidator>
+                                                            <asp:CustomValidator ID="custLockoutAmount" runat="server" ValidationGroup="CompensationUpdate"
+                                                                Display="Dynamic" Text="*" OnServerValidate="custLockoutAmount_OnServerValidate"></asp:CustomValidator>
                                                         </span>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
@@ -1240,6 +1260,8 @@
                                                                 ValueToCompare="0" EnableClientScript="false" Text="*" ValidationGroup="CompensationUpdate"
                                                                 ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0.">
                                                             </asp:CompareValidator>
+                                                            <asp:CustomValidator ID="custLockoutAmount" runat="server" ValidationGroup="CompensationUpdate"
+                                                                Display="Dynamic" Text="*" OnServerValidate="custLockoutAmount_OnServerValidate"></asp:CustomValidator>
                                                         </span>
                                                     </FooterTemplate>
                                                     <HeaderStyle CssClass="Width8Percent" />
@@ -1272,6 +1294,8 @@
                                                             <asp:CustomValidator ID="cvSLTPTOApprovalValidation" runat="server" OnServerValidate="cvSLTPTOApprovalValidation_OnServerValidate"
                                                                 ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                                 Display="Dynamic"></asp:CustomValidator>
+                                                            <asp:CustomValidator ID="custLockoutPTO" runat="server" ValidationGroup="CompensationUpdate"
+                                                                Display="Dynamic" Text="*" OnServerValidate="custLockoutPTO_OnServerValidate"></asp:CustomValidator>
                                                         </span>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
@@ -1294,6 +1318,8 @@
                                                             <asp:CustomValidator ID="cvSLTPTOApprovalValidation" runat="server" OnServerValidate="cvSLTPTOApprovalValidation_OnServerValidate"
                                                                 ValidationGroup="CompensationUpdate" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                                 Display="Dynamic"></asp:CustomValidator>
+                                                            <asp:CustomValidator ID="custLockoutPTO" runat="server" ValidationGroup="CompensationUpdate"
+                                                                Display="Dynamic" Text="*" OnServerValidate="custLockoutPTO_OnServerValidate"></asp:CustomValidator>
                                                         </span>
                                                     </FooterTemplate>
                                                     <HeaderStyle CssClass="Width7Percent" />
