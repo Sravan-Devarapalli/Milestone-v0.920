@@ -87,8 +87,8 @@
                                             ErrorMessage="Delivery Attribution: The person is not a 'W2-Hourly/W2-Salary' during the period."
                                             ToolTip="The person is not a 'W2-Hourly/W2-Salary' during the period." Text="*"
                                             OnServerValidate="custPaytypeValidation_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic" 
-                                            Text="*" OnServerValidate="custDivision_ServerValidate"></asp:CustomValidator>
+                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic" Text="*"
+                                            OnServerValidate="custDivision_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -159,6 +159,8 @@
                                             ToolTip="The person end date must be greater than or equal to the person start date."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                                        <asp:CustomValidator ID="custLockdown" runat="server" Text="*" EnableClientScript="false"
+                                            SetFocusOnError="true" Display="Dynamic" OnServerValidate="custLockdown_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -267,8 +269,8 @@
                                             ErrorMessage="Sales Attribution: The person is not a 'W2-Hourly/W2-Salary' during the period."
                                             ToolTip="The person is not a 'W2-Hourly/W2-Salary' during the period." Text="*"
                                             OnServerValidate="custPaytypeValidation_ServerValidate"></asp:CustomValidator>
-                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic"
-                                            Text="*" OnServerValidate="custDivision_ServerValidate"></asp:CustomValidator>
+                                        <asp:CustomValidator runat="server" ID="custDivision" Display="Dynamic" Text="*"
+                                            OnServerValidate="custDivision_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
@@ -339,6 +341,8 @@
                                             ToolTip="The person end date must be greater than or equal to the person start date."
                                             Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                             Operator="GreaterThanEqual" Type="Date"></asp:CompareValidator>
+                                        <asp:CustomValidator ID="custLockdown" runat="server" Text="*" EnableClientScript="false"
+                                            SetFocusOnError="true" Display="Dynamic" OnServerValidate="custLockdown_ServerValidate"></asp:CustomValidator>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField>
