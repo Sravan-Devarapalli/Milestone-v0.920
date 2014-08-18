@@ -20,6 +20,8 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string IsPersonHourlyTypeDisableAttribute = "IsPersonHourlyTypeDisable";
         private const string IsChargeCodeTurnOffDisableAttribute = "isChargeCodeTurnOffDisable";
         private const string ImgNoteClientIdAttribute = "imgNoteClientId";
+        private const string IsLockoutAttribute = "IsLockout";
+        private const string IsLockoutDeleteAttribute = "IsLockoutDelete";
 
         #endregion Constants
 
@@ -288,8 +290,9 @@ namespace PraticeManagement.Controls.TimeEntry
 
             tbActualHours.Attributes["IsPTO"] = IsPTO.ToString();
             tbActualHours.Attributes["txtboxNoteClienId"] = tbNotes.ClientID;
-
+            tbActualHours.Attributes[IsLockoutDeleteAttribute] = "0"; 
             MaintainEditedtbActualHoursStyle();
+            LockdownHours();
         }
 
         private void MaintainEditedtbActualHoursStyle()
@@ -570,6 +573,30 @@ namespace PraticeManagement.Controls.TimeEntry
         internal void AddAttributeToPTOTextBox(string clientId)
         {
             tbActualHours.Attributes["HorizontalTotalCalculator"] = clientId;
+        }
+
+        public void LockdownHours()
+        {
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                if (tbActualHours.Text == string.Empty)
+                {
+                    tbActualHours.Enabled = false;
+                }
+            }
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Edit Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                if (tbActualHours.Text != string.Empty)
+                {
+                    tbNotes.Enabled = false;
+                    tbActualHours.Enabled = false;
+                    tbActualHours.Attributes[IsLockoutDeleteAttribute] = "1"; 
+                }
+            }
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Delete Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                tbActualHours.Attributes[IsLockoutDeleteAttribute] = "1"; 
+            }
         }
 
         #endregion Methods
