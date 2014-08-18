@@ -187,6 +187,12 @@ namespace PraticeManagement
 
         #region properties
 
+        public List<DataTransferObjects.Lockout> Lockouts
+        {
+            get;
+            set;
+        }
+
         public bool IsSaving { get; set; }
 
         public bool IsValidNote { get; set; }
@@ -524,6 +530,7 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            LockdownTimeEntry();
             btnAddProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeProjectSection.BehaviorID + "');";
             btnAddInternalProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeInternalSection.BehaviorID + "');";
             btnAddBusinessDevelopmentSection.Attributes["onclick"] = "ExpandPanel('" + cpeBusinessDevelopmentSection.BehaviorID + "');";
@@ -582,6 +589,10 @@ namespace PraticeManagement
             DataBindSectionHeader(repInternalSections, pnlInternalSectionHeader, repInternalSectionHeader, Image2);
             DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader, Image1);
             DataBindSectionHeader(repAdministrativeTes, pnlAdministrativeSection, repAdministrativeTesHeader, btnAdmistrativeExpandCollapseFilter);
+            if (Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout && SelectedDates[6].Date <= p.LockoutDate.Value.Date))
+            {
+                btnSave.Enabled = btnAddAccount.Enabled = btnAddProject.Enabled = btnAddInternalProject.Enabled = false;
+            }
         }
 
         private void DataBindSectionHeader(Repeater sectionRepeater, Panel sectionHeaderPanel, Repeater sectionHeaderRepeater, System.Web.UI.WebControls.Image collapseImage)
@@ -689,6 +700,9 @@ namespace PraticeManagement
                 imgBtnDeleteProjectSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Project).ToString();
                 imgBtnDeleteProjectSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Project");
                 imgBtnDeleteProjectSection.Visible = !IsReadOnly;
+
+                if (Lockouts.Any(p => (p.HtmlEncodedName == "Delete Time entries" || p.HtmlEncodedName == "Edit Time entries") && p.IsLockout && SelectedDates[0].Date <= p.LockoutDate.Value.Date))
+                    imgBtnDeleteProjectSection.Enabled = false;
             }
         }
 
@@ -736,6 +750,8 @@ namespace PraticeManagement
                 imgBtnDeleteBusinessDevelopmentSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.BusinessDevelopment).ToString();
                 imgBtnDeleteBusinessDevelopmentSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Account");
                 imgBtnDeleteBusinessDevelopmentSection.Visible = !IsReadOnly;
+                if (Lockouts.Any(p => (p.HtmlEncodedName == "Delete Time entries" || p.HtmlEncodedName == "Edit Time entries") && p.IsLockout && SelectedDates[0].Date <= p.LockoutDate.Value.Date))
+                    imgBtnDeleteBusinessDevelopmentSection.Enabled = false;
             }
         }
 
@@ -785,6 +801,9 @@ namespace PraticeManagement
                 imgBtnDeleteInternalSection.Attributes[TimeEntrySectionIdXname] = ((int)TimeEntrySectionType.Internal).ToString();
                 imgBtnDeleteInternalSection.ToolTip = String.Format(deleteSectionToolTipFormat, "Project");
                 imgBtnDeleteInternalSection.Visible = !IsReadOnly;
+
+                if (Lockouts.Any(p => (p.HtmlEncodedName == "Delete Time entries" || p.HtmlEncodedName == "Edit Time entries") && p.IsLockout && SelectedDates[0].Date <= p.LockoutDate.Value.Date))
+                    imgBtnDeleteInternalSection.Enabled = false;
             }
         }
 
@@ -823,8 +842,9 @@ namespace PraticeManagement
                 imgPlusProjectSection.Attributes[AccountIdXname] = AccountId;
                 imgPlusProjectSection.Attributes[ProjectIdXname] = ProjectId;
                 imgPlusProjectSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
-
                 imgPlusProjectSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
+                if (Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout))
+                    imgPlusProjectSection.Enabled = false;
             }
         }
 
@@ -867,6 +887,8 @@ namespace PraticeManagement
                 imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgPlusBusinessDevelopmentSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusBusinessDevelopmentSection.ToolTip = string.Format(PlusToolTipFormat, "Account");
+                if (Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout))
+                    imgPlusBusinessDevelopmentSection.Enabled = false;
             }
         }
 
@@ -908,6 +930,8 @@ namespace PraticeManagement
                 imgPlusInternalSection.Attributes[BusinessUnitIdXname] = BusinessUnitId;
                 imgPlusInternalSection.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
                 imgPlusInternalSection.ToolTip = string.Format(PlusToolTipFormat, "Project");
+                if (Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout))
+                    imgPlusInternalSection.Enabled = false;
             }
         }
 
@@ -993,11 +1017,12 @@ namespace PraticeManagement
                     imgPlus.Style["display"] = "none";
                 extDupilcateOptionsRemoveExtenderAdministrative.ControlsToCheck = DdlWorkTypeIdsList;
                 extDupilcateOptionsRemoveExtenderAdministrative.PlusButtonClientID = imgPlus.ClientID;
-
                 var repProjectTesFooter = e.Item.FindControl(repAdministrativeTesFooterRepeater) as Repeater;
                 repProjectTesFooter.DataSource = SelectedDates;
                 repProjectTesFooter.DataBind();
                 imgPlus.Attributes[PlaceHolderCell] = TdPlusSectionClientId;
+                if (Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout))
+                    imgPlus.Enabled = false;
             }
         }
 
@@ -2330,6 +2355,16 @@ namespace PraticeManagement
             return xdoc;
         }
 
+        public void LockdownTimeEntry()
+        {
+            using (var service = new ConfigurationService.ConfigurationServiceClient())
+            {
+                var timeEntryItems = service.GetLockoutDetails((int)LockoutPages.TimeEntry).ToList();
+                Lockouts = timeEntryItems;
+            }
+        }
+
         #endregion Methods
     }
 }
+
