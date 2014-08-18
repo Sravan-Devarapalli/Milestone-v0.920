@@ -482,6 +482,7 @@
     <Content Include="Images\Terminated.png" />
     <Content Include="Images\Title.png" />
     <Content Include="Images\Zoom-In-icon.png" />
+    <Content Include="Lockout.aspx" />
     <Content Include="LoggedOut.aspx" />
     <Content Include="OpportunitySearch.aspx" />
     <Content Include="ProjectCalendar.aspx" />
@@ -560,6 +561,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.CohortAssignment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Lockout.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PricingList.datasource" />
@@ -1860,6 +1862,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FilterObjects\PersonFilter.cs" />
+    <Compile Include="Lockout.aspx.cs">
+      <DependentUpon>Lockout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Lockout.aspx.designer.cs">
+      <DependentUpon>Lockout.aspx</DependentUpon>
+    </Compile>
     <Compile Include="LoggedOut.aspx.cs">
       <DependentUpon>LoggedOut.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
