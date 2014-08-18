@@ -9,6 +9,11 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string LockoutDate = "LockoutDate";
+            public const string Lockout = "Lockout";
+            public const string FunctionalityName = "FunctionalityName";
+            public const string LockoutPageId = "LockoutPageId";
+            public const string LockoutId = "LockoutId";
             public const string SalesPersonName = "SalesPersonName";
             public const string ActualRevenueInRange = "ActualRevenueInRange";
             public const string GroupName = "GroupName";
@@ -518,6 +523,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string LockoutXML = "@LockoutXML";
+            public static string LockoutPageId = "@LockoutPageId";
             public static string SeniorManagerIds = "@SeniorManagerIds";
             public static string ProjectManagerIds = "@ProjectManagerIds";
             public static string DirectorIds = "@DirectorIds";
@@ -938,6 +945,8 @@
 
             public class Configuration
             {
+                public const string SaveLockoutDetails = "dbo.SaveLockoutDetails";
+                public const string GetLockoutDetails = "dbo.GetLockoutDetails";
                 public const string GetCompanyNameProcedure = "dbo.GetCompanyName";
                 public const string GetCompanyLogoDataProcedure = "dbo.GetCompanyLogoData";
                 public const string CompanyLogoDataSaveProcedure = "dbo.CompanyLogoDataSave";
