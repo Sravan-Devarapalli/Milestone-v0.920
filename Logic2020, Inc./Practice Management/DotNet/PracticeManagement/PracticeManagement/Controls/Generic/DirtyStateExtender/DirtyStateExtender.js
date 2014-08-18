@@ -208,8 +208,12 @@ PraticeManagement.Controls.Generic.DirtyStateExtender.DirtyStateBehavior.prototy
     _clearData: function () {
         var actualHours = $get(this.get_ActualHoursIdValue());
         var isPTO = actualHours.getAttribute('IsPTO') == null ? false : actualHours.getAttribute('IsPTO').toString().toLowerCase();
-
-        if ((!$get(this.get_NoteIdValue()).disabled && !actualHours.disabled) || (isPTO && !actualHours.disabled)) {
+        var isLockoutDelete = actualHours.getAttribute('IsLockoutDelete');
+        
+        if(isLockoutDelete == 1){
+            
+        }
+        else if ((!$get(this.get_NoteIdValue()).disabled && !actualHours.disabled) || (isPTO && !actualHours.disabled)) {
 
             actualHours.value = '';
             $get(this.get_NoteIdValue()).value = '';
