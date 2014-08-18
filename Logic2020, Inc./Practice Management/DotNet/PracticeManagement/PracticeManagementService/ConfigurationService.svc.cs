@@ -161,5 +161,15 @@ namespace PracticeManagementService
         {
             MailUtil.SendRecruitingMetricsReportEmail(startDate, endDate, attachmentByteArray);
         }
+
+        public List<Lockout> GetLockoutDetails(int? lockoutPageId)
+        {
+            return ConfigurationDAL.GetLockoutDetails(lockoutPageId);
+        }
+
+        public void SaveLockoutDetails(string lockoutXML)
+        {
+            ConfigurationDAL.SaveLockoutDetails(lockoutXML);
+        }
     }
 }
