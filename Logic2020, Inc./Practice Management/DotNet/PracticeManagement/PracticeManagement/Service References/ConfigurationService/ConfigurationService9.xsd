@@ -368,4 +368,30 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetLockoutDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="lockoutPageId" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLockoutDetailsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetLockoutDetailsResult" nillable="true" type="q23:ArrayOfLockout" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveLockoutDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="lockoutXML" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveLockoutDetailsResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
