@@ -572,6 +572,7 @@ namespace PraticeManagement
                             if (!PersonDetailData.Id.HasValue)
                                 PersonDetailData.Id = personId.Value;
                             IsDirty = false;
+                            personnelCompensation.SaveAllLockdownViewStates();
                         }
                         else
                         {
