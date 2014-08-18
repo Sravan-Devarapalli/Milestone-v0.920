@@ -22,7 +22,9 @@ namespace PraticeManagement.Controls.TimeEntry
         private const string isChargeCodeTurnOffDisableAttribute = "isChargeCodeTurnOffDisable";
         private const string isHourlyRevenueDisableAttribute = "isHourlyRevenueDisable";
         private const string IsEmpDisableAttribute = "IsEmpDisable";
-         
+        private const string IsLockoutAttribute = "IsLockout";
+        private const string IsLockoutDeleteAttribute = "IsLockoutDelete";
+
         #endregion
 
         #region Properties
@@ -165,12 +167,49 @@ namespace PraticeManagement.Controls.TimeEntry
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            tbNotes.Attributes[imgNoteClientIdAttribute] = imgNote.ClientID; 
+            tbNotes.Attributes[imgNoteClientIdAttribute] = imgNote.ClientID;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
             SpreadSheetTotalCalculatorExtenderId = HostingPage.SpreadSheetTotalCalculatorExtenderId;
+        }
+
+        public void LockdownHours()
+        {
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                if (tbBillableHours.Text == string.Empty)
+                {
+                    tbBillableHours.Attributes[IsLockoutAttribute] = "1";
+                }
+                if (tbNonBillableHours.Text == string.Empty)
+                {
+                    tbNonBillableHours.Attributes[IsLockoutAttribute] = "1";
+                }
+            }
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Edit Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {
+                if (tbBillableHours.Text != string.Empty)
+                {
+                    tbNotes.Enabled = false;
+                    tbBillableHours.Attributes[IsLockoutAttribute] = "1";
+                    tbBillableHours.Attributes[IsLockoutDeleteAttribute] = "1";
+                    tbNonBillableHours.Attributes[IsLockoutDeleteAttribute] = "1"; 
+                }
+                if (tbNonBillableHours.Text != string.Empty)
+                {
+                    tbNotes.Enabled = false;
+                    tbNonBillableHours.Attributes[IsLockoutAttribute] = "1";
+                    tbBillableHours.Attributes[IsLockoutDeleteAttribute] = "1";
+                    tbNonBillableHours.Attributes[IsLockoutDeleteAttribute] = "1"; 
+                }
+            }
+            if (HostingPage.Lockouts.Any(p => p.HtmlEncodedName == "Delete Time entries" && p.IsLockout && DateBehind.Date <= p.LockoutDate.Value.Date))
+            {                
+                tbBillableHours.Attributes[IsLockoutAttribute] = "1";
+                tbNonBillableHours.Attributes[IsLockoutDeleteAttribute] = "1"; 
+            }
         }
 
         public void CanelControlStyle()
@@ -208,7 +247,12 @@ namespace PraticeManagement.Controls.TimeEntry
             tbBillableHours.Attributes[isChargeCodeTurnOffDisableAttribute] = Convert.ToBoolean(IsChargeCodeTurnOff) ? "1" : "0";
 
             tbNonBillableHours.Attributes[IsEmpDisableAttribute] =
-            tbBillableHours.Attributes[IsEmpDisableAttribute] = HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date]  ? "0" : "1";
+            tbBillableHours.Attributes[IsEmpDisableAttribute] = HostingPage.IsDateInPersonEmployeeHistoryList[DateBehind.Date] ? "0" : "1";
+            tbNonBillableHours.Attributes[IsLockoutAttribute] = "0";
+            tbBillableHours.Attributes[IsLockoutAttribute] = "0";
+            tbBillableHours.Attributes[IsLockoutDeleteAttribute] = "0";
+            tbNonBillableHours.Attributes[IsLockoutDeleteAttribute] = "0"; 
+            LockdownHours();
         }
 
         private void MaintainEditedtbHoursStyle()
@@ -374,7 +418,7 @@ namespace PraticeManagement.Controls.TimeEntry
                 {
                     HostingPage.IsNoteRequiredBecauseOfNonBillable = true;
                 }
-              
+
             }
 
             if (!(isValidBillableHours && isValidNonBillableHours))
@@ -410,10 +454,10 @@ namespace PraticeManagement.Controls.TimeEntry
 
             var note = tbNotes.Text.Trim();
 
-           
+
             if (!string.IsNullOrEmpty(tbNonBillableHours.Text) //For Non-Billable Note is Mandatory
                 || (hdnIsNoteRequired.Value.ToLowerInvariant() == "true" && (!string.IsNullOrEmpty(tbBillableHours.Text)))
-                
+
                 )
             {
                 if (string.IsNullOrEmpty(note) || note.Length < 3 || note.Length > 1000)
