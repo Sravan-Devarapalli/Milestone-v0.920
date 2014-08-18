@@ -265,4 +265,30 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="RecruitingMetricsType" nillable="true" type="tns:RecruitingMetricsType" />
+  <xs:complexType name="ArrayOfLockout">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Lockout" nillable="true" type="tns:Lockout" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLockout" nillable="true" type="tns:ArrayOfLockout" />
+  <xs:complexType name="Lockout">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsLockout" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LockoutDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LockoutPage" type="tns:LockoutPages" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Lockout" nillable="true" type="tns:Lockout" />
+  <xs:simpleType name="LockoutPages">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Undefined" />
+      <xs:enumeration value="TimeEntry" />
+      <xs:enumeration value="Calendar" />
+      <xs:enumeration value="Persondetail" />
+      <xs:enumeration value="Projectdetail" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LockoutPages" nillable="true" type="tns:LockoutPages" />
 </xs:schema>
