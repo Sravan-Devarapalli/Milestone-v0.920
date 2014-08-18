@@ -458,6 +458,7 @@ namespace DataAccess
                 }
             }
         }
+
         #region RecruitingMetrics
 
         public static List<RecruitingMetrics> GetRecruitingMetrics(int? recruitingMetricsTypeId)
@@ -503,7 +504,6 @@ namespace DataAccess
             }
         }
 
-
         public static void SaveRecruitingMetrics(RecruitingMetrics metric)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -545,6 +545,65 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.Name, metrics.Name);
                 command.Parameters.AddWithValue(Constants.ParameterNames.RecruitingMetricsTypeId, (int)metrics.RecruitingMetricsType);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SortOrder, metrics.SortOrder);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        #endregion
+
+        #region Lockout
+
+        public static List<Lockout> GetLockoutDetails(int? lockoutPageId)
+        {
+            var lockouts = new List<Lockout>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetLockoutDetails, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.LockoutPageId, lockoutPageId.HasValue ? lockoutPageId.Value : (object)DBNull.Value);
+                    
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        ReadLockoutDetails(reader, lockouts);
+                    }
+                }
+            }
+            return lockouts;
+        }
+
+        private static void ReadLockoutDetails(SqlDataReader reader, List<Lockout> lockouts)
+        {
+            if (!reader.HasRows) return;
+            int lockoutIdIndex = reader.GetOrdinal(Constants.ColumnNames.LockoutId);
+            int lockoutPageIdIndex = reader.GetOrdinal(Constants.ColumnNames.LockoutPageId);
+            int functionalityNameIndex = reader.GetOrdinal(Constants.ColumnNames.FunctionalityName);
+            int lockoutIndex = reader.GetOrdinal(Constants.ColumnNames.Lockout);
+            int lockoutDateIndex = reader.GetOrdinal(Constants.ColumnNames.LockoutDate);
+            while (reader.Read())
+            {
+                lockouts.Add(new Lockout()
+                {
+                    Id = reader.GetInt32(lockoutIdIndex),
+                    Name = reader.GetString(functionalityNameIndex),
+                    LockoutPage = (LockoutPages)reader.GetInt32(lockoutPageIdIndex),
+                    IsLockout = reader.GetBoolean(lockoutIndex),
+                    LockoutDate = reader.IsDBNull(lockoutDateIndex) ? null : (DateTime?)reader.GetDateTime(lockoutDateIndex)
+                });
+            }
+        }
+
+        public static void SaveLockoutDetails(string lockoutXML)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.SaveLockoutDetails, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.LockoutXML, lockoutXML);
                 connection.Open();
                 command.ExecuteNonQuery();
             }
