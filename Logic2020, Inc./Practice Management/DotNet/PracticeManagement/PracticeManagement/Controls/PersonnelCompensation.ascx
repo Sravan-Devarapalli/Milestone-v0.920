@@ -38,9 +38,17 @@
                 ToolTip="The End Date has an incorrect format. It must be 'MM/dd/yyyy'." Text="*"
                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" Operator="DataTypeCheck"
                 Type="Date"></asp:CompareValidator>
+            <asp:CustomValidator ID="custValLockoutDates" runat="server" Display="Dynamic" Text="*"
+                OnServerValidate="custValLockoutDates_OnServerValidate"></asp:CustomValidator>
         </td>
         <td colspan="4">
             &nbsp;
+            <asp:CustomValidator ID="custLockoutBasis" runat="server" Display="Dynamic" Text="*"
+                OnServerValidate="custLockoutBasis_OnServerValidate"></asp:CustomValidator>
+            <asp:CustomValidator ID="custLockoutAmount" runat="server" Display="Dynamic" Text="*"
+                OnServerValidate="custLockoutAmount_OnServerValidate"></asp:CustomValidator>
+            <asp:CustomValidator ID="custLockoutPTO" runat="server" Display="Dynamic" Text="*"
+                OnServerValidate="custLockoutPTO_OnServerValidate"></asp:CustomValidator>
         </td>
     </tr>
     <tr>
@@ -68,8 +76,7 @@
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck"
                 Type="Currency" Display="Dynamic"></asp:CompareValidator>
             <asp:CompareValidator ID="compSalaryWageGreaterThanZero" runat="server" ControlToValidate="txtSalaryAnnual"
-                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
-                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
+                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="GreaterThan"
                 Type="Currency" ValueToCompare="0" Display="Dynamic"></asp:CompareValidator>
             <asp:CustomValidator ID="cvSLTApprovalValidation" runat="server" OnServerValidate="cvSLTApprovalValidation_OnServerValidate"
@@ -110,8 +117,7 @@
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck"
                 Type="Currency" Display="Dynamic"></asp:CompareValidator>
             <asp:CompareValidator ID="compHourlyWageGreaterThanZero" runat="server" ControlToValidate="txtSalaryHourly"
-                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
-                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
+                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="GreaterThan"
                 Type="Currency" ValueToCompare="0" Display="Dynamic"></asp:CompareValidator>
         </td>
@@ -145,8 +151,7 @@
                 EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck" Type="Currency"
                 Display="Dynamic"></asp:CompareValidator>
             <asp:CompareValidator ID="compHourlyGreaterThanZero" runat="server" ControlToValidate="txt1099Ctc"
-                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
-                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
+                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="GreaterThan"
                 Type="Currency" ValueToCompare="0" Display="Dynamic"></asp:CompareValidator>
         </td>
@@ -178,8 +183,7 @@
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="DataTypeCheck"
                 Type="Double" Display="Dynamic"></asp:CompareValidator>
             <asp:CompareValidator ID="compPercRevenueGreaterThanZero" runat="server" ControlToValidate="txtPercRevenue"
-                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0."
-                ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
+                ErrorMessage="Warning - Incorrect Pay: The wage must be greater than $0." ToolTip="Warning - Incorrect Pay: The wage must be greater than $0."
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="GreaterThan"
                 Type="Currency" ValueToCompare="0" Display="Dynamic"></asp:CompareValidator>
         </td>
@@ -298,8 +302,7 @@
                 ToolTip="PTO Accrual(In Hours) must be in multiple of 8." SetFocusOnError="true"
                 EnableClientScript="false" Enabled="false" OnServerValidate="cvVacationDays_ServerValidate"></asp:CustomValidator>
             <asp:CustomValidator ID="cvSLTPTOApprovalValidation" runat="server" OnServerValidate="cvSLTPTOApprovalValidation_OnServerValidate"
-                Text="*" EnableClientScript="false" SetFocusOnError="true"
-                Display="Dynamic"></asp:CustomValidator>
+                Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:CustomValidator>
         </td>
     </tr>
     <tr id="trTitleAndPractice" runat="server">
@@ -315,6 +318,9 @@
             <asp:RequiredFieldValidator ID="rfvTitle" runat="server" ToolTip="Please select Title"
                 ControlToValidate="ddlTitle" EnableClientScript="false" Display="Dynamic" Text="*"
                 ErrorMessage="Please select Title"></asp:RequiredFieldValidator>
+            <asp:CustomValidator ID="custLockoutTitle" runat="server" Display="Dynamic" Text="*"
+                OnServerValidate="custLockoutTitle_OnServerValidate">
+            </asp:CustomValidator>
         </td>
         <td>
             Practice Area
@@ -327,6 +333,8 @@
             <asp:RequiredFieldValidator ID="rfvPractice" runat="server" ToolTip="Please select Practice Area"
                 ControlToValidate="ddlPractice" EnableClientScript="false" Display="Dynamic"
                 Text="*" ErrorMessage="Please select Practice Area"></asp:RequiredFieldValidator>
+            <asp:CustomValidator ID="custLockOutPractice" runat="server" Display="Dynamic" Text="*"
+                OnServerValidate="custLockOutPractice_OnServerValidate"></asp:CustomValidator>
         </td>
     </tr>
 </table>
