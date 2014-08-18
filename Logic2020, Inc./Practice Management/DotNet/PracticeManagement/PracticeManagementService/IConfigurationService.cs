@@ -90,5 +90,11 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SendRecruitingMetricsReportEmail(DateTime startDate, DateTime endDate, byte[] attachmentByteArray);
+
+        [OperationContract]
+        List<Lockout> GetLockoutDetails(int? lockoutPageId);
+
+        [OperationContract]
+        void SaveLockoutDetails(string lockoutXML);
     }
 }
