@@ -172,6 +172,18 @@
   <wsdl:message name="IConfigurationService_SendRecruitingMetricsReportEmail_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendRecruitingMetricsReportEmailResponse" />
   </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetLockoutDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLockoutDetails" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_GetLockoutDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLockoutDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveLockoutDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveLockoutDetails" />
+  </wsdl:message>
+  <wsdl:message name="IConfigurationService_SaveLockoutDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveLockoutDetailsResponse" />
+  </wsdl:message>
   <wsdl:portType name="IConfigurationService">
     <wsdl:operation name="GetAllEmailTemplates">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetAllEmailTemplates" message="tns:IConfigurationService_GetAllEmailTemplates_InputMessage" />
@@ -280,6 +292,14 @@
     <wsdl:operation name="SendRecruitingMetricsReportEmail">
       <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SendRecruitingMetricsReportEmail" message="tns:IConfigurationService_SendRecruitingMetricsReportEmail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SendRecruitingMetricsReportEmailResponse" message="tns:IConfigurationService_SendRecruitingMetricsReportEmail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLockoutDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/GetLockoutDetails" message="tns:IConfigurationService_GetLockoutDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/GetLockoutDetailsResponse" message="tns:IConfigurationService_GetLockoutDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveLockoutDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IConfigurationService/SaveLockoutDetails" message="tns:IConfigurationService_SaveLockoutDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IConfigurationService/SaveLockoutDetailsResponse" message="tns:IConfigurationService_SaveLockoutDetails_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IConfigurationService" type="tns:IConfigurationService">
@@ -520,6 +540,24 @@
     </wsdl:operation>
     <wsdl:operation name="SendRecruitingMetricsReportEmail">
       <soap:operation soapAction="http://tempuri.org/IConfigurationService/SendRecruitingMetricsReportEmail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLockoutDetails">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/GetLockoutDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveLockoutDetails">
+      <soap:operation soapAction="http://tempuri.org/IConfigurationService/SaveLockoutDetails" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
