@@ -200,6 +200,12 @@ namespace PraticeManagement.Controls.Projects
             SalesPracticeAttribution = 4
         }
 
+        public bool IsPracticeLockout
+        {
+            get;
+            set;
+        }
+
         #endregion Properities
 
         #region Events
@@ -207,6 +213,7 @@ namespace PraticeManagement.Controls.Projects
         protected void Page_Load(object sender, EventArgs e)
         {
             LockdownCommission();
+            IsPracticeLockout = false;
             if (TitleList == null)
             {
                 TitleList = new Dictionary<int, string>();
@@ -295,10 +302,13 @@ namespace PraticeManagement.Controls.Projects
                     btnCopyAlltoRight.OnClientClick = null;
                 }
                 if (startDate.Date <= LockoutDate.Value.Date)
+                {
                     imgDeliveryAttributionPersonDelete.Enabled = chbAttribution.Enabled = false;
-                if(endDate.Date >LockoutDate.Value.Date && startDate.Date > LockoutDate.Value.Date)
+                    IsPracticeLockout = true;
+                }
+                if (endDate.Date > LockoutDate.Value.Date && startDate.Date > LockoutDate.Value.Date)
                     IsEnableRightbtn = true;
-            }   
+            }
         }
 
         protected void gvSalesAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -449,10 +459,13 @@ namespace PraticeManagement.Controls.Projects
                     btnCopyAlltoLeft.OnClientClick = null;
                 }
                 if (startDate.Date <= LockoutDate.Value.Date)
-                    imgSalesAttributionPersonDelete.Enabled =chbAttribution.Enabled = false;
-                if(endDate.Date >LockoutDate.Value.Date && startDate.Date > LockoutDate.Value.Date)
+                {
+                    imgSalesAttributionPersonDelete.Enabled = chbAttribution.Enabled = false;
+                    IsPracticeLockout = true;
+                }
+                if (endDate.Date > LockoutDate.Value.Date && startDate.Date > LockoutDate.Value.Date)
                     IsEnableLeftbtn = true;
-            }   
+            }
         }
 
         protected void gvDeliveryAttributionPractice_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -1399,6 +1412,27 @@ namespace PraticeManagement.Controls.Projects
                 IsEnableLeftbtn = true;
             if (gridView == gvDeliveryAttributionPerson && xlistLatest.Count == 0)
                 IsEnableRightbtn = true;
+            if (IsPracticeLockout)
+            {
+                btnAddDeliveryAttributionPractice.Enabled = btnAddSalesAttributionPractice.Enabled = false;
+                PracticeLockout();
+            }
+        }
+
+        public void PracticeLockout()
+        {
+            foreach(GridViewRow row in gvDeliveryAttributionPractice.Rows)
+            {
+                var imgDeliveryPracticeAttributeEdit = row.FindControl("imgDeliveryPracticeAttributeEdit") as ImageButton;
+                var imgDeliveryAttributionPracticeDelete = row.FindControl("imgDeliveryAttributionPracticeDelete") as ImageButton;
+                imgDeliveryPracticeAttributeEdit.Enabled = imgDeliveryAttributionPracticeDelete.Enabled = false;
+            }
+            foreach (GridViewRow row in gvSalesAttributionPractice.Rows)
+            {
+                var imgSalesPracticeAttributeEdit = row.FindControl("imgSalesPracticeAttributeEdit") as ImageButton;
+                var imgSalesAttributionPracticeDelete = row.FindControl("imgSalesAttributionPracticeDelete") as ImageButton;
+                imgSalesPracticeAttributeEdit.Enabled = imgSalesAttributionPracticeDelete.Enabled = false;
+            }
         }
 
         private void BindAttributions()
