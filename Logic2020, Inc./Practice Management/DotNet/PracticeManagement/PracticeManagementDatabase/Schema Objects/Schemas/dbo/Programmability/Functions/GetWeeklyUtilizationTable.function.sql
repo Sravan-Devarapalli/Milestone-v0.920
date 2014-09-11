@@ -146,8 +146,8 @@ AS
 	SELECT CR.PersonId,CR.StartDate,CR.EndDate,CCWV.RedefinedVacationDays,CCWV.VacationDaysIncludingCompanyDayOffsNotWeekends,ISNULL(CCWA.AvailableHours,0) AS AvailableHours,ISNULL(CCWP.ProjectedHours,0) AS ProjectedHours,CR.Timescale
 	FROM CurrentConsultantsWithRanges2 CR
 	LEFT JOIN CurrentConsultantsWithVacationDays CCWV ON CCWV.PersonId = CR.PersonId AND CCWV.StartDate = CR.StartDate
-	LEFT JOIN CurrentConsultantsWithAvailableHours CCWA ON CCWV.PersonId = CCWA.PersonId AND CCWV.StartDate = CCWA.StartDate
-	LEFT JOIN CurrentConsultantsWithProjectedHours CCWP ON CCWV.PersonId = CCWP.PersonId AND CCWV.StartDate = CCWP.StartDate
+	LEFT JOIN CurrentConsultantsWithAvailableHours CCWA ON CR.PersonId = CCWA.PersonId AND CR.StartDate = CCWA.StartDate
+	LEFT JOIN CurrentConsultantsWithProjectedHours CCWP ON CR.PersonId = CCWP.PersonId AND CR.StartDate = CCWP.StartDate
 )
 SELECT	CC.PersonId,
 		CC.StartDate,
