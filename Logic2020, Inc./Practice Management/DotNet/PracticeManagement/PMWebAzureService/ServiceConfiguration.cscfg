@@ -38,7 +38,7 @@
       <Setting name="PopupTimebeforeFormsAuthTimeOutSec" value="60" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="Practice.logic2020.com" thumbprint="CE1B0C178EC4081BCD477C1C80A48E2E0152B54F" thumbprintAlgorithm="sha1" />
+      <Certificate name="Practice.logic2020.com" thumbprint="3E8C215A80A218A09853B358AD698EB8EF3E4B45" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
 </ServiceConfiguration>
