@@ -38,6 +38,11 @@ namespace PraticeManagement.Utils.Excel
                 cell.SetCellValue(value);
         }
 
+        private void SetCellValue(ICell cell, IRichTextString value)
+        {
+            cell.SetCellValue(value);
+        }
+
         private void SetFontColorIndex(string color)
         {
             switch (color)
@@ -70,6 +75,43 @@ namespace PraticeManagement.Utils.Excel
                 string cellcolor = values[1];
                 SetCellValue(cell, cellValue);
                 SetFontColorIndex(cellcolor);
+            }
+            if (cell.CellType == CellType.STRING && cell.StringCellValue.StartsWith(NPOIExcel.SuperscriptStartTag))
+            {
+                string[] values = cell.StringCellValue.Split(new[] { '~' });
+                string cellValue = values[2];
+                string cellcolor = values[1];
+                string cellSuperscript = values[3];
+                string cellLegend = values[4]; //cellLegend = 1 for Legend in bench cost report, 0 for others
+                SetFontColorIndex(cellcolor);
+                var fontSuperscript = parentWorkbook.CreateFont();
+                fontSuperscript.TypeOffset = FontFormatting.SS_SUPER;
+                fontSuperscript.Color = FontColorIndex;
+                IRichTextString richtext;
+                if (cellLegend == "0")
+                {
+                    richtext = new HSSFRichTextString(cellValue + cellSuperscript);
+                    richtext.ApplyFont(richtext.Length - cellSuperscript.Length, richtext.Length, fontSuperscript);
+                }
+                else
+                {
+                    richtext = new HSSFRichTextString(cellSuperscript + cellValue);
+                    richtext.ApplyFont(0, 1, fontSuperscript);
+                }
+                SetCellValue(cell, richtext);
+            }
+            if (cell.CellType == CellType.STRING && cell.StringCellValue.StartsWith(NPOIExcel.CustomColorWithBoldStartTag))
+            {
+                string[] values = cell.StringCellValue.Split(new[] { '~' });
+                string cellValue = values[2];
+                string cellcolor = values[1];
+                SetFontColorIndex(cellcolor);
+                var fontInBold = parentWorkbook.CreateFont();
+                fontInBold.Boldweight = (short)FontBoldWeight.BOLD;
+                fontInBold.Color = FontColorIndex;
+                IRichTextString richtext = new HSSFRichTextString(cellValue);
+                richtext.ApplyFont(fontInBold);
+                SetCellValue(cell, richtext);
             }
             ICellStyle coloumnstyle = FindCellStyle(allCellStyles, allDataFormats);
             if (coloumnstyle == null)
