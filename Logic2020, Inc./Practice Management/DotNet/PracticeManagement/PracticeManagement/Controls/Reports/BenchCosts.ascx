@@ -4,7 +4,7 @@
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
 <script type="text/javascript">
-    function EnableResetButton() {       
+    function EnableResetButton() {
         var button = document.getElementById("<%= btnResetFilter.ClientID%>");
         var hiddenField = document.getElementById("<%= hdnFiltersChanged.ClientID%>")
         if (button != null) {
@@ -13,7 +13,7 @@
         }
     }
 
-    function CheckIfDatesValid() {       
+    function CheckIfDatesValid() {
         txtStartDate = document.getElementById('<%= (diRange.FindControl("tbFrom") as TextBox).ClientID %>');
         txtEndDate = document.getElementById('<%= (diRange.FindControl("tbTo") as TextBox).ClientID %>');
         var startDate = new Date(txtStartDate.value);
@@ -37,7 +37,7 @@
     }
 
 
-    function CheckAndShowCustomDatesPoup(ddlPeriod) {       
+    function CheckAndShowCustomDatesPoup(ddlPeriod) {
         imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
         lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
         if (ddlPeriod.value == '0') {
@@ -63,7 +63,7 @@
             }
         }
     }
-    function ReAssignStartDateEndDates() {        
+    function ReAssignStartDateEndDates() {
         hdnStartDate = document.getElementById('<%= hdnStartDate.ClientID %>');
         hdnEndDate = document.getElementById('<%= hdnEndDate.ClientID %>');
         hdnStartDateCalExtenderBehaviourId = document.getElementById('<%= hdnStartDateCalExtenderBehaviourId.ClientID %>');
@@ -82,7 +82,7 @@
 
     Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
 
-    function endRequestHandle(sender, Args) {        
+    function endRequestHandle(sender, Args) {
         imgCalender = document.getElementById('<%= imgCalender.ClientID %>');
         lblCustomDateRange = document.getElementById('<%= lblCustomDateRange.ClientID %>');
         ddlPeriod = document.getElementById('<%=  ddlPeriod.ClientID %>');
@@ -157,6 +157,15 @@
                                     CausesValidation="false" OnClick="btnResetFilter_Click" />
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td class="PaddingTop5">
+                                <asp:Button ID="bntExportExcel" runat="server" Text="Excel" CssClass="Width100Px"
+                                    Visible="false" OnClick="btnExportToExcel_OnClick" ValidationGroup="Filter" />
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>
@@ -167,7 +176,8 @@
             </tr>
         </table>
     </div>
-    <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" style="display:none;">
+    <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp"
+        Style="display: none;">
         <table class="WholeWidth">
             <tr>
                 <td align="Center">
@@ -231,7 +241,7 @@
                                 <asp:CheckBox ID="chbCompletedProjects" runat="server" AutoPostBack="false" Checked="True"
                                     onclick="EnableResetButton();" Text="Completed" ToolTip="Include Completed projects into report" />
                             </td>
-                                                        <td>
+                            <td>
                                 <asp:CheckBox ID="chbProposed" runat="server" AutoPostBack="false" Checked="True"
                                     onclick="EnableResetButton();" Text="Proposed" ToolTip="Include Proposed projects into report" />
                             </td>
@@ -255,7 +265,8 @@
                                 <asp:CheckBox ID="chbExperimentalProjects" runat="server" AutoPostBack="false" Text="Experimental"
                                     ToolTip="Include experimental projects into report" onclick="EnableResetButton();" />
                             </td>
-                            <td></td>
+                            <td>
+                            </td>
                             <td>
                             </td>
                             <td>
@@ -478,14 +489,14 @@
         </tr>
         <tr>
             <td>
-                <sup >3</sup> - Person was changed from salaried to hourly compensation
-                during this month.
+                <sup>3</sup> - Person was changed from salaried to hourly compensation during this
+                month.
             </td>
         </tr>
         <tr>
             <td>
-                <sup>4</sup> - Person was changed from hourly to salaried compensation
-                during this month.
+                <sup>4</sup> - Person was changed from hourly to salaried compensation during this
+                month.
             </td>
         </tr>
     </table>
