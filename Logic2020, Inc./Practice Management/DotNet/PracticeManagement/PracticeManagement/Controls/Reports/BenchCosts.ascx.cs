@@ -7,6 +7,9 @@ using DataTransferObjects.ContextObjects;
 using PraticeManagement.Security;
 using System.Collections;
 using System.Web.Security;
+using PraticeManagement.Utils.Excel;
+using System.Data;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -22,8 +25,12 @@ namespace PraticeManagement.Controls.Reports
         private const string BenchListKey = "BenchList";
         private const string UserIsAdminKey = "UserIsAdmin";
         private const string CompPerfDataWithPaddingRightCssClass = "CompPerfData padRight10Imp textRight";
-        
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
+        private const string BenchReportExport = "Bench Report";
         private Dictionary<DateTime, Decimal> monthlyTotals;
+        private const string BenchNegativeFormat = "({0})";
+
         private BenchReportContext ReportContext
         {
             get
@@ -191,6 +198,377 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                dataCellStyle.IsBold = true;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.FontHeight = 200;
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                datarowStyle.Height = 350;
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                var headerCellStyle = new CellStyles
+                {
+                    IsBold = true,
+                    HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER
+                };
+                var headerDateCellStyle = new CellStyles
+                {
+                    IsBold = true,
+                    HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER,
+                    DataFormat = "[$-409]mmmm-yy;@"
+                };
+                var headerCellStyleList = new List<CellStyles> { headerCellStyle, headerCellStyle, headerCellStyle, headerDateCellStyle };
+                var headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                var dataCellStyle = new CellStyles();
+
+                List<CellStyles> dataCellStylearray = new List<CellStyles> { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle
+                                                  };
+                for (var i = 0; i < GetPeriodLength(); i++)
+                {
+                    dataCellStylearray.Add(dataCellStyle);
+                }
+
+                var datarowStyle = new RowStyles(dataCellStylearray.ToArray());
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                var sheetStyle = new SheetStyles(rowStylearray)
+                {
+                    TopRowNo = headerRowsCount,
+                    IsFreezePane = true,
+                    FreezePanColSplit = 0,
+                    FreezePanRowSplit = headerRowsCount
+                };
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles LegendDataSheetStyle
+        {
+            get
+            {
+                var headerCellStyle = new CellStyles
+                {
+                    IsBold = true,
+                    HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER
+                };
+
+                var headerCellStyleList = new List<CellStyles> { headerCellStyle };
+                var headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                var dataCellStyle = new CellStyles();
+
+                List<CellStyles> dataCellStylearray = new List<CellStyles> { dataCellStyle };
+                
+                var datarowStyle = new RowStyles(dataCellStylearray.ToArray());
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                var sheetStyle = new SheetStyles(rowStylearray)
+                {
+                    TopRowNo = headerRowsCount
+                };
+
+                return sheetStyle;
+            }
+        }
+
+        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
+        {
+            var filename = string.Format("BenchReport_{0}-{1}.xls",
+                BegPeriod.ToString("MM_dd_yyyy"), EndPeriod.ToString("MM_dd_yyyy"));
+            DataHelper.InsertExportActivityLogMessage(BenchReportExport);
+            int dataRowsCount=0;
+            var sheetStylesList = new List<SheetStyles>();
+            var dataSetList = new List<DataSet>();
+            var benchList = BenchList.OrderBy(P => P.Name).ToList();
+            if (benchList.Count > 0)
+            {
+                var header = new DataTable();
+                header.Columns.Add("Bench Report");
+
+                if (chbSeperateInternalExternal.Checked)
+                {
+                    List<object> row1 = new List<object>();
+                    row1.Add("Persons with External Practices");
+                    header.Rows.Add(row1.ToArray());
+                }
+                headerRowsCount = header.Rows.Count + 3;
+
+                
+                var data = PrepareDataTable(chbSeperateInternalExternal.Checked ? benchList.ToList().FindAll(P => !P.Practice.IsCompanyInternal) : benchList, true);
+                coloumnsCount = data.Columns.Count;
+                dataRowsCount = data.Rows.Count;
+                var dataStyle = DataSheetStyle;
+                for (int i = 0; i < 5;i++)
+                    dataStyle.MergeRegion.Add(new int[] { dataRowsCount-1+i, dataRowsCount-1+i,0, coloumnsCount - 1 });
+                var dataset = new DataSet { DataSetName = chbSeperateInternalExternal.Checked ? "BenchCosts_ExternalPractices" : "BenchCost_Report" };
+                dataset.Tables.Add(header);
+                dataset.Tables.Add(data);
+                dataSetList.Add(dataset);
+               sheetStylesList.Add(HeaderSheetStyle);
+               sheetStylesList.Add(dataStyle);
+                if (chbSeperateInternalExternal.Checked && benchList.ToList().FindAll(P => P.Practice.IsCompanyInternal).Count > 0)
+                {
+                    var internalData = PrepareDataTable(benchList.ToList().FindAll(P => P.Practice.IsCompanyInternal), false);
+                    var headerInternal = new DataTable();
+                    headerInternal.Columns.Add("Bench Report");
+
+                    List<object> row2 = new List<object>();
+                    row2.Add("Persons with Internal Practices");
+                    headerInternal.Rows.Add(row2.ToArray());
+                    dataRowsCount = internalData.Rows.Count;
+                    var internalDataStyle = DataSheetStyle;
+                    for (int i = 0; i < 5; i++)
+                        internalDataStyle.MergeRegion.Add(new int[] { dataRowsCount -1+ i, dataRowsCount -1+ i, 0, coloumnsCount - 1 });
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(internalDataStyle);
+                    var datasetInternal = new DataSet { DataSetName = "BenchCosts_InternalPractices" };
+                    datasetInternal.Tables.Add(headerInternal);
+                    datasetInternal.Tables.Add(internalData);
+                    dataSetList.Add(datasetInternal);
+                }
+            }
+            else
+            {
+                const string dateRangeTitle = "There are no people towards this range selected.";
+                var header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet { DataSetName = "BenchCost_Report" };
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
+            }
+
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+        }
+
+        public void PrepareLegendTable(DataTable data)
+        {
+            data.Rows.Add("");
+            data.Rows.Add(string.Format(NPOIExcel.CustomColorWithBoldKey, "black","Legend"));
+            data.Rows.Add(string.Format(NPOIExcel.SuperscriptKey, "black"," - Person was hired during this month.","1","1"));
+            data.Rows.Add(string.Format(NPOIExcel.SuperscriptKey, "black", " - Person was terminated during this month.","2","1"));
+            data.Rows.Add(string.Format(NPOIExcel.SuperscriptKey, "black"," - Person was changed from salaried to hourly compensation during this month.","3","1"));
+            data.Rows.Add(string.Format(NPOIExcel.SuperscriptKey, "black", " - Person was changed from hourly to salaried compensation during this month.","4","1"));
+        }
+
+        public DataTable PrepareDataTable(List<Project> reportData, bool isExternal)
+        {
+            var data = new DataTable();
+            var periodLength = GetPeriodLength();
+            var periodStart = BegPeriod;
+
+            data.Columns.Add("Consultant Name");
+            data.Columns.Add("Practice Area");
+            data.Columns.Add("Status");
+            for (var i = 0; i < GetPeriodLength(); i++)
+            {
+                data.Columns.Add(periodStart.ToString("MMM, yyyy"));
+                periodStart = periodStart.AddMonths(1);
+            }
+            data.Columns.Add("Grand Total");
+            foreach (var report in reportData)
+            {
+                var row = new List<object>
+                    {
+                        string.Format(NPOIExcel.CustomColorKey, "black",report.Name),
+                        string.Format(NPOIExcel.CustomColorKey, "black",report.Practice.Name),
+                        string.Format(NPOIExcel.CustomColorKey, "black",report.ProjectNumber),
+                    };
+                var monthBegin = BegPeriod;
+                var list = new ArrayList();
+                string lastBenchValue = "0";
+                for (int i = 3, k = 0; k < periodLength; i++, k++, monthBegin = monthBegin.AddMonths(1))
+                {
+                    var monthEnd =
+                        new DateTime(monthBegin.Year,
+                            monthBegin.Month,
+                            DateTime.DaysInMonth(monthBegin.Year, monthBegin.Month));
+                    object benchValueColor = "";
+                    foreach (var interestValue in report.ProjectedFinancialsByMonth)
+                    {
+                        string benchValue;
+                        if (IsInMonth(interestValue.Key, monthBegin, monthEnd))
+                        {
+                            benchValueColor = string.Format(NPOIExcel.CustomColorKey, interestValue.Value.Timescale == TimescaleType.Salary ? "red" : "black", (interestValue.Value.Timescale == TimescaleType.Salary ?
+                                                            ((PracticeManagementCurrency)Convert.ToDecimal(interestValue.Value.GrossMargin)).FormattedValue() :
+                                                            (object)Resources.Controls.HourlyLabel));
+                            benchValue = (interestValue.Value.Timescale == TimescaleType.Salary ?
+                                                            Convert.ToDecimal(interestValue.Value.GrossMargin).ToString() :
+                                                            Resources.Controls.HourlyLabel);
+                            if (!MonthlyTotals.Any(kvp => kvp.Key == monthBegin))
+                            {
+                                MonthlyTotals.Add(monthBegin, 0M);
+                            }
+                            if (interestValue.Value.Timescale == TimescaleType.Salary)
+                            {
+                                MonthlyTotals[monthBegin] += Convert.ToDecimal(benchValue);
+                            }
+
+                            if (interestValue.Value.Timescale == TimescaleType.Salary)
+                            {
+                                list.Add(Convert.ToDecimal(interestValue.Value.GrossMargin));
+                                if (interestValue.Value.GrossMargin.Value == 0M)
+                                {
+                                    benchValue = "0";
+                                    benchValueColor = "$0.00"; //(object)string.Format(NPOIExcel.CustomColorKey, "green", 0);
+                                }
+                            }
+                            else
+                            {
+                                list.Add(benchValue);
+                            }
+                            string superScriptContent = string.Empty;
+                            if (report.StartDate.HasValue
+                                && report.StartDate.Value.Year == interestValue.Key.Year
+                                && report.StartDate.Value.Month == interestValue.Key.Month
+                                )
+                            {
+                                superScriptContent = "1";
+                            }
+                            if (report.EndDate.HasValue
+                                && report.EndDate.Value.Year == interestValue.Key.Year
+                                && report.EndDate.Value.Month == interestValue.Key.Month)
+                            {
+                                superScriptContent += (string.IsNullOrEmpty(superScriptContent) ? string.Empty : ",") + "2";
+                            }
+                            if (interestValue.Value.TimescaleChangeStatus > 0)
+                            {
+                                switch (interestValue.Value.TimescaleChangeStatus)
+                                {
+                                    case 1: superScriptContent += (string.IsNullOrEmpty(superScriptContent) ? string.Empty : ",") + "3";
+                                        break;
+                                    case 2:
+                                    case 3: superScriptContent += (string.IsNullOrEmpty(superScriptContent) ? string.Empty : ",") + "4";
+                                        break;
+                                    default: break;
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(superScriptContent))
+                            {
+                                if (interestValue.Value.Timescale == TimescaleType.Salary)
+                                {
+                                    if (interestValue.Value.GrossMargin.Value == 0M)
+                                    {
+                                        benchValueColor = string.Format(NPOIExcel.SuperscriptKey, "green", "0.00", superScriptContent,"0");
+                                    }
+                                    else
+                                    {
+                                        benchValueColor = string.Format(NPOIExcel.SuperscriptKey, "red",  ((PracticeManagementCurrency)Convert.ToDecimal(interestValue.Value.GrossMargin)).FormattedValue(), superScriptContent,"0");
+                                    }
+                                }
+                                else
+                                {
+                                    benchValueColor = string.Format(NPOIExcel.SuperscriptKey, "black", (object)Resources.Controls.HourlyLabel, superScriptContent,"0");
+                                }
+                            }
+
+                            if (list.OfType<Decimal>().ToList().Count <= 0)
+                            {
+                                lastBenchValue = string.Empty;
+                            }
+                            else
+                            {
+                                lastBenchValue = ((PracticeManagementCurrency)list.OfType<Decimal>().ToList().Sum()).FormattedValue();
+                            }
+                        }
+                    }
+                    row.Add(benchValueColor);
+                }
+                string lastBenchValueFormat;
+                if (lastBenchValue == "0")
+                {
+                    lastBenchValueFormat = string.Format(NPOIExcel.CustomColorKey, "green", 0);
+                }
+                else
+                {
+                    lastBenchValueFormat = string.Format(NPOIExcel.CustomColorKey, "red",
+                                                            string.Format(BenchNegativeFormat, lastBenchValue.Remove(0, 1)));
+                }
+                row.Add(lastBenchValueFormat);
+                data.Rows.Add(row.ToArray());
+            }
+            List<string> grandTotals = GetGrandTotalValues(isExternal);
+            var totalsRow = new List<object>()
+                {
+                    string.Format(NPOIExcel.CustomColorWithBoldKey, "black","Grand Total"),
+                    "",
+                    ""
+                };
+            for (int i = 3; i < data.Columns.Count; i++)
+                totalsRow.Add(string.Format(NPOIExcel.CustomColorWithBoldKey, "red",
+                                                            string.Format(BenchNegativeFormat, grandTotals[i - 3].Remove(0, 1))));
+            data.Rows.Add(totalsRow.ToArray());
+            PrepareLegendTable(data);
+            return data;
+        }
+
+        public List<string> GetGrandTotalValues(bool isExternal)
+        {
+            var grandTotals = new List<string>();
+            GridView grid = isExternal ? gvBenchCosts : gvBenchCostsInternal;
+            grandTotals = FooterSum(grandTotals, grid);
+            MonthlyTotals = null;
+            return grandTotals;
+        }
+
+        public List<string> FooterSum(List<string> grandTotals, GridView grid)
+        {
+            GridViewRow footer = grid.FooterRow;
+            var monthBegin =
+                        new DateTime(ReportContext.Start.Year,
+                            ReportContext.Start.Month,
+                            Constants.Dates.FirstDay);
+            var perodLenth = GetPeriodLength();
+            if (footer != null)
+            {
+                for (int i = 3; i < grid.Columns.Count; i++)
+                {
+                    if (i < (3 + perodLenth))
+                    {
+                        if (MonthlyTotals.Any(kvp => kvp.Key == monthBegin.AddMonths(i - 3)))
+                        {
+                            var total = MonthlyTotals[monthBegin.AddMonths(i - 3)].ToString(Constants.Formatting.CurrencyExcelReportFormatWithoutDecimal);
+                            grandTotals.Add(total);
+                        }
+                    }
+                    else if (i == grid.Columns.Count - 1)
+                    {
+                        var grandTotal = MonthlyTotals.Values.Sum().ToString(Constants.Formatting.CurrencyExcelReportFormatWithoutDecimal);
+                        grandTotals.Add(grandTotal);
+                    }
+                }
+            }
+            return grandTotals;
+        }
+
         protected void btnSortConsultant_Click(object sender, EventArgs e)
         {
             var sortOrder = gvBenchCosts.Attributes[ConsultantNameSortOrder];
@@ -219,6 +597,7 @@ namespace PraticeManagement.Controls.Reports
             AddMonthColumn(3, ReportContext.Start, GetPeriodLength(), gvBenchCosts);
             gvBenchCosts.DataSource = benchList;
             gvBenchCosts.DataBind();
+            bntExportExcel.Visible = benchList.Count() > 0;
         }
 
         protected void btnSortInternalConsultant_Click(object sender, EventArgs e)
@@ -245,8 +624,8 @@ namespace PraticeManagement.Controls.Reports
             AddMonthColumn(3, ReportContext.Start, GetPeriodLength(), gvBenchCostsInternal);
             gvBenchCostsInternal.DataSource = benchList;
             gvBenchCostsInternal.DataBind();
-
             gvBenchCostsInternal.Focus();
+            bntExportExcel.Visible = BenchList.Count() > 0;
         }
 
         protected void btnSortPractice_Click(object sender, EventArgs e)
@@ -277,7 +656,7 @@ namespace PraticeManagement.Controls.Reports
             AddMonthColumn(3, ReportContext.Start, GetPeriodLength(), gvBenchCosts);
             gvBenchCosts.DataSource = benchList;
             gvBenchCosts.DataBind();
-
+            bntExportExcel.Visible = BenchList.Count() > 0;
         }
 
         protected void btnSortInternalPractice_Click(object sender, EventArgs e)
@@ -301,6 +680,7 @@ namespace PraticeManagement.Controls.Reports
             gvBenchCostsInternal.DataSource = benchList;
             gvBenchCostsInternal.DataBind();
             gvBenchCostsInternal.Focus();
+            bntExportExcel.Visible = BenchList.Count() > 0;
         }
 
         protected void btnSortStatus_Click(object sender, EventArgs e)
@@ -333,6 +713,7 @@ namespace PraticeManagement.Controls.Reports
             AddMonthColumn(3, ReportContext.Start, GetPeriodLength(), gvBenchCosts);
             gvBenchCosts.DataSource = benchList;
             gvBenchCosts.DataBind();
+            bntExportExcel.Visible = BenchList.Count() > 0;
         }
 
         protected void btnSortInternalStatus_Click(object sender, EventArgs e)
@@ -360,6 +741,7 @@ namespace PraticeManagement.Controls.Reports
             gvBenchCostsInternal.DataSource = benchList;
             gvBenchCostsInternal.DataBind();
             gvBenchCostsInternal.Focus();
+            bntExportExcel.Visible = BenchList.Count() > 0;
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -406,7 +788,7 @@ namespace PraticeManagement.Controls.Reports
             }
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
-            var clFromDate = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender; 
+            var clFromDate = diRange.FindControl("clFromDate") as AjaxControlToolkit.CalendarExtender;
             var clToDate = diRange.FindControl("clToDate") as AjaxControlToolkit.CalendarExtender;
             hdnStartDateCalExtenderBehaviourId.Value = clFromDate.BehaviorID;
             hdnEndDateCalExtenderBehaviourId.Value = clToDate.BehaviorID;
@@ -428,12 +810,14 @@ namespace PraticeManagement.Controls.Reports
                     gvBenchCosts.DataBind();
                     gvBenchCostsInternal.DataBind();
                     divBenchCostsInternal.Visible = lblExternalPractices.Visible = true;
+                    bntExportExcel.Visible = BenchList.Count() > 0;
                 }
                 else
                 {
                     gvBenchCosts.DataSource = benchList.OrderBy(P => P.Name);
                     gvBenchCosts.DataBind();
                     divBenchCostsInternal.Visible = lblExternalPractices.Visible = false;
+                    bntExportExcel.Visible = BenchList.Count() > 0;
                 }
             }
         }
@@ -482,7 +866,7 @@ namespace PraticeManagement.Controls.Reports
                                                             && !string.IsNullOrEmpty(p.ProjectNumber)
                                                             )
                                                      );
-            return benchListTemp.FindAll(p => p.ProjectedFinancialsByMonth.Values.Any(q => ((chbIncludeZeroCostEmps.Checked) ||  q.GrossMargin.Value != 0M) && q.Timescale == TimescaleType.Salary));
+            return benchListTemp.FindAll(p => p.ProjectedFinancialsByMonth.Values.Any(q => ((chbIncludeZeroCostEmps.Checked) || q.GrossMargin.Value != 0M) && q.Timescale == TimescaleType.Salary));
         }
 
         protected void gvBenchRollOffDates_RowDataBound(object sender, GridViewRowEventArgs e)
