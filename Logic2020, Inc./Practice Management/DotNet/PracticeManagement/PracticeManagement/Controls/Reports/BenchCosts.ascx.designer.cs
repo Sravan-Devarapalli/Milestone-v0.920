@@ -166,6 +166,15 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.Button btnResetFilter;
         
         /// <summary>
+        /// bntExportExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button bntExportExcel;
+        
+        /// <summary>
         /// ValSumFilter control.
         /// </summary>
         /// <remarks>
