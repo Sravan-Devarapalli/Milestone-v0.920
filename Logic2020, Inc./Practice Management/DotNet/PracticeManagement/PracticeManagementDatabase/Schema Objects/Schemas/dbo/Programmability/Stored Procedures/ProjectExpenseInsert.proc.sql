@@ -9,7 +9,8 @@ CREATE PROCEDURE dbo.ProjectExpenseInsert
     @ExpenseReimbursement decimal(18, 2),
 	@ProjectId INT,
 	@StartDate	DATETIME,
-	@EndDate	DATETIME
+	@EndDate	DATETIME,
+	@MilestoneId	INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -20,7 +21,8 @@ BEGIN
            ,[Reimbursement]
            ,[ProjectId]
            ,[StartDate]
-           ,[EndDate])
+           ,[EndDate]
+		   ,[MilestoneId])
      VALUES
            (@ExpenseName 
            ,@ExpenseAmount
@@ -28,6 +30,7 @@ BEGIN
            ,@ProjectId
 		   ,@StartDate	
 		   ,@EndDate
+		   ,@MilestoneId
 		   )
 	SELECT @ExpenseId = SCOPE_IDENTITY()
 
