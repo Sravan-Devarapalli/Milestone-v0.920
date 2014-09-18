@@ -48,10 +48,10 @@
                 <table id="tblBillingReport" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
-                            <th class="TextAlignLeftImp Width180Px">
+                            <th class="TextAlignLeftImp Width7Percent">
                                 Project Number
                             </th>
-                            <th class="Width170PxImp">
+                            <th class="Width5Percent">
                                 Account
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgAccountFilter" />
@@ -59,10 +59,10 @@
                                     BehaviorID="pceAccountFilter" PopupControlID="pnlFilterAccount" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width170PxImp">
+                            <th class="Width10PerImp">
                                 Project Name
                             </th>
-                            <th class="Width170PxImp">
+                            <th class="Width10PerImp">
                                 Practice Area
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgPracticeFilter" />
@@ -70,28 +70,25 @@
                                     BehaviorID="pcePracticeFilter" PopupControlID="pnlFilterPractice" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width170PxImp">
-                                Type
-                            </th>
-                            <th class="Width150pxImp bgcolorE2EBFFImp">
+                            <th class="Width10PerImp bgcolorE2EBFFImp">
                                 <asp:Label ID="lblLifetoDateProjected" runat="server"></asp:Label>
                             </th>
-                            <th class="Width150pxImp bgcolorE2EBFFImp">
+                            <th class="Width5Percent bgcolorE2EBFFImp">
                                 <asp:Label ID="lblLifetoDateActual" runat="server"></asp:Label>
                             </th>
-                            <th class="Width150pxImp bgcolorE2EBFFImp">
+                            <th class="Width5Percent bgcolorE2EBFFImp">
                                 <asp:Label ID="lblLifetoDateRemaining" runat="server"></asp:Label>
                             </th>
-                            <th class="Width100Px">
+                            <th class="Width8Per bgColorE0DAECImp">
                                 Range Projected
                             </th>
-                            <th class="Width150pxImp">
+                            <th class="Width5Percent bgColorE0DAECImp">
                                 Range Actual
                             </th>
-                            <th class="Width170PxImp">
+                            <th class="Width5Percent bgColorE0DAECImp">
                                 Difference
                             </th>
-                            <th class="Width170PxImp">
+                            <th class="Width5Percent">
                                 SalesPerson
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgSalespersonFilter" />
@@ -100,7 +97,7 @@
                                     Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width170PxImp">
+                            <th class="Width10PerImp">
                                 Project Manager(s)
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgProjectManagerFilter" />
@@ -109,7 +106,7 @@
                                     PopupControlID="pnlFilterProjectManager" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width180Px">
+                            <th class="Width5Percent">
                                 Senior Manager
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgSeniorManagerFilter" />
@@ -118,7 +115,7 @@
                                     PopupControlID="pnlFilterSeniorManager" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width170PxImp">
+                            <th class="Width5Percent">
                                 Director
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgDirectorFilter" />
@@ -126,7 +123,7 @@
                                     BehaviorID="pceDirectorFilter" PopupControlID="pnlFilterDirector" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width150pxImp">
+                            <th class="Width5Percent">
                                 PONumber
                             </th>
                         </tr>
@@ -149,9 +146,6 @@
                 <td>
                     <%# Eval("Project.Practice.HtmlEncodedName")%>
                 </td>
-                <td>
-                    Revenue
-                </td>
                 <td class="bgcolorE2EBFFImp">
                     <asp:Label ID="lblLifetoDateProjectedValue" runat="server"></asp:Label>
                 </td>
@@ -161,14 +155,14 @@
                 <td class="bgcolorE2EBFFImp">
                     <asp:Label ID="lblLifetoDateRemainingValue" runat="server"></asp:Label>
                 </td>
-                <td>
-                    <%# Eval("RangeProjected")%>
+                <td class="bgColorE0DAECImp">
+                    <asp:Label ID="lblRangeProjectedValue" runat="server"></asp:Label>
                 </td>
-                <td>
-                    <%# Eval("RangeActual")%>
+                <td class="bgColorE0DAECImp">
+                    <asp:Label ID="lblRangeActual" runat="server"></asp:Label>
                 </td>
-                <td>
-                    <%# Eval("Difference")%>
+                <td class="bgColorE0DAECImp">
+                    <asp:Label ID="lblRangeDifference" runat="server"></asp:Label>
                 </td>
                 <td>
                     <%# Eval("Project.SalesPersonName")%>
