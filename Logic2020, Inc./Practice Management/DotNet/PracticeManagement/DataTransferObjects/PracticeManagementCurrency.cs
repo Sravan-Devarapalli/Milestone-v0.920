@@ -53,6 +53,15 @@ namespace DataTransferObjects
 
         #region Methods
 
+        public string FormattedValue()
+        {
+            decimal absValue = Math.Abs(Value);
+            string result =
+                absValue >= SmallFormatLimit ?
+                absValue.ToString(CurrencyLargeDisplayFormat) : absValue.ToString(CurrencySmallDisplayFormat);
+            return "("+result+")";
+        }
+
         /// <summary>
         /// Converts a Value into the text representation.
         /// </summary>
