@@ -65,8 +65,8 @@ namespace PraticeManagement.Controls.ProjectExpenses
 
             // Add fake row to the datatable so we can still see the footer and add new rows
             //  We know that this row is fake because Id will not have value
-            if (expensesForMilestone.Length == 0)
-                expensesForMilestone = new[] { projectExpense };
+            //if (expensesForMilestone.Length == 0)
+            //    expensesForMilestone = new[] { projectExpense };
 
             return expensesForMilestone;
         }
@@ -81,13 +81,13 @@ namespace PraticeManagement.Controls.ProjectExpenses
 
             // Add fake row to the datatable so we can still see the footer and add new rows
             //  We know that this row is fake because Id will not have value
-            //if (expensesForMilestone.Length == 0)
-            //    expensesForMilestone = new[] { projectExpense };
+            if (expensesForMilestone.Length == 0)
+                expensesForMilestone = new[] { projectExpense };
 
             return expensesForMilestone;
         }
 
-        public static void AddProjectExpense(string name, string amount, string reimb, string projectId, DateTime startDate, DateTime endDate)
+        public static void AddProjectExpense(string name, string amount, string reimb, string projectId, DateTime startDate, DateTime endDate,string milestoneId)
         {
             AddProjectExpense(
                     new ProjectExpense
@@ -95,13 +95,18 @@ namespace PraticeManagement.Controls.ProjectExpenses
                             Name = name,
                             Amount = Convert.ToDecimal(amount),
                             Reimbursement = Convert.ToDecimal(reimb),
-                            StartDate =  startDate,
-                            EndDate =  endDate,
-                            ProjectId = Convert.ToInt32(projectId)
+                            StartDate = startDate,
+                            EndDate = endDate,
+                            ProjectId = Convert.ToInt32(projectId),
+                            Milestone = new Milestone()
+                            {
+                                Id = Convert.ToInt32(milestoneId)
+                            }
                         }
-                );
+                    );
         }
 
         #endregion
     }
 }
+
