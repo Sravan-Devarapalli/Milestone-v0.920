@@ -438,7 +438,7 @@ namespace PraticeManagement.Controls.Reports
                                 if (interestValue.Value.GrossMargin.Value == 0M)
                                 {
                                     benchValue = "0";
-                                    benchValueColor = "$0.00"; //(object)string.Format(NPOIExcel.CustomColorKey, "green", 0);
+                                    benchValueColor = string.Format(NPOIExcel.CustomColorKey, "black", "$0.00"); //(object)string.Format(NPOIExcel.CustomColorKey, "green", 0);
                                 }
                             }
                             else
@@ -509,8 +509,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 else
                 {
-                    lastBenchValueFormat = string.Format(NPOIExcel.CustomColorKey, "red",
-                                                            string.Format(BenchNegativeFormat, lastBenchValue.Remove(0, 1)));
+                    lastBenchValueFormat = string.Format(NPOIExcel.CustomColorKey, "red",lastBenchValue);
                 }
                 row.Add(lastBenchValueFormat);
                 data.Rows.Add(row.ToArray());
