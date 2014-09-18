@@ -17,11 +17,13 @@ BEGIN
 	DECLARE @StartDateLocal   DATETIME,
 			@EndDateLocal     DATETIME,
 			@CurrentMonthStartDate DATETIME,
+			@LifeToDateEndDate		DATETIME,
 			@Today DATETIME
 
 	SELECT @StartDateLocal=@StartDate,
 		   @EndDateLocal=@EndDate,
-		   @Today = dbo.GettingPMTime(GETUTCDATE())
+		   @Today = dbo.GettingPMTime(GETUTCDATE()),
+		   @LifeToDateEndDate= DATEADD(DD,-1,@StartDate)
 			
 	SELECT @CurrentMonthStartDate = MonthStartDate FROM dbo.Calendar WHERE CONVERT(DATE, Date) = CONVERT(DATE, @Today)
 	;WITH ActualTimeEntries
@@ -189,8 +191,8 @@ FROM ActualTimeEntries AS AE --ActualEntriesByPerson
 	ActualAndProjectedValuesMonthly  AS
 	(SELECT CT.ProjectId, 
 			SUM(ISNULL(CT.ProjectedRevenueperDay, 0)) AS ProjectedRevenueInRange,
-			SUM(CASE WHEN CT.Date < @CurrentMonthStartDate THEN ISNULL(CT.HourlyActualRevenuePerDay, 0) + ISNULL(CT.FixedActualRevenuePerDay, 0) ELSE 0 END) AS ActualRevenue,
-			SUM(CASE WHEN CT.Date < @CurrentMonthStartDate THEN ISNULL(CT.HourlyActualRevenuePerDayInRange, 0) + ISNULL(CT.FixedActualRevenuePerDayInRange, 0) ELSE 0 END) AS ActualRevenueInRange
+			SUM(CASE WHEN CT.Date <= @LifeToDateEndDate THEN ISNULL(CT.HourlyActualRevenuePerDay, 0) + ISNULL(CT.FixedActualRevenuePerDay, 0) ELSE 0 END) AS ActualRevenue,
+			SUM(ISNULL(CT.HourlyActualRevenuePerDayInRange, 0) + ISNULL(CT.FixedActualRevenuePerDayInRange, 0)) AS ActualRevenueInRange
 	FROM ActualAndProjectedValuesDaily CT
 	GROUP BY CT.ProjectId
 	)
@@ -228,3 +230,4 @@ FROM ActualTimeEntries AS AE --ActualEntriesByPerson
 	LEFT JOIN dbo.Person manager ON manager.PersonId = PM.ProjectManagerId
 	ORDER BY ProjectId 
 END
+
