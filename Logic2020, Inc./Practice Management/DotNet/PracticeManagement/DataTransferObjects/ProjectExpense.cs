@@ -59,6 +59,8 @@ namespace DataTransferObjects
         [DataMember]
         public Milestone Milestone { get; set; }
 
+        [DataMember]
+        public string MilestoneName { get; set; }
         /// <summary>
         /// Reimbursed $
         /// </summary>
@@ -71,3 +73,4 @@ namespace DataTransferObjects
         }
     }
 }
+
