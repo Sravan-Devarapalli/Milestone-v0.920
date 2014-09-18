@@ -10,7 +10,9 @@
 <%@ Register Src="~/Controls/Generic/Notes.ascx" TagName="Notes" TagPrefix="uc" %>
 <%@ Register Src="Controls/MilestonePersons/MilestonePersonActivity.ascx" TagName="Activity"
     TagPrefix="mp" %>
-<%@ Register Src="Controls/MilestonePersons/CumulativeDailyActivity.ascx" TagName="Cumulative"
+<%@ Register Src="Controls/Milestones/MilestoneExpenses.ascx" TagName="Expenses"
+    TagPrefix="m" %>
+    <%@ Register Src="Controls/MilestonePersons/CumulativeDailyActivity.ascx" TagName="Cumulative"
     TagPrefix="mp" %>
 <%@ Register Src="Controls/MilestonePersons/CumulativeActivity.ascx" TagName="CumulativeTotal"
     TagPrefix="mp" %>
@@ -688,74 +690,7 @@
                 </asp:View>
                 <asp:View ID="vwExpenses" runat="server">
                     <asp:Panel ID="pnlExpenses" runat="server" CssClass="tab-pane">
-                        <asp:GridView ID="gvMilestoneExpenses" runat="server" DataSourceID="odsMilestoneExpenses"
-                            EmptyDataText="No expenses are there for this Milestone period." ShowFooter="True"
-                            AutoGenerateColumns="False" DataKeyNames="Id" OnRowDataBound="gvMilestoneExpenses_OnRowDataBound"
-                            CssClass="CompPerfTable MileStoneDetailPageExpensesTab">
-                            <AlternatingRowStyle CssClass="bgColor_e0e0e0" />
-                            <FooterStyle CssClass="fontBold vTop" />
-                            <Columns>
-                                <asp:TemplateField>
-                                    <HeaderTemplate>
-                                        <div class="ie-bg">
-                                            Name
-                                        </div>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# ((DataTransferObjects.ProjectExpense) Container.DataItem).Name %>
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        Total
-                                    </FooterTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField>
-                                    <HeaderTemplate>
-                                        <div class="ie-bg">
-                                            Expense, $
-                                        </div>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# ((DataTransferObjects.PracticeManagementCurrency) ((DataTransferObjects.ProjectExpense) Container.DataItem).Amount).ToString() %>
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:Label ID="lblTotalAmount" runat="server" Text="$0" />
-                                    </FooterTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Reimbursed, %">
-                                    <HeaderTemplate>
-                                        <div class="ie-bg">
-                                            Reimbursed, %
-                                        </div>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# (string.Format("{0:0}",((DataTransferObjects.ProjectExpense) Container.DataItem).Reimbursement)) %>%
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:Label ID="lblTotalReimbursed" runat="server" Text="0%" />
-                                    </FooterTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Reimbursed, $">
-                                    <HeaderTemplate>
-                                        <div class="ie-bg">
-                                            Reimbursed, $
-                                        </div>
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# ((DataTransferObjects.PracticeManagementCurrency) ((DataTransferObjects.ProjectExpense)Container.DataItem).ReimbursementAmount).ToString() %>
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:Label ID="lblTotalReimbursementAmount" runat="server" Text="$0" />
-                                    </FooterTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
-                        <asp:ObjectDataSource ID="odsMilestoneExpenses" runat="server" DataObjectTypeName="DataTransferObjects.ProjectExpense"
-                            SelectMethod="ProjectExpensesForMilestone" TypeName="PraticeManagement.Controls.ProjectExpenses.ProjectExpenseHelper"
-                            OnSelecting="odsMilestoneExpenses_OnSelecting">
-                            <SelectParameters>
-                                <asp:Parameter Name="milestoneId" Type="Int32" />
-                            </SelectParameters>
-                        </asp:ObjectDataSource>
+                        <m:Expenses ID="milestoneExpenses" runat="server"/>
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwDaily" runat="server">
