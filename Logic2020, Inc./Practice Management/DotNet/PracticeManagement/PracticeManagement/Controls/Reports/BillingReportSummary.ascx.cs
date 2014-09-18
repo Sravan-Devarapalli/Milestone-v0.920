@@ -74,7 +74,6 @@ namespace PraticeManagement.Controls.Reports
                                                     dataCellStyle,
                                                     dataCellStyle,
                                                     dataCellStyle,
-                                                    dataCellStyle, 
                                                  HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
                                                  HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
                                                  HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
@@ -187,20 +186,29 @@ namespace PraticeManagement.Controls.Reports
             {
                 var lblLifetoDateProjectedValue = e.Item.FindControl("lblLifetoDateProjectedValue") as Label;
                 var lblLifetoDateActualValue = e.Item.FindControl("lblLifetoDateActualValue") as Label;
-                var lblLifetoDateRemainingValue = e.Item.FindControl("lblLifetoDateRemainingValue") as Label;
+                var lblLifetoDateRemainingValue = e.Item.FindControl("lblLifetoDateRemainingValue") as Label; 
                 var lblProjectManagers = e.Item.FindControl("lblProjectManagers") as Label;
+                var lblRangeProjectedValue = e.Item.FindControl("lblRangeProjectedValue") as Label;
+                var lblRangeActual = e.Item.FindControl("lblRangeActual") as Label;
+                var lblRangeDifference = e.Item.FindControl("lblRangeDifference") as Label;
                 var dataitem = (BillingReport)e.Item.DataItem;
                 if (HostingPage.IsHoursUnitOfMeasure)
                 {
                     lblLifetoDateProjectedValue.Text = GetDoubleFormat(dataitem.ForecastedHours);
                     lblLifetoDateActualValue.Text = GetDoubleFormat(dataitem.ActualHours);
                     lblLifetoDateRemainingValue.Text = GetDoubleFormat(dataitem.RemainingHours);
+                    lblRangeActual.Text = GetDoubleFormat(dataitem.ActualHoursInRange);
+                    lblRangeProjectedValue.Text = GetDoubleFormat(dataitem.ForecastedHoursInRange);
+                    lblRangeDifference.Text = GetDoubleFormat(dataitem.DifferenceInHours);
                 }
                 else
                 {
                     lblLifetoDateProjectedValue.Text = dataitem.SOWBudget.ToString();
                     lblLifetoDateActualValue.Text = dataitem.ActualToDate.ToString();
                     lblLifetoDateRemainingValue.Text = dataitem.Remaining.ToString();
+                    lblRangeActual.Text = dataitem.RangeActual.ToString();
+                    lblRangeProjectedValue.Text = dataitem.RangeProjected.ToString();
+                    lblRangeDifference.Text = dataitem.DifferenceInCurrency.ToString();
                 }
                 lblProjectManagers.Text = (dataitem.Project.ProjectManagers == null || dataitem.Project.ProjectManagers.Count == 0) ? string.Empty : dataitem.ProjectMangers;
             }
@@ -251,8 +259,8 @@ namespace PraticeManagement.Controls.Reports
             DataHelper.InsertExportActivityLogMessage(BillingReportExport);
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var report = HostingPage.IsHoursUnitOfMeasure ? ServiceCallers.Custom.Report(r => r.BillingReportByHours(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList())
-                    : ServiceCallers.Custom.Report(r => r.BillingReportByCurrency(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList());
+            var report = HostingPage.IsHoursUnitOfMeasure ? ServiceCallers.Custom.Report(r => r.BillingReportByHours(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList().OrderBy(p=>p.Project.ProjectNumber).ToList())
+                    : ServiceCallers.Custom.Report(r => r.BillingReportByCurrency(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList().OrderBy(p => p.Project.ProjectNumber).ToList());
             var filterApplied = "Filters applied to columns: ";
             var filteredColoums = new List<string>();
             if (!cblAccountFilter.AllItemsSelected)
@@ -438,7 +446,6 @@ namespace PraticeManagement.Controls.Reports
             data.Columns.Add("Account");
             data.Columns.Add("Project Name");
             data.Columns.Add("Practice Area");
-            data.Columns.Add("Type");
             data.Columns.Add(HostingPage.IsHoursUnitOfMeasure ? "Total Projected Hours" : "SOW Budget");
             data.Columns.Add("Actual to Date");
             data.Columns.Add("Remaining");
@@ -460,13 +467,12 @@ namespace PraticeManagement.Controls.Reports
                                     report.Project.Client.Name,
                                     report.Project.Name,
                                     report.Project.Practice.Name,
-                                    "Revenue",
                                     GetDoubleFormat(report.ForecastedHours),
                                     GetDoubleFormat(report.ActualHours),
                                     GetDoubleFormat(report.RemainingHours),
-                                    report.RangeProjected.Value,
-                                    report.RangeActual.Value,
-                                    report.Difference.Value,
+                                    GetDoubleFormat(report.ForecastedHoursInRange),
+                                    GetDoubleFormat(report.ActualHoursInRange),
+                                    GetDoubleFormat(report.DifferenceInHours),
                                     report.Project.SalesPersonName,
                                     report.ProjectMangers,
                                     report.Project.SeniorManagerName,
@@ -482,13 +488,12 @@ namespace PraticeManagement.Controls.Reports
                                         report.Project.Client.Name,
                                         report.Project.Name,
                                         report.Project.Practice.Name,
-                                        "Revenue",
-                                        report.SOWBudget.Value,
-                                        report.ActualToDate.Value,
-                                        report.Remaining.Value,
-                                        report.RangeProjected.Value,
-                                        report.RangeActual.Value,
-                                        report.Difference.Value,
+                                        report.SOWBudget < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.SOWBudget)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.SOWBudget.ToString()),
+                                        report.ActualToDate < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.ActualToDate)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.ActualToDate.ToString()),
+                                        report.Remaining < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.Remaining)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.Remaining.ToString()),
+                                        report.RangeProjected < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.RangeProjected)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.RangeProjected.ToString()),
+                                        report.RangeActual < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.RangeActual)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.RangeActual.ToString()),
+                                        report.DifferenceInCurrency < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.DifferenceInCurrency)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.DifferenceInCurrency.ToString()),
                                         report.Project.SalesPersonName,
                                         report.ProjectMangers,
                                         report.Project.SeniorManagerName,
@@ -503,3 +508,4 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
+
