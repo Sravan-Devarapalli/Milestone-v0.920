@@ -4100,9 +4100,9 @@ namespace DataAccess
                     var feedbackId = reader.GetInt32(feedbackIdIndex);
                     var projectManager = new Person()
                        {
-                           Id = reader.GetInt32(projectManagerIdIndex),
-                           FirstName = reader.GetString(projectManagerFirstNameIndex),
-                           LastName = reader.GetString(projectManagerLastNameIndex),
+                           Id = !reader.IsDBNull(projectManagerIdIndex) ? (int?)reader.GetInt32(projectManagerIdIndex):null,
+                           FirstName = !reader.IsDBNull(projectManagerFirstNameIndex) ? reader.GetString(projectManagerFirstNameIndex):"",
+                           LastName = !reader.IsDBNull(projectManagerLastNameIndex) ?reader.GetString(projectManagerLastNameIndex):""
                        };
                     if (result.Any(f => f.Id.Value == feedbackId))
                     {
@@ -4158,10 +4158,6 @@ namespace DataAccess
                                     LastName = !reader.IsDBNull(directorLastNameColumnIndex) ? reader.GetString(directorLastNameColumnIndex) : string.Empty
                                 },
                                 SeniorManagerName = !reader.IsDBNull(seniorManagerNameIndex) ? reader.GetString(seniorManagerNameIndex) : string.Empty,
-                                ProjectManagers = new List<Person>()
-                              {
-                                projectManager
-                              },
                                 ProjectOwner = new Person()
                                 {
                                     Id = !reader.IsDBNull(projectOwnerIdIndex) ? (int?)reader.GetInt32(projectOwnerIdIndex) : null,
@@ -4180,6 +4176,11 @@ namespace DataAccess
                             CompletionCertificateDate = !reader.IsDBNull(completionCertificateDateIndex) ? reader.GetDateTime(completionCertificateDateIndex) : DateTime.MinValue,
                             CancelationReason = !reader.IsDBNull(cancelationReasonIndex) ? reader.GetString(cancelationReasonIndex) : string.Empty
                         };
+                        if (projectManager.Id != null)
+                            feedback.Project.ProjectManagers = new List<Person>()
+                            {
+                                projectManager
+                            };
                         result.Add(feedback);
                     }
                 }
@@ -4254,9 +4255,6 @@ namespace DataAccess
                 int projectnameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
                 int practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
                 int practicenameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
-                int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
-                int actualRevenueinRangeIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenueInRange);
-
                 int salespersonIdIndex = reader.GetOrdinal(Constants.ColumnNames.SalespersonIdColumn);
                 int salesPersonNameIndex = reader.GetOrdinal(Constants.ColumnNames.SalesPersonName);
                 int projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
@@ -4272,8 +4270,12 @@ namespace DataAccess
 
                 int forecastedhoursIndex = -1;
                 int actualHoursIndex = -1;
+                int forecastedhoursInRangeIndex = -1;
+                int actualHoursInRangeIndex = -1;
                 int sowBudgetIndex = -1;
                 int actualRevenueIndex = -1;
+                int actualRevenueinRangeIndex = -1;
+                int revenueIndex = -1;
                 try
                 {
                     forecastedhoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
@@ -4299,8 +4301,32 @@ namespace DataAccess
                 }
                 catch
                 { }
+                try
+                {
+                    actualRevenueinRangeIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenueInRange);
+                }
+                catch
+                { }
+                try
+                {
+                    revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+                }
+                catch
+                { }
+                try
+                {
+                    forecastedhoursInRangeIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursInRange);
+                }
+                catch
+                { }
+                try
+                {
+                    actualHoursInRangeIndex = reader.GetOrdinal(Constants.ColumnNames.ActualHoursInRange);
+                }
+                catch
+                { }
                 while (reader.Read())
-                { 
+                {
                     var projectManger = new Person()
                     {
                         Id = reader.IsDBNull(projectManagerIdIndex) ? null : (int?)reader.GetInt32(projectManagerIdIndex),
@@ -4308,9 +4334,9 @@ namespace DataAccess
                         LastName = reader.IsDBNull(projectManagerLastNameIndex) ? "" : reader.GetString(projectManagerLastNameIndex)
                     };
                     var projectId = reader.GetInt32(projectIdIndex);
-                    if(result.Any(p=>p.Project.Id == projectId))
+                    if (result.Any(p => p.Project.Id == projectId))
                     {
-                        var billingItem = result.FirstOrDefault(p=>p.Project.Id == projectId);
+                        var billingItem = result.FirstOrDefault(p => p.Project.Id == projectId);
                         billingItem.Project.ProjectManagers.Add(projectManger);
                     }
                     else
@@ -4332,25 +4358,63 @@ namespace DataAccess
                                     Name = reader.GetString(practicenameIndex)
                                 },
                                 SalesPersonId = reader.IsDBNull(salespersonIdIndex) ? -1 : reader.GetInt32(salespersonIdIndex),
-                                SalesPersonName = reader.IsDBNull(salesPersonNameIndex) ?"":reader.GetString(salesPersonNameIndex),
+                                SalesPersonName = reader.IsDBNull(salesPersonNameIndex) ? "" : reader.GetString(salesPersonNameIndex),
                                 ProjectManagers = new List<Person>(),
                                 Director = new Person()
                                 {
                                     Id = reader.IsDBNull(directorIdIndex) ? null : (int?)reader.GetInt32(directorIdIndex),
-                                    FirstName = reader.IsDBNull(directorFirstNameIndex) ?"": reader.GetString(directorFirstNameIndex),
-                                    LastName = reader.IsDBNull(directorLastNameIndex) ?"": reader.GetString(directorLastNameIndex)
+                                    FirstName = reader.IsDBNull(directorFirstNameIndex) ? "" : reader.GetString(directorFirstNameIndex),
+                                    LastName = reader.IsDBNull(directorLastNameIndex) ? "" : reader.GetString(directorLastNameIndex)
                                 },
                                 PONumber = reader.IsDBNull(poNumberIndex) ? "" : reader.GetString(poNumberIndex),
                                 SeniorManagerId = reader.IsDBNull(seniorManagerIdIndex) ? -1 : reader.GetInt32(seniorManagerIdIndex),
-                                SeniorManagerName = reader.IsDBNull(seniorManagerNameIndex) ?"":reader.GetString(seniorManagerNameIndex),
+                                SeniorManagerName = reader.IsDBNull(seniorManagerNameIndex) ? "" : reader.GetString(seniorManagerNameIndex),
                             };
                         if (projectManger.Id != null)
                             project.ProjectManagers.Add(projectManger);
-                       billingItem.Project = project;
-                       billingItem.RangeProjected = reader.GetDecimal(revenueIndex);
-                       billingItem.RangeActual =  reader.GetDecimal(actualRevenueinRangeIndex);
-                       if (forecastedhoursIndex >= 0)
-                         {
+                        billingItem.Project = project;
+                        if (actualRevenueinRangeIndex >= 0)
+                        {
+                            try
+                            {
+                                billingItem.RangeActual = reader.GetDecimal(actualRevenueinRangeIndex); 
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        if (revenueIndex >= 0)
+                        {
+                            try
+                            {
+                                billingItem.RangeProjected = reader.GetDecimal(revenueIndex);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        if (forecastedhoursInRangeIndex >= 0)
+                        {
+                            try
+                            {
+                                billingItem.ForecastedHoursInRange = Convert.ToDouble(reader.GetDecimal(forecastedhoursInRangeIndex));
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        if (actualHoursInRangeIndex >= 0)
+                        {
+                            try
+                            {
+                                billingItem.ActualHoursInRange = Convert.ToDouble(reader.GetDecimal(actualHoursInRangeIndex));
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        if (forecastedhoursIndex >= 0)
+                        {
                             try
                             {
                                 billingItem.ForecastedHours = Convert.ToDouble(reader.GetDecimal(forecastedhoursIndex));
@@ -4358,9 +4422,9 @@ namespace DataAccess
                             catch
                             {
                             }
-                         }
+                        }
                         if (actualHoursIndex >= 0)
-                          {
+                        {
                             try
                             {
                                 billingItem.ActualHours = reader.GetDouble(actualHoursIndex);
@@ -4368,9 +4432,9 @@ namespace DataAccess
                             catch
                             {
                             }
-                          }
+                        }
                         if (sowBudgetIndex >= 0)
-                          {
+                        {
                             try
                             {
                                 billingItem.SOWBudget = reader.IsDBNull(sowBudgetIndex) ? 0 : reader.GetDecimal(sowBudgetIndex);
@@ -4378,9 +4442,9 @@ namespace DataAccess
                             catch
                             {
                             }
-                          }
-                          if (actualRevenueIndex >= 0)
-                           {
+                        }
+                        if (actualRevenueIndex >= 0)
+                        {
                             try
                             {
                                 billingItem.ActualToDate = reader.GetDecimal(actualRevenueIndex);
@@ -4389,9 +4453,9 @@ namespace DataAccess
                             {
                             }
                         }
-                            result.Add(billingItem);
+                        result.Add(billingItem);
                     }
-              }
+                }
             }
 
             catch (Exception ex)
