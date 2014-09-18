@@ -49,7 +49,7 @@ namespace DataTransferObjects
                 return 0;
             switch (sortBy)
             {
-                case "Client":
+                case "Account":
                     return String.Compare(((Project)pFirstObject).Client.Name, ((Project)pObjectToCompare).Client.Name);
                 case "Project":
                     return String.Compare(((Project)pFirstObject).Name, ((Project)pObjectToCompare).Name);
