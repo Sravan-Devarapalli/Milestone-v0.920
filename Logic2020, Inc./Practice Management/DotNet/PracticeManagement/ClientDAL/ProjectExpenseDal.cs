@@ -41,6 +41,7 @@ namespace DataAccess
         {
             InitPropertiesNoId(command, entity);
             command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, entity.ProjectId);
+            command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, entity.Milestone.Id);
 
             var outParam =
                 new SqlParameter(Constants.ParameterNames.ExpenseId, SqlDbType.Int) { Direction = ParameterDirection.Output };
@@ -124,3 +125,4 @@ namespace DataAccess
         #endregion Overrides of DalBase<ProjectExpense>
     }
 }
+
