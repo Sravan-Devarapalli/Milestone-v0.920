@@ -5,6 +5,7 @@
     [Reimbursement] DECIMAL (18, 2) NOT NULL,
     [ProjectId]		INT             NOT NULL,
 	[StartDate]		DATETIME		NOT NULL,
-	[EndDate]		DATETIME		NOT NULL
+	[EndDate]		DATETIME		NOT NULL,
+	[MilestoneId]	INT				NULL
 );
 
