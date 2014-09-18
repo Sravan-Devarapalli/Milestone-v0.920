@@ -58,13 +58,13 @@ BEGIN
 		ISNULL(Revenue,0) as 'Revenue',
 		ISNULL(RevenueNet,0) as 'RevenueNet',
 		ISNULL(Cogs,0) Cogs,
-		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100)  as 'GrossMargin',
+		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))  as 'GrossMargin',
 		fin.Hours,
 		ISNULL(me.Expense,0) Expense,
 		ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense,
 		case 
 			when ISNULL(Revenue,0)  <> 0
-				then (ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))*(1 - p.Discount/100))  * 100 / 
+				then (ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0)))  * 100 / 
 				ISNULL(Revenue,0)
 			else
 				0
