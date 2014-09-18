@@ -13,6 +13,7 @@ namespace DataAccess.Readers
         private int _projectIndex;
         private int _startDateIndex;
         private int _endDateIndex;
+        private int _milestoneNameIndex;
 
         public ProjectExpenseReader()
         {
@@ -33,6 +34,7 @@ namespace DataAccess.Readers
             _projectIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
             _startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
             _endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+            _milestoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
         }
 
         public override void SetReader(DbDataReader value)
@@ -45,15 +47,20 @@ namespace DataAccess.Readers
         public override ProjectExpense ReadEntity()
         {
             return new ProjectExpense
-                       {
-                           Id = Reader.GetInt32(_idIndex),
-                           Name = Reader.GetString(_nameIndex),
-                           Amount = Reader.GetDecimal(_amountIndex),
-                           Reimbursement = Reader.GetDecimal(_reimbIndex),
-                           ProjectId = Reader.GetInt32(_projectIndex),
-                           StartDate = Reader.GetDateTime(_startDateIndex),
-                           EndDate = Reader.GetDateTime(_endDateIndex)
-                       };
+            {
+                Id = Reader.GetInt32(_idIndex),
+                Name = Reader.GetString(_nameIndex),
+                Amount = Reader.GetDecimal(_amountIndex),
+                Reimbursement = Reader.GetDecimal(_reimbIndex),
+                ProjectId = Reader.GetInt32(_projectIndex),
+                StartDate = Reader.GetDateTime(_startDateIndex),
+                EndDate = Reader.GetDateTime(_endDateIndex),
+                Milestone = new Milestone()
+                {
+                    Description = Reader.GetString(_milestoneNameIndex)
+                }
+            };
         }
     }
 }
+
