@@ -40,24 +40,6 @@ namespace PraticeManagement.Controls.ProjectExpenses {
         protected global::System.Web.UI.WebControls.GridView gvProjectExpenses;
         
         /// <summary>
-        /// vsProjectExpensesEdit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary vsProjectExpensesEdit;
-        
-        /// <summary>
-        /// vsProjectExpensesAdd control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary vsProjectExpensesAdd;
-        
-        /// <summary>
         /// odsProjectExpenses control.
         /// </summary>
         /// <remarks>
