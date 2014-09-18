@@ -709,6 +709,16 @@ TD .spacing
     background-image: url(../images/project-indicator.png);
     margin: 0 0 0 5px;
 }
+.ProposedProject
+{
+    display: block;
+    height: 10px;
+    width: 10px;
+    background-position: 0 -20px;
+    background-repeat: no-repeat;
+    background-image: url(../images/project-indicator.png);
+    margin: 0 0 0 5px;
+}
 .AciveOpportunity
 {
     display: block;
@@ -8233,5 +8243,10 @@ table#ctl00_body_login tr td label
 .colorWhite
 {
     color: white;
+}
+
+.bgColorE0DAECImp
+{
+ background-color: #E0DAEC !important;
 }
 
