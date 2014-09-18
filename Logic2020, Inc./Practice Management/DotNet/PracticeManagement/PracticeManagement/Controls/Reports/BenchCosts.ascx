@@ -162,7 +162,7 @@
                                 &nbsp;
                             </td>
                             <td class="PaddingTop5">
-                                <asp:Button ID="bntExportExcel" runat="server" Text="Excel" CssClass="Width100Px"
+                                <asp:Button ID="bntExportExcel" runat="server" Text="Export" CssClass="Width100Px"
                                     Visible="false" OnClick="btnExportToExcel_OnClick" ValidationGroup="Filter" />
                             </td>
                         </tr>
