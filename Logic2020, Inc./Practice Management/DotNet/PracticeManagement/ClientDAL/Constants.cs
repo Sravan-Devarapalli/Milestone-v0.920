@@ -9,6 +9,9 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string ActualHoursInRange = "ActualHoursInRange";
+            public const string ForecastedHoursInRange = "ForecastedHoursInRange";
+            public const string POAmount = "POAmount";
             public const string LockoutDate = "LockoutDate";
             public const string Lockout = "Lockout";
             public const string FunctionalityName = "FunctionalityName";
@@ -523,6 +526,14 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string ProjectOwner = "@ProjectOwner";
+            public static string SalesPerson = "@SalesPerson";
+            public static string NewOrExtension = "@NewOrExtension";
+            public static string Capabilities = "@Capabilities";
+            public static string POAmount = "@POAmount";
+            public static string ClientDirector = "@ClientDirector";
+            public static string SowBudget = "@SowBudget";
+            public static string PracticeAreas = "@PracticeAreas";
             public static string LockoutXML = "@LockoutXML";
             public static string LockoutPageId = "@LockoutPageId";
             public static string SeniorManagerIds = "@SeniorManagerIds";
@@ -826,6 +837,7 @@
             public const string IncludeUnpaidParam = "@IncludeUnpaid";
             public const string IncludeSickLeaveParam = "@IncludeSickLeave";
             public const string SowBudgetParam = "@SowBudget";
+            public const string POAmountParam = "@POAmount";
             public const string CategoryIdParam = "@CategoryId";
             public const string LinkParam = "@Link";
             public const string InActiveParam = "@InActive";
