@@ -379,6 +379,7 @@
     <Content Include="Controls\Clients\ClientPricingList.ascx" />
     <Content Include="Controls\Configuration\RecruitingMetricsHeader.ascx" />
     <Content Include="Controls\FilteredCheckBoxList.ascx" />
+    <Content Include="Controls\Milestones\MilestoneExpenses.ascx" />
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\PersonCalendar.ascx" />
     <Content Include="Controls\PersonMonthCalendar.ascx" />
@@ -1506,6 +1507,13 @@
     <Compile Include="Controls\Generic\EnableDisableExtForAdminSection\EnableDisableExtForAdminSection.cs" />
     <Compile Include="Controls\Generic\MaxValueAllowedForTextBox\MaxValueAllowedForTextBoxExtender.cs" />
     <Compile Include="Controls\Generic\RepeatableRadioButton.cs" />
+    <Compile Include="Controls\Milestones\MilestoneExpenses.ascx.cs">
+      <DependentUpon>MilestoneExpenses.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Milestones\MilestoneExpenses.ascx.designer.cs">
+      <DependentUpon>MilestoneExpenses.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Milestones\MilestonePersonBar.ascx.cs">
       <DependentUpon>MilestonePersonBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3787,3 +3795,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
