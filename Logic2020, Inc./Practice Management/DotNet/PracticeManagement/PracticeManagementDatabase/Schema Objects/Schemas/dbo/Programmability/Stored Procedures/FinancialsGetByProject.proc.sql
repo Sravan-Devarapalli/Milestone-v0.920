@@ -56,7 +56,7 @@ AS
 		ISNULL(pf.RevenueNet,0) as 'RevenueNet',
 		CASE WHEN (pr.IsCompanyInternal = 1) THEN 0
 		ELSE ISNULL(pf.Cogs,0) END AS 'Cogs',
-		ISNULL(pf.GrossMargin,0)+((ISNULL(PE.ReimbursedExpenseSum,0)-ISNULL(PE.ExpenseSum,0)) * (1 - P.Discount/100))  as 'GrossMargin',
+		ISNULL(pf.GrossMargin,0)+((ISNULL(PE.ReimbursedExpenseSum,0)-ISNULL(PE.ExpenseSum,0)))  as 'GrossMargin',
 		ISNULL(pf.Hours,0) Hours,
 		ISNULL(PE.ExpenseSum,0) Expense,
 		ISNULL(PE.ReimbursedExpenseSum,0) ReimbursedExpense
