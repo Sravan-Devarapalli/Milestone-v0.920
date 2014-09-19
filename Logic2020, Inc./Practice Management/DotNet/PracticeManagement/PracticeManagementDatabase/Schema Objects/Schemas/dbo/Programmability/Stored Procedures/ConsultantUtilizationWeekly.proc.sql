@@ -107,13 +107,14 @@ AS
 				st.PersonStatusId,
                 st.[Name],
 				P.TitleId,
-				T.Title,
+				p.Title,
+				p.DefaultPractice PracticeId,
+				p.PracticeName,
                 CASE WHEN AvaHrs.AvaliableHours > 0 THEN  AvgUT.AvgUtilization ELSE 0 END AS wutilAvg,
                 ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays
-        FROM    dbo.Person AS p
+        FROM    v_person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
-				INNER JOIN dbo.Title AS T ON T.TitleId = P.TitleId
 				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
 		LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 LEFT JOIN dbo.GetPersonVacationDaysTable(@StartDate,@Enddate) VactionDaysTable ON VactionDaysTable.PersonId = c.ConsId
