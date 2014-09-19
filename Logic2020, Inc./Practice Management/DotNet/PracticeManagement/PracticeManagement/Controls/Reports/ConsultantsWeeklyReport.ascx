@@ -80,8 +80,8 @@
                                     Export:
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
-                                        Enabled="false" UseSubmitBehavior="false" ToolTip="Export To Excel" />
+                                    <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick" Enabled = "true"
+                                         UseSubmitBehavior="false" ToolTip="Export To Excel" />
                                 </td>
                                 <td>
                                     <asp:Button ID="btnExport" runat="server" Text="PDF" OnClick="btnExport_Click" UseSubmitBehavior="false"
@@ -145,6 +145,7 @@
     </ContentTemplate>
     <Triggers>
         <asp:PostBackTrigger ControlID="btnExport" />
+        <asp:PostBackTrigger ControlID="btnExportToExcel" /> 
     </Triggers>
 </asp:UpdatePanel>
 <div id="loading_img" style="width: 100%; text-align: center;" class="tab-invisible">
