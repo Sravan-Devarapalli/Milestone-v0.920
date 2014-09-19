@@ -18,6 +18,8 @@ using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Drawing.Imaging;
+using PraticeManagement.Utils.Excel;
+using System.Data;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -57,6 +59,79 @@ namespace PraticeManagement.Controls.Reports
         private const int reportSize = 25;
         private const string ConsultantCapacityReport = "Consulting Capacity Report";
         private const string ConsultantUtilizationReport = "Consulting Utilization Report";
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
+        private const string ConsultingHeader = "For {0} Persons; For {1} Projects\n{2}\n* Utilization reflects person vacation time during this period.";
+
+        private SheetStyles HeaderSheetStyle
+        {
+            get
+            {
+                CellStyles cellStyle = new CellStyles();
+                cellStyle.IsBold = true;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.FontHeight = 350;
+                CellStyles[] cellStylearray = { cellStyle };
+                RowStyles headerrowStyle = new RowStyles(cellStylearray);
+                headerrowStyle.Height = 500;
+
+                CellStyles dataCellStyle = new CellStyles();
+                dataCellStyle.IsBold = true;
+                dataCellStyle.WrapText = true;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.FontHeight = 200;
+                CellStyles[] dataCellStylearray = { dataCellStyle };
+                RowStyles datarowStyle1 = new RowStyles(dataCellStylearray);
+                RowStyles datarowStyle2 = new RowStyles(dataCellStylearray);
+                datarowStyle1.Height = 350;
+                datarowStyle2.Height = 800;
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle2, datarowStyle1 };
+
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
+                sheetStyle.MergeRegion.Add(new int[] { 1, 1, 0, coloumnsCount - 1 });
+                sheetStyle.IsAutoResize = false;
+
+                return sheetStyle;
+            }
+        }
+
+        private SheetStyles DataSheetStyle
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                List<CellStyles> headerCellStyleList = new List<CellStyles>();
+                headerCellStyleList.Add(headerCellStyle);
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles percentageCellStyle = new CellStyles();
+                percentageCellStyle.DataFormat = "0%";
+                CellStyles[] dataCellStylearray = { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle, 
+                                                    percentageCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+
+                return sheetStyle;
+            }
+        }
 
         #endregion Constants
 
@@ -236,6 +311,10 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                btnExportToExcel.Enabled = !IsCapacityMode; 
+            }
             if (IsSampleReport)
             {
                 utf.IsSampleReport = true;
@@ -588,7 +667,153 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
+            var filename = string.Format("ConsultingUtilization_{0}-{1}.xls", BegPeriod.ToString("MM_dd_yyyy"), EndPeriod.ToString("MM_dd_yyyy"));
+            DataHelper.InsertExportActivityLogMessage(ConsultantUtilizationReport);
+            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
+            var dataSetList = new List<DataSet>();
 
+            var report = DataHelper.GetConsultantsWeeklyReport(
+                    BegPeriod, Granularity, Period,
+                    utf.ActivePersons, utf.ProjectedPersons,
+                    utf.ActiveProjects, utf.ProjectedProjects,
+                    utf.ExperimentalProjects,
+                    utf.InternalProjects, utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices);
+            report.Reverse(); 
+            string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
+            if (utf.ProjectedPersons && utf.ActivePersons)
+            {
+                personsPlaceHolder = "All";
+            }
+            else if (utf.ActivePersons)
+            {
+                personsPlaceHolder = "Active";
+            }
+            else if (utf.ProjectedPersons)
+            {
+                personsPlaceHolder = "Projected";
+            }
+            else
+            {
+                personsPlaceHolder = "No";
+            }
+
+            if (utf.ActiveProjects && utf.ProjectedProjects
+                && utf.InternalProjects && utf.ExperimentalProjects && utf.ProposedProjects)
+            {
+                projectsPlaceHolder = "All";
+            }
+            else
+            {
+                if (utf.ActiveProjects)
+                    projectsPlaceHolder = "Active";
+
+                if (utf.ProjectedProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Projected";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Projected";
+                    }
+                }
+                if (utf.InternalProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Internal";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Internal";
+                    }
+                }
+                if (utf.ExperimentalProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Experimental";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Experimental";
+                    }
+                }
+                if (utf.ProposedProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Proposed";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Proposed";
+                    }
+                }
+            }
+            if (string.IsNullOrEmpty(projectsPlaceHolder))
+            {
+                projectsPlaceHolder = "No";
+            }
+
+            if (report.Count > 0)
+                {
+                    DataTable header1 = new DataTable();
+                    header1.Columns.Add(string.Format("Period: {0}-{1}", BegPeriod.ToString("MM/dd/yyyy"), EndPeriod.ToString("MM/dd/yyyy")));
+                
+                    List<object> row1 = new List<object>();
+                    row1.Add(string.Format(ConsultingHeader, personsPlaceHolder,projectsPlaceHolder,utf.PracticesFilterText()));
+                    header1.Rows.Add(row1.ToArray());
+                    headerRowsCount = header1.Rows.Count + 3;
+
+                    var data = PrepareDataTable(report);
+                    coloumnsCount = data.Columns.Count;
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    sheetStylesList.Add(DataSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "Consulting_Utilization";
+                    dataset.Tables.Add(header1);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
+                }
+                else
+                {
+                    string dateRangeTitle = "There are no people with the selected parameters.";
+                    DataTable header = new DataTable();
+                    header.Columns.Add(dateRangeTitle);
+                    sheetStylesList.Add(HeaderSheetStyle);
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "Consulting_Utilization";
+                    dataset.Tables.Add(header);
+                    dataSetList.Add(dataset);
+                }
+
+                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+        }
+
+        public DataTable PrepareDataTable(List<ConsultantUtilizationPerson> report)
+        {
+            DataTable data = new DataTable();
+            List<object> row;
+            data.Columns.Add("Person Name");
+            data.Columns.Add("Title");
+            data.Columns.Add("Person Status");
+            data.Columns.Add("Practice Area");
+            data.Columns.Add("Pay type");
+            data.Columns.Add("Utilization %");
+            foreach (var person in report)
+            {
+                row = new List<object>();
+                row.Add(person.Person.PersonLastFirstName);
+                row.Add(person.Person.Title.TitleName);
+                row.Add(person.Person.Status.Name);
+                row.Add(person.Person.DefaultPractice.Name);
+                row.Add(person.Person.CurrentPay.TimescaleName);
+                row.Add(person.PersonVacationDays > 0 ? person.AverageUtilization.ToString()+"%*":((double)person.AverageUtilization/100).ToString());
+                data.Rows.Add(row.ToArray());
+            }
+            return data;
         }
 
         protected void Chart_Click(object sender, ImageMapEventArgs e)
