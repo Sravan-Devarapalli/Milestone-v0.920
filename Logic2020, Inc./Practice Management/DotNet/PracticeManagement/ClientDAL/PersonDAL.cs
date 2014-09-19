@@ -391,7 +391,6 @@ namespace DataAccess
                 int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
                 int lastNameIndex = reader.GetOrdinal(LastNameColumn);
                 int employeeNumberIndex = reader.GetOrdinal(EmployeeNumberColumn);
-                //int weeklyLoadIndex = reader.GetOrdinal(WeeklyUtilColumn);
                 int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
                 int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
                 int hireDateIndex = reader.GetOrdinal(HireDateColumn);
@@ -399,7 +398,16 @@ namespace DataAccess
                 int personVacationDaysIndex = reader.GetOrdinal(PersonVactionDaysColumn);
                 int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
                 int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
-
+                int practiceId = -1;
+                int practiceArea = -1;
+                try
+                {
+                    practiceId = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                    practiceArea = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                }
+                catch
+                {
+                }
                 var res = new List<ConsultantUtilizationPerson>();
                 while (reader.Read())
                 {
@@ -428,6 +436,15 @@ namespace DataAccess
                                 TitleName = reader.GetString(titleIndex)
                             }
                         };
+
+                    if (practiceId > -1)
+                    {
+                        person.DefaultPractice = new Practice()
+                        {
+                            Id = reader.GetInt32(titleIdIndex),
+                            Name = reader.GetString(practiceArea)
+                        };
+                    }
 
                     if (Convert.IsDBNull(reader[TerminationDateColumn]))
                     {
