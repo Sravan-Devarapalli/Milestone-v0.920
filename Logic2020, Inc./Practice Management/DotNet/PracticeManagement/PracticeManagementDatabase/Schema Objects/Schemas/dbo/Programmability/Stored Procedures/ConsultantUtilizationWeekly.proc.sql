@@ -139,7 +139,7 @@ AS
 		FROM dbo.PersonCalendarAuto PC 
 		INNER JOIN @CurrentConsultants AS c ON c.ConsId=PC.PersonId AND PC.[Date] BETWEEN @StartDate AND @EndDate
 		LEFT JOIN dbo.Calendar AS Cal ON Cal.Date=PC.Date
-		WHERE PC.DayOff=1 AND (PC.TimeOffHours=8 OR PC.CompanyDayOff=1) AND DATEPART(DW,PC.Date) NOT IN (1,7)
+		WHERE PC.DayOff=1 AND (PC.TimeOffHours>0 OR PC.CompanyDayOff=1) AND DATEPART(DW,PC.Date) NOT IN (1,7)
 		ORDER BY PC.PersonId,PC.Date'
 		
      --PRINT @Query
