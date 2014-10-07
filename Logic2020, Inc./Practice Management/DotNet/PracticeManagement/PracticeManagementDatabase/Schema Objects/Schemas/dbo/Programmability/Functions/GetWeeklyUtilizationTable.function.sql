@@ -120,7 +120,7 @@ AS
 												)
 												OR
 												(
-													PC.DayOff = 1 AND PC.TimeOffHours = 8--if a person has added Timeoff  for complete 8 hr then the day is treated as vacation day.
+													PC.DayOff = 1 AND PC.TimeOffHours > 0--if a person has added Timeoff  for complete 8 hr then the day is treated as vacation day.
 												) 
 											)
 	GROUP BY CCWR.PersonId,CCWR.StartDate,CCWR.EndDate,CCWR.Timescale
