@@ -1530,3 +1530,6 @@ table#ctl00_body_login tr td label{float:left}
 .attributionHeader{font-size:16px;font-weight:bold;text-align:center}
 .attributionFirstTd{width:47%;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;text-align:right;padding-bottom:5px;padding-right:5px;padding-top:5px}
 .colorWhite{color:white}
+.bgColorE0DAECImp{background-color: #E0DAEC !important}
+.ConsultPopup{padding-top: 5px;padding-left: 20%;}
+.minwidth350px{min-width: 350px !important;}
