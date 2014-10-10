@@ -18,7 +18,21 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
+        public List<ConsultantUtilzationByProject> ProjectUtilization
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public List<int> WeeklyUtilization
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<decimal> ProjectedHoursList
         {
             get;
             set;
