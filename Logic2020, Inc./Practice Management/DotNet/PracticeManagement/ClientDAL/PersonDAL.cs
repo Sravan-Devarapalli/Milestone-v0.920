@@ -293,12 +293,16 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.TimescaleIds, context.TimescaleIdList);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, context.ExcludeInternalPractices);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSampleReport, context.IsSampleReport);
+                command.Parameters.AddWithValue(Constants.ParameterNames.UtilizationType, context.UtilizationType);
 
                 connection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    ReadPersonsWeeklyUtlization(reader, consultantUtilizationPersonList);
+                    if (context.UtilizationType == 0)
+                        ReadPersonsWeeklyUtlization(reader, consultantUtilizationPersonList);
+                    else if (context.UtilizationType == 1)
+                        ReadPersonsWeeklyUtlizationByProject(reader, consultantUtilizationPersonList);
                 }
             }
         }
@@ -457,6 +461,7 @@ namespace DataAccess
                     item.WeeklyPayTypes = new List<int>();
                     item.WeeklyUtilization = new List<int>();
                     item.WeeklyVacationDays = new List<int>();
+                    item.ProjectedHoursList = new List<decimal>();
                     item.TimeOffDates = new List<DateTime>();
                     item.Person = person;
                     item.PersonVacationDays = reader.GetInt32(personVacationDaysIndex);
@@ -487,8 +492,71 @@ namespace DataAccess
                         record.ProjectedHours = record.ProjectedHours + reader.GetDecimal(projectedHoursIndex);
                         record.AvailableHours = record.AvailableHours + reader.GetDecimal(availableHoursIndex);
                         record.WeeklyUtilization.Add(reader.GetInt32(weeklyUtlizationIndex));
+                        record.ProjectedHoursList.Add(reader.GetDecimal(projectedHoursIndex));
                         record.WeeklyPayTypes.Add(reader.IsDBNull(payTypeIndex) ? 0 : reader.GetInt32(payTypeIndex));
                         record.WeeklyVacationDays.Add(reader.GetInt32(vacationDaysIndex));
+                    }
+                }
+            }
+        }
+
+        private static void ReadPersonsWeeklyUtlizationByProject(SqlDataReader reader, List<ConsultantUtilizationPerson> consultantUtilizationPersonList)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int weeklyUtlizationIndex = reader.GetOrdinal(Constants.ColumnNames.WeeklyUtlization);
+                int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHours);
+                int availableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.AvailableHours);
+                int payTypeIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int vacationDaysIndex = reader.GetOrdinal(Constants.ColumnNames.VacationDays);
+                while (reader.Read())
+                {
+                    int personid = reader.GetInt32(personIdIndex);
+                    var startDate = reader.GetDateTime(startDateIndex);
+                    var utilizationByProject = new UtilizationByProject()
+                    {
+                        Project = new Project()
+                        {
+                            Id = reader.IsDBNull(projectIdIndex) ? null: (int?)reader.GetInt32(projectIdIndex),
+                            Name = reader.IsDBNull(projectNameIndex) ? string.Empty: reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.IsDBNull(projectNumberIndex) ? string.Empty : reader.GetString(projectNumberIndex)
+                        },
+                        ProjectedHours = reader.GetDecimal(projectedHoursIndex),
+                        Utilization =  reader.GetInt32(weeklyUtlizationIndex)
+                    };
+                    
+                    if (consultantUtilizationPersonList.Any(p => p.Person.Id == personid))
+                    {
+                        var person = consultantUtilizationPersonList.FirstOrDefault(p => p.Person.Id == personid);
+                        person.ProjectedHours = person.ProjectedHours + reader.GetDecimal(projectedHoursIndex);
+                        if (person.ProjectUtilization != null && person.ProjectUtilization.Any(p => p.StartDate.Date == startDate.Date))
+                        {
+                            var utilProject = person.ProjectUtilization.FirstOrDefault(p => p.StartDate.Date == startDate.Date);
+                            utilProject.UtilizationProject.Add(utilizationByProject);
+                        }
+                        else
+                        {
+                            var utilProject = new ConsultantUtilzationByProject();
+                            utilProject.StartDate = startDate;
+                            utilProject.EndDate = reader.GetDateTime(endDateIndex);
+                            utilProject.AvailableHours = reader.GetDecimal(availableHoursIndex);
+                            person.AvailableHours = person.AvailableHours + reader.GetDecimal(availableHoursIndex);
+                            utilProject.UtilizationProject = new List<UtilizationByProject>() { utilizationByProject };
+                            if (person.ProjectUtilization == null)
+                            {
+                                person.ProjectUtilization = new List<ConsultantUtilzationByProject>() { utilProject };
+                            }
+                            else
+                                person.ProjectUtilization.Add(utilProject);
+                        }
+                        person.WeeklyPayTypes.Add(reader.IsDBNull(payTypeIndex) ? 0 : reader.GetInt32(payTypeIndex));
+                        person.WeeklyVacationDays.Add(reader.GetInt32(vacationDaysIndex));
                     }
                 }
             }
