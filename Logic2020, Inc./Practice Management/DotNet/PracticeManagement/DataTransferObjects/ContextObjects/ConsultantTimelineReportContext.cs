@@ -34,5 +34,9 @@ namespace DataTransferObjects.ContextObjects
 
         [DataMember]
         public bool IsSampleReport { get; set; }
+
+        //UtilizationType = 0 for only utilization, 1 for project utilization, 2 for hours utilization 
+        [DataMember]
+        public int UtilizationType { get; set; }
     }
 }
