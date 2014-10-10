@@ -526,6 +526,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string UtilizationType = "@UtilizationType";
             public static string ProjectOwner = "@ProjectOwner";
             public static string SalesPerson = "@SalesPerson";
             public static string NewOrExtension = "@NewOrExtension";
@@ -926,6 +927,8 @@
 
             public class ActivityLog
             {
+                public const string ActivityLogRecordPerChangeListByPeriod = "dbo.ActivityLogRecordPerChangeListByPeriod";
+                public const string ActivityLogRecordPerChangeGetCount = "dbo.ActivityLogRecordPerChangeGetCount";
                 public const string ActivityLogListByPeriodProcedure = "dbo.ActivityLogListByPeriod";
                 public const string ActivityLogGetCountProcedure = "dbo.ActivityLogGetCount";
                 public const string UserActivityLogInsertProcedure = "dbo.UserActivityLogInsert";
