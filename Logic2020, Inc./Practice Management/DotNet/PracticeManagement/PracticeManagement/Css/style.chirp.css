@@ -8250,3 +8250,13 @@ table#ctl00_body_login tr td label
  background-color: #E0DAEC !important;
 }
 
+.ConsultPopup
+{
+    padding-top: 5px;
+    padding-left: 20%;
+}
+
+.minwidth350px
+{
+    min-width: 350px !important;
+}
