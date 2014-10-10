@@ -21,6 +21,11 @@
         hdnSaveReportText.value = printContent.innerHTML;
     }
 
+    function ClosePopUp() {
+        var popup = $find('mpeExportBehaviourId');
+        popup.hide();
+    }
+
     function Applytargetatt() {
         var area = document.getElementsByTagName("area");
         var hdn = document.getElementById("<%= hdnpopup.ClientID%>");
@@ -65,7 +70,7 @@
     </ContentTemplate>
 </asp:UpdatePanel>
 <uc3:LoadingProgress ID="progress" runat="server" />
-<asp:UpdatePanel ID="updConsReport" runat="server" UpdateMode="Conditional">
+<asp:UpdatePanel ID="updConsReport" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
     <ContentTemplate>
         <asp:HiddenField ID="hdnSaveReportText" runat="server" />
         <div class="textRight">
@@ -80,8 +85,8 @@
                                     Export:
                                 </td>
                                 <td>
-                                    <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick" Enabled = "true"
-                                         UseSubmitBehavior="false" ToolTip="Export To Excel" />
+                                    <asp:Button ID="btnExportToExcel" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"
+                                        Enabled="true" UseSubmitBehavior="false" ToolTip="Export To Excel" />
                                 </td>
                                 <td>
                                     <asp:Button ID="btnExport" runat="server" Text="PDF" OnClick="btnExport_Click" UseSubmitBehavior="false"
@@ -142,10 +147,52 @@
                 </ChartAreas>
             </asp:Chart>
         </div>
+        <asp:HiddenField ID="hdnExportOptions" Value="false" runat="server" />
+        <AjaxControlToolkit:ModalPopupExtender ID="mpeExportOptions" runat="server" TargetControlID="hdnExportOptions"
+            BehaviorID="mpeExportBehaviourId" BackgroundCssClass="modalBackground" PopupControlID="pnlExportOptions"
+            CancelControlID="btnCancelExport" DropShadow="false" />
+        <asp:Panel ID="pnlExportOptions" runat="server" CssClass="popUp yScrollAuto minwidth350px" Style="display: none;">
+            <table class="WholeWidth">
+                <tr class="PopUpHeader">
+                    <th>
+                        Please select one of the options below to export
+                    </th>
+                </tr> 
+                <tr>
+                    <td class="ConsultPopup">
+                        <asp:RadioButton ID="rbUtilization" runat="server" Checked="true" GroupName="ExportOptions" />
+                    &nbsp;&nbsp;
+                        Utilization only
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ConsultPopup">
+                        <asp:RadioButton ID="rbProjectUtilization" runat="server" GroupName="ExportOptions" />
+                    &nbsp;&nbsp;
+                        Project and Utilization 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ConsultPopup">
+                        <asp:RadioButton ID="rbHoursUtilization" runat="server" GroupName="ExportOptions" />
+                    &nbsp;&nbsp;
+                        Hours
+                    </td>
+                </tr>
+                <tr>
+                    <td class="textCenter NewHireGraphEmptyDiv">
+                        <asp:Button ID="btnOkExport" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp"
+                            OnClientClick="ClosePopUp()" OnClick="btnOkExport_Click" />
+                        &nbsp;&nbsp;
+                        <asp:Button ID="btnCancelExport" runat="server" ToolTip="Cancel" Text="Cancel" CssClass="Width100PxImp" />
+                    </td>
+                </tr>
+            </table>
+        </asp:Panel>
     </ContentTemplate>
     <Triggers>
         <asp:PostBackTrigger ControlID="btnExport" />
-        <asp:PostBackTrigger ControlID="btnExportToExcel" /> 
+        <asp:PostBackTrigger ControlID="btnOkExport" />
     </Triggers>
 </asp:UpdatePanel>
 <div id="loading_img" style="width: 100%; text-align: center;" class="tab-invisible">
@@ -172,8 +219,8 @@
 <AjaxControlToolkit:ModalPopupExtender ID="mpeConsultantDetailReport" runat="server"
     TargetControlID="hdnTempField" BackgroundCssClass="modalBackground" PopupControlID="pnlConsultantDetailReport"
     DropShadow="false" CancelControlID="btnCancelConsultantDetailReport" OnCancelScript="OnCancelClick();" />
-<asp:Panel ID="pnlConsultantDetailReport" CssClass="ConsultantUtilReportPopup"
-    Style="display: none;" runat="server">
+<asp:Panel ID="pnlConsultantDetailReport" CssClass="ConsultantUtilReportPopup" Style="display: none;"
+    runat="server">
     <table class="WholeWidth Padding5">
         <tr>
             <td colspan="3" class="BackGroundWhiteImp">
