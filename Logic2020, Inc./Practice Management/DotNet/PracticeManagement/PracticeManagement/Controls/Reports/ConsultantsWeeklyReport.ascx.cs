@@ -62,6 +62,7 @@ namespace PraticeManagement.Controls.Reports
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
         private const string ConsultingHeader = "For {0} Persons; For {1} Projects\n{2}\n* Utilization reflects person vacation time during this period.";
+        private const int maxWidth = 15;
 
         private SheetStyles HeaderSheetStyle
         {
@@ -80,6 +81,7 @@ namespace PraticeManagement.Controls.Reports
                 dataCellStyle.WrapText = true;
                 dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
                 dataCellStyle.FontHeight = 200;
+
                 CellStyles[] dataCellStylearray = { dataCellStyle };
                 RowStyles datarowStyle1 = new RowStyles(dataCellStylearray);
                 RowStyles datarowStyle2 = new RowStyles(dataCellStylearray);
@@ -104,33 +106,90 @@ namespace PraticeManagement.Controls.Reports
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                headerCellStyleList.Add(headerCellStyle);
+
+
+                CellStyles dateCellStyle = new CellStyles();
+                dateCellStyle.IsBold = true;
+                dateCellStyle.WrapText = true;
+                dateCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+
+                dateCellStyle.DataFormat = Granularity == 30 ? "[$-409]mmm-yy;@" : "[$-409]d-mmm;@";
+
+                List<CellStyles> headerCellStyleList = new List<CellStyles>() { headerCellStyle, headerCellStyle, headerCellStyle, dateCellStyle };
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
                 CellStyles dataCellStyle = new CellStyles();
 
                 CellStyles percentageCellStyle = new CellStyles();
                 percentageCellStyle.DataFormat = "0%";
+                percentageCellStyle.WrapText = true;
                 CellStyles[] dataCellStylearray = { dataCellStyle, 
                                                     dataCellStyle,
                                                     dataCellStyle,
-                                                    dataCellStyle,
-                                                    dataCellStyle, 
                                                     percentageCellStyle
                                                   };
-
+                List<int> coloumnWidth = new List<int>();
+                for (int i = 0; i < 3; i++)
+                    coloumnWidth.Add(0);
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                RowStyles[] rowStylearray = { headerrowStyle };
+                
+                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
+                sheetStyle.TopRowNo = headerRowsCount;
+                sheetStyle.IsFreezePane = true;
+                sheetStyle.FreezePanColSplit = 0;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
+                sheetStyle.ColoumnWidths = coloumnWidth;
+                sheetStyle.IsAutoResize = true;
+                return sheetStyle;
+            }
+        }
 
+        private SheetStyles DataSheetStyleForHours
+        {
+            get
+            {
+                CellStyles headerCellStyle = new CellStyles();
+                headerCellStyle.IsBold = true;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+
+
+                CellStyles dateCellStyle = new CellStyles();
+                dateCellStyle.IsBold = true;
+                dateCellStyle.WrapText = true;
+                dateCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+
+                dateCellStyle.DataFormat = Granularity == 30 ? "[$-409]mmm-yy;@" : "[$-409]d-mmm;@";
+
+                List<CellStyles> headerCellStyleList = new List<CellStyles>() { headerCellStyle, headerCellStyle, headerCellStyle, dateCellStyle };
+                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
+
+                CellStyles dataCellStyle = new CellStyles();
+
+                CellStyles percentageCellStyle = new CellStyles();
+                percentageCellStyle.DataFormat = "0.00";
+                percentageCellStyle.WrapText = true;
+                CellStyles[] dataCellStylearray = { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    percentageCellStyle
+                                                  };
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
                 sheetStyle.TopRowNo = headerRowsCount;
                 sheetStyle.IsFreezePane = true;
                 sheetStyle.FreezePanColSplit = 0;
                 sheetStyle.FreezePanRowSplit = headerRowsCount;
-
+                sheetStyle.IsAutoResize = true;
                 return sheetStyle;
             }
+        }
+
+        public List<int> Heights
+        {
+            get;
+            set;
         }
 
         #endregion Constants
@@ -313,7 +372,7 @@ namespace PraticeManagement.Controls.Reports
         {
             if (!IsPostBack)
             {
-                btnExportToExcel.Enabled = !IsCapacityMode; 
+                btnExportToExcel.Enabled = !IsCapacityMode;
             }
             if (IsSampleReport)
             {
@@ -361,7 +420,7 @@ namespace PraticeManagement.Controls.Reports
             if (cookie.PersonId.HasValue)
             {
                 ShowDetailedReport(cookie.PersonId.Value, cookie.BegPeriod.Date, cookie.EndPeriod.Date, cookie.ChartTitle,
-                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects,cookie.ProposedProjects);
+                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects, cookie.ProposedProjects);
 
                 System.Web.UI.ScriptManager.RegisterStartupScript(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
             }
@@ -377,7 +436,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects,utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices);
+                    utf.InternalProjects, utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0);
             ConsultantUtilizationPerson = report;
             foreach (var quadruple in report)
                 AddPerson(quadruple);
@@ -667,7 +726,18 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            var filename = string.Format("ConsultingUtilization_{0}-{1}.xls", BegPeriod.ToString("MM_dd_yyyy"), EndPeriod.ToString("MM_dd_yyyy"));
+            mpeExportOptions.Show();
+        }
+
+        protected void btnOkExport_Click(object sender, EventArgs e)
+        {
+            int optionNumber = rbUtilization.Checked ? 0 : rbProjectUtilization.Checked ? 1 : 2;
+            Export(optionNumber);
+        }
+
+        private void Export(int optionNumber)
+        {
+            var filename = string.Format(optionNumber == 0 ? "ConsultingUtilization_UtilizationOnly_{0}-{1}.xls" : optionNumber == 1 ? "ConsultingUtilization_ProjectUtilization_{0}-{1}.xls" : "ConsultingUtilization_Hours_{0}-{1}.xls", BegPeriod.ToString("MM_dd_yyyy"), EndPeriod.ToString("MM_dd_yyyy"));
             DataHelper.InsertExportActivityLogMessage(ConsultantUtilizationReport);
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
@@ -677,8 +747,8 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices);
-            report.Reverse(); 
+                    utf.InternalProjects, utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber);
+            report.Reverse();
             string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
             if (utf.ProjectedPersons && utf.ActivePersons)
             {
@@ -758,60 +828,263 @@ namespace PraticeManagement.Controls.Reports
             }
 
             if (report.Count > 0)
-                {
-                    DataTable header1 = new DataTable();
-                    header1.Columns.Add(string.Format("Period: {0}-{1}", BegPeriod.ToString("MM/dd/yyyy"), EndPeriod.ToString("MM/dd/yyyy")));
-                
-                    List<object> row1 = new List<object>();
-                    row1.Add(string.Format(ConsultingHeader, personsPlaceHolder,projectsPlaceHolder,utf.PracticesFilterText()));
-                    header1.Rows.Add(row1.ToArray());
-                    headerRowsCount = header1.Rows.Count + 3;
+            {
+                DataTable header1 = new DataTable();
+                header1.Columns.Add(string.Format("Period: {0}-{1}", BegPeriod.ToString("MM/dd/yyyy"), EndPeriod.ToString("MM/dd/yyyy")));
 
-                    var data = PrepareDataTable(report);
-                    coloumnsCount = data.Columns.Count;
-                    sheetStylesList.Add(HeaderSheetStyle);
-                    sheetStylesList.Add(DataSheetStyle);
-                    var dataset = new DataSet();
-                    dataset.DataSetName = "Consulting_Utilization";
-                    dataset.Tables.Add(header1);
-                    dataset.Tables.Add(data);
-                    dataSetList.Add(dataset);
+                List<object> row1 = new List<object>();
+                row1.Add(string.Format(ConsultingHeader, personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
+                header1.Rows.Add(row1.ToArray());
+                headerRowsCount = header1.Rows.Count + 3;
+
+                var data = PrepareDataTable(report, optionNumber);
+                coloumnsCount = data.Columns.Count;
+                sheetStylesList.Add(HeaderSheetStyle);
+                if (optionNumber == 1)
+                {
+                    var dataStyle = DataSheetStyle;
+                    var rowStylesList = dataStyle.rowStyles.ToList();
+                    for (int i = 0; i < Heights.Count; i++)
+                    {
+                        CellStyles dataCellStyle = new CellStyles();
+
+                        CellStyles percentageCellStyle = new CellStyles();
+                        percentageCellStyle.DataFormat = "0%";
+                        percentageCellStyle.WrapText = true;
+                        CellStyles[] dataCellStylearray = { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    percentageCellStyle
+                                                  };
+                        var datarowStyle = new RowStyles(dataCellStylearray);
+                        datarowStyle.Height = Heights[i] == 0 ? (short)300 : (short)(Heights[i] * 300);
+                        rowStylesList.Add(datarowStyle);
+                    }
+                    dataStyle.rowStyles = rowStylesList.ToArray();
+                    for (int i = 0; i < report[0].ProjectUtilization.Count; i++)
+                        dataStyle.ColoumnWidths.Add(20);
+                    sheetStylesList.Add(dataStyle);
+                }
+                if (optionNumber == 2)
+                {
+                    sheetStylesList.Add(DataSheetStyleForHours);
                 }
                 else
                 {
-                    string dateRangeTitle = "There are no people with the selected parameters.";
-                    DataTable header = new DataTable();
-                    header.Columns.Add(dateRangeTitle);
-                    sheetStylesList.Add(HeaderSheetStyle);
-                    var dataset = new DataSet();
-                    dataset.DataSetName = "Consulting_Utilization";
-                    dataset.Tables.Add(header);
-                    dataSetList.Add(dataset);
-                }
+                    var dataStyle = DataSheetStyle;
+                    var rowStylesList = dataStyle.rowStyles.ToList();
+                    CellStyles dataCellStyle = new CellStyles();
 
-                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
+                    CellStyles percentageCellStyle = new CellStyles();
+                    percentageCellStyle.DataFormat = "0%";
+                    percentageCellStyle.WrapText = true;
+                    CellStyles[] dataCellStylearray = { dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    percentageCellStyle
+                                                  };
+                    RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                    rowStylesList.Add(datarowStyle);
+                    dataStyle.rowStyles = rowStylesList.ToArray();
+                    sheetStylesList.Add(dataStyle);
+                }
+                var dataset = new DataSet();
+                dataset.DataSetName = "Consulting_Utilization";
+                dataset.Tables.Add(header1);
+                dataset.Tables.Add(data);
+                dataSetList.Add(dataset);
+            }
+            else
+            {
+                string dateRangeTitle = "There are no people with the selected parameters.";
+                DataTable header = new DataTable();
+                header.Columns.Add(dateRangeTitle);
+                sheetStylesList.Add(HeaderSheetStyle);
+                var dataset = new DataSet();
+                dataset.DataSetName = "Consulting_Utilization";
+                dataset.Tables.Add(header);
+                dataSetList.Add(dataset);
+            }
+
+            NPOIExcel.Export(filename, dataSetList, sheetStylesList);
         }
 
-        public DataTable PrepareDataTable(List<ConsultantUtilizationPerson> report)
+        public DataTable PrepareDataTable(List<ConsultantUtilizationPerson> report, int optionNumber)
         {
             DataTable data = new DataTable();
             List<object> row;
             data.Columns.Add("Person Name");
             data.Columns.Add("Title");
-            data.Columns.Add("Person Status");
-            data.Columns.Add("Practice Area");
             data.Columns.Add("Pay type");
-            data.Columns.Add("Utilization %");
-            foreach (var person in report)
+            if (optionNumber == 0 || optionNumber == 2)
             {
-                row = new List<object>();
-                row.Add(person.Person.PersonLastFirstName);
-                row.Add(person.Person.Title.TitleName);
-                row.Add(person.Person.Status.Name);
-                row.Add(person.Person.DefaultPractice.Name);
-                row.Add(person.Person.CurrentPay.TimescaleName);
-                row.Add(person.PersonVacationDays > 0 ? person.AverageUtilization.ToString()+"%*":((double)person.AverageUtilization/100).ToString());
-                data.Rows.Add(row.ToArray());
+                for (int i = 0; i < report[0].WeeklyUtilization.Count; i++)
+                {
+                    var beginPeriod = BegPeriod;
+                    var endPeriod = EndPeriod;
+
+                    if (Granularity == 7)
+                    {
+                        if ((int)BegPeriod.DayOfWeek > 0)
+                        {
+                            beginPeriod = BegPeriod.AddDays(-1 * ((int)BegPeriod.DayOfWeek));
+                        }
+                        if ((int)EndPeriod.DayOfWeek < 6)
+                        {
+                            endPeriod = EndPeriod.AddDays(6 - ((int)EndPeriod.DayOfWeek));
+                        }
+                    }
+                    else if (Granularity == 30)
+                    {
+                        beginPeriod = BegPeriod;
+                        endPeriod = EndPeriod;
+
+                        if ((int)beginPeriod.DayOfWeek > 0)
+                        {
+                            beginPeriod = beginPeriod.AddDays(-1 * ((int)beginPeriod.DayOfWeek));
+                        }
+                        if ((int)endPeriod.DayOfWeek < 6)
+                        {
+                            endPeriod = endPeriod.AddDays(6 - ((int)endPeriod.DayOfWeek));
+                        }
+                    }
+                    var period = (endPeriod.Subtract(beginPeriod).Days + 1);
+                    var pointStartDate = beginPeriod.AddDays(i * Granularity);
+                    var pointEndDate = beginPeriod.AddDays(((i + 1) * Granularity));
+                    if (Granularity == 30)
+                    {
+                        pointStartDate = beginPeriod.AddMonths(i);
+                        pointEndDate = endPeriod > beginPeriod.AddMonths(i + 1) ? beginPeriod.AddMonths(i + 1) : endPeriod.AddDays(1);
+                    }
+                    else
+                    {
+                        var delta = period - (i * Granularity - 1);
+                        if (delta <= Granularity)
+                        {
+                            pointEndDate = beginPeriod.AddDays(period);
+                        }
+                    }
+                    data.Columns.Add(pointStartDate.ToShortDateString());
+                }
+            }
+            else if (optionNumber == 1)
+            {
+                foreach (var item in report[0].ProjectUtilization)
+                {
+                    data.Columns.Add(item.StartDate.ToShortDateString());
+                }
+            }
+            data.Columns.Add(optionNumber == 2 ? "Average Hours" : "Utilization %");
+            if (optionNumber == 0 || optionNumber == 2)
+            {
+                foreach (var person in report)
+                {
+                    row = new List<object>();
+                    row.Add(person.Person.PersonLastFirstName);
+                    row.Add(person.Person.Title.TitleName);
+                    row.Add(person.Person.CurrentPay.TimescaleName);
+                    for (int i = 0; i < person.WeeklyUtilization.Count; i++)
+                    {
+                        var beginPeriod = BegPeriod;
+                        var endPeriod = EndPeriod;
+
+                        if (Granularity == 7)
+                        {
+                            if ((int)BegPeriod.DayOfWeek > 0)
+                            {
+                                beginPeriod = BegPeriod.AddDays(-1 * ((int)BegPeriod.DayOfWeek));
+                            }
+                            if ((int)EndPeriod.DayOfWeek < 6)
+                            {
+                                endPeriod = EndPeriod.AddDays(6 - ((int)EndPeriod.DayOfWeek));
+                            }
+                        }
+                        else if (Granularity == 30)
+                        {
+                            beginPeriod = BegPeriod;
+                            endPeriod = EndPeriod;
+
+                            if ((int)beginPeriod.DayOfWeek > 0)
+                            {
+                                beginPeriod = beginPeriod.AddDays(-1 * ((int)beginPeriod.DayOfWeek));
+                            }
+                            if ((int)endPeriod.DayOfWeek < 6)
+                            {
+                                endPeriod = endPeriod.AddDays(6 - ((int)endPeriod.DayOfWeek));
+                            }
+                        }
+                        var period = (endPeriod.Subtract(beginPeriod).Days + 1);
+                        var pointStartDate = beginPeriod.AddDays(i * Granularity);
+                        var pointEndDate = beginPeriod.AddDays(((i + 1) * Granularity));
+                        if (Granularity == 30)
+                        {
+                            pointStartDate = beginPeriod.AddMonths(i);
+                            pointEndDate = endPeriod > beginPeriod.AddMonths(i + 1) ? beginPeriod.AddMonths(i + 1) : endPeriod.AddDays(1);
+                        }
+                        else
+                        {
+                            var delta = period - (i * Granularity - 1);
+                            if (delta <= Granularity)
+                            {
+                                pointEndDate = beginPeriod.AddDays(period);
+                            }
+                        }
+                        if (person.WeeklyUtilization[i] == -1 && pointEndDate == pointStartDate.AddDays(1) && person.CompanyHolidayDates.Any(d => d.Key == pointStartDate))
+                        {
+                            var first = person.CompanyHolidayDates.FirstOrDefault(d => d.Key == pointStartDate);
+                            row.Add(first.Value);
+                        }
+                        else if (person.WeeklyUtilization[i] == -1)
+                        {
+                            row.Add("On Vacation");
+                        }
+                        else
+                        {
+                            if (optionNumber == 0)
+                                row.Add(((double)person.WeeklyUtilization[i] / 100).ToString());
+                            else if (optionNumber == 2)
+                                row.Add(Math.Round(person.ProjectedHoursList[i], 2));
+                        }
+                    }
+                    if (optionNumber == 0)
+                        row.Add(person.PersonVacationDays > 0 ? person.AverageUtilization.ToString() + "%*" : ((double)person.AverageUtilization / 100).ToString());
+                    else if (optionNumber == 2)
+                        row.Add(Math.Round((decimal)person.ProjectedHoursList.Sum() / person.ProjectedHoursList.Count, 2));
+                    data.Rows.Add(row.ToArray());
+                }
+            }
+            else if (optionNumber == 1)
+            {
+                Heights = new List<int>();
+                foreach (var person in report)
+                {
+                    int temp = 0;
+                    row = new List<object>();
+                    row.Add(person.Person.PersonLastFirstName);
+                    row.Add(person.Person.Title.TitleName);
+                    row.Add(person.Person.CurrentPay.TimescaleName);
+                    foreach (var util in person.ProjectUtilization)
+                    {
+                        if (util.Format == "-1" && util.StartDate == util.EndDate && person.CompanyHolidayDates.Any(d => d.Key == util.StartDate))
+                        {
+                            var first = person.CompanyHolidayDates.FirstOrDefault(d => d.Key == util.StartDate);
+                            row.Add(first.Value);
+                        }
+                        else if (util.Format == "-1")
+                        {
+                            row.Add("On Vacation");
+                        }
+                        else
+                        {
+                            row.Add(util.Format == "0" ? 0.ToString() : util.Format);
+                            var value = (int)Math.Ceiling((decimal)util.Format.Length / maxWidth);
+                            temp = value > temp ? value : temp;
+                        }
+                    }
+                    Heights.Add(temp);
+                    row.Add(person.PersonVacationDays > 0 ? person.AverageUtilization.ToString() + "%*" : ((double)person.AverageUtilization / 100).ToString()); //row.Add(person.AverageUtilization);
+                    data.Rows.Add(row.ToArray());
+                }
             }
             return data;
         }
@@ -870,7 +1143,7 @@ namespace PraticeManagement.Controls.Reports
                     IsCapacityMode);
 
             var utilizationDaily = DataHelper.ConsultantUtilizationDailyByPerson(repStartDate, ParseInt(repEndDate.Subtract(repStartDate).Days.ToString(), DAYS_FORWARD),
-                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects,utf.ProposedProjects, personId);
+                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, utf.ProposedProjects, personId);
             var avgUtils = utilizationDaily.First().Second;
             for (int index = 0; index < avgUtils.Length; index++)
             {
@@ -1089,8 +1362,10 @@ namespace PraticeManagement.Controls.Reports
 
             if (Granularity == 30)
             {
-                pointStartDate = beginPeriod.AddMonths(w);
-                pointEndDate = endPeriod > beginPeriod.AddMonths(w + 1) ? beginPeriod.AddMonths(w + 1) : endPeriod.AddDays(1);
+                var numberOfMonths = (endPeriod.Year - beginPeriod.Year) * 12 + endPeriod.Month - beginPeriod.Month;
+                var tempDate = beginPeriod.AddMonths(w);
+                pointStartDate = w == 0 ? beginPeriod.AddMonths(w) : new DateTime(tempDate.Year, tempDate.Month, 1);
+                pointEndDate = w == numberOfMonths ? endPeriod : new DateTime(tempDate.Year, tempDate.Month, 1).AddMonths(1);
             }
             else
             {
@@ -1342,7 +1617,7 @@ namespace PraticeManagement.Controls.Reports
             foreach (var quadruple in report)
                 AddPerson(quadruple, true);
             chartPdf.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
-                
+
                 (report.Count == reportSize ? Resources.Controls.TimelineGeneralItemHeigth * report.Count : (report.Count <= 14) ? 70 + report.Count * 20 : 80 + report.Count * 22) +
                               Resources.Controls.TimelineGeneralFooterHeigth;
         }
