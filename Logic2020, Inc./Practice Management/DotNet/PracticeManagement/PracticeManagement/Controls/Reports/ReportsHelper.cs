@@ -57,7 +57,7 @@ namespace PraticeManagement.Controls.Reports
             bool activePersons, bool projectedPersons, bool activeProjects,
             bool projectedProjects, bool experimentalProjects, bool internalProjects,bool proposedProjects,
             string timescaleIds, string practiceIdList, int sortId, string sortDirection,
-            bool excludeInternalPractices, bool isSampleReport)
+            bool excludeInternalPractices, int utilizationType,bool isSampleReport)
         {
             var context = new ConsultantTimelineReportContext
                               {
@@ -76,7 +76,8 @@ namespace PraticeManagement.Controls.Reports
                                   InternalProjects = internalProjects,
                                   SortId = sortId,
                                   SortDirection = sortDirection,
-                                  IsSampleReport = isSampleReport
+                                  IsSampleReport = isSampleReport,
+                                  UtilizationType = utilizationType
                               };
 
             var consultants = ServiceCallers.Custom.Person(
