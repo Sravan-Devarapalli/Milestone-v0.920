@@ -12,7 +12,8 @@
 	@TimescaleIds NVARCHAR(4000) = NULL,
 	@PracticeIds NVARCHAR(4000) = NULL,
 	@ExcludeInternalPractices BIT = 0,
-	@IsSampleReport BIT = 0
+	@IsSampleReport BIT = 0,
+	@UtilizationType BIT = 0 -- 0 for only utilization, 1 for project utilization, 2 for hours utilization
 	
 AS 
    BEGIN
@@ -62,9 +63,17 @@ AS
 			END
 		END
 
-		SELECT WUT.PersonId,WUT.WeeklyUtlization,WUT.AvailableHours,WUT.ProjectedHours,WUT.Timescale,WUT.VacationDays
-		FROM dbo.GetWeeklyUtilizationTable(@StartDate,@EndRange, @Step, @ActivePersons, @ActiveProjects, @ProjectedPersons, @ProjectedProjects,@ExperimentalProjects,@ProposedProjects,@InternalProjects,@TimescaleIds,@PracticeIds,@ExcludeInternalPractices) AS WUT 
-		ORDER BY WUT.PersonId,WUT.StartDate
-				 
+		IF(@UtilizationType = 0)
+		BEGIN
+			SELECT WUT.PersonId,WUT.WeeklyUtlization,WUT.AvailableHours,WUT.ProjectedHours,WUT.Timescale,WUT.VacationDays
+			FROM dbo.GetWeeklyUtilizationTable(@StartDate,@EndRange, @Step, @ActivePersons, @ActiveProjects, @ProjectedPersons, @ProjectedProjects,@ExperimentalProjects,@ProposedProjects,@InternalProjects,@TimescaleIds,@PracticeIds,@ExcludeInternalPractices) AS WUT 
+			ORDER BY WUT.PersonId,WUT.StartDate
+		END
+		IF(@UtilizationType = 1)
+		BEGIN
+			SELECT WUT.PersonId,WUT.StartDate,WUT.EndDate,WUT.ProjectId,WUT.ProjectName,WUT.ProjectNumber,WUT.WeeklyUtlization,WUT.AvailableHours,WUT.ProjectedHours,WUT.Timescale,WUT.VacationDays
+			FROM dbo.GetWeeklyUtilizationByProjectTable(@StartDate,@EndRange, @Step, @ActivePersons, @ActiveProjects, @ProjectedPersons, @ProjectedProjects,@ExperimentalProjects,@ProposedProjects,@InternalProjects,@TimescaleIds,@PracticeIds,@ExcludeInternalPractices) AS WUT 
+			ORDER BY WUT.PersonId,WUT.StartDate
+		END
     END
 
