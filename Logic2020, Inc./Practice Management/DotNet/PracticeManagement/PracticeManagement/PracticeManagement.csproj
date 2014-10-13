@@ -573,6 +573,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.ProjectFeedbackStatus1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.RecruitingMetrics.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.AttainmentBillableutlizationReport.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.BillingReport1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
