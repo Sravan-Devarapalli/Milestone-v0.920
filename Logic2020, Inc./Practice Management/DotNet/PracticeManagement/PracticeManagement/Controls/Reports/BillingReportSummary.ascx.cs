@@ -77,9 +77,9 @@ namespace PraticeManagement.Controls.Reports
                                                  HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
                                                  HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
                                                  HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
-                                                 dataCurrancyCellStyle,
-                                                 dataCurrancyCellStyle,
-                                                 dataCurrancyCellStyle,
+                                                 HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
+                                                 HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
+                                                 HostingPage.IsHoursUnitOfMeasure?dataCellStyle:dataCurrancyCellStyle,
                                                  dataCellStyle, 
                                                     dataCellStyle,
                                                     dataCellStyle,
@@ -150,6 +150,78 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        public PracticeManagementCurrency TotalRangeProjected
+        {
+            get;
+            set;
+        }
+
+        public PracticeManagementCurrency TotalRangeActual
+        {
+            get;
+            set;
+        }
+
+        public PracticeManagementCurrency TotalRangeDifference
+        {
+            get;
+            set;
+        }
+
+        public PracticeManagementCurrency TotalSOWBudget
+        {
+            get;
+            set;
+        }
+
+        public PracticeManagementCurrency TotalActualtoDate
+        {
+            get;
+            set;
+        }
+
+        public PracticeManagementCurrency TotalRemaining
+        {
+            get;
+            set;
+        }
+
+        public double TotalForecastedHours
+        {
+            get;
+            set;
+        }
+
+        public double TotalActualHours
+        {
+            get;
+            set;
+        }
+
+        public double TotalForecastedHoursInRange
+        {
+            get;
+            set;
+        }
+
+        public double TotalActualHoursInRange
+        {
+            get;
+            set;
+        }
+
+        public double TotalDifferenceInHours
+        {
+            get;
+            set;
+        }
+
+        public double TotalRemainingHours
+        {
+            get;
+            set;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             cblAccountFilter.OKButtonId = cblPracticeFilter.OKButtonId = cblProjectManagers.OKButtonId = cblSalespersonFilter.OKButtonId = cblSeniorManager.OKButtonId = cblDirectorFilter.OKButtonId = btnFilterOK.ClientID;
@@ -186,7 +258,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 var lblLifetoDateProjectedValue = e.Item.FindControl("lblLifetoDateProjectedValue") as Label;
                 var lblLifetoDateActualValue = e.Item.FindControl("lblLifetoDateActualValue") as Label;
-                var lblLifetoDateRemainingValue = e.Item.FindControl("lblLifetoDateRemainingValue") as Label; 
+                var lblLifetoDateRemainingValue = e.Item.FindControl("lblLifetoDateRemainingValue") as Label;
                 var lblProjectManagers = e.Item.FindControl("lblProjectManagers") as Label;
                 var lblRangeProjectedValue = e.Item.FindControl("lblRangeProjectedValue") as Label;
                 var lblRangeActual = e.Item.FindControl("lblRangeActual") as Label;
@@ -211,6 +283,33 @@ namespace PraticeManagement.Controls.Reports
                     lblRangeDifference.Text = dataitem.DifferenceInCurrency.ToString();
                 }
                 lblProjectManagers.Text = (dataitem.Project.ProjectManagers == null || dataitem.Project.ProjectManagers.Count == 0) ? string.Empty : dataitem.ProjectMangers;
+            }
+            if (e.Item.ItemType == ListItemType.Footer)
+            {
+                var lblTotalLifetoDateProjectedValue = e.Item.FindControl("lblTotalLifetoDateProjectedValue") as Label;
+                var lblTotalLifetoDateActualValue = e.Item.FindControl("lblTotalLifetoDateActualValue") as Label;
+                var lblTotalLifetoDateRemainingValue = e.Item.FindControl("lblTotalLifetoDateRemainingValue") as Label;
+                var lblTotalRangeProjectedValue = e.Item.FindControl("lblTotalRangeProjectedValue") as Label;
+                var lblTotalRangeActual = e.Item.FindControl("lblTotalRangeActual") as Label;
+                var lblTotalRangeDifference = e.Item.FindControl("lblTotalRangeDifference") as Label;
+                if (HostingPage.IsHoursUnitOfMeasure)
+                {
+                    lblTotalLifetoDateProjectedValue.Text = GetDoubleFormat(TotalForecastedHours);
+                    lblTotalLifetoDateActualValue.Text = GetDoubleFormat(TotalActualHours);
+                    lblTotalLifetoDateRemainingValue.Text = GetDoubleFormat(TotalRemainingHours);
+                    lblTotalRangeProjectedValue.Text = GetDoubleFormat(TotalForecastedHoursInRange);
+                    lblTotalRangeActual.Text = GetDoubleFormat(TotalActualHoursInRange);
+                    lblTotalRangeDifference.Text = GetDoubleFormat(TotalDifferenceInHours);
+                }
+                else
+                {
+                    lblTotalLifetoDateProjectedValue.Text = TotalSOWBudget.ToString();
+                    lblTotalLifetoDateActualValue.Text = TotalActualtoDate.ToString();
+                    lblTotalLifetoDateRemainingValue.Text = TotalRemaining.ToString();
+                    lblTotalRangeProjectedValue.Text = TotalRangeProjected.ToString();
+                    lblTotalRangeActual.Text = TotalRangeActual.ToString();
+                    lblTotalRangeDifference.Text = TotalRangeDifference.ToString();
+                }
             }
         }
 
@@ -242,8 +341,30 @@ namespace PraticeManagement.Controls.Reports
                 report = HostingPage.IsHoursUnitOfMeasure ? ServiceCallers.Custom.Report(r => r.BillingReportByHours(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList())
                     : ServiceCallers.Custom.Report(r => r.BillingReportByCurrency(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList());
             }
-
+            AssignTotalValues(HostingPage.IsHoursUnitOfMeasure, report);
             DataBindBusinesUnit(report.ToArray(), isPopulateFilters);
+        }
+
+        public void AssignTotalValues(bool isHours, List<BillingReport> report)
+        {
+            if (isHours)
+            {
+                TotalActualHours = report.Sum(s => s.ActualHours);
+                TotalActualHoursInRange = report.Sum(s => s.ActualHoursInRange);
+                TotalDifferenceInHours = report.Sum(s => s.DifferenceInHours);
+                TotalForecastedHours = report.Sum(s => s.ForecastedHours);
+                TotalForecastedHoursInRange = report.Sum(s => s.ForecastedHoursInRange);
+                TotalRemainingHours = report.Sum(s => s.RemainingHours);
+            }
+            else
+            {
+                TotalActualtoDate = report.Sum(s => s.ActualToDate);
+                TotalRangeActual = report.Sum(s => s.RangeActual);
+                TotalRangeDifference = report.Sum(s => s.DifferenceInCurrency);
+                TotalRangeProjected = report.Sum(s => s.RangeProjected);
+                TotalRemaining = report.Sum(s => s.Remaining);
+                TotalSOWBudget = report.Sum(s => s.SOWBudget);
+            }
         }
 
         protected string GetDoubleFormat(double value)
@@ -259,8 +380,9 @@ namespace PraticeManagement.Controls.Reports
             DataHelper.InsertExportActivityLogMessage(BillingReportExport);
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var report = HostingPage.IsHoursUnitOfMeasure ? ServiceCallers.Custom.Report(r => r.BillingReportByHours(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList().OrderBy(p=>p.Project.ProjectNumber).ToList())
+            var report = HostingPage.IsHoursUnitOfMeasure ? ServiceCallers.Custom.Report(r => r.BillingReportByHours(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList().OrderBy(p => p.Project.ProjectNumber).ToList())
                     : ServiceCallers.Custom.Report(r => r.BillingReportByCurrency(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblPracticeFilter.SelectedItems, AccountIds, HostingPage.BusinessUnitIds, DirectorIds, cblSalespersonFilter.SelectedItems, cblProjectManagers.SelectedItems, cblSeniorManager.SelectedItems).ToList().OrderBy(p => p.Project.ProjectNumber).ToList());
+            AssignTotalValues(HostingPage.IsHoursUnitOfMeasure, report);
             var filterApplied = "Filters applied to columns: ";
             var filteredColoums = new List<string>();
             if (!cblAccountFilter.AllItemsSelected)
@@ -346,7 +468,7 @@ namespace PraticeManagement.Controls.Reports
             }
             if (reportDataList.Count > 0)
             {
-                repBillingReport.Visible =btnExportToExcel.Enabled= tdLifetoDate.Visible = true;
+                repBillingReport.Visible = btnExportToExcel.Enabled = tdLifetoDate.Visible = true;
                 divEmptyMessage.Style["display"] = "none";
                 repBillingReport.DataSource = reportData;
                 repBillingReport.DataBind();
@@ -389,8 +511,8 @@ namespace PraticeManagement.Controls.Reports
             PopulateAccountFilter(clients.Distinct().ToArray());
             PopulatePracticeFilter(practices.Distinct().ToArray());
             PopulateSalespersonFilter(salespersons.Distinct().ToArray());
-            PopulateProjectManagerFilter(projectManagersList.Distinct().Where(p=>p.Id != null).ToArray());
-            PopulateSeniorManagerFilter(seniorManagers.Distinct().Where(p=>p.Id != -1).ToArray());
+            PopulateProjectManagerFilter(projectManagersList.Distinct().Where(p => p.Id != null).ToArray());
+            PopulateSeniorManagerFilter(seniorManagers.Distinct().Where(p => p.Id != -1).ToArray());
             PopulateDirectorFilter(directors.Distinct().ToArray());
 
             cblAccountFilter.SaveSelectedIndexesInViewState();
@@ -441,7 +563,6 @@ namespace PraticeManagement.Controls.Reports
         public DataTable PrepareDataTable(List<BillingReport> reportData)
         {
             var data = new DataTable();
-
             data.Columns.Add("ProjectNumber");
             data.Columns.Add("Account");
             data.Columns.Add("Project Name");
@@ -488,12 +609,12 @@ namespace PraticeManagement.Controls.Reports
                                         report.Project.Client.Name,
                                         report.Project.Name,
                                         report.Project.Practice.Name,
-                                        report.SOWBudget < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.SOWBudget)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.SOWBudget.ToString()),
-                                        report.ActualToDate < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.ActualToDate)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.ActualToDate.ToString()),
-                                        report.Remaining < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.Remaining)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.Remaining.ToString()),
-                                        report.RangeProjected < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.RangeProjected)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.RangeProjected.ToString()),
-                                        report.RangeActual < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.RangeActual)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.RangeActual.ToString()),
-                                        report.DifferenceInCurrency < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", ((PracticeManagementCurrency)Convert.ToDecimal(report.DifferenceInCurrency)).FormattedValue()): string.Format(NPOIExcel.CustomColorKey, "black",report.DifferenceInCurrency.ToString()),
+                                        report.SOWBudget < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(report.SOWBudget)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(report.SOWBudget)),
+                                        report.ActualToDate < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(report.ActualToDate)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(report.ActualToDate)),
+                                        report.Remaining < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(report.Remaining)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(report.Remaining)),
+                                        report.RangeProjected < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(report.RangeProjected)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(report.RangeProjected)),
+                                        report.RangeActual < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(report.RangeActual)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(report.RangeActual)),
+                                        report.DifferenceInCurrency < 0 ?string.Format(NPOIExcel.CustomColorKey, "red",Convert.ToDecimal(report.DifferenceInCurrency)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(report.DifferenceInCurrency)),
                                         report.Project.SalesPersonName,
                                         report.ProjectMangers,
                                         report.Project.SeniorManagerName,
@@ -504,6 +625,50 @@ namespace PraticeManagement.Controls.Reports
                 }
                 data.Rows.Add(row.ToArray());
             }
+            List<object> totalRow;
+            if (HostingPage.IsHoursUnitOfMeasure)
+            {
+                totalRow = new List<object>{              
+                                    string.Format(NPOIExcel.CustomColorWithBoldKey, "black", "Total"),
+                                    "",
+                                    "",
+                                    "",
+                                    GetDoubleFormat(TotalForecastedHours),
+                                    GetDoubleFormat(TotalActualHours),
+                                    GetDoubleFormat(TotalRemainingHours),
+                                    GetDoubleFormat(TotalForecastedHoursInRange),
+                                    GetDoubleFormat(TotalActualHoursInRange),
+                                    GetDoubleFormat(TotalDifferenceInHours),
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    ""
+                                     };
+            }
+
+            else
+            {
+                totalRow = new List<object>{     
+                                        string.Format(NPOIExcel.CustomColorWithBoldKey, "black", "Total"),
+                                    "",
+                                    "",
+                                    "",
+                                        TotalSOWBudget < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(TotalSOWBudget)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(TotalSOWBudget)),
+                                        TotalActualtoDate < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(TotalActualtoDate)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(TotalActualtoDate)),
+                                        TotalRemaining < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(TotalRemaining)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(TotalRemaining)),
+                                        TotalRangeProjected < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(TotalRangeProjected)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(TotalRangeProjected)),
+                                        TotalRangeActual < 0 ?string.Format(NPOIExcel.CustomColorKey, "red", Convert.ToDecimal(TotalRangeActual)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(TotalRangeActual)),
+                                        TotalRangeDifference < 0 ?string.Format(NPOIExcel.CustomColorKey, "red",Convert.ToDecimal(TotalRangeDifference)): string.Format(NPOIExcel.CustomColorKey, "black",Convert.ToDecimal(TotalRangeDifference)),
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        ""
+                                        };
+
+            }
+            data.Rows.Add(totalRow.ToArray());
             return data;
         }
     }
