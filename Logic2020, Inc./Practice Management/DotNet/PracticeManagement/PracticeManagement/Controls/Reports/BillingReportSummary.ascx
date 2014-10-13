@@ -11,7 +11,8 @@
                         <td style="width: 585px;">
                             &nbsp;
                         </td>
-                        <td id="tdLifetoDate" runat="server" style="width:310px; font-weight: bold;text-align:center;font-size:16px;">
+                        <td id="tdLifetoDate" runat="server" style="width: 310px; font-weight: bold; text-align: center;
+                            font-size: 16px;">
                             Life to date(Prior to Projected Range)
                         </td>
                         <td>
@@ -182,6 +183,33 @@
             </tr>
         </ItemTemplate>
         <FooterTemplate>
+            <tr>
+                <th class="TextAlignLeftImp fontBold">
+                    Total
+                </th>
+                <th colspan="3">
+                </th>
+                <th class="bgcolorE2EBFFImp">
+                    <asp:Label ID="lblTotalLifetoDateProjectedValue" runat="server"></asp:Label>
+                </th>
+                <th class="bgcolorE2EBFFImp">
+                    <asp:Label ID="lblTotalLifetoDateActualValue" runat="server"></asp:Label>
+                </th>
+                <th class="bgcolorE2EBFFImp">
+                    <asp:Label ID="lblTotalLifetoDateRemainingValue" runat="server"></asp:Label>
+                </th>
+                <th class="bgColorE0DAECImp">
+                    <asp:Label ID="lblTotalRangeProjectedValue" runat="server"></asp:Label>
+                </th>
+                <th class="bgColorE0DAECImp">
+                    <asp:Label ID="lblTotalRangeActual" runat="server"></asp:Label>
+                </th>
+                <th class="bgColorE0DAECImp">
+                    <asp:Label ID="lblTotalRangeDifference" runat="server"></asp:Label>
+                </th>
+                <th colspan="5">
+                </th>
+            </tr>
             </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
