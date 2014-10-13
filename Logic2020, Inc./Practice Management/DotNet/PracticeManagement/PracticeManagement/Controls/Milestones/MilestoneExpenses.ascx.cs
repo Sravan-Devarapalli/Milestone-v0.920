@@ -138,10 +138,18 @@ namespace PraticeManagement.Controls.Milestones
                         //      empty data grid message
                         if (!expense.Id.HasValue)
                             row.Visible = false;
-                        if (IsLockout && expense.EndDate <= LockoutDate)
+                        if (IsLockout)
                         {
-                            lnkEdit.Enabled = lnkDelete.Enabled = false;
-                            lnkDelete.OnClientClick = null;
+                            if (expense.EndDate <= LockoutDate)
+                            {
+                                lnkEdit.Enabled = lnkDelete.Enabled = false;
+                                lnkDelete.OnClientClick = null;
+                            }
+                            if (expense.StartDate <= LockoutDate)
+                            {
+                                lnkDelete.Enabled = false;
+                                lnkDelete.OnClientClick = null;
+                            }
                         }
                     }
 
@@ -288,10 +296,10 @@ namespace PraticeManagement.Controls.Milestones
             DataTransferObjects.Lockout expenseItem = new DataTransferObjects.Lockout();
             using (var service = new ConfigurationService.ConfigurationServiceClient())
             {
-                //List<DataTransferObjects.Lockout> projectdetailItems = service.GetLockoutDetails((int)LockoutPages.Projectdetail).ToList();
-                //expenseItem = projectdetailItems.FirstOrDefault(p => p.Name == "Expenses");
-                //IsLockout = expenseItem.IsLockout;
-                //LockoutDate = expenseItem.LockoutDate;
+                List<DataTransferObjects.Lockout> projectdetailItems = service.GetLockoutDetails((int)LockoutPages.Projectdetail).ToList();
+                expenseItem = projectdetailItems.FirstOrDefault(p => p.Name == "Expenses");
+                IsLockout = expenseItem.IsLockout;
+                LockoutDate = expenseItem.LockoutDate;
             }
         }
     }
