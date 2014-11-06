@@ -74,7 +74,7 @@
                   or $attrName = 'AttributionId' or $attrName = 'AttributionTypeId' or $attrName = 'AttributionRecordTypeId' or $attrName = 'TargetId' or $attrName = 'DayOff' 
                   or $attrName = 'ApprovedPersonId' or $attrName = 'SeriesId' or $attrName = 'IsFromTimeEntry' 
                   or $attrName = 'JobSeekerStatusId' or $attrName = 'SourceId' or $attrName = 'TargetedCompanyId' or $attrName = 'EmployeeReferralId' or $attrName = 'CohortAssignmentId' or $attrName = 'FeedbackId' 
-                  or $attrName = 'FeedbackStatusId' or $attrName = 'StatusUpdatedById' 
+                  or $attrName = 'FeedbackStatusId' or $attrName = 'StatusUpdatedById' or $attrName = 'SalesPersonId' or $attrName = 'CapabilityId' 
                   "></xsl:when>
         <xsl:otherwise>
           <xsl:for-each select="parent::*/OLD_VALUES/attribute::*">
@@ -116,7 +116,7 @@
                   or $attrName = 'AttributionId' or $attrName = 'AttributionTypeId' or $attrName = 'AttributionRecordTypeId' or $attrName = 'TargetId' or $attrName = 'DayOff' 
                   or $attrName = 'ApprovedPersonId' or $attrName = 'SeriesId'  or $attrName = 'IsFromTimeEntry'  
                   or $attrName = 'JobSeekerStatusId' or $attrName = 'SourceId' or $attrName = 'TargetedCompanyId' or $attrName = 'EmployeeReferralId' or $attrName = 'CohortAssignmentId'
-                  or $attrName = 'FeedbackId' or $attrName = 'FeedbackStatusId' or $attrName = 'StatusUpdatedById' "></xsl:when>
+                  or $attrName = 'FeedbackId' or $attrName = 'FeedbackStatusId' or $attrName = 'StatusUpdatedById' or $attrName = 'SalesPersonId'  or $attrName = 'CapabilityId'   "></xsl:when>
         <xsl:otherwise>
           <xsl:if test="not(parent::*/parent::*/attribute::*[name() = $attrName])">
             <xsl:call-template name="DisplayChange">
@@ -192,7 +192,7 @@
                   or $attrName = 'AttributionId' or $attrName = 'AttributionTypeId' or $attrName = 'AttributionRecordTypeId' or $attrName = 'TargetId' or $attrName = 'DayOff' 
                   or $attrName = 'ApprovedPersonId' or $attrName = 'SeriesId'  or $attrName = 'IsFromTimeEntry'  
                   or $attrName = 'JobSeekerStatusId' or $attrName = 'SourceId' or $attrName = 'TargetedCompanyId' or $attrName = 'EmployeeReferralId'  or $attrName = 'CohortAssignmentId'
-                  or $attrName = 'FeedbackId' or $attrName = 'FeedbackStatusId' or $attrName = 'StatusUpdatedById' "></xsl:when>
+                  or $attrName = 'FeedbackId' or $attrName = 'FeedbackStatusId' or $attrName = 'StatusUpdatedById' or $attrName = 'SalesPersonId'  or $attrName = 'CapabilityId'  "></xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="FriendlyName">
             <xsl:with-param name="attrName" select="name()" />
@@ -277,7 +277,7 @@
                     </xsl:choose>
                     <xsl:value-of select="$redirectUrl" />
                   </xsl:when>
-                  <xsl:when test="($rootName = 'Project' or $rootName = 'TimeEntry' or $rootName = 'ProjectCSAT' or $rootName = 'Attribution') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName' or name() = 'Project')">
+                  <xsl:when test="($rootName = 'Project' or $rootName = 'TimeEntry' or $rootName = 'ProjectCSAT' or $rootName = 'Attribution' or $rootName = 'ProjectCapabilities') and (name() = 'ProjectId' or name() = 'Name' or name() = 'ProjectName' or name() = 'Project')">
                     <xsl:text>ProjectDetail.aspx?id=</xsl:text>
                     <xsl:value-of select="./../@ProjectId" />
                     <xsl:value-of select="$redirectUrl" />
@@ -532,7 +532,6 @@
       <xsl:when test="$attrName = 'EmployeeReferral'">Employee Referral</xsl:when>
       <xsl:when test="$attrName = 'EmployeeReferralName'">Employee Referral Name</xsl:when>
       <xsl:when test="$attrName = 'CohortAssignmentName'">Cohort Assignment Name</xsl:when>
-
       <xsl:when test="$attrName = 'ResourceName'">Resource Name</xsl:when>
       <xsl:when test="$attrName = 'ReviewPeriodStartDate'">Review Period Start Date</xsl:when>
       <xsl:when test="$attrName = 'ReviewPeriodEndDate'">Review Period End Date</xsl:when>
@@ -542,6 +541,8 @@
       <xsl:when test="$attrName = 'StatusUpdatedDate'">Status Updated Date</xsl:when>
       <xsl:when test="$attrName = 'StatusUpdatedBy'">Status Updated By</xsl:when>
       <xsl:when test="$attrName = 'CancelationReason'">Cancelation Reason</xsl:when>
+      <xsl:when test="$attrName = 'SalesPerson'">Sales Person</xsl:when>
+      <xsl:when test="$attrName = 'IsGap'">Has gap in range</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$attrName" />
       </xsl:otherwise>
