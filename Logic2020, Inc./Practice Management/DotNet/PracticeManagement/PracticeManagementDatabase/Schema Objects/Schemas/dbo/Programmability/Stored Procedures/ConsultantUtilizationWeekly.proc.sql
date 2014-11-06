@@ -135,7 +135,8 @@ AS
 		'  
 		SELECT	PC.PersonId,PC.Date,
 				CASE WHEN PC.DayOff=1 AND PC.CompanyDayOff=0 THEN 1
-				ELSE 0 END AS IsTimeOff,Cal.HolidayDescription
+				ELSE 0 END AS IsTimeOff,Cal.HolidayDescription,
+				ROUND(ISNULL(PC.TimeOffHours,0),2) TimeOffHours
 		FROM dbo.PersonCalendarAuto PC 
 		INNER JOIN @CurrentConsultants AS c ON c.ConsId=PC.PersonId AND PC.[Date] BETWEEN @StartDate AND @EndDate
 		LEFT JOIN dbo.Calendar AS Cal ON Cal.Date=PC.Date
