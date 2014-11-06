@@ -174,6 +174,9 @@ namespace PraticeManagement
             public const string SkillsProfile = "~/SkillsProfile.aspx";
             public const string ProjectFeedbackReport = "~/Reports/ProjectFeedbackReport.aspx";
             public const string BillingReport = "~/Reports/BillingReport.aspx";
+            public const string RecruitingMetricsReport = "~/Reports/RecruitingMetricsReport.aspx";
+            public const string ResourceExceptionReport = "~/Reports/ResourceExceptionReport.aspx";
+            public const string PayrollDistributionReport = "~/Reports/PayrollDistributionReport.aspx";
 
         }
 
