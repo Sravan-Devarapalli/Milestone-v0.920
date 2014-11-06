@@ -610,31 +610,31 @@
                                 </td>
                                 <td class="CompPerfProjectNumber">
                                     <div class="ie-bg">
-                                        <asp:LinkButton ID="btnSortProject" CommandArgument="1" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortProject" CommandArgument="2" CommandName="Sort" runat="server"
                                             CssClass="arrow">Project #</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfClient">
                                     <div class="ie-bg">
-                                        <asp:LinkButton ID="btnSortClient" CommandArgument="2" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortClient" CommandArgument="3" CommandName="Sort" runat="server"
                                             CssClass="arrow">Account</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfProject">
                                     <div class="ie-bg">
-                                        <asp:LinkButton ID="btnSortProjectName" CommandArgument="3" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortProjectName" CommandArgument="4" CommandName="Sort" runat="server"
                                             CssClass="arrow">Project</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfPeriod">
                                     <div class="ie-bg alignCenter">
-                                        <asp:LinkButton ID="btnSortStartDate" CommandArgument="4" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortStartDate" CommandArgument="5" CommandName="Sort" runat="server"
                                             CssClass="arrow">Start Date</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfPeriod">
                                     <div class="ie-bg  alignCenter">
-                                        <asp:LinkButton ID="btnSortEndDate" CommandArgument="5" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortEndDate" CommandArgument="6" CommandName="Sort" runat="server"
                                             CssClass="arrow">End Date</asp:LinkButton>
                                     </div>
                                 </td>
@@ -645,7 +645,7 @@
                                 </td>
                             </tr>
                             <tr runat="server" id="lvSummary" class="summary">
-                                <td colspan="6">
+                                <td colspan="7">
                                     <div class="cell-pad">
                                         Financial Summary</div>
                                 </td>
