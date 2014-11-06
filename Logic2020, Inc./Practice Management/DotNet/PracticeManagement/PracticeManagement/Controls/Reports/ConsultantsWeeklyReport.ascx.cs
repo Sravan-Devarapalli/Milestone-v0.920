@@ -54,6 +54,7 @@ namespace PraticeManagement.Controls.Reports
         private const string NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%";
         private const string VACATION_NEGATIVE_AVERAGE_UTIL_FORMAT = "~({0})%*";
         private const string COMPANYHOLIDAYS_KEY = "CompanyHolidays_Key";
+        private const string TIMEOFFDATES_KEY = "TIMEOFFDATES_KEY";
         private const string CONSULTANTUTILIZATIONPERSON_KEY = "ConsultantUtilizationPerson_Key";
         private const string PageCount = "Page {0} of {1}";
         private const int reportSize = 25;
@@ -331,6 +332,12 @@ namespace PraticeManagement.Controls.Reports
         {
             get { return ViewState[COMPANYHOLIDAYS_KEY] as Dictionary<DateTime, string>; }
             set { ViewState[COMPANYHOLIDAYS_KEY] = value; }
+        }
+
+        public Dictionary<DateTime, double> TimeOffDates
+        {
+            get { return ViewState[TIMEOFFDATES_KEY] as Dictionary<DateTime, double>; }
+            set { ViewState[TIMEOFFDATES_KEY] = value; }
         }
 
         public List<ConsultantUtilizationPerson> ConsultantUtilizationPerson
@@ -1144,8 +1151,8 @@ namespace PraticeManagement.Controls.Reports
 
             var utilizationDaily = DataHelper.ConsultantUtilizationDailyByPerson(repStartDate, ParseInt(repEndDate.Subtract(repStartDate).Days.ToString(), DAYS_FORWARD),
                 utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, utf.ProposedProjects, personId);
-            var avgUtils = utilizationDaily.First().Second;
-            for (int index = 0; index < avgUtils.Length; index++)
+            var avgUtils = utilizationDaily.First().WeeklyUtilization;
+            for (int index = 0; index < avgUtils.Count; index++)
             {
                 var pointStartDate = repStartDate.AddDays(index);
                 var pointEndDate = repStartDate.AddDays(index + 1);
@@ -1159,7 +1166,7 @@ namespace PraticeManagement.Controls.Reports
 
                     var range = chartDetails.Series["Milestones"].Points[ind];
                     range.Color = Coloring.GetColorByUtilization(load, load == -1 ? 2 : (load == -2 ? 1 : 0));
-                    string holidayDescription = CompanyHolidays.Keys.Any(t => t == pointStartDate) ? CompanyHolidays[pointStartDate] : string.Empty;
+                    string holidayDescription = CompanyHolidays.Keys.Any(t => t == pointStartDate) ? CompanyHolidays[pointStartDate] : utilizationDaily.First().TimeOffDates.Keys.Any(t => t == pointStartDate) ? utilizationDaily.First().TimeOffDates[pointStartDate].ToString() : string.Empty;
                     range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), load == -1 ? 2 : (load == -2 ? 1 : 0), null, false, holidayDescription);
                 }
             }
@@ -1323,7 +1330,7 @@ namespace PraticeManagement.Controls.Reports
             return Urls.GetSkillsProfileUrl(p);
         }
 
-        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, List<DateTime> timeoffDates, Dictionary<DateTime, string> companyHolidayDates, bool isPdf)
+        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, Dictionary<DateTime, double> timeoffDates, Dictionary<DateTime, string> companyHolidayDates, bool isPdf)
         {
             if (companyHolidayDates == null)
                 companyHolidayDates = new Dictionary<DateTime, string>();
@@ -1416,7 +1423,7 @@ namespace PraticeManagement.Controls.Reports
                     bool IsWholeRangeCompanyHolidays = true;
                     for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
                     {
-                        if (!timeoffDates.Any(t => t == d))
+                        if (!timeoffDates.Any(t => t.Key == d))
                         {
                             if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
                             {
@@ -1446,10 +1453,10 @@ namespace PraticeManagement.Controls.Reports
 
                         for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
                         {
-                            int dayType = timeoffDates.Any(t => t == d) ? 1 : payType == "W2-Salary" ? IsRangeComapanyHolidays(d, d.AddDays(1), companyHolidayDates, (IsCapacityMode ? load > 100 : load < 0), (IsCapacityMode ? load > 100 : load < 0) && !IsWholeRangeCompanyHolidays) : 0;
+                            int dayType = timeoffDates.Any(t => t.Key == d) ? 1 : payType == "W2-Salary" ? IsRangeComapanyHolidays(d, d.AddDays(1), companyHolidayDates, (IsCapacityMode ? load > 100 : load < 0), (IsCapacityMode ? load > 100 : load < 0) && !IsWholeRangeCompanyHolidays) : 0;
 
-                            string holidayDescription = companyHolidayDates.Keys.Any(t => t == d) ? companyHolidayDates[d] : "Weekly off";
-                            if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third && dayType != 2))
+                            string holidayDescription = companyHolidayDates.Keys.Any(t => t == d) ? companyHolidayDates[d] : timeoffDates.Keys.Any(t => t == d) ? timeoffDates[d].ToString() : "8";
+                            if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third && dayType != 2 && tri.Fourth == holidayDescription))
                             {
                                 var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third);
                                 tripleRange.Second = d;
@@ -1472,8 +1479,29 @@ namespace PraticeManagement.Controls.Reports
 
                     else //If the whole range is vacation days
                     {
-                        range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange);
-                        range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), 1);
+                        for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
+                        {
+                            int dayType = 1;
+
+                            string holidayDescription = timeoffDates.Keys.Any(t => t == d) ? timeoffDates[d].ToString() : "8";
+                            if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third && tri.Fourth == holidayDescription))
+                            {
+                                var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third);
+                                tripleRange.Second = d;
+                            }
+                            else
+                            {
+                                weekDatesRange.Add(new Quadruple<DateTime, DateTime, int, string>(d, d, dayType, holidayDescription));
+                            }
+                        }
+
+                        foreach (var tripleR in weekDatesRange)
+                        {
+                            var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
+                            innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange);
+                            innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, 1, null, false, tripleR.Fourth);
+                            innerRangeList.Add(innerRange);
+                        }
                     }
                 }
 
@@ -1679,7 +1707,7 @@ namespace PraticeManagement.Controls.Reports
             if (pointStartDate == pointEndDate)
             {
                 tooltip = dayType == 1 ?
-                           string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM. d")) :
+                    string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM. d")) + (holidayDescription != "8" ? "- " + holidayDescription+" hours" : string.Empty) :
                            dayType == 2 ? holidayDescription + ": " + pointStartDate.ToString("MMM. d") :
                            string.Format(TOOLTIP_FORMAT_FOR_SINGLEDAY,
                                  pointStartDate.ToString("MMM, d"), string.Format(
@@ -1690,7 +1718,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 tooltip = dayType == 1 ?
                           string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM. d") + " - " +
-                                     pointEndDate.ToString("MMM. d")) :
+                          pointEndDate.ToString("MMM. d")) + (holidayDescription != "8"? "- " + holidayDescription + " hours":string.Empty) :
                           string.Format(TOOLTIP_FORMAT,
                                      pointStartDate.ToString("MMM, d"),
                                      pointEndDate.ToString("MMM, d"),
