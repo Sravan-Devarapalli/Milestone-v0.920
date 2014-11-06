@@ -8,7 +8,17 @@
 	@PageNo        INT,
 	@EventSource   NVARCHAR(50),
 	@OpportunityId INT = NULL,
-	@MilestoneId   INT = NULL
+	@MilestoneId   INT = NULL,
+	@PracticeAreas BIT = 1,
+	@SOWBudget     BIT = 1,
+	@ClientDirector BIT = 1,
+	@POAmount	   BIT = 1,
+	@Capabilities  BIT = 1,
+	@NewOrExtension BIT = 1,
+	@PONumber      BIT = 1,
+	@ProjectStatus BIT = 1,
+	@SalesPerson   BIT = 1,
+	@ProjectOwner  BIT = 1
 )
 AS
 	SET NOCOUNT ON
@@ -123,11 +133,45 @@ AS
 						)
 						AND 
 						(@ProjectId IS NULL 
-						OR a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
-						OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
-						OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
-						OR a.LogData.value('(/Attribution/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
-						OR a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+							OR (a.LogData.value('(/Project/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId 
+								AND ( ((CASE WHEN (a.LogData.exist('(/Project)') = 1) AND @PracticeAreas = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@PracticeName)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@PracticeName)[1]', 'NVARCHAR(100)')
+									   THEN 1 
+									   ELSE 0 END) +
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 AND @SOWBudget = 1 AND ISNULL(CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@SowBudget)[1]', 'DECIMAL(18,2)'),-1) <> ISNULL(CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@SowBudget)[1]', 'DECIMAL(18,2)'),-1)
+									   THEN 1
+									    ELSE 0 END) +
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 and @ClientDirector = 1 and CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@ClientDirector)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@ClientDirector)[1]', 'NVARCHAR(100)')
+									   THEN 1
+									ELSE 0 END) +
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 AND @POAmount = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@POAmount)[1]', 'DECIMAL(18,2)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@POAmount)[1]', 'DECIMAL(18,2)')
+									   THEN 1
+									ELSE 0 END) +
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 AND @NewOrExtension = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@BusinessType)[1]', 'NVARCHAR(50)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@BusinessType)[1]', 'NVARCHAR(50)')
+									   THEN 1
+									ELSE 0 END) +
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 AND @PONumber = 1 AND 
+									   (ISNULL(CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@POAmount)[1]', 'DECIMAL(18,2)'),-1) <> ISNULL(CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@POAmount)[1]', 'DECIMAL(18,2)'),-1))
+									   THEN 1
+									  
+									ELSE 0 END) + 
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 AND @ProjectStatus = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@ProjectStatusName)[1]', 'NVARCHAR(20)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@ProjectStatusName)[1]', 'NVARCHAR(20)')
+									   THEN 1
+									
+									ELSE 0 END) +
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 AND @SalesPerson = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@SalesPerson)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@SalesPerson)[1]', 'NVARCHAR(100)')
+									   THEN 1
+									
+									ELSE 0 END) +
+									  (CASE WHEN a.LogData.exist('(/Project)') = 1 AND @ProjectOwner = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@ProjectOwner)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@ProjectOwner)[1]', 'NVARCHAR(100)')
+									   THEN 1
+									
+									   ELSE 0 END)) > 0
+									   )
+							   )
+							OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+							OR a.LogData.value('(/ProjectAttachment/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+							OR a.LogData.value('(/Attribution/NEW_VALUES/@ProjectId)[1]', 'int') = @ProjectId
+							OR a.LogData.value('(/Attribution/NEW_VALUES/OLD_VALUES/@ProjectId)[1]', 'int') = @ProjectId
 						 )
 					 )
 					 
