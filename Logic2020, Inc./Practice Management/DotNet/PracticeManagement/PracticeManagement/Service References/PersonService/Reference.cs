@@ -198,7 +198,7 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.Reports.ConsultantUtilizationPerson[] GetConsultantUtilizationWeekly(DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/ConsultantUtilizationDailyByPerson", ReplyAction="http://tempuri.org/IPersonService/ConsultantUtilizationDailyByPersonResponse")]
-        DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
+        DataTransferObjects.Reports.ConsultantUtilizationPerson[] ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/IsCompensationCoversMilestone", ReplyAction="http://tempuri.org/IPersonService/IsCompensationCoversMilestoneResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -321,6 +321,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
+     
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -557,7 +558,7 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetConsultantUtilizationWeekly(context);
         }
         
-        public DataTransferObjects.Triple<DataTransferObjects.Person, int[], int>[] ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
+        public DataTransferObjects.Reports.ConsultantUtilizationPerson[] ConsultantUtilizationDailyByPerson(int personId, DataTransferObjects.ContextObjects.ConsultantTimelineReportContext context) {
             return base.Channel.ConsultantUtilizationDailyByPerson(personId, context);
         }
         
