@@ -252,7 +252,7 @@ namespace PraticeManagement.Controls
             return consultants.FindAll(Q => Q.AverageUtilization < avgUtil);
         }
 
-        public static List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson
+        public static List<ConsultantUtilizationPerson> ConsultantUtilizationDailyByPerson
             (DateTime startDate,
             int duration,
             bool activeProjects,
@@ -275,7 +275,7 @@ namespace PraticeManagement.Controls
 
             var consultants = ServiceCallers.Custom.Person(
                 client => client.ConsultantUtilizationDailyByPerson(personId, context));
-            var consultantsList = new List<Triple<DataTransferObjects.Person, int[], int>>();
+            var consultantsList = new List<ConsultantUtilizationPerson>();
             if (consultants != null && consultants.Any())
                 consultantsList.AddRange(consultants);
 
@@ -516,14 +516,14 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control"></param>
         /// <param name="firstItemText"></param>
-        public static void FillTimescaleList(ListControl control, string firstItemText)
+        public static void FillTimescaleList(ListControl control, string firstItemText,List<int> excludedPaytypes=null)
         {
             using (var serviceClient = new TimescaleServiceClient())
             {
                 try
                 {
                     Timescale[] Timescales = serviceClient.GetAll();
-
+                    Timescales = excludedPaytypes != null ? Timescales.Where(p => !excludedPaytypes.Any(g => g == p.Id)).ToArray() : Timescales;
                     FillListDefault(control, firstItemText, Timescales, false);
                 }
                 catch (CommunicationException)
