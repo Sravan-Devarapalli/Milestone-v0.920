@@ -154,11 +154,11 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
 
             if (!string.IsNullOrEmpty(EditImageUrl))
             {
-                return string.Format(htmlWithImageFormat, LabelId, DisplayText, ResolveUrl(EditImageUrl), !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + "\"" : string.Empty, SelectedStringToolTip);
+                return string.Format(htmlWithImageFormat, LabelId, DisplayText, ResolveUrl(EditImageUrl), !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + ";white-space:normal\"" : string.Empty, SelectedStringToolTip);
             }
             else
             {
-                return string.Format(htmlWithoutImageFormat, LabelId, DisplayText, !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + "\"" : string.Empty);
+                return string.Format(htmlWithoutImageFormat, LabelId, DisplayText, !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + ";white-space:normal\"" : string.Empty);
             }
         }
     }
