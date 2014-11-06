@@ -55,6 +55,7 @@ AS
 			ELSE CAST(1 AS BIT) END AS [HasTimeEntries],
 			p.IsNoteRequired,
 			p.SowBudget,
+			p.POAmount,
 			p.ClientIsNoteRequired,
 			p.ProjectCapabilityIds,
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN -1 ELSE  sm.PersonId  END AS 'SeniorManagerId',
@@ -73,3 +74,4 @@ AS
 	  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
 	  WHERE p.ProjectId = @ProjectId
 	  
+
