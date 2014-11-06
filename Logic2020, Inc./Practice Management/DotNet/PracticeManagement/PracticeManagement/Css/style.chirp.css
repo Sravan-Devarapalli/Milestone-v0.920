@@ -1836,6 +1836,10 @@ TABLE.Section td
 {
     padding-left: 3%;
 }
+.padLeft4Per
+{
+    padding-left: 4%;
+}
 .padLeft4, .PaddingLeft4Px
 {
     padding-left: 4px;
