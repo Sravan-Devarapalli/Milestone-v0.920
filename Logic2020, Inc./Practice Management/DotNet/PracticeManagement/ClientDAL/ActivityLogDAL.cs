@@ -14,6 +14,12 @@ namespace DataAccess
     /// </summary>
     public static class ActivityLogDAL
     {
+        #region Constants
+
+        private const string ProjectXml = "<Project><NEW_VALUES ProjectId=\"{0}\" ><OLD_VALUES ProjectId=\"{0}\"/> </NEW_VALUES> </Project>";
+        
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -26,7 +32,7 @@ namespace DataAccess
         public static List<ActivityLogItem> ActivityLogListByPeriod(ActivityLogSelectContext context, int pageSize, int pageNo)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.ActivityLog.ActivityLogListByPeriodProcedure, connection))
+            using (var command = new SqlCommand(context.RecordPerSingleChange ? Constants.ProcedureNames.ActivityLog.ActivityLogRecordPerChangeListByPeriod : Constants.ProcedureNames.ActivityLog.ActivityLogListByPeriodProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -48,7 +54,26 @@ namespace DataAccess
                                                 context.OpportunityId.HasValue ? (object)context.OpportunityId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneIdParam,
                                                 context.MilestoneId.HasValue ? (object)context.MilestoneId.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeAreas,
+                                                context.PracticeAreas);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudget,
+                                                context.SowBudget);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientDirector,
+                                      context.Director);
+                command.Parameters.AddWithValue(Constants.ParameterNames.POAmount,
+                                                context.POAmount);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Capabilities,
+                                                context.Capabilities);
+                command.Parameters.AddWithValue(Constants.ParameterNames.NewOrExtension,
+                                                context.NewOrExtension);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PONumber,
+                                            context.PONumber);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatus,
+                                            context.ProjectStatus);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalesPerson,
+                                     context.SalesPerson);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwner,
+                                         context.ProjectOwner);   
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
@@ -59,6 +84,21 @@ namespace DataAccess
             }
         }
 
+        public static List<ActivityLogItem> SplitAsMultipleRecords(List<ActivityLogItem> originalRecords)
+        {
+            var records = new List<ActivityLogItem>();
+            foreach (var record in originalRecords)
+            {
+                if (record.ActivityTypeId == 4)
+                {
+
+                }
+                else
+                    records.Add(record);
+            }
+            return records;
+        }
+
         /// <summary>
         /// 	Retrives a number of the activity log items for the specified period.
         /// </summary>
@@ -67,7 +107,7 @@ namespace DataAccess
         public static int ActivityLogGetCount(ActivityLogSelectContext context)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-            using (var command = new SqlCommand(Constants.ProcedureNames.ActivityLog.ActivityLogGetCountProcedure, connection))
+            using (var command = new SqlCommand(context.RecordPerSingleChange ? Constants.ProcedureNames.ActivityLog.ActivityLogRecordPerChangeGetCount : Constants.ProcedureNames.ActivityLog.ActivityLogGetCountProcedure, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -83,7 +123,26 @@ namespace DataAccess
                                                 context.OpportunityId.HasValue ? (object)context.OpportunityId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneIdParam,
                                                 context.MilestoneId.HasValue ? (object)context.MilestoneId.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeAreas,
+                                                context.PracticeAreas);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SowBudget,
+                                                context.SowBudget);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientDirector,
+                                                context.Director);
+                command.Parameters.AddWithValue(Constants.ParameterNames.POAmount,
+                                                context.POAmount);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Capabilities,
+                                                context.Capabilities);
+                command.Parameters.AddWithValue(Constants.ParameterNames.NewOrExtension,
+                                                context.NewOrExtension);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PONumber,
+                                                context.PONumber);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatus,
+                                                context.ProjectStatus);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SalesPerson,
+                                         context.SalesPerson);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwner,
+                                             context.ProjectOwner);     
                 connection.Open();
                 var result = (int)command.ExecuteScalar();
 
@@ -188,3 +247,4 @@ namespace DataAccess
         #endregion Methods
     }
 }
+
