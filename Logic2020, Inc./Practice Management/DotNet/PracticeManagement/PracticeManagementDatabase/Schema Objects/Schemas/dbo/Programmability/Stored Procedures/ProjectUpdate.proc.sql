@@ -21,6 +21,7 @@ CREATE PROCEDURE dbo.ProjectUpdate
 	@IsNoteRequired     BIT = 1  ,
 	@ProjectOwner       INT,
 	@SowBudget			DECIMAL(18,2),
+	@POAmount			DECIMAL(18,2),
 	@ProjectCapabilityIds NVARCHAR(MAX),
 	@PricingListId      INT = NULL,
 	@BusinessTypeId     INT= NULL,
@@ -114,8 +115,9 @@ BEGIN
 				IsNoteRequired  = @IsNoteRequired,
 				ProjectOwnerId  = @ProjectOwner,
 				SowBudget		= @SowBudget,
-				PricingListId   =@PricingListId,
-				BusinessTypeId   =@BusinessTypeId,
+				POAmount        = @POAmount,
+				PricingListId   = @PricingListId,
+				BusinessTypeId  = @BusinessTypeId,
 				SeniorManagerId = @SeniorManagerId,
 				IsSeniorManagerUnassigned  = @IsSeniorManagerUnassigned,
 				ReviewerId = @CSATOwnerId,
@@ -180,7 +182,10 @@ BEGIN
 		ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
 		WHERE pm.ProjectManagerId IS NULL
 
-	    DELETE PC
+		EXEC dbo.SessionLogUnprepare
+		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+	    
+		DELETE PC
 		FROM dbo.ProjectCapabilities PC
 		LEFT JOIN [dbo].ConvertStringListIntoTable(@ProjectCapabilityIds) AS p 
 		ON PC.ProjectId = @ProjectId AND PC.CapabilityId = p.ResultId 
