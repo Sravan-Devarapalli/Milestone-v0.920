@@ -34,6 +34,7 @@ AS
 		   p.IsNoteRequired,
 		   p.ProjectOwnerId,
 		   p.SowBudget,
+		   p.POAmount,
 		   c.IsNoteRequired AS [ClientIsNoteRequired],
 		   c.IsHouseAccount,
 		   p.IsAdministrative,
@@ -48,3 +49,4 @@ AS
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
 		   INNER JOIN dbo.ProjectStatus AS s ON p.ProjectStatusId = s.ProjectStatusId
 		   LEFT JOIN Person as d on d.PersonId = p.DirectorId
+
