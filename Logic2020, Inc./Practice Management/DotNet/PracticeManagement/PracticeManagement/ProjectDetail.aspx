@@ -3,7 +3,7 @@
     Title="Project Details | Practice Management" EnableEventValidation="false" ValidateRequest="False" %>
 
 <%@ Import Namespace="PraticeManagement.Utils" %>
-<%@ Register Src="~/Controls/ActivityLogControl.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
+<%@ Register Src="~/Controls/Projects/ProjectActivityLog.ascx" TagPrefix="uc" TagName="ActivityLogControl" %>
 <%@ Register TagPrefix="extDisable" Namespace="PraticeManagement.Controls.Generic.ElementDisabler"
     Assembly="PraticeManagement" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
@@ -915,6 +915,29 @@
                                 <td class="Width2Percent">
                                 </td>
                                 <td class="TdProjectDetailFeild">
+                                    <table class="WholeWidth">
+                                        <tr>
+                                            <td class="width30P">
+                                                PO Amount
+                                            </td>
+                                            <td class="width60P WhiteSpaceNoWrap">
+                                                $
+                                                <asp:TextBox ID="txtPOAmount" CssClass="Width925Per" runat="server" onchange="setDirty();"
+                                                    MaxLength="100"></asp:TextBox>
+                                                <AjaxControlToolkit:TextBoxWatermarkExtender ID="tbwePOAmount" runat="server" TargetControlID="txtPOAmount"
+                                                    WatermarkText="Ex: 15000" EnableViewState="false" WatermarkCssClass="watermarkedtext Width925Per" />
+                                                <AjaxControlToolkit:FilteredTextBoxExtender ID="ftbePOAmount" TargetControlID="txtPOAmount"
+                                                    FilterType="Numbers,Custom" FilterMode="ValidChars" runat="server" ValidChars=".," />
+                                            </td>
+                                            <td class="TdValidators">
+                                                <asp:CustomValidator ID="custPOAmount" runat="server" ControlToValidate="txtPOAmount"
+                                                    ToolTip="A number with 2 decimal digits is allowed for the PO Amount." Text="*"
+                                                    ErrorMessage="A number with 2 decimal digits is allowed for the PO Amount." EnableClientScript="false"
+                                                    SetFocusOnError="true" OnServerValidate="custPOAmount_ServerValidate" Display="Dynamic"
+                                                    ValidationGroup="Project"></asp:CustomValidator>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                                 <td class="Width2Percent">
                                 </td>
@@ -1233,8 +1256,8 @@
                             <asp:View ID="vwHistory" runat="server">
                                 <asp:Panel ID="plnTabHistory" runat="server" CssClass="tab-pane">
                                     <uc:ActivityLogControl runat="server" ID="activityLog" DisplayDropDownValue="Project"
-                                        ShowProjectDropDown="false" LabelTextBeforeDropDown="Show Project changes over "
-                                        DateFilterValue="Year" ShowDisplayDropDown="false" />
+                                        ShowProjectDropDown="false" LabelTextBeforeDropDown="changes over " DateFilterValue="Year"
+                                        ShowDisplayDropDown="false" />
                                 </asp:Panel>
                             </asp:View>
                             <asp:View ID="vwProjectTools" runat="server">
@@ -1299,6 +1322,7 @@
                     </td>
                 </tr>
             </table>
+            <asp:HiddenField ID="hdnVisibilty" runat="server" />
             <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
             <asp:HiddenField ID="hdnLinkPopup" runat="server" Value="" />
             <asp:HiddenField ID="hdnCanShowPopup" runat="server" />
