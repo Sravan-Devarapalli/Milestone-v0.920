@@ -113,6 +113,39 @@ namespace PraticeManagement.Utils.Excel
                 richtext.ApplyFont(fontInBold);
                 SetCellValue(cell, richtext);
             }
+            if (cell.CellType == CellType.STRING && cell.StringCellValue.Contains(NPOIExcel.BoldFontKeyStartTag))
+            {
+                string cellValue = cell.StringCellValue;
+                string tempValue = cellValue.Replace("<BoldFont>", "").Replace("</BoldFont>", "");
+                var fontInBold = parentWorkbook.CreateFont();
+                fontInBold.Boldweight = (short)FontBoldWeight.BOLD;
+
+                IRichTextString richtext = new HSSFRichTextString(tempValue);
+                int i=0;
+                int startIndex = 0;
+                int lastIndex = 0;
+                int number=0;
+                while(i<cellValue.Length)
+                {
+                    if(cellValue.Length-i >=10 && cellValue.Substring(i, 10) == "<BoldFont>")
+                    {
+                        i = i + 10;
+                        startIndex = i;
+                    }
+                    if (cellValue.Length - i > 10 && cellValue.Substring(i, 11) == "</BoldFont>")
+                    {
+                        if (i > startIndex)
+                        {
+                            number++;
+                            i = i + 11;
+                            lastIndex = i;
+                            richtext.ApplyFont(startIndex-(10*number + 11*(number-1)), lastIndex-21*number, fontInBold);
+                        }
+                    }
+                    i++;
+                }
+                SetCellValue(cell, richtext);
+            }
             ICellStyle coloumnstyle = FindCellStyle(allCellStyles, allDataFormats);
             if (coloumnstyle == null)
             {
@@ -190,3 +223,4 @@ namespace PraticeManagement.Utils.Excel
         }
     }
 }
+
