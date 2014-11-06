@@ -37,7 +37,7 @@ namespace PracticeManagementService
         /// </summary>
         /// <returns>An <see cref="Opportunity"/> object if found and null otherwise.</returns>
         [OperationContract]
-        List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context);
+        List<ConsultantUtilizationPerson> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context);
 
         /// <summary>
         /// Check's if there's compensation record covering milestone/
@@ -471,3 +471,4 @@ namespace PracticeManagementService
         List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays);
     }
 }
+
