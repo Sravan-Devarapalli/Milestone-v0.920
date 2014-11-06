@@ -47,7 +47,7 @@ namespace PracticeManagementService
             return PersonDAL.GetConsultantUtilizationWeekly(context);
         }
 
-        public List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
+        public List<ConsultantUtilizationPerson> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
         {
             return PersonDAL.ConsultantUtilizationDailyByPerson(personId, context);
         }
@@ -1159,3 +1159,4 @@ namespace PracticeManagementService
         #endregion IPersonService Members
     }
 }
+
