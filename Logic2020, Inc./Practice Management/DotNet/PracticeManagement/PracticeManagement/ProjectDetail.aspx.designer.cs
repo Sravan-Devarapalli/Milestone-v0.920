@@ -544,6 +544,42 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator cvProjectManagerStatus;
         
         /// <summary>
+        /// txtPOAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPOAmount;
+        
+        /// <summary>
+        /// tbwePOAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TextBoxWatermarkExtender tbwePOAmount;
+        
+        /// <summary>
+        /// ftbePOAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender ftbePOAmount;
+        
+        /// <summary>
+        /// custPOAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custPOAmount;
+        
+        /// <summary>
         /// ddlCSATOwner control.
         /// </summary>
         /// <remarks>
@@ -1144,7 +1180,7 @@ namespace PraticeManagement {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ActivityLogControl activityLog;
+        protected global::PraticeManagement.Controls.Projects.ProjectActivityLog activityLog;
         
         /// <summary>
         /// vwProjectTools control.
@@ -1289,6 +1325,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.Buttons.CancelAndReturnButton btnCancelAndReturn;
+        
+        /// <summary>
+        /// hdnVisibilty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnVisibilty;
         
         /// <summary>
         /// hdnTargetErrorPanel control.
