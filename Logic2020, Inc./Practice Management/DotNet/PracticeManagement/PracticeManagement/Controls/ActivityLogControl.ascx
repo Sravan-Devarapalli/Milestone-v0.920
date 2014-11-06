@@ -333,6 +333,17 @@
                             <asp:Parameter Name="projectId" />
                             <asp:Parameter Name="opportunityId" />
                             <asp:Parameter Name="milestoneId" />
+                            <asp:Parameter Name="practiceAreas" Type="Boolean" />
+                            <asp:Parameter Name="sowBudget" Type="Boolean" />
+                            <asp:Parameter Name="director" Type="Boolean" />
+                            <asp:Parameter Name="poAmount" Type="Boolean" />
+                            <asp:Parameter Name="capabilities" Type="Boolean" />
+                            <asp:Parameter Name="newOrExtension" Type="Boolean" />
+                            <asp:Parameter Name="poNumber" Type="Boolean" />
+                            <asp:Parameter Name="projectStatus" Type="Boolean" />
+                            <asp:Parameter Name="salesPerson" Type="Boolean" />
+                            <asp:Parameter Name="projectOwner" Type="Boolean" />
+                            <asp:Parameter Name="recordPerChange" Type="Boolean" />
                         </SelectParameters>
                     </asp:ObjectDataSource>
                 </td>
