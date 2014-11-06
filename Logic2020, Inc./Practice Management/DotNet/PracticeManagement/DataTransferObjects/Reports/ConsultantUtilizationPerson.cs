@@ -46,7 +46,7 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
-        public List<DateTime> TimeOffDates
+        public Dictionary<DateTime,double> TimeOffDates
         {
             get;
             set;
@@ -87,6 +87,13 @@ namespace DataTransferObjects.Reports
 
         [DataMember]
         public List<int> WeeklyPayTypes
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int Utilization
         {
             get;
             set;
