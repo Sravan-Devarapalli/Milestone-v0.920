@@ -307,8 +307,9 @@ namespace DataAccess
             }
         }
 
-        public static List<Triple<Person, int[], int>> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
+        public static List<ConsultantUtilizationPerson> ConsultantUtilizationDailyByPerson(int personId, ConsultantTimelineReportContext context)
         {
+            List<ConsultantUtilizationPerson> result = null;
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.ConsultantUtilizationDailyByPersonProcedure, connection))
             {
@@ -325,61 +326,70 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
 
                 connection.Open();
-                return GetPersonLoad(command);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    result = GetPersonLoad(reader);
+                    reader.NextResult();
+                    ReadPersonTimeOffDates(reader, result);
+                }
+                return result;
             }
         }
 
         /// <summary>
         /// reads a dataset of persons into a collection
         /// </summary>
-        private static List<Triple<Person, int[], int>> GetPersonLoad(SqlCommand command)
+        private static List<ConsultantUtilizationPerson> GetPersonLoad(SqlDataReader reader)
         {
-            using (SqlDataReader reader = command.ExecuteReader())
+            if (reader.HasRows)
             {
-                if (reader.HasRows)
+                int personStatusIdIndex = reader.GetOrdinal(PersonStatusId);
+                int personStatusNameIndex = reader.GetOrdinal(NameColumn);
+                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                int employeeNumberIndex = reader.GetOrdinal(EmployeeNumberColumn);
+                int weeklyLoadIndex = reader.GetOrdinal(WeeklyUtilColumn);
+                int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
+                int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+                int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+                int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
+
+                var res = new List<ConsultantUtilizationPerson>();
+                while (reader.Read())
                 {
-                    int personStatusIdIndex = reader.GetOrdinal(PersonStatusId);
-                    int personStatusNameIndex = reader.GetOrdinal(NameColumn);
-                    int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
-                    int lastNameIndex = reader.GetOrdinal(LastNameColumn);
-                    int employeeNumberIndex = reader.GetOrdinal(EmployeeNumberColumn);
-                    int weeklyLoadIndex = reader.GetOrdinal(WeeklyUtilColumn);
-                    int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
-                    int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
-                    int hireDateIndex = reader.GetOrdinal(HireDateColumn);
-                    int avgUtilIndex = reader.GetOrdinal(AvgUtilColumn);
-
-                    var res = new List<Triple<Person, int[], int>>();
-                    while (reader.Read())
-                    {
-                        var person =
-                            new Person
+                    var person =
+                        new Person
+                        {
+                            Id = (int)reader[PersonIdColumn],
+                            FirstName = (string)reader[firstNameIndex],
+                            LastName = (string)reader[lastNameIndex],
+                            EmployeeNumber = (string)reader[employeeNumberIndex],
+                            Status = new PersonStatus
                             {
-                                Id = (int)reader[PersonIdColumn],
-                                FirstName = (string)reader[firstNameIndex],
-                                LastName = (string)reader[lastNameIndex],
-                                EmployeeNumber = (string)reader[employeeNumberIndex],
-                                Status = new PersonStatus
-                                {
-                                    Id = (int)reader[personStatusIdIndex],
-                                    Name = (string)reader[personStatusNameIndex]
-                                },
-                                CurrentPay = new Pay
-                                {
-                                    TimescaleName = reader.GetString(timescaleNameIndex),
-                                    Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
-                                },
-                                HireDate = (DateTime)reader[hireDateIndex]
-                            };
-                        int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
-                        int avgUtil = reader.GetInt32(avgUtilIndex);
-                        res.Add(new Triple<Person, int[], int>(person, load, avgUtil));
-                    }
+                                Id = (int)reader[personStatusIdIndex],
+                                Name = (string)reader[personStatusNameIndex]
+                            },
+                            CurrentPay = new Pay
+                            {
+                                TimescaleName = reader.GetString(timescaleNameIndex),
+                                Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
+                            },
+                            HireDate = (DateTime)reader[hireDateIndex]
+                        };
+                    int[] load = Utils.StringToIntArray((string)reader[weeklyLoadIndex]);
+                    int avgUtil = reader.GetInt32(avgUtilIndex);
+                    var consultPerson = new ConsultantUtilizationPerson()
+                    {
+                        Person = person,
+                        WeeklyUtilization = load.ToList(),
+                        Utilization = avgUtil
 
-                    return res;
+                    };
+                    res.Add(consultPerson);
                 }
-            }
 
+                return res;
+            }
             return null;
         }
 
@@ -462,7 +472,7 @@ namespace DataAccess
                     item.WeeklyUtilization = new List<int>();
                     item.WeeklyVacationDays = new List<int>();
                     item.ProjectedHoursList = new List<decimal>();
-                    item.TimeOffDates = new List<DateTime>();
+                    item.TimeOffDates = new Dictionary<DateTime, double>();
                     item.Person = person;
                     item.PersonVacationDays = reader.GetInt32(personVacationDaysIndex);
                     res.Add(item);
@@ -523,14 +533,14 @@ namespace DataAccess
                     {
                         Project = new Project()
                         {
-                            Id = reader.IsDBNull(projectIdIndex) ? null: (int?)reader.GetInt32(projectIdIndex),
-                            Name = reader.IsDBNull(projectNameIndex) ? string.Empty: reader.GetString(projectNameIndex),
+                            Id = reader.IsDBNull(projectIdIndex) ? null : (int?)reader.GetInt32(projectIdIndex),
+                            Name = reader.IsDBNull(projectNameIndex) ? string.Empty : reader.GetString(projectNameIndex),
                             ProjectNumber = reader.IsDBNull(projectNumberIndex) ? string.Empty : reader.GetString(projectNumberIndex)
                         },
                         ProjectedHours = reader.GetDecimal(projectedHoursIndex),
-                        Utilization =  reader.GetInt32(weeklyUtlizationIndex)
+                        Utilization = reader.GetInt32(weeklyUtlizationIndex)
                     };
-                    
+
                     if (consultantUtilizationPersonList.Any(p => p.Person.Id == personid))
                     {
                         var person = consultantUtilizationPersonList.FirstOrDefault(p => p.Person.Id == personid);
@@ -612,12 +622,14 @@ namespace DataAccess
                     int timeOffDateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
                     int isTimeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsTimeOff);
                     int holidayDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.HolidayDescriptionColumn);
+                    int timeOffHoursIndex = reader.GetOrdinal(Constants.ColumnNames.TimeOffHours);
 
                     while (reader.Read())
                     {
-                        int personId = reader.GetInt32(personIdIndex);
+                        var personId = reader.GetInt32(personIdIndex);
                         var timeOffDate = reader.GetDateTime(timeOffDateIndex);
-                        bool isTimeOff = reader.GetInt32(isTimeOffIndex) == 1;
+                        var isTimeOff = reader.GetInt32(isTimeOffIndex) == 1;
+                        var timeOffHours = reader.GetDouble(timeOffHoursIndex);
                         string holidayDescription = reader.IsDBNull(holidayDescriptionIndex)
                                         ? string.Empty
                                         : reader.GetString(holidayDescriptionIndex);
@@ -626,8 +638,8 @@ namespace DataAccess
                             var record = result.First(p => p.Person.Id == personId);
                             if (isTimeOff)
                             {
-                                if (record.TimeOffDates == null) record.TimeOffDates = new List<DateTime>();
-                                record.TimeOffDates.Add(timeOffDate);
+                                if (record.TimeOffDates == null) record.TimeOffDates = new Dictionary<DateTime, double>();
+                                record.TimeOffDates.Add(timeOffDate, timeOffHours);
                             }
                             else
                             {
