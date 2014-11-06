@@ -23,6 +23,7 @@ namespace PraticeManagement.Utils
         public static string SuperscriptStartTag = "<SuperScript>";
         public static string CustomColorStartTag = "<CustomColor>";
         public static string CustomColorWithBoldStartTag = "<CustomColorWithBold>";
+        public static string BoldFontKeyStartTag = "<BoldFont>";
 
         public static void Export(string fileName, List<DataSet> dsInput, List<SheetStyles> sheetStylesList)
         {
@@ -141,3 +142,4 @@ namespace PraticeManagement.Utils
         }
     }
 }
+
