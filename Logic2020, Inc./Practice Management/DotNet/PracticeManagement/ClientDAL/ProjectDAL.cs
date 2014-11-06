@@ -841,6 +841,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.POAmountParam, project.POAmount.HasValue ? (object)project.POAmount.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PONumber, !string.IsNullOrEmpty(project.PONumber) ? (Object)project.PONumber : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdParam, project.SalesPersonId > 0 ? (object)project.SalesPersonId : DBNull.Value);
@@ -914,6 +915,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInternalParam, project.IsInternal);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdParam, project.ProjectOwner.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SowBudgetParam, project.SowBudget.HasValue ? (object)project.SowBudget.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.POAmountParam, project.POAmount.HasValue ? (object)project.POAmount.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectCapabilityIds, !string.IsNullOrEmpty(project.ProjectCapabilityIds) ? project.ProjectCapabilityIds : string.Empty);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PONumber, !string.IsNullOrEmpty(project.PONumber) ? (Object)project.PONumber : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdParam, project.SalesPersonId > 0 ? (object)project.SalesPersonId : DBNull.Value);
@@ -1031,6 +1033,13 @@ namespace DataAccess
                 int clientIsNoteRequiredIndex = -1;
                 int poNumberIndex = -1;
                 int isHouseAccountIndex = -1;
+                int poAmountIndex = -1;
+                try
+                {
+                    poAmountIndex = reader.GetOrdinal(Constants.ColumnNames.POAmount);
+                }
+                catch
+                { }
                 try
                 {
                     poNumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
@@ -1313,6 +1322,10 @@ namespace DataAccess
                     if (descriptionIndex > -1)
                     {
                         project.Description = !reader.IsDBNull(descriptionIndex) ? reader.GetString(descriptionIndex) : string.Empty;
+                    }
+                    if (poAmountIndex > -1)
+                    {
+                        project.POAmount = !reader.IsDBNull(poAmountIndex) ? (Decimal?)reader.GetDecimal(poAmountIndex) : null;
                     }
 
                     if (hasAttachmentsIndex >= 0)
@@ -3460,7 +3473,7 @@ namespace DataAccess
                 if (!reader.HasRows) return;
                 int feedbackStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.FeedbackStatusId);
                 int feedbackStatusIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
-                
+
                 while (reader.Read())
                 {
                     ProjectFeedbackStatus feedback = new ProjectFeedbackStatus()
@@ -3477,7 +3490,7 @@ namespace DataAccess
             }
         }
 
-        public static void SaveFeedbackCancelationDetails(int feedbackId,int? statusId,bool isCanceled, string cancelationReason, string userLogin)
+        public static void SaveFeedbackCancelationDetails(int feedbackId, int? statusId, bool isCanceled, string cancelationReason, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Project.SaveFeedbackCancelationDetails, connection))
@@ -3494,7 +3507,7 @@ namespace DataAccess
             }
         }
 
-        public static bool CheckIfFeedbackExists(int? milestonePersonId,int? milestoneId,int? projectId)
+        public static bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, int? projectId)
         {
             bool result;
             try
@@ -3543,7 +3556,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ProjectFeedbackMail> GetPersonsForProjectReviewCanceled(int personId,string userLogin)
+        public static List<ProjectFeedbackMail> GetPersonsForProjectReviewCanceled(int personId, string userLogin)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Project.GetPersonsForProjectReviewCanceled, connection))
