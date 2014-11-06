@@ -12,6 +12,7 @@
           <xs:element minOccurs="0" name="SortDirection" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="SortId" type="xs:int" />
           <xs:element minOccurs="0" name="TimescaleIdList" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="UtilizationType" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -26,6 +27,7 @@
       <xs:element minOccurs="0" name="InternalProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="ProjectedPersons" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="ProjectedProjects" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ProposedProjects" type="xs:boolean" />
       <xs:element minOccurs="0" name="Start" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
