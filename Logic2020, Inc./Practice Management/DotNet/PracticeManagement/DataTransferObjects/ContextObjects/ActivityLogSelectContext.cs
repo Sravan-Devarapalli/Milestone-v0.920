@@ -30,5 +30,39 @@ namespace DataTransferObjects.ContextObjects
 
         [DataMember]
         public int? MilestoneId { get; set; }
+
+        [DataMember]
+        public bool PracticeAreas{ get; set; }
+
+        [DataMember]
+        public bool SowBudget { get; set; }
+
+        [DataMember]
+        public bool Director { get; set; }
+
+        [DataMember]
+        public bool POAmount { get; set; }
+
+        [DataMember]
+        public bool Capabilities { get; set; }
+
+        [DataMember]
+        public bool NewOrExtension { get; set; }
+
+        [DataMember]
+        public bool ProjectStatus { get; set; }
+
+        [DataMember]
+        public bool SalesPerson { get; set; }
+
+        [DataMember]
+        public bool ProjectOwner { get; set; }
+
+        [DataMember]
+        public bool PONumber { get; set; }
+
+        [DataMember]
+        public bool RecordPerSingleChange { get; set; }
     }
 }
+
