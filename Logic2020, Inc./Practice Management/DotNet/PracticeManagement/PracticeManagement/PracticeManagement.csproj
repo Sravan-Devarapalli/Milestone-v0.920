@@ -384,6 +384,7 @@
     <Content Include="Controls\PersonCalendar.ascx" />
     <Content Include="Controls\PersonMonthCalendar.ascx" />
     <Content Include="Controls\Projects\CommissionsAttribution.ascx" />
+    <Content Include="Controls\Projects\ProjectActivityLog.ascx" />
     <Content Include="Controls\Projects\ProjectCSAT.ascx" />
     <Content Include="Controls\Projects\ProjectFeedback.ascx" />
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
@@ -553,6 +554,8 @@
     <Content Include="Reports\TerminationReport.aspx" />
     <Content Include="Reports\TimeEntryReport_new.aspx" />
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
+    <Content Include="Reports\Xslt\ActivityLogChanges_TextMode.xslt" />
+    <Content Include="Reports\Xslt\ActivityLogItem_TextMode.xslt" />
     <Content Include="RevenueGoals.aspx" />
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\PersonPicture.ashx" />
@@ -1027,10 +1030,10 @@
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="Scripts\UploaderRemovedFolder1.js" />
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
     <None Include="Service References\ClientService\ClientService1.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
@@ -1555,6 +1558,13 @@
     </Compile>
     <Compile Include="Controls\Projects\CommissionsAttribution.ascx.designer.cs">
       <DependentUpon>CommissionsAttribution.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectActivityLog.ascx.cs">
+      <DependentUpon>ProjectActivityLog.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Projects\ProjectActivityLog.ascx.designer.cs">
+      <DependentUpon>ProjectActivityLog.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Projects\ProjectCSAT.ascx.cs">
       <DependentUpon>ProjectCSAT.ascx</DependentUpon>
