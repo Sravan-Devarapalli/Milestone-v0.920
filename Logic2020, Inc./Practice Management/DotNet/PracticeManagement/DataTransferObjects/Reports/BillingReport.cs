@@ -73,6 +73,20 @@ namespace DataTransferObjects.Reports
             set;
         }
 
+        [DataMember]
+        public double ForecastedHoursInRange
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public double ActualHoursInRange
+        {
+            get;
+            set;
+        }
+
         public PracticeManagementCurrency Remaining
         {
             get
@@ -81,11 +95,19 @@ namespace DataTransferObjects.Reports
             }
         }
 
-        public PracticeManagementCurrency Difference
+        public PracticeManagementCurrency DifferenceInCurrency
         {
             get
             {
                 return RangeActual - RangeProjected;
+            }
+        }
+
+        public double DifferenceInHours
+        {
+            get
+            {
+                return ActualHoursInRange - ForecastedHoursInRange;
             }
         }
 
