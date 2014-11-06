@@ -418,6 +418,9 @@ namespace DataTransferObjects
         public decimal? SowBudget { get; set; }
 
         [DataMember]
+        public decimal? POAmount { get; set; }
+
+        [DataMember]
         public PricingList PricingList { get; set; }
 
         [DataMember]
@@ -503,3 +506,4 @@ namespace DataTransferObjects
         #endregion IEquatable<Project> Members
     }
 }
+
