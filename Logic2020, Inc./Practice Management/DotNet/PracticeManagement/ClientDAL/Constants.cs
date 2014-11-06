@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string IsGap = "IsGap";
+            public const string TimeOffHours = "TimeOffHours";
             public const string ActualHoursInRange = "ActualHoursInRange";
             public const string ForecastedHoursInRange = "ForecastedHoursInRange";
             public const string POAmount = "POAmount";
@@ -526,6 +528,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string TargetCompanyIds = "@TargetCompanyIds";
+            public static string RecruitingSourceIds = "@RecruitingSourceIds";
             public static string UtilizationType = "@UtilizationType";
             public static string ProjectOwner = "@ProjectOwner";
             public static string SalesPerson = "@SalesPerson";
@@ -1291,6 +1295,7 @@
 
             public class Project
             {
+                public const string CheckIfProjectNumberExists = "dbo.CheckIfProjectNumberExists";
                 public const string GetPersonsForProjectReviewCanceled = "dbo.GetPersonsForProjectReviewCanceled";
                 public const string GetPersonsForIntialMailForProjectFeedback = "dbo.GetPersonsForIntialMailForProjectFeedback";
                 public const string CheckIfFeedbackExists = "dbo.CheckIfFeedbackExists";
