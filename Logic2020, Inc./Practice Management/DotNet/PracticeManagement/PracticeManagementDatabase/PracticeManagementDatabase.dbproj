@@ -4523,11 +4523,24 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\SaveLockoutDetails.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetWeeklyUtilizationByProjectTable.function.sql">
       <SubType>Code</SubType>
     </Build>
-   
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ActivityLogRecordPerChangeGetCount.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ActivityLogRecordPerChangeListByPeriod.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Triggers\tr_ProjectCapabilities_Log.trigger.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\UserActivityLogRecordPerChange.table.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\PK_UserActivityLogRecordPerChange_ActivityId.pkey.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
