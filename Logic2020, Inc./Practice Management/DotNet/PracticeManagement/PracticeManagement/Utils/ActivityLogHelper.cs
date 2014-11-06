@@ -17,10 +17,20 @@ namespace PraticeManagement.Utils
             string opportunityId,
             string milestoneId,
             int startRow,
-            int maxRows)
+            int maxRows,
+            bool practiceAreas = true,
+            bool sowBudget = true,
+            bool director = true,
+            bool poAmount = true,
+            bool capabilities = true,
+            bool newOrExtension = true,
+            bool poNumber = true,
+            bool projectStatus = true,
+            bool salesPerson = true,
+            bool projectOwner = true,
+            bool recordPerChange = false)
         {
-            var context = GetContext(startDateFilter,endDateFilter, sourceFilter, personId, projectId, opportunityId, milestoneId);
-
+            var context = GetContext(startDateFilter, endDateFilter, sourceFilter, personId, projectId, opportunityId, milestoneId, practiceAreas, sowBudget, director, poAmount, capabilities, newOrExtension, poNumber, projectStatus, salesPerson, projectOwner, recordPerChange);
             return ServiceCallers.Custom.ActivityLog(
                 client => client.ActivityLogList(context, maxRows, startRow / maxRows));
         }
@@ -32,7 +42,18 @@ namespace PraticeManagement.Utils
             string personId,
             string projectId,
             string opportunityId,
-            string milestoneId)
+            string milestoneId,
+            bool practiceAreas,
+            bool sowBudget,
+            bool director,
+            bool poAmount,
+            bool capabilities,
+            bool newOrExtension,
+            bool poNumber,
+            bool projectStatus,
+            bool salesPerson,
+            bool projectOwner,
+            bool recordPerChange)
         {
             var prsId = Generic.ParseNullableInt(personId);
             var prjId = Generic.ParseNullableInt(projectId);
@@ -48,7 +69,18 @@ namespace PraticeManagement.Utils
                 PersonId = prsId,
                 ProjectId = prjId,
                 OpportunityId = optId,
-                MilestoneId = mlId
+                MilestoneId = mlId,
+                PracticeAreas = practiceAreas,
+                SowBudget = sowBudget,
+                Director = director,
+                POAmount = poAmount,
+                Capabilities = capabilities,
+                NewOrExtension = newOrExtension,
+                ProjectStatus = projectStatus,
+                SalesPerson = salesPerson,
+                ProjectOwner = projectOwner,
+                PONumber = poNumber,
+                RecordPerSingleChange = recordPerChange
             };
         }
 
@@ -59,11 +91,23 @@ namespace PraticeManagement.Utils
             string personId,
             string projectId,
             string opportunityId,
-            string milestoneId)
+            string milestoneId,
+            bool practiceAreas = true,
+            bool sowBudget = true,
+            bool director = true,
+            bool poAmount = true,
+            bool capabilities = true,
+            bool newOrExtension = true, 
+            bool poNumber = true,
+            bool projectStatus = true,
+            bool salesPerson = true,
+            bool projectOwner = true,
+            bool recordPerChange=false)
         {
-            var context = GetContext(startDateFilter,endDateFilter, sourceFilter, personId, projectId, opportunityId, milestoneId);
+            var context = GetContext(startDateFilter, endDateFilter, sourceFilter, personId, projectId, opportunityId, milestoneId, practiceAreas, sowBudget, director, poAmount, capabilities, newOrExtension, poNumber,projectStatus, salesPerson, projectOwner,recordPerChange);
 
             return ServiceCallers.Custom.ActivityLog(client => client.ActivityLogGetCount(context));
         }
     }
 }
+
