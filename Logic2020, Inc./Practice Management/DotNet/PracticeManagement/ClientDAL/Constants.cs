@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string PreviousMonthActualRevenue = "PreviousMonthActualRevenue";
+            public const string PreviousMonthActualGrossMargin = "PreviousMonthActualGrossMargin";
             public const string IsGap = "IsGap";
             public const string TimeOffHours = "TimeOffHours";
             public const string ActualHoursInRange = "ActualHoursInRange";
