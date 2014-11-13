@@ -39,7 +39,7 @@ namespace PraticeManagement.Controls.Reports
         private const string TITLE_FORMAT_WITHOUT_REPORT_ForPdf = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
         private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
         private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
-        private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}";
+        private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}";
         private const char DELIMITER = '+';
         private const string TOOLTIP_FORMAT = "{0}-{1} {2},{3}";
         private const string TOOLTIP_FORMAT_FOR_SINGLEDAY = "{0} {1},{2}";
@@ -427,7 +427,7 @@ namespace PraticeManagement.Controls.Reports
             if (cookie.PersonId.HasValue)
             {
                 ShowDetailedReport(cookie.PersonId.Value, cookie.BegPeriod.Date, cookie.EndPeriod.Date, cookie.ChartTitle,
-                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects, cookie.ProposedProjects);
+                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects, cookie.ProposedProjects,cookie.CompletedProjects);
 
                 System.Web.UI.ScriptManager.RegisterStartupScript(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
             }
@@ -443,7 +443,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0);
+                    utf.InternalProjects, utf.ProposedProjects,utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0);
             ConsultantUtilizationPerson = report;
             foreach (var quadruple in report)
                 AddPerson(quadruple);
@@ -658,6 +658,17 @@ namespace PraticeManagement.Controls.Reports
                         projectsPlaceHolder += "/Projected";
                     }
                 }
+                if (utf.CompletedProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Completed";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Completed";
+                    }
+                }
                 if (utf.InternalProjects)
                 {
                     if (string.IsNullOrEmpty(projectsPlaceHolder))
@@ -754,7 +765,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber);
+                    utf.InternalProjects, utf.ProposedProjects,utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber);
             report.Reverse();
             string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
             if (utf.ProjectedPersons && utf.ActivePersons)
@@ -793,6 +804,17 @@ namespace PraticeManagement.Controls.Reports
                     else
                     {
                         projectsPlaceHolder += "/Projected";
+                    }
+                }
+                if (utf.CompletedProjects)
+                {
+                    if (string.IsNullOrEmpty(projectsPlaceHolder))
+                    {
+                        projectsPlaceHolder = "Completed";
+                    }
+                    else
+                    {
+                        projectsPlaceHolder += "/Completed";
                     }
                 }
                 if (utf.InternalProjects)
@@ -1110,9 +1132,10 @@ namespace PraticeManagement.Controls.Reports
             var internalProjects = bool.Parse(query[6]);
             var experimentalProjects = bool.Parse(query[7]);
             var proposedProjects = bool.Parse(query[8]);
+            var completedProjects = bool.Parse(query[9]);
 
             ShowDetailedReport(personId, repStartDate, repEndDate, query[3],
-            activeProjects, projectedProjects, internalProjects, experimentalProjects, proposedProjects);
+            activeProjects, projectedProjects, internalProjects, experimentalProjects, proposedProjects,completedProjects);
 
             System.Web.UI.ScriptManager.RegisterClientScriptBlock(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
 
@@ -1128,7 +1151,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
         private void ShowDetailedReport(int personId, DateTime repStartDate, DateTime repEndDate, string chartTitle,
-            bool activeProjects, bool projectedProjects, bool internalProjects, bool experimentalProjects, bool proposedProjects)
+            bool activeProjects, bool projectedProjects, bool internalProjects, bool experimentalProjects, bool proposedProjects,bool completedProjects)
         {
             chartDetails.Visible = true;
 
@@ -1147,10 +1170,11 @@ namespace PraticeManagement.Controls.Reports
                     internalProjects,
                     experimentalProjects,
                     proposedProjects,
+                    completedProjects,
                     IsCapacityMode);
 
             var utilizationDaily = DataHelper.ConsultantUtilizationDailyByPerson(repStartDate, ParseInt(repEndDate.Subtract(repStartDate).Days.ToString(), DAYS_FORWARD),
-                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, utf.ProposedProjects, personId);
+                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, utf.ProposedProjects,utf.CompletedProjects, personId);
             var avgUtils = utilizationDaily.First().WeeklyUtilization;
             for (int index = 0; index < avgUtils.Count; index++)
             {
@@ -1685,7 +1709,8 @@ namespace PraticeManagement.Controls.Reports
                               utf.ProjectedProjects.ToString(),
                               utf.InternalProjects.ToString(),
                               utf.ExperimentalProjects.ToString(),
-                              utf.ProposedProjects.ToString()
+                              utf.ProposedProjects.ToString(),
+                              utf.CompletedProjects.ToString()
                               );
         }
 
