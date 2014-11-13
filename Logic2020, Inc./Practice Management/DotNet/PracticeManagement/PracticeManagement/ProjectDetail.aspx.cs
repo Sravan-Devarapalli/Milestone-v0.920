@@ -312,6 +312,19 @@ namespace PraticeManagement
             }
         }
 
+        protected void custPOAmount_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            e.IsValid = true;
+            if (!string.IsNullOrEmpty(txtPOAmount.Text))
+            {
+                Decimal result;
+                if (!Decimal.TryParse(txtPOAmount.Text, out result))
+                {
+                    e.IsValid = false;
+                }
+            }
+        }
+
         public void ClearDirtyForChildControls()
         {
             ClearDirty();
@@ -593,7 +606,7 @@ namespace PraticeManagement
             {
                 imgLink.Enabled = imgNavigateToOpp.Enabled = imgUnlink.Enabled = false;//as per #2941.
                 cellProjectTools.Visible = false;
-                ddlSalesperson.Enabled = txtSowBudget.Enabled = ddlDirector.Enabled = false;
+                ddlSalesperson.Enabled = txtSowBudget.Enabled = txtPOAmount.Enabled = ddlDirector.Enabled = false;
             }
 
             #endregion Security
@@ -693,6 +706,7 @@ namespace PraticeManagement
 
         protected void btnUpdateProjectName_OnClick(object sender, EventArgs e)
         {
+            activityLog.Update();
             Page.Validate("ProjectName");
 
             if (Page.IsValid)
@@ -841,6 +855,7 @@ namespace PraticeManagement
         /// <param name="e"></param>
         protected void ddlClientName_SelectedIndexChanged(object sender, EventArgs e)
         {
+            activityLog.Update();
             if (!string.IsNullOrEmpty(ddlClientName.SelectedValue))
             {
                 int clientId = int.Parse(ddlClientName.SelectedValue);
@@ -852,6 +867,7 @@ namespace PraticeManagement
 
         protected void ddlDirector_SelectedIndexChanged(object sender, EventArgs e)
         {
+            activityLog.Update();
             PopulateCSATOwnerList();
         }
 
@@ -1004,11 +1020,13 @@ namespace PraticeManagement
 
         protected void ddlProjectGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
+            activityLog.Update();
             SetBusinessGroupLabel();
         }
 
         protected void ddlCSATOwner_SelectedIndexChanged(object sender, EventArgs e)
         {
+            activityLog.Update();
             PopulateDirectorsList();
         }
 
@@ -1076,6 +1094,7 @@ namespace PraticeManagement
 
         protected void DropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
+            activityLog.Update();
             // Only set an input focus
             ((Control)sender).Focus();
             if (ProjectId.HasValue)
@@ -1254,7 +1273,8 @@ namespace PraticeManagement
             return
                 statusId == (int)ProjectStatusType.Experimental ||
                 statusId == (int)ProjectStatusType.Inactive ||
-                statusId == (int)ProjectStatusType.Projected;
+                statusId == (int)ProjectStatusType.Projected||
+                statusId == (int)ProjectStatusType.Proposed;
         }
 
         /// <summary>
@@ -1530,6 +1550,7 @@ namespace PraticeManagement
                 ddlNotes.SelectedValue = project.IsNoteRequired ? "1" : "0";
                 ddlNotes.Enabled = !project.Client.IsNoteRequired;
                 txtSowBudget.Text = project.SowBudget != null ? project.SowBudget.Value.ToString("###,###,###,###,##0") : string.Empty;
+                txtPOAmount.Text = project.POAmount != null ? project.POAmount.Value.ToString("###,###,###,###,##0") : string.Empty;
                 PopulateClientDropDown(project);
                 FillAndSelectProjectGroupList(project);
                 PopulatePracticeDropDown(project);
@@ -1795,6 +1816,8 @@ namespace PraticeManagement
             {
                 project.CSATOwnerId = int.Parse(ddlCSATOwner.SelectedValue);
             }
+            project.POAmount = string.IsNullOrEmpty(txtPOAmount.Text) ? null : (decimal?)Convert.ToDecimal(txtPOAmount.Text);
+
         }
 
         private void PopulatePricingList(Project project)
