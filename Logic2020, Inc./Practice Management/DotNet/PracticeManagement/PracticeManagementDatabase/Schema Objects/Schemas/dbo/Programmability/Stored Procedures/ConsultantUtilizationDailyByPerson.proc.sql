@@ -6,6 +6,7 @@
 	@InternalProjects BIT = 1,
     @ExperimentalProjects BIT = 1,
 	@ProposedProjects BIT = 1,
+	@CompletedProjects BIT = 1,
 	@PersonId	INT
 AS 
     BEGIN
@@ -34,7 +35,7 @@ AS
                 paytp.[Name] AS Timescale,
 				st.PersonStatusId,
                 st.[Name],
-                dbo.GetWeeklyUtilization(@PersonId, @StartDate, 1, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@ProposedProjects,@InternalProjects) AS wutil,
+                dbo.GetWeeklyUtilization(@PersonId, @StartDate, 1, @DaysForward, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@ProposedProjects,@InternalProjects,@CompletedProjects) AS wutil,
 				0 AS wutilAvg
         FROM    dbo.Person AS p
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
