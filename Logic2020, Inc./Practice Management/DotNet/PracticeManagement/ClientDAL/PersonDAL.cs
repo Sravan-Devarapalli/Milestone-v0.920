@@ -242,6 +242,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Granularity, context.Granularity);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Period, context.Period);
@@ -286,6 +287,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Granularity, context.Granularity);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Period, context.Period);
@@ -321,6 +323,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
+                command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.DaysForward, context.Period);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
