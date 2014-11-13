@@ -30,6 +30,8 @@ BEGIN
 		  ,[ReimbursedExpense]
 		  ,[ActualRevenue]
 		  ,[ActualGrossMargin]
+		  ,[PreviousMonthActualRevenue]
+		  ,[PreviousMonthActualGrossMargin]
 	FROM [dbo].[ProjectSummaryCache]
 	WHERE CacheDate = CONVERT(DATE ,@InsertingTime )
 			AND (
