@@ -19,6 +19,8 @@ namespace DataTransferObjects
         private PracticeManagementCurrency _revenueValue;
         private PracticeManagementCurrency _actualMarginValue;
         private PracticeManagementCurrency _actualRevenueValue;
+        private PracticeManagementCurrency _previousMonthsActualMarginValue;
+        private PracticeManagementCurrency _previousMonthsActualRevenueValue;
 
         #endregion Fields
 
@@ -58,6 +60,28 @@ namespace DataTransferObjects
             {
                 _actualMarginValue = value;
                 _actualMarginValue.FormatStyle = NumberFormatStyle.Margin;
+            }
+        }
+
+        [DataMember]
+        public PracticeManagementCurrency PreviousMonthsActualMarginValue
+        {
+            get { return _previousMonthsActualMarginValue; }
+            set
+            {
+                _previousMonthsActualMarginValue = value;
+                _previousMonthsActualMarginValue.FormatStyle = NumberFormatStyle.Margin;
+            }
+        }
+
+        [DataMember]
+        public PracticeManagementCurrency PreviousMonthsActualRevenueValue
+        {
+            get { return _previousMonthsActualRevenueValue; }
+            set
+            {
+                _previousMonthsActualRevenueValue = value;
+                _previousMonthsActualRevenueValue.FormatStyle = NumberFormatStyle.Revenue;
             }
         }
 
