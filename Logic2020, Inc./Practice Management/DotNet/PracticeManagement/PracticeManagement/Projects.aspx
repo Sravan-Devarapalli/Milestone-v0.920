@@ -369,7 +369,12 @@
                                 &nbsp;
                             </td>
                             <td colspan="3" class="buttons-blockCheckBox PaddingTop4Px">
-                                <asp:CheckBox ID="chbUseActuals" runat="server" Checked="true" Text="Use Actual Time Entry data for Previous Month calculations" />
+                                <%--<asp:CheckBox ID="chbUseActuals" runat="server" Checked="true" Text="Use Actual Time Entry data for Previous Month calculations" />--%>
+                                <asp:DropDownList ID="ddlCalculationsType" runat="server">
+                                <asp:ListItem Text="Projected values for all months" Value="1" Selected="True"></asp:ListItem>
+                                <asp:ListItem Text="Actual values for all months" Value="2"></asp:ListItem>
+                                <asp:ListItem Text="Actual values for previous months and Projected values for current/Future months." Value="3"></asp:ListItem>
+                                </asp:DropDownList>
                             </td>
                             <td class="PaddingTop5">
                                 <asp:Button ID="btnUpdateFilters" runat="server" Text="Refresh Report" OnClick="btnUpdateView_Click"
