@@ -518,6 +518,8 @@
                                     ToolTip="Include experimental projects into report" onclick="EnableResetButton();" />
                             </td>
                             <td>
+                                <asp:CheckBox ID="chbCompletedProjects" runat="server" AutoPostBack="false" Text="Completed" Checked="True"
+                                    ToolTip="Include completed projects into report" onclick="EnableResetButton();" />
                             </td>
                             <td>
                             </td>
