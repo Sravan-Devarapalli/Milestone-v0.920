@@ -203,6 +203,8 @@ namespace PracticeManagementService
                                 currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualRevenue),
                             ActualGrossMargin =
                                 currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualGrossMargin),
+                            PreviousMonthsActualMarginValue = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.PreviousMonthsActualMarginValue),
+                            PreviousMonthsActualRevenueValue = currentYearProject.ProjectedFinancialsByMonth.Values.Sum(mf => mf.PreviousMonthsActualRevenueValue)
                         };
 
                     project.ComputedFinancials = financials;
@@ -234,6 +236,8 @@ namespace PracticeManagementService
                         ReimbursedExpenses = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ReimbursedExpenses),
                         ActualRevenue = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualRevenue),
                         ActualGrossMargin = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.ActualGrossMargin),
+                        PreviousMonthsActualRevenueValue = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.PreviousMonthsActualRevenueValue),
+                        PreviousMonthsActualMarginValue = project.ProjectedFinancialsByMonth.Values.Sum(mf => mf.PreviousMonthsActualMarginValue)
                     };
 
                 project.ComputedFinancials = financials;
