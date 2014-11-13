@@ -458,6 +458,8 @@ namespace DataAccess
             int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
             int actualRevenueIndex = -1;
             int actualGrossMarginIndex = -1;
+            int previousMonthsActualRevenueIndex = -1;
+            int previousMonthsActualGrossMarginIndex = -1;
 
             try
             {
@@ -465,6 +467,13 @@ namespace DataAccess
                 actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
             }
             catch { }
+            try
+            {
+                previousMonthsActualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.PreviousMonthActualRevenue);
+                previousMonthsActualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.PreviousMonthActualGrossMargin);
+            }
+            catch { }
+
 
             while (reader.Read())
             {
@@ -481,7 +490,9 @@ namespace DataAccess
                         -1,
                         -1,
                         actualRevenueIndex,
-                        actualGrossMarginIndex);
+                        actualGrossMarginIndex,
+                        previousMonthsActualRevenueIndex,
+                        previousMonthsActualGrossMarginIndex);
 
                 var i = projects.IndexOf(project);
                 projects[i].ProjectedFinancialsByMonth.Add(financials.FinancialDate.Value, financials);
@@ -500,11 +511,19 @@ namespace DataAccess
             int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
             int actualRevenueIndex = -1;
             int actualGrossMarginIndex = -1;
+            int previousMonthsActualRevenueIndex = -1;
+            int previousMonthsActualGrossMarginIndex = -1;
 
             try
             {
                 actualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenue);
                 actualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.ActualGrossMargin);
+            }
+            catch { }
+            try
+            {
+                previousMonthsActualRevenueIndex = reader.GetOrdinal(Constants.ColumnNames.PreviousMonthActualRevenue);
+                previousMonthsActualGrossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.PreviousMonthActualGrossMargin);
             }
             catch { }
 
@@ -523,7 +542,9 @@ namespace DataAccess
                         -1,
                         -1,
                         actualRevenueIndex,
-                        actualGrossMarginIndex);
+                        actualGrossMarginIndex,
+                        previousMonthsActualRevenueIndex,
+                        previousMonthsActualGrossMarginIndex);
 
                 var i = projects.IndexOf(project);
                 projects[i].ComputedFinancials = financials;
@@ -676,7 +697,9 @@ namespace DataAccess
             int expenseIndex,
             int expenseReimbIndex,
             int actualRevenueIndex = -1,
-            int actualGrossMarginIndex = -1)
+            int actualGrossMarginIndex = -1,
+            int previousRevenueIndex = -1,
+            int previousGrossMarginIndex = -1)
         {
             return new ComputedFinancials
                        {
@@ -689,7 +712,9 @@ namespace DataAccess
                            Expenses = expenseIndex < 0 ? 0 : reader.GetDecimal(expenseIndex),
                            ReimbursedExpenses = expenseReimbIndex < 0 ? 0 : reader.GetDecimal(expenseReimbIndex),
                            ActualRevenue = actualRevenueIndex > -1 && !reader.IsDBNull(actualRevenueIndex) ? reader.GetDecimal(actualRevenueIndex) : 0M,
-                           ActualGrossMargin = actualGrossMarginIndex > -1 && !reader.IsDBNull(actualGrossMarginIndex) ? reader.GetDecimal(actualGrossMarginIndex) : 0M
+                           ActualGrossMargin = actualGrossMarginIndex > -1 && !reader.IsDBNull(actualGrossMarginIndex) ? reader.GetDecimal(actualGrossMarginIndex) : 0M,
+                           PreviousMonthsActualRevenueValue = previousRevenueIndex > -1 && !reader.IsDBNull(previousRevenueIndex) ? reader.GetDecimal(previousRevenueIndex) : 0M,
+                           PreviousMonthsActualMarginValue = previousGrossMarginIndex > -1 && !reader.IsDBNull(previousGrossMarginIndex) ? reader.GetDecimal(previousGrossMarginIndex) : 0M
                        };
         }
 
