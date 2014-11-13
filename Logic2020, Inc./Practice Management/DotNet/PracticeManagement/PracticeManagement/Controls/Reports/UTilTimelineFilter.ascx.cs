@@ -35,6 +35,8 @@ namespace PraticeManagement.Controls.Reports
 
         public bool ProposedProjects { get { return chbProposedProjects.Checked; } }
 
+        public bool CompletedProjects { get { return chbCompletedProjects.Checked; } }
+
         public string TimescalesSelected { get { return cblTimeScales.SelectedItems; } }
 
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
@@ -316,6 +318,7 @@ namespace PraticeManagement.Controls.Reports
                 chbExperimentalProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExperimentalProjectsKey]);
                 chbProposedProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ProposedProjectsKey]);
                 chbInternalProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.InternalProjectsKey]);
+                chbCompletedProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.CompletedProjectsKey]);
                 chkExcludeInternalPractices.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExcludeInternalPracticesKey]);
                 rbSortbyAsc.Checked = resoureDictionary[Constants.ResourceKeys.SortDirectionKey] == "Desc" ? true : false;
 
@@ -352,6 +355,7 @@ namespace PraticeManagement.Controls.Reports
             chbProposedProjects.Checked = cookie.ProposedProjects;
             chbExperimentalProjects.Checked = cookie.ExperimentalProjects;
             chbInternalProjects.Checked = cookie.InternalProjects;
+            chbCompletedProjects.Checked = cookie.CompletedProjects;
             chkExcludeInternalPractices.Checked = cookie.ExcludeInternalPractices;
             rbSortbyAsc.Checked = cookie.SortDirection == "Asc" ? true : false;
             rbSortbyDesc.Checked = cookie.SortDirection == "Desc" ? true : false;
@@ -423,6 +427,7 @@ namespace PraticeManagement.Controls.Reports
             this.chbProjectedProjects.Checked = true;
             this.chbProposedProjects.Checked = true;
             this.chbExperimentalProjects.Checked = false;
+            this.chbCompletedProjects.Checked = true;
             this.chkExcludeInternalPractices.Checked = true;
             SelectAllItems(this.cblPractices);
             SelectDefaultTimeScaleItems(this.cblTimeScales);            
