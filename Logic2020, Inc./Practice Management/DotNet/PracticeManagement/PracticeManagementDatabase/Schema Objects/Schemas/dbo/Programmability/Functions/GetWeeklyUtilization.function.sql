@@ -13,7 +13,8 @@ CREATE FUNCTION [dbo].[GetWeeklyUtilization]
 	@ProjectedProjects BIT = 1,
 	@ExperimentalProjects BIT = 1,
 	@ProposedProjects BIT =1,
-	@InternalProjects	BIT = 1  
+	@InternalProjects	BIT = 1,
+	@CompletedProjects BIT = 1 
 )
 RETURNS VARCHAR(2500)
 AS
@@ -108,13 +109,13 @@ BEGIN
 					SET @wUtil = -1
 				ELSE  
 				BEGIN
-					SET @av = dbo.GetNumberAvaliableHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@ProposedProjects,@InternalProjects)
+					SET @av = dbo.GetNumberAvaliableHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects ,@ProposedProjects,@InternalProjects,@CompletedProjects)
 			
 					IF (@av = 0 OR @av IS NULL)
 						SET @wUtil = 0
 					ELSE 		
 						SET @wUtil = CEILING(
-							100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@ProposedProjects ,@InternalProjects), 0) / 
+							100*ISNULL(dbo.GetNumberProjectedHours(@PersonId, @start, @end, @ActiveProjects, @ProjectedProjects, @ExperimentalProjects,@ProposedProjects ,@InternalProjects,@CompletedProjects), 0) / 
 								@av)
 				END
 			END 
