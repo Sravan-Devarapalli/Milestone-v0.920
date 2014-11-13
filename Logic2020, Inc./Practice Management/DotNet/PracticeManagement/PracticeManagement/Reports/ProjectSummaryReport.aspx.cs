@@ -331,6 +331,12 @@ namespace PraticeManagement.Reporting
             get { return (PraticeManagement.Controls.Reports.ProjectSummaryByResource)ucByResource; }
         }
 
+        public string SelectedPeriod
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Control Methods
@@ -342,15 +348,16 @@ namespace PraticeManagement.Reporting
                 var clients = DataHelper.GetAllClientsSecure(null, true, true);
                 DataHelper.FillListDefault(ddlClients, "-- Select an Account -- ", clients as object[], false);
             }
-
-
         }
 
         protected void txtProjectNumber_OnTextChanged(object sender, EventArgs e)
         {
-            ddlView.SelectedValue = "";
-            ddlPeriod.SelectedValue = "*";
             PopulateddlPeriod(ProjectNumber);
+            var value = ddlPeriod.Items.FindByValue(SelectedPeriod);
+            if (value == null)
+                ddlPeriod.SelectedValue = "*";
+            else
+                ddlPeriod.SelectedValue = value.Value ;
             LoadActiveView();
         }
 
@@ -579,15 +586,17 @@ namespace PraticeManagement.Reporting
             ddlProjects.Items.Clear();
             ddlProjects.Items.Add(firstItem);
             ddlProjects.Enabled = false;
-
         }
 
         private void PopulateControls(string projectNumber)
         {
-            ddlView.SelectedValue = "";
-            ddlPeriod.SelectedValue = "*";
             txtProjectNumber.Text = projectNumber;
             PopulateddlPeriod(projectNumber);
+            var value = ddlPeriod.Items.FindByValue(SelectedPeriod);
+            if (value == null)
+                ddlPeriod.SelectedValue = "*";
+            else
+                ddlPeriod.SelectedValue = value.Value;
             LoadActiveView();
             ClearFilters();
         }
@@ -595,7 +604,7 @@ namespace PraticeManagement.Reporting
         private void PopulateddlPeriod(string projectNumber)
         {
             var list = ServiceCallers.Custom.Report(r => r.GetMilestonesForProject(ProjectNumber));
-
+            SelectedPeriod = ddlPeriod.SelectedValue;
             ddlPeriod.Items.Clear();
             var listItem = new System.Web.UI.WebControls.ListItem("Entire Project", "*");
             if (list.Length > 0)
@@ -741,7 +750,7 @@ namespace PraticeManagement.Reporting
             double totalEstBillings = _personLevelGroupedHoursList.Where(p => p.EstimatedBillings != -1.00).Sum(p => p.EstimatedBillings);
             PdfPTable outerTable = new PdfPTable(5);
             outerTable.WidthPercentage = 100;
-            float[] outerWidths = { .4f, .15f, .15f,.2f, .1f };
+            float[] outerWidths = { .4f, .15f, .15f, .2f, .1f };
             outerTable.SetWidths(outerWidths);
 
             var boldBaseFont = iTextSharp.text.pdf.BaseFont.CreateFont();
@@ -861,7 +870,7 @@ namespace PraticeManagement.Reporting
             PdfPCell innerTableCell3 = new PdfPCell(innerTable3);
             PdfPCell innerTableCell4 = new PdfPCell(innerTable4);
             PdfPCell innerTableCell5 = new PdfPCell(innerTable5);
-            innerTableCell1.BorderWidth = innerTableCell2.BorderWidth = innerTableCell3.BorderWidth = innerTableCell4.BorderWidth = innerTableCell5.BorderWidth =  0f;
+            innerTableCell1.BorderWidth = innerTableCell2.BorderWidth = innerTableCell3.BorderWidth = innerTableCell4.BorderWidth = innerTableCell5.BorderWidth = 0f;
             innerTableCell1.PaddingBottom = 20f;
 
             outerTable.AddCell(innerTableCell1);
