@@ -55,7 +55,7 @@ namespace PraticeManagement.Controls.Reports
         public static List<ConsultantUtilizationPerson> GetConsultantsTimelineReport(
             DateTime start, int granularity, int period,
             bool activePersons, bool projectedPersons, bool activeProjects,
-            bool projectedProjects, bool experimentalProjects, bool internalProjects,bool proposedProjects,
+            bool projectedProjects, bool experimentalProjects, bool internalProjects,bool proposedProjects,bool completedProjects,
             string timescaleIds, string practiceIdList, int sortId, string sortDirection,
             bool excludeInternalPractices, int utilizationType,bool isSampleReport)
         {
@@ -67,6 +67,7 @@ namespace PraticeManagement.Controls.Reports
                                   ProjectedPersons = projectedPersons,
                                   ProjectedProjects = projectedProjects,
                                   ProposedProjects = proposedProjects,
+                                  CompletedProjects = completedProjects,
                                   ActivePersons = activePersons,
                                   ActiveProjects = activeProjects,
                                   ExperimentalProjects = experimentalProjects,
