@@ -70,7 +70,7 @@ namespace PraticeManagement.Controls
         private bool totalOnlySelectedDateWindowValue;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private bool useActualTimeEntries;
+        private int useActualTimeEntries;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool isQuarterColoumnsShown;
@@ -390,7 +390,7 @@ namespace PraticeManagement.Controls
             set { isGroupByPersonPage = value; }
         }
 
-        public bool UseActualTimeEntries
+        public int CalculationsType
         {
             get { return useActualTimeEntries; }
             set { useActualTimeEntries = value; }
@@ -459,7 +459,7 @@ namespace PraticeManagement.Controls
             PracticeIdsList = null;
             ProjectGroupIdsList = null;
             SalespersonIdsList = null;
-            UseActualTimeEntries = true;
+            CalculationsType = 2;
             FinancialsFromCache = false;
             IsQuarterColoumnsShown =false;
             IsYearToDateColoumnsShown = false;
@@ -520,7 +520,7 @@ namespace PraticeManagement.Controls
                     ProjectOwnerIdsList == compareObj.ProjectOwnerIdsList &&
                     PracticeIdsList == compareObj.PracticeIdsList &&
                     ProjectGroupIdsList == compareObj.ProjectGroupIdsList &&
-                    UseActualTimeEntries == compareObj.UseActualTimeEntries &&
+                    CalculationsType == compareObj.CalculationsType &&
 
                     IsGroupByPersonPage == compareObj.IsGroupByPersonPage &&
                     FinancialsFromCache == compareObj.FinancialsFromCache &&
@@ -561,7 +561,7 @@ namespace PraticeManagement.Controls
                    Convert.ToInt32(TotalOnlySelectedDateWindow) +
                    Convert.ToInt32(ViewSelected) +
                 // UseActuals
-                    Convert.ToInt32(UseActualTimeEntries) +
+                    Convert.ToInt32(CalculationsType != 1) +
                 // FinancialsFromCache
                     Convert.ToInt32(FinancialsFromCache) +
                     Convert.ToInt32(IsQuarterColoumnsShown) +
