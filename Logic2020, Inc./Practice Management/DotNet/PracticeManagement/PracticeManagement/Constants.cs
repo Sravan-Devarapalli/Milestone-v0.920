@@ -31,6 +31,7 @@ namespace PraticeManagement
             public const string PracticeIdListKey = "PracticeIdListKey";
             public const string ExcludeInternalPracticesKey = "ExcludeInternalPracticesKey";
             public const string InternalProjectsKey = "InternalProjectsKey";
+            public const string CompletedProjectsKey = "CompletedProjectsKey";
             public const string SortIdKey = "SortIdKey";
             public const string SortDirectionKey = "SortDirectionKey";
             public const string AvgUtilKey = "AvgUtilKey";
