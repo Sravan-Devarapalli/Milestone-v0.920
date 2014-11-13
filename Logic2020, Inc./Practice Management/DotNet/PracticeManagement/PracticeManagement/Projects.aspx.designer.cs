@@ -184,13 +184,13 @@ namespace PraticeManagement {
         protected global::PraticeManagement.Controls.Generic.Buttons.ShadowedHyperlink lnkAddProject;
         
         /// <summary>
-        /// chbUseActuals control.
+        /// ddlCalculationsType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbUseActuals;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCalculationsType;
         
         /// <summary>
         /// btnUpdateFilters control.
