@@ -244,7 +244,7 @@ namespace PraticeManagement
                 {
                     CompanyPerformanceState.Filter.FinancialsFromCache = false;
                 }
-                return CompanyPerformanceState.ProjectList;
+                return CompanyPerformanceState.ProjectList.ToList().OrderBy(p => p.ProjectNumber).ToArray();
             }
         }
 
@@ -307,11 +307,11 @@ namespace PraticeManagement
             set;
         }
 
-        public bool UseActuals
+        public int CalculationsType
         {
             get
             {
-                return chbUseActuals.Checked;
+                return Convert.ToInt32(ddlCalculationsType.SelectedValue);
             }
         }
 
@@ -644,7 +644,7 @@ namespace PraticeManagement
 
                      CalculateRangeSelected = (ProjectCalculateRangeType)Enum.Parse(typeof(ProjectCalculateRangeType), ddlCalculateRange.SelectedValue),
                      HideAdvancedFilter = false,
-                     UseActualTimeEntries = chbUseActuals.Checked
+                     CalculationsType = Convert.ToInt32(ddlCalculationsType.SelectedValue)
                  };
             return filter;
         }
@@ -733,8 +733,8 @@ namespace PraticeManagement
                                 // Project.Id != null is for regular projects only
                                 bool greaterSeniorityExists = personListAnalyzer != null && personListAnalyzer.GreaterSeniorityExists;
 
-                                var revenue = UseActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue;
-                                var margin = UseActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin;
+                                var revenue = CalculationsType == 2 ? interestValue.Value.ActualRevenue : CalculationsType == 1 ? interestValue.Value.Revenue : interestValue.Value.PreviousMonthsActualRevenueValue;
+                                var margin = CalculationsType == 2 ? interestValue.Value.ActualGrossMargin : CalculationsType == 1 ? interestValue.Value.GrossMargin : interestValue.Value.PreviousMonthsActualMarginValue;
 
                                 row.Cells[i].InnerHtml = GetMonthReportTableAsHtml(revenue, margin, greaterSeniorityExists);
                                 break;
@@ -769,8 +769,8 @@ namespace PraticeManagement
             // Calculate Total Revenue and Margin for current Project
             if (project.ComputedFinancials != null)
             {
-                totalRevenue = UseActuals ? project.ComputedFinancials.ActualRevenue : project.ComputedFinancials.Revenue;
-                totalMargin = UseActuals ? project.ComputedFinancials.ActualGrossMargin : project.ComputedFinancials.GrossMargin;
+                totalRevenue = CalculationsType == 2 ? project.ComputedFinancials.ActualRevenue : CalculationsType == 1 ? project.ComputedFinancials.Revenue : project.ComputedFinancials.PreviousMonthsActualRevenueValue; //CalculationsType == 1 ? project.ComputedFinancials.Revenue : project.ComputedFinancials.ActualRevenue;
+                totalMargin = CalculationsType == 2 ? project.ComputedFinancials.ActualGrossMargin : CalculationsType == 1 ? project.ComputedFinancials.GrossMargin : project.ComputedFinancials.PreviousMonthsActualMarginValue; //CalculationsType == 1 ? project.ComputedFinancials.GrossMargin : project.ComputedFinancials.ActualGrossMargin;
             }
 
             // Render Total Revenue and Margin for current Project
@@ -1115,8 +1115,8 @@ namespace PraticeManagement
                             projectFinancials.Key.Month == dtTemp.Month &&
                             project.Id.HasValue)
                         {
-                            financials.Revenue += UseActuals ? projectFinancials.Value.ActualRevenue : projectFinancials.Value.Revenue;
-                            financials.GrossMargin += UseActuals ? projectFinancials.Value.ActualGrossMargin : projectFinancials.Value.GrossMargin;
+                            financials.Revenue += CalculationsType == 2 ? projectFinancials.Value.ActualRevenue : CalculationsType == 1 ? projectFinancials.Value.Revenue : projectFinancials.Value.PreviousMonthsActualRevenueValue;
+                            financials.GrossMargin += CalculationsType == 2 ? projectFinancials.Value.ActualGrossMargin : CalculationsType == 1 ? projectFinancials.Value.GrossMargin : projectFinancials.Value.PreviousMonthsActualMarginValue;
                         }
                     }
                 }
@@ -1127,8 +1127,8 @@ namespace PraticeManagement
 
                 if (projectsHavingFinancials != null)
                 {
-                    financialSummaryRevenue.ComputedFinancials.GrossMargin = projectsHavingFinancials.Sum(proj => UseActuals ? proj.ComputedFinancials.ActualGrossMargin : proj.ComputedFinancials.GrossMargin);
-                    financialSummaryRevenue.ComputedFinancials.Revenue = projectsHavingFinancials.Sum(proj => UseActuals ? proj.ComputedFinancials.ActualRevenue : proj.ComputedFinancials.Revenue);
+                    financialSummaryRevenue.ComputedFinancials.GrossMargin = projectsHavingFinancials.Sum(proj => CalculationsType == 2 ? proj.ComputedFinancials.ActualGrossMargin : CalculationsType == 1 ? proj.ComputedFinancials.GrossMargin : proj.ComputedFinancials.PreviousMonthsActualMarginValue);
+                    financialSummaryRevenue.ComputedFinancials.Revenue = projectsHavingFinancials.Sum(proj => CalculationsType == 2 ? proj.ComputedFinancials.ActualRevenue : CalculationsType == 1 ? proj.ComputedFinancials.Revenue : proj.ComputedFinancials.PreviousMonthsActualRevenueValue);
                 }
             }
 
@@ -1206,7 +1206,7 @@ namespace PraticeManagement
                 ddlView.SelectedIndex = ddlView.Items.IndexOf(ddlView.Items.FindByValue(filter.ViewSelected.ToString()));
                 ddlCalculateRange.SelectedIndex = ddlCalculateRange.Items.IndexOf(ddlCalculateRange.Items.FindByValue(filter.CalculateRangeSelected.ToString()));
 
-                chbUseActuals.Checked = filter.UseActualTimeEntries;
+                ddlCalculationsType.SelectedValue = filter.CalculationsType.ToString();
             }
             else
             {
@@ -1361,7 +1361,7 @@ namespace PraticeManagement
 
             tblReport.Rows.Add(new TableRow());
             tblReport.Rows[1].Cells.Add(new TableCell { ID = string.Format(ReportCellIdFormat, i) });
-
+            var useActuals = CalculationsType != 1;
             pnlReport.Controls.Add(tblReport);
             pnlReport.Controls.Add(
                 new DynamicPopulateExtender
@@ -1376,7 +1376,7 @@ namespace PraticeManagement
                                 this.chbProposed.Checked.ToString() + "," +
                                 this.chbInternal.Checked.ToString() + "," +
                                 this.chbInactive.Checked.ToString() + "," +
-                                this.chbUseActuals.Checked.ToString(),
+                                useActuals.ToString(),
 
                     ServiceMethod = POPULATE_EXTENDER_SERVICEMETHOD,
                     UpdatingCssClass = POPULATE_EXTENDER_UPDATINGCSS,
@@ -1430,7 +1430,7 @@ namespace PraticeManagement
                 showCompleted = false,
                 showActive = false,
                 showExperimental = false,
-                showProposed=false,
+                showProposed = false,
                 showInternal = false,
                 showInactive = false,
                 useActuals = false;
@@ -2143,3 +2143,4 @@ namespace PraticeManagement
         }
     }
 }
+
