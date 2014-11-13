@@ -28,6 +28,8 @@ namespace PraticeManagement.FilterObjects
 
         public bool ProposedProjects { get; set; }
 
+        public bool CompletedProjects { get; set; }
+
         public string TimescalesSelected { get; set; }
 
         public bool ExcludeInternalPractices { get; set; }
