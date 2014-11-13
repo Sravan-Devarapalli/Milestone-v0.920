@@ -6,7 +6,8 @@
     @ActiveProjects BIT = 1,
     @ProjectedPersons BIT = 1,
     @ProjectedProjects BIT = 1,
-	@ProposedProjects BIT=1,
+	@ProposedProjects BIT = 1,
+	@CompletedProjects BIT = 1,
     @ExperimentalProjects BIT = 1,
 	@InternalProjects	BIT = 1,
 	@TimescaleIds NVARCHAR(4000) = NULL,
@@ -115,10 +116,10 @@ AS
         FROM    v_person AS p
                 INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
-				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
+				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects,@CompletedProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
 		LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 LEFT JOIN dbo.GetPersonVacationDaysTable(@StartDate,@Enddate) VactionDaysTable ON VactionDaysTable.PersonId = c.ConsId
-				LEFT JOIN dbo.GetAvgUtilizationTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects) AS AvgUT ON AvgUT.PersonId =  p.PersonId'
+				LEFT JOIN dbo.GetAvgUtilizationTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects,@CompletedProjects) AS AvgUT ON AvgUT.PersonId =  p.PersonId'
 
      SET @Query = @Query+@OrderBy
 	SET @Query = @Query+	
@@ -154,6 +155,7 @@ AS
 								 @ProposedProjects		BIT,
 								 @ExperimentalProjects	BIT,
 								 @InternalProjects		BIT,
+								 @CompletedProjects		BIT,
 								 @TimescaleIds			NVARCHAR(4000),
 								 @PracticeIds			NVARCHAR(4000),
 								 @ExcludeInternalPractices	BIT',
@@ -167,6 +169,7 @@ AS
 								 @ProposedProjects	=	@ProposedProjects,
 								 @ExperimentalProjects = @ExperimentalProjects,
 								 @InternalProjects	=	@InternalProjects,
+								 @CompletedProjects = @CompletedProjects,
 								 @TimescaleIds	=	@TimescaleIds,
 								 @PracticeIds	=	@PracticeIds,
 								 @ExcludeInternalPractices = @ExcludeInternalPractices
