@@ -29,10 +29,12 @@ BEGIN
 			@RefinedEndDate DATETIME,
 			@Today DATETIME, 
 			@InsertingTime DATETIME,
+			@CurrentMonthStartDate DATETIME,
 			@CurrentMonthEndDate DATETIME
 
 	SELECT @Today = CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE())),@InsertingTime = dbo.InsertingTime()
-	SELECT @CurrentMonthEndDate = C.MonthEndDate
+	SELECT @CurrentMonthEndDate = C.MonthEndDate,
+		   @CurrentMonthStartDate = C.MonthStartDate
 	FROM dbo.Calendar C
 	WHERE C.Date = @Today
 
@@ -197,6 +199,14 @@ BEGIN
 		CONVERT(DECIMAL(18,2),ISNULL(PEM.Reimbursement,0)) ReimbursedExpense,
 		CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenue,0)) ActualRevenue,
 		CONVERT(DECIMAL(18,6), ISNULL(APV.ActualMargin,0) - (ISNULL(APV.ActualRevenue,0) * ISNULL(APV.Discount,0)/100) + ((ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)))) ActualGrossMargin,
+		CASE WHEN ISNULL(APV.FinancialDate,PEM.FinancialDate) < @CurrentMonthStartDate 
+			 THEN CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenue,0))
+			 ELSE CONVERT(DECIMAL(18,6), ISNULL(APV.ProjectedRevenue,0))
+			 END PreviousMonthActualRevenue,
+		CASE WHEN ISNULL(APV.FinancialDate,PEM.FinancialDate) < @CurrentMonthStartDate 
+			 THEN CONVERT(DECIMAL(18,6), ISNULL(APV.ActualMargin,0) - (ISNULL(APV.ActualRevenue,0) * ISNULL(APV.Discount,0)/100) + ((ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))))
+			 ELSE CONVERT(DECIMAL(18,6), ISNULL(APV.ProjectedGrossMargin,0) + (ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)))
+			 END PreviousMonthActualGrossMargin,
 		CONVERT(BIT,1) AS IsMonthlyRecord,
 		@InsertingTime AS  CreatedDate,	
 		CONVERT(DATE,@InsertingTime)  AS CacheDate
