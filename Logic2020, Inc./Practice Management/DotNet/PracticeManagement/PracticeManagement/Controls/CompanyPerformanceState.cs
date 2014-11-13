@@ -213,7 +213,7 @@ namespace PraticeManagement.Controls
                                         filterSet.CalculateRangeSelected,
                                         filterSet.ExcludeInternalPractices,
                                         Thread.CurrentPrincipal.Identity.Name,
-                                        filterSet.UseActualTimeEntries,
+                                        filterSet.CalculationsType != 1,
                                         filterSet.FinancialsFromCache);
 
                                 }
