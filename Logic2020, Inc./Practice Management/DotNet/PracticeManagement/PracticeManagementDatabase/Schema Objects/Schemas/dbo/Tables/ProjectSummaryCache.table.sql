@@ -14,6 +14,8 @@
 	ReimbursedExpense				INT NULL,
 	ActualRevenue					DECIMAL (18, 2) NULL,
 	ActualGrossMargin				DECIMAL (18, 2) NULL,
+	PreviousMonthActualRevenue		DECIMAL (18, 2) NULL,
+	PreviousMonthActualGrossMargin	DECIMAL (18, 2) NULL,
 	IsMonthlyRecord					BIT NOT NULL,
 	CreatedDate						DATETIME,	
 	CacheDate						DATE,
