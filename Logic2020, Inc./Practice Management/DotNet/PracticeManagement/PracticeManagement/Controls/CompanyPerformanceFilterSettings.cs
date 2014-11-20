@@ -70,7 +70,10 @@ namespace PraticeManagement.Controls
         private bool totalOnlySelectedDateWindowValue;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private int useActualTimeEntries;
+        private int calculationType;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private bool useActualTimeEntries;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private bool isQuarterColoumnsShown;
@@ -390,10 +393,16 @@ namespace PraticeManagement.Controls
             set { isGroupByPersonPage = value; }
         }
 
-        public int CalculationsType
+        public bool UseActualTimeEntries
         {
             get { return useActualTimeEntries; }
             set { useActualTimeEntries = value; }
+        }
+
+        public int CalculationsType
+        {
+            get { return calculationType; }
+            set { calculationType = value; }
         }
 
         public bool IsMonthsColoumnsShown
@@ -459,6 +468,7 @@ namespace PraticeManagement.Controls
             PracticeIdsList = null;
             ProjectGroupIdsList = null;
             SalespersonIdsList = null;
+            UseActualTimeEntries = true;
             CalculationsType = 2;
             FinancialsFromCache = false;
             IsQuarterColoumnsShown =false;
@@ -520,6 +530,7 @@ namespace PraticeManagement.Controls
                     ProjectOwnerIdsList == compareObj.ProjectOwnerIdsList &&
                     PracticeIdsList == compareObj.PracticeIdsList &&
                     ProjectGroupIdsList == compareObj.ProjectGroupIdsList &&
+                    UseActualTimeEntries == compareObj.UseActualTimeEntries &&
                     CalculationsType == compareObj.CalculationsType &&
 
                     IsGroupByPersonPage == compareObj.IsGroupByPersonPage &&
@@ -561,6 +572,8 @@ namespace PraticeManagement.Controls
                    Convert.ToInt32(TotalOnlySelectedDateWindow) +
                    Convert.ToInt32(ViewSelected) +
                 // UseActuals
+                    Convert.ToInt32(UseActualTimeEntries) +
+                // CalculationType
                     Convert.ToInt32(CalculationsType != 1) +
                 // FinancialsFromCache
                     Convert.ToInt32(FinancialsFromCache) +
