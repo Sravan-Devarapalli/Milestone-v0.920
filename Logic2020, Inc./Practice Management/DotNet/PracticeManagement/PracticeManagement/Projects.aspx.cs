@@ -1206,7 +1206,7 @@ namespace PraticeManagement
                 ddlView.SelectedIndex = ddlView.Items.IndexOf(ddlView.Items.FindByValue(filter.ViewSelected.ToString()));
                 ddlCalculateRange.SelectedIndex = ddlCalculateRange.Items.IndexOf(ddlCalculateRange.Items.FindByValue(filter.CalculateRangeSelected.ToString()));
 
-                ddlCalculationsType.SelectedValue = filter.CalculationsType.ToString();
+                ddlCalculationsType.SelectedValue = filter.CalculationsType == 0 ? "1":filter.CalculationsType.ToString();
             }
             else
             {
