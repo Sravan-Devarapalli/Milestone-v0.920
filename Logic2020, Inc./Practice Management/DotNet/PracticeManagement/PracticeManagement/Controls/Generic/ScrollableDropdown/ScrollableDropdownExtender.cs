@@ -25,6 +25,7 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
         private const string DisplayText_Value = "DisplayTextValue";
         private const string EditImageUrl_Value = "EditImageUrlValue";
         private const string ExtenderWidth_Value = "ExtenderWidthValue";
+        private const string ExtenderDisplay_Value = "ExtenderDisplayValue";
 
 
         #endregion
@@ -131,6 +132,14 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
             set { SetPropertyValue(ExtenderWidth_Value, value); }
         }
 
+        [ExtenderControlProperty]
+        [ClientPropertyName("Display")]
+        public string Display
+        {
+            get { return GetPropertyValue(ExtenderDisplay_Value, string.Empty); }
+            set { SetPropertyValue(ExtenderDisplay_Value, value); }
+        }
+
         protected override void OnInit(EventArgs e)
         {
             Load += Page_Load;
@@ -151,14 +160,26 @@ namespace PraticeManagement.Controls.Generic.ScrollableDropdown
         {
             string htmlWithoutImageFormat = "<div ID={0} class=\"scrollextLabel\"{2}><label class=\"vTop\">{1}</label></div>";
             string htmlWithImageFormat = "<div ID={0} class=\"scrollextLabel\"{3}><label class=\"vTop\" title=\"{4}\">{1}</label><span class=\"padLeft18 fl-right\"><image src={2} /></span></div>";
-
-            if (!string.IsNullOrEmpty(EditImageUrl))
+            var styleString = "";
+            if (!string.IsNullOrEmpty(Width))
             {
-                return string.Format(htmlWithImageFormat, LabelId, DisplayText, ResolveUrl(EditImageUrl), !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + ";white-space:normal\"" : string.Empty, SelectedStringToolTip);
+                if (!string.IsNullOrEmpty(Display))
+                    styleString = "style=\"width:" + Width + ";display:" + Display + ";white-space:normal\"";
+                else
+                    styleString = "style=\"width:" + Width + ";white-space:normal\"";
             }
             else
             {
-                return string.Format(htmlWithoutImageFormat, LabelId, DisplayText, !string.IsNullOrEmpty(Width) ? "style=\"width:" + Width + ";white-space:normal\"" : string.Empty);
+                if (!string.IsNullOrEmpty(Display))
+                    styleString = "style=\"display:" + Display;
+            }
+            if (!string.IsNullOrEmpty(EditImageUrl))
+            {
+                return string.Format(htmlWithImageFormat, LabelId, DisplayText, ResolveUrl(EditImageUrl), styleString, SelectedStringToolTip);
+            }
+            else
+            {
+                return string.Format(htmlWithoutImageFormat, LabelId, DisplayText, styleString);
             }
         }
     }
