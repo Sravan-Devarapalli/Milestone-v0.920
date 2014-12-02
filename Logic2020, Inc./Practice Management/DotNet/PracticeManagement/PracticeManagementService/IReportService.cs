@@ -156,6 +156,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<BillingReport> BillingReportByHours(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds);
+
+        [OperationContract]
+        List<ProjectLevelGroupedHours> NonBillableReport(DateTime startDate, DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds);
     }
 }
 
