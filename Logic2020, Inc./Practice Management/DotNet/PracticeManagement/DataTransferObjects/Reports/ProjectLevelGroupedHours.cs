@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Collections.Generic;
 
 namespace DataTransferObjects.Reports
 {
@@ -47,6 +48,13 @@ namespace DataTransferObjects.Reports
 
         [DataMember]
         public double ForecastedHours
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<PersonLevelGroupedHours> PersonLevelDetails
         {
             get;
             set;
