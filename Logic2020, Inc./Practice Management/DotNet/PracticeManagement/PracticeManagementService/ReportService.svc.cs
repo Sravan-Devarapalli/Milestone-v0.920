@@ -256,6 +256,11 @@ namespace PracticeManagementService
         {
             return ReportDAL.BillingReportByHours(startDate,endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
         }
+
+        public List<ProjectLevelGroupedHours> NonBillableReport(DateTime startDate, DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds)
+        {
+            return ReportDAL.NonBillableReport(startDate, endDate, projectNumber, directorIds, businessUnitIds, practiceIds);
+        }
     }
 }
 
