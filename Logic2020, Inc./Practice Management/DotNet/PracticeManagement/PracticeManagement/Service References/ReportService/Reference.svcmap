@@ -18,22 +18,22 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:3262/ReportService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost/PracticeManagementService/ReportService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="ReportService9.xsd" MetadataType="Schema" ID="adfb03ef-b2fd-4ca7-bc9c-75030d76e951" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd9" />
-    <MetadataFile FileName="ReportService.wsdl" MetadataType="Wsdl" ID="fa727c88-d689-484a-b416-cebb099eac83" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?wsdl" />
-    <MetadataFile FileName="ReportService1.xsd" MetadataType="Schema" ID="62c9cc41-fa31-435b-ac2e-ecc9cb42beb3" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd2" />
-    <MetadataFile FileName="ReportService.disco" MetadataType="Disco" ID="7fae72ad-40f8-4917-89b7-2848596de004" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?disco" />
-    <MetadataFile FileName="ReportService3.xsd" MetadataType="Schema" ID="90a574f1-8838-4319-a58b-0e7124d06752" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd0" />
-    <MetadataFile FileName="ReportService10.xsd" MetadataType="Schema" ID="8f7a5876-d0f8-42e4-b618-70b0f3a3e534" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd10" />
-    <MetadataFile FileName="ReportService2.xsd" MetadataType="Schema" ID="39d4da38-1084-44be-b08a-5172707b0a15" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd6" />
-    <MetadataFile FileName="ReportService8.xsd" MetadataType="Schema" ID="3552d79b-b914-47a5-8e3a-b8abd760cced" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd8" />
-    <MetadataFile FileName="ReportService4.xsd" MetadataType="Schema" ID="cf09ba22-38f8-4c0b-a0d5-ade70945fbd6" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd3" />
-    <MetadataFile FileName="ReportService5.xsd" MetadataType="Schema" ID="0381f7e3-fe58-48c3-84df-d396ce9ed7e8" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd1" />
-    <MetadataFile FileName="ReportService7.xsd" MetadataType="Schema" ID="0a9dcbca-dbf2-4d67-8977-052c82274392" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd7" />
-    <MetadataFile FileName="ReportService6.xsd" MetadataType="Schema" ID="b33f9ae4-ccae-4d54-b0ec-6d6d01a919c8" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd4" />
-    <MetadataFile FileName="ReportService.xsd" MetadataType="Schema" ID="0f6902ac-4c93-491d-9e80-d64a6b97bca4" SourceId="1" SourceUrl="http://localhost:3262/ReportService.svc?xsd=xsd5" />
+    <MetadataFile FileName="ReportService11134.xsd" MetadataType="Schema" ID="0ec67e9a-16dc-45e1-859c-137b7438e2b7" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd8" />
+    <MetadataFile FileName="ReportService11135.xsd" MetadataType="Schema" ID="0b08d82d-423b-4b62-b393-4eabbc76d726" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd5" />
+    <MetadataFile FileName="ReportService11136.xsd" MetadataType="Schema" ID="a273b7bb-9f32-4a29-9e4d-6b5a869ac125" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ReportService11137.xsd" MetadataType="Schema" ID="94ed5f8c-bc59-4931-b45f-c4070abb1150" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ReportService110.wsdl" MetadataType="Wsdl" ID="7eeeed2b-2870-44a1-bea4-14f43907f79d" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?wsdl" />
+    <MetadataFile FileName="ReportService11138.xsd" MetadataType="Schema" ID="53df37b7-bc7e-4d81-83ed-aec54d511487" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd10" />
+    <MetadataFile FileName="ReportService11139.xsd" MetadataType="Schema" ID="8eb28448-b324-4198-b54c-7d9dad20c73b" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd9" />
+    <MetadataFile FileName="ReportService11140.xsd" MetadataType="Schema" ID="22ac135b-a08f-40ea-a1f5-259b336b2d85" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd6" />
+    <MetadataFile FileName="ReportService11141.xsd" MetadataType="Schema" ID="808ef5ef-4269-43f3-94f0-07180eefeb44" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd7" />
+    <MetadataFile FileName="ReportService11142.xsd" MetadataType="Schema" ID="71a6d123-44de-44ed-b74b-31cb979253fb" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ReportService11143.xsd" MetadataType="Schema" ID="0245f22c-ef44-48b7-9a5f-18f754b200fb" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ReportService11144.xsd" MetadataType="Schema" ID="b84fa0cf-ba69-4fe9-8164-9e636a4d49ef" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ReportService110.disco" MetadataType="Disco" ID="dec8833e-ea1c-49d2-89f3-22c577a30078" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ReportService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
