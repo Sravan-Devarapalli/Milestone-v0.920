@@ -4477,6 +4477,126 @@ namespace DataAccess
                 throw ex;
             }
         }
+
+        public static List<ProjectLevelGroupedHours> NonBillableReport(DateTime startDate, DateTime endDate, string projectNumber ,string directorIds,string businessUnitIds, string practiceIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.NonBillableReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumber, projectNumber ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DirectorIds, directorIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds ?? (Object)DBNull.Value);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<ProjectLevelGroupedHours>();
+                    ReadNonBillableReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadNonBillableReport(SqlDataReader reader, List<ProjectLevelGroupedHours> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectnameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectnumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+                int groupidIndex = reader.GetOrdinal(Constants.ColumnNames.GroupId);
+                int groupnameIndex = reader.GetOrdinal(Constants.ColumnNames.GroupName);
+                int personidIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int lastnameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int firstnameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                int practicenameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                int salesPersonNameIndex = reader.GetOrdinal(Constants.ColumnNames.SalesPerson);
+                int directornameIndex = reader.GetOrdinal(Constants.ColumnNames.DirectorName);
+                int projectManagersIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagers);
+                int seniorManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorManagerName);
+                int latestDateIndex = reader.GetOrdinal(Constants.ColumnNames.LatestDate);
+                int billRateIndex = reader.GetOrdinal(Constants.ColumnNames.BillRate);
+                int billablehoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                int nonbillablehoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                int flhrIndex = reader.GetOrdinal(Constants.ColumnNames.FLHR);
+                int discountIndex = reader.GetOrdinal(Constants.ColumnNames.Discount);
+                
+                while (reader.Read())
+                {
+                    var discount = Convert.ToDouble(reader[discountIndex]);
+                    var some = reader.IsDBNull(billRateIndex) ? 0 : Convert.ToDouble(reader[billRateIndex]) - Convert.ToDouble(reader[billRateIndex]) * discount / 100;
+                    var pesronlevelhours = new PersonLevelGroupedHours()
+                    {
+                        BillRate = reader.IsDBNull(billRateIndex) ? 0 : Convert.ToDouble(reader[billRateIndex]) - Convert.ToDouble(reader[billRateIndex]) * discount / 100,
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personidIndex),
+                            LastName = reader.GetString(lastnameIndex),
+                            FirstName = reader.GetString(firstnameIndex)
+                        },
+                        BillableHours = reader.IsDBNull(billablehoursIndex) ? 0 : reader.GetDouble(billablehoursIndex),
+                        ProjectNonBillableHours = reader.IsDBNull(nonbillablehoursIndex) ? 0 : reader.GetDouble(nonbillablehoursIndex),
+                        LatestDate = reader.GetDateTime(latestDateIndex),
+                        FLHR = reader.IsDBNull(flhrIndex) ? 0 : Convert.ToDouble(reader[flhrIndex])
+                    };
+                    var projectId = reader.GetInt32(projectIdIndex);
+                    if (result.Any(p => p.Project.Id == projectId))
+                    {
+                        var first = result.FirstOrDefault(p => p.Project.Id == projectId);
+                        first.PersonLevelDetails.Add(pesronlevelhours);
+                    }
+                    else
+                    {
+                        var billingItem = new ProjectLevelGroupedHours()
+                        {
+                            Project = new Project()
+                            {
+                                Id = projectId,
+                                Client = new Client()
+                                {
+                                    Id = reader.GetInt32(clientIdIndex),
+                                    Name = reader.GetString(clientNameIndex)
+                                },
+                                ProjectNumber = reader.GetString(projectnumberIndex),
+                                Name = reader.GetString(projectnameIndex),
+                                Group = new ProjectGroup()
+                                {
+                                    Id = reader.GetInt32(groupidIndex),
+                                    Name = reader.GetString(groupnameIndex)
+                                },
+                                Practice = new Practice()
+                                {
+                                    Id = reader.GetInt32(practiceIdIndex),
+                                    Name = reader.GetString(practicenameIndex)
+                                },
+                                SalesPersonName = reader.IsDBNull(salesPersonNameIndex) ? "" : reader.GetString(salesPersonNameIndex),
+                                DirectorName = reader.IsDBNull(directornameIndex) ? "" : reader.GetString(directornameIndex),
+                                ProjectManagerNames = reader.IsDBNull(projectManagersIndex) ? "" : reader.GetString(projectManagersIndex),
+                                SeniorManagerName = reader.IsDBNull(seniorManagerNameIndex) ? "" : reader.GetString(seniorManagerNameIndex)
+                            },
+                            PersonLevelDetails = new List<PersonLevelGroupedHours>()
+                            {
+                                pesronlevelhours
+                            }
+                        };
+                        result.Add(billingItem);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
