@@ -15,40 +15,6 @@ namespace PraticeManagement.ReportService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ReportService.IReportService")]
     public interface IReportService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReport", ReplyAction="http://tempuri.org/IReportService/AttainmentBillableutlizationReportResponse")]
-        DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParameters", ReplyAction="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParametersResponse" +
-            "")]
-        DataTransferObjects.Project[] GetAttainmentProjectListMultiParameters(
-                    string clientIds, 
-                    bool showProjected, 
-                    bool showCompleted, 
-                    bool showActive, 
-                    bool showInternal, 
-                    bool showExperimental, 
-                    bool showProposed, 
-                    bool showInactive, 
-                    System.DateTime periodStart, 
-                    System.DateTime periodEnd, 
-                    string salespersonIdsList, 
-                    string practiceManagerIdsList, 
-                    string practiceIdsList, 
-                    string projectGroupIdsList, 
-                    DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
-                    bool excludeInternalPractices, 
-                    string userLogin, 
-                    bool IsMonthsColoumnsShown, 
-                    bool IsQuarterColoumnsShown, 
-                    bool IsYearToDateColoumnsShown, 
-                    bool getFinancialsFromCache);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectAttributionReport", ReplyAction="http://tempuri.org/IReportService/ProjectAttributionReportResponse")]
-        DataTransferObjects.Project[] ProjectAttributionReport(System.DateTime startDate, System.DateTime endDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ZeroHourlyRateExceptionReport", ReplyAction="http://tempuri.org/IReportService/ZeroHourlyRateExceptionReportResponse")]
-        DataTransferObjects.Reports.ResourceExceptionReport[] ZeroHourlyRateExceptionReport(System.DateTime startDate, System.DateTime endDate);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ResourceAssignedOrUnassignedChargingExceptionRe" +
             "port", ReplyAction="http://tempuri.org/IReportService/ResourceAssignedOrUnassignedChargingExceptionRe" +
             "portResponse")]
@@ -81,6 +47,9 @@ namespace PraticeManagement.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BillingReportByHours", ReplyAction="http://tempuri.org/IReportService/BillingReportByHoursResponse")]
         DataTransferObjects.Reports.BillingReport[] BillingReportByHours(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/NonBillableReport", ReplyAction="http://tempuri.org/IReportService/NonBillableReportResponse")]
+        DataTransferObjects.Reports.ProjectLevelGroupedHours[] NonBillableReport(System.DateTime startDate, System.DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
@@ -179,37 +148,13 @@ namespace PraticeManagement.ReportService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkill", ReplyAction="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkillResponse")]
         System.Collections.Generic.Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(System.DateTime startDate, System.DateTime endDate, string salesStages);
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IReportServiceChannel : PraticeManagement.ReportService.IReportService, System.ServiceModel.IClientChannel {
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-      
-        public ReportServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
-        }
         
-        public ReportServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
-        }
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReport", ReplyAction="http://tempuri.org/IReportService/AttainmentBillableutlizationReportResponse")]
+        DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate);
         
-        public ReportServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
-        }
-        
-        public ReportServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
-        }
-        
-        public DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.AttainmentBillableutlizationReport(startDate, endDate);
-        }
-        
-        public DataTransferObjects.Project[] GetAttainmentProjectListMultiParameters(
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParameters", ReplyAction="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParametersResponse" +
+            "")]
+        DataTransferObjects.Project[] GetAttainmentProjectListMultiParameters(
                     string clientIds, 
                     bool showProjected, 
                     bool showCompleted, 
@@ -230,16 +175,38 @@ namespace PraticeManagement.ReportService {
                     bool IsMonthsColoumnsShown, 
                     bool IsQuarterColoumnsShown, 
                     bool IsYearToDateColoumnsShown, 
-                    bool getFinancialsFromCache) {
-            return base.Channel.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+                    bool getFinancialsFromCache);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectAttributionReport", ReplyAction="http://tempuri.org/IReportService/ProjectAttributionReportResponse")]
+        DataTransferObjects.Project[] ProjectAttributionReport(System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ZeroHourlyRateExceptionReport", ReplyAction="http://tempuri.org/IReportService/ZeroHourlyRateExceptionReportResponse")]
+        DataTransferObjects.Reports.ResourceExceptionReport[] ZeroHourlyRateExceptionReport(System.DateTime startDate, System.DateTime endDate);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IReportServiceChannel : PraticeManagement.ReportService.IReportService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
+        
+       
+        public ReportServiceClient(string endpointConfigurationName) : 
+                base(endpointConfigurationName) {
         }
         
-        public DataTransferObjects.Project[] ProjectAttributionReport(System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.ProjectAttributionReport(startDate, endDate);
+        public ReportServiceClient(string endpointConfigurationName, string remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
         }
         
-        public DataTransferObjects.Reports.ResourceExceptionReport[] ZeroHourlyRateExceptionReport(System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.ZeroHourlyRateExceptionReport(startDate, endDate);
+        public ReportServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public ReportServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress) {
         }
         
         public DataTransferObjects.Reports.ResourceExceptionReport[] ResourceAssignedOrUnassignedChargingExceptionReport(System.DateTime startDate, System.DateTime endDate, bool isUnassignedReport) {
@@ -276,6 +243,10 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Reports.BillingReport[] BillingReportByHours(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds) {
             return base.Channel.BillingReportByHours(startDate, endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
+        }
+        
+        public DataTransferObjects.Reports.ProjectLevelGroupedHours[] NonBillableReport(System.DateTime startDate, System.DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds) {
+            return base.Channel.NonBillableReport(startDate, endDate, projectNumber, directorIds, businessUnitIds, practiceIds);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
@@ -404,6 +375,43 @@ namespace PraticeManagement.ReportService {
         
         public System.Collections.Generic.Dictionary<string, int> ConsultingDemandGrphsGroupsBySkill(System.DateTime startDate, System.DateTime endDate, string salesStages) {
             return base.Channel.ConsultingDemandGrphsGroupsBySkill(startDate, endDate, salesStages);
+        }
+        
+        public DataTransferObjects.Reports.AttainmentBillableutlizationReport[] AttainmentBillableutlizationReport(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.AttainmentBillableutlizationReport(startDate, endDate);
+        }
+        
+        public DataTransferObjects.Project[] GetAttainmentProjectListMultiParameters(
+                    string clientIds, 
+                    bool showProjected, 
+                    bool showCompleted, 
+                    bool showActive, 
+                    bool showInternal, 
+                    bool showExperimental, 
+                    bool showProposed, 
+                    bool showInactive, 
+                    System.DateTime periodStart, 
+                    System.DateTime periodEnd, 
+                    string salespersonIdsList, 
+                    string practiceManagerIdsList, 
+                    string practiceIdsList, 
+                    string projectGroupIdsList, 
+                    DataTransferObjects.ProjectCalculateRangeType includeCurentYearFinancials, 
+                    bool excludeInternalPractices, 
+                    string userLogin, 
+                    bool IsMonthsColoumnsShown, 
+                    bool IsQuarterColoumnsShown, 
+                    bool IsYearToDateColoumnsShown, 
+                    bool getFinancialsFromCache) {
+            return base.Channel.GetAttainmentProjectListMultiParameters(clientIds, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, practiceManagerIdsList, practiceIdsList, projectGroupIdsList, includeCurentYearFinancials, excludeInternalPractices, userLogin, IsMonthsColoumnsShown, IsQuarterColoumnsShown, IsYearToDateColoumnsShown, getFinancialsFromCache);
+        }
+        
+        public DataTransferObjects.Project[] ProjectAttributionReport(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.ProjectAttributionReport(startDate, endDate);
+        }
+        
+        public DataTransferObjects.Reports.ResourceExceptionReport[] ZeroHourlyRateExceptionReport(System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.ZeroHourlyRateExceptionReport(startDate, endDate);
         }
     }
 }
