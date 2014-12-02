@@ -237,6 +237,12 @@ namespace DataAccess
                            InUse = (int)reader[InUseColumn] == 1,
                            Code = (string)reader[CodeColumn],
                            BusinessGroupId = (int)reader[Constants.ColumnNames.BusinessGroupIdColumn]
+                           ,
+                           Client = new Client()
+                           {
+                               Id = (int)reader[Constants.ColumnNames.ClientId],
+                               Name = !reader.IsDBNull(reader.GetOrdinal(Constants.ColumnNames.ClientName)) ? (string)reader[Constants.ColumnNames.ClientName] : string.Empty
+                           }
                        };
         }
 
