@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string FLHR = "FLHR";
+            public const string LatestDate = "LatestDate";
             public const string PreviousMonthActualRevenue = "PreviousMonthActualRevenue";
             public const string PreviousMonthActualGrossMargin = "PreviousMonthActualGrossMargin";
             public const string IsGap = "IsGap";
@@ -1203,6 +1205,7 @@
 
             public class Reports
             {
+                public const string NonBillableReport = "dbo.NonBillableReport";
                 public const string BillingReportByHours = "dbo.BillingReportByHours";
                 public const string BillingReportByCurrency = "dbo.BillingReportByCurrency";
                 public const string RecruitingMetricsReport = "dbo.RecruitingMetricsReport";
