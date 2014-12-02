@@ -25,6 +25,7 @@ AS
 		SELECT
 				pg.GroupId
 				, pg.ClientId
+				,c.Name AS ClientName
 				, pg.Code
 				, pg.Name
 				, 1 InUse
@@ -32,6 +33,7 @@ AS
 				pg.BusinessGroupId
 			FROM ProjectGroup pg
 				INNER JOIN Project p ON pg.GroupId = p.GroupId				
+				INNER JOIN Client c on c.ClientId = pg.ClientId
 			WHERE p.ProjectId = @ProjectId 
 					AND (@PersonId IS NULL OR pg.GroupId IN (SELECT * FROM @GroupPermissions))
 			ORDER BY pg.Name
@@ -39,14 +41,16 @@ AS
 	IF @ClientId IS NOT NULL 
 			SELECT
 				GroupId
-				, ClientId
-				, Code
-				, Name
-				,dbo.IsProjectGroupInUse(ProjectGroup.GroupId,ProjectGroup.Code) AS InUse
+				,pg.ClientId
+				,c.Name AS ClientName
+				, pg.Code
+				, pg.Name
+				,dbo.IsProjectGroupInUse(pg.GroupId,pg.Code) AS InUse
 				,Active
 				,BusinessGroupId
-			FROM ProjectGroup
-			WHERE ((ClientId = @ClientId))
+			FROM ProjectGroup PG
+			INNER JOIN Client c on c.ClientId = PG.ClientId
+			WHERE ((pg.ClientId = @ClientId))
 					AND (@PersonId IS NULL 
 					     OR GroupId IN (SELECT * FROM @GroupPermissions)
 						 OR GroupId IN (SELECT pro.GroupId FROM Project AS pro
