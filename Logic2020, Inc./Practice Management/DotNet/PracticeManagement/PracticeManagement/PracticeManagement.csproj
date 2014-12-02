@@ -409,6 +409,8 @@
     <Content Include="Controls\Reports\HumanCapital\NewHireReportSummaryView.ascx" />
     <Content Include="Controls\Reports\HumanCapital\TerminationReportGraphView.ascx" />
     <Content Include="Controls\Reports\HumanCapital\TerminationReportSummaryView.ascx" />
+    <Content Include="Controls\Reports\NonbillableDetail.ascx" />
+    <Content Include="Controls\Reports\NonbillableSummary.ascx" />
     <Content Include="Controls\Reports\PersonDetailReport.ascx" />
     <Content Include="Controls\Reports\PersonSummaryReport.ascx" />
     <Content Include="Controls\Reports\ProjectDetailTabByResource.ascx" />
@@ -548,6 +550,7 @@
     <Content Include="Reports\CSATReport.aspx" />
     <Content Include="Reports\HumanCapital.aspx" />
     <Content Include="Reports\NewHireReport.aspx" />
+    <Content Include="Reports\NonBillableReport.aspx" />
     <Content Include="Reports\PersonDetailTimeReport.aspx" />
     <Content Include="Reports\ProjectFeedbackReport.aspx" />
     <Content Include="Reports\ProjectSummaryReport.aspx" />
@@ -877,38 +880,38 @@
     <None Include="Service References\ProjectService\ProjectService23.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService.wsdl" />
-    <None Include="Service References\ReportService\ReportService.xsd">
+    <None Include="Service References\ReportService\ReportService110.wsdl" />
+    <None Include="Service References\ReportService\ReportService11134.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService1.xsd">
+    <None Include="Service References\ReportService\ReportService11135.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService10.xsd">
+    <None Include="Service References\ReportService\ReportService11136.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService2.xsd">
+    <None Include="Service References\ReportService\ReportService11137.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService3.xsd">
+    <None Include="Service References\ReportService\ReportService11138.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService4.xsd">
+    <None Include="Service References\ReportService\ReportService11139.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService5.xsd">
+    <None Include="Service References\ReportService\ReportService11140.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService6.xsd">
+    <None Include="Service References\ReportService\ReportService11141.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService7.xsd">
+    <None Include="Service References\ReportService\ReportService11142.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService8.xsd">
+    <None Include="Service References\ReportService\ReportService11143.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService9.xsd">
+    <None Include="Service References\ReportService\ReportService11144.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
@@ -949,7 +952,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\CalendarService\CalendarService1.disco" />
-    <None Include="Service References\ReportService\ReportService.disco" />
     <None Include="Service References\ReportService\configuration91.svcinfo" />
     <None Include="Service References\ReportService\configuration.svcinfo" />
     <None Include="Service References\ReportService\Reference.svcmap">
@@ -1034,6 +1036,7 @@
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
     <None Include="Service References\ClientService\ClientService1.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\ReportService\ReportService110.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
@@ -1734,6 +1737,20 @@
     <Compile Include="Controls\Reports\HumanCapital\TerminationReportSummaryView.ascx.designer.cs">
       <DependentUpon>TerminationReportSummaryView.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\NonbillableDetail.ascx.cs">
+      <DependentUpon>NonbillableDetail.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\NonbillableDetail.ascx.designer.cs">
+      <DependentUpon>NonbillableDetail.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\NonbillableSummary.ascx.cs">
+      <DependentUpon>NonbillableSummary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\NonbillableSummary.ascx.designer.cs">
+      <DependentUpon>NonbillableSummary.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\PersonDetailReport.ascx.cs">
       <DependentUpon>PersonDetailReport.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2213,6 +2230,13 @@
     </Compile>
     <Compile Include="Reports\NewHireReport.aspx.designer.cs">
       <DependentUpon>NewHireReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\NonBillableReport.aspx.cs">
+      <DependentUpon>NonBillableReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\NonBillableReport.aspx.designer.cs">
+      <DependentUpon>NonBillableReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\PersonDetailTimeReport.aspx.cs">
       <DependentUpon>PersonDetailTimeReport.aspx</DependentUpon>
