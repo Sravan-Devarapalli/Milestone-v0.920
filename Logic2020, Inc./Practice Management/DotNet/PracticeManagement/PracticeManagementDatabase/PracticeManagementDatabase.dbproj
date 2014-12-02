@@ -4541,6 +4541,12 @@
     <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\PK_UserActivityLogRecordPerChange_ActivityId.pkey.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\NonBillableReport.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetPayTypeAtSpecificDate.function.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
