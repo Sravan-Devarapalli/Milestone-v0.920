@@ -74,6 +74,20 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
+        public DateTime LatestDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public double FLHR
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public int TimeEntrySectionId { get; set; }
 
         public double NonBillableHours
@@ -354,6 +368,70 @@ namespace DataTransferObjects.Reports
             get
             {
                 return EstimatedBillings == -1.00 ? "FF" : EstimatedBillings.ToString();
+            }
+        }
+
+        public double BillableRevenue
+        {
+            get
+            {
+                return BillRate * BillableHours;
+            }
+        }
+
+        public double LostRevenue
+        {
+            get
+            {
+                return BillRate * NonBillableHours;
+            }
+        }
+
+        public double PotentialRevenue
+        {
+            get
+            {
+                return BillableRevenue + LostRevenue;
+            }
+        }
+
+        public double BillableCost
+        {
+            get
+            {
+                return BillableHours * FLHR;
+            }
+        }
+
+        public double NonBillableCost
+        {
+            get
+            {
+                return NonBillableHours * FLHR;
+            }
+        }
+
+        public double TotalCost
+        {
+            get
+            {
+                return BillableCost + NonBillableCost;
+            }
+        }
+
+        public double BillableMargin
+        {
+            get
+            {
+                return BillableRevenue - BillableCost;
+            }
+        }
+
+        public double ActualMargin
+        {
+            get
+            {
+                return BillableRevenue - TotalCost;
             }
         }
     }
