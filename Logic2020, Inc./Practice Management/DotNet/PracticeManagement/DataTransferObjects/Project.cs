@@ -95,6 +95,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string DirectorName
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets a reference to the client the project intended for.
         /// </summary>
