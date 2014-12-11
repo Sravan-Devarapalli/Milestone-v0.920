@@ -4547,6 +4547,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetPayTypeAtSpecificDate.function.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\CheckIfProjectNumberExists.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4596,4 +4599,3 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
-
