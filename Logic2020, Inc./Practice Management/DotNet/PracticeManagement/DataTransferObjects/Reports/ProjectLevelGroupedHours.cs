@@ -215,15 +215,5 @@ namespace DataTransferObjects.Reports
             }
         }
 
-        public string EstimatedBillingsWithFormat
-        {
-            get
-            {
-                if (EstimatedBillings == -1)
-                    return "FF";
-                else
-                    return EstimatedBillings.ToString("$####,###,###,###,###,##0.00");
-            }
-        }
     }
 }
