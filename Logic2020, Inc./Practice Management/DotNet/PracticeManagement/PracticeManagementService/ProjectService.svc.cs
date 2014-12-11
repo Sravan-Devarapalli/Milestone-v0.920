@@ -547,7 +547,7 @@ namespace PracticeManagementService
                 var monthStart = new DateTime(month.Year, month.Month, 1);
                 var monthEnd = new DateTime(month.Year, month.Month, DateTime.DaysInMonth(month.Year, month.Month));
 
-                var res = PersonStartsReport(monthStart, monthEnd, userName, null, null, showProjected, showCompleted, showActive, showExperimental,showProposed, showInternal, showInactive, useActuals);
+                var res = PersonStartsReport(monthStart, monthEnd, userName, null, null, showProjected, showCompleted, showActive, showExperimental, showProposed, showInternal, showInactive, useActuals);
 
                 if (res.Count != 1)
                 {
@@ -1019,7 +1019,7 @@ namespace PracticeManagementService
             return ProjectDAL.GetAllFeedbackStatuses();
         }
 
-        public void SaveFeedbackCancelationDetails(int feedbackId, int? statusId, bool isCanceled, string cancelationReason, string userLogin,bool sendReactivationMail)
+        public void SaveFeedbackCancelationDetails(int feedbackId, int? statusId, bool isCanceled, string cancelationReason, string userLogin, bool sendReactivationMail)
         {
             ProjectDAL.SaveFeedbackCancelationDetails(feedbackId, statusId, isCanceled, cancelationReason, userLogin);
             if (sendReactivationMail)
@@ -1041,6 +1041,12 @@ namespace PracticeManagementService
             }
         }
 
+        public bool CheckIfProjectNumberExists(string projectNumber)
+        {
+            return ProjectDAL.CheckIfProjectNumberExists(projectNumber);
+        }
+
         #endregion IProjectService Members
     }
 }
+
