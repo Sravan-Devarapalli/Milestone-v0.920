@@ -242,13 +242,13 @@ namespace PraticeManagement.Controls
             int avgUtil,
             int sortId,
             string sortDirection,
-            bool excludeInternalPractices, int utilizationType,bool isSampleReport = false)
+            bool excludeInternalPractices, int utilizationType, bool isSampleReport = false)
         {
             var consultants =
                 ReportsHelper.GetConsultantsTimelineReport(
                     startDate, duration, step, activePersons, projectedPersons,
-                    activeProjects, projectedProjects, experimentalProjects, internalProjects,proposedProjects,completedProjects,
-                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices,utilizationType, isSampleReport);
+                    activeProjects, projectedProjects, experimentalProjects, internalProjects, proposedProjects, completedProjects,
+                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, utilizationType, isSampleReport);
 
             return consultants.FindAll(Q => Q.AverageUtilization < avgUtil);
         }
@@ -285,7 +285,7 @@ namespace PraticeManagement.Controls
             return consultantsList;
         }
 
-        public static List<DetailedUtilizationReportBaseItem> GetMilestonePersons(int personId, DateTime startDate, DateTime endDate, bool incActive, bool incProjected, bool incInternal, bool incExperimental,bool incProposed, bool incCompleted,bool isCapacityMode = false)
+        public static List<DetailedUtilizationReportBaseItem> GetMilestonePersons(int personId, DateTime startDate, DateTime endDate, bool incActive, bool incProjected, bool incInternal, bool incExperimental, bool incProposed, bool incCompleted, bool isCapacityMode = false)
         {
             var result = new List<DetailedUtilizationReportBaseItem>();
 
@@ -519,7 +519,7 @@ namespace PraticeManagement.Controls
         /// </summary>
         /// <param name="control"></param>
         /// <param name="firstItemText"></param>
-        public static void FillTimescaleList(ListControl control, string firstItemText,List<int> excludedPaytypes=null)
+        public static void FillTimescaleList(ListControl control, string firstItemText, List<int> excludedPaytypes = null)
         {
             using (var serviceClient = new TimescaleServiceClient())
             {
@@ -1657,7 +1657,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    ProjectGroup[] groups = serviceClient.GetBusinessUnitsForClients(clientIds).OrderBy(g => g.Client.Name).ThenBy(g=>g.Name).ToArray();
+                    ProjectGroup[] groups = serviceClient.GetBusinessUnitsForClients(clientIds).OrderBy(g => g.Client.Name).ThenBy(g => g.Name).ToArray();
                     FillListDefault(control, firstItemText, groups, noFirstItem, "Id", "ClientProjectGroupFormat");
                 }
                 catch (CommunicationException)
