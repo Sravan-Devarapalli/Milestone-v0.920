@@ -22,22 +22,13 @@ namespace PraticeManagement.Reporting {
         protected global::System.Web.UI.UpdatePanel upnlBody;
         
         /// <summary>
-        /// cblAccount control.
+        /// ddlAccount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ScrollingDropDown cblAccount;
-        
-        /// <summary>
-        /// sdeAccount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeAccount;
+        protected global::System.Web.UI.WebControls.DropDownList ddlAccount;
         
         /// <summary>
         /// cblProjectGroup control.
@@ -56,15 +47,6 @@ namespace PraticeManagement.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectGroup;
-        
-        /// <summary>
-        /// ddlDirector control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlDirector;
         
         /// <summary>
         /// cblProjectStatus control.
