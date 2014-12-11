@@ -2,7 +2,8 @@
 (
 	@StartDate				DATETIME,
 	@EndDate				DATETIME,
-	@IncludeCompanyHolidays	BIT = 0
+	@IncludeCompanyHolidays	BIT = 0,
+	@PersonId				INT = NULL
 )
 AS
 BEGIN
@@ -17,7 +18,8 @@ BEGIN
 		INNER JOIN dbo.Person per ON per.PersonId = p.Person AND per.IsStrawman = 0
 		WHERE  GETDATE() >= p.StartDate
 				AND GETDATE() < p.EndDate
-				AND p.Timescale = 2 -- W2-Salary
+				AND p.Timescale IN (1,2) -- W2-Hourly and W2-Salary
+				AND @PersonId IS NULL OR p.Person = @PersonId
 	),
 	PersonPTO
 	AS
@@ -106,3 +108,4 @@ BEGIN
 			   PPT.CompanyDayOff
 	ORDER BY P.LastName,p.FirstName,PPT.StartDate
 END
+
