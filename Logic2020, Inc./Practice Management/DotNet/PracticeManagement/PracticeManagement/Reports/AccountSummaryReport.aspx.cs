@@ -9,8 +9,6 @@ using PraticeManagement.Controls.Reports.ByAccount;
 using System.Text;
 using PraticeManagement.FilterObjects;
 using DataTransferObjects;
-using PraticeManagement.ClientService;
-using System.ServiceModel;
 
 namespace PraticeManagement.Reporting
 {
@@ -18,36 +16,21 @@ namespace PraticeManagement.Reporting
     {
         #region Properties
 
-        public int? ClientdirectorId
+        public int AccountId
         {
             get
             {
-                return ddlDirector.SelectedValue == string.Empty ? null : (int?)Convert.ToInt32(ddlDirector.SelectedValue);
+                int accountId = 0;
+                int.TryParse(ddlAccount.SelectedValue, out accountId);
+                return accountId;
             }
         }
 
-        public string ClientdirectorName
+        public String AccountName
         {
             get
             {
-                return ddlDirector.SelectedItem.Text;
-            }
-        }
-
-        public string AccountIds
-        {
-            get
-            {
-                if (cblAccount.Items.Count == 0)
-                    return null;
-                else
-                {
-                    var clientList = new StringBuilder();
-                    foreach (ListItem item in cblAccount.Items)
-                        if (item.Selected)
-                            clientList.Append(item.Value).Append(',');
-                    return clientList.ToString();
-                }
+                return ddlAccount.SelectedItem.Text;
             }
         }
 
@@ -70,8 +53,6 @@ namespace PraticeManagement.Reporting
 
         public bool UpdateHeaderSection { get; set; }
 
-        public int AccountsCount { get { return Convert.ToInt32(ViewState["ACCOUNTSCOUNT_Key"]); } set { ViewState["ACCOUNTSCOUNT_Key"] = value; } }
-
         public int BusinessUnitsCount { get { return Convert.ToInt32(ViewState["BusinessUnitsCount_Key"]); } set { ViewState["BusinessUnitsCount_Key"] = value; } }
 
         public int ProjectsCount { get { return Convert.ToInt32(ViewState["ProjectsCount_Key"]); } set { ViewState["ProjectsCount_Key"] = value; } }
@@ -92,15 +73,7 @@ namespace PraticeManagement.Reporting
         {
             get
             {
-                return string.Format("{0} Account(s), {1} Business Unit(s), {2} Project(s), {3}", AccountsCount, BusinessUnitsCount, ProjectsCount, PersonsCount.ToString() == "1" ? PersonsCount + " Person" : PersonsCount + " People");
-            }
-        }
-
-        public String HeaderCountTextForBDView
-        {
-            get
-            {
-                return string.Format("{0} Account(s), {1} Business Unit(s), {2}", AccountsCount, BusinessUnitsCount, PersonsCount.ToString() == "1" ? PersonsCount + " Person" : PersonsCount + " People");
+                return string.Format("{0} Business Unit(s), {1} Project(s), {2}", BusinessUnitsCount, ProjectsCount, PersonsCount.ToString() == "1" ? PersonsCount + " Person" : PersonsCount + " People");
             }
         }
 
@@ -304,18 +277,6 @@ namespace PraticeManagement.Reporting
             }
         }
 
-        public string AccountFilteredIds
-        {
-            get
-            {
-                return ViewState["AccountFilteredIds"] as string;
-            }
-            set
-            {
-                ViewState["AccountFilteredIds"] = value;
-            }
-        }
-
         public string BusinessUnitsFilteredIds
         {
             get
@@ -338,29 +299,72 @@ namespace PraticeManagement.Reporting
         {
             if (!IsPostBack)
             {
-                DataHelper.FillDirectorsList(ddlDirector, "All Client Directors", null);
-                FillInitAccountsList();
-                FillInitProjectGroupList();
+                var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
+                DataHelper.FillListDefault(ddlAccount, "- - Select Account - -", allClients, false);
+
+                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ByAccountReportFitlerCookie) as ByAccountReportFilter;
+                if (cookie != null)
+                {
+                    var targetItem = ddlAccount.Items.FindByValue(cookie.AccountId);
+                    if (targetItem != null)
+                    {
+                        ddlAccount.SelectedValue = targetItem.Value;
+
+                        if (ddlAccount.SelectedIndex != 0)
+                        {
+                            DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+
+                            cblProjectGroup.SelectedItems = cookie.BusinessUnitIds;
+                        }
+                        else
+                        {
+                            FillInitProjectGroupList();
+                        }
+
+                    }
+                    else
+                    {
+                        FillInitProjectGroupList();
+                    }
+
+                    var targetItems = ddlPeriod.Items.FindByValue(cookie.RangeSelected.ToString());
+
+                    ddlPeriod.SelectedValue = targetItems.Value;
+
+                    if (cookie.RangeSelected.ToString() == "0")
+                    {
+                        diRange.FromDate = cookie.StartDate;
+                        diRange.ToDate = cookie.EndDate;
+                    }
+
+                    //SelectView();//Updating in Prerender
+                }
+                else
+                {
+                    FillInitProjectGroupList();
+                }
+
+                ddlAccount.SelectedValue = "";
+                ddlAccount_SelectedIndexChanged(ddlAccount, new EventArgs());
+                ddlPeriod.SelectedValue = "30";//This Month - as per 3201 
                 DataHelper.FillProjectStatusList(cblProjectStatus, "All Project Statuses", null);
                 cblProjectStatus.SelectAll();
             }
+
+        }
+
+        protected void cblProjectStatus_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            ddlPeriod.SelectedValue = "Please Select";
+            SelectView();
         }
 
         private void FillInitProjectGroupList()
         {
-            DataHelper.FillBusinessUnitsByClients(cblProjectGroup, AccountIds, "All Business Units", false);
-            foreach (ListItem item in cblProjectGroup.Items)
-            {
-                item.Selected = true;
-            }
-        }
+            cblProjectGroup.DataSource = new List<ListItem> { new ListItem("All Business Units", String.Empty) };
+            cblProjectGroup.DataBind();
 
-        private void FillInitAccountsList()
-        {
-            var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
-            DataHelper.FillListDefaultWithEncodedName(cblAccount, "All Accounts", allClients,
-                                             false);
-            foreach (ListItem item in cblAccount.Items)
+            foreach (ListItem item in cblProjectGroup.Items)
             {
                 item.Selected = true;
             }
@@ -405,30 +409,25 @@ namespace PraticeManagement.Reporting
 
         #region Control Events
 
-        protected void ddlDirector_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ddlPeriod.SelectedValue = "Please Select";
-            SelectView();
-        }
-        protected void cblProjectStatus_OnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            ddlPeriod.SelectedValue = "Please Select";
-            SelectView();
-        }
-        protected void cblAccount_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            using (var serviceClient = new ClientServiceClient())
+            //Fill BusinessUnits.
+            BusinessUnitsFilteredIds = null;
+            if (ddlAccount.SelectedIndex != 0)
             {
-                try
+                DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+
+                foreach (ListItem item in cblProjectGroup.Items)
                 {
-                    FillInitProjectGroupList();
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
+                    item.Selected = true;
                 }
             }
+            else
+            {
+                DataHelper.FillListDefaultWithEncodedName(cblProjectGroup, "All Business Units", null,
+                                             false);
+            }
+            //ddlPeriod.SelectedValue = "Please Select";
             SelectView();
         }
 
@@ -510,8 +509,7 @@ namespace PraticeManagement.Reporting
         {
             var filter = new ByAccountReportFilter
             {
-                ClientDirectorId = ddlDirector.SelectedValue,
-                AccountIds = cblAccount.SelectedItems,
+                AccountId = ddlAccount.SelectedValue,
                 BusinessUnitIds = cblProjectGroup.SelectedItems,
                 ProjectStatusIds = cblProjectStatus.SelectedItems,
                 RangeSelected = ddlPeriod.SelectedValue,
@@ -524,7 +522,7 @@ namespace PraticeManagement.Reporting
 
         private void SelectView()
         {
-            if (StartDate.HasValue && EndDate.HasValue && (AccountIds == null || !string.IsNullOrEmpty(AccountIds)) && (BusinessUnitIds == null || !string.IsNullOrEmpty(BusinessUnitIds)) && RangeSelected != "Please Select")
+            if (StartDate.HasValue && EndDate.HasValue && AccountId != 0 && (BusinessUnitIds == null || !string.IsNullOrEmpty(BusinessUnitIds)))
             {
                 divWholePage.Style.Remove("display");
                 LoadActiveView();
@@ -602,8 +600,8 @@ namespace PraticeManagement.Reporting
 
         private void PopulateHeaderSection()
         {
-            ltAccount.Text = HttpUtility.HtmlEncode(ClientdirectorName);
-            ltHeaderCount.Text = mvAccountReport.ActiveViewIndex == 2 ? HeaderCountTextForBDView : HeaderCountText;
+            ltAccount.Text = HttpUtility.HtmlEncode(AccountName);
+            ltHeaderCount.Text = HeaderCountText;
             ltRange.Text = Range;
             ltrlTotalActualHours.Text = TotalProjectHours.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
             ltrlTotalProjectedHours.Text = TotalProjectedHours.ToString(Constants.Formatting.NumberFormatWithCommasAndDecimals);
