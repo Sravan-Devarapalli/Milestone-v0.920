@@ -132,12 +132,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (Page is AccountSummaryReport)
             {
                 var hostingPage = Page as AccountSummaryReport;
-                tpByBusinessUnit.PopulateData(hostingPage.AccountIds, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+                tpByBusinessUnit.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
             }
             else if (Page is TimePeriodSummaryReport)
             {
                 var hostingPage = Page as TimePeriodSummaryReport;
-                hostingPage.Total = tpByBusinessUnit.PopulateData(hostingPage.AccountId.ToString(), hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+                hostingPage.Total = tpByBusinessUnit.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
                 hostingPage.ByProjectControl.MpeProjectDetailReport.Show();
             }
         }
@@ -147,12 +147,12 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (Page is AccountSummaryReport)
             {
                 var hostingPage = Page as AccountSummaryReport;
-                tpByPerson.PopulateData(hostingPage.AccountIds, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+                tpByPerson.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
             }
             else if (Page is TimePeriodSummaryReport)
             {
                 var hostingPage = Page as TimePeriodSummaryReport;
-                hostingPage.Total = tpByPerson.PopulateData(hostingPage.AccountId.ToString(), hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
+                hostingPage.Total = tpByPerson.PopulateData(hostingPage.AccountId, hostingPage.BusinessUnitIds, hostingPage.StartDate.Value, hostingPage.EndDate.Value);
                 hostingPage.ByProjectControl.MpeProjectDetailReport.Show();
             }
         }
@@ -186,19 +186,17 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            string accountIds = "0";
+            int accountId = 0;
             string businessUnitIds = string.Empty;
             DateTime? startDate;
             DateTime? endDate;
             string range = string.Empty;
             int businessUnitsCount = 0, projectsCount = 0, personsCount = 0;
-            int accountsCount = 0;
-            string clientDirectorName = "";
 
             if (Page is TimePeriodSummaryReport)
             {
                 var hostingPage = Page as TimePeriodSummaryReport;
-                accountIds = hostingPage.AccountId.ToString();
+                accountId = hostingPage.AccountId;
                 businessUnitIds = hostingPage.BusinessUnitIds;
                 startDate = hostingPage.StartDate;
                 endDate = hostingPage.EndDate;
@@ -207,7 +205,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             else
             {
                 var hostingPage = Page as AccountSummaryReport;
-                accountIds = hostingPage.AccountIds;
+                accountId = hostingPage.AccountId;
                 businessUnitIds = hostingPage.BusinessUnitIds;
                 startDate = hostingPage.StartDate;
                 endDate = hostingPage.EndDate;
@@ -218,16 +216,15 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
 
-            List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountIds, businessUnitIds, startDate.Value, endDate.Value)).ToList();
+            List<BusinessUnitLevelGroupedHours> data = ServiceCallers.Custom.Report(r => r.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate.Value, endDate.Value)).ToList();
 
-            var account = new Client();
+            var account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(accountId));
 
             if (Page is TimePeriodSummaryReport)
             {
                 businessUnitsCount = data.Select(r => r.BusinessUnit.Id.Value).Distinct().Count();
                 projectsCount = data.Count > 0 ? 1 : 0;
                 personsCount = data.SelectMany(g => g.PersonLevelGroupedHoursList.Select(p => p.Person.Id.Value)).Distinct().Count();
-                account = ServiceCallers.Custom.Client(c => c.GetClientDetailsShort(Convert.ToInt32(accountIds)));
             }
             else
             {
@@ -235,46 +232,26 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 businessUnitsCount = hostingPage.BusinessUnitsCount;
                 projectsCount = hostingPage.ProjectsCount;
                 personsCount = hostingPage.PersonsCount;
-                accountsCount = hostingPage.AccountsCount;
-                clientDirectorName = hostingPage.ClientdirectorName;
             }
-            var filename = "AccountReport_ByBusinessDevlopment.xls";
-            
+            var filename = string.Format("{0}_{1}_{2}.xls", account.Code, account.Name, "_ByBusinessDevlopment");
+            filename = filename.Replace(' ', '_');
             if (data.Count > 0)
             {
                 DataTable header1 = new DataTable();
                 header1.Columns.Add("Account By Business Development Report");
                 header1.Columns.Add(" ");
                 header1.Columns.Add("  ");
-                header1.Columns.Add("   ");
 
-                if (Page is AccountSummaryReport)
-                {
-                    List<object> row1 = new List<object>();
-                    row1.Add(clientDirectorName);
-                    header1.Rows.Add(row1.ToArray());
+                List<object> row1 = new List<object>();
+                row1.Add(account.HtmlEncodedName);
+                row1.Add(account.Code);
+                header1.Rows.Add(row1.ToArray());
 
-                    List<object> row2 = new List<object>();
-                    row2.Add(accountsCount + " Account(s)");
-                    row2.Add(businessUnitsCount + " Business Unit(s)");
-                    row2.Add(personsCount.ToString() == "1" ? personsCount + " Person" : personsCount + " People");
-                    header1.Rows.Add(row2.ToArray());
-                }
-                else
-                {
-                    List<object> row1 = new List<object>();
-                    row1.Add(account.HtmlEncodedName);
-                    row1.Add(account.Code);
-                    header1.Rows.Add(row1.ToArray());
-
-                    List<object> row2 = new List<object>();
-
-                    row2.Add(businessUnitsCount + " Business Unit(s)");
-                    row2.Add(projectsCount + " Project(s)");
-                    row2.Add(personsCount.ToString() == "1" ? personsCount + " Person" : personsCount + " People");
-                    header1.Rows.Add(row2.ToArray());
-                }
-               
+                List<object> row2 = new List<object>();
+                row2.Add(businessUnitsCount + " Business Unit(s)");
+                row2.Add(projectsCount + " Project(s)");
+                row2.Add(personsCount.ToString() == "1" ? personsCount + " Person" : personsCount + " People");
+                header1.Rows.Add(row2.ToArray());
 
                 List<object> row3 = new List<object>();
                 row3.Add(range);
@@ -319,8 +296,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             data.Columns.Add("Work Type Name");
             data.Columns.Add("Business Unit");
             data.Columns.Add("Business Unit Name");
-            data.Columns.Add("Account");
-            data.Columns.Add("Account Name");
             data.Columns.Add("Non-Billable");
             data.Columns.Add("Total");
             data.Columns.Add("Note");
@@ -344,8 +319,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                             row.Add(dateLevel.TimeType.Name);
                             row.Add(buLevelGroupedHours.BusinessUnit.Code);
                             row.Add(buLevelGroupedHours.BusinessUnit.HtmlEncodedName);
-                            row.Add(buLevelGroupedHours.BusinessUnit.Client.Code);
-                            row.Add(buLevelGroupedHours.BusinessUnit.Client.HtmlEncodedName);
                             row.Add(dateLevel.NonBillableHours);
                             row.Add(dateLevel.TotalHours);
                             row.Add(dateLevel.HtmlEncodedNoteForExport);
