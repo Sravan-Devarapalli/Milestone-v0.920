@@ -359,11 +359,11 @@ namespace PraticeManagement.Controls.Opportunities
 
             //text changes related to #3092
             List<OpportunityPriority> priorityList = opportunityPriorities.Where(p => p.Id == Constants.OpportunityPriorityIds.PriorityIdOfPO || p.Id == Constants.OpportunityPriorityIds.PriorityIdOfA || p.Id == Constants.OpportunityPriorityIds.PriorityIdOfB).ToList();
-            
+
 
             if (priorityList != null && priorityList.Count > 0)
             {
-                string displayNames = priorityList.First().DisplayName;               
+                string displayNames = priorityList.First().DisplayName;
                 if (priorityList.Count > 1)
                 {
                     for (int i = 1; i < priorityList.Count - 1; i++)
@@ -409,7 +409,7 @@ namespace PraticeManagement.Controls.Opportunities
             var animShow = row.FindControl("animShow") as AnimationExtender;
 
             int height = 205;
-            
+
             animShow.Animations = string.Format(ANIMATION_SHOW_SCRIPT, pnlPriority.ID, height);
             animHide.Animations = string.Format(ANIMATION_HIDE_SCRIPT, pnlPriority.ID);
 
@@ -475,8 +475,8 @@ namespace PraticeManagement.Controls.Opportunities
         protected string GetOpportunityDetailsLink(int opportunityId, int index)
         {
             string absoluteUri = Request.Url.AbsoluteUri;
-            absoluteUri = absoluteUri.Replace("DiscussionReview2.aspx?isFilterCached=true","DiscussionReview2.aspx");
-            absoluteUri = absoluteUri.Replace("DiscussionReview2.aspx","DiscussionReview2.aspx?isFilterCached=true");
+            absoluteUri = absoluteUri.Replace("DiscussionReview2.aspx?isFilterCached=true", "DiscussionReview2.aspx");
+            absoluteUri = absoluteUri.Replace("DiscussionReview2.aspx", "DiscussionReview2.aspx?isFilterCached=true");
             return Utils.Generic.GetTargetUrlWithReturn(Urls.OpportunityDetailsLink(opportunityId), absoluteUri);
         }
 
