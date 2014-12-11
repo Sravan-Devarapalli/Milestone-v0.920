@@ -939,7 +939,7 @@
     function SetTooltipText(descriptionText, hlinkObj) {
         var hlinkObjct = $('#' + hlinkObj.id);
         var displayPanel = $('#<%= oppNameToolTipHolder.ClientID %>');
-        iptop = hlinkObjct.offset().top - 20;// - hlinkObjct[0].offsetHeight;
+        iptop = hlinkObjct.offset().top - 20; // - hlinkObjct[0].offsetHeight;
         ipleft = hlinkObjct.offset().left + hlinkObjct[0].offsetWidth + 10;
         iptop = iptop;
         ipleft = ipleft;
@@ -1044,6 +1044,10 @@
             <asp:Panel CssClass="summary WhiteSpaceNoWrap OverflowxAuto" ID="pnlSummary" runat="server">
             </asp:Panel>
         </div>
+        <div class="textRightImp PaddingBottom3 PaddingTop3">
+            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click" CssClass="Width100Px"
+                Text="Export" />
+        </div>
         <div id="opportunity-list">
             <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" EnableViewState="true"
                 OnSorting="lvOpportunities_Sorting" OnItemDataBound="lvOpportunities_OnItemDataBound">
@@ -1137,7 +1141,7 @@
                             </td>
                             <td class="Width7Percent">
                                 <div class="ie-bg no-wrap">
-                                    <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Sales Team" CommandName="Sort"
+                                    <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Sales Person" CommandName="Sort"
                                         CssClass="arrow" CommandArgument="Salesperson" />
                                 </div>
                             </td>
@@ -1349,10 +1353,6 @@
                     </tr>
                 </EmptyDataTemplate>
             </asp:ListView>
-        </div>
-        <div class="textRightImp">
-            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
-                Text="Export" />
         </div>
         <asp:HiddenField ID="hdnRedirectOpportunityId" runat="server" />
         <asp:HiddenField ID="hdnClickedRowIndex" runat="server" />
