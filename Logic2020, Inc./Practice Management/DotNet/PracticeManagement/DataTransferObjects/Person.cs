@@ -526,7 +526,18 @@ namespace DataTransferObjects
         [DataMember]
         public List<PersonTimeOff> TimeOffHistory { get; set; }
 
+        [DataMember]
+        public PersonTimeOff TimeOff { get; set; }
 
+        public string FormattedName
+        {
+            get
+            {
+                if (Id.HasValue)
+                    return HtmlEncodedName;
+                return string.Empty;
+            }
+        }
         #endregion Properties - data members
 
         #region Properties - calculated
@@ -672,3 +683,4 @@ namespace DataTransferObjects
         #endregion Methods
     }
 }
+
