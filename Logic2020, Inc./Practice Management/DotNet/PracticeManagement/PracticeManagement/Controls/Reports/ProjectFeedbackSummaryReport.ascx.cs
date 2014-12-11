@@ -180,6 +180,7 @@ namespace PraticeManagement.Controls.Reports
 
             data.Columns.Add("Employee Number");
             data.Columns.Add("Resource Name");
+            data.Columns.Add("Title");
             data.Columns.Add("Project Number");
             data.Columns.Add("Project Name");
             data.Columns.Add("Project Status");
@@ -203,23 +204,25 @@ namespace PraticeManagement.Controls.Reports
                 row = new List<object>();
                 row.Add(feedback.Person.EmployeeNumber);
                 row.Add(feedback.Person.Name);
+                row.Add(feedback.Person.Title.TitleName);
                 row.Add(feedback.Project.ProjectNumber);
                 row.Add(feedback.Project.Name);
                 row.Add(feedback.Project.Status.Name);
                 row.Add(feedback.Project.Client.Name);
                 row.Add(feedback.Project.BusinessGroup.Name);
                 row.Add(feedback.Project.Group.Name);
-                row.Add(feedback.Project.Director.FirstName == ""?"": feedback.Project.Director.Name);
+                row.Add(feedback.Project.Director.FirstName == "" ? "" : feedback.Project.Director.Name);
                 row.Add(feedback.Project.SeniorManagerName);
                 row.Add(feedback.Project.ProjectOwner.Name);
-                for (i = 0; i < feedback.Project.ProjectManagers.Count; i++)
-                {
-                    managers += feedback.Project.ProjectManagers[i].HtmlEncodedName;
-                    if (i != feedback.Project.ProjectManagers.Count - 1)
+                if (feedback.Project.ProjectManagers != null)
+                    for (i = 0; i < feedback.Project.ProjectManagers.Count; i++)
                     {
-                        managers += "; ";
+                        managers += feedback.Project.ProjectManagers[i].HtmlEncodedName;
+                        if (i != feedback.Project.ProjectManagers.Count - 1)
+                        {
+                            managers += "; ";
+                        }
                     }
-                }
                 row.Add(managers);
                 row.Add(feedback.ReviewStartDate);
                 row.Add(feedback.ReviewEndDate);
@@ -256,12 +259,15 @@ namespace PraticeManagement.Controls.Reports
                 var dataItem = (ProjectFeedback)e.Item.DataItem;
                 var lblProjectManagers = e.Item.FindControl("lblProjectManagers") as Label;
                 var hlProjectNumber = e.Item.FindControl("hlProjectNumber") as HyperLink;
-                for (i = 0; i < dataItem.Project.ProjectManagers.Count; i++)
+                if (dataItem.Project.ProjectManagers != null)
                 {
-                    lblProjectManagers.Text += dataItem.Project.ProjectManagers[i].HtmlEncodedName;
-                    if (i != dataItem.Project.ProjectManagers.Count - 1)
+                    for (i = 0; i < dataItem.Project.ProjectManagers.Count; i++)
                     {
-                        lblProjectManagers.Text += "; ";
+                        lblProjectManagers.Text += dataItem.Project.ProjectManagers[i].HtmlEncodedName;
+                        if (i != dataItem.Project.ProjectManagers.Count - 1)
+                        {
+                            lblProjectManagers.Text += "; ";
+                        }
                     }
                 }
             }
@@ -418,7 +424,7 @@ namespace PraticeManagement.Controls.Reports
             count = PopulateProjectManagersFilter(report);
             foreach (ListItem item in cblProjectManagers.Items)
             {
-                if (reportData.Any(p => p.Project.ProjectManagers.Any(r => r.Id.Value.ToString() == item.Value)))
+                if (reportData.Where(p => p.Project.ProjectManagers != null).Any(p => p.Project.ProjectManagers.Any(r => r.Id.Value.ToString() == item.Value)))
                 {
                     item.Selected = true;
                 }
@@ -533,7 +539,7 @@ namespace PraticeManagement.Controls.Reports
         private int PopulateProjectManagersFilter(ProjectFeedback[] reportData)
         {
             var resources = new List<Person>();
-            resources = reportData.SelectMany(b => b.Project.ProjectManagers.Select(r => new Person { Id = r.Id, FirstName = r.FirstName, LastName = r.LastName }).Distinct().ToList().OrderBy(s => s.Name)).ToList();
+            resources = reportData.Where(p => p.Project.ProjectManagers != null).SelectMany(b => b.Project.ProjectManagers.Select(r => new Person { Id = r.Id, FirstName = r.FirstName, LastName = r.LastName }).Distinct().ToList().OrderBy(s => s.Name)).ToList();
 
             DataHelper.FillListDefault(cblProjectManagers.CheckBoxListObject, "All Project Managers", resources.Distinct().ToArray(), false, "Id", "Name");
             cblProjectManagers.SelectAllItems(true);
@@ -570,3 +576,4 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
+
