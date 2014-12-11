@@ -103,6 +103,78 @@ namespace PraticeManagement {
         protected global::AjaxControlToolkit.ModalPopupExtender mpeEditProjectName;
         
         /// <summary>
+        /// tblSetProjectNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblSetProjectNumber;
+        
+        /// <summary>
+        /// rbAutoGenerate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbAutoGenerate;
+        
+        /// <summary>
+        /// rbOwnNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rbOwnNumber;
+        
+        /// <summary>
+        /// txtProjectNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProjectNumber;
+        
+        /// <summary>
+        /// custProjectNumberRequired control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custProjectNumberRequired;
+        
+        /// <summary>
+        /// custNumberExistsInSystem control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custNumberExistsInSystem;
+        
+        /// <summary>
+        /// custFormat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custFormat;
+        
+        /// <summary>
+        /// custInternalNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custInternalNumber;
+        
+        /// <summary>
         /// divStatus control.
         /// </summary>
         /// <remarks>
