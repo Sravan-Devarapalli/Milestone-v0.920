@@ -33,7 +33,7 @@ namespace DataTransferObjects
         }
 
         [DataMember]
-        public List<Project> Projects
+        public Project Project
         {
             get;
             set;
