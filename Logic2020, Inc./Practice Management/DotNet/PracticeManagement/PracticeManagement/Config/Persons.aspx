@@ -105,10 +105,10 @@
                         </td>
                     </tr>
                     <tr class="Height35Px vBottom">
-                        <td colspan="2" class="ValSumSearch">
+                        <td colspan="2" class="ValSumSearch Width80PercentImp">
                             <asp:ValidationSummary ID="valsumSearch" runat="server" ValidationGroup="ValSearch" />
                         </td>
-                        <td class="Width10Per TextAlignRight">
+                        <td class="Width15Per textRight">
                             <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
                                 AutoPostBack="true">
                                 <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -117,7 +117,19 @@
                                 <asp:ListItem Text="View All" Value="-1" Selected="True"></asp:ListItem>
                             </asp:DropDownList>
                         </td>
-                    </tr>                   
+                    </tr>
+                    <tr class="Height35Px vBottom">
+                        <td colspan="2">
+                        </td>
+                        <td class="Width15Per textRight">
+                            <asp:Button ID="btnExpandedExcel" runat="server" OnClick="btnExpandedExcel_Click" Style="margin-right: 0px;float: none"
+                                Text="Expanded Export" /> &nbsp;&nbsp;
+                            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
+                                Style="margin-right: 0px;float: none" Text="Export" />
+                        </td>
+                    </tr>
+                    <div class="textRightImp PaddingBottom3 PaddingTop3">
+                    </div>
                 </table>
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
@@ -146,10 +158,9 @@
                                             </tr>
                                             <tr>
                                                 <td rowspan="2" class="floatRight SddRecruiter">
-                                                    <cc2:ScrollingDropDown ID="cblRecruiters" runat="server"  AllSelectedReturnType="AllItems"
-                                                        onclick="scrollingDropdown_onclick('cblRecruiters','Recruiter')" 
-                                                         NoItemsType="All" SetDirty="False" DropDownListType="Recruiter" CssClass="PersonPage_cblRecruiters"
-                                                         />
+                                                    <cc2:ScrollingDropDown ID="cblRecruiters" runat="server" AllSelectedReturnType="AllItems"
+                                                        onclick="scrollingDropdown_onclick('cblRecruiters','Recruiter')" NoItemsType="All"
+                                                        SetDirty="False" DropDownListType="Recruiter" CssClass="PersonPage_cblRecruiters" />
                                                     <ext:ScrollableDropdownExtender ID="sdeRecruiters" runat="server" TargetControlID="cblRecruiters"
                                                         UseAdvanceFeature="True" Width="200px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                     </ext:ScrollableDropdownExtender>
@@ -361,8 +372,6 @@
                                         <asp:Label ID="lblRecords" runat="server" CssClass="fontBold ColorBlack"></asp:Label>
                                     </td>
                                     <td class="Width15Per PaddingRight10Px WhiteSpaceNoWrap TextAlignRight">
-                                        <asp:Button ID="btnExportToExcel" CssClass="Width100Per" runat="server" OnClick="btnExportToExcel_Click"
-                                            Text="Export" />
                                     </td>
                                 </tr>
                             </table>
@@ -373,6 +382,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnExportToExcel" />
+            <asp:PostBackTrigger ControlID="btnExpandedExcel"/>
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
