@@ -59,16 +59,16 @@ namespace PracticeManagementService
         List<ProjectLevelTimeEntriesHistory> TimeEntryAuditReportByProject(DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId,string accountIds, string businessUnitIds,string projectStatusIds, DateTime startDate, DateTime endDate);
+        GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<GroupByAccount> AccountSummaryReportByProject(int? directorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes);
+        GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes);
 
         [OperationContract]
-        List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate);
+        List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        List<GroupByPerson> AccountReportGroupByPerson(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate);
+        List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate);
 
         [OperationContract]
         List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string titleIds, string hireDates, string recruiterIds);
@@ -144,7 +144,7 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport);
-        
+
         [OperationContract]
         List<Person> RecruitingMetricsReport(DateTime startDate, DateTime endDate);
 
