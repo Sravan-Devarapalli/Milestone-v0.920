@@ -13,15 +13,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount {
     public partial class ByProject {
         
         /// <summary>
-        /// btnExpandOrCollapseAll control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExpandOrCollapseAll;
-        
-        /// <summary>
         /// btnExportToExcel control.
         /// </summary>
         /// <remarks>
@@ -119,33 +110,6 @@ namespace PraticeManagement.Controls.Reports.ByAccount {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyMessage;
-        
-        /// <summary>
-        /// hdncpeExtendersIds control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdncpeExtendersIds;
-        
-        /// <summary>
-        /// hdnCollapsed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnCollapsed;
-        
-        /// <summary>
-        /// repClientsByProject control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repClientsByProject;
         
         /// <summary>
         /// pnlBillableUtilization control.
