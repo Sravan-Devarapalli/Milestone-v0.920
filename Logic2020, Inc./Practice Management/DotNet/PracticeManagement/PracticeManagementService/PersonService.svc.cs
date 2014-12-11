@@ -329,7 +329,7 @@ namespace PracticeManagementService
         /// is placed in the <paramref name="person"/>
         /// </remarks>
         /// <returns>An ID of the saved record.</returns>
-        public int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay,string userLogin)
+        public int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay, string userLogin)
         {
             Person oldPerson = person.Id.HasValue ? PersonDAL.GetById(person.Id.Value) : null;
             try
@@ -403,7 +403,7 @@ namespace PracticeManagementService
         /// <param name="person">Present person data.</param>
         /// <param name="isRehireDueToPay">Is person rehire due to compensation change of contract to employee.</param>
         /// <param name="loginPageUrl">Login page url of site.</param>
-        public static void SendMailsAfterProcessPersonData(Person oldPerson, Person person, bool isRehireDueToPay, string loginPageUrl,string userLogin)
+        public static void SendMailsAfterProcessPersonData(Person oldPerson, Person person, bool isRehireDueToPay, string loginPageUrl, string userLogin)
         {
             int personStatusId = person.Status.Id;
             bool isPersonActive = (personStatusId == (int)PersonStatusType.Active || personStatusId == (int)PersonStatusType.TerminationPending);
@@ -445,7 +445,7 @@ namespace PracticeManagementService
             }
         }
 
-        public static void SendReviewCancelationMail(int personId,string userLogin)
+        public static void SendReviewCancelationMail(int personId, string userLogin)
         {
             var feedbacks = ProjectDAL.GetPersonsForProjectReviewCanceled(personId, userLogin);
             if (feedbacks.Count > 0)
@@ -525,7 +525,7 @@ namespace PracticeManagementService
         /// <param name="person">The data to be stored.</param>
         /// <param name="currentUser">A currently logged user.</param>
         /// <param name="oldPerson">Old person data.</param>
-        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson, string loginPageUrl, bool saveCurrentPay,string userLogin)
+        private static void ProcessPersonData(Person person, string currentUser, Person oldPerson, string loginPageUrl, bool saveCurrentPay, string userLogin)
         {
             bool isReHireDueToPay = false;
             bool isAdministrator = Roles.IsUserInRole(currentUser, DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
@@ -605,7 +605,7 @@ namespace PracticeManagementService
                 }
                 if (person.Id != null) person.CurrentPay = PayDAL.GetCurrentByPerson(person.Id.Value);
             }
-            SendMailsAfterProcessPersonData(oldPerson, person, isReHireDueToPay, loginPageUrl,userLogin);
+            SendMailsAfterProcessPersonData(oldPerson, person, isReHireDueToPay, loginPageUrl, userLogin);
         }
 
         /// <summary>
@@ -1151,9 +1151,9 @@ namespace PracticeManagementService
             return PersonDAL.GetAllCohortAssignments();
         }
 
-        public List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays)
+        public List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays, int? personId)
         {
-            return PersonDAL.GetPTOReport(startDate, endDate, includeCompanyHolidays);
+            return PersonDAL.GetPTOReport(startDate, endDate, includeCompanyHolidays, personId);
         }
 
         #endregion IPersonService Members
