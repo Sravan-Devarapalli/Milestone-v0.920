@@ -97,16 +97,16 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory[] TimeEntryAuditReportByProject(System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnit", ReplyAction="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnitResponse")]
-        DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByBusinessUnit(System.Nullable<int> clientDirectorId, string accountIds, string businessUnitIds, string projectStatusIds, System.DateTime startDate, System.DateTime endDate);
+        DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountSummaryReportByProject", ReplyAction="http://tempuri.org/IReportService/AccountSummaryReportByProjectResponse")]
-        DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByProject(System.Nullable<int> directorId, string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes);
+        DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnit", ReplyAction="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnitResponse")]
-        DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours[] AccountReportGroupByBusinessUnit(string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
+        DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours[] AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountReportGroupByPerson", ReplyAction="http://tempuri.org/IReportService/AccountReportGroupByPersonResponse")]
-        DataTransferObjects.Reports.ByAccount.GroupByPerson[] AccountReportGroupByPerson(string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
+        DataTransferObjects.Reports.ByAccount.GroupByPerson[] AccountReportGroupByPerson(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/NewHireReport", ReplyAction="http://tempuri.org/IReportService/NewHireReportResponse")]
         DataTransferObjects.Person[] NewHireReport(System.DateTime startDate, System.DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string titleIds, string hireDates, string recruiterIds);
@@ -191,7 +191,6 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-        
        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -309,20 +308,20 @@ namespace PraticeManagement.ReportService {
             return base.Channel.TimeEntryAuditReportByProject(startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByBusinessUnit(System.Nullable<int> clientDirectorId, string accountIds, string businessUnitIds, string projectStatusIds, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.AccountSummaryReportByBusinessUnit(clientDirectorId, accountIds, businessUnitIds, projectStatusIds, startDate, endDate);
+        public DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.ByAccount.GroupByAccount[] AccountSummaryReportByProject(System.Nullable<int> directorId, string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes) {
-            return base.Channel.AccountSummaryReportByProject(directorId, accountIds, businessUnitIds, startDate, endDate, projectStatusIds, projectBillingTypes);
+        public DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes) {
+            return base.Channel.AccountSummaryReportByProject(accountId, businessUnitIds, startDate, endDate, projectStatusIds, projectBillingTypes);
         }
         
-        public DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours[] AccountReportGroupByBusinessUnit(string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.AccountReportGroupByBusinessUnit(accountIds, businessUnitIds, startDate, endDate);
+        public DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours[] AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.ByAccount.GroupByPerson[] AccountReportGroupByPerson(string accountIds, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.AccountReportGroupByPerson(accountIds, businessUnitIds, startDate, endDate);
+        public DataTransferObjects.Reports.ByAccount.GroupByPerson[] AccountReportGroupByPerson(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate);
         }
         
         public DataTransferObjects.Person[] NewHireReport(System.DateTime startDate, System.DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string titleIds, string hireDates, string recruiterIds) {
