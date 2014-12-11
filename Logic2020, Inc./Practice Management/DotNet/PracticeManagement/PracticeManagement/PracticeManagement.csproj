@@ -398,6 +398,7 @@
     <Content Include="Controls\Reports\ByAccount\GroupByPerson.ascx" />
     <Content Include="Controls\Reports\ByPerson\GroupByProject.ascx" />
     <Content Include="Controls\Reports\ByworkType.ascx" />
+    <Content Include="Controls\Reports\CalendarReport.ascx" />
     <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandDetails.ascx" />
     <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandGraphs.ascx" />
     <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandSummary.ascx" />
@@ -544,6 +545,7 @@
     <Content Include="Reports\AttainmentReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
     <Content Include="Reports\BillingReport.aspx" />
+    <Content Include="Reports\CalendarReport.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\ConsultingDemand_New.aspx" />
@@ -1035,8 +1037,8 @@
     <Content Include="Scripts\UploaderRemovedFolder1.js" />
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
     <None Include="Service References\ClientService\ClientService1.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\ReportService\ReportService110.disco" />
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
@@ -1660,6 +1662,13 @@
     <Compile Include="Controls\Reports\ByworkType.ascx.designer.cs">
       <DependentUpon>ByworkType.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\CalendarReport.ascx.cs">
+      <DependentUpon>CalendarReport.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\CalendarReport.ascx.designer.cs">
+      <DependentUpon>CalendarReport.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\ConsultantDemand\ConsultingDemandDetails.ascx.cs">
       <DependentUpon>ConsultingDemandDetails.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2188,6 +2197,13 @@
     </Compile>
     <Compile Include="Reports\BillingReport.aspx.designer.cs">
       <DependentUpon>BillingReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\CalendarReport.aspx.cs">
+      <DependentUpon>CalendarReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\CalendarReport.aspx.designer.cs">
+      <DependentUpon>CalendarReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\ConsultingCapacity.aspx.cs">
       <DependentUpon>ConsultingCapacity.aspx</DependentUpon>
@@ -3830,4 +3846,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
