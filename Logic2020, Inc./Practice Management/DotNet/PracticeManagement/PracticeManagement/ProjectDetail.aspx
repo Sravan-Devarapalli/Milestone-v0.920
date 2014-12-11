@@ -416,6 +416,20 @@
 
                 }
 
+                //number = 1 to show, 2 to close
+                function showProjectNumberTextBox(number) {
+                    var projectNumber = document.getElementById('<%= tblSetProjectNumber.ClientID%>');
+                    var HiddenField = document.getElementById('<%= hdnVisibilty.ClientID%>');
+                    if (number == 1) {
+                        projectNumber.rows[0].cells[1].children[0].setAttribute('style', 'display:inline;');
+                        HiddenField.value = 'inline';
+                    }
+                    else {
+                        projectNumber.rows[0].cells[1].children[0].setAttribute('style', 'display:none;');
+                        HiddenField.value = 'none';
+                    }
+                }
+
                 //region project time types script
 
                 function btnClose_OnClientClick() {
@@ -464,7 +478,7 @@
                     <td>
                         <table class="WholeWidth">
                             <tr>
-                                <td class="TdProjectName">
+                                <td class="width30P">
                                     <asp:TextBox ID="txtProjectNameFirstTime" CssClass="Width500PxImp" runat="server"
                                         Visible="false"></asp:TextBox>
                                     <AjaxControlToolkit:TextBoxWatermarkExtender ID="txtweProjectNameFirstTime" runat="server"
@@ -481,6 +495,39 @@
                                     <AjaxControlToolkit:ModalPopupExtender ID="mpeEditProjectName" runat="server" TargetControlID="imgEditProjectName"
                                         CancelControlID="btncloseEditProjectName" BehaviorID="mpeEditProjectName" BackgroundCssClass="modalBackground"
                                         PopupControlID="pnlProjectName" DropShadow="false" />
+                                </td>
+                                <td class="Width35Percent padLeft4Per">
+                                    <table id="tblSetProjectNumber" runat="server">
+                                        <tr>
+                                            <td>
+                                                <asp:RadioButton ID="rbAutoGenerate" runat="server" GroupName="ProjectNumber" Text="Auto generate project number" Checked="true"
+                                                    onchange="showProjectNumberTextBox(2)" />
+                                                <asp:RadioButton ID="rbOwnNumber" runat="server" GroupName="ProjectNumber" Text="Set own project number"
+                                                     onchange="showProjectNumberTextBox(1)" />
+                                            </td>
+                                            <td class="padLeft5">
+                                                <asp:TextBox ID="txtProjectNumber" runat="server" Style="display:none"></asp:TextBox>
+                                                &nbsp;
+                                            </td>
+                                            <td>
+                                                <asp:CustomValidator ID="custProjectNumberRequired" runat="server" ErrorMessage="The project number is required."
+                                                    ToolTip="The project number is required." ValidationGroup="Project" Text="*"
+                                                    EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" OnServerValidate="custProjectNumberRequired_ServerValidate"></asp:CustomValidator>
+                                                <asp:CustomValidator ID="custNumberExistsInSystem" runat="server" ErrorMessage="The project number already exists in the system."
+                                                    ToolTip="The project number already exists in the system." ValidationGroup="Project"
+                                                    Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
+                                                    OnServerValidate="custNumberExistsInSystem_ServerValidate"></asp:CustomValidator>
+                                                <asp:CustomValidator ID="custFormat" runat="server" ErrorMessage="Project Number should start with P followed by 6 digits."
+                                                    ToolTip="Project Number should start with P followed by 6 digits."
+                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="custFormat_ServerValidate"></asp:CustomValidator>
+                                                <asp:CustomValidator ID="custInternalNumber" runat="server" ErrorMessage="The Project numbers from P999900 to P999999 are designed to Internal projects."
+                                                    ToolTip="The Project numbers from P999900 to P999999 are designed to Internal projects."
+                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                                    Display="Dynamic" OnServerValidate="custInternalNumber_ServerValidate"></asp:CustomValidator>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                                 <td class="Width35Percent">
                                     <table class="WholeWidth">
