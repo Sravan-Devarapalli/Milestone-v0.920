@@ -588,14 +588,14 @@ namespace DataAccess
                     while (reader.Read())
                     {
                         var employment = new Employment
-                            {
-                                PersonId = reader.GetInt32(personIdIndex),
-                                HireDate = reader.GetDateTime(hireDateIndex),
-                                TerminationDate =
-                                    reader.IsDBNull(terminationDateIndex)
-                                        ? null
-                                        : (DateTime?)reader.GetDateTime(terminationDateIndex)
-                            };
+                        {
+                            PersonId = reader.GetInt32(personIdIndex),
+                            HireDate = reader.GetDateTime(hireDateIndex),
+                            TerminationDate =
+                                reader.IsDBNull(terminationDateIndex)
+                                    ? null
+                                    : (DateTime?)reader.GetDateTime(terminationDateIndex)
+                        };
 
                         Person person = null;
                         if (result.Any(p => p.Person.Id == employment.PersonId))
@@ -3901,7 +3901,7 @@ namespace DataAccess
             return result;
         }
 
-        public static List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays)
+        public static List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays, int? personId = null)
         {
             List<Person> result = new List<Person>();
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -3913,6 +3913,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludeCompanyHolidays, includeCompanyHolidays);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId.HasValue ? (object)personId.Value : DBNull.Value);
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -4001,43 +4002,24 @@ namespace DataAccess
                             LastName = reader.IsDBNull(directorLastNameIndex) ? string.Empty : reader.GetString(directorLastNameIndex)
                         }
                     };
-                    if (result.Any(p => p.Id == personId && p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
+
+                    var personTimeOff = new PersonTimeOff()
                     {
-                        var personTimeoff = (result.First(p => p.Id == personId && p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate && t.TimeOffEndDate == timeoffEndDate)));
-                        var projects = personTimeoff.TimeOffHistory.First(t => t.TimeOffStartDate == timeoffStartDate).Projects;
-                        projects.Add(project);
-                    }
-                    else if (result.Any(p => p.Id == personId && !p.TimeOffHistory.Any(t => t.TimeOffStartDate == timeoffStartDate)))
+                        TimeType = timetype,
+                        TimeOffStartDate = timeoffStartDate,
+                        TimeOffEndDate = timeoffEndDate,
+                        Project = project
+                    };
+
+                    var person = new Person()
                     {
-                        var personTimeOff = new PersonTimeOff()
-                        {
-                            TimeType = timetype,
-                            TimeOffStartDate = timeoffStartDate,
-                            TimeOffEndDate = timeoffEndDate,
-                            Projects = new List<Project>() { project }
-                        };
-                        var person = result.First(p => p.Id == personId);
-                        person.TimeOffHistory.Add(personTimeOff);
-                    }
-                    else
-                    {
-                        var personTimeOff = new PersonTimeOff()
-                        {
-                            TimeType = timetype,
-                            TimeOffStartDate = timeoffStartDate,
-                            TimeOffEndDate = timeoffEndDate,
-                            Projects = new List<Project>() { project }
-                        };
-                        Person person = new Person()
-                        {
-                            Id = personId,
-                            EmployeeNumber = reader.GetString(employeeNumberIndex),
-                            FirstName = reader.GetString(firstNameIndex),
-                            LastName = reader.GetString(lastNameIndex),
-                            TimeOffHistory = new List<PersonTimeOff>() { personTimeOff }
-                        };
-                        result.Add(person);
-                    }
+                        Id = personId,
+                        EmployeeNumber = reader.GetString(employeeNumberIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        TimeOff = personTimeOff
+                    };
+                    result.Add(person);
                 }
             }
         }
