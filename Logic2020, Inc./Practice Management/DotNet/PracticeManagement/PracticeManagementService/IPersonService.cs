@@ -229,7 +229,7 @@ namespace PracticeManagementService
         /// <param name="currentUser">current logged in user name</param>
         [OperationContract]
         [FaultContract(typeof(DataAccessFault))]
-        int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay,string userLogin);
+        int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay, string userLogin);
 
         [OperationContract]
         void PersonValidations(Person person);
@@ -468,7 +468,7 @@ namespace PracticeManagementService
         List<CohortAssignment> GetAllCohortAssignments();
 
         [OperationContract]
-        List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays);
+        List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays, int? personId);
     }
 }
 
