@@ -102,24 +102,24 @@ namespace PracticeManagementService
             return ReportDAL.TimeEntryAuditReportByProject(startDate, endDate);
         }
 
-        public List<GroupByAccount> AccountSummaryReportByBusinessUnit(int? clientDirectorId, string accountIds, string businessUnitIds,string projectStatusIds, DateTime startDate, DateTime endDate)
+        public GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountSummaryReportByBusinessUnit(clientDirectorId, accountIds, businessUnitIds, projectStatusIds, startDate, endDate);
+            return ReportDAL.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
         }
 
-        public List<GroupByAccount> AccountSummaryReportByProject(int? directorId,string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
+        public GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
         {
-            return ReportDAL.AccountSummaryReportByProject(directorId,accountIds, businessUnitIds, startDate, endDate, projectStatusIds, projectBillingTypes);
+            return ReportDAL.AccountSummaryReportByProject(accountId, businessUnitIds, startDate, endDate, projectStatusIds, projectBillingTypes);
         }
 
-        public List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public List<BusinessUnitLevelGroupedHours> AccountReportGroupByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountReportGroupByBusinessUnit(accountIds, businessUnitIds, startDate, endDate);
+            return ReportDAL.AccountReportGroupByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
         }
 
-        public List<GroupByPerson> AccountReportGroupByPerson(string accountIds, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public List<GroupByPerson> AccountReportGroupByPerson(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountReportGroupByPerson(accountIds, businessUnitIds, startDate, endDate);
+            return ReportDAL.AccountReportGroupByPerson(accountId, businessUnitIds, startDate, endDate);
         }
 
         public List<Person> NewHireReport(DateTime startDate, DateTime endDate, string personStatusIds, string payTypeIds, string practiceIds, bool excludeInternalPractices, string personDivisionIds, string titleIds, string hireDates, string recruiterIds)
@@ -234,7 +234,7 @@ namespace PracticeManagementService
 
         public List<ResourceExceptionReport> ResourceAssignedOrUnassignedChargingExceptionReport(DateTime startDate, DateTime endDate, bool isUnassignedReport)
         {
-            return ReportDAL.ResourceAssignedOrUnassignedChargingExceptionReport(startDate,endDate,isUnassignedReport);
+            return ReportDAL.ResourceAssignedOrUnassignedChargingExceptionReport(startDate, endDate, isUnassignedReport);
         }
 
         public List<Person> RecruitingMetricsReport(DateTime startDate, DateTime endDate)
@@ -242,19 +242,19 @@ namespace PracticeManagementService
             return ReportDAL.RecruitingMetricsReport(startDate, endDate);
         }
 
-        public List<ProjectFeedback> ProjectFeedbackReport(string accountIds, string businessGroupIds, DateTime startDate, DateTime endDate,string projectStatus, string projectIds,string directorIds, string practiceIds, bool excludeInternalPractices, string personIds, string titleIds, string reviewStartdateMonths, string reviewEnddateMonths, string projectmanagerIds, string statusIds, bool isExport)
+        public List<ProjectFeedback> ProjectFeedbackReport(string accountIds, string businessGroupIds, DateTime startDate, DateTime endDate, string projectStatus, string projectIds, string directorIds, string practiceIds, bool excludeInternalPractices, string personIds, string titleIds, string reviewStartdateMonths, string reviewEnddateMonths, string projectmanagerIds, string statusIds, bool isExport)
         {
-            return ReportDAL.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus,projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport);
+            return ReportDAL.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus, projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport);
         }
 
-        public List<BillingReport> BillingReportByCurrency(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds,string salesPersonIds,string projectManagerIds,string seniorManagerIds)
+        public List<BillingReport> BillingReportByCurrency(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds)
         {
-            return ReportDAL.BillingReportByCurrency( startDate,  endDate, practiceIds,accountIds, businessUnitIds, directorIds,salesPersonIds, projectManagerIds, seniorManagerIds);
+            return ReportDAL.BillingReportByCurrency(startDate, endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
         }
 
         public List<BillingReport> BillingReportByHours(DateTime startDate, DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds)
         {
-            return ReportDAL.BillingReportByHours(startDate,endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
+            return ReportDAL.BillingReportByHours(startDate, endDate, practiceIds, accountIds, businessUnitIds, directorIds, salesPersonIds, projectManagerIds, seniorManagerIds);
         }
 
         public List<ProjectLevelGroupedHours> NonBillableReport(DateTime startDate, DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds)
