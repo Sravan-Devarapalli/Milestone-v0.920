@@ -19,6 +19,7 @@ using PraticeManagement.Utils;
 using Resources;
 using ProjectAttachment = PraticeManagement.AttachmentService.ProjectAttachment;
 using ProjectCSAT = PraticeManagement.Controls.Projects.ProjectCSAT;
+using System.Text.RegularExpressions;
 
 namespace PraticeManagement
 {
@@ -405,6 +406,57 @@ namespace PraticeManagement
             }
         }
 
+        protected void custProjectNumberRequired_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (ProjectId.HasValue || rbAutoGenerate.Checked)
+                args.IsValid = true;
+            else
+            {
+                if (string.IsNullOrEmpty(txtProjectNumber.Text.Trim()))
+                    args.IsValid = false;
+            }
+        }
+
+        protected void custNumberExistsInSystem_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (ProjectId.HasValue || rbAutoGenerate.Checked)
+                args.IsValid = true;
+            else
+            {
+                if (!custProjectNumberRequired.IsValid || !custFormat.IsValid || !custInternalNumber.IsValid)
+                    return;
+                args.IsValid = !ServiceCallers.Custom.Project(p => p.CheckIfProjectNumberExists(txtProjectNumber.Text.Trim()));
+            }
+        }
+
+        protected void custInternalNumber_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (ProjectId.HasValue || rbAutoGenerate.Checked)
+                args.IsValid = true;
+            else
+            {
+                if (!custProjectNumberRequired.IsValid || !custFormat.IsValid)
+                    return;
+                var projectNumber = txtProjectNumber.Text.Trim();
+                var number = Convert.ToInt32(projectNumber.Substring(1, 6));
+                if (number >= 999900 && number <= 999999)
+                    args.IsValid = false;
+            }
+        }
+
+        protected void custFormat_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (ProjectId.HasValue || rbAutoGenerate.Checked)
+                args.IsValid = true;
+            else
+            {
+                if (!custProjectNumberRequired.IsValid)
+                    return;
+                Regex reg = new Regex("^[p|P][0-9]{6}$");
+                args.IsValid = reg.IsMatch(txtProjectNumber.Text.Trim());
+            }
+        }
+
         protected void cvCloneStatus_ServerValidate(object sender, ServerValidateEventArgs args)
         {
             args.IsValid = true;
@@ -469,6 +521,10 @@ namespace PraticeManagement
                 lblAttachmentMessage.Text = string.Format(AttachSOWMessage, size / 1000);
                 DataHelper.FillAttachemntCategoryList(ddlAttachmentCategory);
                 ddlCloneProjectStatus.SelectedValue = ((int)ProjectStatusType.Experimental).ToString();
+            }
+            else
+            {
+                txtProjectNumber.Style["display"] = hdnVisibilty.Value;
             }
             mlConfirmation.ClearMessage();
 
@@ -563,7 +619,7 @@ namespace PraticeManagement
 
             //isReadOnly  variable can be removed as only this roles can access the page.
             bool isReadOnly = !userIsAdministrator && !userIsSalesPerson && !userIsPracticeManager && !userIsBusinessUnitManager && !userIsDirector && !userIsSeniorLeadership && !userIsProjectLead;// #2817: userIsDirector is added as per the requirement.
-          
+
             txtProjectName.ReadOnly = isReadOnly;
             ddlClientName.Enabled = ddlPractice.Enabled = !isReadOnly;
             ddlSalesperson.Enabled = ddlProjectGroup.Enabled = !string.IsNullOrEmpty(ddlClientName.SelectedValue) && !isReadOnly;
@@ -1273,7 +1329,7 @@ namespace PraticeManagement
             return
                 statusId == (int)ProjectStatusType.Experimental ||
                 statusId == (int)ProjectStatusType.Inactive ||
-                statusId == (int)ProjectStatusType.Projected||
+                statusId == (int)ProjectStatusType.Projected ||
                 statusId == (int)ProjectStatusType.Proposed;
         }
 
@@ -1401,6 +1457,7 @@ namespace PraticeManagement
             var project = new Project();
             PopulateData(project);
             int result = -1;
+            var isNew = !ProjectId.HasValue;
             using (var serviceClient = new ProjectServiceClient())
             {
                 try
@@ -1416,6 +1473,12 @@ namespace PraticeManagement
                     if (Project != null && Project.Milestones != null && Project.Milestones.Count > 0)
                         projectAttribution.FinalSave();
                     ShowTabs();
+                    if (isNew && ProjectId.HasValue)
+                    {
+                        //ResetToPreviousData();
+                        //ReloadProjectDetails(ProjectId);
+                        Response.Redirect("~/ProjectDetail.aspx?Id=" + ProjectId.Value + "&returnTo=" + Constants.ApplicationPages.Projects);
+                    }
                 }
                 catch (CommunicationException ex)
                 {
@@ -1454,6 +1517,12 @@ namespace PraticeManagement
             return result;
         }
 
+        protected void ReloadProjectDetails(int? projectId)
+        {
+            if (ProjectId.HasValue)
+                Server.Transfer("~/ProjectDetail.aspx?Id=" + projectId.Value + "&returnTo=" + Constants.ApplicationPages.Projects, true);
+        }
+
         protected override void Display()
         {
             DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
@@ -1477,6 +1546,7 @@ namespace PraticeManagement
                 PopulateControls(Project);
                 DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty, new List<int>());
                 FillUnlinkedOpportunityList(Project.Client.Id);
+                tblSetProjectNumber.Visible = false;
             }
             else
             {
@@ -1509,6 +1579,8 @@ namespace PraticeManagement
 
                 var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null)).Where(pc => pc.IsActive);
                 DataHelper.FillListDefault(cblPracticeCapabilities, "All Capabilities", capabilities.ToArray(), false, "CapabilityId", "MergedName");
+
+                tblSetProjectNumber.Visible = true;
             }
         }
 
@@ -1817,7 +1889,7 @@ namespace PraticeManagement
                 project.CSATOwnerId = int.Parse(ddlCSATOwner.SelectedValue);
             }
             project.POAmount = string.IsNullOrEmpty(txtPOAmount.Text) ? null : (decimal?)Convert.ToDecimal(txtPOAmount.Text);
-
+            project.ProjectNumber = string.IsNullOrEmpty(txtProjectNumber.Text) || rbAutoGenerate.Checked ? null : txtProjectNumber.Text.Trim();
         }
 
         private void PopulatePricingList(Project project)
