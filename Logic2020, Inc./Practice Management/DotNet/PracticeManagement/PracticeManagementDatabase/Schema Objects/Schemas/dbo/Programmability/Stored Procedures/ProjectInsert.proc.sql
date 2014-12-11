@@ -31,7 +31,8 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@IsSeniorManagerUnassigned   BIT = 0,
 	@CSATOwnerId			INT = NULL,
 	@PONumber			NVARCHAR(50) = NULL,
-	@SalesPersonId			INT = NULL
+	@SalesPersonId			INT = NULL,
+	@ProjectNumber		NVARCHAR(50) = NULL
 )
 AS
 BEGIN
@@ -42,9 +43,15 @@ BEGIN
 	BEGIN TRAN  T1;
 
 	-- Generating Project Number
-	DECLARE @ProjectNumber NVARCHAR(12) 
-	EXEC dbo.GenerateNewProjectNumber @IsInternal , @ProjectNumber OUTPUT 
-
+	DECLARE @ProjectNumberLocal NVARCHAR(12) 
+	IF @ProjectNumber IS NULL
+	BEGIN
+		EXEC dbo.GenerateNewProjectNumber @IsInternal , @ProjectNumberLocal OUTPUT 
+	END
+	ELSE
+	BEGIN
+	  SELECT @ProjectNumberLocal = @ProjectNumber
+	END
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
@@ -58,7 +65,7 @@ BEGIN
 	            (ClientId, Terms, Name, PracticeId,
 	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, DirectorId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectOwnerId, SowBudget, POAmount, Discount,PricingListId,BusinessTypeId,SeniorManagerId,IsSeniorManagerUnassigned,ReviewerId,PONumber,SalesPersonId)
 	     VALUES (@ClientId, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumber, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget, @POAmount, @Discount,@PricingListId,@BusinessTypeId,@SeniorManagerId,@IsSeniorManagerUnassigned,@CSATOwnerId,@PONumber,@SalesPersonId)
+	             @ProjectStatusId, @ProjectNumberLocal, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget, @POAmount, @Discount,@PricingListId,@BusinessTypeId,@SeniorManagerId,@IsSeniorManagerUnassigned,@CSATOwnerId,@PONumber,@SalesPersonId)
 	
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
