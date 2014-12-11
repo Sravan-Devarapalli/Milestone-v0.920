@@ -8,7 +8,7 @@
             <tr class="textLeft">
                 <td colspan="4" class="ProjectAccountName Width95Percent no-wrap">                  
                     <asp:Label ID="lbProject" Style="display: none;" runat="server"></asp:Label>
-                    <asp:Label ID="lblAccountName" runat="server"></asp:Label> <%# Eval("BusinessUnit.HtmlEncodedName")%>
+                    <%# Eval("BusinessUnit.HtmlEncodedName")%>
                     <b class="fontStyleNormal">
                         <%# GetBusinessUnitStatus((bool)Eval("BusinessUnit.IsActive"))%></b>
                 </td>
