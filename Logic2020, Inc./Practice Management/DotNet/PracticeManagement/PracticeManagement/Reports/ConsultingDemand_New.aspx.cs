@@ -184,7 +184,7 @@ namespace PraticeManagement.Reports
                 hdnCustomOk.Value = "false";
                 hdnPeriodValue.Value = "-1";
                 trGtypes.Visible =
-                trSalesStageType.Visible = 
+                trSalesStageType.Visible =
                 trTitles.Visible =
                 upnlTabCell.Visible = false;
                 lblTitle.Text = "Title";
@@ -206,7 +206,7 @@ namespace PraticeManagement.Reports
                 }
                 OpportunityPriority[] priorities = OpportunityPriorityHelper.GetOpportunityPriorities(true);
                 salesStages.AddRange(priorities.Select(p => p.DisplayName).ToList());
-                salesStages = salesStages.Distinct().OrderBy(p=>p).ToList();
+                salesStages = salesStages.Distinct().OrderBy(p => p).ToList();
                 DataHelper.FillListDefault(cblTitles, "All Titles", titles.Select(p => new { title = p }).ToArray(), false, "title", "title");
                 DataHelper.FillListDefault(cblSalesStages, "All Sales Stages", salesStages.Select(p => new { salesStage = p }).ToArray(), false, "salesStage", "salesStage");
                 tdSkills.Visible = false;
@@ -319,7 +319,7 @@ namespace PraticeManagement.Reports
             else if (ddlGraphsTypes.SelectedValue == TransactionSkill)
             {
                 lblTitle.Text = "Skill";
-                List<string> skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).OrderBy(p=>p.FirstName).Select(p => p.FirstName).Distinct().ToList();
+                List<string> skills = ServiceCallers.Custom.Person(p => p.GetStrawmenListAllShort(true)).OrderBy(p => p.FirstName).Select(p => p.FirstName).Distinct().ToList();
                 DataHelper.FillListDefault(cblSkills, "All Skills", skills.Select(p => new { skill = p }).ToArray(), false, "skill", "skill");
                 tdSkills.Visible = true;
                 tdTitles.Visible = false;
@@ -357,7 +357,7 @@ namespace PraticeManagement.Reports
             bool enableUpdateView = false;
             bool enableResetFilter = true;
 
-            enableUpdateView = enableUpdateView ||( ddlPeriod.SelectedValue != "-1" && hdnPeriodValue.Value != ddlPeriod.SelectedValue);
+            enableUpdateView = enableUpdateView || (ddlPeriod.SelectedValue != "-1" && hdnPeriodValue.Value != ddlPeriod.SelectedValue);
 
             if (trGtypes.Visible)
             {
@@ -422,7 +422,7 @@ namespace PraticeManagement.Reports
                 trSalesStageType.Visible = true;
                 trTitles.Visible = ddlGraphsTypes.SelectedIndex != 0 && ddlGraphsTypes.SelectedValue != "PipeLine";
                 string selectedValues = null;
-                hdnSalesStages.Value = cblSalesStages.SelectedItems; 
+                hdnSalesStages.Value = cblSalesStages.SelectedItems;
                 if (ddlGraphsTypes.SelectedValue == TransactionTitle)
                 {
                     selectedValues = cblTitles.SelectedItems;
