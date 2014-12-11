@@ -87,6 +87,9 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CheckIfFeedbackExists", ReplyAction="http://tempuri.org/IProjectService/CheckIfFeedbackExistsResponse")]
         bool CheckIfFeedbackExists(System.Nullable<int> milestonePersonId, System.Nullable<int> milestoneId, System.Nullable<int> projectId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CheckIfProjectNumberExists", ReplyAction="http://tempuri.org/IProjectService/CheckIfProjectNumberExistsResponse")]
+        bool CheckIfProjectNumberExists(string projectNumber);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -338,6 +341,10 @@ namespace PraticeManagement.ProjectService {
         
         public bool CheckIfFeedbackExists(System.Nullable<int> milestonePersonId, System.Nullable<int> milestoneId, System.Nullable<int> projectId) {
             return base.Channel.CheckIfFeedbackExists(milestonePersonId, milestoneId, projectId);
+        }
+        
+        public bool CheckIfProjectNumberExists(string projectNumber) {
+            return base.Channel.CheckIfProjectNumberExists(projectNumber);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
