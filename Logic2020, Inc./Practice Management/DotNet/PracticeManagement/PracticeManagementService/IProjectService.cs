@@ -78,7 +78,7 @@ namespace PracticeManagementService
         /// Enlists the requested projects.
         /// </summary>
         [OperationContract]
-        List<Project> GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal,bool proposed);
+        List<Project> GetProjectListCustom(bool projected, bool completed, bool active, bool experimantal, bool proposed);
 
         /// <summary>
         /// Enlists the requested projects.
@@ -371,5 +371,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, int? projectId);
+
+        [OperationContract]
+        bool CheckIfProjectNumberExists(string projectNumber);
     }
 }
+
