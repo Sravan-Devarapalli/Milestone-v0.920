@@ -65,42 +65,37 @@
                     <td class="width60P">
                     </td>
                 </tr>
-                <tr class="height30P WholeWidth">
+                <tr class="height30P">
                     <td class="ReportFilterLabels">
                         Account:&nbsp;
                     </td>
-                    <td class="textLeft Width90Percent">
-                        <pmc:ScrollingDropDown ID="cblAccount" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            OnSelectedIndexChanged="cblAccount_SelectedIndexChanged" NoItemsType="All" onclick="scrollingDropdown_onclick('cblAccount','Account')"
-                            AutoPostBack="true" DropDownListType="Account" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
-                        <ext:ScrollableDropdownExtender ID="sdeAccount" runat="server" TargetControlID="cblAccount"
-                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                        </ext:ScrollableDropdownExtender>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span class="fontBold">Business Unit:</span> &nbsp;
+                    <td class="textLeft">
+                        <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" CssClass="Width220Px"
+                            OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
+                        </asp:DropDownList>
+                         <span class="fontBold">Business Unit:</span> &nbsp;
                         <pmc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
                             onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')" AutoPostBack="true"
                             DropDownListType="Business Unit" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
-                            UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td>
                     </td>
                 </tr>
                 <tr class="height30P">
-                    <td class="ReportFilterLabels">
-                        Client Director:&nbsp;
+                    <td class="ReportFilterLabels vTop lineHeight30Px">
+                    Project Status:&nbsp;
                     </td>
-                    <td class="textLeft Width90Percent">
-                        <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width220Px" AutoPostBack="true"
-                            OnSelectedIndexChanged="ddlDirector_SelectedIndexChanged">
-                        </asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp;
-                         <span class="fontBold">Project Status:</span> &nbsp;
+                   <td class="textLeft Width90Percent">
                         <pmc:ScrollingDropDown ID="cblProjectStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             OnSelectedIndexChanged="cblProjectStatus_OnSelectedIndexChanged" NoItemsType="All"
                             onclick="scrollingDropdown_onclick('cblProjectStatus','Project Status','es')" AutoPostBack="true" PluralForm="es"
                             DropDownListType="Project Status" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectStatus" runat="server" TargetControlID="cblProjectStatus"
-                            UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td>
