@@ -160,6 +160,7 @@
       <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TerminationReason" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TerminationReasonid" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TimeOff" nillable="true" type="tns:PersonTimeOff" />
       <xs:element minOccurs="0" name="TimeOffHistory" nillable="true" type="tns:ArrayOfPersonTimeOff" />
       <xs:element minOccurs="0" name="Title" nillable="true" type="tns:Title" />
       <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q10:ArrayOfPersonTraining" />
@@ -204,6 +205,8 @@
       <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" minOccurs="0" name="FinancialRange" nillable="true" type="q12:RangeType" />
       <xs:element minOccurs="0" name="GrossMargin" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PreviousMonthsActualMarginValue" type="tns:PracticeManagementCurrency" />
+      <xs:element minOccurs="0" name="PreviousMonthsActualRevenueValue" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="ReimbursedExpenses" type="xs:decimal" />
       <xs:element minOccurs="0" name="Revenue" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="RevenueNet" type="tns:PracticeManagementCurrency" />
@@ -353,27 +356,15 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonStatus" nillable="true" type="tns:PersonStatus" />
-  <xs:complexType name="ArrayOfPersonTimeOff">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonTimeOff" nillable="true" type="tns:PersonTimeOff" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPersonTimeOff" nillable="true" type="tns:ArrayOfPersonTimeOff" />
   <xs:complexType name="PersonTimeOff">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Projects" nillable="true" type="tns:ArrayOfProject" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
       <xs:element minOccurs="0" name="TimeOffEndDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TimeOffStartDate" type="xs:dateTime" />
       <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="TimeType" nillable="true" type="q13:TimeTypeRecord" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonTimeOff" nillable="true" type="tns:PersonTimeOff" />
-  <xs:complexType name="ArrayOfProject">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
   <xs:complexType name="Project">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
@@ -391,6 +382,7 @@
       <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
       <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Director" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="DirectorName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Discount" type="xs:decimal" />
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Group" nillable="true" type="tns:ProjectGroup" />
@@ -734,6 +726,18 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectStatus" nillable="true" type="tns:ProjectStatus" />
+  <xs:complexType name="ArrayOfPersonTimeOff">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonTimeOff" nillable="true" type="tns:PersonTimeOff" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPersonTimeOff" nillable="true" type="tns:ArrayOfPersonTimeOff" />
+  <xs:complexType name="ArrayOfProject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Project" nillable="true" type="tns:Project" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProject" nillable="true" type="tns:ArrayOfProject" />
   <xs:complexType name="ArrayOfCohortAssignment">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="CohortAssignment" nillable="true" type="tns:CohortAssignment" />
