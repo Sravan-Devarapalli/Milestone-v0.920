@@ -29,7 +29,7 @@ BEGIN
 
 	SELECT @IsAdmin = 1
 	FROM RequestersRoles AS roles 
-	WHERE roles.RoleName = 'System Administrator'  OR roles.RoleName = 'Salesperson'
+	WHERE roles.RoleName = 'System Administrator'  OR roles.RoleName = 'Salesperson' OR roles.RoleName = 'Operations' 
 		
 	IF(@ProjectId IS NULL)
 	BEGIN
