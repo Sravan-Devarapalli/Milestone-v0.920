@@ -451,8 +451,8 @@
       <xsl:when test="$attrName = 'SkillType'">Type</xsl:when>
       <xsl:when test="$attrName = 'SkillLevel'">Level</xsl:when>
       <xsl:when test="$attrName = 'IndustryDescription'">Industry</xsl:when>
-      <xsl:when test="$attrName = 'IsDefaultManager'">Is Career Counselor</xsl:when>
-      <xsl:when test="$attrName = 'ManagerName'">Career Counselor name</xsl:when>
+      <xsl:when test="$attrName = 'IsDefaultManager'">Is Career Manager</xsl:when>
+      <xsl:when test="$attrName = 'ManagerName'">Career Manager name</xsl:when>
       <xsl:when test="$attrName = 'ProjectGroupId'">Business Unit Id</xsl:when>
       <xsl:when test="$attrName = 'ProjectGroupName'">Business Unit</xsl:when>
       <xsl:when test="$attrName = 'Client'">Account</xsl:when>
