@@ -485,6 +485,7 @@ namespace PraticeManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            bool userIsOperations = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName);
             if (!IsPostBack)
             {
                 bool userIsSalesPerson = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
@@ -494,7 +495,7 @@ namespace PraticeManagement
                 bool userIsSeniorLeadership = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);// #2913: userIsSeniorLeadership is added as per the requirement.
                 bool userIsProjectLead = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);
 
-                if (ProjectId.HasValue && !userIsAdministrator)
+                if (ProjectId.HasValue && (!userIsAdministrator && !userIsOperations))
                 {
                     if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value
                         && IsUserisOwnerOfProject.HasValue && !IsUserisOwnerOfProject.Value)
@@ -510,7 +511,7 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
-                ddlNotes.Enabled = (userIsAdministrator || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
+                ddlNotes.Enabled = (userIsAdministrator|| userIsOperations || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
 
                 txtProjectName.Focus();
 
@@ -532,7 +533,7 @@ namespace PraticeManagement
 
             ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
 
-            if (!userIsAdministrator)
+            if (!userIsAdministrator || !userIsOperations)
             {
                 lblOppLinking.Style["display"] = "none";
                 imgLink.Style["display"] = "none";
@@ -605,6 +606,8 @@ namespace PraticeManagement
 
             bool userIsAdministrator =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+            bool userIsOperations =
+              Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName);
             bool userIsSalesPerson =
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName);
             bool userIsPracticeManager =
@@ -618,7 +621,7 @@ namespace PraticeManagement
                 Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.ProjectLead);//added Project Lead as per #2941.
 
             //isReadOnly  variable can be removed as only this roles can access the page.
-            bool isReadOnly = !userIsAdministrator && !userIsSalesPerson && !userIsPracticeManager && !userIsBusinessUnitManager && !userIsDirector && !userIsSeniorLeadership && !userIsProjectLead;// #2817: userIsDirector is added as per the requirement.
+            bool isReadOnly = !userIsOperations && !userIsAdministrator && !userIsSalesPerson && !userIsPracticeManager && !userIsBusinessUnitManager && !userIsDirector && !userIsSeniorLeadership && !userIsProjectLead;// #2817: userIsDirector is added as per the requirement.
 
             txtProjectName.ReadOnly = isReadOnly;
             ddlClientName.Enabled = ddlPractice.Enabled = !isReadOnly;
@@ -639,6 +642,7 @@ namespace PraticeManagement
                 // add new project mode
                 !ProjectId.HasValue ||
                 // Administrators always can change the project status
+                userIsOperations ||
                 userIsAdministrator ||
                 // Practice Managers and Sales persons can change the status from Experimental, Inactive or Projected
                 IsStatusValidForNonadmin(Project);
@@ -658,7 +662,7 @@ namespace PraticeManagement
             bool userIsHR = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
             bool userIsRecruiter = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
 
-            if (userIsProjectLead && !(userIsAdministrator || userIsSalesPerson || userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsSeniorLeadership || userIsHR || userIsRecruiter))
+            if (userIsProjectLead && !(userIsOperations || userIsAdministrator || userIsSalesPerson || userIsPracticeManager || userIsBusinessUnitManager || userIsDirector || userIsSeniorLeadership || userIsHR || userIsRecruiter))
             {
                 imgLink.Enabled = imgNavigateToOpp.Enabled = imgUnlink.Enabled = false;//as per #2941.
                 cellProjectTools.Visible = false;
@@ -690,7 +694,7 @@ namespace PraticeManagement
             {
                 btnDelete.Enabled = true;
             }
-            else if (Project.Status.Id == 1 && (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName)))
+            else if (Project.Status.Id == 1 && (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName)))
             {
                 btnDelete.Enabled = true;
             }
@@ -1527,7 +1531,7 @@ namespace PraticeManagement
         {
             DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
             DataHelper.FillClientListForProject(ddlClientName, "-- Select Account --", ProjectId);
-            Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
+            Person person = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName) ? null : DataHelper.CurrentPerson;
             DataHelper.FillSalespersonListOnlyActiveForLoginPerson(ddlSalesperson, person, "-- Select Salesperson --");
             DataHelper.FillProjectStatusList(ddlProjectStatus, string.Empty);
             DataHelper.FillProjectStatusList(ddlCloneProjectStatus, string.Empty, null, true);
