@@ -10,6 +10,7 @@ CREATE PROCEDURE [dbo].[PersonUpdate]
 	@PersonId        INT,
 	@FirstName       NVARCHAR(40),
 	@LastName        NVARCHAR(40),
+	@PreferredFirstName        NVARCHAR(40), 
 	@HireDate        DATETIME,
 	@TerminationDate DATETIME,
 	@Alias           NVARCHAR(100),
@@ -151,6 +152,7 @@ BEGIN TRY
 	UPDATE dbo.Person
 		SET FirstName = @FirstName,
 			LastName = @LastName,
+			PreferredFirstName = @PreferredFirstName,
 			HireDate = @HireDate, 
 			TerminationDate = @TerminationDate,
 			Alias = @Alias,
