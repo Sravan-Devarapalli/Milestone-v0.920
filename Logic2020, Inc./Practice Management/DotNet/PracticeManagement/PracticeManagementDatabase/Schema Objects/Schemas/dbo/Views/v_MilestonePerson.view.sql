@@ -53,9 +53,15 @@ AS
 				WHERE pcal.DayOff = 1 AND pcal.CompanyDayOff = 0 AND pcal.IsFloatingHoliday = 0
 					AND pcal.Date BETWEEN mpe.StartDate AND mpe.EndDate
 					AND pcal.PersonId = mp.PersonId ),0) as VacationDays,
-		   m.GroupId
+		   m.GroupId,
+		   mpe.IsBadgeRequired,
+		   mpe.BadgeStartDate,
+		   mpe.BadgeEndDate,
+		   mpe.IsBadgeException,
+		   mpe.IsApproved
 	  FROM dbo.MilestonePerson AS mp
 	       INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
 	       INNER JOIN dbo.v_Milestone AS m ON mp.MilestoneId = m.MilestoneId
 	       INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	       LEFT JOIN dbo.PersonRole AS r ON mpe.PersonRoleId = r.PersonRoleId
+
