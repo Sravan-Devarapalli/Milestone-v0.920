@@ -463,7 +463,7 @@ namespace DataAccess
         /// <param name="milestoneId">An ID of the <see cref="Milestone"/> to be moved.</param>
         /// <param name="shiftDays">A number of days to move.</param>
         /// <param name="moveFutureMilestones">Determines whether future milestones must be moved too.</param>
-        public static void MilestoneMove(int milestoneId, int shiftDays, bool moveFutureMilestones)
+        public static List<MSBadge> MilestoneMove(int milestoneId, int shiftDays, bool moveFutureMilestones)
         {
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(MilestoneMoveProcedure, connection))
@@ -477,12 +477,62 @@ namespace DataAccess
 
                 connection.Open();
 
-                SqlTransaction trnScope = connection.BeginTransaction();
-                command.Transaction = trnScope;
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    List<MSBadge> result = new List<MSBadge>();
+                    ReadBadgeRecords(reader, result);
+                    return result;
+                }
+            }
+        }
 
-                command.ExecuteNonQuery();
+        public static void ReadBadgeRecords(SqlDataReader reader, List<MSBadge> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+              
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                int newBadgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.NewBadgeStartDate);
+                int newBadgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.NewBadgeEndDate);
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int isBadgeExceptionIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeException);
 
-                trnScope.Commit();
+                while (reader.Read())
+                {
+                    var badgeResource = new MSBadge()
+                    {
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            FirstName = reader.GetString(firstNameIndex)
+                        },
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        },
+                        BadgeStartDate = reader.GetDateTime(newBadgeStartDateIndex),
+                        BadgeEndDate = reader.GetDateTime(newBadgeEndDateIndex),
+                        LastBadgeStartDate = reader.GetDateTime(badgeStartDateIndex),
+                        LastBadgeEndDate = reader.GetDateTime(badgeEndDateIndex),
+                        IsException = reader.GetBoolean(isBadgeExceptionIndex)
+                    };
+                    result.Add(badgeResource);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
