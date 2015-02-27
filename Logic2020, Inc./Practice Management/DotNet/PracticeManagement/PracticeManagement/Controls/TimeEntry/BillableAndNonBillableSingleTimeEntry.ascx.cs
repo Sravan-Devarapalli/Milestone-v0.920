@@ -161,6 +161,31 @@ namespace PraticeManagement.Controls.TimeEntry
             }
         }
 
+        public TextBox BillableHours
+        {
+            get
+            {
+               return tbBillableHours;
+            }
+            set
+            {
+                tbBillableHours = value;
+            }
+        }
+
+        public TextBox NonBillableHours
+        {
+            get
+            {
+                return tbNonBillableHours;
+            }
+            set
+            {
+                tbNonBillableHours = value;
+            }
+        }
+
+
         #endregion
 
         #region Control events
@@ -476,7 +501,7 @@ namespace PraticeManagement.Controls.TimeEntry
             return true;
         }
 
-        private bool IsValidNonBillableHours()
+        public bool IsValidNonBillableHours()
         {
             double hours;
             if (string.IsNullOrEmpty(tbNonBillableHours.Text))
@@ -499,7 +524,7 @@ namespace PraticeManagement.Controls.TimeEntry
             return false;
         }
 
-        private bool IsValidBillableHours()
+        public bool IsValidBillableHours()
         {
             double hours;
             if (string.IsNullOrEmpty(tbBillableHours.Text))
