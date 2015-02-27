@@ -68,13 +68,15 @@ namespace PraticeManagement
 
         private int _saveCode;
         private bool? _userIsAdministratorValue;
+        private bool? _userIsOperationsValue;
         private bool? _userIsHRValue;
+        private bool? _userIsRecruiterValue;
         private bool IsErrorPanelDisplay;
         private bool IsOtherPanelDisplay;
         private Pay payForcvEmployeePayTypeChangeViolation;
         private ExceptionDetail internalException;
         private bool _disableValidatecustTerminateDateTE;
-        private int _finalWizardView = 3;
+        private int _finalWizardView = 8;
         private int _startingWizardView = 0;
         private DateTime? _editablePayStartDate;
 
@@ -219,7 +221,7 @@ namespace PraticeManagement
             }
         }
 
-        private int? PersonId
+        public int? PersonId
         {
             get
             {
@@ -263,6 +265,20 @@ namespace PraticeManagement
             }
         }
 
+        protected bool UserIsOperations
+        {
+            get
+            {
+                if (!_userIsOperationsValue.HasValue)
+                {
+                    _userIsOperationsValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName);
+                }
+
+                return _userIsOperationsValue.Value;
+            }
+        }
+
         protected bool UserIsHR
         {
             get
@@ -274,6 +290,20 @@ namespace PraticeManagement
                 }
 
                 return _userIsHRValue.Value;
+            }
+        }
+
+        protected bool UserIsRecruiter
+        {
+            get
+            {
+                if (!_userIsRecruiterValue.HasValue)
+                {
+                    _userIsRecruiterValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
+                }
+
+                return _userIsRecruiterValue.Value;
             }
         }
 
@@ -490,6 +520,7 @@ namespace PraticeManagement
                 _ActiveWizardsArray.Add(1, new int[] { 0, 1 });
                 _ActiveWizardsArray.Add(2, new int[] { 0, 1, 2 });
                 _ActiveWizardsArray.Add(3, new int[] { 0, 1, 2, 3 });
+                _ActiveWizardsArray.Add(8, new int[] { 0, 1, 2, 3, 8 });
                 return _ActiveWizardsArray;
             }
         }
@@ -501,6 +532,14 @@ namespace PraticeManagement
                 string email = string.Empty;
                 email = !string.IsNullOrEmpty(txtEmailAddress.Text) ? txtEmailAddress.Text + '@' + ddlDomain.SelectedValue : string.Empty;
                 return email;
+            }
+        }
+
+        public DateTime CurrentHireDate
+        {
+            get
+            {
+                return dtpHireDate.DateValue;
             }
         }
 
@@ -523,7 +562,8 @@ namespace PraticeManagement
             {
                 activityLog.Update();
             }
-            cellOpportunities.Visible = UserIsAdministrator;
+            cellOpportunities.Visible = UserIsAdministrator || UserIsOperations;
+            cellCompensation.Visible = UserIsAdministrator || UserIsHR || UserIsRecruiter;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -1001,7 +1041,7 @@ namespace PraticeManagement
             PreviousPtoAccrual = null;
             PreviousPractice = null;
             PreviousBasis = null;
-             PreviousAmount = null;
+            PreviousAmount = null;
             if (!PersonId.HasValue)
             {
                 // Save a New Record
@@ -1269,6 +1309,21 @@ namespace PraticeManagement
             }
         }
 
+        protected void cvPFNAllowSpace_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            var isValid = valRegPrefferedFirstName.IsValid;
+            if (isValid)
+            {
+                var inputString = txtPrefferedFirstName.Text;
+                var spacesRemovedInputString = inputString.Replace(" ", "");
+                args.IsValid = ((inputString.Length - spacesRemovedInputString.Length) < 2) ? true : false;
+            }
+            else
+            {
+                args.IsValid = true;
+            }
+        }
+
         protected void custEmailAddress_ServerValidate(object source, ServerValidateEventArgs args)
         {
             if (!String.IsNullOrEmpty(ExMessage))
@@ -1401,7 +1456,7 @@ namespace PraticeManagement
         {
             Person current = DataHelper.CurrentPerson;
             e.IsValid =
-                UserIsAdministrator || UserIsHR ||
+                UserIsAdministrator || UserIsHR || UserIsOperations ||
                 (current != null && current.Id.HasValue && int.Parse(ddlRecruiter.SelectedValue) == current.Id.Value);
         }
 
@@ -2175,7 +2230,7 @@ namespace PraticeManagement
             PreviousPtoAccrual = lbVacationDays.Text == string.Empty ? null : (int?)Convert.ToInt32(lbVacationDays.Text);
             PreviousPractice = lblpractice.Text;
             PreviousBasis = lblBasis.Text;
-            PreviousAmount = Convert.ToDecimal(lbAmount.Text.Remove(0,1));
+            PreviousAmount = Convert.ToDecimal(lbAmount.Text.Remove(0, 1));
         }
 
         private bool validateAndSave(object sender, EventArgs e)
@@ -2662,7 +2717,7 @@ namespace PraticeManagement
                 }
             }
         }
-        
+
         protected void custLockoutPTO_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
             if (Lockouts.Any(p => p.Name == "PTO Accrual" && p.IsLockout == true))
@@ -2690,7 +2745,7 @@ namespace PraticeManagement
                     custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownPTOAccrualsMessage, LockoutDate.Value.ToShortDateString());
                 }
             }
-        } 
+        }
 
         #endregion gvCompensationHistory Events
 
@@ -2745,7 +2800,15 @@ namespace PraticeManagement
                 }
                 if (ActiveWizard != _finalWizardView)
                 {
-                    ActiveWizard++;
+                    if (ActiveWizard == 3)
+                    {
+                        ActiveWizard = _finalWizardView;
+                        personBadge.chbBlockFromMS_CheckedChanged(personBadge.BlockCheckBox,new EventArgs());
+                        personBadge.chbException_CheckedChanged(personBadge.ExceptionCheckBox, new EventArgs());
+                        personBadge.ddlPreviousAtMS_OnIndexChanged(personBadge.PreviousBadgeDdl, new EventArgs());
+                    }
+                    else
+                        ActiveWizard++;
                     SelectView(rowSwitcher.Cells[ActiveWizard].Controls[0], ActiveWizard, true);
                 }
             }
@@ -2790,6 +2853,7 @@ namespace PraticeManagement
             int activeindex = mvPerson.ActiveViewIndex;
             int[] activeWizardsArray = ActiveWizardsArray[ActiveWizard];
             Page.Validate(valsPerson.ValidationGroup);
+            personBadge.ValidateMSBadgeDetails();
             if (Page.IsValid)
             {
                 foreach (int i in activeWizardsArray)
@@ -3120,6 +3184,10 @@ namespace PraticeManagement
             {
                 cvSLTPTOApproval.Validate();
             }
+            if (Page.IsValid)
+            {
+                personBadge.ValidateMSBadgeDetails();
+            }
             if (!Page.IsValid)
             {
                 IsErrorPanelDisplay = true;
@@ -3421,6 +3489,7 @@ namespace PraticeManagement
         {
             txtFirstName.Text = person.FirstName;
             txtLastName.Text = person.LastName;
+            txtPrefferedFirstName.Text = person.PrefferedFirstName;
             PersonHireDate = dtpHireDate.DateValue = person.HireDate;
             PreviousHireDate = person.HireDate;
             PreviousTerminationDate = (person.EmploymentHistory != null && person.EmploymentHistory.Count > 0) ? person.EmploymentHistory.Last().TerminationDate : null;
@@ -3566,6 +3635,7 @@ namespace PraticeManagement
             person.Id = PersonId;
             person.FirstName = txtFirstName.Text;
             person.LastName = txtLastName.Text;
+            person.PrefferedFirstName = txtPrefferedFirstName.Text;
             person.HireDate = HireDate.Value;
 
             person.IsOffshore = ddlPersonType.SelectedValue == "1";
@@ -3679,6 +3749,7 @@ namespace PraticeManagement
                     SaveRoles(person, currentRoles);
 
                     serviceClient.SendAdministratorAddedEmail(person, oldPerson);
+                    
                     if (personId.Value < 0)
                     {
                         // Creating User error
@@ -3698,6 +3769,9 @@ namespace PraticeManagement
                     ValidateAttribution = true;
 
                     IsDirty = IsStatusChangeClicked = false;
+                    if (personId.HasValue) hdnPersonId.Value = personId.Value.ToString();
+                    personBadge.SaveData();
+                    personBadge.PopulateData();
                     return personId;
                 }
                 catch (Exception ex)
