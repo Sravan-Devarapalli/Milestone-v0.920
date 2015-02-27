@@ -991,6 +991,9 @@
                                     <asp:CustomValidator ID="cvApprovedManager" runat="server" ErrorMessage="You must select an approving Manager from the drop-down in notes entry for the highlighted entries."
                                         OnServerValidate="cvApprovedManager_ServerValidate" EnableClientScript="false"
                                         Text="*" Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="You must select an approving Manager from the drop-down in notes entry for the highlighted entries." />
+                                    <asp:CustomValidator ID="custOpsApproval" runat="server" ErrorMessage="Ops needs to approve MS badge dates, please email Ops for approval."
+                                        OnServerValidate="custOpsApproval_ServerValidate" EnableClientScript="false"
+                                        Text="*" Display="None" SetFocusOnError="true" ValidationGroup="TE" ToolTip="Ops needs to approve MS badge dates, please email Ops for approval." />
                                     <asp:ValidationSummary ID="valSumSaveTimeEntries" runat="server" ValidationGroup="TE" />
                                 </td>
                             </tr>
@@ -1280,3 +1283,4 @@
         </asp:UpdatePanel>
     </div>
 </asp:Content>
+
