@@ -17,6 +17,7 @@
             public const string DirectorRoleName = "Client Director";
             public const string HRRoleName = "HR";
             public const string SeniorLeadershipRoleName = "Senior Leadership";
+            public const string OperationsRoleName = "Operations";
         }
 
         public static class SeniorityNames
