@@ -77,14 +77,14 @@ namespace PraticeManagement.Controls.Milestones
             else if (HostingPage.Project.StartDate.HasValue && HostingPage.Project.EndDate.HasValue)
             {
                 var isValid = true;
-                if (startDate < HostingPage.Project.StartDate.Value.Date ||
-                    startDate > HostingPage.Project.EndDate.Value.Date)
+                if (startDate < HostingPage.Milestone.StartDate.Date ||
+                    startDate > HostingPage.Milestone.EndDate.Date)
                 {
                     CustomValidator cstStartDateShouldbewithinProjectPeriod = footerRow.FindControl("cstStartDateShouldbewithinProjectPeriod") as CustomValidator;
                     cstStartDateShouldbewithinProjectPeriod.IsValid = isValid = false;
                 }
-                if ((endDate < HostingPage.Project.StartDate.Value.Date ||
-                    endDate > HostingPage.Project.EndDate.Value.Date) && isValid)
+                if ((endDate < HostingPage.Milestone.StartDate.Date ||
+                    endDate > HostingPage.Milestone.EndDate.Date) && isValid)
                 {
                     CustomValidator cstEndDateShouldbewithinProjectPeriod = footerRow.FindControl("cstEndDateShouldbewithinProjectPeriod") as CustomValidator;
                     cstEndDateShouldbewithinProjectPeriod.IsValid = isValid = false;
@@ -216,14 +216,14 @@ namespace PraticeManagement.Controls.Milestones
                         {
                             var isValid = true;
 
-                            if ((startDate < HostingPage.Project.StartDate.Value.Date ||
-                                startDate > HostingPage.Project.EndDate.Value.Date))
+                            if ((startDate < HostingPage.Milestone.StartDate.Date ||
+                                startDate > HostingPage.Milestone.EndDate.Date))
                             {
                                 CustomValidator cstStartDateShouldbewithinProjectPeriod = gvProjectExpenses.Rows[e.RowIndex].FindControl("cstStartDateShouldbewithinProjectPeriod") as CustomValidator;
                                 cstStartDateShouldbewithinProjectPeriod.IsValid = isValid = false;
                             }
-                            if ((endDate < HostingPage.Project.StartDate.Value.Date ||
-                               endDate > HostingPage.Project.EndDate.Value.Date) && isValid)
+                            if ((endDate < HostingPage.Milestone.StartDate.Date ||
+                               endDate > HostingPage.Milestone.EndDate.Date) && isValid)
                             {
                                 CustomValidator cstEndDateShouldbewithinProjectPeriod = gvProjectExpenses.Rows[e.RowIndex].FindControl("cstEndDateShouldbewithinProjectPeriod") as CustomValidator;
                                 cstEndDateShouldbewithinProjectPeriod.IsValid = isValid = false;
