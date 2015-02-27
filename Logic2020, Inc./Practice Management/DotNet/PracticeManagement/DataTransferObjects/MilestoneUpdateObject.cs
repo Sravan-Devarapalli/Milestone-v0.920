@@ -12,5 +12,8 @@ namespace DataTransferObjects
 
         [DataMember]
         public bool? IsEndDateChangeReflectedForMilestoneAndPersons { get; set; }
+
+        [DataMember]
+        public bool? IsExtendedORCompleteOutOfRange { get; set; }
     }
 }
