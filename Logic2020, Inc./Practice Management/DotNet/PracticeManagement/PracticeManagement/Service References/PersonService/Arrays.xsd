@@ -20,12 +20,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" nillable="true" type="tns:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
-  <xs:complexType name="ArrayOfstring">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring" />
   <xs:complexType name="ArrayOfKeyValueOfdateTimedecimal">
     <xs:annotation>
       <xs:appinfo>
@@ -62,6 +56,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" nillable="true" type="tns:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
+  <xs:complexType name="ArrayOfstring">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring" />
   <xs:complexType name="ArrayOfKeyValueOfdateTimeboolean">
     <xs:annotation>
       <xs:appinfo>
