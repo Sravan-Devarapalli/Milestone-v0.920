@@ -8,7 +8,13 @@
 	@EndDate       DATETIME,
 	@HoursPerDay   DECIMAL(4,2),
 	@PersonRoleId  INT,
-	@Amount        DECIMAL(18,2)
+	@Amount        DECIMAL(18,2),
+	@IsBadgeRequired	BIT,
+	@BadgeStartDate		DATETIME,
+	@BadgeEndDate		DATETIME,
+	@IsBadgeException	BIT,
+	@IsApproved			BIT,
+	@RequestDate		DATETIME
 )
 AS
 BEGIN
@@ -17,15 +23,19 @@ BEGIN
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-	DECLARE @MilestoneId INT , @OldPersonId INT
+	DECLARE @MilestoneId INT , @OldPersonId INT, @UpdatedBy INT, @CurrentPMTime DATETIME,@OldRequestDate DATETIME
 
-	SELECT @MilestoneId = mp.MilestoneId,@OldPersonId = mp.PersonId  FROM dbo.MilestonePerson AS mp
+	SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
+	SELECT @CurrentPMTime = dbo.GettingPMTime(GETUTCDATE())
+
+	SELECT @MilestoneId = mp.MilestoneId,@OldPersonId = mp.PersonId,@OldRequestDate = BadgeRequestDate FROM dbo.MilestonePerson AS mp
 	INNER JOIN dbo.MilestonePersonEntry AS mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
 	WHERE mp.MilestonePersonId = @MilestonePersonId AND mpe.Id = @Id
 
+	SELECT @RequestDate = ISNULL(@RequestDate,@OldRequestDate)	
 
 	UPDATE dbo.MilestonePersonEntry
-	SET  StartDate = @StartDate, EndDate = @EndDate, PersonRoleId=@PersonRoleId, Amount=@Amount, HoursPerDay=@HoursPerDay
+	SET  StartDate = @StartDate, EndDate = @EndDate, PersonRoleId=@PersonRoleId, Amount=@Amount, HoursPerDay=@HoursPerDay, IsBadgeRequired = @IsBadgeRequired, BadgeStartDate = @BadgeStartDate, BadgeEndDate = @BadgeEndDate, IsBadgeException = @IsBadgeException, IsApproved = @IsApproved, BadgeRequestDate = @RequestDate
 	WHERE Id = @Id          
 	     
 	     
@@ -58,13 +68,16 @@ BEGIN
 			WHERE Id=@Id
 
 		END
-
 	END 
 
 	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = @MilestonePersonId,@MilestoneId = NULL
+	EXEC UpdateMSBadgeDetailsByPersonId @PersonId = @PersonId,@UpdatedBy=@UpdatedBy
 
-
+	IF @OldPersonId IS NOT NULL
+		EXEC UpdateMSBadgeDetailsByPersonId @PersonId = @OldPersonId,@UpdatedBy = @UpdatedBy
+	
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
 END
+
