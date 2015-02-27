@@ -1156,6 +1156,41 @@ namespace PracticeManagementService
             return PersonDAL.GetPTOReport(startDate, endDate, includeCompanyHolidays, personId);
         }
 
+        public List<MSBadge> GetBadgeDetailsByPersonId(int personId)
+        {
+            return PersonDAL.GetBadgeDetailsByPersonId(personId);
+        }
+
+        public List<MSBadge> GetLogic2020BadgeHistory(int personId)
+        {
+            return PersonDAL.GetLogic2020BadgeHistory(personId);
+        }
+
+        public void SaveBadgeDetailsByPersonId(MSBadge msBadge)
+        {
+            PersonDAL.SaveBadgeDetailsByPersonId(msBadge);
+        }
+
+        public void UpdateMSBadgeDetailsByPersonId(int personId,int updatedBy)
+        {
+            PersonDAL.UpdateMSBadgeDetailsByPersonId(personId,updatedBy);
+        }
+
+        public bool CheckIfPersonInProjectForDates(int personId, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.CheckIfPersonInProjectForDates(personId,  startDate,  endDate);
+        }
+
+        public bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId)
+        {
+            return PersonDAL.CheckIfPersonIsRestrictedByProjectId(personId, projectId);
+        }
+
+        public PersonBadgeHistories GetBadgeHistoryByPersonId(int personId)
+        {
+            return PersonDAL.GetBadgeHistoryByPersonId(personId);
+        }
+
         #endregion IPersonService Members
     }
 }
