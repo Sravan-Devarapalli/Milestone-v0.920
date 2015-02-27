@@ -113,7 +113,10 @@ namespace DataTransferObjects
         Admin = 7,
 
         [EnumMember]
-        ProjectLead = 8
+        ProjectLead = 8,
+
+        [EnumMember]
+        Operations = 9
     }
 
     [DataContract]
@@ -300,3 +303,4 @@ namespace DataTransferObjects
         Projectdetail = 4
     }
 }
+
