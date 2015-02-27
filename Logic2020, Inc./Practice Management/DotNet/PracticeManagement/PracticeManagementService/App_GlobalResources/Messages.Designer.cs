@@ -178,6 +178,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MSBadgeRequestApproved.
+        /// </summary>
+        internal static string MSBadgeRequestApprovedTemplate {
+            get {
+                return ResourceManager.GetString("MSBadgeRequestApprovedTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MSBadgeRequest.
+        /// </summary>
+        internal static string MSBadgeRequestTemplateName {
+            get {
+                return ResourceManager.GetString("MSBadgeRequestTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only System Administrators can convert an Opportunity..
         /// </summary>
         internal static string OpportunityConversionMessage {
