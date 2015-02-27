@@ -525,6 +525,11 @@ namespace DataAccess
                                                 entry.HourlyAmount.HasValue
                                                     ? (object)entry.HourlyAmount.Value.Value
                                                     : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsBadgeRequired, entry.MSBadgeRequired);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BadgeStartDate, entry.BadgeStartDate.HasValue ? (object)entry.BadgeStartDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BadgeEndDate, entry.BadgeEndDate.HasValue ? (object)entry.BadgeEndDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsBadgeException, entry.BadgeException);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsApproved, entry.IsApproved);
                 command.Parameters.AddWithValue(UserLoginParam,
                                                 !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
@@ -671,6 +676,62 @@ namespace DataAccess
             var milestoneHourlyRevenueIndex = reader.GetOrdinal(MilestoneHourlyRevenueColumn);
             var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
 
+            int IsBadgeRequiredIndex;
+            int BadgeStartDateIndex;
+            int BadgeEndDateIndex;
+            int IsBadgeExceptionIndex;
+            int IsApprovedIndex;
+            int ConsultantEndDateIndex;
+            try
+            {
+                IsBadgeRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeRequired);
+            }
+            catch
+            {
+                IsBadgeRequiredIndex = -1;
+            }
+
+            try
+            {
+                BadgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+            }
+            catch
+            {
+                BadgeStartDateIndex = -1;
+            }
+
+            try
+            {
+                BadgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+            }
+            catch
+            {
+                BadgeEndDateIndex = -1;
+            }
+            try
+            {
+                IsBadgeExceptionIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeException);
+            }
+            catch
+            {
+                IsBadgeExceptionIndex = -1;
+            }
+            try
+            {
+                IsApprovedIndex = reader.GetOrdinal(Constants.ColumnNames.IsApproved);
+            }
+            catch
+            {
+                IsApprovedIndex = -1;
+            }
+            try
+            {
+                ConsultantEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantEndDate);
+            }
+            catch
+            {
+                ConsultantEndDateIndex = -1;
+            }
             int firstHireDateIndex;
             try
             {
@@ -746,9 +807,33 @@ namespace DataAccess
                                 Id = reader.GetInt32(personIdIndex),
                                 FirstName = reader.GetString(firstNameIndex),
                                 LastName = reader.GetString(lastNameIndex)
-                            }
+                            },
                     };
 
+                if (IsBadgeRequiredIndex > -1)
+                {
+                    entry.MSBadgeRequired = !reader.IsDBNull(IsBadgeRequiredIndex) ? reader.GetBoolean(IsBadgeRequiredIndex) : false;
+                }
+                if (BadgeStartDateIndex > -1)
+                {
+                    entry.BadgeStartDate = !reader.IsDBNull(BadgeStartDateIndex) ? (DateTime?)reader.GetDateTime(BadgeStartDateIndex) : null;
+                }
+                if (BadgeEndDateIndex > -1)
+                {
+                    entry.BadgeEndDate = !reader.IsDBNull(BadgeEndDateIndex) ? (DateTime?)reader.GetDateTime(BadgeEndDateIndex) : null;
+                }
+                if (IsBadgeExceptionIndex > -1)
+                {
+                    entry.BadgeException = !reader.IsDBNull(IsBadgeExceptionIndex) ? reader.GetBoolean(IsBadgeExceptionIndex) : false;
+                }
+                if (IsApprovedIndex > -1)
+                {
+                    entry.MSBadgeRequired = !reader.IsDBNull(IsBadgeRequiredIndex) ? reader.GetBoolean(IsBadgeRequiredIndex) : false;
+                }
+                if (ConsultantEndDateIndex > -1)
+                {
+                    entry.ConsultantEndDate = !reader.IsDBNull(ConsultantEndDateIndex) ? (DateTime?)reader.GetDateTime(ConsultantEndDateIndex) : null;
+                }
                 if (milestonePersonEntryIdIndex > -1)
                 {
                     entry.Id = reader.GetInt32(milestonePersonEntryIdIndex);
@@ -1219,6 +1304,12 @@ namespace DataAccess
                 var lastNameIndex = reader.GetOrdinal(LastNameColumn);
                 var hasTimeEntriesIndex = reader.GetOrdinal(HasTimeEntriesColumn);
                 var isStrawManIndex = reader.GetOrdinal(Constants.ColumnNames.IsStrawmanColumn);
+                var isBadgeRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeRequired);
+                var badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                var badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                var isBadgeExceptionIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeException);
+                var isApprovedIndex = reader.GetOrdinal(Constants.ColumnNames.IsApproved);
+                var consultantEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantEndDate);
 
                 while (reader.Read())
                 {
@@ -1250,7 +1341,13 @@ namespace DataAccess
                                     Id = reader.GetInt32(personSeniorityIdIndex)
                                 } : null
                             },
-                            HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
+                            HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex),
+                            MSBadgeRequired = !reader.IsDBNull(isBadgeRequiredIndex) ? reader.GetBoolean(isBadgeRequiredIndex) : false,
+                            BadgeException = !reader.IsDBNull(isBadgeExceptionIndex) ? reader.GetBoolean(isBadgeExceptionIndex) : false,
+                            IsApproved = !reader.IsDBNull(isApprovedIndex) ? reader.GetBoolean(isApprovedIndex) : false,
+                            BadgeStartDate = !reader.IsDBNull(badgeStartDateIndex) ? (DateTime?)reader.GetDateTime(badgeStartDateIndex) : null,
+                            BadgeEndDate = !reader.IsDBNull(badgeEndDateIndex) ? (DateTime?)reader.GetDateTime(badgeEndDateIndex) : null,
+                            ConsultantEndDate = !reader.IsDBNull(consultantEndDateIndex) ? (DateTime?)reader.GetDateTime(consultantEndDateIndex) : null
                         };
 
                     if (!reader.IsDBNull(personRoleIdIndex))
@@ -1296,6 +1393,13 @@ namespace DataAccess
             var personRoleNameIndex = reader.GetOrdinal(PersonRoleNameColumn);
             var amountIndex = reader.GetOrdinal(AmountColumn);
             var hoursPerDayIndex = reader.GetOrdinal(HoursPerDayColumn);
+            var isBadgeRequiredIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeRequired);
+            var badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+            var badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+            var isBadgeExceptionIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeException);
+            var isApprovedIndex = reader.GetOrdinal(Constants.ColumnNames.IsApproved);
+            var consultantEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ConsultantEndDate);
+
             var personVacationsOnMilestoneIndex = reader.GetOrdinal(PersonVacationsOnMilestoneColumn);
             var expectedHoursWithVacationDaysIndex = reader.GetOrdinal(ExpectedHoursWithVacationDaysColumn);
             var personSeniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
@@ -1335,7 +1439,13 @@ namespace DataAccess
                                                             Id = reader.GetInt32(personSeniorityIdIndex)
                                                         } : null
                                 },
-                            HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex)
+                            HasTimeEntries = reader.GetBoolean(hasTimeEntriesIndex),
+                            MSBadgeRequired = !reader.IsDBNull(isBadgeRequiredIndex) ? reader.GetBoolean(isBadgeRequiredIndex) : false,
+                            BadgeException = !reader.IsDBNull(isBadgeExceptionIndex) ? reader.GetBoolean(isBadgeExceptionIndex) : false,
+                            IsApproved = !reader.IsDBNull(isApprovedIndex) ? reader.GetBoolean(isApprovedIndex) : false,
+                            BadgeStartDate = !reader.IsDBNull(badgeStartDateIndex) ? (DateTime?)reader.GetDateTime(badgeStartDateIndex) : null,
+                            BadgeEndDate = !reader.IsDBNull(badgeEndDateIndex) ? (DateTime?)reader.GetDateTime(badgeEndDateIndex) : null,
+                            ConsultantEndDate = !reader.IsDBNull(consultantEndDateIndex) ? (DateTime?)reader.GetDateTime(consultantEndDateIndex) : null
                         };
 
                 if (!reader.IsDBNull(personRoleIdIndex))
@@ -1449,6 +1559,12 @@ namespace DataAccess
                                                     entry.HourlyAmount.HasValue
                                                         ? (object)entry.HourlyAmount.Value.Value
                                                         : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsBadgeRequired, entry.MSBadgeRequired);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BadgeStartDate, entry.BadgeStartDate.HasValue ? (object)entry.BadgeStartDate.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.BadgeEndDate, entry.BadgeEndDate.HasValue ? (object)entry.BadgeEndDate.Value : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsBadgeException, entry.BadgeException);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.IsApproved, entry.IsApproved);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.RequestDate, entry.RequestDate.HasValue ? (object)entry.RequestDate.Value : DBNull.Value);
                     command.Parameters.AddWithValue(UserLoginParam,
                                                     !string.IsNullOrEmpty(userName) ? (object)userName : DBNull.Value);
 
@@ -1480,6 +1596,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsEndDateChangeReflectedForMilestoneAndPersons,
                      milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons.HasValue ?
                     (object)milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsExtendedORCompleteOutOfRange,
+                    milestoneUpdateObj.IsExtendedORCompleteOutOfRange.HasValue ?
+                   (object)milestoneUpdateObj.IsExtendedORCompleteOutOfRange.Value : DBNull.Value);
 
                 connection.Open();
 
@@ -1493,3 +1612,4 @@ namespace DataAccess
         }
     }
 }
+
