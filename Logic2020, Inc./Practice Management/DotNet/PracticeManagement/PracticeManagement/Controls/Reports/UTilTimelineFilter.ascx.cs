@@ -41,6 +41,8 @@ namespace PraticeManagement.Controls.Reports
 
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
 
+        public bool IncludeBadgeStatus { get { return chbShowMSBadge.Checked; } }
+
         public string SortDirection { get { return this.rbSortbyAsc.Checked ? "Desc" : "Asc"; } }
 
         public int SortId { get { return Convert.ToInt32(ddlSortBy.SelectedItem.Value); } }
@@ -66,6 +68,7 @@ namespace PraticeManagement.Controls.Reports
                     rbSortbyAsc.Checked = true;
                     rbSortbyDesc.Checked = false;
                     hdnIsCapacityMode.Value = "1";
+                    chbShowMSBadge.Visible = false;
                 }
             }
         }
