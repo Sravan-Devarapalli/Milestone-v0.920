@@ -97,24 +97,10 @@ AS
 				
 	-- @CurrentConsultants now contains ids of consultants
     ---------------------------------------------------------
-    
-    SET @Query = @Query + '
-        SELECT  p.PersonId,p.EmployeeNumber,p.FirstName,
-                p.LastName,
-                p.HireDate,
-				p.TerminationDate,
-                c.TimescaleId,
-                c.[TimeScaleName] AS Timescale,
-				st.PersonStatusId,
-                st.[Name],
-				P.TitleId,
-				p.Title,
-				p.DefaultPractice PracticeId,
-				p.PracticeName,
-                CASE WHEN AvaHrs.AvaliableHours > 0 THEN  AvgUT.AvgUtilization ELSE 0 END AS wutilAvg,
-                ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays
-        FROM    v_person AS p
-                INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
+ SET @Query = @Query + '
+        SELECT  p.PersonId,p.EmployeeNumber,p.FirstName,p.LastName,p.HireDate,p.TerminationDate,c.TimescaleId,c.[TimeScaleName] AS Timescale,st.PersonStatusId,st.[Name],P.TitleId,p.Title,p.DefaultPractice PracticeId,p.PracticeName,CASE WHEN AvaHrs.AvaliableHours > 0 THEN  AvgUT.AvgUtilization ELSE 0 END AS wutilAvg,ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays,M.BadgeStartDate,M.BadgeEndDate,M.BreakStartDate,M.BreakEndDate,M.BlockStartDate,M.BlockEndDate
+		        FROM v_person AS p INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
+				LEFT JOIN v_CurrentMSBadge M ON M.PersonId = p.PersonId
                 INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
 				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects,@CompletedProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
 		LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
@@ -124,20 +110,13 @@ AS
      SET @Query = @Query+@OrderBy
 	SET @Query = @Query+	
 		'  
-		SELECT	PH.PersonId,
-				PH.HireDate,
-				PH.TerminationDate
-		FROM v_PersonHistory PH
-		INNER JOIN @CurrentConsultants AS c ON c.ConsId = PH.PersonId
+		SELECT PH.PersonId,PH.HireDate,PH.TerminationDate FROM v_PersonHistory PH INNER JOIN @CurrentConsultants AS c ON c.ConsId = PH.PersonId
 		ORDER BY PH.PersonId,PH.HireDate '
 
 	--if a person has added Timeoff  for complete 8 hr then the day is treated as vacation day.
 	SET @Query = @Query+	
 		'  
-		SELECT	PC.PersonId,PC.Date,
-				CASE WHEN PC.DayOff=1 AND PC.CompanyDayOff=0 THEN 1
-				ELSE 0 END AS IsTimeOff,Cal.HolidayDescription,
-				ROUND(ISNULL(PC.TimeOffHours,0),2) TimeOffHours
+		SELECT	PC.PersonId,PC.Date,CASE WHEN PC.DayOff=1 AND PC.CompanyDayOff=0 THEN 1	ELSE 0 END AS IsTimeOff,Cal.HolidayDescription,ROUND(ISNULL(PC.TimeOffHours,0),2) TimeOffHours
 		FROM dbo.PersonCalendarAuto PC 
 		INNER JOIN @CurrentConsultants AS c ON c.ConsId=PC.PersonId AND PC.[Date] BETWEEN @StartDate AND @EndDate
 		LEFT JOIN dbo.Calendar AS Cal ON Cal.Date=PC.Date
