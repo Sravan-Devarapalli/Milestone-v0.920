@@ -17,11 +17,38 @@ AS
 			@ProjectNewEndDate		DATETIME,
 			@ProjectId	INT
     SELECT @ProjectId=ProjectId FROM dbo.Milestone WHERE MilestoneId = @MilestoneId
+
+	SELECT P.ProjectId,P.Name AS ProjectName,P.ProjectNumber,mpe.BadgeStartDate,MPE.BadgeEndDate,DATEADD(dd, @ShiftDays, mpe.BadgeStartDate) AS NewBadgeStartDate, DATEADD(dd, @ShiftDays, mpe.BadgeEndDate) AS NewBadgeEndDate,
+		   MP.PersonId,Per.LastName,Per.FirstName,mpe.IsBadgeException
+	FROM dbo.MilestonePersonEntry AS mpe
+		 INNER JOIN dbo.MilestonePerson AS mp ON mpe.MilestonePersonId = mp.MilestonePersonId
+		 INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
+		 INNER JOIN dbo.Milestone AS sh ON m.ProjectId = sh.ProjectId AND m.StartDate > sh.StartDate
+		 INNER JOIN dbo.Project P ON P.ProjectId = sh.ProjectId
+		 INNER JOIN dbo.Person Per ON Per.PersonId = MP.PersonId
+	WHERE sh.MilestoneId = @MilestoneId AND @MoveFutureMilestones = 1 AND mpe.IsBadgeRequired = 1
+	UNION ALL
+	SELECT P.ProjectId,P.Name AS ProjectName,P.ProjectNumber,mpe.BadgeStartDate,MPE.BadgeEndDate,DATEADD(dd, @ShiftDays, mpe.BadgeStartDate) AS NewBadgeStartDate, DATEADD(dd, @ShiftDays, mpe.BadgeEndDate) AS NewBadgeEndDate,
+		   MP.PersonId,Per.LastName,Per.FirstName,mpe.IsBadgeException
+	FROM dbo.MilestonePersonEntry AS mpe
+	       INNER JOIN dbo.MilestonePerson AS mp ON mpe.MilestonePersonId = mp.MilestonePersonId
+	       INNER JOIN dbo.Milestone AS sh ON mp.MilestoneId = sh.MilestoneId
+		   INNER JOIN dbo.Project P ON P.ProjectId = sh.ProjectId
+		 INNER JOIN dbo.Person Per ON Per.PersonId = MP.PersonId
+	 WHERE sh.MilestoneId = @MilestoneId AND mpe.IsBadgeRequired = 1
+
 	IF @MoveFutureMilestones = 1
 	BEGIN
+		
 		UPDATE mpe
 		   SET StartDate = DATEADD(dd, @ShiftDays, mpe.StartDate),
-		       EndDate = DATEADD(dd, @ShiftDays, mpe.EndDate)
+		       EndDate = DATEADD(dd, @ShiftDays, mpe.EndDate),
+			   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL
+								ELSE DATEADD(dd, @ShiftDays, mpe.BadgeStartDate) END,
+			   BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL
+							  ELSE DATEADD(dd, @ShiftDays, mpe.BadgeEndDate) END,
+			   IsApproved = CASE WHEN IsApproved IS NULL OR BadgeStartDate IS NULL THEN NULL
+							 ELSE 0 END
 		  FROM dbo.MilestonePersonEntry AS mpe
 		       INNER JOIN dbo.MilestonePerson AS mp ON mpe.MilestonePersonId = mp.MilestonePersonId
 		       INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
@@ -38,7 +65,13 @@ AS
 
 	UPDATE mpe
 	   SET StartDate = DATEADD(dd, @ShiftDays, mpe.StartDate),
-	       EndDate = DATEADD(dd, @ShiftDays, mpe.EndDate)
+	       EndDate = DATEADD(dd, @ShiftDays, mpe.EndDate),
+		   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL
+								ELSE DATEADD(dd, @ShiftDays, mpe.BadgeStartDate) END,
+		   BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL
+							  ELSE DATEADD(dd, @ShiftDays, mpe.BadgeEndDate) END,
+		   IsApproved = CASE WHEN IsApproved IS NULL OR BadgeStartDate IS NULL THEN NULL
+							 ELSE 0 END
 	  FROM dbo.MilestonePersonEntry AS mpe
 	       INNER JOIN dbo.MilestonePerson AS mp ON mpe.MilestonePersonId = mp.MilestonePersonId
 	       INNER JOIN dbo.Milestone AS sh ON mp.MilestoneId = sh.MilestoneId
@@ -66,3 +99,4 @@ AS
 		 EndDate = @ProjectNewEndDate
 	 WHERE StartDate > @ProjectNewEndDate OR @ProjectNewStartDate > EndDate
 	 AND ProjectId = @ProjectId
+
