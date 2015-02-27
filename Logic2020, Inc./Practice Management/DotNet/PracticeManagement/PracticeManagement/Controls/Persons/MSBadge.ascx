@@ -1,0 +1,347 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="MSBadge.ascx.cs" Inherits="PraticeManagement.Controls.Persons.MSBadge" %>
+<%@ Register Src="~/Controls/Persons/PersonBadgeHistory.ascx" TagName="BadgeHistory"
+    TagPrefix="uc" %>
+<%@ Register Src="~/Controls/DatePicker.ascx" TagName="DatePicker" TagPrefix="uc" %>
+<table>
+    <tr>
+        <td class="MsBadgeTd1">
+            18mos Period Start
+        </td>
+        <td>
+            <asp:TextBox ID="txtBadgeStart" runat="server" ReadOnly="true"></asp:TextBox>
+        </td>
+        <td class="MsBadgeTd2">
+            Date Source -
+            <asp:Label ID="lblBadgeStartDateSource" runat="server" Text="Available Now"></asp:Label>
+        </td>
+        <td colspan="2">
+            Previously at Microsoft in any capacity?
+            <asp:DropDownList ID="ddlPreviousAtMS" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPreviousAtMS_OnIndexChanged">
+                <asp:ListItem Text="Yes" Value="1"></asp:ListItem>
+                <asp:ListItem Text="No" Value="0" Selected="True"></asp:ListItem>
+            </asp:DropDownList>
+        </td>
+        <td>
+            <asp:LinkButton ID="lnkHistory" runat="server" Text="History" OnClick="lnkHistory_Click"></asp:LinkButton>
+        </td>
+    </tr>
+    <tr>
+        <td class="MsBadgeTd1">
+            Project Planned End
+        </td>
+        <td>
+            <asp:TextBox ID="txtPlannedEnd" runat="server" ReadOnly="true"></asp:TextBox>
+        </td>
+        <td class="MsBadgeTd2">
+            Date Source -
+            <asp:Label ID="lblPlannedDateSource" runat="server" Text="Available Now"></asp:Label>
+        </td>
+        <td class="MsBadgeTd1">
+            Enter previous badge alias:
+        </td>
+        <td>
+            <asp:TextBox ID="txtPreviousBadgeAlias" runat="server"></asp:TextBox>
+            <asp:RequiredFieldValidator ID="reqPreviousAlias" runat="server" ControlToValidate="txtPreviousBadgeAlias"
+                ErrorMessage="Previous badge alias is required." ToolTip="Previous badge alias is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="MsBadgeTd1">
+            18mos End
+        </td>
+        <td>
+            <asp:TextBox ID="txtBadgeEnd" runat="server" ReadOnly="true"></asp:TextBox>
+        </td>
+        <td class="MsBadgeTd2">
+            Date Source -
+            <asp:Label ID="lblBadgeEndDateSource" runat="server" Text="Available Now"></asp:Label>
+        </td>
+        <td class="MsBadgeTd1">
+            Last Badge Start
+        </td>
+        <td>
+            <uc:DatePicker ID="dtpLastBadgeStart" runat="server" />
+            <asp:RequiredFieldValidator ID="reqLastBadgeStart" runat="server" ControlToValidate="dtpLastBadgeStart"
+                ErrorMessage="Last badge start date is required." ToolTip="Last badge start date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="cvLastBadgeStart" runat="server" ControlToValidate="dtpLastBadgeStart"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Text="*" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CustomValidator ID="custNotFuture" runat="server" ControlToValidate="dtpLastBadgeStart"
+                Text="*" Display="Dynamic" EnableTheming="True" ErrorMessage="Last badge start cannot be in the future."
+                ToolTip="Last badge start cannot be in the future." SetFocusOnError="True" OnServerValidate="custNotFuture_ServerValidate"
+                EnableClientScript="false"></asp:CustomValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="MsBadgeTd1">
+            6mos Break Start
+        </td>
+        <td>
+            <asp:TextBox ID="txtBreakStart" runat="server" ReadOnly="true"></asp:TextBox>
+        </td>
+        <td>
+            &nbsp;
+        </td>
+        <td class="MsBadgeTd1">
+            Last Badge End
+        </td>
+        <td>
+            <uc:DatePicker ID="dtpLastBadgeEnd" runat="server" />
+            <asp:RequiredFieldValidator ID="reqLastbadgeEnd" runat="server" ControlToValidate="dtpLastBadgeEnd"
+                ErrorMessage="Last badge end date is required." ToolTip="Last badge end date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="cvLastbadgeEnd" runat="server" ControlToValidate="dtpLastBadgeEnd"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CompareValidator ID="cvLastBadgeRange" runat="server" ControlToValidate="dtpLastBadgeEnd"
+                ControlToCompare="dtpLastBadgeStart" Operator="GreaterThanEqual" Type="Date"
+                ErrorMessage="Last Badge end date should be greater than or equal to Last Badge start date."
+                Display="Dynamic" Text="*" ToolTip="Last Badge end date should be greater than or equal to Last Badge start date."
+                SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="MsBadgeTd1">
+            6mos Break End
+        </td>
+        <td>
+            <asp:TextBox ID="txtBreakEnd" runat="server" ReadOnly="true"></asp:TextBox>
+        </td>
+        <td colspan="3">
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="padding: 10px">
+            <asp:CheckBox ID="chbBlockFromMS" runat="server" Checked="false" Text="Block from MS Projects"
+                AutoPostBack="true" OnCheckedChanged="chbBlockFromMS_CheckedChanged" />
+        </td>
+        <td colspan="2">
+            <asp:CheckBox ID="chbException" runat="server" Checked="false" Text="Project Override Exception"
+                AutoPostBack="true" OnCheckedChanged="chbException_CheckedChanged" />
+        </td>
+    </tr>
+    <tr>
+        <td class="MsBadgeTd1">
+            Block Start
+        </td>
+        <td colspan="2">
+            <uc:DatePicker ID="dtpBlockStart" runat="server" />
+            <asp:RequiredFieldValidator ID="reqBlockStart" runat="server" ControlToValidate="dtpBlockStart"
+                ErrorMessage="Block start date is required." ToolTip="Block start date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="cvBlockStart" runat="server" ControlToValidate="dtpBlockStart"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+        </td>
+        <td class="MsBadgeTd1">
+            Exception Start
+        </td>
+        <td>
+            <uc:DatePicker ID="dtpExceptionStart" runat="server" />
+            <asp:RequiredFieldValidator ID="reqExceptionStart" runat="server" ControlToValidate="dtpExceptionStart"
+                ErrorMessage="Exception start date is required." ToolTip="Exception start date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="cvExceptionStart" runat="server" ControlToValidate="dtpExceptionStart"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CustomValidator ID="cvExceptionStartAfterJuly" runat="server" ErrorMessage="Exception start date should not be before 7/1/2014."
+                ToolTip="Exception start date should not be before 7/1/2014." Display="Dynamic"
+                OnServerValidate="cvExceptionStartAfterJuly_ServerValidate" Text="*" EnableClientScript="false"
+                SetFocusOnError="true"></asp:CustomValidator>
+        </td>
+    </tr>
+    <tr>
+        <td class="MsBadgeTd1">
+            Block End
+        </td>
+        <td colspan="2">
+            <uc:DatePicker ID="dtpBlockEnd" runat="server" />
+            <asp:RequiredFieldValidator ID="reqBlockEnd" runat="server" ControlToValidate="dtpBlockEnd"
+                ErrorMessage="Block end date is required." ToolTip="Block end date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="cvBlockEnd" runat="server" ControlToValidate="dtpBlockEnd"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CompareValidator ID="cvBlockDateRange" runat="server" ControlToValidate="dtpBlockEnd"
+                ControlToCompare="dtpBlockStart" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Block end date should be greater than or equal to Block start date."
+                Display="Dynamic" Text="*" ToolTip="Block end date should be greater than or equal to Block start date."
+                SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
+            <asp:CustomValidator ID="custBlockDatesInEmpHistory" runat="server" ErrorMessage="Person Block dates are outside of hire/termination date range."
+                ToolTip="Person Block dates are outside of hire/termination date range." Display="Dynamic"
+                OnServerValidate="custBlockDatesInEmpHistory_ServerValidate" Text="*" EnableClientScript="false"
+                SetFocusOnError="true"></asp:CustomValidator>
+            <asp:CustomValidator ID="custBlockDatesOverlappedException" runat="server" ErrorMessage="This person currently has a block in place, exception cannot be set. If you have questions, please connect with Operations."
+                ToolTip="This person currently has a block in place, exception cannot be set. If you have questions, please connect with Operations."
+                Display="Dynamic" OnServerValidate="custBlockDatesOverlappedException_ServerValidate"
+                Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
+            <asp:CustomValidator ID="custPersonInProject" runat="server" ErrorMessage="This person is currently assigned to a project/milestone during the requested dates."
+                ToolTip="This person is currently assigned to a project/milestone during the requested dates."
+                Display="Dynamic" OnServerValidate="custPersonInProject_ServerValidate" Text="*"
+                EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
+        </td>
+        <td class="MsBadgeTd1">
+            Exception End
+        </td>
+        <td>
+            <uc:DatePicker ID="dtpExceptionEnd" runat="server" />
+            <asp:RequiredFieldValidator ID="reqExceptionEnd" runat="server" ControlToValidate="dtpExceptionEnd"
+                ErrorMessage="Exception end date is required." ToolTip="Exception end date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="cvExceptionEnd" runat="server" ControlToValidate="dtpExceptionEnd"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CompareValidator ID="cvExceptionDateRanges" runat="server" ControlToValidate="dtpExceptionEnd"
+                ControlToCompare="dtpExceptionStart" Operator="GreaterThanEqual" Type="Date"
+                ErrorMessage="Exception end date should be greater than or equal to Exception start date."
+                Display="Dynamic" Text="*" ToolTip="Exception end date should be greater than or equal to Exception start date."
+                SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
+            <asp:CustomValidator ID="custExceptionInEmpHistory" runat="server" ErrorMessage="Person Exception dates are outside of hire/termination date range."
+                ToolTip="Person Exception dates are outside of hire/termination date range."
+                Display="Dynamic" OnServerValidate="custExceptionInEmpHistory_ServerValidate"
+                Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
+            <asp:CustomValidator ID="custExceptionDatesOverlappsBlock" runat="server" ErrorMessage="This person currently has an exception in place, block cannot be set."
+                ToolTip="This person currently has an exception in place, block cannot be set."
+                Display="Dynamic" OnServerValidate="custExceptionDatesOverlappsBlock_ServerValidate"
+                Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
+            <asp:CustomValidator ID="custExceptionMorethan18" runat="server" ErrorMessage="Exception dates duration cann't be less than 18 months."
+                ToolTip="Exception dates duration cann't be less than 18 months." Display="Dynamic"
+                OnServerValidate="custExceptionMorethan18_ServerValidate" Text="*" EnableClientScript="false"
+                SetFocusOnError="true"></asp:CustomValidator>
+            <asp:CustomValidator ID="custExceptionNotMoreThan18moEndDate" runat="server" ErrorMessage="Requested exception will shorten the person’s 18-month clock. Please remove exception."
+                ToolTip="Requested exception will shorten the person’s 18-month clock. Please remove exception." Display="Dynamic"
+                OnServerValidate="custExceptionNotMoreThan18moEndDate_ServerValidate" Text="*" EnableClientScript="false"
+                SetFocusOnError="true"></asp:CustomValidator>
+        </td>
+    </tr>
+</table>
+<h3>
+    Logic20/20 MS Badge History:</h3>
+<asp:Repeater ID="repMSBadge" runat="server" OnItemDataBound="repMSBadge_DataBound">
+    <HeaderTemplate>
+        <div class="BadgeHistory">
+            <table id="tblAccountSummaryByBusinessReport" class="tablesorter PersonSummaryReport zebra WholeWidth">
+                <thead>
+                    <tr>
+                        <th class="TextAlignLeftImp">
+                            Project Name
+                        </th>
+                        <th class="">
+                            Project #
+                        </th>
+                        <th class="">
+                            Project Start
+                        </th>
+                        <th class="">
+                            Project End
+                        </th>
+                        <th class="">
+                            Badge Start
+                        </th>
+                        <th class="">
+                            Badge End
+                        </th>
+                        <th class="">
+                            Badged Time on Project(in Months)
+                        </th>
+                        <th>
+                            Is Approved?
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+    </HeaderTemplate>
+    <ItemTemplate>
+        <tr class="ReportItemTemplate">
+            <td class="padLeft5 textLeft">
+                <%# Eval("Project.HtmlEncodedName")%>
+            </td>
+            <td>
+                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
+                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Project.Id"))) %>'>
+                </asp:HyperLink>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("Project.StartDate"))%>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("Project.EndDate"))%>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("BadgeStartDate"))%>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("BadgeEndDate"))%>
+            </td>
+            <td>
+                <%# Eval("BadgeDuration")%>
+            </td>
+            <td>
+                <asp:Label ID="lblIsApproved" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </ItemTemplate>
+    <AlternatingItemTemplate>
+        <tr class="alterrow">
+            <td class="padLeft5 textLeft">
+                <%# Eval("Project.HtmlEncodedName")%>
+            </td>
+            <td>
+                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
+                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Project.Id"))) %>'>
+                </asp:HyperLink>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("Project.StartDate"))%>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("Project.EndDate"))%>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("BadgeStartDate"))%>
+            </td>
+            <td>
+                <%# GetDateFormat((DateTime)Eval("BadgeEndDate"))%>
+            </td>
+            <td>
+                <%# Eval("BadgeDuration")%>
+            </td>
+            <td>
+                <asp:Label ID="lblIsApproved" runat="server"></asp:Label>
+            </td>
+        </tr>
+    </AlternatingItemTemplate>
+    <FooterTemplate>
+        </tbody></table></div>
+    </FooterTemplate>
+</asp:Repeater>
+<div id="divEmptyMessage" class="MSBadgeEmptyDiv" style="display: none;" runat="server">
+    There are no previous MS projects for this person.
+</div>
+<asp:HiddenField ID="hdnHistoryPanel" runat="server" />
+<AjaxControlToolkit:ModalPopupExtender ID="mpeBadgeHistoryPanel" runat="server" BehaviorID="mpeBadgePanelBehaviourId"
+    TargetControlID="lnkHistory" BackgroundCssClass="modalBackground" PopupControlID="pnlHistoryPanel"
+    OkControlID="btnOKValidationPanel" CancelControlID="btnOKValidationPanel" DropShadow="false" />
+<asp:Panel ID="pnlHistoryPanel" runat="server" CssClass="BadgeHistorypopUp" Style="display: none;">
+    <table class="WholeWidth">
+        <tr>
+            <td>
+                <uc:BadgeHistory ID="badgeHistory" runat="server" />
+            </td>
+        </tr>
+        <tr>
+            <td class="Padding10 textCenter">
+                <asp:Button ID="btnOKValidationPanel" runat="server" ToolTip="OK" Text="OK" CssClass="Width100Px" />
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+
