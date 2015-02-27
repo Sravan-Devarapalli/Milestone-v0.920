@@ -59,7 +59,7 @@ BEGIN
 			END AS 'Hourly Bonus, hours',
 			T.Title,
 			pay.VacationDays AS 'PTO Accrual',
-			manager.FirstName + ' ' + manager.LastName AS 'Career Counselor Name',
+			manager.FirstName + ' ' + manager.LastName AS 'Career Manager Name',
 			rcd.LastName + ' ' + rcd.FirstName AS 'RecruiterName'
 	FROM    dbo.Person AS pers
 			LEFT OUTER JOIN dbo.v_Pay AS pay ON pers.PersonId = pay.PersonId
