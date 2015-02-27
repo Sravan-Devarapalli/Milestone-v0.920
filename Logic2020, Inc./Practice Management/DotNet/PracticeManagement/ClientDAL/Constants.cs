@@ -9,6 +9,46 @@
         /// </summary>
         public class ColumnNames
         {
+            public static string NewBadgeEndDate = "NewBadgeEndDate";
+            public static string NewBadgeStartDate = "NewBadgeStartDate";
+            public static string BadgeRequestDate = "BadgeRequestDate";
+            public static string BadgeEndDateSource = "BadgeEndDateSource";
+            public static string ProjectPlannedEndDateSource = "ProjectPlannedEndDateSource";
+            public static string ProjectPlannedEndDate = "ProjectPlannedEndDate";
+            public static string OverrideEndDate = "OverrideEndDate";
+            public static string OverrideStartDate = "OverrideStartDate";
+            public static string ProjectBadgeStartDate = "ProjectBadgeStartDate";
+            public static string ProjectBadgeEndDate = "ProjectBadgeEndDate";
+            public static string InBreakPeriodCount = "InBreakPeriodCount";
+            public static string BlockedCount = "BlockedCount";
+            public static string ClockNotStartedCount = "ClockNotStartedCount";
+            public static string BadgedNotOnProjectCount = "BadgedNotOnProjectCount";
+            public static string BadgedOnProjectCount = "BadgedOnProjectCount";
+            public static string ProjectOwnerAlias = "ProjectOwnerAlias";
+            public static string ToAddressList = "ToAddressList";
+            public static string ConsultantEndDate = "ConsultantEndDate";
+            public static string IsApproved = "IsApproved";
+            public static string IsBadgeException = "IsBadgeException";
+            public static string IsBadgeRequired = "IsBadgeRequired";
+            public static string PreferredFirstName = "PreferredFirstName";
+            public const string PlannedEndDateSource = "PlannedEndDateSource";
+            public const string BadgeStartDateSource = "BadgeStartDateSource";
+            public const string PreviousBadgeAlias = "PreviousBadgeAlias";
+            public const string BadgeDuration = "BadgeDuration";
+            public const string ExceptionEndDate = "ExceptionEndDate";
+            public const string ExceptionStartDate = "ExceptionStartDate";
+            public const string IsException = "IsException";
+            public const string LastBadgeEndDate = "LastBadgeEndDate";
+            public const string LastBadgeStartDate = "LastBadgeStartDate";
+            public const string IsPreviousBadge = "IsPreviousBadge";
+            public const string BlockEndDate = "BlockEndDate";
+            public const string BlockStartDate = "BlockStartDate";
+            public const string IsBlocked = "IsBlocked";
+            public const string BreakEndDate = "BreakEndDate";
+            public const string BreakStartDate = "BreakStartDate";
+            public const string PlannedEndDate = "PlannedEndDate";
+            public const string BadgeEndDate = "BadgeEndDate";
+            public const string BadgeStartDate = "BadgeStartDate";
             public const string FLHR = "FLHR";
             public const string LatestDate = "LatestDate";
             public const string PreviousMonthActualRevenue = "PreviousMonthActualRevenue";
@@ -532,6 +572,31 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string RequestDate = "@RequestDate";
+            public static string IsExtendedORCompleteOutOfRange = "@IsExtendedORCompleteOutOfRange";
+            public static string UpdatedBy = "@UpdatedBy";
+            public static string IsBadgeIncluded = "@IsBadgeIncluded";
+            public static string TitleIds = "@TitleIds";
+            public static string BadgedOnProject = "@BadgedOnProject";
+            public static string IsBreak = "@IsBreak";
+            public static string IsClockNotStart = "@IsClockNotStart";
+            public static string IsNotBadged = "@IsNotBadged";
+            public static string IsApproved = "@IsApproved";
+            public static string IsBadgeException = "@IsBadgeException";
+            public static string BadgeEndDate = "@BadgeEndDate";
+            public static string BadgeStartDate = "@BadgeStartDate";
+            public static string IsBadgeRequired = "@IsBadgeRequired";
+            public static string PreferredFirstName = "@PreferredFirstName";
+            public static string ExceptionEndDate = "@ExceptionEndDate";
+            public static string ExceptionStartDate = "@ExceptionStartDate";
+            public static string IsException = "@IsException";
+            public static string LastBadgeEndDate = "@LastBadgeEndDate";
+            public static string LastBadgeStartDate = "@LastBadgeStartDate";
+            public static string PreviousBadgeAlias = "@PreviousBadgeAlias";
+            public static string IsPreviousBadge = "@IsPreviousBadge";
+            public static string IsBlocked = "@IsBlocked";
+            public static string BlockStartDate = "@BlockStartDate";
+            public static string BlockEndDate = "@BlockEndDate";
             public static string TargetCompanyIds = "@TargetCompanyIds";
             public static string RecruitingSourceIds = "@RecruitingSourceIds";
             public static string UtilizationType = "@UtilizationType";
@@ -996,6 +1061,11 @@
 
             public class Person
             {
+                public const string GetBadgeHistoryByPersonId = "dbo.GetBadgeHistoryByPersonId";
+                public const string UpdateMSBadgeDetailsByPersonId = "dbo.UpdateMSBadgeDetailsByPersonId";
+                public const string SaveBadgeDetailsByPersonId = "dbo.SaveBadgeDetailsByPersonId";
+                public const string GetLogic2020BadgeHistory = "dbo.GetLogic2020BadgeHistory";
+                public const string GetBadgeDetailsByPersonId = "dbo.GetBadgeDetailsByPersonId";
                 public const string GetPTOReport = "dbo.GetPTOReport";
                 public const string GetAllCohortAssignments = "dbo.GetAllCohortAssignments";
                 public const string GetPersonsByPayTypesAndByStatusIds = "dbo.GetPersonsByPayTypesAndByStatusIds";
@@ -1205,6 +1275,11 @@
 
             public class Reports
             {
+                public const string GetBadgeRequestNotApprovedList = "dbo.GetBadgeRequestNotApprovedList";
+                public const string ResourcesByTitleReport = "dbo.ResourcesByTitleReport";
+                public const string ResourcesByPracticeReport = "dbo.ResourcesByPracticeReport";
+                public const string ListBadgeResourcesByType = "dbo.ListBadgeResourcesByType";
+                public const string BadgedResourcesByTimeReport = "dbo.BadgedResourcesByTimeReport";
                 public const string NonBillableReport = "dbo.NonBillableReport";
                 public const string BillingReportByHours = "dbo.BillingReportByHours";
                 public const string BillingReportByCurrency = "dbo.BillingReportByCurrency";
@@ -1300,6 +1375,8 @@
 
             public class Project
             {
+                public const string CheckIfPersonIsRestrictedByProjectId = "dbo.CheckIfPersonIsRestrictedByProjectId";
+                public const string CheckIfPersonInProjectForDates = "dbo.CheckIfPersonInProjectForDates";
                 public const string CheckIfProjectNumberExists = "dbo.CheckIfProjectNumberExists";
                 public const string GetPersonsForProjectReviewCanceled = "dbo.GetPersonsForProjectReviewCanceled";
                 public const string GetPersonsForIntialMailForProjectFeedback = "dbo.GetPersonsForIntialMailForProjectFeedback";
