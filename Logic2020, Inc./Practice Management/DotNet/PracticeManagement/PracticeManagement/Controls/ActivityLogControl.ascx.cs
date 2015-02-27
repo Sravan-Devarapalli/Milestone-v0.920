@@ -585,7 +585,17 @@ namespace PraticeManagement.Controls
                                                 null : ddlPersonName.SelectedValue;
             e.InputParameters["projectId"] = string.IsNullOrEmpty(ddlProjects.SelectedValue) ?
                                                 null : ddlProjects.SelectedValue;
-
+            e.InputParameters["practiceAreas"] = true;
+            e.InputParameters["sowBudget"] = true;
+            e.InputParameters["director"] = true;
+            e.InputParameters["poAmount"] = true;
+            e.InputParameters["capabilities"] = true;
+            e.InputParameters["newOrExtension"] = true;
+            e.InputParameters["poNumber"] = true;
+            e.InputParameters["projectStatus"] = true;
+            e.InputParameters["salesPerson"] = true;
+            e.InputParameters["projectOwner"] = true;
+            e.InputParameters["recordPerChange"] = false;
         }
 
         public object AddDefaultProjectAndMileStoneInfo(object logDataObject)
