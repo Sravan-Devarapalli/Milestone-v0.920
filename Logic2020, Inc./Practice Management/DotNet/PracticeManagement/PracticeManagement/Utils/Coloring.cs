@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Web.UI.DataVisualization.Charting;
 using PraticeManagement.Configuration.ConsReportColoring;
+using System.Web;
+using System.IO;
 
 namespace PraticeManagement.Utils
 {
@@ -37,7 +39,7 @@ namespace PraticeManagement.Utils
             if (dayType == 1)
                 return coloring.VacationColor;
             if (dayType == 2)
-                return coloring.CompanyHolidayColor;    
+                return coloring.CompanyHolidayColor;
 
             //  Iterate through all colors and check their min/max values
             foreach (ConsReportColoringElement color in coloring.Colors)
@@ -71,7 +73,7 @@ namespace PraticeManagement.Utils
             if (dayType == 1)
                 return coloring.VacationColor;
             if (dayType == 2)
-                return coloring.CompanyHolidayColor;    
+                return coloring.CompanyHolidayColor;
 
             if (isWeekEnd)
                 return Color.FromArgb(255, 255, 255);
@@ -166,7 +168,7 @@ namespace PraticeManagement.Utils
         /// Adds color coding to legend
         /// </summary>
         /// <param name="legend">Legend to put colors to</param>
-        public static void ColorLegend(Legend legend)
+        public static void ColorLegend(Legend legend, bool includeBadgeStatus)
         {
             //  Clear legend items first
             LegendItemsCollection legendItems = legend.CustomItems;
@@ -177,13 +179,76 @@ namespace PraticeManagement.Utils
                 ConsReportColoringElementSection.ColorSettings;
             foreach (ConsReportColoringElement color in coloring.Colors)
             {
-                legendItems.Add(color.ItemColor, color.Title);
+                var legendItem = new LegendItem();
+                legendItem.Name = color.Title;
+                legendItem.Color = color.ItemColor;
+                legendItem.ImageStyle = LegendImageStyle.Rectangle;
+                legendItem.MarkerStyle = MarkerStyle.Square;
+                legendItem.MarkerSize = 50;
+                legendItem.MarkerColor = Color.Black;
+                legendItems.Add(legendItem);
             }
 
+            var vacationLgn = new LegendItem();
+            vacationLgn.Name = coloring.VacationTitle;
+            vacationLgn.Color = coloring.VacationColor;
+            vacationLgn.ImageStyle = LegendImageStyle.Rectangle;
+            vacationLgn.MarkerStyle = MarkerStyle.Square;
+            vacationLgn.MarkerSize = 50;
+            vacationLgn.MarkerColor = Color.Black;
+            legendItems.Add(vacationLgn);
             //  Add vacation item
-            legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+            //legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
             // Add company holiday item
-            legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+            var companylgn = new LegendItem();
+            companylgn.Name = coloring.CompanyHolidaysTitle;
+            companylgn.Color = coloring.CompanyHolidayColor;
+            companylgn.ImageStyle = LegendImageStyle.Rectangle;
+            companylgn.MarkerStyle = MarkerStyle.Square;
+            companylgn.MarkerSize = 50;
+            companylgn.MarkerColor = Color.Black;
+            legendItems.Add(companylgn);
+            //legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+
+            if (includeBadgeStatus)
+            {
+                //MS Badged legend
+                var legItem3 = new LegendItem();
+                legItem3.Color = Color.White;
+                legItem3.ImageStyle = LegendImageStyle.Rectangle;
+                legItem3.BackHatchStyle = ChartHatchStyle.Vertical;
+                legItem3.BackSecondaryColor = Color.Black;
+                legItem3.BackSecondaryColor = Color.Black;
+                legItem3.MarkerStyle = MarkerStyle.Square;
+                legItem3.MarkerSize = 50;
+                legItem3.MarkerColor = Color.Black;
+                legItem3.Name = "18 mo Window Active";
+                legendItems.Add(legItem3);
+
+                //MS Badged legend
+                var legItem2 = new LegendItem();
+                legItem2.Color = Color.White;
+                legItem2.ImageStyle = LegendImageStyle.Rectangle;
+                legItem2.BackHatchStyle = ChartHatchStyle.LargeGrid;
+                legItem2.BackSecondaryColor = Color.Black;
+                legItem2.MarkerStyle = MarkerStyle.Square;
+                legItem2.MarkerSize = 50;
+                legItem2.MarkerColor = Color.Black;
+                legItem2.Name = "MS Badged";
+                legendItems.Add(legItem2);
+
+                //6-Month Break and Block Badged legend
+                var legItem1 = new LegendItem();
+                legItem1.Color = Color.White;
+                legItem1.ImageStyle = LegendImageStyle.Rectangle;
+                legItem1.BackHatchStyle = ChartHatchStyle.Divot;
+                legItem1.BackSecondaryColor = Color.Black;
+                legItem1.Name = "6-Month Break/Block";
+                legItem1.MarkerStyle = MarkerStyle.Square;
+                legItem1.MarkerSize = 50;
+                legItem1.MarkerColor = Color.Black;
+                legendItems.Add(legItem1);
+            }
         }
 
         /// <summary>
