@@ -2,11 +2,16 @@
 (
 	@PersonId            INT = NULL,
 	@MilestonePersonId   INT,
-	@StartDate     DATETIME,
+	@StartDate	   DATETIME,
 	@EndDate       DATETIME,
 	@HoursPerDay   DECIMAL(4,2),
 	@PersonRoleId  INT,
 	@Amount        DECIMAL(18,2),
+	@IsBadgeRequired	BIT,
+	@BadgeStartDate		DATETIME,
+	@BadgeEndDate		DATETIME,
+	@IsBadgeException	BIT,
+	@IsApproved			BIT,
 	@Location      NVARCHAR(20) = NULL,
 	@UserLogin     NVARCHAR(255),
 	@Id            INT = NULL OUTPUT 
@@ -17,9 +22,21 @@ AS
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
+	DECLARE @UpdatedBy  INT,
+			@RequestDate DATETIME=NULL,
+			@CurrentPMTime DATETIME
+
+	SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
+
+	SELECT @CurrentPMTime = dbo.GettingPMTime(GETUTCDATE())
+	IF(@IsBadgeRequired = 1)
+	BEGIN
+		SET @RequestDate = @CurrentPMTime
+	END
+
 	INSERT INTO dbo.MilestonePersonEntry
-	            (MilestonePersonId, StartDate, EndDate, PersonRoleId, Amount, HoursPerDay, Location)
-	     VALUES (@MilestonePersonId, @StartDate, @EndDate, @PersonRoleId, @Amount, @HoursPerDay, @Location)
+	            (MilestonePersonId, StartDate, EndDate, PersonRoleId, Amount,IsBadgeRequired,BadgeStartDate,BadgeEndDate,IsBadgeException,IsApproved,BadgeRequestDate, HoursPerDay, Location)
+	     VALUES (@MilestonePersonId, @StartDate, @EndDate, @PersonRoleId, @Amount,@IsBadgeRequired,@BadgeStartDate,@BadgeEndDate,@IsBadgeException,@IsApproved,@RequestDate, @HoursPerDay, @Location)
 
 		SET @Id = SCOPE_IDENTITY()
 	     
@@ -31,6 +48,7 @@ AS
 	END
 	
 	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = @MilestonePersonId,@MilestoneId = NULL
+	EXEC dbo.UpdateMSBadgeDetailsByPersonId @PersonId = @PersonId, @UpdatedBy = @UpdatedBy
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
