@@ -67,6 +67,29 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPTOReport", ReplyAction="http://tempuri.org/IPersonService/GetPTOReportResponse")]
         DataTransferObjects.Person[] GetPTOReport(System.DateTime startDate, System.DateTime endDate, bool includeCompanyHolidays, System.Nullable<int> personId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetBadgeDetailsByPersonId", ReplyAction="http://tempuri.org/IPersonService/GetBadgeDetailsByPersonIdResponse")]
+        DataTransferObjects.MSBadge[] GetBadgeDetailsByPersonId(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetLogic2020BadgeHistory", ReplyAction="http://tempuri.org/IPersonService/GetLogic2020BadgeHistoryResponse")]
+        DataTransferObjects.MSBadge[] GetLogic2020BadgeHistory(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveBadgeDetailsByPersonId", ReplyAction="http://tempuri.org/IPersonService/SaveBadgeDetailsByPersonIdResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        void SaveBadgeDetailsByPersonId(DataTransferObjects.MSBadge msBadge);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/UpdateMSBadgeDetailsByPersonId", ReplyAction="http://tempuri.org/IPersonService/UpdateMSBadgeDetailsByPersonIdResponse")]
+        void UpdateMSBadgeDetailsByPersonId(int personId, int updatedBy);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckIfPersonInProjectForDates", ReplyAction="http://tempuri.org/IPersonService/CheckIfPersonInProjectForDatesResponse")]
+        bool CheckIfPersonInProjectForDates(int personId, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckIfPersonIsRestrictedByProjectId", ReplyAction="http://tempuri.org/IPersonService/CheckIfPersonIsRestrictedByProjectIdResponse")]
+        bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonId", ReplyAction="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonIdResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
+        DataTransferObjects.PersonBadgeHistories GetBadgeHistoryByPersonId(int personId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -321,7 +344,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-        public PersonServiceClient(string endpointConfigurationName) : 
+       public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
@@ -399,6 +422,34 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person[] GetPTOReport(System.DateTime startDate, System.DateTime endDate, bool includeCompanyHolidays, System.Nullable<int> personId) {
             return base.Channel.GetPTOReport(startDate, endDate, includeCompanyHolidays, personId);
+        }
+        
+        public DataTransferObjects.MSBadge[] GetBadgeDetailsByPersonId(int personId) {
+            return base.Channel.GetBadgeDetailsByPersonId(personId);
+        }
+        
+        public DataTransferObjects.MSBadge[] GetLogic2020BadgeHistory(int personId) {
+            return base.Channel.GetLogic2020BadgeHistory(personId);
+        }
+        
+        public void SaveBadgeDetailsByPersonId(DataTransferObjects.MSBadge msBadge) {
+            base.Channel.SaveBadgeDetailsByPersonId(msBadge);
+        }
+        
+        public void UpdateMSBadgeDetailsByPersonId(int personId, int updatedBy) {
+            base.Channel.UpdateMSBadgeDetailsByPersonId(personId, updatedBy);
+        }
+        
+        public bool CheckIfPersonInProjectForDates(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.CheckIfPersonInProjectForDates(personId, startDate, endDate);
+        }
+        
+        public bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId) {
+            return base.Channel.CheckIfPersonIsRestrictedByProjectId(personId, projectId);
+        }
+        
+        public DataTransferObjects.PersonBadgeHistories GetBadgeHistoryByPersonId(int personId) {
+            return base.Channel.GetBadgeHistoryByPersonId(personId);
         }
         
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
