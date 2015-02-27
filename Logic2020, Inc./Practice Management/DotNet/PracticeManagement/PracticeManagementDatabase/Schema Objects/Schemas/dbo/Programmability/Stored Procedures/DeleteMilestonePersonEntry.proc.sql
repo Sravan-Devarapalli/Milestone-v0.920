@@ -12,7 +12,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @MilestonePersonId   INT,
-			@PersonId INT
+			@PersonId INT,
+			@UpdatedBy INT
+
+	SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
 
 	SELECT @MilestonePersonId = MilestonePersonId
 	FROM dbo.MilestonePersonEntry
@@ -27,7 +30,8 @@ BEGIN
 	WHERE Id = @Id
 
 	EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=@MilestonePersonId,@MilestoneId = NULL
-
+	EXEC [dbo].[UpdateMSBadgeDetailsByPersonId] @PersonId = @PersonId, @UpdatedBy = @UpdatedBy
+	
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
