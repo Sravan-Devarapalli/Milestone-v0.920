@@ -100,26 +100,9 @@
         </div>
         <div class="ConsultantsWeeklyReportAlignCenter" id="divConsultingUtil" runat="server">
             <asp:Chart ID="chart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
-                Width="920px" Height="850px" OnClick="Chart_Click">
-                <Legends>
-                    <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
-                        Alignment="Center">
-                        <CellColumns>
-                            <asp:LegendCellColumn Name="Weeks" Text="">
-                                <Margins Left="15" Right="15"></Margins>
-                            </asp:LegendCellColumn>
-                        </CellColumns>
-                    </asp:Legend>
-                    <asp:Legend LegendStyle="Row" Name="Top Legend" TableStyle="Wide" Docking="Top" Alignment="Center">
-                        <CellColumns>
-                            <asp:LegendCellColumn Name="Weeks" Text="">
-                                <Margins Left="15" Right="15"></Margins>
-                            </asp:LegendCellColumn>
-                        </CellColumns>
-                    </asp:Legend>
-                </Legends>
+                Width="1050px" Height="850px" OnClick="Chart_Click">
                 <Series>
-                    <asp:Series Name="Weeks" ChartType="RangeBar" />
+                    <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false"/>
                 </Series>
                 <ChartAreas>
                     <asp:ChartArea Name="MainArea">
@@ -234,7 +217,7 @@
                     <asp:UpdatePanel ID="updPersonDetails" runat="server">
                         <ContentTemplate>
                             <div class="textCenter">
-                                <table cellpadding="0" cellspacing="0" width="100%" runat="server">
+                                <table id="Table1" cellpadding="0" cellspacing="0" width="100%" runat="server">
                                     <tr>
                                         <td align="center">
                                         </td>
@@ -279,25 +262,8 @@
 </asp:Panel>
 <asp:Chart ID="chartPdf" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
     Visible="false" Width="920px" Height="850px">
-    <Legends>
-        <asp:Legend LegendStyle="Row" Name="Botom Legend" TableStyle="Wide" Docking="Bottom"
-            Alignment="Center">
-            <CellColumns>
-                <asp:LegendCellColumn Name="Weeks" Text="">
-                    <Margins Left="15" Right="15"></Margins>
-                </asp:LegendCellColumn>
-            </CellColumns>
-        </asp:Legend>
-        <asp:Legend LegendStyle="Row" Name="Top Legend" TableStyle="Wide" Docking="Top" Alignment="Center">
-            <CellColumns>
-                <asp:LegendCellColumn Name="Weeks" Text="">
-                    <Margins Left="15" Right="15"></Margins>
-                </asp:LegendCellColumn>
-            </CellColumns>
-        </asp:Legend>
-    </Legends>
     <Series>
-        <asp:Series Name="Weeks" ChartType="RangeBar" />
+        <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false"/>
     </Series>
     <ChartAreas>
         <asp:ChartArea Name="MainArea">
