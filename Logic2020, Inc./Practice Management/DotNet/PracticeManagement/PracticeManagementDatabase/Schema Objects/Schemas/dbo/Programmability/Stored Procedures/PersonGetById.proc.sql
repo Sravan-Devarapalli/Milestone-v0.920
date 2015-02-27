@@ -16,6 +16,7 @@ BEGIN
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
+		   p.PreferredFirstName,
 	       p.HireDate,
 	       p.TerminationDate,
 	       p.Alias,
