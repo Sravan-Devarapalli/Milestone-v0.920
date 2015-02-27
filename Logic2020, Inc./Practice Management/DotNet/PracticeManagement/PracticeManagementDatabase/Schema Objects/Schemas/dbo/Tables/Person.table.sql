@@ -6,6 +6,7 @@
     [DefaultPractice]	INT						NULL,
     [FirstName]			NVARCHAR (40)			NOT NULL,
     [LastName]			NVARCHAR (40)			NOT NULL,
+	[PreferredFirstName]	NVARCHAR (40)		NULL,
     [Notes]				NVARCHAR (MAX)			NULL,
     [PersonStatusId]	INT						NOT NULL,
     [EmployeeNumber]	NVARCHAR (12)			NOT NULL,
