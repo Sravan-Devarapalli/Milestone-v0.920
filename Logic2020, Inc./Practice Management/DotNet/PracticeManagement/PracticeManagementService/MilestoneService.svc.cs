@@ -150,9 +150,9 @@ namespace PracticeManagementService
         /// <param name="milestoneId">An ID of the <see cref="Milestone"/> to be moved.</param>
         /// <param name="shiftDays">A number of days to move.</param>
         /// <param name="moveFutureMilestones">Determines whether future milestones must be moved too.</param>
-        public void MilestoneMove(int milestoneId, int shiftDays, bool moveFutureMilestones)
+        public List<MSBadge> MilestoneMove(int milestoneId, int shiftDays, bool moveFutureMilestones)
         {
-            MilestoneDAL.MilestoneMove(milestoneId, shiftDays, moveFutureMilestones);
+            return MilestoneDAL.MilestoneMove(milestoneId, shiftDays, moveFutureMilestones);
         }
 
         /// <summary>
@@ -284,6 +284,16 @@ namespace PracticeManagementService
         public List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate)
         {
             return MilestoneDAL.GetPersonMilestonesOnPreviousHireDate(personId, previousHireDate);
+        }
+
+        public void SendBadgeRequestMail(Project project)
+        {
+             MailUtil.SendMSBadgeRequestEmail(project);
+        }
+
+        public void SendBadgeRequestApprovedMail(string personName, string toAddress)
+        {
+            MailUtil.SendMSBadgeRequestApprovedEmail(personName,toAddress);
         }
 
         #endregion Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
