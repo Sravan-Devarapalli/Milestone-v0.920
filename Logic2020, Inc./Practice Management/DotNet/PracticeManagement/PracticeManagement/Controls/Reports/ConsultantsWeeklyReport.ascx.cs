@@ -134,7 +134,7 @@ namespace PraticeManagement.Controls.Reports
                     coloumnWidth.Add(0);
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
                 RowStyles[] rowStylearray = { headerrowStyle };
-                
+
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
                 sheetStyle.TopRowNo = headerRowsCount;
                 sheetStyle.IsFreezePane = true;
@@ -427,7 +427,7 @@ namespace PraticeManagement.Controls.Reports
             if (cookie.PersonId.HasValue)
             {
                 ShowDetailedReport(cookie.PersonId.Value, cookie.BegPeriod.Date, cookie.EndPeriod.Date, cookie.ChartTitle,
-                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects, cookie.ProposedProjects,cookie.CompletedProjects);
+                    cookie.ActiveProjects, cookie.ProjectedProjects, cookie.InternalProjects, cookie.ExperimentalProjects, cookie.ProposedProjects, cookie.CompletedProjects);
 
                 System.Web.UI.ScriptManager.RegisterStartupScript(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
             }
@@ -443,7 +443,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects,utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0);
+                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0, utf.IncludeBadgeStatus);
             ConsultantUtilizationPerson = report;
             foreach (var quadruple in report)
                 AddPerson(quadruple);
@@ -481,6 +481,28 @@ namespace PraticeManagement.Controls.Reports
         /// </summary>
         private void InitLegends(bool isPdf = false)
         {
+            chart.Legends.Clear();
+            chartPdf.Legends.Clear();
+            var legendTop = new Legend("Top")
+            {
+                DockedToChartArea = MAIN_CHART_AREA_NAME,
+                Docking = Docking.Top,
+                Alignment = StringAlignment.Center,
+                IsDockedInsideChartArea = false,
+                LegendStyle = LegendStyle.Table
+            };
+            var legendBtm = new Legend("Bottom")
+            {
+                DockedToChartArea = MAIN_CHART_AREA_NAME,
+                Docking = Docking.Bottom,
+                Alignment = StringAlignment.Center,
+                IsDockedInsideChartArea = false,
+                LegendStyle = LegendStyle.Table
+            };
+            chart.Legends.Add(legendTop);
+            chart.Legends.Add(legendBtm);
+            chartPdf.Legends.Add(legendTop);
+            chartPdf.Legends.Add(legendBtm);
             LegendCollection lcollection = isPdf ? chartPdf.Legends : chart.Legends;
             foreach (var legend in lcollection)
             {
@@ -490,7 +512,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 else
                 {
-                    Coloring.ColorLegend(legend);
+                    Coloring.ColorLegend(legend, utf.IncludeBadgeStatus);
                 }
             }
         }
@@ -765,7 +787,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects,utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber);
+                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber, false);
             report.Reverse();
             string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
             if (utf.ProjectedPersons && utf.ActivePersons)
@@ -1135,7 +1157,7 @@ namespace PraticeManagement.Controls.Reports
             var completedProjects = bool.Parse(query[9]);
 
             ShowDetailedReport(personId, repStartDate, repEndDate, query[3],
-            activeProjects, projectedProjects, internalProjects, experimentalProjects, proposedProjects,completedProjects);
+            activeProjects, projectedProjects, internalProjects, experimentalProjects, proposedProjects, completedProjects);
 
             System.Web.UI.ScriptManager.RegisterClientScriptBlock(updConsReport, updConsReport.GetType(), "focusDetailReport", "window.location='#details';", true);
 
@@ -1151,7 +1173,7 @@ namespace PraticeManagement.Controls.Reports
         }
 
         private void ShowDetailedReport(int personId, DateTime repStartDate, DateTime repEndDate, string chartTitle,
-            bool activeProjects, bool projectedProjects, bool internalProjects, bool experimentalProjects, bool proposedProjects,bool completedProjects)
+            bool activeProjects, bool projectedProjects, bool internalProjects, bool experimentalProjects, bool proposedProjects, bool completedProjects)
         {
             chartDetails.Visible = true;
 
@@ -1174,7 +1196,7 @@ namespace PraticeManagement.Controls.Reports
                     IsCapacityMode);
 
             var utilizationDaily = DataHelper.ConsultantUtilizationDailyByPerson(repStartDate, ParseInt(repEndDate.Subtract(repStartDate).Days.ToString(), DAYS_FORWARD),
-                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, utf.ProposedProjects,utf.CompletedProjects, personId);
+                utf.ActiveProjects, utf.ProjectedProjects, utf.InternalProjects, utf.ExperimentalProjects, utf.ProposedProjects, utf.CompletedProjects, personId);
             var avgUtils = utilizationDaily.First().WeeklyUtilization;
             for (int index = 0; index < avgUtils.Count; index++)
             {
@@ -1191,7 +1213,7 @@ namespace PraticeManagement.Controls.Reports
                     var range = chartDetails.Series["Milestones"].Points[ind];
                     range.Color = Coloring.GetColorByUtilization(load, load == -1 ? 2 : (load == -2 ? 1 : 0));
                     string holidayDescription = CompanyHolidays.Keys.Any(t => t == pointStartDate) ? CompanyHolidays[pointStartDate] : utilizationDaily.First().TimeOffDates.Keys.Any(t => t == pointStartDate) ? utilizationDaily.First().TimeOffDates[pointStartDate].ToString() : string.Empty;
-                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), load == -1 ? 2 : (load == -2 ? 1 : 0), null, false, holidayDescription);
+                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), new BadgeType() { DayType = load == -1 ? 2 : (load == -2 ? 1 : 0) }, null, false, holidayDescription);
                 }
             }
 
@@ -1435,105 +1457,101 @@ namespace PraticeManagement.Controls.Reports
                 range.ToolTip = tooltip;
             }
             else
-            {   //vacationDays doesn't include saturdays and sundays
-                //if some part of the range has vacation days(not the whole range) OR the whole range is vacation days
-                if ((vacationDays > 0 && !(IsCapacityMode ? load > 100 : load < 0)) || (IsCapacityMode ? load > 100 : load < 0))
+            {
+                range.ToolTip = "";
+                range.Color = Color.White;
+                ConsReportColoringElementSection coloring = ConsReportColoringElementSection.ColorSettings;
+                List<Quadruple<DateTime, DateTime, BadgeType, string>> weekDatesRange = new List<Quadruple<DateTime, DateTime, BadgeType, string>>();//third parameter in the list int will have 3 possible values '0' for utilization '1' for timeoffs '2' for companyholiday
+                bool IsWholeRangeVacation = true;
+                bool IsWholeRangeCompanyHolidays = true;
+                for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
                 {
-                    range.ToolTip = "";
-                    range.Color = Color.White;
-                    ConsReportColoringElementSection coloring = ConsReportColoringElementSection.ColorSettings;
-                    List<Quadruple<DateTime, DateTime, int, string>> weekDatesRange = new List<Quadruple<DateTime, DateTime, int, string>>();//third parameter in the list int will have 3 possible values '0' for utilization '1' for timeoffs '2' for companyholiday
-                    bool IsWholeRangeVacation = true;
-                    bool IsWholeRangeCompanyHolidays = true;
+                    if (!timeoffDates.Any(t => t.Key == d))
+                    {
+                        if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                        {
+                            IsWholeRangeVacation = false;
+                            break;
+                        }
+                    }
+                }
+                if (payType == "W2-Salary")
+                {
                     for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
                     {
-                        if (!timeoffDates.Any(t => t.Key == d))
+                        if (!companyHolidayDates.Select(s => s.Key).Any(t => t == d))
                         {
                             if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
                             {
-                                IsWholeRangeVacation = false;
+                                IsWholeRangeCompanyHolidays = false;
                                 break;
                             }
                         }
                     }
-                    if (payType == "W2-Salary")
-                    {
-                        for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
-                        {
-                            if (!companyHolidayDates.Select(s => s.Key).Any(t => t == d))
-                            {
-                                if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
-                                {
-                                    IsWholeRangeCompanyHolidays = false;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else
-                        IsWholeRangeCompanyHolidays = false;
-                    if (!IsWholeRangeVacation)
-                    {
-
-                        for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
-                        {
-                            int dayType = timeoffDates.Any(t => t.Key == d) ? 1 : payType == "W2-Salary" ? IsRangeComapanyHolidays(d, d.AddDays(1), companyHolidayDates, (IsCapacityMode ? load > 100 : load < 0), (IsCapacityMode ? load > 100 : load < 0) && !IsWholeRangeCompanyHolidays) : 0;
-
-                            string holidayDescription = companyHolidayDates.Keys.Any(t => t == d) ? companyHolidayDates[d] : timeoffDates.Keys.Any(t => t == d) ? timeoffDates[d].ToString() : "8";
-                            if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third && dayType != 2 && tri.Fourth == holidayDescription))
-                            {
-                                var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third);
-                                tripleRange.Second = d;
-                            }
-                            else
-                            {
-                                weekDatesRange.Add(new Quadruple<DateTime, DateTime, int, string>(d, d, dayType, holidayDescription));
-                            }
-                        }
-
-                        foreach (var tripleR in weekDatesRange)
-                        {
-                            var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
-                            innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third, isHiredIntheEmployeementRange);
-                            innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth);
-                            innerRangeList.Add(innerRange);
-                        }
-                    }
-
-
-                    else //If the whole range is vacation days
-                    {
-                        for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
-                        {
-                            int dayType = 1;
-
-                            string holidayDescription = timeoffDates.Keys.Any(t => t == d) ? timeoffDates[d].ToString() : "8";
-                            if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third && tri.Fourth == holidayDescription))
-                            {
-                                var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third);
-                                tripleRange.Second = d;
-                            }
-                            else
-                            {
-                                weekDatesRange.Add(new Quadruple<DateTime, DateTime, int, string>(d, d, dayType, holidayDescription));
-                            }
-                        }
-
-                        foreach (var tripleR in weekDatesRange)
-                        {
-                            var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
-                            innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange);
-                            innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, 1, null, false, tripleR.Fourth);
-                            innerRangeList.Add(innerRange);
-                        }
-                    }
                 }
-
-                //If the whole range is working days
                 else
+                    IsWholeRangeCompanyHolidays = false;
+                if (!IsWholeRangeVacation)
                 {
-                    range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), 0, payType, IsCapacityMode);
+
+                    for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
+                    {
+                        int dayType = timeoffDates.Any(t => t.Key == d) ? 1 : payType == "W2-Salary" ? IsRangeComapanyHolidays(d, d.AddDays(1), companyHolidayDates, (IsCapacityMode ? load > 100 : load < 0), (IsCapacityMode ? load > 100 : load < 0) && !IsWholeRangeCompanyHolidays) : 0;
+                        string holidayDescription = companyHolidayDates.Keys.Any(t => t == d) ? companyHolidayDates[d] : timeoffDates.Keys.Any(t => t == d) ? timeoffDates[d].ToString() : "8";
+                        int badgeType = GetBadgeType(p, d);
+                        if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third.DayType && dayType != 2 && tri.Fourth == holidayDescription && badgeType == tri.Third.BadgedType))
+                        {
+                            var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third.DayType && badgeType == tri.Third.BadgedType);
+                            tripleRange.Second = d;
+                        }
+                        else
+                        {
+                            weekDatesRange.Add(new Quadruple<DateTime, DateTime, BadgeType, string>(d, d, new BadgeType() { DayType = dayType, BadgedType = badgeType }, holidayDescription));
+                        }
+                    }
+
+                    foreach (var tripleR in weekDatesRange)
+                    {
+                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
+                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third.DayType, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third.DayType, isHiredIntheEmployeementRange);
+                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth);
+                        innerRange.BackHatchStyle = GetAppropriateHatchStyle(tripleR.Third.BadgedType);
+                        innerRange.BackSecondaryColor = Color.Black;
+                        innerRangeList.Add(innerRange);
+                    }
                 }
+
+
+                else //If the whole range is vacation days
+                {
+                    for (var d = pointStartDate; d < pointEndDate; d = d.AddDays(1))
+                    {
+                        int dayType = 1;
+                        string holidayDescription = timeoffDates.Keys.Any(t => t == d) ? timeoffDates[d].ToString() : "8";
+                        int badgeType = GetBadgeType(p, d);
+
+                        if (weekDatesRange.Any(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third.DayType && tri.Fourth == holidayDescription && badgeType == tri.Third.BadgedType))
+                        {
+                            var tripleRange = weekDatesRange.First(tri => tri.Second == d.AddDays(-1) && dayType == tri.Third.DayType && badgeType == tri.Third.BadgedType);
+                            tripleRange.Second = d;
+                        }
+                        else
+                        {
+                            weekDatesRange.Add(new Quadruple<DateTime, DateTime, BadgeType, string>(d, d, new BadgeType() { DayType = dayType, BadgedType = badgeType }, holidayDescription));
+                        }
+                    }
+
+                    foreach (var tripleR in weekDatesRange)
+                    {
+                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
+                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange);
+                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, null, false, tripleR.Fourth);
+                        innerRange.BackHatchStyle = GetAppropriateHatchStyle(tripleR.Third.BadgedType);
+                        innerRange.BackSecondaryColor = Color.Black;
+                        innerRangeList.Add(innerRange);
+                    }
+                }
+
                 if (!IsSampleReport)
                 {
                     CompanyHolidays = companyHolidayDates;
@@ -1551,6 +1569,46 @@ namespace PraticeManagement.Controls.Reports
                     }
                 }
             }
+        }
+
+        public ChartHatchStyle GetAppropriateHatchStyle(int badgeType)
+        {
+            var result = new ChartHatchStyle();
+            switch (badgeType)
+            {
+                case 0: result = ChartHatchStyle.None;
+                    break;
+                case 1: result = ChartHatchStyle.LargeGrid;
+                    break;
+                case 2: result = ChartHatchStyle.Vertical;
+                    break;
+                case 3: result = ChartHatchStyle.Divot;
+                    break;
+                case 4: result = ChartHatchStyle.Divot;
+                    break;
+            }
+            return result;
+        }
+
+        public int GetBadgeType(Person person, DateTime startDate)
+        {
+            if (!utf.IncludeBadgeStatus || IsCapacityMode)
+                return 0;
+            if (person.BadgedProjects != null)
+            {
+                foreach (var badgeProject in person.BadgedProjects)
+                {
+                    if (startDate.Date <= badgeProject.BadgeEndDate.Value.Date && badgeProject.BadgeStartDate.Value.Date <= startDate.Date)
+                        return 1;
+                }
+            }
+            if (person.Badge.BadgeStartDate.HasValue && startDate.Date <= person.Badge.BadgeEndDate.Value.Date && person.Badge.BadgeStartDate.Value.Date <= startDate.Date)
+                return 2;
+            if (person.Badge.BreakStartDate.HasValue && startDate.Date <= person.Badge.BreakEndDate.Value.Date && person.Badge.BreakStartDate.Value.Date <= startDate.Date)
+                return 3;
+            if (person.Badge.BlockStartDate.HasValue && startDate.Date <= person.Badge.BlockEndDate.Value.Date && person.Badge.BlockStartDate.Value.Date <= startDate.Date)
+                return 4;
+            return 0;
         }
 
         private DataPoint AddRange(DateTime pointStartDate, DateTime pointEndDate, double yvalue, bool isPdf)
@@ -1581,7 +1639,7 @@ namespace PraticeManagement.Controls.Reports
 
         private int IsRangeComapanyHolidays(DateTime startDate, DateTime endDate, Dictionary<DateTime, string> companyHolidayDates, bool includeWeekends, bool IsMixedVacationDays = false)
         {
-            //returns true if the given range is companyholidays or saturdays or sundays otherwise false
+            //returns '0' for utilization '1' for timeoffs '2' for companyholiday
 
             for (var i = startDate; i < endDate; i = i.AddDays(1))
             {
@@ -1724,35 +1782,52 @@ namespace PraticeManagement.Controls.Reports
                 );
         }
 
-        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate, int dayType, string payType = null, bool IsCapacityMode = false, string holidayDescription = null)
+        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate, BadgeType dayType, string payType = null, bool IsCapacityMode = false, string holidayDescription = null)
         {
             //dayType = '0' for utilization '1' for timeoffs '2' for companyholiday
             string tooltip = "";
 
             if (pointStartDate == pointEndDate)
             {
-                tooltip = dayType == 1 ?
-                    string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM. d")) + (holidayDescription != "8" ? "- " + holidayDescription+" hours" : string.Empty) :
-                           dayType == 2 ? holidayDescription + ": " + pointStartDate.ToString("MMM. d") :
+                tooltip = dayType.DayType == 1 ?
+                    string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM. d")) + (holidayDescription != "8" ? "- " + holidayDescription + " hours" : string.Empty) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "") :
+                           dayType.DayType == 2 ? holidayDescription + ": " + pointStartDate.ToString("MMM. d") :
                            string.Format(TOOLTIP_FORMAT_FOR_SINGLEDAY,
                                  pointStartDate.ToString("MMM, d"), string.Format(
                                      IsCapacityMode ? CAPACITY_TOOLTIP_FORMAT : UTILIZATION_TOOLTIP_FORMAT,
-                                         load), payType);
+                                         load), payType) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "");
             }
             else
             {
-                tooltip = dayType == 1 ?
+                tooltip = dayType.DayType == 1 ?
                           string.Format(VACATION_TOOLTIP_FORMAT, pointStartDate.ToString("MMM. d") + " - " +
-                          pointEndDate.ToString("MMM. d")) + (holidayDescription != "8"? "- " + holidayDescription + " hours":string.Empty) :
+                          pointEndDate.ToString("MMM. d")) + (holidayDescription != "8" ? "- " + holidayDescription + " hours" : string.Empty) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "") :
                           string.Format(TOOLTIP_FORMAT,
                                      pointStartDate.ToString("MMM, d"),
                                      pointEndDate.ToString("MMM, d"),
                                       string.Format(
                                          IsCapacityMode ? CAPACITY_TOOLTIP_FORMAT : UTILIZATION_TOOLTIP_FORMAT,
-                                             load), payType);
+                                             load), payType) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "");
             }
 
             return tooltip;
+        }
+
+        public static string BadgeTooltip(int badgeType)
+        {
+            var result = "";
+            switch (badgeType)
+            {
+                case 1: result = "MS Badged";
+                    break;
+                case 2: result = "18 mos Window Active";
+                    break;
+                case 3: result = "6-Month Break";
+                    break;
+                case 4: result = "Block";
+                    break;
+            }
+            return result;
         }
 
         protected void btnUpdateView_OnClick(object sender, EventArgs e)
@@ -1782,5 +1857,23 @@ namespace PraticeManagement.Controls.Reports
         #endregion Formatting
 
     }
+
+    public class BadgeType
+    {
+        //dayType = '0' for utilization '1' for timeoffs '2' for companyholiday
+        public int DayType
+        {
+            get;
+            set;
+        }
+
+        //BadgedType = 1 for badged,2 for 18 mo window,3 for 6 mo break and block, 4 for block dates
+        public int BadgedType
+        {
+            get;
+            set;
+        }
+    }
 }
+
 
