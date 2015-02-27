@@ -78,7 +78,7 @@ BEGIN
 			ISNULL(P.ClientDirector,'') AS [Client Director],
 			ISNULL(P.ProjectOwner,'') AS [Project Owner],
 			dbo.GetProjectManagerNames(P.ProjectId) AS [Project Managers],
-			P.Manager AS [Career Counselor],
+			P.Manager AS [Career Manager],
 			CONVERT(DATE,MIN(P.Date))[Roll on Date],
 			CONVERT(DATE,MAX(P.Date))[Roll off Date],
 			COUNT(*) AS [Days]
