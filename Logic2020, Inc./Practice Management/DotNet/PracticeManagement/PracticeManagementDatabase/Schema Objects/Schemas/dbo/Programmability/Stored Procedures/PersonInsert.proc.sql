@@ -8,6 +8,7 @@ CREATE PROCEDURE [dbo].[PersonInsert]
 (
 	@FirstName       NVARCHAR(40),
 	@LastName        NVARCHAR(40), 
+	@PreferredFirstName        NVARCHAR(40), 
 	@HireDate        DATETIME,
 	@TerminationDate DATETIME,
 	@Alias           NVARCHAR(100),
@@ -80,16 +81,19 @@ AS
 		SELECT @PersonStatusId = CASE WHEN @TerminationDate < @Today THEN 2 ELSE @PersonStatusId END
 		-- Inserting Person
 		INSERT dbo.Person
-			(FirstName, LastName, HireDate,  Alias, DefaultPractice, 
+			(FirstName, LastName,PreferredFirstName, HireDate,  Alias, DefaultPractice, 
 		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId, TerminationReasonId,TitleId,RecruiterId,JobSeekerStatusId,SourceId,TargetedCompanyId,EmployeeReferralId,CohortAssignmentId)
 		VALUES
-			(@FirstName, @LastName, @HireDate, @Alias, @DefaultPractice, 
+			(@FirstName, @LastName,@PreferredFirstName, @HireDate, @Alias, @DefaultPractice, 
 		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId, @TerminationReasonId,@TitleId,@RecruiterId,@JobSeekerStatusId,@SourceRecruitingMetricsId,@TargetRecruitingMetricsId,@EmployeeReferralId,@CohortAssignmentId)
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
 
 		SET @PersonId = SCOPE_IDENTITY()
+
+		INSERT INTO dbo.MSBadge(PersonId,IsBlocked,IsPreviousBadge,IsException)
+		SELECT @PersonId,0,0,0
 
 		DECLARE @Date DATETIME 
 
