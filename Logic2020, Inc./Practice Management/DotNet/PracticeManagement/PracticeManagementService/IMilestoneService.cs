@@ -70,7 +70,7 @@ namespace PracticeManagementService
         /// <param name="shiftDays">A number of days to move.</param>
         /// <param name="moveFutureMilestones">Determines whether future milestones must be moved too.</param>
         [OperationContract]
-        void MilestoneMove(int milestoneId, int shiftDays, bool moveFutureMilestones);
+        List<MSBadge> MilestoneMove(int milestoneId, int shiftDays, bool moveFutureMilestones);
 
         /// <summary>
         /// Moves the specified milestone end date forward and backward.
@@ -187,6 +187,12 @@ namespace PracticeManagementService
 
          [OperationContract]
          List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate);
+
+         [OperationContract]
+         void SendBadgeRequestMail(Project project);
+        
+         [OperationContract]
+         void SendBadgeRequestApprovedMail(string personName, string toAddress);
     }
 }
 
