@@ -3437,7 +3437,7 @@ li.l1 a
     white-space: normal;
     padding-bottom: 3px;
     padding-left: 5px;
-    width: 130px;
+    width: 140px;
 }
 #navItems
 {
@@ -3926,22 +3926,20 @@ div.scrollextLabel Label
 {
     background-color: White;
     height: 25px;
-    white-space: nowrap;
 }
 
 .MileStoneDetailPageResourcesTab th
 {
     height: 20px;
-    white-space: nowrap;
     text-align: center;
 }
 
 .MileStoneDetailPageResourcesTab td
 {
     height: 20px;
-    white-space: nowrap;
     text-align: center;
 }
+
 .WhiteSpaceNormal
 {
     white-space: normal;
@@ -8251,7 +8249,7 @@ table#ctl00_body_login tr td label
 
 .bgColorE0DAECImp
 {
- background-color: #E0DAEC !important;
+    background-color: #E0DAEC !important;
 }
 
 .ConsultPopup
@@ -8263,4 +8261,57 @@ table#ctl00_body_login tr td label
 .minwidth350px
 {
     min-width: 350px !important;
+}
+
+.MsBadgeTd1
+{
+    padding: 10px;
+    text-align: right;
+}
+
+.MsBadgeTd2
+{
+    width: 240px;
+    padding-left: 5px;
+}
+
+.MSBadgeEmptyDiv
+{
+    width: 60%; 
+    padding-top:10px;
+    font-size:13px;
+}
+.BadgeHistory
+{
+    min-height: 250px;
+    width: 60%;
+    padding: 10px;
+}
+.BackImageMilestoneDetail
+{
+     background: url(../images/cp-header-bg_new.png) repeat-x 0 0 !important;
+}
+.Height30PxImp
+{
+    height: 30px !important;
+}
+.BadgeHistorypopUp
+{
+    background-color: White;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    min-height: 60px;
+    min-width:500px;
+    max-width:900px;
+    overflow:auto;
+    max-height:500px;
+}
+.Width1300Px
+{
+    width: 1300px;
+}
+.Width600Px
+{
+    width: 600px;
 }
