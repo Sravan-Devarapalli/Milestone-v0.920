@@ -229,7 +229,7 @@ namespace PracticeManagementService
         /// <param name="currentUser">current logged in user name</param>
         [OperationContract]
         [FaultContract(typeof(DataAccessFault))]
-        int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay, string userLogin);
+        int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay,string userLogin);
 
         [OperationContract]
         void PersonValidations(Person person);
@@ -468,7 +468,28 @@ namespace PracticeManagementService
         List<CohortAssignment> GetAllCohortAssignments();
 
         [OperationContract]
-        List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays, int? personId);
+        List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays,int? personId);
+
+        [OperationContract]
+        List<MSBadge> GetBadgeDetailsByPersonId(int personId);
+
+        [OperationContract]
+        List<MSBadge> GetLogic2020BadgeHistory(int personId);
+
+        [OperationContract]
+        void SaveBadgeDetailsByPersonId(MSBadge msBadge);
+
+        [OperationContract]
+        void UpdateMSBadgeDetailsByPersonId(int personId,int updatedBy);
+
+        [OperationContract]
+        bool CheckIfPersonInProjectForDates(int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId);
+
+        [OperationContract]
+        PersonBadgeHistories GetBadgeHistoryByPersonId(int personId);
     }
 }
 
