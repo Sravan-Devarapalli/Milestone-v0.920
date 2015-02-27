@@ -144,7 +144,9 @@
     <Compile Include="Financials\QuarterRange.cs" />
     <Compile Include="Financials\RangeType.cs" />
     <Compile Include="Lockout.cs" />
+    <Compile Include="MSBadge.cs" />
     <Compile Include="OpurtunityPerson.cs" />
+    <Compile Include="PersonBadgeHistories.cs" />
     <Compile Include="PersonPassword.cs" />
     <Compile Include="PersonTimeOff.cs" />
     <Compile Include="PersonWorkingHoursDetailsWithinThePeriod.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="ProjectFeedbackStatus.cs" />
     <Compile Include="RecruitingMetrics.cs" />
     <Compile Include="Reports\AttainmentBillableutlizationReport.cs" />
+    <Compile Include="Reports\BadgedResourcesByTime.cs" />
     <Compile Include="Reports\BillableUtlizationByRange.cs" />
     <Compile Include="Reports\BillingReport.cs" />
     <Compile Include="Reports\ByPerson\GroupByDateByPerson.cs" />
@@ -175,6 +178,8 @@
     <Compile Include="Reports\ConsultantDemand\ConsultantGroupbyTitleSkill.cs" />
     <Compile Include="Reports\ConsultantUtilizationPerson.cs" />
     <Compile Include="Reports\ConsultantUtilzationByProject.cs" />
+    <Compile Include="Reports\GroupByPractice.cs" />
+    <Compile Include="Reports\GroupbyTitle.cs" />
     <Compile Include="Reports\GroupedHours.cs" />
     <Compile Include="Reports\HumanCapital\TerminationPersonsInRange.cs" />
     <Compile Include="Reports\PersonLevelGroupedHours.cs" />
