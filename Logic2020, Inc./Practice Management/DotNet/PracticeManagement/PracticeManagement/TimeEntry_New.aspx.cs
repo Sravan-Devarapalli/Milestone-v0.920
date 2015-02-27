@@ -209,6 +209,8 @@ namespace PraticeManagement
 
         public bool IsValidApprovedManager { get; set; }
 
+        public bool IsBadgeApprovedProject { get; set; }
+
         public bool IsWeekOrPersonChanged
         {
             set
@@ -625,6 +627,12 @@ namespace PraticeManagement
             args.IsValid = IsValidDayTotal;
         }
 
+        protected void custOpsApproval_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            
+            args.IsValid = IsBadgeApprovedProject;
+        }
+
         protected void cvApprovedManager_ServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = IsValidApprovedManager;
@@ -824,7 +832,6 @@ namespace PraticeManagement
                 bar.AccountId = AccountId;
                 bar.BusinessUnitId = BusinessUnitId;
                 bar.ProjectId = ProjectId;
-
                 var imgDropTes = bar.FindControl(imgDropTesImage) as ImageButton;
                 imgDropTes.Attributes[AccountIdXname] = AccountId;
                 imgDropTes.Attributes[ProjectIdXname] = ProjectId;
@@ -1660,7 +1667,7 @@ namespace PraticeManagement
         private void ValidateAll()
         {
             IsNoteRequiredBecauseOfNonBillable = false;
-            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidAdminstrativeHours = IsValidApprovedManager = true;
+            IsValidDayTotal = IsValidHours = IsValidNote = IsValidWorkType = IsValidAdminstrativeHours = IsValidApprovedManager = IsBadgeApprovedProject = true;
 
             foreach (RepeaterItem barItem in repProjectSections.Items)
             {
