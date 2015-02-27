@@ -261,7 +261,7 @@ namespace PraticeManagement.Controls.Projects
         {
             get { return ((PraticeManagement.ProjectDetail)Page); }
         }
-        
+
         public DateTime? FromDateFilterValue
         {
             get { return diRange.FromDate; }
@@ -427,7 +427,7 @@ namespace PraticeManagement.Controls.Projects
             {
                 row = new List<object>();
                 row.Add(activityItem.LogDate);
-                row.Add(GetModifiedByDetails(activityItem.Person != null ? (int?)activityItem.Person.Id.Value : null, activityItem.Person != null ? activityItem.Person.PersonLastFirstName:null, activityItem.SystemUser, activityItem.LogData));
+                row.Add(GetModifiedByDetails(activityItem.Person != null ? (int?)activityItem.Person.Id.Value : null, activityItem.Person != null ? activityItem.Person.PersonLastFirstName : null, activityItem.SystemUser, activityItem.LogData));
                 row.Add(NoNeedToShowActivityType(activityItem.ActivityName) + " " + string.Format(BoldFontStyle, Regex.Replace(GetActivityItem(activityItem.LogData, true), @"\s+", " ")));
                 var item = Regex.Replace(GetActivityItem(activityItem.LogData, false), @"\s+", " ");
                 row.Add(item);
@@ -613,8 +613,11 @@ namespace PraticeManagement.Controls.Projects
 
         private static void PrepareDropDown(string entityId, DropDownList listControl)
         {
-            listControl.SelectedValue = entityId;
-            listControl.Enabled = false;
+            if (listControl.Items.FindByValue(entityId) != null)
+            {
+                listControl.SelectedValue = entityId;
+                listControl.Enabled = false;
+            }
         }
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
@@ -733,9 +736,9 @@ namespace PraticeManagement.Controls.Projects
 
         protected void odsActivities_Selecting(object sender, ObjectDataSourceSelectingEventArgs e)
         {
-            if (ddlProjects.SelectedValue == "")
+            if (ddlProjects.SelectedValue == "0")
             {
-                ddlProjects.DataBind();
+                //ddlProjects.DataBind();
             }
             if (ddlPeriod.SelectedValue == "0")
             {
@@ -769,8 +772,7 @@ namespace PraticeManagement.Controls.Projects
             e.InputParameters["milestoneId"] = MilestoneIdFilter = (this.MilestoneId == null ? null : this.MilestoneId.ToString());
             e.InputParameters["personId"] = PersonId = string.IsNullOrEmpty(ddlPersonName.SelectedValue) ?
                                                 null : ddlPersonName.SelectedValue;
-            e.InputParameters["projectId"] = ProjectId = string.IsNullOrEmpty(ddlProjects.SelectedValue) ?
-                                                null : ddlProjects.SelectedValue;
+            e.InputParameters["projectId"] = ProjectId = ddlProjects.SelectedValue == string.Empty ? "0" : ddlProjects.SelectedValue;
             var selectedFields = cblFields.SelectedItems;
             e.InputParameters["practiceAreas"] = PracticeAreas = selectedFields == null ? true : selectedFields.Contains("PracticeAreas");
             e.InputParameters["sowBudget"] = SowBudget = selectedFields == null ? true : selectedFields.Contains("SOWBudget");
