@@ -34,6 +34,10 @@ namespace PraticeManagement.Config
         private const int NameCharactersLength = 50;
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
+        private bool? _userIsAdministratorValue;
+        private bool? _userIsOperationsValue;
+        private bool? _userIsHRValue;
+        private bool? _userIsRecruiterValue;
 
         #endregion
 
@@ -290,6 +294,62 @@ namespace PraticeManagement.Config
             }
         }
 
+        protected bool UserIsAdministrator
+        {
+            get
+            {
+                if (!_userIsAdministratorValue.HasValue)
+                {
+                    _userIsAdministratorValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
+                }
+
+                return _userIsAdministratorValue.Value;
+            }
+        }
+
+        protected bool UserIsOperations
+        {
+            get
+            {
+                if (!_userIsOperationsValue.HasValue)
+                {
+                    _userIsOperationsValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName);
+                }
+
+                return _userIsOperationsValue.Value;
+            }
+        }
+
+        protected bool UserIsHR
+        {
+            get
+            {
+                if (!_userIsHRValue.HasValue)
+                {
+                    _userIsHRValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName);
+                }
+
+                return _userIsHRValue.Value;
+            }
+        }
+
+        protected bool UserIsRecruiter
+        {
+            get
+            {
+                if (!_userIsRecruiterValue.HasValue)
+                {
+                    _userIsRecruiterValue =
+                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.RecruiterRoleName);
+                }
+
+                return _userIsRecruiterValue.Value;
+            }
+        }
+
         #endregion Properties
 
         #region Events And Methods
@@ -384,8 +444,7 @@ namespace PraticeManagement.Config
                     gvPersons.Sort("LastName", SortDirection.Ascending);
                     SetFilterValues();
                 }
-
-
+               lnkAddPerson.Visible = UserIsAdministrator || userIsHR || UserIsRecruiter;
             }
 
 
@@ -972,7 +1031,7 @@ namespace PraticeManagement.Config
             data.Columns.Add("Status");
             data.Columns.Add("Last Login");
             data.Columns.Add("Title");
-            data.Columns.Add("Career Counselor");
+            data.Columns.Add("Career Manager");
             foreach (var person in reportData)
             {
                 row = new List<object>();
