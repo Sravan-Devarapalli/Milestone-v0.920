@@ -18,6 +18,12 @@ BEGIN
 	       mpe.PersonRoleId,
 	       mpe.Amount,
 	       mpe.HoursPerDay,
+		    mpe.IsBadgeRequired,
+		   mpe.BadgeStartDate,
+		   mpe.BadgeEndDate,
+		   mpe.IsBadgeException,
+		   mpe.IsApproved,
+		   MS.BadgeEndDate AS ConsultantEndDate,
 	       r.Name AS RoleName,
 		   ISNULL((SELECT COUNT(*)
 				FROM dbo.v_PersonCalendar AS pcal
@@ -41,10 +47,15 @@ BEGIN
 	       INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
 	       INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	       LEFT JOIN dbo.PersonRole AS r ON mpe.PersonRoleId = r.PersonRoleId
+		    LEFT JOIN dbo.MSBadge MS ON MS.PersonId = p.PersonId
 	       LEFT JOIN dbo.TimeEntries as te on te.MilestonePersonId = mp.MilestonePersonId
 		  AND (te.MilestoneDate BETWEEN mpe.StartDate AND  mpe.EndDate)
 	  WHERE mp.MilestoneId = @MilestoneId
-	  GROUP BY mpe.Id,mp.MilestonePersonId, p.SeniorityId,mp.PersonId,mpe.StartDate,mpe.EndDate,mpe.PersonRoleId,mpe.Amount,
+	  GROUP BY mpe.Id,mp.MilestonePersonId, p.SeniorityId,mp.PersonId,mpe.StartDate,mpe.EndDate,mpe.PersonRoleId,mpe.Amount, mpe.IsBadgeRequired,
+		   mpe.BadgeStartDate,
+		   mpe.BadgeEndDate,
+		   mpe.IsBadgeException,
+		   mpe.IsApproved,MS.BadgeEndDate,
 	       mpe.HoursPerDay,r.Name,mpe.Location,
 		   p.LastName,
 		   p.FirstName,m.ProjectedDeliveryDate,p.IsStrawman
