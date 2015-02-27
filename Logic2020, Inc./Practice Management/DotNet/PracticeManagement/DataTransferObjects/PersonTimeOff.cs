@@ -38,6 +38,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public List<Project> Projects
+        {
+            get;
+            set;
+        }
     }
 }
 
