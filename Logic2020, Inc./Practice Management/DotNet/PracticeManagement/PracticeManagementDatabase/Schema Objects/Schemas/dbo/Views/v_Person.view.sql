@@ -11,6 +11,7 @@ AS
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
+		   p.PreferredFirstName,
 		   P.IsOffshore,
 		   p.PaychexID,
 	       p.HireDate,
