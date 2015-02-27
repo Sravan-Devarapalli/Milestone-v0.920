@@ -679,7 +679,7 @@ li.l1 a{display:block;width:130px;height:34px;line-height:30px;text-align:center
 .l2 dd div.flyout{float:left;position:absolute;display:none;min-width:135px;width:auto;background:#e0e7eb;margin:0;padding:0 0 5px}
 .flyoutLeft{left:130px}
 .flyoutRight{right:130px}
-.l2 dd div.flyout a{color:#5a8293;display:block;white-space:normal;padding-bottom:3px;padding-left:5px;width:130px}
+.l2 dd div.flyout a{color:#5a8293;display:block;white-space:normal;padding-bottom:3px;padding-left:5px;width:140px}
 #navItems{height:40px;display:inline-block}
 h1,h2,h3,h4,h5,h6,.container,.marginLineManager{margin-top:10px}
 .no-wrap,TABLE.CompPerfTable td .cell-pad table td,.tem-grid-date-cell,.WhiteSpaceNoWrap,.lblOverheadsBenchCost{white-space:nowrap}
@@ -767,9 +767,9 @@ div.scrollextLabel Label{padding-left:4px}
 .MileStoneDetailPageDetailTab{background-color:White;border-style:none;border-width:1px;border-collapse:collapse;width:100%}
 .MileStoneDetailPageExpensesTab{background-color:White;border-style:none;border-collapse:collapse;width:100%}
 .MileStoneDetailPageResourcesTab{background-color:White;border-style:none;border-collapse:collapse;width:100%}
-.MileStoneDetailPageResourcesTab tr{background-color:White;height:25px;white-space:nowrap}
-.MileStoneDetailPageResourcesTab th{height:20px;white-space:nowrap;text-align:center}
-.MileStoneDetailPageResourcesTab td{height:20px;white-space:nowrap;text-align:center}
+.MileStoneDetailPageResourcesTab tr{background-color:White;height:25px;}
+.MileStoneDetailPageResourcesTab th{height:20px;text-align:center}
+.MileStoneDetailPageResourcesTab td{height:20px;text-align:center}
 .WhiteSpaceNormal{white-space:normal}
 .WS-Normal{white-space:normal!important}
 .tab-pane{background-color:#e2ebff;padding:5px}
@@ -1534,3 +1534,55 @@ table#ctl00_body_login tr td label{float:left}
 .bgColorE0DAECImp{background-color: #E0DAEC !important}
 .ConsultPopup{padding-top: 5px;padding-left: 20%;}
 .minwidth350px{min-width: 350px !important;}
+.MsBadgeTd1
+{
+    padding: 10px;
+    text-align: right;
+}
+
+.MsBadgeTd2
+{
+    width: 240px;
+    padding-left: 5px;
+}
+
+.MSBadgeEmptyDiv
+{
+    width: 60%; 
+    padding-top:10px;
+    font-size:13px;
+}
+.BadgeHistory
+{
+    min-height: 250px;
+    width: 60%;
+    padding: 10px;
+}
+.BackImageMilestoneDetail
+{
+     background: url(../images/cp-header-bg_new.png) repeat-x 0 0 !important;
+}
+.Height30PxImp
+{
+    height: 30px !important;
+}
+.BadgeHistorypopUp
+{
+    background-color: White;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    min-height: 60px;
+    min-width:500px;
+    max-width:900px;
+    overflow:auto;
+    max-height:500px;
+}
+.Width1300Px
+{
+    width: 1300px;
+}
+.Width600Px
+{
+    width: 600px;
+}
