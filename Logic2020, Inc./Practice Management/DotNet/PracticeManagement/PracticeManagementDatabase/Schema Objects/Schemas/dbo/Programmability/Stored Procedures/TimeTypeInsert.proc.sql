@@ -86,8 +86,8 @@ BEGIN
 
 			SET @TimeTypeCode = 'W'+ REPLICATE('0',4 - LEN(@NextTimeTypeNumber)) + CONVERT(NVARCHAR,@NextTimeTypeNumber)
 
-			INSERT INTO dbo.TimeType ([Name], [IsDefault], [IsInternal], [IsAllowedToEdit],Code,[IsActive],IsAdministrative) 
-			VALUES (@Name, @IsDefault, @IsInternal, 1,@TimeTypeCode,@IsActive,@IsAdministrative)
+			INSERT INTO dbo.TimeType ([Name], [IsDefault], [IsInternal], [IsAllowedToEdit],Code,[IsActive],IsAdministrative,Acronym) 
+			VALUES (@Name, @IsDefault, @IsInternal, 1,@TimeTypeCode,@IsActive,@IsAdministrative,@Name)
 
 			SET @TimeTypeId = SCOPE_IDENTITY()
 
