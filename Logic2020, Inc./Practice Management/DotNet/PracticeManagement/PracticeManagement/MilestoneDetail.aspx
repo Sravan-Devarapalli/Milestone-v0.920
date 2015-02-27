@@ -12,7 +12,7 @@
     TagPrefix="mp" %>
 <%@ Register Src="Controls/Milestones/MilestoneExpenses.ascx" TagName="Expenses"
     TagPrefix="m" %>
-    <%@ Register Src="Controls/MilestonePersons/CumulativeDailyActivity.ascx" TagName="Cumulative"
+<%@ Register Src="Controls/MilestonePersons/CumulativeDailyActivity.ascx" TagName="Cumulative"
     TagPrefix="mp" %>
 <%@ Register Src="Controls/MilestonePersons/CumulativeActivity.ascx" TagName="CumulativeTotal"
     TagPrefix="mp" %>
@@ -512,7 +512,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                     Total Project Expenses
+                                    Total Project Expenses
                                 </td>
                                 <td class="textRight">
                                     <asp:Label ID="lblExpenses" runat="server" class="fontBold" />
@@ -690,7 +690,7 @@
                 </asp:View>
                 <asp:View ID="vwExpenses" runat="server">
                     <asp:Panel ID="pnlExpenses" runat="server" CssClass="tab-pane">
-                        <m:Expenses ID="milestoneExpenses" runat="server"/>
+                        <m:Expenses ID="milestoneExpenses" runat="server" />
                     </asp:Panel>
                 </asp:View>
                 <asp:View ID="vwDaily" runat="server">
@@ -823,6 +823,28 @@
             </asp:MultiView>
             <table>
                 <tr>
+                    <td align="left" colspan="2" style="padding-top: 5px;">
+                        <asp:HiddenField ID="hdnMilestoneId" runat="server" />
+                        <asp:Button ID="btnDelete" runat="server" Text="Delete Milestone" ToolTip="Delete Milestone"
+                            CausesValidation="False" OnClick="btnDelete_Click" OnClientClick="if (!confirm('Do you really want to delete the milestone?')) return false;" />&nbsp;
+                        <asp:Button ID="btnSave" runat="server" Text="Save All" ToolTip="Save All" OnClick="btnSave_Click"
+                            CausesValidation="true" ValidationGroup="Milestone" />&nbsp;
+                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
+                        <script type="text/javascript">
+                            function disableSaveButton() {
+                                document.getElementById('<%= btnSave.ClientID %>').disabled = true;
+                            }
+                        </script>
+                        <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
+                            <Animations>
+					            <OnClick>
+					                <ScriptAction Script="disableSaveButton();" />
+					            </OnClick>
+                            </Animations>
+                        </AjaxControlToolkit:AnimationExtender>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="2">
                         <uc:MessageLabel ID="lblError" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
                             WarningColor="Orange" />
@@ -849,28 +871,6 @@
                         <asp:ValidationSummary ID="vsumShiftDays" runat="server" EnableClientScript="false"
                             ValidationGroup="ShiftDays" />
                         <asp:ValidationSummary ID="vsumClone" runat="server" EnableClientScript="false" ValidationGroup="Clone" />
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" colspan="2">
-                        <asp:HiddenField ID="hdnMilestoneId" runat="server" />
-                        <asp:Button ID="btnDelete" runat="server" Text="Delete Milestone" ToolTip="Delete Milestone"
-                            CausesValidation="False" OnClick="btnDelete_Click" OnClientClick="if (!confirm('Do you really want to delete the milestone?')) return false;" />&nbsp;
-                        <asp:Button ID="btnSave" runat="server" Text="Save All" ToolTip="Save All" OnClick="btnSave_Click"
-                            CausesValidation="true" ValidationGroup="Milestone" />&nbsp;
-                        <asp:CancelAndReturnButton ID="btnCancelAndReturn" runat="server" />
-                        <script type="text/javascript">
-                            function disableSaveButton() {
-                                document.getElementById('<%= btnSave.ClientID %>').disabled = true;
-                            }
-                        </script>
-                        <AjaxControlToolkit:AnimationExtender ID="aeBtnSave" runat="server" TargetControlID="btnSave">
-                            <Animations>
-					            <OnClick>
-					                <ScriptAction Script="disableSaveButton();" />
-					            </OnClick>
-                            </Animations>
-                        </AjaxControlToolkit:AnimationExtender>
                     </td>
                 </tr>
             </table>
@@ -1081,6 +1081,32 @@
                             &nbsp;&nbsp;
                             <asp:Button ID="btnCancelAttribution" runat="server" ToolTip="Cancel" Text="Cancel"
                                 OnClick="btnCancelAttribution_Click" CssClass="Width100PxImp" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnApprovedByOps" Value="false" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeApprovedByOpsWhenCompleteOut" runat="server"
+                TargetControlID="hdnApprovedByOps" BehaviorID="mpeApprovedbyOpsBehaviourId" BackgroundCssClass="modalBackground"
+                OkControlID="btnOk" PopupControlID="pnlApprovedByOps" DropShadow="false" />
+            <asp:Panel ID="pnlApprovedByOps" runat="server" CssClass="popUp" Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
+                            Attention!
+                            <asp:Button ID="Button1" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel Changes"
+                                OnClick="btnCancel_OnClick" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">
+                            “Approved by Ops” has been unchecked as person badge dates are changed with change
+                            in milestone dates. Request for Operations for the approval has been sent.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="textCenter" style="padding-bottom:5px;">
+                            <asp:Button ID="btnOk" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp" />
                         </td>
                     </tr>
                 </table>
