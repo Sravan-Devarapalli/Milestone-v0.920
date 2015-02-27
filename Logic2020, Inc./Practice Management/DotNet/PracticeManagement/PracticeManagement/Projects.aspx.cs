@@ -873,7 +873,7 @@ namespace PraticeManagement
             {
                 var row = e.FindControl("boundingRow") as HtmlTableRow;
                 // Client name cell content
-               
+
                 imgProjectDelete.Attributes["ProjectId"] = project.Id.Value.ToString();
                 row.Cells[DeleteProjectColumnIndex].Controls.Add(imgProjectDelete);
             }
@@ -1156,9 +1156,12 @@ namespace PraticeManagement
 
                 //  If current user is administrator, don't apply restrictions
                 var person =
-                    Roles.IsUserInRole(
+                    (Roles.IsUserInRole(
                         DataHelper.CurrentPerson.Alias,
                         DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
+                        || Roles.IsUserInRole(
+                        DataHelper.CurrentPerson.Alias,
+                        DataTransferObjects.Constants.RoleNames.OperationsRoleName))
                     ? null : DataHelper.CurrentPerson;
 
                 // If person is not administrator, return list of values when [All] is selected
