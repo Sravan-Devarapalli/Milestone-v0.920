@@ -21,14 +21,15 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/MilestoneService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="MilestoneService1.wsdl" MetadataType="Wsdl" ID="d402df11-bc56-4fde-bec8-c2f38c90a1a8" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?wsdl" />
-    <MetadataFile FileName="MilestoneService4.xsd" MetadataType="Schema" ID="bf454b5d-ea6b-4e25-a33a-b4af981f3409" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd2" />
-    <MetadataFile FileName="MilestoneService5.xsd" MetadataType="Schema" ID="b638820a-810d-4c3f-b1f2-1ead6ff6bdba" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd4" />
-    <MetadataFile FileName="MilestoneService6.xsd" MetadataType="Schema" ID="38bfcb8e-5079-44f4-a0d7-f9a4943bd0f0" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd3" />
-    <MetadataFile FileName="MilestoneService2.disco" MetadataType="Disco" ID="acd8c7a1-d4b8-4895-b4db-1e417a35f23c" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?disco" />
-    <MetadataFile FileName="MilestoneService7.xsd" MetadataType="Schema" ID="c5f9bed1-6568-4f7b-9c02-0fadef4e4812" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd0" />
-    <MetadataFile FileName="MilestoneService8.xsd" MetadataType="Schema" ID="d9cb9177-7f1d-4a88-8761-0612483b38e0" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd5" />
-    <MetadataFile FileName="MilestoneService9.xsd" MetadataType="Schema" ID="8cd8c8ea-44a4-4088-9882-9d0d8f309004" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/MilestoneService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MilestoneService4.xsd" MetadataType="Schema" ID="48ce17dd-8048-41e6-83a2-0787c2323e1e" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?xsd=xsd6" />
+    <MetadataFile FileName="MilestoneService5.xsd" MetadataType="Schema" ID="22fc0000-63de-4975-afc2-2d10f8d7244e" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?xsd=xsd2" />
+    <MetadataFile FileName="MilestoneService2.disco" MetadataType="Disco" ID="bdc0e685-b826-44b1-a480-18274d025ffd" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?disco" />
+    <MetadataFile FileName="MilestoneService6.xsd" MetadataType="Schema" ID="13219c20-7c87-4680-b44c-4febd1dd11c7" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?xsd=xsd0" />
+    <MetadataFile FileName="MilestoneService7.xsd" MetadataType="Schema" ID="987cadcc-7bac-4f8d-938c-c56e7c3e5b3c" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?xsd=xsd1" />
+    <MetadataFile FileName="MilestoneService8.xsd" MetadataType="Schema" ID="ead1e927-7cfb-4ff7-bea7-abe552c33aad" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?xsd=xsd4" />
+    <MetadataFile FileName="MilestoneService9.xsd" MetadataType="Schema" ID="0c5d6d4f-c624-4827-8cea-86c0f60dc371" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?xsd=xsd5" />
+    <MetadataFile FileName="MilestoneService1.wsdl" MetadataType="Wsdl" ID="bf00d5b3-f7e5-4e15-96d0-94128f879249" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?wsdl" />
+    <MetadataFile FileName="MilestoneService11.xsd" MetadataType="Schema" ID="8f32e91c-bf96-453e-b19b-32725f7f0618" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/MilestoneService.svc?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
