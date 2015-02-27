@@ -902,7 +902,7 @@ namespace PraticeManagement
 
 
 
-                if (!Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
+                if (!(Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName)))
                 {
                     if (IsUserHasPermissionOnProject.HasValue && !IsUserHasPermissionOnProject.Value
                         && IsUserisOwnerOfProject.HasValue && !IsUserisOwnerOfProject.Value)
