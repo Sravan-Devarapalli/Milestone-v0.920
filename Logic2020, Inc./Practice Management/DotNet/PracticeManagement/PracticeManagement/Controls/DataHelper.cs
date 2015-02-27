@@ -242,13 +242,13 @@ namespace PraticeManagement.Controls
             int avgUtil,
             int sortId,
             string sortDirection,
-            bool excludeInternalPractices, int utilizationType, bool isSampleReport = false)
+            bool excludeInternalPractices, int utilizationType, bool includeBadgeStatus ,bool isSampleReport = false)
         {
             var consultants =
                 ReportsHelper.GetConsultantsTimelineReport(
                     startDate, duration, step, activePersons, projectedPersons,
                     activeProjects, projectedProjects, experimentalProjects, internalProjects, proposedProjects, completedProjects,
-                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, utilizationType, isSampleReport);
+                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, utilizationType,includeBadgeStatus, isSampleReport);
 
             return consultants.FindAll(Q => Q.AverageUtilization < avgUtil);
         }
@@ -430,13 +430,13 @@ namespace PraticeManagement.Controls
         /// <param name="shiftDays">Number of days to move milestone</param>
         /// <param name="selectedIdValue">Id of the milestone to move</param>
         /// <param name="moveFutureMilestones">Whether to move future milestones</param>
-        public static void ShiftMilestone(int shiftDays, int selectedIdValue, bool moveFutureMilestones)
+        public static List<MSBadge> ShiftMilestone(int shiftDays, int selectedIdValue, bool moveFutureMilestones)
         {
             using (var serviceClient = new MilestoneServiceClient())
             {
                 try
                 {
-                    serviceClient.MilestoneMove(selectedIdValue, shiftDays, moveFutureMilestones);
+                   return serviceClient.MilestoneMove(selectedIdValue, shiftDays, moveFutureMilestones).ToList();
                 }
                 catch (CommunicationException)
                 {
@@ -1485,9 +1485,12 @@ namespace PraticeManagement.Controls
         /// Fills the list control with the list of person's titles.
         /// </summary>
         /// <param name="control">The control to be filled.</param>
-        public static void FillTitleList(ListControl control, string firstItemText = null, bool isHtmlEncodedText = false)
+        public static void FillTitleList(ListControl control, string firstItemText = null, bool isHtmlEncodedText = false, int titleTypeId = 0)
         {
             var titles = ServiceCallers.Custom.Title(t => t.GetAllTitles());
+            if (titleTypeId != 0)
+                titles = titles.Where(t => t.TitleType.TitleTypeId == titleTypeId).ToArray();
+
             control.Items.Clear();
 
             if (!string.IsNullOrEmpty(firstItemText))
@@ -1687,9 +1690,12 @@ namespace PraticeManagement.Controls
         {
             //  If current user is administrator, don't apply restrictions
             Person person =
-                Roles.IsUserInRole(
+                (Roles.IsUserInRole(
                     CurrentPerson.Alias,
                     DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
+                    || Roles.IsUserInRole(
+                    CurrentPerson.Alias,
+                    DataTransferObjects.Constants.RoleNames.OperationsRoleName))
                     ? null
                     : CurrentPerson;
 
@@ -1710,7 +1716,8 @@ namespace PraticeManagement.Controls
             Person person =
                 (
                 Roles.IsUserInRole(CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.AdministratorRoleName) ||
-                Roles.IsUserInRole(CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.HRRoleName)
+                Roles.IsUserInRole(CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.HRRoleName) ||
+                Roles.IsUserInRole(CurrentPerson.Alias, DataTransferObjects.Constants.RoleNames.OperationsRoleName)
                 )
                     ? null
                     : CurrentPerson;
