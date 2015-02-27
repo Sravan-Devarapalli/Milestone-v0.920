@@ -4478,6 +4478,486 @@ namespace DataAccess
                 throw ex;
             }
         }
+
+        public static List<BadgedResourcesByTime> BadgedResourcesByTimeReport(DateTime startDate, DateTime endDate, int step)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.BadgedResourcesByTimeReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Step, step);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<BadgedResourcesByTime>();
+                    ReadBadgedResourceByTimeReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadBadgedResourceByTimeReport(SqlDataReader reader, List<BadgedResourcesByTime> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int badgedOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedOnProjectCount);
+                int badgedNotOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedNotOnProjectCount);
+                int clockNotStartedCountIndex = reader.GetOrdinal(Constants.ColumnNames.ClockNotStartedCount);
+                int blockedCountIndex = reader.GetOrdinal(Constants.ColumnNames.BlockedCount);
+                int inBreakPeriodCountIndex = reader.GetOrdinal(Constants.ColumnNames.InBreakPeriodCount);
+
+                while (reader.Read())
+                {
+                    var badgeResource = new BadgedResourcesByTime()
+                    {
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = reader.GetDateTime(endDateIndex),
+                        BadgedOnProjectCount = reader.GetInt32(badgedOnProjectCountIndex),
+                        BadgedNotOnProjectCount = reader.GetInt32(badgedNotOnProjectCountIndex),
+                        ClockNotStartedCount = reader.GetInt32(clockNotStartedCountIndex),
+                        BlockedCount = reader.GetInt32(blockedCountIndex),
+                        InBreakPeriodCount = reader.GetInt32(inBreakPeriodCountIndex),
+                    };
+                    result.Add(badgeResource);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<MSBadge> ListBadgeResourcesByType(DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak,bool badgedOnProject)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ListBadgeResourcesByType, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsNotBadged, isNotBadged);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsClockNotStart, isClockNotStart);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsBlocked, isBlocked);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsBreak, isBreak);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BadgedOnProject, badgedOnProject);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<MSBadge>();
+                    ReadBadgedResourceByType(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadBadgedResourceByType(SqlDataReader reader, List<MSBadge> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+
+                int titleIndex = -1;
+                int badgeStartDateIndex = -1;
+                int badgeEnddateIndex = -1;
+                int blockStartdateIndex = -1;
+                int blockEnddateIndex = -1;
+                int breakStartdateIndex = -1;
+                int breakEnddateIndex = -1;
+                int clockStartDateIndex = -1;
+                int clockEnddateIndex = -1;
+                int clientIdIndex = -1;
+                int clientNameIndex = -1;
+                int projectIdIndex = -1;
+                int projectNameIndex = -1;
+                int projectNumberIndex = -1;
+                int startDateIndex = -1;
+                int endDateIndex = -1;
+                int isApprovedByOpsIndex = -1;
+                try
+                {
+                    titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                }
+                catch
+                { }
+                try
+                {
+                    badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                }
+                catch
+                { }
+                try
+                {
+                    badgeEnddateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                }
+                catch
+                { }
+                try
+                {
+                    blockStartdateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockStartDate);
+                }
+                catch
+                { }
+                try
+                {
+                    blockEnddateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockEndDate);
+                }
+                catch
+                { }
+                try
+                {
+                    breakStartdateIndex = reader.GetOrdinal(Constants.ColumnNames.BreakStartDate);
+                }
+                catch
+                { }
+                try
+                {
+                    breakEnddateIndex = reader.GetOrdinal(Constants.ColumnNames.BreakEndDate);
+                }
+                catch
+                { }
+
+                try
+                {
+                    clockStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectBadgeStartDate);
+                }
+                catch
+                { }
+                try
+                {
+                    clockEnddateIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectBadgeEndDate);
+                }
+                catch
+                { }
+                try
+                {
+                    clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientId);
+                }
+                catch
+                { }
+                try
+                {
+                    clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+                }
+                catch
+                { }
+                try
+                {
+                    projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                }
+                catch
+                { }
+                try
+                {
+                    projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                }
+                catch
+                { }
+                try
+                {
+                    projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                }
+                catch
+                { }
+                try
+                {
+                    startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                }
+                catch
+                { }
+                try
+                {
+                    endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                }
+                catch
+                { }
+                try
+                {
+                    isApprovedByOpsIndex = reader.GetOrdinal(Constants.ColumnNames.IsApproved);
+                }
+                catch
+                { }
+
+                while (reader.Read())
+                {
+                    var badgeResource = new MSBadge()
+                    {
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex)
+                        }
+                    };
+                    if (titleIndex != -1)
+                        badgeResource.Person.Title = new Title()
+                        {
+                            TitleName = reader.GetString(titleIndex)
+                        };
+                    if (badgeStartDateIndex != -1)
+                        badgeResource.BadgeStartDate = reader.IsDBNull(badgeStartDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeStartDateIndex);
+                    if (badgeEnddateIndex != -1)
+                        badgeResource.BadgeEndDate = reader.IsDBNull(badgeEnddateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEnddateIndex);
+                    if (blockStartdateIndex != -1)
+                        badgeResource.BlockStartDate = reader.IsDBNull(blockStartdateIndex) ? null : (DateTime?)reader.GetDateTime(blockStartdateIndex);
+                    if (blockEnddateIndex != -1)
+                        badgeResource.BlockEndDate = reader.IsDBNull(blockEnddateIndex) ? null : (DateTime?)reader.GetDateTime(blockEnddateIndex);
+                    if (breakStartdateIndex != -1)
+                        badgeResource.BreakStartDate = reader.IsDBNull(breakStartdateIndex) ? null : (DateTime?)reader.GetDateTime(breakStartdateIndex);
+                    if (breakEnddateIndex != -1)
+                        badgeResource.BreakEndDate = reader.IsDBNull(breakEnddateIndex) ? null : (DateTime?)reader.GetDateTime(breakEnddateIndex);
+                    if (clockStartDateIndex !=-1)
+                        badgeResource.ProjectBadgeStartDate = reader.IsDBNull(clockStartDateIndex) ? null : (DateTime?)reader.GetDateTime(clockStartDateIndex);
+                    if(clockEnddateIndex!=-1)
+                        badgeResource.ProjectBadgeEndDate = reader.IsDBNull(clockEnddateIndex) ? null : (DateTime?)reader.GetDateTime(clockEnddateIndex);
+                    if (clientIdIndex != -1)
+                    {
+                        badgeResource.Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex),
+                            Client = new Client()
+                            {
+                                Id= reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(clientNameIndex)
+                            },
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate = reader.GetDateTime(endDateIndex)
+                        };
+                    }
+                    if (isApprovedByOpsIndex != -1)
+                        badgeResource.IsApproved = reader.GetInt32(isApprovedByOpsIndex) == 1;
+                    result.Add(badgeResource);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<GroupByPractice> ResourcesByPracticeReport(string practices,DateTime startDate, DateTime endDate, int step)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourcesByPracticeReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.Practices, practices);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Step, step);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<GroupByPractice>();
+                    ReadResourcesByPracticeReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadResourcesByPracticeReport(SqlDataReader reader, List<GroupByPractice> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                int practiceNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int badgedOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedOnProjectCount);
+                int badgedNotOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedNotOnProjectCount);
+                int clockNotStartedCountIndex = reader.GetOrdinal(Constants.ColumnNames.ClockNotStartedCount);
+
+                while (reader.Read())
+                {
+                    var practiceId = reader.GetInt32(practiceIdIndex);
+                    var badgeResource = new BadgedResourcesByTime()
+                    {
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = reader.GetDateTime(endDateIndex),
+                        BadgedOnProjectCount = reader.GetInt32(badgedOnProjectCountIndex),
+                        BadgedNotOnProjectCount = reader.GetInt32(badgedNotOnProjectCountIndex),
+                        ClockNotStartedCount = reader.GetInt32(clockNotStartedCountIndex),
+                        Practice = new Practice()
+                        {
+                            Id = practiceId,
+                            Name = reader.GetString(practiceNameIndex)
+                        }
+                    };
+
+                    if (result.Any(p => p.Practice.Id == practiceId))
+                    {
+                        var first = result.FirstOrDefault(p => p.Practice.Id == practiceId);
+                        first.ResourcesCount.Add(badgeResource);
+                    }
+                    else
+                    {
+                        var groupedPractice = new GroupByPractice()
+                        {
+                            Practice = new Practice()
+                            {
+                                Id = practiceId,
+                                Name = reader.GetString(practiceNameIndex)
+                            },
+                            ResourcesCount = new List<BadgedResourcesByTime>() { badgeResource }
+                        };
+                        result.Add(groupedPractice);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<GroupbyTitle> ResourcesByTitleReport(string titles, DateTime startDate, DateTime endDate, int step)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourcesByTitleReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.TitleIds, titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Step, step);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<GroupbyTitle>();
+                    ReadResourcesByTitleReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadResourcesByTitleReport(SqlDataReader reader, List<GroupbyTitle> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int badgedOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedOnProjectCount);
+                int badgedNotOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedNotOnProjectCount);
+                int clockNotStartedCountIndex = reader.GetOrdinal(Constants.ColumnNames.ClockNotStartedCount);
+
+                while (reader.Read())
+                {
+                    var titleId = reader.GetInt32(titleIdIndex);
+                    var badgeResource = new BadgedResourcesByTime()
+                    {
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = reader.GetDateTime(endDateIndex),
+                        BadgedOnProjectCount = reader.GetInt32(badgedOnProjectCountIndex),
+                        BadgedNotOnProjectCount = reader.GetInt32(badgedNotOnProjectCountIndex),
+                        ClockNotStartedCount = reader.GetInt32(clockNotStartedCountIndex)
+                    };
+
+                    if (result.Any(p => p.Title.TitleId == titleId))
+                    {
+                        var first = result.FirstOrDefault(p => p.Title.TitleId == titleId);
+                        first.ResourcesCount.Add(badgeResource);
+                    }
+                    else
+                    {
+                        var groupedTitle = new GroupbyTitle()
+                        {
+                            Title = new Title()
+                            {
+                                TitleId = titleId,
+                                TitleName = reader.GetString(titleIndex)
+                            },
+                            ResourcesCount = new List<BadgedResourcesByTime>() { badgeResource }
+                        };
+                        result.Add(groupedTitle);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<MSBadge> GetBadgeRequestNotApprovedList()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetBadgeRequestNotApprovedList, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<MSBadge>();
+                    ReadBadgeRequestNotApprovedList(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadBadgeRequestNotApprovedList(SqlDataReader reader, List<MSBadge> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                int badgeRequestDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeRequestDate);
+
+                while (reader.Read())
+                {
+                    var badgeResource = new MSBadge()
+                    {
+                        Person = new Person()
+                        {
+                            LastName = reader.GetString(lastNameIndex),
+                            FirstName = reader.GetString(firstNameIndex)
+                        },
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        },
+                        BadgeStartDate = reader.GetDateTime(badgeStartDateIndex),
+                        BadgeEndDate = reader.GetDateTime(badgeEndDateIndex),
+                        PlannedEndDate = reader.IsDBNull(badgeRequestDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeRequestDateIndex)
+                    };
+                    result.Add(badgeResource);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
