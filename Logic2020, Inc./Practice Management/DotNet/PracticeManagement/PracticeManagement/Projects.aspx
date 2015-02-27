@@ -114,7 +114,7 @@
             var topValue = 0, leftValue = 0;
             while (obj) {
                 leftValue += obj.offsetLeft;
-                topValue += obj.offsetTop;
+                topValue += obj.offsetTop; 
                 obj = obj.offsetParent;
             }
 
