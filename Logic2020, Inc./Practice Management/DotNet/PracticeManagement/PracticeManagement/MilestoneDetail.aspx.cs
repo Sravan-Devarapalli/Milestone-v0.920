@@ -39,14 +39,14 @@ namespace PraticeManagement
         private const string LblTotalreimbursement = "lblTotalReimbursed";
         private const string LblTotalreimbursementamount = "lblTotalReimbursementAmount";
 
-        private const string changeMilestonePersonsPopupMessageForStartDate = @"<p>You are trying to set a new milestone start date ({0}) that is earlier than the existing milestone start date ({1}).</p><br/>
-                                                                    <p>Select ""Change Milestone and Resources""  to update the start dates for all of the Resources attached to this milestone to ({2})
-                                                                    or Select ""Change Milestone Only"" to leave the Resource start dates unchanged.</p>" + "<br/><p>" +
+        private const string changeMilestonePersonsPopupMessageForStartDate = @"<p>You are trying to set a new milestone start date ({0}) that is earlier than the existing milestone start date ({1}).Do you also want to change the resource badge dates as well? Changing resource badge dates requires Operations approval again.</p><br/>
+                                                                    <p>Select ""Change Milestone and Resources""  to update the start dates and badge start dates for all of the Resources attached to this milestone to ({2})
+                                                                    or Select ""Change Milestone Only"" to leave the Resource start dates and badge start dates unchanged.</p>" + "<br/><p>" +
                                                                    "<b>Note:</b>  If any Resource(s) has a hire date after the new milestone start date their new start date will be their hire date.</p>" + "<br/>";
 
-        private const string changeMilestonePersonsPopupMessageForEndDate = @"<p>You are trying to set a new milestone end date ({0}) that is later than the existing milestone end date ({1}).</p><br/>
-                                                                <p>Select ""Change Milestone and Resources""  to update the end dates for all of the Resources attached to this milestone to ({2}) or
-                                                                Select ""Change Milestone Only"" to leave the Resource end dates unchanged.</p>" + "<br/><p>" +
+        private const string changeMilestonePersonsPopupMessageForEndDate = @"<p>You are trying to set a new milestone end date ({0}) that is later than the existing milestone end date ({1}).Do you also want to change the resource badge dates as well? Changing resource badge dates requires Operations approval again.</p><br/>
+                                                                <p>Select ""Change Milestone and Resources""  to update the end dates and badge end dates for all of the Resources attached to this milestone to ({2}) or
+                                                                Select ""Change Milestone Only"" to leave the Resource end dates and badge end dates unchanged.</p>" + "<br/><p>" +
                                                                 "<b>Note:</b>  If any Resource(s) has a termination date before the new milestone end date their new end date will be their termination date.</p>" + "<br/>";
 
         private const string RemoveMilestonePersonsPopupMessageForStartDate = @"<p>You are trying to set a start date ({0}) for the milestone that is later than the following Resource(s) termination date:{1} <br/> Select OK to remove these Resource(s) from the milestone and update the milestone start date.</p>" + "<br/><p>" +
@@ -57,6 +57,8 @@ namespace PraticeManagement
 
         private const string format = "{0} {1} ({2})";
         private const string lblCommissionsMessage = "Attribution {0} date will change from {1} to {2} based on the change to the project milestone.";
+        private const string BadgeRequestRevisedDatesMailBody = "<html><body>{0} is requesting to change MS badge dates for {1}  from {2}-{3} to {4}-{5} on <a href=\"{6}\">{7}</a>-{8}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestRevisedDatesExcpMailBody = "<html><body>{0} is requesting to change MS badge exception dates for {1}  from {2}-{3} to {4}-{5} on <a href=\"{6}\">{7}</a>-{8}, please review & approve or decline.</body></html>";
 
         #endregion Constants
 
@@ -302,7 +304,7 @@ namespace PraticeManagement
             return milestoneValue;
         }
 
-        protected int? SelectedProjectId
+        public int? SelectedProjectId
         {
             get
             {
@@ -671,17 +673,45 @@ namespace PraticeManagement
                     (hdnCanShowPopup.Value == "false" && PeriodTo != dtpPeriodTo.DateValue))
                 {
                     var milestoneUpdateObj = new MilestoneUpdateObject();
-                    if (PeriodFrom != dtpPeriodFrom.DateValue)
+                    //if (PeriodFrom != dtpPeriodFrom.DateValue)
+                    //{
+                    //    milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons = true;
+                    //}
+
+                    //if (PeriodTo != dtpPeriodTo.DateValue)
+                    //{
+                    //    milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
+                    //}
+
+                    //if (PeriodFrom.Date > dtpPeriodFrom.DateValue || PeriodTo.Date < dtpPeriodTo.DateValue || !(PeriodFrom.Date <= dtpPeriodTo.DateValue && dtpPeriodFrom.DateValue <= PeriodTo.Date))
+                    //    milestoneUpdateObj.IsExtendedORCompleteOutOfRange = true;
+                    //else
+                    //    milestoneUpdateObj.IsExtendedORCompleteOutOfRange = false;
+
+                    if (tblchangeMilestonePersonsForStartDate.Visible)
+                    {
+                        milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons = rbtnchangeMileStoneAndPersonsStartDate.Checked;
+                    }
+                    else if (PeriodFrom != dtpPeriodFrom.DateValue)
                     {
                         milestoneUpdateObj.IsStartDateChangeReflectedForMilestoneAndPersons = true;
                     }
 
-                    if (PeriodTo != dtpPeriodTo.DateValue)
+                    if (tblchangeMilestonePersonsForEndDate.Visible)
+                    {
+                        milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = rbtnchangeMileStoneAndPersonsEndDate.Checked;
+                    }
+                    else if (PeriodTo != dtpPeriodTo.DateValue)
                     {
                         milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
                     }
+                    if (PeriodFrom.Date > dtpPeriodFrom.DateValue || PeriodTo.Date < dtpPeriodTo.DateValue || !(PeriodFrom.Date <= dtpPeriodTo.DateValue && dtpPeriodFrom.DateValue <= PeriodTo.Date))
+                        milestoneUpdateObj.IsExtendedORCompleteOutOfRange = true;
+                    else
+                        milestoneUpdateObj.IsExtendedORCompleteOutOfRange = false;
 
-                    OnSaveClick(MilestoneUpdate == null ? milestoneUpdateObj : MilestoneUpdate);
+
+                    OnSaveClick(milestoneUpdateObj);
                 }
                 else
                 {
@@ -718,6 +748,10 @@ namespace PraticeManagement
             {
                 milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
             }
+            if (PeriodFrom.Date > dtpPeriodFrom.DateValue || PeriodTo.Date < dtpPeriodTo.DateValue || !(PeriodFrom.Date <= dtpPeriodTo.DateValue && dtpPeriodFrom.DateValue <= PeriodTo.Date))
+                milestoneUpdateObj.IsExtendedORCompleteOutOfRange = true;
+            else
+                milestoneUpdateObj.IsExtendedORCompleteOutOfRange = false;
 
             hdnCanShowPopup.Value = "false";
             MilestoneUpdate = milestoneUpdateObj;
@@ -769,7 +803,7 @@ namespace PraticeManagement
             }
         }
 
-    
+
         protected void cvAttributionPopup_ServerValidate(object sender, ServerValidateEventArgs e)
         {
             e.IsValid = true;
@@ -788,7 +822,7 @@ namespace PraticeManagement
                                                                                   dtpPeriodTo.DateValue,
                                                                                   hdnIsUpdate.Value == true.ToString())
                                .ToList();
-             
+
                 }
 
             }
@@ -846,7 +880,7 @@ namespace PraticeManagement
                     if (extendAttributionDates[1])
                     {
                         trCommissionsEndDateExtend.Visible = true;
-                        lblCommissionsEndDateExtendMessage.Text = string.Format(lblCommissionsMessage, "end date",Project.EndDate.Value.ToShortDateString(),dtpPeriodTo.DateValue.ToShortDateString());
+                        lblCommissionsEndDateExtendMessage.Text = string.Format(lblCommissionsMessage, "end date", Project.EndDate.Value.ToShortDateString(), dtpPeriodTo.DateValue.ToShortDateString());
                     }
                     else
                     {
@@ -863,7 +897,7 @@ namespace PraticeManagement
             else
             {
                 trCommissionsStartDateExtend.Visible = false;
-                trCommissionsEndDateExtend.Visible = false;  
+                trCommissionsEndDateExtend.Visible = false;
             }
 
         }
@@ -932,11 +966,24 @@ namespace PraticeManagement
                 var shiftDays = int.Parse(txtShiftDays.Text);
                 var newStartDate = Milestone.StartDate.AddDays(shiftDays);
                 var newEndDate = Milestone.EndDate.AddDays(shiftDays);
-               
-                DataHelper.ShiftMilestone(
+
+                var badges = DataHelper.ShiftMilestone(
                     shiftDays,
                     MilestoneId.Value,
                     chbMoveFutureMilestones.Checked);
+                var loggedInPerson = DataHelper.CurrentPerson;
+                foreach (var badge in badges)
+                {
+                    var project = new Project()
+                    {
+                        Id = badge.Project.Id
+                    };
+                    project.MailBody = badge.IsException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
+                                                         "{0}", badge.Project.ProjectNumber, badge.Project.Name) :
+                                                                                     string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
+                                                                                     "{0}", badge.Project.ProjectNumber, badge.Project.Name);
+                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                }
                 ReturnToPreviousPage();
             }
         }
@@ -989,6 +1036,10 @@ namespace PraticeManagement
                     {
                         milestoneUpdateObj.IsEndDateChangeReflectedForMilestoneAndPersons = true;
                     }
+                    if (PeriodFrom.Date > dtpPeriodFrom.DateValue || PeriodTo.Date < dtpPeriodTo.DateValue || !(PeriodFrom.Date <= dtpPeriodTo.DateValue && dtpPeriodFrom.DateValue <= PeriodTo.Date))
+                        milestoneUpdateObj.IsExtendedORCompleteOutOfRange = true;
+                    else
+                        milestoneUpdateObj.IsExtendedORCompleteOutOfRange = false;
                 }
             }
 
@@ -1068,6 +1119,8 @@ namespace PraticeManagement
         private bool ValidateandSaveData(MilestoneUpdateObject milestoneUpdateObj = null)
         {
             bool result = false;
+            var showApprovedByOpsPopup = false;
+            Person currentPerson = DataHelper.CurrentPerson;
             Page.Validate(vsumMilestone.ValidationGroup);
             if (Page.IsValid)
             {
@@ -1086,6 +1139,42 @@ namespace PraticeManagement
                         if (result)
                         {
                             ServiceCallers.Custom.MilestonePerson(mp => mp.MilestoneResourceUpdate(MilestoneObject, MilestoneUpdateObject, Context.User.Identity.Name));
+
+                            foreach (var person in Milestone.MilestonePersons)
+                            {
+                                if (person.Person.IsStrawMan)
+                                    continue;
+                                ServiceCallers.Custom.Person(p => p.UpdateMSBadgeDetailsByPersonId(person.Person.Id.Value, currentPerson.Id.Value));
+                            }
+                            if (milestoneUpdateObj != null)
+                            {
+                                var newMilestonePersons = ServiceCallers.Custom.MilestonePerson(m => m.GetMilestonePersonListByMilestone(Milestone.Id.Value)).ToList();
+                                foreach (var person in newMilestonePersons)
+                                {
+                                    //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(SelectedProjectId.Value, User.Identity.Name));
+                                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(SelectedProjectId.Value));
+                                    var loggedInPerson = DataHelper.CurrentPerson;
+                                    var oldPerson = new MilestonePerson();
+                                    if (Milestone.MilestonePersons.Any(m => m.Person.Id == person.Person.Id))
+                                        oldPerson = Milestone.MilestonePersons.First(m => m.Person.Id == person.Person.Id);
+                                    else
+                                        continue;
+                                    if (person.Entries[0].MSBadgeRequired && person.Entries[0].BadgeStartDate.HasValue && oldPerson.Entries[0].BadgeStartDate.HasValue && (oldPerson.Entries[0].BadgeStartDate.Value > person.Entries[0].BadgeStartDate.Value || oldPerson.Entries[0].BadgeEndDate.Value < person.Entries[0].BadgeEndDate.Value || !(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value)))
+                                    {
+                                        project.MailBody = person.Entries[0].BadgeException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
+                                                     "{0}", project.ProjectNumber, project.Name) :
+                                                                                 string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
+                                                                                 "{0}", project.ProjectNumber, project.Name);
+                                        ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                        if (!(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value))
+                                            showApprovedByOpsPopup = true;
+                                    }
+                                }
+                            }
+                            if (showApprovedByOpsPopup)
+                            {
+                                mpeApprovedByOpsWhenCompleteOut.Show();
+                            }
                         }
                     }
                     else
@@ -1110,7 +1199,12 @@ namespace PraticeManagement
                             if (result)
                             {
                                 ServiceCallers.Custom.MilestonePerson(mp => mp.MilestoneResourceUpdate(MilestoneObject, MilestoneUpdateObject, Context.User.Identity.Name));
-
+                                foreach (var person in Milestone.MilestonePersons)
+                                {
+                                    if (person.Person.IsStrawMan)
+                                        continue;
+                                    ServiceCallers.Custom.Person(p => p.UpdateMSBadgeDetailsByPersonId(person.Person.Id.Value, currentPerson.Id.Value));
+                                }
                                 if (index != 2)
                                 {
                                     SelectView(control, index, true);
@@ -1119,7 +1213,7 @@ namespace PraticeManagement
                         }
                         else
                         {
-                            lblResult.ShowErrorMessage("Error occured while saving resources.");
+                            //lblResult.ShowErrorMessage("Error occured while saving resources.");
                         }
 
                         ValidateNewEntry = false;
@@ -1320,7 +1414,8 @@ namespace PraticeManagement
                 milestoneUpdateObj = new MilestoneUpdateObject()
                 {
                     IsEndDateChangeReflectedForMilestoneAndPersons = null,
-                    IsStartDateChangeReflectedForMilestoneAndPersons = null
+                    IsStartDateChangeReflectedForMilestoneAndPersons = null,
+                    IsExtendedORCompleteOutOfRange = null
                 };
             }
 
@@ -1353,12 +1448,19 @@ namespace PraticeManagement
         private void DeleteRecord()
         {
             var milestone = new Milestone { Id = MilestoneId };
+            Person currentPerson = DataHelper.CurrentPerson;
 
             using (var serviceClient = new MilestoneServiceClient())
             {
                 try
                 {
                     serviceClient.DeleteMilestone(milestone, User.Identity.Name);
+                    foreach (var person in Milestone.MilestonePersons)
+                    {
+                        if (person.Person.IsStrawMan)
+                            continue;
+                        ServiceCallers.Custom.Person(p => p.UpdateMSBadgeDetailsByPersonId(person.Person.Id.Value, currentPerson.Id.Value));
+                    }
                 }
                 catch (FaultException<ExceptionDetail>)
                 {
@@ -1471,6 +1573,7 @@ namespace PraticeManagement
             // Security
             var isReadOnly =
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) &&
+                !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SalespersonRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.PracticeManagerRoleName) &&
                 !Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName) &&
