@@ -15,11 +15,11 @@
             <tr>
                 <td class="textRight PersonDefaultUser">
                     <asp:Button ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false" CssClass="marginLineManager"
-                        Text="Save Default Career Counselor" />
+                        Text="Save Default Career Manager" />
                 </td>
             </tr>
         </table>
-        <%--<asp:LinkButton ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false">Set as def. Career Counselor</asp:LinkButton>--%>
+        <%--<asp:LinkButton ID="btnSetDefault" runat="server" OnClick="btnSetDefault_Click" Visible="false">Set as def. Career Manager</asp:LinkButton>--%>
         <uc:MessageLabel ID="mlMessage" runat="server" ErrorColor="Red" InfoColor="DarkGreen"
             WarningColor="Orange" EnableViewState="false" />
     </ContentTemplate>
