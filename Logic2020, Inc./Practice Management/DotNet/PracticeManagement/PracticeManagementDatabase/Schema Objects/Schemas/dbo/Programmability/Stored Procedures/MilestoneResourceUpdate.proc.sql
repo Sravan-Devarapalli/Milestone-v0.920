@@ -4,12 +4,13 @@
 	@StartDate                DATETIME,
 	@ProjectedDeliveryDate    DATETIME,
 	@IsStartDateChangeReflectedForMilestoneAndPersons BIT,
-	@IsEndDateChangeReflectedForMilestoneAndPersons   BIT
+	@IsEndDateChangeReflectedForMilestoneAndPersons   BIT,
+	@IsExtendedORCompleteOutOfRange BIT
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
-		
+		SET ANSI_WARNINGS OFF
 		DECLARE @FutureDate DATETIME
 		SET @FutureDate = dbo.GetFutureDate()
 
@@ -45,10 +46,10 @@ BEGIN
 
 		--When the milestone person entries are out of the range of the selected milestone range,Keep atleast one record with granularity(milestone person,role)
 		DECLARE @TempMPE TABLE
-		(MilestonePersonId INT,PersonRoleId INT,Amount DECIMAL(18,2),HoursPerDay DECIMAL(4,2))
+		(MilestonePersonId INT,PersonRoleId INT,Amount DECIMAL(18,2),HoursPerDay DECIMAL(4,2), IsBadgeRequired BIT, IsBadgeException BIT, IsApproved BIT)
 		
-		INSERT INTO @TempMPE(MilestonePersonId,PersonRoleId ,Amount ,HoursPerDay )
-		SELECT MPE.MilestonePersonId,MPE.PersonRoleId,MAX(MPE.Amount),MAX(MPE.HoursPerDay)
+		INSERT INTO @TempMPE(MilestonePersonId,PersonRoleId ,Amount ,HoursPerDay ,IsBadgeRequired, IsBadgeException, IsApproved)
+		SELECT MPE.MilestonePersonId,MPE.PersonRoleId,MAX(MPE.Amount),MAX(MPE.HoursPerDay),MAX(CAST(MPE.IsBadgeRequired AS INT)),MAX(CAST(MPE.IsBadgeException AS INT)),MAX(CAST(mpe.IsApproved AS INT))
 		FROM dbo.MilestonePersonEntry MPE
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
 		INNER JOIN dbo.Person AS p ON p.PersonId = MP.PersonId AND p.IsStrawman = 0
@@ -64,8 +65,11 @@ BEGIN
 		WHERE MP.MilestoneId = @MilestoneId 
 			AND ( MPE.StartDate > @ProjectedDeliveryDate OR MPE.EndDate < @StartDate )
 			
-		INSERT INTO dbo.MilestonePersonEntry(MilestonePersonId,StartDate,EndDate,PersonRoleId,Amount,Location,HoursPerDay )
-		SELECT TEMPmpe.MilestonePersonId,@StartDate,@StartDate,TEMPmpe.PersonRoleId,TEMPmpe.Amount, NULL, TEMPmpe.HoursPerDay  
+		INSERT INTO dbo.MilestonePersonEntry(MilestonePersonId,StartDate,EndDate,PersonRoleId,Amount,Location,HoursPerDay,IsBadgeRequired,BadgeStartDate,BadgeEndDate,IsBadgeException,IsApproved)
+		SELECT TEMPmpe.MilestonePersonId,@StartDate,@StartDate,TEMPmpe.PersonRoleId,TEMPmpe.Amount, NULL, TEMPmpe.HoursPerDay,TEMPmpe.IsBadgeRequired,
+			   CASE WHEN TEMPmpe.IsBadgeRequired = 1 THEN @StartDate ELSE NULL END,
+			    CASE WHEN TEMPmpe.IsBadgeRequired = 1 THEN @StartDate ELSE NULL END,
+				TEMPmpe.IsBadgeException,TEMPmpe.IsApproved
 		FROM @TempMPE AS TEMPmpe
 		WHERE NOT EXISTS (SELECT 1 FROM dbo.MilestonePersonEntry MPE
 						 WHERE  TEMPmpe.MilestonePersonId = MPE.MilestonePersonId 
@@ -109,7 +113,9 @@ BEGIN
 		-- Update For Persons
 
 	    UPDATE mpentry
-			   SET StartDate = P.ActiveStartDate
+			   SET StartDate = P.ActiveStartDate,
+			   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL ELSE P.ActiveStartDate END,
+			   IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
 			  FROM MilestonePersonEntry as mpentry
 			  INNER JOIN 
 						(
@@ -124,7 +130,9 @@ BEGIN
 			  WHERE 1 = q.RANKnO AND q.MilestoneId = @MilestoneId  AND @IsStartDateChangeReflectedForMilestoneAndPersons = 1 
 
 		UPDATE mpentry
-				SET EndDate =  P.ActiveEndDate
+				SET EndDate =  P.ActiveEndDate,
+				BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL ELSE P.ActiveEndDate END,
+				IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
 			    FROM MilestonePersonEntry as mpentry
 				INNER JOIN 
 					(
@@ -146,18 +154,34 @@ BEGIN
 									 ELSE mpe.EndDate
 								   END
 								) ELSE mpe.EndDate END,
+				   BadgeEndDate = CASE	WHEN mpe.BadgeEndDate IS NULL THEN NULL
+										WHEN @IsStartDateChangeReflectedForMilestoneAndPersons =1 THEN 
+										( CASE
+											 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.StartDate
+											 ELSE mpe.EndDate
+										   END
+										) 
+										ELSE mpe.EndDate END,
 				  StartDate = CASE WHEN @IsEndDateChangeReflectedForMilestoneAndPersons =1 THEN 
 								( CASE
 									 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.EndDate
 									 ELSE mpe.StartDate
 								   END
-								) ELSE mpe.StartDate END
+								) ELSE mpe.StartDate END,
+				  BadgeStartDate = CASE WHEN mpe.BadgeStartDate IS NULL THEN NULL
+										WHEN @IsEndDateChangeReflectedForMilestoneAndPersons =1 THEN 
+											( CASE
+												 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.EndDate
+												 ELSE mpe.StartDate
+											   END
+											) 
+										ELSE mpe.StartDate END
 			  FROM dbo.MilestonePersonEntry AS mpe
 				   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
 				   INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId
 			 WHERE mp.MilestoneId = @MilestoneId AND (@IsStartDateChangeReflectedForMilestoneAndPersons = 1 OR @IsEndDateChangeReflectedForMilestoneAndPersons = 1 )
 
 		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = @MilestoneId
-
+		
  END
 
