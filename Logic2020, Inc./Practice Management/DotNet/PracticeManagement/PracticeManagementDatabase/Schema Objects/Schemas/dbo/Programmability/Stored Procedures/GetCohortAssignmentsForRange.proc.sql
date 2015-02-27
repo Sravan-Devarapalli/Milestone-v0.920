@@ -26,7 +26,7 @@ BEGIN
 			  T.Title,
 			  PH.HireDate,
 			  PH.TerminationDate,
-			  manager.LastName+', '+manager.FirstName AS [Career Counselor],
+			  manager.LastName+', '+manager.FirstName AS [Career Manager],
 			  CA.Name AS [Cohort Assignment]
 	   FROM dbo.Person P
 	   INNER JOIN PersonHistoryCTE PH ON PH.PersonId = P.PersonId 
