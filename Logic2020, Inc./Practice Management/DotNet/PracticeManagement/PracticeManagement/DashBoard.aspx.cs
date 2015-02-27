@@ -28,6 +28,7 @@ namespace PraticeManagement
         private bool _userIsHR;
         private bool _userIsSalesperson;
         private bool _userIsSeniorLeadership;
+        private bool _userIsOperations;
 
         #endregion
 
@@ -93,6 +94,7 @@ namespace PraticeManagement
                                     (_userIsPracticeAreaManger || _userIsBusinessUnitManager) ? DashBoardType.Manager.ToString() :
                                     _userIsProjectLead ? DashBoardType.ProjectLead.ToString() :
                                     _userIsConsultant ? DashBoardType.Consulant.ToString() :
+                                    _userIsOperations ? DashBoardType.Operations.ToString() :
                                     string.Empty;
             DashBoardType dashBoardtype = (DashBoardType)Enum.Parse(typeof(DashBoardType), _userIsAdministrator ? ddlDashBoardType.SelectedValue : dashBoardValue);
             List<QuickLinks> qlinks = DataHelper.GetQuickLinksByDashBoardType(dashBoardtype);
@@ -257,6 +259,21 @@ namespace PraticeManagement
                     listOfItems.Add("Project", "Project");
                 }
             }
+            else if (_userIsOperations)
+            {
+                if (!listOfItems.Any(k => k.Key == "Project"))
+                {
+                    listOfItems.Add("Project", "Project");
+                }
+                if (!listOfItems.Any(k => k.Key == "Opportunity"))
+                {
+                    listOfItems.Add("Opportunity", "Opportunity");
+                }
+                if (!listOfItems.Any(k => k.Key == "Person"))
+                {
+                    listOfItems.Add("Person", "Person");
+                }
+            }
 
             ddlSearchType.Items.Clear();
 
@@ -298,6 +315,8 @@ namespace PraticeManagement
                 roles.Contains(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
             _userIsConsultant =
                 roles.Contains(DataTransferObjects.Constants.RoleNames.ConsultantRoleName);
+            _userIsOperations =
+                roles.Contains(DataTransferObjects.Constants.RoleNames.OperationsRoleName);
         }
 
         protected string GetVirtualPath(string virtualPath)
@@ -428,7 +447,7 @@ namespace PraticeManagement
 
         protected bool IsShowSearchSection()
         {
-            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger || _userIsBusinessUnitManager || _userIsProjectLead || _userIsRecruiter || _userIsHR || _userIsSalesperson;
+            var result = _userIsAdministrator || _userIsClientDirector || _userIsSeniorLeadership || _userIsPracticeAreaManger || _userIsBusinessUnitManager || _userIsProjectLead || _userIsRecruiter || _userIsHR || _userIsSalesperson || _userIsOperations;
 
             return result;
         }
