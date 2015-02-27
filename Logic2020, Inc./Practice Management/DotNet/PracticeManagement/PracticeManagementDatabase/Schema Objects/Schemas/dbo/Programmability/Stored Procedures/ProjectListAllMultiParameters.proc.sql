@@ -72,7 +72,7 @@ AS
 		JOIN aspnet_UsersInRoles UR ON UR.UserId = U.UserId
 		JOIN aspnet_Roles R ON R.RoleId = UR.RoleId
 		WHERE U.UserName = @UserLogin
-			AND R.LoweredRoleName IN ('system administrator','client director','business unit manager','salesperson','practice area manager','senior leadership')			
+			AND R.LoweredRoleName IN ('system administrator','client director','business unit manager','salesperson','practice area manager','senior leadership','operations')			
 	END
 	
 	SELECT  P.ClientId,
