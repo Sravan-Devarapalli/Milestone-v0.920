@@ -178,7 +178,13 @@ namespace PraticeManagement
             public const string RecruitingMetricsReport = "~/Reports/RecruitingMetricsReport.aspx";
             public const string ResourceExceptionReport = "~/Reports/ResourceExceptionReport.aspx";
             public const string PayrollDistributionReport = "~/Reports/PayrollDistributionReport.aspx";
-
+            public const string BadgedOnProjectReport = "~/Reports/Badge/BadgedOnProjectReport.aspx?StartDate={0}&EndDate={1}";
+            public const string BadgedNotOnProjectReport = "~/Reports/Badge/BadgedNotOnProjectReport.aspx?StartDate={0}&EndDate={1}";
+            public const string ClockNotStartedReport = "~/Reports/Badge/ClockNotStartedReport.aspx?StartDate={0}&EndDate={1}";
+            public const string BadgeBlockedReport = "~/Reports/Badge/BadgeBlockedReport.aspx?StartDate={0}&EndDate={1}";
+            public const string BadgeBreakReport = "~/Reports/Badge/BadgeBreakReport.aspx?StartDate={0}&EndDate={1}";
+            public const string BadgedResourcesByTimeReport = "~/Reports/Badge/BadgeResourceByTime.aspx";
+            public const string BadgedOnProject = "~/Reports/Badge/BadgedOnProjectReport.aspx";
         }
 
         /// <summary>
@@ -237,6 +243,7 @@ namespace PraticeManagement
             public const string PercentageFormat = "{0:##0.0#}%";
             public const string SearchResultFormat = "<span class=\"found\">$0</span>";
             public const string EntryDateFormat = "MM/dd/yyyy";
+            public const string DateTimeFormat = "MM/dd/yyyy HH:mm:ss"; 
             public const string SortingDateFormat = "yyyyMMdd";
             public const string DoubleFormat = "F2";
             public const string CurrentVersionFormat = "Binaries: v{0}.{1}.{2}.{3} [{4:%y-MM-dd}] | Database: {5}";
