@@ -261,6 +261,31 @@ namespace PracticeManagementService
         {
             return ReportDAL.NonBillableReport(startDate, endDate, projectNumber, directorIds, businessUnitIds, practiceIds);
         }
+
+        public List<BadgedResourcesByTime> BadgedResourcesByTimeReport(DateTime startDate, DateTime endDate, int step)
+        {
+            return ReportDAL.BadgedResourcesByTimeReport(startDate, endDate, step);
+        }
+
+        public List<MSBadge> ListBadgeResourcesByType(DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject)
+        {
+            return ReportDAL.ListBadgeResourcesByType(startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject);
+        }
+
+        public List<GroupByPractice> ResourcesByPracticeReport(string practices, DateTime startDate, DateTime endDate, int step)
+        {
+            return ReportDAL.ResourcesByPracticeReport(practices, startDate, endDate, step);
+        }
+
+        public List<GroupbyTitle> ResourcesByTitleReport(string titles, DateTime startDate, DateTime endDate, int step)
+        {
+            return ReportDAL.ResourcesByTitleReport(titles, startDate, endDate, step);
+        }
+
+        public List<MSBadge> GetBadgeRequestNotApprovedList()
+        {
+            return ReportDAL.GetBadgeRequestNotApprovedList();
+        }
     }
 }
 
