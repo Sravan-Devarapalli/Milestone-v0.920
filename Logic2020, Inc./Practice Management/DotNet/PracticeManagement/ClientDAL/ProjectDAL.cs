@@ -1011,6 +1011,8 @@ namespace DataAccess
                 int clientIsChargeableIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIsChargeable);
                 int pmIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagersIdFirstNameLastName);
 
+                int ToAddressListIndex = -1;
+                int ProjectOwnerAlias = -1;
                 int descriptionIndex = -1;
                 int salesPersonIdIndex = -1;
                 int salesPersonNameIndex = -1;
@@ -1035,6 +1037,18 @@ namespace DataAccess
                 int poNumberIndex = -1;
                 int isHouseAccountIndex = -1;
                 int poAmountIndex = -1;
+                try
+                {
+                    ProjectOwnerAlias = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerAlias);
+                }
+                catch
+                { }
+                try
+                {
+                    ToAddressListIndex = reader.GetOrdinal(Constants.ColumnNames.ToAddressList);
+                }
+                catch
+                { }
                 try
                 {
                     poAmountIndex = reader.GetOrdinal(Constants.ColumnNames.POAmount);
@@ -1295,6 +1309,14 @@ namespace DataAccess
                         },
                         ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
                     };
+                    if (ToAddressListIndex > -1)
+                    {
+                        project.ToAddressList = !reader.IsDBNull(ToAddressListIndex) ? reader.GetString(ToAddressListIndex) : string.Empty;
+                    }
+                    if (ProjectOwnerAlias > -1)
+                    {
+                        project.OwnerAlias = !reader.IsDBNull(ProjectOwnerAlias) ? reader.GetString(ProjectOwnerAlias) : string.Empty;
+                    }
                     if (poNumberIndex > -1)
                     {
                         project.PONumber = !reader.IsDBNull(poNumberIndex) ? reader.GetString(poNumberIndex) : string.Empty;
