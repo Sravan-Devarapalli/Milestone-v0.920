@@ -184,6 +184,15 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.DropDownList ddlAvgCapacity;
         
         /// <summary>
+        /// chbShowMSBadge control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbShowMSBadge;
+        
+        /// <summary>
         /// btnUpdateView control.
         /// </summary>
         /// <remarks>
