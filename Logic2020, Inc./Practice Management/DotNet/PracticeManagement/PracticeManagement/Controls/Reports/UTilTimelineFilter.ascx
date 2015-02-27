@@ -314,7 +314,7 @@
 
 </script>
 <div class="filters Margin-Bottom10Px">
-    <div class="buttons-block">
+    <div class="filter-section-color">
         <table class="WholeWidth">
             <tr>
                 <td align="left" class="Width98Percent">
@@ -373,6 +373,8 @@
                         <asp:ListItem Value="90">&gt; 10</asp:ListItem>
                         <asp:ListItem Value="50">&gt; 50</asp:ListItem>
                     </asp:DropDownList>
+                    &nbsp;
+                    <asp:CheckBox ID="chbShowMSBadge" runat="server" Text="Show MS Badge Status"/>
                     &nbsp;
                 </td>
                 <td align="right">
