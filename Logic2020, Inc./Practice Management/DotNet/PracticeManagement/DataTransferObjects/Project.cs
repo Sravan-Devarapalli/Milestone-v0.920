@@ -227,6 +227,20 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string ToAddressList
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string OwnerAlias
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets the <see cref="Project"/>'s computed interest values.
         /// </summary>
@@ -456,6 +470,9 @@ namespace DataTransferObjects
 
         [DataMember]
         public bool IsSeniorManagerUnassigned { get; set; }
+
+        [DataMember]
+        public string MailBody { get; set; }
 
         #endregion Properties
 
