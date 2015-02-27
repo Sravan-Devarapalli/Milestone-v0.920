@@ -383,6 +383,8 @@
     <Content Include="Controls\Milestones\MilestonePersonBar.ascx" />
     <Content Include="Controls\PersonCalendar.ascx" />
     <Content Include="Controls\PersonMonthCalendar.ascx" />
+    <Content Include="Controls\Persons\MSBadge.ascx" />
+    <Content Include="Controls\Persons\PersonBadgeHistory.ascx" />
     <Content Include="Controls\Projects\CommissionsAttribution.ascx" />
     <Content Include="Controls\Projects\ProjectActivityLog.ascx" />
     <Content Include="Controls\Projects\ProjectCSAT.ascx" />
@@ -390,6 +392,7 @@
     <Content Include="Controls\Projects\ProjectTimeTypes.ascx" />
     <Content Include="Controls\Reports\AuditByPerson.ascx" />
     <Content Include="Controls\Reports\AuditByProject.ascx" />
+    <Content Include="Controls\Reports\BadgeResourcesByPracticeFilter.ascx" />
     <Content Include="Controls\Reports\BillingReportSummary.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessDevelopment.ascx" />
     <Content Include="Controls\Reports\ByAccount\ByBusinessUnit.ascx" />
@@ -458,6 +461,7 @@
     <Content Include="Images\close_24.png" />
     <Content Include="Images\close_inactive16.png" />
     <Content Include="Images\copy.png" />
+    <Content Include="Images\cp-header-bg_new.png" />
     <Content Include="Images\CSATCalculationPanel.jpg" />
     <Content Include="Images\desc.gif" />
     <Content Include="Images\divisions_16x16.png" />
@@ -544,6 +548,16 @@
     <Content Include="Reports\AccountSummaryReport.aspx" />
     <Content Include="Reports\AttainmentReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
+    <Content Include="Reports\Badge\BadgeBlockedReport.aspx" />
+    <Content Include="Reports\Badge\BadgeBreakReport.aspx" />
+    <Content Include="Reports\Badge\BadgedNotOnProjectReport.aspx" />
+    <Content Include="Reports\Badge\BadgedOnProjectReport.aspx" />
+    <Content Include="Reports\Badge\BadgeRequestNotApprovedReport.aspx" />
+    <Content Include="Reports\Badge\BadgeResourceByTime.aspx" />
+    <Content Include="Reports\Badge\ClockNotStartedReport.aspx" />
+    <Content Include="Reports\Badge\ResourceByBusinessConsultants.aspx" />
+    <Content Include="Reports\Badge\ResourceByPracticeReport.aspx" />
+    <Content Include="Reports\Badge\ResourcesByTechnicalConsultants.aspx" />
     <Content Include="Reports\BillingReport.aspx" />
     <Content Include="Reports\CalendarReport.aspx" />
     <Content Include="Reports\ConsultingCapacity.aspx" />
@@ -571,6 +585,9 @@
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Lockout.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.MSBadge12.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.MSBadge3.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.PersonBadgeHistories.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PracticeCapability1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PricingList.datasource" />
@@ -581,6 +598,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.ProjectFeedbackStatus1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.RecruitingMetrics.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.AttainmentBillableutlizationReport.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.BadgedResourcesByTime.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.BillingReport1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.BusinessUnitLevelGroupedHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
@@ -594,6 +612,8 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbySkill.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitle.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.GroupByPractice.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.GroupbyTitle.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck.datasource" />
@@ -738,6 +758,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
+    <None Include="Service References\MilestoneService\MilestoneService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MilestoneService\MilestoneService4.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1033,12 +1056,12 @@
     </None>
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
-    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <Content Include="Scripts\UploaderRemovedFolder1.js" />
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
     <None Include="Service References\ClientService\ClientService1.disco" />
     <None Include="Service References\ReportService\ReportService110.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
@@ -1548,6 +1571,20 @@
     <Compile Include="Controls\PersonPicture.ashx.cs">
       <DependentUpon>PersonPicture.ashx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Persons\MSBadge.ascx.cs">
+      <DependentUpon>MSBadge.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Persons\MSBadge.ascx.designer.cs">
+      <DependentUpon>MSBadge.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Persons\PersonBadgeHistory.ascx.cs">
+      <DependentUpon>PersonBadgeHistory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Persons\PersonBadgeHistory.ascx.designer.cs">
+      <DependentUpon>PersonBadgeHistory.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PracticeManagementExtendedPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -1605,6 +1642,13 @@
     </Compile>
     <Compile Include="Controls\Reports\AuditByProject.ascx.designer.cs">
       <DependentUpon>AuditByProject.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\BadgeResourcesByPracticeFilter.ascx.cs">
+      <DependentUpon>BadgeResourcesByPracticeFilter.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\BadgeResourcesByPracticeFilter.ascx.designer.cs">
+      <DependentUpon>BadgeResourcesByPracticeFilter.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\Reports\BillingReportSummary.ascx.cs">
       <DependentUpon>BillingReportSummary.ascx</DependentUpon>
@@ -2190,6 +2234,76 @@
     </Compile>
     <Compile Include="Reports\Audit.aspx.designer.cs">
       <DependentUpon>Audit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeBlockedReport.aspx.cs">
+      <DependentUpon>BadgeBlockedReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeBlockedReport.aspx.designer.cs">
+      <DependentUpon>BadgeBlockedReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeBreakReport.aspx.cs">
+      <DependentUpon>BadgeBreakReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeBreakReport.aspx.designer.cs">
+      <DependentUpon>BadgeBreakReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgedNotOnProjectReport.aspx.cs">
+      <DependentUpon>BadgedNotOnProjectReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgedNotOnProjectReport.aspx.designer.cs">
+      <DependentUpon>BadgedNotOnProjectReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgedOnProjectReport.aspx.cs">
+      <DependentUpon>BadgedOnProjectReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgedOnProjectReport.aspx.designer.cs">
+      <DependentUpon>BadgedOnProjectReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeRequestNotApprovedReport.aspx.cs">
+      <DependentUpon>BadgeRequestNotApprovedReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeRequestNotApprovedReport.aspx.designer.cs">
+      <DependentUpon>BadgeRequestNotApprovedReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeResourceByTime.aspx.cs">
+      <DependentUpon>BadgeResourceByTime.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgeResourceByTime.aspx.designer.cs">
+      <DependentUpon>BadgeResourceByTime.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\ClockNotStartedReport.aspx.cs">
+      <DependentUpon>ClockNotStartedReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\ClockNotStartedReport.aspx.designer.cs">
+      <DependentUpon>ClockNotStartedReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\ResourceByBusinessConsultants.aspx.cs">
+      <DependentUpon>ResourceByBusinessConsultants.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\ResourceByBusinessConsultants.aspx.designer.cs">
+      <DependentUpon>ResourceByBusinessConsultants.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\ResourceByPracticeReport.aspx.cs">
+      <DependentUpon>ResourceByPracticeReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\ResourceByPracticeReport.aspx.designer.cs">
+      <DependentUpon>ResourceByPracticeReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\ResourcesByTechnicalConsultants.aspx.cs">
+      <DependentUpon>ResourcesByTechnicalConsultants.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\ResourcesByTechnicalConsultants.aspx.designer.cs">
+      <DependentUpon>ResourcesByTechnicalConsultants.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\BillingReport.aspx.cs">
       <DependentUpon>BillingReport.aspx</DependentUpon>
