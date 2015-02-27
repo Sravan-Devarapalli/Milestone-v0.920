@@ -218,6 +218,55 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public bool MSBadgeRequired
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? BadgeStartDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? BadgeEndDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? ConsultantEndDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? RequestDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public bool BadgeException
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public bool IsApproved
+        {
+            get;
+            set;
+        }
+
         #endregion Properties
 
         #region Constructor
@@ -309,3 +358,4 @@ namespace DataTransferObjects
         #endregion "Members used in Milestone Detail Resources tab."
     }
 }
+
