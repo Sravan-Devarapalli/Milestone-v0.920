@@ -88,8 +88,8 @@
                                         ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
                                         ValidationGroup='ProjectExpensesEdit'>*</asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="cstStartDateShouldbewithinProjectPeriod" runat="server"
-                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."
-                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
+                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."
+                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                 </td>
                             </tr>
                         </table>
@@ -121,8 +121,8 @@
                                         ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
                                         ValidationGroup='ProjectExpensesAdd'>*</asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="cstStartDateShouldbewithinProjectPeriod" runat="server"
-                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."
-                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
+                                        ValidationGroup="ProjectExpensesEdit" ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."
+                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                 </td>
                             </tr>
                         </table>
@@ -164,8 +164,8 @@
                                         ValidationExpression="^([1-9]|0[1-9]|1[012])[/]([1-9]|0[1-9]|[12][0-9]|3[01])[/][0-9]{4}$"
                                         ValidationGroup='ProjectExpensesEdit'>*</asp:RegularExpressionValidator>
                                     <asp:CustomValidator ID="cstEndDateShouldbewithinProjectPeriod" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."
-                                        Display="Dynamic" Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
+                                        ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."
+                                        Display="Dynamic" Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                     <asp:CustomValidator ID="custLockdown" runat="server" Text="*" ValidationGroup="ProjectExpensesEdit"></asp:CustomValidator>
                                 </td>
                             </tr>
@@ -200,8 +200,8 @@
                                     <asp:CustomValidator ID="cstEndShouldBeGreater" runat="server" Text="*" ErrorMessage="End date shuould be greater than Start date"
                                         ToolTip="End date shuould be greater than Start date" ValidationGroup="ProjectExpensesEdit"></asp:CustomValidator>
                                     <asp:CustomValidator ID="cstEndDateShouldbewithinProjectPeriod" runat="server" ValidationGroup="ProjectExpensesEdit"
-                                        ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."
-                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the project. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
+                                        ErrorMessage="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."
+                                        Text="*" ToolTip="You have attempted to add an expense that was for a period of time outside of the start and end dates for the milestone. Please readjust the start and end dates for the expense line item."></asp:CustomValidator>
                                     <asp:CustomValidator ID="custLockdown" runat="server" Text="*" ValidationGroup="ProjectExpensesEdit"></asp:CustomValidator>
                                 </td>
                             </tr>
