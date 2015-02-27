@@ -12,6 +12,7 @@
     TagPrefix="uc" %>
 <%@ Register Src="~/Controls/Generic/OpportunityList.ascx" TagName="OpportunityList"
     TagPrefix="uc" %>
+<%@ Register Src="~/Controls/Persons/MSBadge.ascx" TagName="MSBadge" TagPrefix="uc" %>
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ElementDisabler" %>
 <%@ Register TagPrefix="asp" Namespace="PraticeManagement.Controls.Generic.Buttons"
     Assembly="PraticeManagement" %>
@@ -457,7 +458,7 @@
                         <table class="PersonInfo">
                             <tr>
                                 <td>
-                                    First Name
+                                    Legal First Name
                                 </td>
                                 <td>
                                     <asp:TextBox ID="txtFirstName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
@@ -505,6 +506,47 @@
                             </tr>
                             <tr>
                                 <td>
+                                    Preferred First Name
+                                </td>
+                                <td>
+                                     <asp:TextBox ID="txtPrefferedFirstName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
+                                </td>
+                                <td>
+                                    <asp:RegularExpressionValidator ControlToValidate="txtPrefferedFirstName" ID="valRegPrefferedFirstName"
+                                        runat="server" ValidationGroup="Person" ErrorMessage="Preferred First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ToolTip="Preferred First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-\ ]{2,35}$" />
+                                    &nbsp;
+                                    <asp:CustomValidator ID="cvPFNAllowSpace" runat="server" ControlToValidate="txtPrefferedFirstName"
+                                        ErrorMessage="Preferred First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ToolTip="Preferred First Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic" OnServerValidate="cvPFNAllowSpace_ServerValidate"></asp:CustomValidator>
+                                </td>
+                                <td>
+                                    Career Manager
+                                </td>
+                                <td class="padRight2">
+                                    <asp:UpdatePanel ID="pnlLineManager" runat="server">
+                                        <ContentTemplate>
+                                            <uc:DefaultManager ID="defaultManager" runat="server" InsertFirtItem="false" PersonsRole="Practice Area Manager"
+                                                CssClass="Width256Px" />
+                                        </ContentTemplate>
+                                        <Triggers>
+                                            <asp:AsyncPostBackTrigger ControlID="lbSetPracticeOwner" EventName="Click" />
+                                        </Triggers>
+                                    </asp:UpdatePanel>
+                                </td>
+                                <td>
+                                    Cohort Assignment
+                                    <asp:DropDownList ID="ddlCohortAssignment" runat="server">
+                                    </asp:DropDownList>
+                                    <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Manager to Practice Area Owner</asp:LinkButton>
+                                    <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     Last Name
                                 </td>
                                 <td>
@@ -526,25 +568,24 @@
                                         Display="Dynamic" OnServerValidate="cvLNAllowSpace_ServerValidate"></asp:CustomValidator>
                                 </td>
                                 <td>
-                                    Career Counselor
+                                    Hire&nbsp;Date
                                 </td>
-                                <td class="padRight2">
-                                    <asp:UpdatePanel ID="pnlLineManager" runat="server">
-                                        <ContentTemplate>
-                                            <uc:DefaultManager ID="defaultManager" runat="server" InsertFirtItem="false" PersonsRole="Practice Area Manager"
-                                                CssClass="Width256Px" />
-                                        </ContentTemplate>
-                                        <Triggers>
-                                            <asp:AsyncPostBackTrigger ControlID="lbSetPracticeOwner" EventName="Click" />
-                                        </Triggers>
-                                    </asp:UpdatePanel>
+                                <td class="DatePickerOuterTd">
+                                    <uc2:DatePicker ID="dtpHireDate" runat="server" OnSelectionChanged="dtpHireDate_SelectionChanged"
+                                        AutoPostBack="true" />
                                 </td>
                                 <td>
-                                    Cohort Assignment
-                                    <asp:DropDownList ID="ddlCohortAssignment" runat="server">
-                                    </asp:DropDownList>
-                                    <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Counselor to Practice Area Owner</asp:LinkButton>
-                                    <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
+                                    <asp:RequiredFieldValidator ID="reqHireDate" runat="server" ControlToValidate="dtpHireDate"
+                                        Display="Dynamic" EnableClientScript="False" ErrorMessage="The Hire Date is required."
+                                        SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date is required.">*</asp:RequiredFieldValidator>
+                                    <asp:CompareValidator ID="compHireDate" runat="server" ControlToValidate="dtpHireDate"
+                                        EnableClientScript="False" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
+                                        Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'"
+                                        Type="Date">*</asp:CompareValidator>
+                                    <asp:CustomValidator ID="custWithPreviousTermDate" runat="server" ControlToValidate="dtpHireDate"
+                                        ErrorMessage="Hire Date should be greater than previous Termination date." ToolTip="Hire Date should be greater than previous Termination date."
+                                        ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate"
+                                        ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
                                 </td>
                             </tr>
                             <tr>
@@ -570,41 +611,6 @@
                                     <asp:HiddenField ID="hdcvSLTApproval" runat="server" Value="false" />
                                     <asp:HiddenField ID="hdcvSLTPTOApproval" runat="server" Value="false" />
                                 </td>
-                                <td>
-                                    Hire&nbsp;Date
-                                </td>
-                                <td class="DatePickerOuterTd">
-                                    <uc2:DatePicker ID="dtpHireDate" runat="server" OnSelectionChanged="dtpHireDate_SelectionChanged"
-                                        AutoPostBack="true" />
-                                </td>
-                                <td>
-                                    <asp:RequiredFieldValidator ID="reqHireDate" runat="server" ControlToValidate="dtpHireDate"
-                                        Display="Dynamic" EnableClientScript="False" ErrorMessage="The Hire Date is required."
-                                        SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date is required.">*</asp:RequiredFieldValidator>
-                                    <asp:CompareValidator ID="compHireDate" runat="server" ControlToValidate="dtpHireDate"
-                                        EnableClientScript="False" ErrorMessage="The Hire Date must be in the format 'MM/dd/yyyy'"
-                                        Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="Person" ToolTip="The Hire Date must be in the format 'MM/dd/yyyy'"
-                                        Type="Date">*</asp:CompareValidator>
-                                    <asp:CustomValidator ID="custWithPreviousTermDate" runat="server" ControlToValidate="dtpHireDate"
-                                        ErrorMessage="Hire Date should be greater than previous Termination date." ToolTip="Hire Date should be greater than previous Termination date."
-                                        ValidationGroup="Person" Text="*" Display="Dynamic" OnServerValidate="custWithPreviousTermDate_ServerValidate"
-                                        ValidateEmptyText="false" SetFocusOnError="true" EnableClientScript="false"></asp:CustomValidator>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap" class="padRight10Imp">
-                                    Practice Area
-                                </td>
-                                <td>
-                                    <asp:DropDownList ID="ddlDefaultPractice" runat="server" CssClass="Width256Px" onchange="setDirty();"
-                                        OnSelectedIndexChanged="ddlDefaultPractice_OnSelectedIndexChanged" AutoPostBack="true">
-                                    </asp:DropDownList>
-                                </td>
-                                <td>
-                                    <asp:RequiredFieldValidator ID="rfvPracticeArea" runat="server" ErrorMessage="The Practice Area is required."
-                                        ToolTip="The Practice Area is required." ValidationGroup="Person" Text="*" EnableClientScript="false"
-                                        SetFocusOnError="true" Display="Dynamic" ControlToValidate="ddlDefaultPractice"></asp:RequiredFieldValidator>&nbsp;
-                                </td>
                                 <td nowrap="nowrap">
                                     Termination Date&nbsp;
                                 </td>
@@ -628,7 +634,7 @@
                                     <asp:CustomValidator ID="custTerminateDateTE" runat="server" ErrorMessage="" ToolTip=""
                                         Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                         OnServerValidate="custTerminationDateTE_ServerValidate"></asp:CustomValidator>
-                                    <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set the Termination Date for this person because this person is set as the Default Career Counselor for the company. Please select another Default Career Counselor (Configuration > Company Resources > Default Career Counselor) before terminating the individual."
+                                    <asp:CustomValidator ID="custIsDefautManager" runat="server" ErrorMessage="Unable to set the Termination Date for this person because this person is set as the Default Career Manager for the company. Please select another Default Career Manager (Configuration > Company Resources > Default Career Manager) before terminating the individual."
                                         Display="Dynamic" ValidationGroup="Person" Text="*" EnableClientScript="false"
                                         OnServerValidate="custIsDefautManager_ServerValidate"></asp:CustomValidator>
                                     <asp:DropDownList ID="ddlTerminationReason" runat="server" Visible="false" CssClass="Width250Px">
@@ -642,6 +648,31 @@
                                         ToolTip="To terminate the person the Termination Reason should be specified."
                                         ValidationGroup="Person" Text="*" Display="Static" EnableClientScript="false"
                                         OnServerValidate="custTerminationReason_ServerValidate"></asp:CustomValidator>&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td nowrap="nowrap" class="padRight10Imp">
+                                    Practice Area
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlDefaultPractice" runat="server" CssClass="Width256Px" onchange="setDirty();"
+                                        OnSelectedIndexChanged="ddlDefaultPractice_OnSelectedIndexChanged" AutoPostBack="true">
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="rfvPracticeArea" runat="server" ErrorMessage="The Practice Area is required."
+                                        ToolTip="The Practice Area is required." ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                        SetFocusOnError="true" Display="Dynamic" ControlToValidate="ddlDefaultPractice"></asp:RequiredFieldValidator>&nbsp;
+                                </td>
+                                <td>
+                                    <asp:Label ID="lbPayChexID" runat="server" Text="ADP ID" Visible="false"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="Width250Px" onchange="setDirty();"
+                                        Visible="false"></asp:TextBox>
+                                </td>
+                                <td>
+                                    &nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -674,14 +705,16 @@
                                         ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>&nbsp;
                                 </td>
                                 <td>
-                                    <asp:Label ID="lbPayChexID" runat="server" Text="ADP ID" Visible="false"></asp:Label>
+                                    Division
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="txtPayCheckId" runat="server" CssClass="Width250Px" onchange="setDirty();"
-                                        Visible="false"></asp:TextBox>
+                                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width256Px">
+                                    </asp:DropDownList>
                                 </td>
                                 <td>
-                                    &nbsp;
+                                    <asp:RequiredFieldValidator ID="rfvDivision" runat="server" ErrorMessage="The Division is required."
+                                        ControlToValidate="ddlDivision" ToolTip="The Division is required." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -698,16 +731,14 @@
                                     &nbsp;
                                 </td>
                                 <td>
-                                    Division
+                                    &nbsp;
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width256Px">
-                                    </asp:DropDownList>
+                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
+                                        Text="Locked-Out" />
                                 </td>
                                 <td>
-                                    <asp:RequiredFieldValidator ID="rfvDivision" runat="server" ErrorMessage="The Division is required."
-                                        ControlToValidate="ddlDivision" ToolTip="The Division is required." ValidationGroup="Person"
-                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                    &nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -726,16 +757,6 @@
                                         ControlToValidate="txtTelephoneNumber" ToolTip="The Telephone number is required."
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
-                                </td>
-                                <td>
-                                    &nbsp;
-                                </td>
-                                <td>
-                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
-                                        Text="Locked-Out" />
-                                </td>
-                                <td>
-                                    &nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -821,6 +842,12 @@
                                     <span class="bg">
                                         <asp:LinkButton ID="btnActivityLog" runat="server" Text="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; History"
                                             CausesValidation="false" CssClass="Width45Px" OnCommand="btnView_Command" CommandArgument="7"></asp:LinkButton>
+                                    </span>
+                                </asp:TableCell>
+                                <asp:TableCell ID="cellMSBadge" runat="server">
+                                    <span class="bg">
+                                        <asp:LinkButton ID="btnMSBadge" runat="server" Text="MS Badge History" CausesValidation="false"
+                                            CssClass="Width80Px" OnCommand="btnView_Command" CommandArgument="8"></asp:LinkButton>
                                     </span>
                                 </asp:TableCell>
                             </asp:TableRow>
@@ -1485,6 +1512,11 @@
                                         ShowProjectDropDown="false" ShowPersonDropDown="false" />
                                 </asp:Panel>
                             </asp:View>
+                            <asp:View ID="vwMSBadge" runat="server">
+                                <asp:Panel ID="pnlMSBadge" runat="server" CssClass="tab-pane WholeWidth">
+                                    <uc:MSBadge ID="personBadge" runat="server" ValidationGroup="Badge" />
+                                </asp:Panel>
+                            </asp:View>
                         </asp:MultiView>
                     </td>
                 </tr>
@@ -2023,6 +2055,8 @@
                                 CssClass="ApplyStyleForDashBoardLists" ValidationGroup="CompensationDelete" />
                             <asp:ValidationSummary ID="valSumCompensation" runat="server" EnableClientScript="false"
                                 CssClass="ApplyStyleForDashBoardLists" ValidationGroup="CompensationUpdate" />
+                            <asp:ValidationSummary ID="valSumBadge" runat="server" EnableClientScript="false"
+                                CssClass="ApplyStyleForDashBoardLists" ValidationGroup="Badge" />
                             <asp:ValidationSummary ID="ValSumSalaryToContractVoilation" runat="server" EnableClientScript="false"
                                 CssClass="ApplyStyleForDashBoardLists" ValidationGroup="SalaryToContractVoilation" />
                             <uc:MessageLabel ID="mlConfirmation" runat="server" ErrorColor="Red" InfoColor="Green"
