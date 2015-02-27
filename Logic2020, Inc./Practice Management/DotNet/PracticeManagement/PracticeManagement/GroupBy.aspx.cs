@@ -667,9 +667,12 @@ namespace PraticeManagement
 
                 //  If current user is administrator, don't apply restrictions
                 var person =
-                    Roles.IsUserInRole(
+                    (Roles.IsUserInRole(
                         DataHelper.CurrentPerson.Alias,
                         DataTransferObjects.Constants.RoleNames.AdministratorRoleName)
+                           || Roles.IsUserInRole(
+                        DataHelper.CurrentPerson.Alias,
+                        DataTransferObjects.Constants.RoleNames.OperationsRoleName))
                     ? null : DataHelper.CurrentPerson;
 
                 // If person is not administrator, return list of values when [All] is selected
@@ -1367,7 +1370,7 @@ namespace PraticeManagement
                 var lastItem = lvGroupByPerson.Items.Last();
                 var row = lastItem.FindControl("testTr") as HtmlTableRow;
                 row.Cells[row.Cells.Count - 1].InnerHtml += string.Format(GrandTotalRowHTMLTemplate,
-                    getMonthCellsHTML(grandtotals.ProjectedFinancialsByMonth, true,IsPracticeAreaGrandTotalHidden),
+                    getMonthCellsHTML(grandtotals.ProjectedFinancialsByMonth, true, IsPracticeAreaGrandTotalHidden),
                     grandtotals.ComputedFinancials.Revenue, grandtotals.ComputedFinancials.GrossMargin.ToString(IsPracticeAreaGrandTotalHidden));
             }
         }
