@@ -97,6 +97,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string PrefferedFirstName
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Person status
         /// </summary>
@@ -482,6 +489,20 @@ namespace DataTransferObjects
 
         [DataMember]
         public List<Profile> Profiles
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public MSBadge Badge
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public List<MSBadge> BadgedProjects
         {
             get;
             set;
