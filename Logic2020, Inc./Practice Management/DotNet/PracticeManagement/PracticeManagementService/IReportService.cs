@@ -159,6 +159,21 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ProjectLevelGroupedHours> NonBillableReport(DateTime startDate, DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds);
+
+        [OperationContract]
+        List<BadgedResourcesByTime> BadgedResourcesByTimeReport(DateTime startDate, DateTime endDate, int step);
+
+        [OperationContract]
+        List<MSBadge> ListBadgeResourcesByType(DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject);
+
+        [OperationContract]
+        List<GroupByPractice> ResourcesByPracticeReport(string practices, DateTime startDate, DateTime endDate, int step);
+
+        [OperationContract]
+        List<GroupbyTitle> ResourcesByTitleReport(string titles, DateTime startDate, DateTime endDate, int step);
+
+        [OperationContract]
+        List<MSBadge> GetBadgeRequestNotApprovedList();
     }
 }
 
