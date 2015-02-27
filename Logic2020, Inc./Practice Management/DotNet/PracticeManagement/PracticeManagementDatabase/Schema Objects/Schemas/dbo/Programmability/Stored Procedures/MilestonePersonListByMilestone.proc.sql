@@ -46,10 +46,17 @@ AS
 	       p.TerminationDate,
 		   mp.EntryId,
 		   ISNULL(MPAD.FirstHireDate,'19000101') AS FirstHireDate,
-		   ISNULL(MPAD.LastTerminationDate,'20121231') AS LastTerminationDate
+		   ISNULL(MPAD.LastTerminationDate,'20121231') AS LastTerminationDate,
+		   mp.IsBadgeRequired,
+		   mp.BadgeStartDate,
+		   mp.BadgeEndDate,
+		   mp.IsBadgeException,
+		   mp.IsApproved,
+		   MS.BadgeEndDate AS ConsultantEndDate
 	  FROM dbo.v_MilestonePerson AS mp
 	  INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	  LEFT JOIN MileStonePersonActiveDates AS MPAD ON MPAD.PersonId = P.PersonId
+	  LEFT JOIN dbo.MSBadge MS ON MS.PersonId = p.PersonId
 	  WHERE mp.MilestoneId = @MilestoneIdLocal
 
 	 SELECT  personid,Date,ActualHours 
