@@ -27,7 +27,7 @@ AS
 		JOIN aspnet_Roles R ON R.RoleId = UR.RoleId
 		JOIN Person P ON P.Alias = U.UserName
 		WHERE P.PersonId = @PersonId
-			AND R.LoweredRoleName IN ('system administrator','client director','business unit manager','salesperson','practice area manager','senior leadership')		
+			AND R.LoweredRoleName IN ('system administrator','client director','business unit manager','salesperson','practice area manager','senior leadership','operations')		
 	END
 
 	IF @UserHasHighRoleThanProjectLead = 0--Adding Project Lead as per #2941.
