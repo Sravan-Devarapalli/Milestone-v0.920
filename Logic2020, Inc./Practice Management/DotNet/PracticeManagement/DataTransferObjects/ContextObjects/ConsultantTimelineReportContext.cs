@@ -38,5 +38,8 @@ namespace DataTransferObjects.ContextObjects
         //UtilizationType = 0 for only utilization, 1 for project utilization, 2 for hours utilization 
         [DataMember]
         public int UtilizationType { get; set; }
+
+        [DataMember]
+        public bool IncludeBadgeStatus { get; set; }
     }
 }
