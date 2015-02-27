@@ -5,9 +5,9 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
@@ -110,6 +110,48 @@
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPTOReport_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPTOReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeDetailsByPersonId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeDetailsByPersonId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeDetailsByPersonId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeDetailsByPersonIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetLogic2020BadgeHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLogic2020BadgeHistory" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetLogic2020BadgeHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLogic2020BadgeHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SaveBadgeDetailsByPersonId_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveBadgeDetailsByPersonId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SaveBadgeDetailsByPersonId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveBadgeDetailsByPersonIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_UpdateMSBadgeDetailsByPersonId_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMSBadgeDetailsByPersonId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_UpdateMSBadgeDetailsByPersonId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMSBadgeDetailsByPersonIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonInProjectForDates_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonInProjectForDates" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonInProjectForDates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonInProjectForDatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonIsRestrictedByProjectId_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonIsRestrictedByProjectId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonIsRestrictedByProjectId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonIsRestrictedByProjectIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeHistoryByPersonId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeHistoryByPersonId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeHistoryByPersonId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeHistoryByPersonIdResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
@@ -611,6 +653,34 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPTOReport" message="tns:IPersonService_GetPTOReport_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPTOReportResponse" message="tns:IPersonService_GetPTOReport_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetBadgeDetailsByPersonId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetBadgeDetailsByPersonId" message="tns:IPersonService_GetBadgeDetailsByPersonId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetBadgeDetailsByPersonIdResponse" message="tns:IPersonService_GetBadgeDetailsByPersonId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLogic2020BadgeHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetLogic2020BadgeHistory" message="tns:IPersonService_GetLogic2020BadgeHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetLogic2020BadgeHistoryResponse" message="tns:IPersonService_GetLogic2020BadgeHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveBadgeDetailsByPersonId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveBadgeDetailsByPersonId" message="tns:IPersonService_SaveBadgeDetailsByPersonId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveBadgeDetailsByPersonIdResponse" message="tns:IPersonService_SaveBadgeDetailsByPersonId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMSBadgeDetailsByPersonId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/UpdateMSBadgeDetailsByPersonId" message="tns:IPersonService_UpdateMSBadgeDetailsByPersonId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/UpdateMSBadgeDetailsByPersonIdResponse" message="tns:IPersonService_UpdateMSBadgeDetailsByPersonId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonInProjectForDates">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonInProjectForDates" message="tns:IPersonService_CheckIfPersonInProjectForDates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonInProjectForDatesResponse" message="tns:IPersonService_CheckIfPersonInProjectForDates_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonIsRestrictedByProjectId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonIsRestrictedByProjectId" message="tns:IPersonService_CheckIfPersonIsRestrictedByProjectId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonIsRestrictedByProjectIdResponse" message="tns:IPersonService_CheckIfPersonIsRestrictedByProjectId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeHistoryByPersonId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonId" message="tns:IPersonService_GetBadgeHistoryByPersonId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonIdResponse" message="tns:IPersonService_GetBadgeHistoryByPersonId_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -1040,6 +1110,69 @@
     </wsdl:operation>
     <wsdl:operation name="GetPTOReport">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPTOReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeDetailsByPersonId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetBadgeDetailsByPersonId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLogic2020BadgeHistory">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetLogic2020BadgeHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveBadgeDetailsByPersonId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SaveBadgeDetailsByPersonId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMSBadgeDetailsByPersonId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/UpdateMSBadgeDetailsByPersonId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonInProjectForDates">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfPersonInProjectForDates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonIsRestrictedByProjectId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfPersonIsRestrictedByProjectId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeHistoryByPersonId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonId" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
