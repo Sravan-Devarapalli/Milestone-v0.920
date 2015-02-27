@@ -195,4 +195,10 @@
   <data name="ProjectReviewCanceledNotification" xml:space="preserve">
     <value>ProjectReviewCanceledNotification</value>
   </data>
+  <data name="MSBadgeRequestApprovedTemplate" xml:space="preserve">
+    <value>MSBadgeRequestApproved</value>
+  </data>
+  <data name="MSBadgeRequestTemplateName" xml:space="preserve">
+    <value>MSBadgeRequest</value>
+  </data>
 </root>
