@@ -384,13 +384,21 @@ namespace PraticeManagement.Controls.TimeEntry
                 }
 
                 billableAndNonbillableSte.ValidateNoteAndHours();
+                if (!string.IsNullOrEmpty(billableAndNonbillableSte.BillableHours.Text) || !string.IsNullOrEmpty(billableAndNonbillableSte.NonBillableHours.Text))
+                {
+                    HostingPage.IsBadgeApprovedProject = !ServiceCallers.Custom.Person(p => p.CheckIfPersonIsRestrictedByProjectId(HostingPage.SelectedPerson.Id.Value, Convert.ToInt32(extEnableDisable.ProjectId)));
+                    if (!HostingPage.IsBadgeApprovedProject)
+                    {
+                        billableAndNonbillableSte.BillableHours.Style["background-color"] = "red";
+                        billableAndNonbillableSte.NonBillableHours.Style["background-color"] = "red";
+                    }
+                }
             }
 
             if (isThereAtleastOneTimeEntryrecord && !ValideWorkTypeDropDown())
             {
                 HostingPage.IsValidWorkType = false;
             }
-
         }
 
         public void LockdownTimetypes()
