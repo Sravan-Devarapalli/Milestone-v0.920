@@ -6,15 +6,11 @@ CREATE PROCEDURE [dbo].[SetCommissionsAttributions]
 AS
 BEGIN
 	DECLARE @PersonStatusId		INT,
-			@ConsultingDivId	INT,
-			@BusinessDevelopmentDivId INT,
 	  		@W2SalaryId			INT,
 			@W2HourlyId			INT
 			
 	  SELECT	@W2SalaryId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
 	  SELECT	@W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
-	  SELECT    @ConsultingDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Consulting'
-	  SELECT    @BusinessDevelopmentDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Business Development'
 
 	  --Deleting Attribution Records based on pay/division/employment history		
 		DELETE A 
