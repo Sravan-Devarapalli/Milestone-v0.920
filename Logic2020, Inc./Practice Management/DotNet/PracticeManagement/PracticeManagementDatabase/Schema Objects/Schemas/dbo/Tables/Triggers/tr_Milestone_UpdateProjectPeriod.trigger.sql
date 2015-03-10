@@ -23,14 +23,10 @@ AS
 			@OldProjectStartDate	DATETIME,
 			@OldProjectEndDate		DATETIME,
 			@W2SalaryTimescaleId INT,
-			@W2HourlyTimescaleId INT,
-			@ConsultingDivId	INT,
-			@BusinessDevelopmentDivId INT
+			@W2HourlyTimescaleId INT
 
 	SELECT	@W2SalaryTimescaleId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
 	SELECT  @W2HourlyTimescaleId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
-	SELECT  @ConsultingDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Consulting'
-	SELECT  @BusinessDevelopmentDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Business Development'
 
 	SELECT @ProjectId = P.ProjectId,
 			@NewProjectStartDate = (SELECT MIN(StartDate) FROM dbo.Milestone AS m WHERE m.ProjectId = P.ProjectId),
