@@ -131,8 +131,9 @@
                 <table class="WholeWidth" id="tblStartDate" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
+                        <asp:HiddenField ID="hdnStartDateValue" runat="server" Value='<%# Eval("StartDate") %>'/>
                             <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="<%# GetValidationGroup(Container) %>"
-                                OnSelectionChanged="dpPersonStart_SelectionChanged" TextBoxWidth="95%" AutoPostBack="true"
+                                OnClientChange="dtpStartDate_OnClientChange(this);" TextBoxWidth="95%" AutoPostBack="false"
                                 DateValue='<%# Eval("StartDate") %>' OldValue='<%# Eval("StartDate") %>' />
                         </td>
                         <td class="Width15Percent">
@@ -179,9 +180,10 @@
                 <table class="WholeWidth" id="tblEndDate" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
+                        <asp:HiddenField ID="hdnEndDateValue" runat="server" Value='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>'/>
                             <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="<%# GetValidationGroup(Container) %>"
-                                OnSelectionChanged="dpPersonStart_SelectionChanged" OldValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>'
-                                TextBoxWidth="95%" AutoPostBack="true" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
+                                 OnClientChange="dtpStartDate_OnClientChange(this);" OldValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>'
+                                TextBoxWidth="95%" AutoPostBack="false" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
                         </td>
                         <td class="Width15Percent">
                             <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEnd"
