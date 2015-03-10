@@ -89,6 +89,7 @@ AS
 			INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
 			WHERE MPE.IsBadgeRequired = 1
 			AND P.ClientId = 2 -- ClientId = 2 for MICROSOFT
+			AND P.ProjectStatusId IN (1,2,3,4)
 
 			UNION ALL
 
