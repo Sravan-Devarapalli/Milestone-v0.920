@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[AccountSummaryByBusinessDevelopment]
 (
-	@AccountIds	NVARCHAR(MAX),
+	@AccountId	INT,
 	@BusinessUnitIds	NVARCHAR(MAX) = NULL,
 	@StartDate	DATETIME,
 	@EndDate	DATETIME
@@ -10,28 +10,18 @@ BEGIN
 	
 	DECLARE @StartDateLocal DATETIME ,
 		@EndDateLocal DATETIME,
+		@AccountIdLocal INT,
 		@BusinessUnitIdsLocal	NVARCHAR(MAX),
-		@AccountIdsLocal NVARCHAR(MAX),
 		@FutureDate DATETIME
-
-    DECLARE @AccountIdsTable TABLE ( Ids INT )
 
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 		 , @EndDateLocal = CONVERT(DATE, @EndDate)
+		 , @AccountIdLocal = @AccountId
 		 , @BusinessUnitIdsLocal = @BusinessUnitIds
-		 , @AccountIdsLocal = @AccountIds
 		 , @FutureDate = dbo.GetFutureDate()
 
-	INSERT INTO @AccountIdsTable( Ids)
-	SELECT ResultId
-	FROM dbo.ConvertStringListIntoTable(@AccountIdsLocal)
-
-	
 	SELECT PG.GroupId AS [BusinessUnitId]
 		 , PG.Name AS [BusinessUnitName]
-		 ,C.ClientId
-		 ,C.Name AS ClientName
-		 ,C.Code AS ClientCode
 		 , PG.Code AS [GroupCode]
 		 , PG.Active
 		 , TT.Name AS [TimeTypeName]
@@ -55,10 +45,9 @@ BEGIN
 			ON TT.TimeTypeId = CC.TimeTypeId
 		INNER JOIN dbo.Person P
 			ON P.PersonId = TE.PersonId AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, @FutureDate)
-		INNER JOIN dbo.Client C ON C.ClientId = PG.ClientId
 
 	WHERE
-		CC.ClientId IN (SELECT Ids FROM @AccountIdsTable)
+		CC.ClientId = @AccountIdLocal
 		AND (@BusinessUnitIdsLocal IS NULL
 		OR PG.GroupId IN (SELECT ResultId
 						  FROM
@@ -70,4 +59,3 @@ BEGIN
 	  , TT.Name
 
  END
-
