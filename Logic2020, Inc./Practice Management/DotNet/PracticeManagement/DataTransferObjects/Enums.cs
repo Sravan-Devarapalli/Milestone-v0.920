@@ -164,7 +164,19 @@ namespace DataTransferObjects
 
         [EnumMember]
         [Description("Recruiting")]
-        Recruiting = 4
+        Recruiting = 4,
+
+        [EnumMember]
+        [Description("Technology Consulting")]
+        TechnologyConsulting = 5,
+
+        [EnumMember]
+        [Description("Business Consulting")]
+        BusinessConsulting = 6,
+
+        [EnumMember]
+        [Description("Director")]
+        Director = 7
     }
 
     [DataContract]
