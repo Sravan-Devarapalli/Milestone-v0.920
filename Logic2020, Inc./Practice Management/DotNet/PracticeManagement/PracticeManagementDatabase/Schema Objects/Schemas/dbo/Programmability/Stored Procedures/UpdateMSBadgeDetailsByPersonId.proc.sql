@@ -46,7 +46,7 @@ BEGIN
 			WHERE (@PersonId IS NULL OR MP.PersonId = @PersonId)
 					AND
 				  (@MilestoneId IS NULL OR M.MilestoneId = @MilestoneId)
-			AND MPE.IsBadgeRequired = 1 AND MPE.IsApproved = 1
+			AND MPE.IsBadgeRequired = 1 AND MPE.IsApproved = 1 AND P.ProjectStatusId IN (1,2,3,4) --Inactive,Completed,active and projected statuses.
 		
 			UNION ALL
 
