@@ -52,7 +52,7 @@
             <tr>
                 <td class="Width85Percent">
                     <uc2:DatePicker ID="dpPersonStartInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
-                        OnSelectionChanged="dpPersonStart_SelectionChanged" AutoPostBack="true" TextBoxWidth="95%" />
+                        OnClientChange="dtpStartDateInsert_OnClientChange(this)" AutoPostBack="false" TextBoxWidth="95%" />
                 </td>
                 <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStartInsert"
@@ -88,7 +88,7 @@
             <tr>
                 <td class="Width85Percent">
                     <uc2:DatePicker ID="dpPersonEndInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
-                        OnSelectionChanged="dpPersonStart_SelectionChanged" AutoPostBack="true" TextBoxWidth="95%" />
+                        OnClientChange="dtpStartDateInsert_OnClientChange(this)" AutoPostBack="false" TextBoxWidth="95%" />
                 </td>
                 <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEndInsert"
