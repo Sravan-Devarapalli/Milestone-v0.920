@@ -12,16 +12,12 @@ BEGIN
 
 	  DECLARE	@W2SalaryId			INT,
 				@W2HourlyId			INT,
-				@ConsultingDivId	INT,
-				@BusinessDevelopmentDivId INT,
 				@ProjectStartDate	DATETIME,
 				@ProjectEndDate		DATETIME,
 				@CurrentDate		DATETIME
 
 	  SELECT	@W2SalaryId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
 	  SELECT	@W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
-	  SELECT    @ConsultingDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Consulting'
-	  SELECT    @BusinessDevelopmentDivId = DivisionId FROM dbo.PersonDivision WHERE DivisionName = 'Business Development'
 	  SELECT	@CurrentDate = dbo.GettingPMTime(GETUTCDATE())
 
 	  SET	@TerminationDate = CASE WHEN @TerminationDate < @CurrentDate THEN @TerminationDate ELSE NULL END
@@ -80,7 +76,7 @@ BEGIN
 	FROM	dbo.Attribution A
 	INNER JOIN dbo.Project P ON A.ProjectId = P.ProjectId
 	INNER JOIN PersonDivisionCTE1 DH ON DH.PersonId = A.TargetId 
-									AND (DH.StartDate <= A.EndDate AND (DH.EndDate IS NULL OR A.StartDate < DH.EndDate)) AND ISNULL(DH.DivisionId,0) NOT IN(@ConsultingDivId,@BusinessDevelopmentDivId)
+									AND (DH.StartDate <= A.EndDate AND (DH.EndDate IS NULL OR A.StartDate < DH.EndDate)) AND ISNULL(DH.DivisionId,0) NOT IN(SELECT DivisionId FROM dbo.PersonDivision WHERE DivisionName IN ('Consulting','Business Development','Technology Consulting','Business Consulting','Directors'))
 	WHERE A.AttributionRecordTypeId = 1 AND A.TargetId = @PersonId
 	
 END
