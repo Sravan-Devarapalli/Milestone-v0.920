@@ -37,6 +37,45 @@
             }
             return false;
         }
+        function dtpStartDate_OnClientChange(dtp) {
+            var index = dtp.id.indexOf('dpPerson');
+            var row = dtp.id.substring(0, index);
+            var chbBadgeRequired = document.getElementById(row + 'chbBadgeRequired');
+            var chbOpsApproved = document.getElementById(row + 'chbOpsApproved');
+            var dpPersonStart = document.getElementById(row + 'dpPersonStart_txtDate');
+            var dpPersonEnd = document.getElementById(row + 'dpPersonEnd_txtDate');
+            var dpBadgeStart = document.getElementById(row + 'dpBadgeStart_txtDate');
+            var dpBadgeEnd = document.getElementById(row + 'dpBadgeEnd_txtDate');
+            var hdnStartDateValue = document.getElementById(row + 'hdnStartDateValue');
+            var hdnEndDateValue = document.getElementById(row + 'hdnEndDateValue'); 
+            var lblEndDate = document.getElementById(row + 'lblEndDate');
+            var oldPersonStartDate = new Date(hdnStartDateValue.value);
+            var oldPersonEnddate = new Date(hdnEndDateValue.value);
+            var newPersonStartdate = new Date(dpPersonStart.value);
+            var newPersonEnddate = new Date(dpPersonEnd.value);
+            if (chbBadgeRequired.checked) {
+                if (oldPersonStartDate != newPersonStartdate || oldPersonEnddate != newPersonEnddate) {
+                    if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate)
+                        chbOpsApproved.checked = false;
+                    dpBadgeStart.value = dpPersonStart.value;
+                    dpBadgeEnd.value = dpPersonEnd.value;
+                }
+            }
+        }
+
+        function dtpStartDateInsert_OnClientChange(dtp) {
+            var index = dtp.id.indexOf('dpPerson');
+            var row = dtp.id.substring(0, index);
+            var chbBadgeRequired = document.getElementById(row + 'chbBadgeRequiredInsert');
+            var dpPersonStart = document.getElementById(row + 'dpPersonStartInsert_txtDate');
+            var dpPersonEnd = document.getElementById(row + 'dpPersonEndInsert_txtDate');
+            var dpBadgeStart = document.getElementById(row + 'dpBadgeStartInsert_txtDate');
+            var dpBadgeEnd = document.getElementById(row + 'dpBadgeEndInsert_txtDate');
+            if (chbBadgeRequired.checked) {
+                dpBadgeStart.value = dpPersonStart.value;
+                dpBadgeEnd.value = dpPersonEnd.value;
+            }
+        }
 
         function ShowConfirmDialogForStartDate(chb) {
             if (confirm("Are you sure you want to Cancel Changes?")) {
