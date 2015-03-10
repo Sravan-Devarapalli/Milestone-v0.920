@@ -27,7 +27,7 @@ BEGIN
 				INNER JOIN dbo.MSBadge M ON M.PersonId = MP.PersonId
 				INNER JOIN v_Person P ON P.PersonId = M.PersonId 
 				INNER JOIN dbo.Client C ON C.ClientId = Pr.ClientId
-				WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate)
+				WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND Pr.ProjectStatusId IN (1,2,3,4)
 				
 				UNION ALL
 				SELECT P.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,2,'Microsoft',-1,'Previous MS Badge History','',M.LastBadgeStartDate,M.LastBadgeEndDate,M.LastBadgeStartDate,M.LastBadgeEndDate,1
@@ -45,11 +45,13 @@ BEGIN
 				INNER JOIN dbo.MSBadge M ON M.PersonId = MP.PersonId
 				INNER JOIN v_Person P ON P.PersonId = M.PersonId 
 				INNER JOIN dbo.Client C ON C.ClientId = Pr.ClientId
-				WHERE ISNULL(mpe.IsbadgeRequired,0) = 0 AND (MPE.StartDate <= @EndDateLocal AND @StartDateLocal <= MPE.EndDate) AND Pr.ProjectNumber <> 'P031000'
+				WHERE ISNULL(mpe.IsbadgeRequired,0) = 0 AND (MPE.StartDate <= @EndDateLocal AND @StartDateLocal <= MPE.EndDate) AND Pr.ProjectNumber <> 'P031000' AND Pr.ProjectStatusId IN (1,2,3,4)
 				AND M.PersonId IN (SELECT DISTINCT MP.PersonId
 									FROM dbo.MilestonePersonEntry MPE
 									INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-									WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate))
+									INNER JOIN dbo.Milestone MS ON MS.MilestoneId = MP.MilestoneId
+									INNER JOIN dbo.Project Pr ON Pr.ProjectId = MS.ProjectId
+									WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND Pr.ProjectStatusId IN (1,2,3,4))
 				ORDER BY P.LastName,P.FirstName
 	END
     IF(@IsNotBadged=1)
@@ -60,7 +62,9 @@ BEGIN
 				SELECT DISTINCT MP.PersonId
 				FROM dbo.MilestonePersonEntry MPE
 				INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-				WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate)
+				INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+				INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
+				WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND P.ProjectStatusId IN (1,2,3,4)
 
 				UNION ALL
 				SELECT DISTINCT M.PersonId
@@ -83,7 +87,9 @@ BEGIN
 			SELECT DISTINCT MP.PersonId
 			FROM dbo.MilestonePersonEntry MPE
 			INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-			WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate)
+			INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+			INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
+			WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND P.ProjectStatusId IN (1,2,3,4)
 
 			UNION ALL
 			SELECT DISTINCT M.PersonId
@@ -116,7 +122,9 @@ BEGIN
 			SELECT DISTINCT MP.PersonId
 			FROM dbo.MilestonePersonEntry MPE
 			INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-			WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate)
+			INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+			INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
+			WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND P.ProjectStatusId IN (1,2,3,4)
 
 			UNION ALL
 			SELECT DISTINCT M.PersonId
@@ -156,7 +164,9 @@ BEGIN
 			SELECT DISTINCT MP.PersonId
 			FROM dbo.MilestonePersonEntry MPE
 			INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-			WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate)
+			INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+			INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
+			WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND P.ProjectStatusId IN (1,2,3,4)
 
 			UNION ALL
 			SELECT DISTINCT M.PersonId
