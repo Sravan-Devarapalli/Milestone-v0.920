@@ -1676,43 +1676,34 @@ namespace PraticeManagement.Controls.Milestones
             }
         }
 
-        protected void dpPersonStart_SelectionChanged(object sender, EventArgs e)
-        {
-            var dpStartDate = sender as DatePicker;
-            GridViewRow row = dpStartDate.NamingContainer as GridViewRow;
-            var chbBadgeRequired = row.FindControl("chbBadgeRequired") as CheckBox;
-            if (chbBadgeRequired.Checked)
-                ApprovedByOpsFunctionality(row);
-        }
+        //protected void dpPersonStart_SelectionChanged(object sender, EventArgs e)
+        //{
+        //    var dpStartDate = sender as DatePicker;
+        //    GridViewRow row = dpStartDate.NamingContainer as GridViewRow;
+        //    var chbBadgeRequired = row.FindControl("chbBadgeRequired") as CheckBox;
+        //    if (chbBadgeRequired.Checked)
+        //        ApprovedByOpsFunctionality(row);
+        //}
 
-        public void ApprovedByOpsFunctionality(GridViewRow row)
-        {
-            var chbOpsApproved = row.FindControl("chbOpsApproved") as CheckBox;
-            var dpPersonStart = row.FindControl("dpPersonStart") as DatePicker;
-            var dpPersonEnd = row.FindControl("dpPersonEnd") as DatePicker;
-            var dpBadgeStart = row.FindControl("dpBadgeStart") as DatePicker;
-            var dpBadgeEnd = row.FindControl("dpBadgeEnd") as DatePicker;
-            //var chbBadgeException = row.FindControl("chbBadgeException") as CheckBox;
-            //DateTime oldPersonStartDate, oldPersonEnddate, newPersonStartdate, newPersonEnddate, oldBadgeStartdate, oldBadgeEnddate, newBadgeStartDate, newBadgeEnddate;
-            //if (!DateTime.TryParse(dpPersonStart.Attributes["OldValue"], out oldPersonStartDate) || !DateTime.TryParse(dpPersonStart.TextValue, out newPersonStartdate) || !DateTime.TryParse(dpPersonEnd.TextValue, out newPersonEnddate)
-            //    || !DateTime.TryParse(dpPersonEnd.Attributes["OldValue"], out oldPersonEnddate) || !DateTime.TryParse(dpBadgeStart.TextValue, out oldPersonEnddate))
-            //    return;
-            var oldPersonStartDate = Convert.ToDateTime(dpPersonStart.Attributes["OldValue"]);
-            var oldPersonEnddate = Convert.ToDateTime(dpPersonEnd.Attributes["OldValue"]);
-            var newPersonStartdate = dpPersonStart.DateValue;
-            var newPersonEnddate = dpPersonEnd.DateValue;
-            //var oldBadgeStartdate=Convert.ToDateTime(dpBadgeStart.Attributes["Date"]); 
-            //var oldBadgeEnddate = Convert.ToDateTime(dpBadgeEnd.Attributes["Date"]);
-            //var newBadgeStartDate = dpBadgeStart.DateValue;
-            //var newBadgeEnddate = dpBadgeEnd.DateValue;
-            if (oldPersonStartDate != newPersonStartdate || oldPersonEnddate != newPersonEnddate)
-            {
-                if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate)
-                    chbOpsApproved.Checked = false;
-                dpBadgeStart.DateValue = newPersonStartdate;
-                dpBadgeEnd.DateValue = newPersonEnddate;
-            }
-        }
+        //public void ApprovedByOpsFunctionality(GridViewRow row)
+        //{
+        //    var chbOpsApproved = row.FindControl("chbOpsApproved") as CheckBox;
+        //    var dpPersonStart = row.FindControl("dpPersonStart") as DatePicker;
+        //    var dpPersonEnd = row.FindControl("dpPersonEnd") as DatePicker;
+        //    var dpBadgeStart = row.FindControl("dpBadgeStart") as DatePicker;
+        //    var dpBadgeEnd = row.FindControl("dpBadgeEnd") as DatePicker;
+        //    var oldPersonStartDate = Convert.ToDateTime(dpPersonStart.Attributes["OldValue"]);
+        //    var oldPersonEnddate = Convert.ToDateTime(dpPersonEnd.Attributes["OldValue"]);
+        //    var newPersonStartdate = dpPersonStart.DateValue;
+        //    var newPersonEnddate = dpPersonEnd.DateValue;
+        //    if (oldPersonStartDate != newPersonStartdate || oldPersonEnddate != newPersonEnddate)
+        //    {
+        //        if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate)
+        //            chbOpsApproved.Checked = false;
+        //        dpBadgeStart.DateValue = newPersonStartdate;
+        //        dpBadgeEnd.DateValue = newPersonEnddate;
+        //    }
+        //}
 
         protected void chbBadgeRequired_CheckedChanged(object sender, EventArgs e)
         {
@@ -2270,9 +2261,9 @@ namespace PraticeManagement.Controls.Milestones
                 if (isSaveCommit)
                 {
                     var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(entry, Context.User.Identity.Name));
-                    if (entry.MSBadgeRequired)
+                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                    if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
                     {
-                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                         var loggedInPerson = DataHelper.CurrentPerson;
                         project.MailBody = chbBadgeExceptionInsert.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
                                                                              "{0}", project.ProjectNumber, project.Name) :
@@ -2323,9 +2314,9 @@ namespace PraticeManagement.Controls.Milestones
                         mpentry = serviceClient.GetMilestonePersonEntry(id);
                         mpentry.IsShowPlusButton = true;
                         entry = mpentry;
-                        if (entry.MSBadgeRequired)
+                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                        if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
                         {
-                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                             var loggedInPerson = DataHelper.CurrentPerson;
                             project.MailBody = chbBadgeExceptionInsert.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
                                                                                  "{0}", project.ProjectNumber, project.Name) :
@@ -2640,7 +2631,6 @@ namespace PraticeManagement.Controls.Milestones
                     PersonTimeOffList = entry.PersonTimeOffList,
                     VacationDays = entry.VacationDays,
                     HoursPerDay = entry.HoursPerDay
-
                 };
 
                 if (entry.IsNewEntry)
@@ -2654,11 +2644,9 @@ namespace PraticeManagement.Controls.Milestones
                     if (IsSaveCommit)
                     {
                         var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(milestonePersonentry, Context.User.Identity.Name));
-
-
-                        if (milestonePersonentry.MSBadgeRequired)
-                        {
-                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                        if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired)
+                        {   
                             var loggedInPerson = DataHelper.CurrentPerson;
                             project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
                                                 "{0}", project.ProjectNumber, project.Name) :
@@ -2693,7 +2681,7 @@ namespace PraticeManagement.Controls.Milestones
                             //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(HostingPage.SelectedProjectId.Value, HostingPage.User.Identity.Name));
                             var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                             DateTime? badgeDate = null;
-                            if (milestonePersonentry.MSBadgeRequired && (previouslyBadgeRequired != milestonePersonentry.MSBadgeRequired))
+                            if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (previouslyBadgeRequired != milestonePersonentry.MSBadgeRequired))
                             {
                                 project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
                                                "{0}", project.ProjectNumber, project.Name) :
@@ -2704,7 +2692,7 @@ namespace PraticeManagement.Controls.Milestones
                                 mpeBadgePanel.Show();
                                 badgeDate = SettingsHelper.GetCurrentPMTime();
                             }
-                            else if (milestonePersonentry.MSBadgeRequired && (badgeStart.Date > milestonePersonentry.BadgeStartDate || badgeEnd.Date < milestonePersonentry.BadgeEndDate))
+                            else if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (badgeStart.Date > milestonePersonentry.BadgeStartDate || badgeEnd.Date < milestonePersonentry.BadgeEndDate))
                             {
                                 project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, entry.ThisPerson.Name, badgeStart.ToShortDateString(), badgeEnd.ToShortDateString(), milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
                                              "{0}", project.ProjectNumber, project.Name) :
@@ -2717,7 +2705,7 @@ namespace PraticeManagement.Controls.Milestones
                             }
                             milestonePersonentry.RequestDate = badgeDate;
                             ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(milestonePersonentry, Context.User.Identity.Name));
-                            if (milestonePersonentry.IsApproved && !previouslyChecked)
+                            if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.IsApproved && !previouslyChecked)
                             {
                                 var toAddress = string.IsNullOrEmpty(project.ToAddressList) ? string.Empty : project.ToAddressList.Substring(0, project.ToAddressList.Length - 1);
                                 toAddress = string.IsNullOrEmpty(toAddress) ? HostingPage.Project.OwnerAlias : toAddress + "," + HostingPage.Project.OwnerAlias;
@@ -2798,10 +2786,9 @@ namespace PraticeManagement.Controls.Milestones
                                     if (!mPEntry.IsNewEntry)
                                     {
                                         DateTime? badgeDate = null;
-                                        if (mPEntry.MSBadgeRequired)
+                                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                                        if ((project.Status.StatusType == ProjectStatusType.Active || project.Status.StatusType == ProjectStatusType.Projected) && mPEntry.MSBadgeRequired)
                                         {
-                                            //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(HostingPage.SelectedProjectId.Value, HostingPage.User.Identity.Name));
-                                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                                             var loggedInPerson = DataHelper.CurrentPerson;
                                             project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, mPEntry.ThisPerson.Name, mPEntry.BadgeStartDate.Value.ToShortDateString(), mPEntry.BadgeEndDate.Value.ToShortDateString(),
                                                                 "{0}", project.ProjectNumber, project.Name) :
@@ -2819,7 +2806,6 @@ namespace PraticeManagement.Controls.Milestones
                                             MilestonePersonEntry latestMpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(mPEntry.Id));
                                             var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == latestMpentry.Id);
                                             MilestonePersonsEntries[index] = latestMpentry;
-
                                         }
                                         else
                                         {
