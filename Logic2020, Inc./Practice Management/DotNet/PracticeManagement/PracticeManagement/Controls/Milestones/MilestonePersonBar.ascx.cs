@@ -420,13 +420,13 @@ namespace PraticeManagement.Controls.Milestones
             args.IsValid = isGreaterThanMilestone;
         }
 
-        protected void dpPersonStart_SelectionChanged(object sender, EventArgs e)
-        {
-            if (!chbBadgeRequiredInsert.Checked)
-                return;
-            dpBadgeStartInsert.TextValue = dpPersonStartInsert.TextValue;
-            dpBadgeEndInsert.TextValue = dpPersonEndInsert.TextValue;
-        }
+        //protected void dpPersonStart_SelectionChanged(object sender, EventArgs e)
+        //{
+        //    if (!chbBadgeRequiredInsert.Checked)
+        //        return;
+        //    dpBadgeStartInsert.TextValue = dpPersonStartInsert.TextValue;
+        //    dpBadgeEndInsert.TextValue = dpPersonEndInsert.TextValue;
+        //}
 
         protected void chbBadgeRequired_CheckedChanged(object sender, EventArgs e)
         {
