@@ -48,8 +48,10 @@ BEGIN
 		(SELECT MP.PersonId,R.StartDate,R.EndDate
 		FROM dbo.MilestonePersonEntry MPE
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+		INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+		INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
 		INNER JOIN Ranges R ON MPE.BadgeStartDate <= R.EndDate AND R.StartDate <= MPE.BadgeEndDate
-		WHERE mpe.IsbadgeRequired = 1
+		WHERE mpe.IsbadgeRequired = 1 AND P.ProjectStatusId IN (1,2,3,4)
 		UNION ALL
 		SELECT M.PersonId,R.StartDate,R.EndDate
 		FROM dbo.MSBadge M
