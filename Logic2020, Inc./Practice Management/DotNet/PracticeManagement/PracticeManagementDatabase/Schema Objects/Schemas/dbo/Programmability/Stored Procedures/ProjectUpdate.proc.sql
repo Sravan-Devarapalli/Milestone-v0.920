@@ -39,9 +39,12 @@ BEGIN
 	BEGIN TRY
 	BEGIN TRAN  ProjectUpdate
 
+		DECLARE @Persons TABLE(Id INT, 
+							   IsDoneExecuting BIT)
+		DECLARE @UpdatedBy INT 
 		-- Start logging session
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
-
+		SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
 		IF EXISTS (SELECT 1 FROM dbo.Project WHERE ProjectId = @ProjectId AND IsInternal != @IsInternal)
 		BEGIN
 			IF EXISTS (SELECT 1	FROM dbo.TimeType tt 
@@ -125,6 +128,29 @@ BEGIN
 				SalesPersonId = @SalesPersonId
 		FROM dbo.Project P
 		WHERE ProjectId = @ProjectId
+
+		--If project status 
+		IF((@ProjectStatusId IN (1,2,3,4) AND @PreviousProjectStatusId IN (5,6,7)) OR (@PreviousProjectStatusId IN (1,2,3,4) AND @ProjectStatusId IN (5,6,7)))
+		BEGIN
+			 INSERT INTO @Persons(Id,IsDoneExecuting)
+			 SELECT DISTINCT mp.PersonId,0
+			 FROM dbo.Milestone m
+			 INNER JOIN dbo.MilestonePerson mp on mp.MilestoneId = m.MilestoneId
+			 INNER JOIN dbo.MilestonePersonEntry mpe on mpe.MilestonePersonId = mp.MilestonePersonId
+			 WHERE m.ProjectId = @ProjectId AND mpe.IsBadgeRequired = 1 AND mpe.IsApproved = 1
+
+			 WHILE EXISTS(SELECT 1 FROM @Persons WHERE IsDoneExecuting=0)
+			 BEGIN
+			    DECLARE @PersonId INT
+				SET @PersonId =(SELECT TOP 1 Id FROM @Persons WHERE IsDoneExecuting = 0)
+				EXEC [dbo].[UpdateMSBadgeDetailsByPersonId]	@PersonId = @PersonId,@UpdatedBy =@UpdatedBy
+
+				UPDATE @Persons
+				SET IsDoneExecuting = 1
+				WHERE Id = @PersonId
+
+			 END
+		END
 
 		IF @ClientId <> @PreviousClientId OR @ProjectStatusId <> 4
 		BEGIN
