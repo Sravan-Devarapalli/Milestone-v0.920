@@ -2261,7 +2261,7 @@ namespace PraticeManagement.Controls.Milestones
                 if (isSaveCommit)
                 {
                     var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(entry, Context.User.Identity.Name));
-                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                     if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
                     {
                         var loggedInPerson = DataHelper.CurrentPerson;
@@ -2314,7 +2314,7 @@ namespace PraticeManagement.Controls.Milestones
                         mpentry = serviceClient.GetMilestonePersonEntry(id);
                         mpentry.IsShowPlusButton = true;
                         entry = mpentry;
-                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                         if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
                         {
                             var loggedInPerson = DataHelper.CurrentPerson;
@@ -2644,7 +2644,7 @@ namespace PraticeManagement.Controls.Milestones
                     if (IsSaveCommit)
                     {
                         var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(milestonePersonentry, Context.User.Identity.Name));
-                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                         if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired)
                         {   
                             var loggedInPerson = DataHelper.CurrentPerson;
@@ -2679,7 +2679,7 @@ namespace PraticeManagement.Controls.Milestones
                         {
                             var loggedInPerson = DataHelper.CurrentPerson;
                             //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(HostingPage.SelectedProjectId.Value, HostingPage.User.Identity.Name));
-                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value)); //ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                             DateTime? badgeDate = null;
                             if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (previouslyBadgeRequired != milestonePersonentry.MSBadgeRequired))
                             {
@@ -2786,7 +2786,7 @@ namespace PraticeManagement.Controls.Milestones
                                     if (!mPEntry.IsNewEntry)
                                     {
                                         DateTime? badgeDate = null;
-                                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                                         if ((project.Status.StatusType == ProjectStatusType.Active || project.Status.StatusType == ProjectStatusType.Projected) && mPEntry.MSBadgeRequired)
                                         {
                                             var loggedInPerson = DataHelper.CurrentPerson;
