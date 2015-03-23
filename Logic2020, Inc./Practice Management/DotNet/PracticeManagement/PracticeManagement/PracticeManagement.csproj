@@ -548,6 +548,7 @@
     <Content Include="Reports\AccountSummaryReport.aspx" />
     <Content Include="Reports\AttainmentReport.aspx" />
     <Content Include="Reports\Audit.aspx" />
+    <Content Include="Reports\Badge\AllEmployees18MoClockReport.aspx" />
     <Content Include="Reports\Badge\BadgeBlockedReport.aspx" />
     <Content Include="Reports\Badge\BadgeBreakReport.aspx" />
     <Content Include="Reports\Badge\BadgedNotOnProjectReport.aspx" />
@@ -573,6 +574,7 @@
     <Content Include="Reports\TerminationReport.aspx" />
     <Content Include="Reports\TimeEntryReport_new.aspx" />
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
+    <Content Include="Reports\UtilizationReport.aspx" />
     <Content Include="Reports\Xslt\ActivityLogChanges_TextMode.xslt" />
     <Content Include="Reports\Xslt\ActivityLogItem_TextMode.xslt" />
     <Content Include="RevenueGoals.aspx" />
@@ -2235,6 +2237,13 @@
     <Compile Include="Reports\Audit.aspx.designer.cs">
       <DependentUpon>Audit.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Badge\AllEmployees18MoClockReport.aspx.cs">
+      <DependentUpon>AllEmployees18MoClockReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\AllEmployees18MoClockReport.aspx.designer.cs">
+      <DependentUpon>AllEmployees18MoClockReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Badge\BadgeBlockedReport.aspx.cs">
       <DependentUpon>BadgeBlockedReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2409,6 +2418,13 @@
     </Compile>
     <Compile Include="Reports\TimePeriodSummaryReport.aspx.designer.cs">
       <DependentUpon>TimePeriodSummaryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\UtilizationReport.aspx.cs">
+      <DependentUpon>UtilizationReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\UtilizationReport.aspx.designer.cs">
+      <DependentUpon>UtilizationReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="RevenueGoals.aspx.cs">
       <DependentUpon>RevenueGoals.aspx</DependentUpon>
@@ -3960,3 +3976,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
