@@ -45,7 +45,7 @@ BEGIN
 			FROM  dbo.Person P
 			INNER JOIN dbo.Pay pay ON P.PersonId = pay.Person
 			WHERE @CurrtenDate BETWEEN pay.StartDate AND ISNULL(pay.EndDate-1,@FutureDate) AND pay.Timescale IN (1,2)
-					AND P.PersonStatusId IN (1,5) AND P.DivisionId = 2 AND P.IsOffShore = 0 
+					AND P.PersonStatusId IN (1,5) AND P.DivisionId IN (2,5,6) AND P.IsOffShore = 0 
 		) ,
 		PersonWithRanges
 		AS
