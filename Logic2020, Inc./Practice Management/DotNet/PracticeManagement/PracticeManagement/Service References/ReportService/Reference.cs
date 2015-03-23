@@ -66,6 +66,12 @@ namespace PraticeManagement.ReportService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetBadgeRequestNotApprovedList", ReplyAction="http://tempuri.org/IReportService/GetBadgeRequestNotApprovedListResponse")]
         DataTransferObjects.MSBadge[] GetBadgeRequestNotApprovedList();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetAllBadgeDetails", ReplyAction="http://tempuri.org/IReportService/GetAllBadgeDetailsResponse")]
+        DataTransferObjects.MSBadge[] GetAllBadgeDetails(string payTypes);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/UtilizationReport", ReplyAction="http://tempuri.org/IReportService/UtilizationReportResponse")]
+        DataTransferObjects.Reports.PersonTimeEntriesTotals UtilizationReport(int personId, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
         
@@ -208,7 +214,6 @@ namespace PraticeManagement.ReportService {
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
       
-        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -283,6 +288,14 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.MSBadge[] GetBadgeRequestNotApprovedList() {
             return base.Channel.GetBadgeRequestNotApprovedList();
+        }
+        
+        public DataTransferObjects.MSBadge[] GetAllBadgeDetails(string payTypes) {
+            return base.Channel.GetAllBadgeDetails(payTypes);
+        }
+        
+        public DataTransferObjects.Reports.PersonTimeEntriesTotals UtilizationReport(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.UtilizationReport(personId, startDate, endDate);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
