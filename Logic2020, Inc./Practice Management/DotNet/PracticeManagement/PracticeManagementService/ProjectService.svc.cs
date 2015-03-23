@@ -1046,6 +1046,11 @@ namespace PracticeManagementService
             return ProjectDAL.CheckIfProjectNumberExists(projectNumber);
         }
 
+        public Project ProjectGetShortById(int projectId)
+        {
+            return ProjectDAL.ProjectGetShortById(projectId);
+        }
+
         #endregion IProjectService Members
     }
 }
