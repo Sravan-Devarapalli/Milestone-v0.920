@@ -374,6 +374,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool CheckIfProjectNumberExists(string projectNumber);
+
+        [OperationContract]
+        Project ProjectGetShortById(int projectId);
     }
 }
 
