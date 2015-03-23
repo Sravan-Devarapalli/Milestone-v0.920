@@ -161,32 +161,32 @@ namespace PraticeManagement.Controls.Reports.CSAT
                 row = new List<object>();
                 int i;
                 row.Add(pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : "");
-                row.Add((pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : "");
-                row.Add((pro.Group != null && pro.Group.Name != null) ? pro.Group.HtmlEncodedName : "");
-                row.Add((pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.HtmlEncodedName : "");
+                row.Add((pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.Name.ToString() : "");
+                row.Add((pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : "");
+                row.Add((pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : "");
                 row.Add((pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : "");
                 row.Add(pro.BuyerName);
-                row.Add(pro.Name != null ? pro.HtmlEncodedName : "");
-                row.Add((pro.ProjectOwner != null && pro.ProjectOwner.Name != null) ? pro.ProjectOwner.HtmlEncodedName : "");
+                row.Add(pro.Name != null ? pro.Name : "");
+                row.Add((pro.ProjectOwner != null && pro.ProjectOwner.Name != null) ? pro.ProjectOwner.Name : "");
                 row.Add(pro.SowBudget.HasValue ? pro.SowBudget.Value.ToString() : "");
                 row.Add(pro.IsCSATEligible ? "Yes" : "No");
                 row.Add(pro.StartDate.HasValue && pro.StartDate.Value != DateTime.MinValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "");
                 row.Add(pro.EndDate.HasValue && pro.EndDate.Value != DateTime.MinValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "");
                 row.Add((pro.RecentCompletedStatusDate == null || pro.RecentCompletedStatusDate.Value == DateTime.MinValue) ? "" : pro.RecentCompletedStatusDate.Value.ToString(Constants.Formatting.EntryDateFormat));
                 row.Add((pro.Practice != null && pro.Practice.Name != null) ? HttpUtility.HtmlEncode(pro.Practice.Name) : "");
-                row.Add((pro.SalesPersonName != null) ? HttpUtility.HtmlEncode(pro.SalesPersonName) : "");
+                row.Add((pro.SalesPersonName != null) ? pro.SalesPersonName : "");
                 row.Add((pro.Director != null && pro.Director.Name != null && pro.Director.FirstName != null) ? HttpUtility.HtmlEncode(pro.Director.Name.ToString()) : "");
                 row.Add(HttpUtility.HtmlEncode(pro.ProjectManagerNames.Replace(";", "\n")));
-                row.Add(!string.IsNullOrEmpty(pro.CSATOwnerName) ? HttpUtility.HtmlEncode(pro.CSATOwnerName) : "");
+                row.Add(!string.IsNullOrEmpty(pro.CSATOwnerName) ? pro.CSATOwnerName : "");
 
                 for (i = 0; i < pro.CSATList.Count; i++)
                 {
                     row.Add(pro.CSATList[i].ReviewStartDate != DateTime.MinValue ? pro.CSATList[i].ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat) : "");
                     row.Add(pro.CSATList[i].ReviewEndDate != DateTime.MinValue ? pro.CSATList[i].ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat) : "");
                     row.Add(pro.CSATList[i].CompletionDate != DateTime.MinValue ? pro.CSATList[i].CompletionDate.ToString(Constants.Formatting.EntryDateFormat) : "");
-                    row.Add(HttpUtility.HtmlEncode(pro.CSATList[i].ReviewerName));
+                    row.Add(pro.CSATList[i].ReviewerName);
                     row.Add(pro.CSATList[i].ReferralScore == -2 ? string.Empty : pro.CSATList[i].ReferralScore == -1 ? "Not Applicable" : pro.CSATList[i].ReferralScore.ToString());
-                    row.Add(HttpUtility.HtmlEncode(pro.CSATList[i].Comments));
+                    row.Add(pro.CSATList[i].Comments);
                     data.Rows.Add(row.ToArray());
 
                     if (i != pro.CSATList.Count - 1)
