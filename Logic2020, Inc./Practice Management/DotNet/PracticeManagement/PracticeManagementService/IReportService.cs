@@ -174,6 +174,12 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<MSBadge> GetBadgeRequestNotApprovedList();
+
+        [OperationContract]
+        List<MSBadge> GetAllBadgeDetails(string payTypes);
+
+        [OperationContract]
+        PersonTimeEntriesTotals UtilizationReport(int personId, DateTime startDate, DateTime endDate);
     }
 }
 
