@@ -15,5 +15,5 @@
 	  CASE WHEN div.EndDate IS NOT NULL AND ph.EndDate > DATEADD(DD,-1,div.EndDate) THEN DATEADD(DD,-1,div.EndDate) ELSE ph.EndDate END AS Enddate
 	FROM PersonPayWithHistory ph
 	INNER JOIN v_DivisionHistory div ON ph.PersonId = div.personid AND (div.EndDate IS NULL OR ph.StartDate < div.EndDate) AND div.StartDate <= ph.EndDate
-	WHERE ISNULL(div.DivisionId,0) IN (1,2) --Consulting,BusinessDevelopment
+	WHERE ISNULL(div.DivisionId,0) IN (1,2,5,6,7) --Consulting,BusinessDevelopment
 
