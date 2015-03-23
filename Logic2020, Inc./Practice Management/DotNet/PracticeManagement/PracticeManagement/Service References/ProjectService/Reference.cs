@@ -90,6 +90,11 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CheckIfProjectNumberExists", ReplyAction="http://tempuri.org/IProjectService/CheckIfProjectNumberExistsResponse")]
         bool CheckIfProjectNumberExists(string projectNumber);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetShortById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetShortByIdResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
+        DataTransferObjects.Project ProjectGetShortById(int projectId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -239,6 +244,7 @@ namespace PraticeManagement.ProjectService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
         
+       
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -345,6 +351,10 @@ namespace PraticeManagement.ProjectService {
         
         public bool CheckIfProjectNumberExists(string projectNumber) {
             return base.Channel.CheckIfProjectNumberExists(projectNumber);
+        }
+        
+        public DataTransferObjects.Project ProjectGetShortById(int projectId) {
+            return base.Channel.ProjectGetShortById(projectId);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
