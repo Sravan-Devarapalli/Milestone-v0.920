@@ -3698,6 +3698,72 @@ namespace DataAccess
         }
 
         #endregion
+
+        public static Project ProjectGetShortById(int projectId)
+        {
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.ProjectGetShortById, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId);
+
+                    connection.Open();
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    return ProjectDAL.ReadProjectShortById(reader);
+                }
+            }
+        }
+
+        private static Project ReadProjectShortById(SqlDataReader reader)
+        {
+            var project = new Project();
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.NameColumn);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+                int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int ToAddressListIndex = -1;
+                try
+                {
+                    ToAddressListIndex = reader.GetOrdinal(Constants.ColumnNames.ToAddressList);
+                }
+                catch
+                { }
+                while (reader.Read())
+                {
+                    var project1 = new Project
+                    {
+                        Id = reader.GetInt32(projectIdIndex),
+                        Name = reader.GetString(nameIndex),
+                        StartDate =
+                            !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                        EndDate =
+                            !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                        ProjectNumber = reader.GetString(projectNumberIndex),
+                        Status = new ProjectStatus
+                        {
+                            Id = reader.GetInt32(projectStatusIdIndex),
+                            Name = reader.GetString(projectStatusNameIndex)
+                        }
+                    };
+                    if (ToAddressListIndex > -1)
+                    {
+                        project1.ToAddressList = !reader.IsDBNull(ToAddressListIndex) ? reader.GetString(ToAddressListIndex) : string.Empty;
+                    }
+                    project = project1;
+                }
+            }
+            return project;
+        }
     }
 }
 
