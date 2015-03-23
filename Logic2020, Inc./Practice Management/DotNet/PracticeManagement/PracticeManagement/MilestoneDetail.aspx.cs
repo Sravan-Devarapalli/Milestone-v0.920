@@ -1152,7 +1152,7 @@ namespace PraticeManagement
                                 foreach (var person in newMilestonePersons)
                                 {
                                     //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(SelectedProjectId.Value, User.Identity.Name));
-                                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(SelectedProjectId.Value));
+                                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(SelectedProjectId.Value));
                                     var loggedInPerson = DataHelper.CurrentPerson;
                                     var oldPerson = new MilestonePerson();
                                     if (Milestone.MilestonePersons.Any(m => m.Person.Id == person.Person.Id))
