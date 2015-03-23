@@ -1586,3 +1586,14 @@ table#ctl00_body_login tr td label{float:left}
 {
     width: 600px;
 }
+.AllEmpClockCblTimeScales
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 110px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 220px;
+    z-index: 20000;
+}
