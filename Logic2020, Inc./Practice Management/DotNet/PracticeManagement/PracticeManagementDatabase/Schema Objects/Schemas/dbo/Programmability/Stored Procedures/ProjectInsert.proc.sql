@@ -23,7 +23,7 @@ CREATE PROCEDURE dbo.ProjectInsert
 	@IsNoteRequired     BIT = 1,
 	@ProjectOwner       INT = NULL,
 	@SowBudget			DECIMAL(18,2),
-	@POAmount			DECIMAL(18,2),
+	@POAmount			DECIMAL(18,2) = NULL,
 	@ProjectCapabilityIds NVARCHAR(MAX) = NULL,
 	@PricingListId      INT = NULL,
 	@BusinessTypeId		INT = NULL,
