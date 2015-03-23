@@ -50,7 +50,7 @@ WHERE (@MilestonePersonId IS NULL OR MP.MilestonePersonId = @MilestonePersonId)
 	AND (@MilestonePersonId IS NULL OR P.MilestonePersonId = @MilestonePersonId)
 	AND (@MilestoneId IS NULL OR M.MilestoneId = @MilestoneId)
 	AND Per.PersonStatusId IN (1,5) AND Per.IsStrawman = 0
-	AND T.Title NOT IN ('Client Director','Practice Director')
+	AND T.Title NOT IN ('Senior Director','Client Director','Practice Director')
 	AND GC.Timescale = 2
 	AND M.ProjectId <> 174
 	)
