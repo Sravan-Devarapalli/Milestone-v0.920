@@ -4958,6 +4958,106 @@ namespace DataAccess
                 throw ex;
             }
         }
+
+        public static List<MSBadge> GetAllBadgeDetails(string payTypes)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetAllBadgeDetails, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, payTypes);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<MSBadge>();
+                    ReadAllBadgeDetails(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadAllBadgeDetails(SqlDataReader reader, List<MSBadge> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                int breakStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BreakStartDate);
+                int breakEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BreakEndDate);
+                int timescaleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int timescaleNameIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+                int badgeDurationIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeDuration);
+
+                while (reader.Read())
+                {
+                    var badgeResource = new MSBadge()
+                    {
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            CurrentPay = new Pay()
+                            {
+                                TimescaleName = reader.IsDBNull(timescaleNameIndex) ? string.Empty : reader.GetString(timescaleNameIndex)
+                            }
+                        },
+                        BadgeStartDate = reader.IsDBNull(badgeStartDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeStartDateIndex),//reader.GetDateTime(badgeStartDateIndex),
+                        BadgeEndDate = reader.IsDBNull(badgeEndDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEndDateIndex),
+                        BreakStartDate = reader.IsDBNull(breakStartDateIndex) ? null : (DateTime?)reader.GetDateTime(breakStartDateIndex),
+                        BreakEndDate = reader.IsDBNull(breakEndDateIndex) ? null : (DateTime?)reader.GetDateTime(breakEndDateIndex),
+                        BadgeDuration = reader.IsDBNull(badgeDurationIndex) ? 0 : reader.GetInt32(badgeDurationIndex)
+                    };
+                    result.Add(badgeResource);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static PersonTimeEntriesTotals UtilizationReport(int personId, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.UtilizationReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    PersonTimeEntriesTotals result = new PersonTimeEntriesTotals();
+                    if (!reader.HasRows) return result;
+                    int billableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHours);
+                    int billableHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.BillableHoursUntilToday);
+                    int nonBillableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.NonBillableHours);
+                    int availableHoursIndex = reader.GetOrdinal(Constants.ColumnNames.AvailableHours);
+                    int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectedHours);
+                    while (reader.Read())
+                    {
+                        result.BillableHours = !reader.IsDBNull(billableHoursIndex) ? (double)reader.GetDouble(billableHoursIndex) : 0d;
+                        result.NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? (double)reader.GetDouble(nonBillableHoursIndex) : 0d;
+                        result.AvailableHours = !reader.IsDBNull(availableHoursIndex) ? (int)reader.GetInt32(availableHoursIndex) : 0d;
+                        result.BillableHoursUntilToday = !reader.IsDBNull(billableHoursUntilTodayIndex) ? (double)reader.GetDouble(billableHoursUntilTodayIndex) : 0d;
+                        result.ProjectedHours = !reader.IsDBNull(projectedHoursIndex) ? (double)reader.GetDouble(projectedHoursIndex) : 0d;
+                    }
+                    return result;
+                }
+            }
+        }
     }
 }
 
