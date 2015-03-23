@@ -286,6 +286,16 @@ namespace PracticeManagementService
         {
             return ReportDAL.GetBadgeRequestNotApprovedList();
         }
+
+        public List<MSBadge> GetAllBadgeDetails(string payTypes)
+        {
+            return ReportDAL.GetAllBadgeDetails(payTypes);
+        }
+
+        public PersonTimeEntriesTotals UtilizationReport(int personId, DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.UtilizationReport(personId, startDate, endDate);
+        }
     }
 }
 
