@@ -49,10 +49,12 @@
         <siteMapNode url="~/Reports/Badge/BadgeBlockedReport.aspx" title="Blocked Resources"  VirtualPath="~/Reports/Badge/BadgeBlockedReport.aspx" QuickLinkTitle="Blocked Resources"  description="Blocked Resources" ShowURL="true"/>
         <siteMapNode url="~/Reports/Badge/BadgeBreakReport.aspx" title="Resources on 6-Month Break"  VirtualPath="~/Reports/Badge/BadgeBreakReport.aspx" QuickLinkTitle="Resources on 6-Month Break"  description="Resources on 6-Month Break" ShowURL="true"/>
         <siteMapNode url="~/Reports/Badge/BadgeRequestNotApprovedReport.aspx" title="Badge Requests Not Yet Approved"  VirtualPath="~/Reports/Badge/BadgeRequestNotApprovedReport.aspx" QuickLinkTitle="Badge Requests Not Yet Approved"  description="Badge Requests Not Yet Approved" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/AllEmployees18MoClockReport.aspx" title="All Employees' 18-Month Clock Dates"  VirtualPath="~/Reports/Badge/AllEmployees18MoClockReport.aspx" QuickLinkTitle="All Employees' 18-Month Clock Dates"  description="All Employees' 18-Month Clock Dates" ShowURL="true"/>
       </siteMapNode>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
+      <siteMapNode url="~/Reports/UtilizationReport.aspx" title="Utilization"  VirtualPath="~/Reports/UtilizationReport.aspx" QuickLinkTitle="Utilization"  description="Utilization" ShowURL="true"/>
       <siteMapNode url="~/Calendar.aspx"  VirtualPath="~/Calendar.aspx" QuickLinkTitle="Calendar"  title="Calendar" description="Calendar" ShowURL="true"  />
     </siteMapNode>
     <siteMapNode url="~/MarginTest.aspx" VirtualPath="~/MarginTest.aspx" QuickLinkTitle="Margin Test"  title="Margin Test" description="Margin Test" ShowURL="true"  />
