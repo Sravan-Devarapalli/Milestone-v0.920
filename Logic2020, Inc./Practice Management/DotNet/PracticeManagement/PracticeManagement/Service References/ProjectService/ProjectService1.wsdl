@@ -151,6 +151,12 @@
   <wsdl:message name="IProjectService_CheckIfProjectNumberExists_OutputMessage">
     <wsdl:part name="parameters" element="tns:CheckIfProjectNumberExistsResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectGetShortById_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGetShortById" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_ProjectGetShortById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectGetShortByIdResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
   </wsdl:message>
@@ -459,6 +465,10 @@
     <wsdl:operation name="CheckIfProjectNumberExists">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/CheckIfProjectNumberExists" message="tns:IProjectService_CheckIfProjectNumberExists_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/CheckIfProjectNumberExistsResponse" message="tns:IProjectService_CheckIfProjectNumberExists_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectGetShortById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetShortById" message="tns:IProjectService_ProjectGetShortById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetShortByIdResponse" message="tns:IProjectService_ProjectGetShortById_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
@@ -807,6 +817,15 @@
     </wsdl:operation>
     <wsdl:operation name="CheckIfProjectNumberExists">
       <soap:operation soapAction="http://tempuri.org/IProjectService/CheckIfProjectNumberExists" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectGetShortById">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectGetShortById" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
