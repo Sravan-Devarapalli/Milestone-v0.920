@@ -572,6 +572,13 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string BreakEndDate = "@BreakEndDate";
+            public static string BreakStartDate = "@BreakStartDate";
+            public static string EndDateSource = "@EndDateSource";
+            public static string StartDateSource = "@StartDateSource";
+            public static string ModifiedStartDate = "@ModifiedStartDate";
+            public static string OldEndDate = "@OldEndDate";
+            public static string ModifiedEndDate = "@ModifiedEndDate";
             public static string RequestDate = "@RequestDate";
             public static string IsExtendedORCompleteOutOfRange = "@IsExtendedORCompleteOutOfRange";
             public static string UpdatedBy = "@UpdatedBy";
@@ -1061,6 +1068,7 @@
 
             public class Person
             {
+                public const string CheckIfPersonInProjectsForThisPeriod = "dbo.CheckIfPersonInProjectsForThisPeriod";
                 public const string GetBadgeHistoryByPersonId = "dbo.GetBadgeHistoryByPersonId";
                 public const string UpdateMSBadgeDetailsByPersonId = "dbo.UpdateMSBadgeDetailsByPersonId";
                 public const string SaveBadgeDetailsByPersonId = "dbo.SaveBadgeDetailsByPersonId";
@@ -1275,6 +1283,8 @@
 
             public class Reports
             {
+                public const string UtilizationReport = "dbo.UtilizationReport";
+                public const string GetAllBadgeDetails = "dbo.GetAllBadgeDetails";
                 public const string GetBadgeRequestNotApprovedList = "dbo.GetBadgeRequestNotApprovedList";
                 public const string ResourcesByTitleReport = "dbo.ResourcesByTitleReport";
                 public const string ResourcesByPracticeReport = "dbo.ResourcesByPracticeReport";
@@ -1375,6 +1385,7 @@
 
             public class Project
             {
+                public const string ProjectGetShortById = "dbo.ProjectGetShortById";
                 public const string CheckIfPersonIsRestrictedByProjectId = "dbo.CheckIfPersonIsRestrictedByProjectId";
                 public const string CheckIfPersonInProjectForDates = "dbo.CheckIfPersonInProjectForDates";
                 public const string CheckIfProjectNumberExists = "dbo.CheckIfProjectNumberExists";
