@@ -8,7 +8,20 @@
             18mos Period Start
         </td>
         <td>
-            <asp:TextBox ID="txtBadgeStart" runat="server" ReadOnly="true"></asp:TextBox>
+            <%--<asp:TextBox ID="txtBadgeStart" runat="server" ReadOnly="true"></asp:TextBox>--%>
+            <uc:datepicker id="dpBadgeStart" runat="server" onselectionchanged="dpBadgeStart_Changed"
+                autopostback="true" />
+            <asp:RequiredFieldValidator ID="reqBadgeStart" runat="server" ControlToValidate="dpBadgeStart"
+                ErrorMessage="18-Month Badge start date is required." ToolTip="18-Month Badge start date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="compBadgeStart" runat="server" ControlToValidate="dpBadgeStart"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Text="*" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CustomValidator ID="custBeforeJuly" runat="server" ControlToValidate="dpBadgeStart"
+                Text="*" Display="Dynamic" EnableTheming="True" ErrorMessage="18 months start date cannot be set before 7/1/2014."
+                ToolTip="18 months start date cannot be set before 7/1/2014." SetFocusOnError="True"
+                OnServerValidate="custBeforeJuly_ServerValidate" EnableClientScript="false"></asp:CustomValidator>
         </td>
         <td class="MsBadgeTd2">
             Date Source -
@@ -21,7 +34,7 @@
                 <asp:ListItem Text="No" Value="0" Selected="True"></asp:ListItem>
             </asp:DropDownList>
         </td>
-        <td>
+        <td style="width: 100px;">
             <asp:LinkButton ID="lnkHistory" runat="server" Text="History" OnClick="lnkHistory_Click"></asp:LinkButton>
         </td>
     </tr>
@@ -51,7 +64,37 @@
             18mos End
         </td>
         <td>
-            <asp:TextBox ID="txtBadgeEnd" runat="server" ReadOnly="true"></asp:TextBox>
+            <%--<asp:TextBox ID="txtBadgeEnd" runat="server" ReadOnly="true"></asp:TextBox>--%>
+            <uc:datepicker id="dpBadgeEnd" runat="server" onselectionchanged="dpBadgeEnd_Changed"
+                autopostback="true" />
+            <asp:RequiredFieldValidator ID="reqBadgeEnd" runat="server" ControlToValidate="dpBadgeEnd"
+                ErrorMessage="18-Month Badge end date is required." ToolTip="18-Month Badge end date is required."
+                Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+            <asp:CompareValidator ID="compBadgeEnd" runat="server" ControlToValidate="dpBadgeEnd"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Text="*" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CompareValidator ID="compBadgeEndLess" runat="server" ControlToValidate="dpBadgeEnd"
+                ControlToCompare="dpBadgeStart" Operator="GreaterThanEqual" Type="Date" ErrorMessage="18-Month Badge end date should be greater than or equal to 18-Month Badge start date."
+                Display="Dynamic" Text="*" ToolTip="18-Month Badge end date should be greater than or equal to 18-Month Badge start date."
+                SetFocusOnError="true" EnableClientScript="false"></asp:CompareValidator>
+            <asp:CustomValidator ID="custLessThan18Mo" runat="server" ControlToValidate="dpBadgeEnd"
+                Text="*" Display="Dynamic" EnableTheming="True" ErrorMessage="MS badge period cannot be less than 18 months. Please adjust 18 months start date and end date accordingly."
+                ToolTip="MS badge period cannot be less than 18 months. Please adjust 18 months start date and end date accordingly."
+                SetFocusOnError="True" OnServerValidate="custLessThan18Mo_ServerValidate" EnableClientScript="false"></asp:CustomValidator>
+            <asp:CustomValidator ID="custMoreThan18Mo" runat="server" ControlToValidate="dpBadgeEnd"
+                Text="*" Display="Dynamic" EnableTheming="True" ErrorMessage="MS badge period cannot be more than 18 months. Please adjust 18 months start date and end date accordingly Or add exception dates to make badge period more than 18 months."
+                ToolTip="MS badge period cannot be more than 18 months. Please adjust 18 months start date and end date accordingly Or add exception dates to make badge period more than 18 months."
+                SetFocusOnError="True" OnServerValidate="custMoreThan18Mo_ServerValidate" EnableClientScript="false"></asp:CustomValidator>
+            <asp:CustomValidator ID="custProjectsAssigned" runat="server" ControlToValidate="dpBadgeEnd"
+                ErrorMessage="Cannot change 18 months dates of the person, as the person is assigned to some projects in current 18 mos date ranges."
+                ToolTip="Cannot change 18 months dates of the person, as the person is assigned to some projects in current 18 mos date ranges."
+                Text="*" Display="Dynamic" EnableTheming="True" SetFocusOnError="True" OnServerValidate="custProjectsAssigned_ServerValidate"
+                EnableClientScript="false"></asp:CustomValidator>
+            <asp:CustomValidator ID="cust18moNotInEmployment" runat="server" ErrorMessage="Person 18-Month dates are outside of hire/termination date range."
+                ToolTip="Person 18-Month dates are outside of hire/termination date range." Display="Dynamic"
+                OnServerValidate="cust18moNotInEmployment_ServerValidate" Text="*" EnableClientScript="false"
+                SetFocusOnError="true"></asp:CustomValidator>
         </td>
         <td class="MsBadgeTd2">
             Date Source -
@@ -61,7 +104,7 @@
             Last Badge Start
         </td>
         <td>
-            <uc:DatePicker ID="dtpLastBadgeStart" runat="server" />
+            <uc:datepicker id="dtpLastBadgeStart" runat="server" />
             <asp:RequiredFieldValidator ID="reqLastBadgeStart" runat="server" ControlToValidate="dtpLastBadgeStart"
                 ErrorMessage="Last badge start date is required." ToolTip="Last badge start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -227,32 +270,35 @@
     Logic20/20 MS Badge History:</h3>
 <asp:Repeater ID="repMSBadge" runat="server" OnItemDataBound="repMSBadge_DataBound">
     <HeaderTemplate>
-        <div class="BadgeHistory">
+        <div class="BadgeHistory" style="width: 80%">
             <table id="tblAccountSummaryByBusinessReport" class="tablesorter PersonSummaryReport zebra WholeWidth">
                 <thead>
                     <tr>
-                        <th class="TextAlignLeftImp">
+                        <th class="TextAlignLeftImp Width20Percent">
                             Project Name
                         </th>
-                        <th class="">
+                        <th class="Width7Percent">
                             Project #
                         </th>
-                        <th class="">
+                        <th class="Width8Per">
+                            Project Stage
+                        </th>
+                        <th class="Width10Per">
                             Project Start
                         </th>
-                        <th class="">
+                        <th class="Width10Per">
                             Project End
                         </th>
-                        <th class="">
+                        <th class="Width10Per">
                             Badge Start
                         </th>
-                        <th class="">
+                        <th class="Width8Per">
                             Badge End
                         </th>
-                        <th class="">
+                        <th class="Width20Percent">
                             Badged Time on Project(in Months)
                         </th>
-                        <th>
+                        <th class="Width7Percent">
                             Is Approved?
                         </th>
                     </tr>
@@ -268,6 +314,9 @@
                 <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
                     Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Project.Id"))) %>'>
                 </asp:HyperLink>
+            </td>
+            <td>
+                <asp:Label ID="lblProjectStatus" runat="server"></asp:Label>
             </td>
             <td>
                 <%# GetDateFormat((DateTime)Eval("Project.StartDate"))%>
@@ -298,6 +347,9 @@
                 <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
                     Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Project.Id"))) %>'>
                 </asp:HyperLink>
+            </td>
+            <td>
+                <asp:Label ID="lblProjectStatus" runat="server"></asp:Label>
             </td>
             <td>
                 <%# GetDateFormat((DateTime)Eval("Project.StartDate"))%>
@@ -334,7 +386,7 @@
     <table class="WholeWidth">
         <tr>
             <td>
-                <uc:BadgeHistory ID="badgeHistory" runat="server" />
+                <uc:badgehistory id="badgeHistory" runat="server" />
             </td>
         </tr>
         <tr>
