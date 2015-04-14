@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="Badged Resources by Time" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="BadgeResourceByTime.aspx.cs" Inherits="PraticeManagement.Reports.Badge.BadgeResourceByTime" %>
 
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
@@ -12,6 +13,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+   <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -88,6 +91,23 @@
                         <asp:Button ID="btnUpdateView" runat="server" Text="View Report" OnClick="btnUpdateView_Click" />
                     </td>
                 </tr>
+                <tr style="white-space: nowrap">
+                 <td class="ReportFilterLabels">
+                        Pay Type:&nbsp;
+                    </td>
+                    <td colspan="4" style="padding-top:5px;">
+                        <pmc:ScrollingDropDown ID="cblPayTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
+                            DropDownListType="Pay Type" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+                         <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
+                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td class="textLeft Width90Percent">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
                 <tr class="height30P">
                     <td colspan="5">
                         &nbsp;
@@ -105,7 +125,8 @@
                 <table class="WholeWidth">
                     <tr>
                         <td style="font-weight: bold; font-size: 16px;">
-                            Projected Range: <asp:Label ID="lblRange" runat="server"></asp:Label>
+                            Projected Range:
+                            <asp:Label ID="lblRange" runat="server"></asp:Label>
                         </td>
                         <td style="text-align: right; padding-right: 30px;">
                             <asp:Button ID="btnExportToExcel" runat="server" Text="Export" OnClick="btnExportToExcel_OnClick"
@@ -116,44 +137,42 @@
                 <asp:Chart ID="chartReport" runat="server" EnableViewState="true">
                     <Series>
                         <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            BorderWidth="2" LegendText="Badged not on project" IsVisibleInLegend="false" 
-                             Color="Blue" XAxisType="Primary" YAxisType="Primary"
-                            YValueType="Int32" XValueMember="month" YValueMembers="badgedNotOnProjectcount"
-                            ToolTip="#VALY Resources">
+                            BorderWidth="2" LegendText="Badged not on project" IsVisibleInLegend="false"
+                            Color="Blue" XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
+                            YValueMembers="badgedNotOnProjectcount" ToolTip="#VALY Resources">
                         </asp:Series>
                         <asp:Series Name="chartSeries2" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                           Color="Gray" BorderWidth="2" LegendText="18 Month Clock Not Started"
-                            IsVisibleInLegend="false" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
-                            XValueMember="month" YValueMembers="clockNotStartedCount" ToolTip="#VALY Resources">
+                            Color="Gray" BorderWidth="2" LegendText="18 Month Clock Not Started" IsVisibleInLegend="false"
+                            XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
+                            YValueMembers="clockNotStartedCount" ToolTip="#VALY Resources">
                         </asp:Series>
                         <asp:Series Name="chartSeries4" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            Color="DarkBlue" BorderWidth="2" LegendText="On 6-Month Break"
-                            IsVisibleInLegend="false" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
-                            XValueMember="month" YValueMembers="breakCount" ToolTip="#VALY Resources">
+                            Color="DarkBlue" BorderWidth="2" LegendText="On 6-Month Break" IsVisibleInLegend="false"
+                            XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
+                            YValueMembers="breakCount" ToolTip="#VALY Resources">
                         </asp:Series>
                         <asp:Series Name="chartSeries" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                             Color="Red" BorderWidth="2" LegendText="Badged on project"
-                            IsVisibleInLegend="false" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
-                            ToolTip="#VALY Resources" XValueMember="month" YValueMembers="badgedOnProjectcount">
+                            Color="Red" BorderWidth="2" LegendText="Badged on project" IsVisibleInLegend="false"
+                            XAxisType="Primary" YAxisType="Primary" YValueType="Int32" ToolTip="#VALY Resources"
+                            XValueMember="month" YValueMembers="badgedOnProjectcount">
                         </asp:Series>
                         <asp:Series Name="chartSeries3" ChartArea="MainArea" ChartType="Line" XValueType="String"
                             Color="Orange" BorderWidth="2" LegendText="Blocked" IsVisibleInLegend="false"
-                            XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
-                            XValueMember="month" YValueMembers="blockedCount" ToolTip="#VALY Resources">
+                            XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
+                            YValueMembers="blockedCount" ToolTip="#VALY Resources">
                         </asp:Series>
                         <asp:Series Name="chartSeries5" ChartArea="MainArea" ChartType="Point" XValueType="String"
-                             Color="Red" BorderWidth="2" XAxisType="Primary" IsVisibleInLegend="false"
-                            YAxisType="Primary" YValueType="Int32" ToolTip="#VALY Resources" XValueMember="month"
-                            YValueMembers="badgedOnProjectcount">
+                            Color="Red" BorderWidth="2" XAxisType="Primary" IsVisibleInLegend="false" YAxisType="Primary"
+                            YValueType="Int32" ToolTip="#VALY Resources" XValueMember="month" YValueMembers="badgedOnProjectcount">
                         </asp:Series>
                         <asp:Series Name="chartSeries6" ChartArea="MainArea" ChartType="Point" XValueType="String"
-                            BorderWidth="2" Color="Blue" XAxisType="Primary" IsVisibleInLegend="false"
-                            YAxisType="Primary" YValueType="Int32" XValueMember="month" YValueMembers="badgedNotOnProjectcount"
+                            BorderWidth="2" Color="Blue" XAxisType="Primary" IsVisibleInLegend="false" YAxisType="Primary"
+                            YValueType="Int32" XValueMember="month" YValueMembers="badgedNotOnProjectcount"
                             ToolTip="#VALY Resources">
                         </asp:Series>
                         <asp:Series Name="chartSeries7" ChartArea="MainArea" ChartType="Point" XValueType="String"
-                            Color="Gray" BorderWidth="2" XAxisType="Primary" IsVisibleInLegend="false"
-                            YAxisType="Primary" YValueType="Int32" XValueMember="month" YValueMembers="clockNotStartedCount"
+                            Color="Gray" BorderWidth="2" XAxisType="Primary" IsVisibleInLegend="false" YAxisType="Primary"
+                            YValueType="Int32" XValueMember="month" YValueMembers="clockNotStartedCount"
                             ToolTip="#VALY Resources">
                         </asp:Series>
                         <asp:Series Name="chartSeries8" ChartArea="MainArea" ChartType="Point" XValueType="String"
@@ -163,8 +182,7 @@
                         </asp:Series>
                         <asp:Series Name="chartSeries9" ChartArea="MainArea" ChartType="Point" XValueType="String"
                             Color="DarkBlue" BorderWidth="2" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
-                            XValueMember="month" YValueMembers="breakCount" IsVisibleInLegend="false"
-                            ToolTip="#VALY Resources">
+                            XValueMember="month" YValueMembers="breakCount" IsVisibleInLegend="false" ToolTip="#VALY Resources">
                         </asp:Series>
                     </Series>
                     <ChartAreas>
