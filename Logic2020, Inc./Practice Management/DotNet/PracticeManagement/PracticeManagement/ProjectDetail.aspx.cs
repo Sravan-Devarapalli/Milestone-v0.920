@@ -38,6 +38,8 @@ namespace PraticeManagement
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
         public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
         public const string ViewStateLoggedInPerson = "ViewStateLoggedInPerson";
+        private const string BadgeRequestMailBody = "<html><body>{0} is requesting a MS badge for {1} for the dates {2} to {3} on <a href=\"{4}\">{5}</a>-{6}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestExceptionMailBody = "<html><body>{0} is requesting a MS badge exception for {1} for the dates {2} to {3} on <a href=\"{4}\">{5}</a>-{6}, please review & approve or decline.</body></html>";
 
         #endregion Constants
 
@@ -452,8 +454,9 @@ namespace PraticeManagement
             {
                 if (!custProjectNumberRequired.IsValid)
                     return;
-                Regex reg = new Regex("^[p|P][0-9]{6}$");
-                args.IsValid = reg.IsMatch(txtProjectNumber.Text.Trim());
+                var reg1 = new Regex("^[p|P][0-9]{6}$");
+                var reg2 = new Regex("^[p|P][0-9]{6}[a-zA-Z]{1}$");
+                args.IsValid = (reg1.IsMatch(txtProjectNumber.Text.Trim()) || reg2.IsMatch(txtProjectNumber.Text.Trim()));
             }
         }
 
@@ -560,7 +563,8 @@ namespace PraticeManagement
             if (ProjectId.HasValue && Project != null && Project.Milestones != null && Project.Milestones.Count > 0)
             {
                 cellExpenses.Visible = true;
-                cellCommissions.Visible = DataHelper.CurrentPerson.Title.TitleName == "Senior Manager" || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
+                var title = DataHelper.CurrentPerson.Title;
+                cellCommissions.Visible = title.TitleName == "Senior Manager" || title.TitleName == "Director" || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
             }
             else
             {
@@ -1458,6 +1462,7 @@ namespace PraticeManagement
 
         private int SaveData()
         {
+            var previousProjectStatus = Project == null?null: Project.Status;
             var project = new Project();
             PopulateData(project);
             int result = -1;
@@ -1482,6 +1487,26 @@ namespace PraticeManagement
                         //ResetToPreviousData();
                         //ReloadProjectDetails(ProjectId);
                         Response.Redirect("~/ProjectDetail.aspx?Id=" + ProjectId.Value + "&returnTo=" + Constants.ApplicationPages.Projects);
+                    }
+                    if (previousProjectStatus != null && (previousProjectStatus.StatusType != project.Status.StatusType) && (project.Status.StatusType == ProjectStatusType.Active || project.Status.StatusType == ProjectStatusType.Projected) && (previousProjectStatus.StatusType != ProjectStatusType.Active && previousProjectStatus.StatusType != ProjectStatusType.Projected))
+                    {
+                        var badgeRecords = ServiceCallers.Custom.Person(p => p.GetBadgeRecordsByProjectId(project.Id.Value));
+                        var loggedInPerson = DataHelper.CurrentPerson;
+                        var mailCount = 1;
+                        foreach (var record in badgeRecords)
+                        {
+                            var proj = record.Project;
+                            proj.MailBody = record.IsException ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, record.Person.Name, record.BadgeStartDate.Value.ToShortDateString(), record.BadgeEndDate.Value.ToShortDateString(),
+                                                                            "{0}", proj.ProjectNumber, proj.Name) :
+                                                                            string.Format(BadgeRequestMailBody, loggedInPerson.Name, record.Person.Name, record.BadgeStartDate.Value.ToShortDateString(), record.BadgeEndDate.Value.ToShortDateString(),
+                                                                            "{0}", proj.ProjectNumber, proj.Name);
+                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(proj));
+                            //if (mailCount % 12 == 0)
+                            //{
+                            //    Thread.Sleep(65 * 1000);
+                            //}
+                            //mailCount++;
+                        }
                     }
                 }
                 catch (CommunicationException ex)
