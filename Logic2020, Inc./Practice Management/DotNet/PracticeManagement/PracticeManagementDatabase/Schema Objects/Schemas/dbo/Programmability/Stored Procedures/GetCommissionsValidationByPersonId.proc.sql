@@ -76,7 +76,8 @@ BEGIN
 	FROM	dbo.Attribution A
 	INNER JOIN dbo.Project P ON A.ProjectId = P.ProjectId
 	INNER JOIN PersonDivisionCTE1 DH ON DH.PersonId = A.TargetId 
-									AND (DH.StartDate <= A.EndDate AND (DH.EndDate IS NULL OR A.StartDate < DH.EndDate)) AND ISNULL(DH.DivisionId,0) NOT IN(SELECT DivisionId FROM dbo.PersonDivision WHERE DivisionName IN ('Consulting','Business Development','Technology Consulting','Business Consulting','Directors'))
+									AND (DH.StartDate <= A.EndDate AND (DH.EndDate IS NULL OR A.StartDate < DH.EndDate)) AND ISNULL(DH.DivisionId,0) NOT IN(SELECT DivisionId FROM dbo.PersonDivision WHERE DivisionName IN ('Consulting','Business Development','Technology Consulting','Business Consulting','Director'))
 	WHERE A.AttributionRecordTypeId = 1 AND A.TargetId = @PersonId
 	
 END
+
