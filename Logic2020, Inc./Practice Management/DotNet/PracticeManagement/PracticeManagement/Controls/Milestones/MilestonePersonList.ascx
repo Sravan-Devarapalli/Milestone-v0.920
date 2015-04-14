@@ -131,7 +131,7 @@
                 <table class="WholeWidth" id="tblStartDate" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
-                        <asp:HiddenField ID="hdnStartDateValue" runat="server" Value='<%# Eval("StartDate") %>'/>
+                            <asp:HiddenField ID="hdnStartDateValue" runat="server" Value='<%# Eval("StartDate") %>' />
                             <uc2:DatePicker ID="dpPersonStart" runat="server" ValidationGroup="<%# GetValidationGroup(Container) %>"
                                 OnClientChange="dtpStartDate_OnClientChange(this);" TextBoxWidth="95%" AutoPostBack="false"
                                 DateValue='<%# Eval("StartDate") %>' OldValue='<%# Eval("StartDate") %>' />
@@ -180,9 +180,9 @@
                 <table class="WholeWidth" id="tblEndDate" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
-                        <asp:HiddenField ID="hdnEndDateValue" runat="server" Value='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>'/>
+                            <asp:HiddenField ID="hdnEndDateValue" runat="server" Value='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
                             <uc2:DatePicker ID="dpPersonEnd" runat="server" ValidationGroup="<%# GetValidationGroup(Container) %>"
-                                 OnClientChange="dtpStartDate_OnClientChange(this);" OldValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>'
+                                OnClientChange="dtpStartDate_OnClientChange(this);" OldValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>'
                                 TextBoxWidth="95%" AutoPostBack="false" DateValue='<%# Eval("EndDate") != null ? ((DateTime?)Eval("EndDate")).Value : DateTime.MinValue %>' />
                         </td>
                         <td class="Width15Percent">
@@ -365,10 +365,11 @@
                 <table class="WholeWidth" id="tblBadgeStart" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
+                            <asp:HiddenField ID="hdnBadgeStartDateValue" runat="server" Value='<%# Eval("BadgeStartDate") %>' />
                             <uc2:DatePicker ID="dpBadgeStart" runat="server" ValidationGroup='<%# GetValidationGroup(Container) %>'
                                 Date='<%# Eval("BadgeStartDate") != null ? ((DateTime?)Eval("BadgeStartDate")).Value.Date : DateTime.MinValue.Date %>'
                                 DateValue='<%# Eval("BadgeStartDate") != null ? ((DateTime?)Eval("BadgeStartDate")).Value : DateTime.MinValue %>'
-                                OnClientChange="return true;" TextBoxWidth="95%" AutoPostBack="false" />
+                                OnClientChange="dtpBadgeStartDate_OnClientChange(this);" TextBoxWidth="95%" AutoPostBack="false" />
                         </td>
                         <td class="Width15Percent">
                             <asp:RequiredFieldValidator ID="reqBadgeStart" runat="server" ControlToValidate="dpBadgeStart"
@@ -408,10 +409,11 @@
                 <table class="WholeWidth" id="tblBadgeEnd" runat="server" visible="false">
                     <tr>
                         <td class="Width85Percent">
+                        <asp:HiddenField ID="hdnBadgeEndDateValue" runat="server" Value='<%# Eval("BadgeEndDate") %>' />
                             <uc2:DatePicker ID="dpBadgeEnd" runat="server" ValidationGroup='<%# GetValidationGroup(Container) %>'
                                 DateValue='<%# Eval("BadgeEndDate") != null ? ((DateTime?)Eval("BadgeEndDate")).Value : DateTime.MinValue %>'
                                 Date='<%# Eval("BadgeEndDate") != null ? ((DateTime?)Eval("BadgeEndDate")).Value.Date : DateTime.MinValue.Date %>'
-                                OnClientChange="return true;" TextBoxWidth="95%" AutoPostBack="false" />
+                                OnClientChange="dtpBadgeStartDate_OnClientChange(this);" TextBoxWidth="95%" AutoPostBack="false" />
                         </td>
                         <td class="Width15Percent">
                             <asp:RequiredFieldValidator ID="reqBadgeEnd" runat="server" ControlToValidate="dpBadgeEnd"
@@ -451,6 +453,10 @@
                                 Text="*" ToolTip="The person's badge dates in a milestone should be within their hire and termination dates."
                                 EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup(Container) %>"
                                 OnServerValidate="custBadgeNotInEmpHistory_ServerValidate"></asp:CustomValidator>
+                            <asp:CustomValidator ID="custBadgeAfterJuly" runat="server" ErrorMessage="Person's badge dates cannot be before 7/1/2014."
+                                Text="*" ToolTip="Person's badge dates cannot be before 7/1/2014."
+                                EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup(Container) %>"
+                                OnServerValidate="custBadgeAfterJuly_ServerValidate"></asp:CustomValidator>
                         </td>
                     </tr>
                 </table>
@@ -465,7 +471,7 @@
             <ItemStyle CssClass="Width5Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblConsultantsEnd" runat="server" DateValue='<%# Eval("ConsultantEndDate") != null ? ((DateTime?)Eval("ConsultantEndDate")).Value : DateTime.MinValue %>'
-                 Text='<%# Eval("ConsultantEndDate") != null ? ((DateTime?)Eval("ConsultantEndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
+                    Text='<%# Eval("ConsultantEndDate") != null ? ((DateTime?)Eval("ConsultantEndDate")).Value.ToString("MM/dd/yyyy") : string.Empty %>'></asp:Label>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField>
@@ -495,6 +501,7 @@
             <ItemStyle CssClass="Width4Percent" />
             <ItemTemplate>
                 <asp:Label ID="lblApproved" runat="server" Text='<%# (bool)Eval("IsApproved") ? "Yes" : "No" %>'></asp:Label>
+                <asp:HiddenField ID="hdnApproved" runat="server" Value='<%# (bool)Eval("IsApproved") ? "Yes" : "No" %>'/>
                 <asp:CheckBox ID="chbOpsApproved" runat="server" Visible="false" Checked='<%# Eval("IsApproved") %>'
                     PreviousChecked='<%# Eval("IsApproved") %>' />
             </ItemTemplate>
@@ -733,7 +740,7 @@
             </td>
         </tr>
         <tr>
-            <td class="Padding10 textCenter" style="padding-top:0px;">
+            <td class="Padding10 textCenter" style="padding-top: 0px;">
                 <asp:Button ID="btnOkExceptionValidation" runat="server" ToolTip="OK" Text="OK" CssClass="Width100Px" />
             </td>
         </tr>
