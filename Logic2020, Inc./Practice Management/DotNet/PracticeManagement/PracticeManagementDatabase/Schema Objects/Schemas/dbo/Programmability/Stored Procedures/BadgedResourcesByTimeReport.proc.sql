@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[BadgedResourcesByTimeReport]
 (
+	@PayTypeIds	NVARCHAR(MAX)=NULL,
 	@StartDate	DATETIME,
 	@EndDate	DATETIME,
 	@Step		INT=7
@@ -8,6 +9,14 @@ AS
 BEGIN
 	DECLARE @StartDateLocal DATETIME ,
 			@EndDateLocal DATETIME
+
+	DECLARE @PayTypeIdsTable TABLE ( Ids INT )
+	DECLARE @PayTypeIdsLocal	NVARCHAR(MAX)
+	SET @PayTypeIdsLocal = @PayTypeIds
+
+	INSERT INTO @PayTypeIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@PayTypeIdsLocal)
 
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 		 , @EndDateLocal = CONVERT(DATE, @EndDate)
@@ -37,7 +46,9 @@ BEGIN
 		SELECT R.StartDate,R.EndDate,COUNT(*) as Count
 		FROM Ranges R
 		CROSS JOIN v_PersonHistory P 
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
 		WHERE P.HireDate <= R.EndDate AND (P.TerminationDate IS NULL OR R.StartDate <= p.TerminationDate)
+			  AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		GROUP BY R.StartDate,R.EndDate
 	 ),
 	 BadgedOnProject
@@ -51,12 +62,15 @@ BEGIN
 		INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
 		INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
 		INNER JOIN Ranges R ON MPE.BadgeStartDate <= R.EndDate AND R.StartDate <= MPE.BadgeEndDate
-		WHERE mpe.IsbadgeRequired = 1 AND P.ProjectStatusId IN (1,2,3,4)
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = MP.PersonId
+		WHERE (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable)) AND mpe.IsbadgeRequired = 1 AND P.ProjectStatusId IN (1,2,3,4) 
+
 		UNION ALL
 		SELECT M.PersonId,R.StartDate,R.EndDate
 		FROM dbo.MSBadge M
 		INNER JOIN Ranges R ON M.LastBadgeStartDate <= R.EndDate AND R.StartDate <= M.LastBadgeEndDate
-		WHERE M.IsPreviousBadge = 1 
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
+		WHERE M.IsPreviousBadge = 1 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable)) 
 		) R
 		GROUP BY R.PersonId,R.StartDate,R.EndDate
 	 ),
@@ -66,8 +80,10 @@ BEGIN
 		SELECT M.PersonId,R.StartDate,R.EndDate
 		FROM v_CurrentMSBadge M 
 		INNER JOIN Ranges R ON R.StartDate <= M.BadgeEndDate AND M.BadgeStartDate <= R.EndDate
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
 		LEFT JOIN BadgedOnProject BP ON BP.StartDate = R.StartDate AND BP.PersonId = M.PersonId
-		WHERE BP.PersonId IS NULL
+		WHERE BP.PersonId IS NULL AND
+		(@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		GROUP BY M.PersonId,R.StartDate,R.EndDate 
 	 ),
 	  BadgedNotOnProjectCount
@@ -101,6 +117,8 @@ BEGIN
 	   SELECT M.PersonId,R.StartDate,R.EndDate
 	   FROM dbo.MSBadge M 
 	   JOIN Ranges R ON R.StartDate <= M.BlockEndDate AND M.BlockStartDate <= R.EndDate
+	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
+	   WHERE (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,R.StartDate,R.EndDate
 	 ),
 	  InBreakPeriod
@@ -109,6 +127,8 @@ BEGIN
 	   SELECT M.PersonId,R.StartDate,R.EndDate
 	   FROM v_CurrentMSBadge M 
 	   JOIN Ranges R ON R.StartDate <= M.BreakEndDate AND M.BreakStartDate <= R.EndDate
+	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
+	   WHERE (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,R.StartDate,R.EndDate
 	 ),
 	 BlockedPeopleCount
