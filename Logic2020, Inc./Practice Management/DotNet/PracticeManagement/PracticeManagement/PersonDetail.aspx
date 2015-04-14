@@ -25,7 +25,62 @@
     Person Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+    <script src="../../Scripts/date.yui.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
+//       function dpBadgeStart_Changed(dtp) {
+//       debugger;
+//            var index = dtp.id.indexOf('dpBadge');
+//            var row = dtp.id.substring(0, index);
+//            var dpBadgeStart = document.getElementById(row + 'dpBadgeStart_txtDate');
+//            var dpBadgeEnd = document.getElementById(row + 'dpBadgeEnd_txtDate');
+//            var txtBreakStart = document.getElementById(row + 'txtBreakStart');
+//            var txtBreakEnd = document.getElementById(row + 'txtBreakEnd');
+//            var lblBadgeEndDateSource = document.getElementById(row + 'lblBadgeEndDateSource');  
+//            var lblBadgeStartDateSource = document.getElementById(row + 'lblBadgeStartDateSource');  
+//            lblBadgeStartDateSource.innerHTML = 'Manual Entry';
+//            lblBadgeEndDateSource.innerHTML = 'Manual Entry';
+//            var newBadgeStartdate = new Date(dpBadgeStart.value);
+//            var newBadgeEnddate = newBadgeStartdate; 
+//           newBadgeEnddate.addMonths(18);
+//            alert(newBadgeEnddate.format("MM/dd/yyyy"));
+//            newBadgeEnddate.addMonths(1);
+//            newBadgeEnddate.setDate(newBadgeEnddate.getDate() - 1);
+//            dpBadgeEnd.value = newBadgeEnddate.format("MM/dd/yyyy");
+
+//            newBadgeEnddate.setMonth(newBadgeStartdate.getMonth() + 18);
+//            txtBreakStart.value = newBadgeEnddate.format("MM/dd/yyyy");//break start date
+//            newBadgeEnddate.setDate(newBadgeEnddate.getDate() - 1);
+//            dpBadgeEnd.value = newBadgeEnddate.format("MM/dd/yyyy");
+//            newBadgeEnddate.setMonth(newBadgeEnddate.getMonth() + 6);
+//            txtBreakEnd.value = newBadgeEnddate.format("MM/dd/yyyy");//break end date
+//        }
+        
+//        function dpDeactivatedDate_Change(dtp){
+//        debugger;
+//             var index = dtp.id.indexOf('dpDeactivatedDate');
+//             var row = dtp.id.substring(0, index);
+//             var txtBreakStart = document.getElementById(row + 'txtOrganicStart');
+//             var txtBreakEnd = document.getElementById(row + 'txtOrganicEnd');
+//             var deactivationDate = document.getElementById(row + 'dpDeactivatedDate_txtDate');
+//             var deactivateDate = new Date(deactivationDate.value);
+//             var organicStart = deactivateDate;
+//             var organicEnd = deactivateDate;
+//             organicStart.setDate(organicStart.getDate() + 1);
+//             var startdate = organicStart.format("MM/dd/yyyy");
+//            
+//             if(startdate == 'NaN/NaN/NaN')
+//             {
+//                txtBreakStart.value = '';
+//                txtBreakEnd.value ='';
+//             } 
+//             else{
+//                txtBreakStart.value = startdate;
+//                organicEnd.setMonth(organicEnd.getMonth() + 6);
+//                organicEnd.setDate(organicEnd.getDate() - 1);
+//                txtBreakEnd.value = organicEnd.format("MM/dd/yyyy");
+//             }
+//        }
+
         /*
         This script is needed to initialize select all/none behavior for checkbox lists
         This is done because tab content is loaded asynchronously and window.load event is not fired
