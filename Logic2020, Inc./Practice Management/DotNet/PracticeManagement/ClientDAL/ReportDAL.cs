@@ -1127,7 +1127,7 @@ namespace DataAccess
             }
         }
 
-        public static List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate, string personRoleNames)
+        public static List<PersonLevelGroupedHours> ProjectDetailReportByResource(string projectNumber, int? milestoneId, DateTime? startDate, DateTime? endDate, string personRoleNames, bool isExport = false)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectDetailReportByResource, connection))
@@ -1137,6 +1137,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate.HasValue ? (object)startDate : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate.HasValue ? (object)endDate : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsExport, isExport);
                 if (personRoleNames != null)
                 {
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonRoleNamesParam, personRoleNames);
@@ -1173,6 +1174,27 @@ namespace DataAccess
             int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
             int billRateIndex = reader.GetOrdinal(Constants.ColumnNames.BillRate);
 
+            int forecastedHoursDailyIndex;
+            int billingTypeIndex;
+
+            try
+            {
+                forecastedHoursDailyIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursDaily);
+            }
+            catch
+            {
+                forecastedHoursDailyIndex = -1;
+            }
+
+            try
+            {
+                billingTypeIndex = reader.GetOrdinal(Constants.ColumnNames.BillingType);
+            }
+            catch
+            {
+                billingTypeIndex = -1;
+            }
+
             while (reader.Read())
             {
                 TimeEntriesGroupByDate dt = null;
@@ -1185,11 +1207,19 @@ namespace DataAccess
                         NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
                         TimeType = new TimeTypeRecord()
                         {
-                            Name = reader.GetString(timeTypeNameIndex),
-                            Code = reader.GetString(timeTypeCodeIndex)
-                        }
+                            Name =!reader.IsDBNull(timeTypeNameIndex) ?  reader.GetString(timeTypeNameIndex):string.Empty,
+                            Code = !reader.IsDBNull(timeTypeCodeIndex) ? reader.GetString(timeTypeCodeIndex) : string.Empty
+                        },
+                        BillRate = !reader.IsDBNull(billRateIndex) ? Convert.ToDouble(reader.GetDecimal(billRateIndex)) : 0d
                     };
-
+                    if (forecastedHoursDailyIndex > -1)
+                    {
+                        dayTotalHoursbyWorkType.ForecastedHoursDaily = !reader.IsDBNull(forecastedHoursDailyIndex) ?  Convert.ToDouble(reader.GetDecimal(forecastedHoursDailyIndex)) : 0d;
+                    }
+                    if (billingTypeIndex > -1)
+                    {
+                        dayTotalHoursbyWorkType.BillingType = !reader.IsDBNull(billingTypeIndex) ? reader.GetString(billingTypeIndex):string.Empty;
+                    }
                     dt = new TimeEntriesGroupByDate()
                     {
                         Date = reader.GetDateTime(chargeCodeDateIndex),
