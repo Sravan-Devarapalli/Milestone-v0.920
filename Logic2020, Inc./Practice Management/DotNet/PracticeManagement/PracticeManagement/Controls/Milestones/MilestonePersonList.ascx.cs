@@ -453,6 +453,15 @@ namespace PraticeManagement.Controls.Milestones
             args.IsValid = !(PersonDatesViolations.Count > 0);
         }
 
+        protected void custBadgeAfterJuly_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            CustomValidator custPerson = sender as CustomValidator;
+            GridViewRow gvRow = custPerson.NamingContainer as GridViewRow;
+            var dpPersonStart = ((Control)sender).Parent.FindControl("dpBadgeStart") as DatePicker;
+            var dpPersonEnd = ((Control)sender).Parent.FindControl("dpBadgeEnd") as DatePicker;
+            args.IsValid = (dpPersonStart.DateValue >= new DateTime(2014, 7, 1) && dpPersonEnd.DateValue >= new DateTime(2014, 7, 1));
+        }
+
         public Dictionary<string, List<DateTime>> IsRangeInThePersonEmpHistory(Person person, DateTime startDate, DateTime endDate)
         {
             Dictionary<string, List<DateTime>> dateValidation = new Dictionary<string, List<DateTime>>();
@@ -1202,7 +1211,8 @@ namespace PraticeManagement.Controls.Milestones
                 }
                 else
                 {
-                    chbOpsApproved.Checked = chbOpsApproved.Enabled = false;
+                    chbOpsApproved.Enabled = false;
+                    chbOpsApproved.Checked = false;
                 }
             }
             if (person != null && person.IsStrawMan)
@@ -1489,6 +1499,7 @@ namespace PraticeManagement.Controls.Milestones
                 var custBlocked = e.Row.FindControl("custBlocked") as CustomValidator;
                 var custBadgeHasMoredays = e.Row.FindControl("custBadgeHasMoredays") as CustomValidator;
                 var custBadgeNotInEmpHistory = e.Row.FindControl("custBadgeNotInEmpHistory") as CustomValidator;
+                var custBadgeAfterJuly = e.Row.FindControl("custBadgeAfterJuly") as CustomValidator;
                 var custBadgeInBreakPeriod = e.Row.FindControl("custBadgeInBreakPeriod") as CustomValidator;
                 var custExceptionNotMoreThan18moEndDate = e.Row.FindControl("custExceptionNotMoreThan18moEndDate") as CustomValidator;
 
@@ -1610,7 +1621,7 @@ namespace PraticeManagement.Controls.Milestones
                     if (entry.ThisPerson.IsStrawMan)
                     {
                         dpBadgeEnd.EnabledTextBox = dpBadgeStart.EnabledTextBox = chbBadgeException.Enabled = chbOpsApproved.Enabled = chbBadgeRequired.Enabled = lblConsultantsEnd.Visible =
-                            custBadgeNotInEmpHistory.Enabled = custExceptionNotMoreThan18moEndDate.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = false;
+                        custBadgeAfterJuly.Enabled =   custBadgeNotInEmpHistory.Enabled = custExceptionNotMoreThan18moEndDate.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = false;
                         dpBadgeStart.ReadOnly = dpBadgeEnd.ReadOnly = true;
                         dpBadgeStart.TextValue = dpBadgeEnd.TextValue = string.Empty;
                     }
@@ -1619,16 +1630,20 @@ namespace PraticeManagement.Controls.Milestones
                         if (chbBadgeRequired.Checked)
                         {
                             dpBadgeEnd.EnabledTextBox = dpBadgeStart.EnabledTextBox = custExceptionNotMoreThan18moEndDate.Enabled = chbBadgeException.Enabled =
-                            custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = true;
+                            custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = true;
                             dpBadgeStart.ReadOnly = dpBadgeEnd.ReadOnly = false;
-                            chbOpsApproved.Enabled = IsAdmin || IsOperations;
-                            dpBadgeStart.TextValue = entry.BadgeStartDate.HasValue ? entry.BadgeStartDate.Value.ToShortDateString() : string.Empty;
-                            dpBadgeEnd.TextValue = entry.BadgeEndDate.HasValue ? entry.BadgeEndDate.Value.ToShortDateString() : string.Empty;
+                            chbOpsApproved.Enabled = (IsAdmin || IsOperations) && entry.BadgeStartDate.HasValue;
+                            if (entry.EditedEntryValues == null)
+                            {
+                                dpBadgeStart.TextValue = entry.BadgeStartDate.HasValue ? entry.BadgeStartDate.Value.ToShortDateString() : string.Empty;
+                                dpBadgeEnd.TextValue = entry.BadgeEndDate.HasValue ? entry.BadgeEndDate.Value.ToShortDateString() : string.Empty;
+                            }
+                            
                         }
                         if (!chbBadgeRequired.Checked)
                         {
                             dpBadgeEnd.EnabledTextBox = dpBadgeStart.EnabledTextBox = chbBadgeException.Enabled = chbOpsApproved.Enabled = custExceptionNotMoreThan18moEndDate.Enabled =
-                            custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = false;
+                            custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = false;
                             dpBadgeStart.ReadOnly = dpBadgeEnd.ReadOnly = true;
                             dpBadgeStart.TextValue = dpBadgeEnd.TextValue = string.Empty;
                         }
@@ -1728,7 +1743,8 @@ namespace PraticeManagement.Controls.Milestones
             var custBlocked = gvRow.FindControl("custBlocked") as CustomValidator;
             var custBadgeHasMoredays = gvRow.FindControl("custBadgeHasMoredays") as CustomValidator;
             var custExceptionNotMoreThan18moEndDate = gvRow.FindControl("custExceptionNotMoreThan18moEndDate") as CustomValidator;
-            var custBadgeNotInEmpHistory = gvRow.FindControl("custBadgeNotInEmpHistory") as CustomValidator;
+            var custBadgeNotInEmpHistory = gvRow.FindControl("custBadgeNotInEmpHistory") as CustomValidator; 
+            var custBadgeAfterJuly = gvRow.FindControl("custBadgeAfterJuly") as CustomValidator; 
             var custBadgeInBreakPeriod = gvRow.FindControl("custBadgeInBreakPeriod") as CustomValidator;
             var compBadgeEndWithPersonEnd = gvRow.FindControl("compBadgeEndWithPersonEnd") as CompareValidator;
             var compBadgeStartWithPersonStart = gvRow.FindControl("compBadgeStartWithPersonStart") as CompareValidator;
@@ -1739,7 +1755,7 @@ namespace PraticeManagement.Controls.Milestones
             if (chbBadgeRequired.Checked)
             {
                 dpBadgeEnd.EnabledTextBox = dpBadgeStart.EnabledTextBox = chbBadgeException.Enabled = custExceptionNotMoreThan18moEndDate.Enabled =
-                custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = true;
+                custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = true;
                 dpBadgeStart.ReadOnly = dpBadgeEnd.ReadOnly = false;
                 chbOpsApproved.Enabled = (IsAdmin || IsOperations) && (badgeStart != DateTime.MinValue);
                 dpBadgeStart.DateValue = badgeStart == DateTime.MinValue ? Milestone.StartDate.Date : badgeStart;
@@ -1779,7 +1795,7 @@ namespace PraticeManagement.Controls.Milestones
             else
             {
                 dpBadgeEnd.EnabledTextBox = dpBadgeStart.EnabledTextBox = chbBadgeException.Enabled = chbOpsApproved.Enabled = custExceptionNotMoreThan18moEndDate.Enabled =
-                custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = false;
+                custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = false;
                 dpBadgeStart.ReadOnly = dpBadgeEnd.ReadOnly = true;
                 dpBadgeStart.TextValue = dpBadgeEnd.TextValue = string.Empty;
                 chbBadgeException.Checked = chbOpsApproved.Checked = false;
@@ -2648,9 +2664,9 @@ namespace PraticeManagement.Controls.Milestones
                         if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired)
                         {   
                             var loggedInPerson = DataHelper.CurrentPerson;
-                            project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
+                            project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
                                                 "{0}", project.ProjectNumber, project.Name) :
-                                                                            string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
+                                                                            string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
                                                                             "{0}", project.ProjectNumber, project.Name);
                             ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
                             mlConfirmation.ShowInfoMessage(badgeRequest);
