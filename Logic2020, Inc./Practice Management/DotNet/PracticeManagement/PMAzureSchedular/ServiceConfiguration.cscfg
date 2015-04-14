@@ -19,7 +19,7 @@
       <!--HH:mm:ss and 24 hour time format-->
       <Setting name="PayrollDistributionScheduleTime" value="07:00:00" />
       <!--HH:mm:ss and 24 hour time format-->
-      <Setting name="ExceptionReportsScheduleTime" value="04:05:00" />
+      <Setting name="ExceptionReportsScheduleTime" value="07:00:00" />
       <!--HH:mm:ss and 24 hour time format-->
       <Setting name="RecruitingMetricsReportScheduleTime" value="07:00:00" />
       <!--HH:mm:ss and 24 hour time format-->
@@ -34,8 +34,9 @@
       <Setting name="WelcomeMailScheduleTime" value="07:00:00" />
       <!--HH:mm:ss and 24 hour time format-->
       <Setting name="UATTestingMail" value="PMTesting@logic2020.com" />
-      <Setting name="FeedbackMailsScheduleTime" value="08:00:00" />
+      <Setting name="FeedbackMailsScheduleTime" value="06:00:00" />
       <!--HH:mm:ss and 24 hour time format-->
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
+
