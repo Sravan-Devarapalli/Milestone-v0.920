@@ -178,11 +178,11 @@ namespace PraticeManagement
             public const string RecruitingMetricsReport = "~/Reports/RecruitingMetricsReport.aspx";
             public const string ResourceExceptionReport = "~/Reports/ResourceExceptionReport.aspx";
             public const string PayrollDistributionReport = "~/Reports/PayrollDistributionReport.aspx";
-            public const string BadgedOnProjectReport = "~/Reports/Badge/BadgedOnProjectReport.aspx?StartDate={0}&EndDate={1}";
-            public const string BadgedNotOnProjectReport = "~/Reports/Badge/BadgedNotOnProjectReport.aspx?StartDate={0}&EndDate={1}";
-            public const string ClockNotStartedReport = "~/Reports/Badge/ClockNotStartedReport.aspx?StartDate={0}&EndDate={1}";
-            public const string BadgeBlockedReport = "~/Reports/Badge/BadgeBlockedReport.aspx?StartDate={0}&EndDate={1}";
-            public const string BadgeBreakReport = "~/Reports/Badge/BadgeBreakReport.aspx?StartDate={0}&EndDate={1}";
+            public const string BadgedOnProjectReport = "~/Reports/Badge/BadgedOnProjectReport.aspx?StartDate={0}&EndDate={1}&PayTypes={2}";
+            public const string BadgedNotOnProjectReport = "~/Reports/Badge/BadgedNotOnProjectReport.aspx?StartDate={0}&EndDate={1}&PayTypes={2}";
+            public const string ClockNotStartedReport = "~/Reports/Badge/ClockNotStartedReport.aspx?StartDate={0}&EndDate={1}&PayTypes={2}";
+            public const string BadgeBlockedReport = "~/Reports/Badge/BadgeBlockedReport.aspx?StartDate={0}&EndDate={1}&PayTypes={2}";
+            public const string BadgeBreakReport = "~/Reports/Badge/BadgeBreakReport.aspx?StartDate={0}&EndDate={1}&PayTypes={2}";
             public const string BadgedResourcesByTimeReport = "~/Reports/Badge/BadgeResourceByTime.aspx";
             public const string BadgedOnProject = "~/Reports/Badge/BadgedOnProjectReport.aspx";
         }
