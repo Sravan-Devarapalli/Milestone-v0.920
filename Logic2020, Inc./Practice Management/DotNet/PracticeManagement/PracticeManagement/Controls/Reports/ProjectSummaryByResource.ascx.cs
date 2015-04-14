@@ -94,7 +94,7 @@ namespace PraticeManagement.Controls.Reports
         {
             ucProjectDetailReport.hdnGroupByControl.Value = "Person";
             ucProjectDetailReport.btnGroupByControl.Text = ucProjectDetailReport.btnGroupByControl.ToolTip = "Group By Date";
-            var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "*" ? null : HostingPage.StartDate, HostingPage.PeriodSelected == "*" ? null : HostingPage.EndDate, ucProjectSummaryReport.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
+            var data = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(HostingPage.ProjectNumber, HostingPage.MilestoneId, HostingPage.PeriodSelected == "*" ? null : HostingPage.StartDate, HostingPage.PeriodSelected == "*" ? null : HostingPage.EndDate, ucProjectSummaryReport.cblProjectRolesControl.SelectedItemsXmlFormat,false)).ToList();
             ucProjectDetailReport.DataBindByResourceDetail(data);
             PopulateHeaderSection(data.ToList());
         }
