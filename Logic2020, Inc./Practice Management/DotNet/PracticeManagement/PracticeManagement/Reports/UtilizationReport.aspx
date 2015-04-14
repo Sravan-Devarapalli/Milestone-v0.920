@@ -13,13 +13,13 @@
                 <asp:Label ID="lblPerson" runat="server" Visible="false" CssClass="fontBold font14Px"></asp:Label>
             </td>
             <td>
-                YTD Available Hours
+                <span class="fontBold">YTD Available Hours</span> 
             </td>
             <td>
-                YTD Billable Hours Entered
+                <span class="fontBold">YTD Billable Hours Entered</span> 
             </td>
             <td>
-                Utilization
+                <span class="fontBold">Utilization</span> 
             </td>
         </tr>
         <tr>
@@ -36,7 +36,7 @@
                 <asp:Label ID="lblUtilization" runat="server"></asp:Label>
             </td>
         </tr>
-        <tr>
+<%--        <tr>
             <td style="padding-top:10px;">
                 &nbsp;
             </td>
@@ -63,7 +63,7 @@
             <td class="vBottom">
                 <asp:Label ID="lblAllocatedVsTarget" runat="server"></asp:Label>
             </td>
-        </tr>
+        </tr>--%>
     </table>
 </asp:Content>
 
