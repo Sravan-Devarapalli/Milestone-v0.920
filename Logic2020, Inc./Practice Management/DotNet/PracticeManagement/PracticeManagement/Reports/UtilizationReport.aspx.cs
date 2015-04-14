@@ -41,7 +41,7 @@ namespace PraticeManagement.Reports
             {
                 var now = Utils.Generic.GetNowWithTimeZone();
                 WeekStartDate = Utils.Calendar.WeekStartDate(now);
-                WeekEndDate = Utils.Calendar.WeekStartDate(now);
+                WeekEndDate = Utils.Calendar.WeekEndDate(now);
                 PopulateDropdownValues();
                 PopulateUtilizationValues();
             }
@@ -82,11 +82,12 @@ namespace PraticeManagement.Reports
             var personId = userIsAdministrator ? Convert.ToInt32(ddlPerson.SelectedValue) : currentPerson.Id.Value;
             totalHours = ServiceCallers.Custom.Report(r => r.UtilizationReport(personId, YearStartDate, YTDEndDate));
             lblTargetHours.Text = totalHours.AvailableHours.ToString();
-            lblBillableTime.Text = lblBillableTime2.Text = totalHours.BillableHoursUntilToday.ToString();
-            lblAllocatedBillable.Text = totalHours.ProjectedHours.ToString();
+            lblBillableTime.Text =  totalHours.BillableHoursUntilToday.ToString();
+            //lblBillableTime2.Text = totalHours.BillableHoursUntilToday.ToString();
+            //lblAllocatedBillable.Text = totalHours.ProjectedHours.ToString();
             lblUtilization.Text = totalHours.BillableUtilizationPercentage;
-            lblAllocatedVsTarget.Text = totalHours.BillableAllocatedVsTarget;
-            lblAllocatedVsTarget.Style["color"] = totalHours.BillableAllocatedVsTargetValue >= 0 ? "Black" : "#F00";
+            //lblAllocatedVsTarget.Text = totalHours.BillableAllocatedVsTarget;
+            //lblAllocatedVsTarget.Style["color"] = totalHours.BillableAllocatedVsTargetValue >= 0 ? "Black" : "#F00";
         }
     }
 }
