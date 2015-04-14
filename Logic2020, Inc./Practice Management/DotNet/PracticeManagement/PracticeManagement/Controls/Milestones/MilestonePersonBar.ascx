@@ -52,7 +52,8 @@
             <tr>
                 <td class="Width85Percent">
                     <uc2:DatePicker ID="dpPersonStartInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
-                        OnClientChange="dtpStartDateInsert_OnClientChange(this)" AutoPostBack="false" TextBoxWidth="95%" />
+                        OnClientChange="dtpStartDateInsert_OnClientChange(this)" AutoPostBack="false"
+                        TextBoxWidth="95%" />
                 </td>
                 <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonStart" runat="server" ControlToValidate="dpPersonStartInsert"
@@ -88,7 +89,8 @@
             <tr>
                 <td class="Width85Percent">
                     <uc2:DatePicker ID="dpPersonEndInsert" runat="server" ValidationGroup="<%# GetValidationGroup() %>"
-                        OnClientChange="dtpStartDateInsert_OnClientChange(this)" AutoPostBack="false" TextBoxWidth="95%" />
+                        OnClientChange="dtpStartDateInsert_OnClientChange(this)" AutoPostBack="false"
+                        TextBoxWidth="95%" />
                 </td>
                 <td class="Width15Percent">
                     <asp:RequiredFieldValidator ID="reqPersonEnd" runat="server" ControlToValidate="dpPersonEndInsert"
@@ -283,6 +285,10 @@
                         Text="*" ToolTip="The person's badge dates in a milestone should be within their hire and termination dates."
                         EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup() %>"
                         OnServerValidate="custBadgeNotInEmpHistory_ServerValidate"></asp:CustomValidator>
+                    <asp:CustomValidator ID="custBadgeAfterJuly" runat="server" ErrorMessage="Person's badge dates cannot be before 7/1/2014."
+                        Text="*" ToolTip="Person's badge dates cannot be before 7/1/2014."
+                        EnableClientScript="false" SetFocusOnError="true" Display="Dynamic" ValidationGroup="<%# GetValidationGroup() %>"
+                        OnServerValidate="custBadgeAfterJuly_ServerValidate"></asp:CustomValidator>
                 </td>
             </tr>
         </table>
