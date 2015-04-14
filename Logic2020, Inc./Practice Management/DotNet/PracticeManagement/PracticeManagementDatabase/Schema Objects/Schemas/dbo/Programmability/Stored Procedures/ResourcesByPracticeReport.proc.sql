@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[ResourcesByPracticeReport]
 (
+	@PayTypeIds			NVARCHAR(MAX)=NULL,
 	@Practices			NVARCHAR(MAX),
 	@StartDate			DATETIME,
 	@EndDate			DATETIME,
@@ -12,7 +13,15 @@ BEGIN
 			@EndDateLocal DATETIME
 
 	DECLARE @PracticeIdsTable TABLE ( Ids INT )
-	
+
+	DECLARE @PayTypeIdsTable TABLE ( Ids INT )
+	DECLARE @PayTypeIdsLocal	NVARCHAR(MAX)
+	SET @PayTypeIdsLocal = @PayTypeIds
+
+	INSERT INTO @PayTypeIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@PayTypeIdsLocal)
+
 	INSERT INTO @PracticeIdsTable( Ids)
 	SELECT ResultId
 	FROM dbo.ConvertStringListIntoTable(@Practices)
@@ -50,13 +59,18 @@ BEGIN
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 		INNER JOIN Ranges R ON MPE.BadgeStartDate <= R.EndDate AND R.StartDate <= MPE.BadgeEndDate
 		INNER JOIN dbo.Person P ON P.PersonId = MP.PersonId 
-		WHERE mpe.IsbadgeRequired = 1
+		INNER JOIN dbo.MSBadge MB ON MB.PersonId = MP.PersonId
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
+		WHERE MB.ExcludeInReports = 0 AND mpe.IsbadgeRequired = 1
+				AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		UNION ALL
+
 		SELECT M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate
 		FROM dbo.MSBadge M
 		INNER JOIN Person P ON P.PersonId = M.PersonId 
 		INNER JOIN Ranges R ON M.LastBadgeStartDate <= R.EndDate AND R.StartDate <= M.LastBadgeEndDate
-		WHERE M.IsPreviousBadge = 1 
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
+		WHERE M.ExcludeInReports = 0 AND M.IsPreviousBadge = 1 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		) P
 		GROUP BY P.PersonId,P.DefaultPractice,P.StartDate,P.EndDate
 	 ),
@@ -68,7 +82,8 @@ BEGIN
 		INNER JOIN Ranges R ON R.StartDate <= M.BadgeEndDate AND M.BadgeStartDate <= R.EndDate
 		INNER JOIN dbo.Person P ON P.PersonId = M.PersonId
 		LEFT JOIN BadgedOnProject BP ON BP.StartDate = R.StartDate AND BP.PersonId = M.PersonId
-		WHERE BP.PersonId IS NULL
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
+		WHERE M.ExcludeInReports = 0 AND BP.PersonId IS NULL AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		GROUP BY M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate 
 	 ),
 	  BadgedNotOnProjectCount
@@ -94,6 +109,8 @@ BEGIN
 	   FROM v_CurrentMSBadge M 
 	   INNER JOIN dbo.Person Per ON Per.PersonId = M.PersonId
 	   INNER JOIN Ranges R ON R.EndDate < M.BadgeStartDate
+	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
+	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,Per.DefaultPractice,R.StartDate,R.EndDate
 	 ),
 	  BlockedPeople
@@ -102,6 +119,8 @@ BEGIN
 	   SELECT M.PersonId,R.StartDate,R.EndDate
 	   FROM dbo.MSBadge M 
 	   JOIN Ranges R ON R.StartDate <= M.BlockEndDate AND M.BlockStartDate <= R.EndDate
+	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
+	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,R.StartDate,R.EndDate
 	 ),
 	  InBreakPeriod
@@ -110,6 +129,8 @@ BEGIN
 	   SELECT M.PersonId,R.StartDate,R.EndDate
 	   FROM v_CurrentMSBadge M 
 	   JOIN Ranges R ON R.StartDate <= M.BreakEndDate AND M.BreakStartDate <= R.EndDate
+	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
+	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,R.StartDate,R.EndDate
 	 ),
 	  ClockNotStartedCount
@@ -137,3 +158,4 @@ BEGIN
 	 WHERE Pr.PracticeId IN (SELECT Ids FROM @PracticeIdsTable)
 	 ORDER BY R.StartDate,Pr.Name
 END
+
