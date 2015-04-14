@@ -47,18 +47,61 @@
             var dpBadgeStart = document.getElementById(row + 'dpBadgeStart_txtDate');
             var dpBadgeEnd = document.getElementById(row + 'dpBadgeEnd_txtDate');
             var hdnStartDateValue = document.getElementById(row + 'hdnStartDateValue');
-            var hdnEndDateValue = document.getElementById(row + 'hdnEndDateValue'); 
-            var lblEndDate = document.getElementById(row + 'lblEndDate');
+            var hdnEndDateValue = document.getElementById(row + 'hdnEndDateValue');
+            var hdnApproved = document.getElementById(row + 'hdnApproved');
+            var hdnPersonId = document.getElementById(row + 'hdnPersonId');
+            var ddlPersonName = document.getElementById(row + 'ddlPersonName');
+            if (hdnPersonId.value != ddlPersonName.value)
+                return;
             var oldPersonStartDate = new Date(hdnStartDateValue.value);
             var oldPersonEnddate = new Date(hdnEndDateValue.value);
             var newPersonStartdate = new Date(dpPersonStart.value);
             var newPersonEnddate = new Date(dpPersonEnd.value);
+            var previousApproved = hdnApproved.value == 'Yes';
             if (chbBadgeRequired.checked) {
                 if (oldPersonStartDate != newPersonStartdate || oldPersonEnddate != newPersonEnddate) {
                     if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate)
                         chbOpsApproved.checked = false;
+                    else
+                        chbOpsApproved.checked = previousApproved;
                     dpBadgeStart.value = dpPersonStart.value;
                     dpBadgeEnd.value = dpPersonEnd.value;
+                    dtpBadgeStartDate_OnClientChange(dpBadgeStart);
+                }
+                else {
+                    chbOpsApproved.checked = previousApproved;
+                }
+            }
+        }
+
+        function dtpBadgeStartDate_OnClientChange(dtp) {
+            var index = dtp.id.indexOf('dpBadge');
+            var row = dtp.id.substring(0, index);
+            var chbBadgeRequired = document.getElementById(row + 'chbBadgeRequired');
+            var chbOpsApproved = document.getElementById(row + 'chbOpsApproved');
+            var dpBadgeStart = document.getElementById(row + 'dpBadgeStart_txtDate');
+            var dpBadgeEnd = document.getElementById(row + 'dpBadgeEnd_txtDate');
+            var hdnStartDateValue = document.getElementById(row + 'hdnBadgeStartDateValue');
+            var hdnEndDateValue = document.getElementById(row + 'hdnBadgeEndDateValue');
+            var hdnApproved = document.getElementById(row + 'hdnApproved');
+            var hdnPersonId = document.getElementById(row + 'hdnPersonId');
+            var ddlPersonName = document.getElementById(row + 'ddlPersonName');
+            if (hdnPersonId.value != ddlPersonName.value)
+                return;
+            var oldPersonStartDate = new Date(hdnStartDateValue.value);
+            var oldPersonEnddate = new Date(hdnEndDateValue.value);
+            var newPersonStartdate = new Date(dpBadgeStart.value);
+            var newPersonEnddate = new Date(dpBadgeEnd.value);
+            var previousApproved = hdnApproved.value == 'Yes';
+            if (chbBadgeRequired.checked) {
+                if (oldPersonStartDate != newPersonStartdate || oldPersonEnddate != newPersonEnddate) {
+                    if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate)
+                        chbOpsApproved.checked = false;
+                    else
+                        chbOpsApproved.checked = previousApproved;
+                }
+                else {
+                    chbOpsApproved.checked = previousApproved;
                 }
             }
         }
