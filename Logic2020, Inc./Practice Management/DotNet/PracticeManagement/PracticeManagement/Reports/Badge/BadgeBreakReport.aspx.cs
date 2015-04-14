@@ -8,6 +8,7 @@ using DataTransferObjects;
 using PraticeManagement.Utils.Excel;
 using System.Data;
 using PraticeManagement.Utils;
+using PraticeManagement.Controls;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -15,6 +16,7 @@ namespace PraticeManagement.Reports.Badge
     {
         public const string StartDateKey = "StartDate";
         public const string EndDateKey = "EndDate";
+        public const string PayTypesKey = "PayTypes";
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
 
@@ -91,16 +93,27 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PayTypesFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[PayTypesKey];
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 dtpEnd.DateValue = DataTransferObjects.Utils.Generic.MonthEndDate(DateTime.Now);
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
+                DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
+                cblPayTypes.SelectItems(new List<int>() { 1, 2 });
                 if (!String.IsNullOrEmpty(StartDateFromQueryString))
                 {
                     dtpStart.DateValue = Convert.ToDateTime(StartDateFromQueryString);
                     dtpEnd.DateValue = Convert.ToDateTime(EndDateFromQueryString);
+                    cblPayTypes.SelectedItems = PayTypesFromQueryString == "null" ? null : PayTypesFromQueryString;
                     btnUpdateView_Click(btnUpdateView, new EventArgs());
                 }
             }
@@ -136,7 +149,8 @@ namespace PraticeManagement.Reports.Badge
         public void PopulateData()
         {
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
-            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(dtpStart.DateValue, dtpEnd.DateValue, false, false, false, true,false).ToList());
+            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,dtpStart.DateValue, dtpEnd.DateValue, false, false, false, true, false).ToList());
             repblocked.DataSource = resources;
             repblocked.DataBind();
             if (resources.Count > 0)
@@ -156,7 +170,8 @@ namespace PraticeManagement.Reports.Badge
             var filename = string.Format("6MosBreakReport_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(dtpStart.DateValue, dtpEnd.DateValue, false, false, false, true,false).ToList());
+            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,dtpStart.DateValue, dtpEnd.DateValue, false, false, false, true, false).ToList());
             if (report.Count > 0)
             {
                 string dateRangeTitle = string.Format("6 mos break report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
@@ -221,3 +236,4 @@ namespace PraticeManagement.Reports.Badge
         }
     }
 }
+
