@@ -36,7 +36,7 @@ namespace PraticeManagement.Controls.Reports
                 CellStyles[] dataCellStylearray = { dataCellStyle };
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
 
-                RowStyles[] rowStylearray = { headerrowStyle};
+                RowStyles[] rowStylearray = { headerrowStyle };
 
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
                 sheetStyle.IsAutoResize = false;
@@ -61,7 +61,9 @@ namespace PraticeManagement.Controls.Reports
                 CellStyles dataDateCellStyle = new CellStyles();
                 dataDateCellStyle.DataFormat = "mm/dd/yy;@";
 
-                CellStyles[] dataCellStylearray = { dataCellStyle,
+                var dataCurrancyCellStyle = new CellStyles { DataFormat = "$#,##0.00_);($#,##0.00)" };
+
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle,
                                                     dataCellStyle, 
                                                     dataCellStyle,
                                                     dataDateCellStyle,
@@ -71,9 +73,10 @@ namespace PraticeManagement.Controls.Reports
                                                     dataCellStyle,
                                                     dataCellStyle, 
                                                     dataCellStyle,
+                                                    dataCurrancyCellStyle,
+                                                    dataCellStyle
                                                   };
-
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
 
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
@@ -408,12 +411,12 @@ namespace PraticeManagement.Controls.Reports
         {
 
             DataHelper.InsertExportActivityLogMessage(ProjectDetailByResourceExport);
-            
+
             var dataSetList = new List<DataSet>();
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
 
             var project = ServiceCallers.Custom.Project(p => p.GetProjectShortByProjectNumber(ProjectNumber, MilestoneId, StartDate, EndDate));
-            List<PersonLevelGroupedHours> report = GetReportData();
+            List<PersonLevelGroupedHours> report = GetReportData(true);
 
             string filterApplied = "Filters applied to columns: ";
             bool isFilterApplied = false;
@@ -476,7 +479,7 @@ namespace PraticeManagement.Controls.Reports
                 dataset.Tables.Add(header);
                 dataSetList.Add(dataset);
             }
-            
+
 
             NPOIExcel.Export(filename, dataSetList, sheetStylesList);
         }
@@ -496,6 +499,8 @@ namespace PraticeManagement.Controls.Reports
             data.Columns.Add("Billable");
             data.Columns.Add("Non-Billable");
             data.Columns.Add("Actual Hours");
+            data.Columns.Add("Projected Hours");
+            data.Columns.Add("Bill Rate");
             data.Columns.Add("Note");
 
             foreach (var timeEntriesGroupByClientAndProject in report)
@@ -516,6 +521,8 @@ namespace PraticeManagement.Controls.Reports
                             row.Add(byWorkType.BillableHours);
                             row.Add(byWorkType.NonBillableHours);
                             row.Add(byWorkType.TotalHours);
+                            row.Add(byWorkType.ForecastedHoursDaily);
+                            row.Add(byWorkType.BillingType == "Fixed" ? "FF" : byWorkType.BillRate.ToString());
                             row.Add(byWorkType.HtmlEncodedNoteForExport);
                             data.Rows.Add(row.ToArray());
                         }
@@ -530,6 +537,8 @@ namespace PraticeManagement.Controls.Reports
                     row.Add("");
                     row.Add("");
                     row.Add("");
+                    row.Add("0");
+                    row.Add("0");
                     row.Add("0");
                     row.Add("0");
                     row.Add("0");
@@ -567,12 +576,12 @@ namespace PraticeManagement.Controls.Reports
                 HostingControl.PopulateHeaderSection(list);
         }
 
-        private List<PersonLevelGroupedHours> GetReportData()
+        private List<PersonLevelGroupedHours> GetReportData(bool fromExport = false)
         {
             List<PersonLevelGroupedHours> list =
                 ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(ProjectNumber, MilestoneId,
                     PeriodSelected == "*" ? null : StartDate, PeriodSelected == "*" ? null : EndDate,
-                    ProjectRoles)).ToList();
+                    ProjectRoles, fromExport)).ToList();
 
             if (Page is PraticeManagement.Reporting.TimePeriodSummaryReport)
             {
