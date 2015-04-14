@@ -130,6 +130,13 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public bool ExcludeInReports
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public DateTime? ExceptionStartDate
         {
             get;
@@ -194,6 +201,27 @@ namespace DataTransferObjects
 
         [DataMember]
         public DateTime ModifiedDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? DeactivatedDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? OrganicBreakStartDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? OrganicBreakEndDate
         {
             get;
             set;
