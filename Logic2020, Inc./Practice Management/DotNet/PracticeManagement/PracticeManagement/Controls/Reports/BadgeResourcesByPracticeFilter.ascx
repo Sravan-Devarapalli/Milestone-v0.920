@@ -13,7 +13,13 @@
         <td class="Width35Percent BorderBottom1px vTop" colspan="3">
             Include people with MS 18 mos category as
         </td>
-        <td class="">
+        <td class="Width2PercentImp">
+        </td>
+        <td class="BorderBottom1px Width8Per">
+            Pay Type
+        </td>
+        <td>
+            &nbsp;
         </td>
     </tr>
     <tr>
@@ -26,17 +32,19 @@
                     UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                 </ext:ScrollableDropdownExtender>
             </span><span id="tdTitles" runat="server">
-                <pmc:ScrollingDropDown ID="cblTitles" runat="server" AllSelectedReturnType="Null" 
-                    onclick="scrollingDropdown_onclick('cblTitles','Title','','Titles')" CellPadding="3"  Style="width:240px;" 
-                    NoItemsType="All" SetDirty="False" DropDownListType="Title" DropDownListTypePluralForm="Titles"
-                    CssClass="NewHireReportCblPractices Height160PxIMP" />
+                <pmc:ScrollingDropDown ID="cblTitles" runat="server" AllSelectedReturnType="Null"
+                    onclick="scrollingDropdown_onclick('cblTitles','Title','','Titles')" CellPadding="3"
+                    Style="width: 240px;" NoItemsType="All" SetDirty="False" DropDownListType="Title"
+                    DropDownListTypePluralForm="Titles" CssClass="NewHireReportCblPractices Height160PxIMP" />
                 <ext:ScrollableDropdownExtender ID="sdeTitles" runat="server" TargetControlID="cblTitles"
                     BehaviorID="sdeTitles" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
                     Width="250px">
                 </ext:ScrollableDropdownExtender>
             </span>
         </td>
-        <td>&nbsp;</td>
+        <td>
+            &nbsp;
+        </td>
         <td>
             <asp:CheckBox ID="chbBadgedNotOnProject" runat="server" AutoPostBack="false" Checked="True"
                 Text="Badged not on Project" ToolTip="Badged not on Project" />
@@ -50,6 +58,18 @@
                 Text="18-Month Clock Not Started" ToolTip="18-Month Clock Not Started" />
         </td>
         <td>
+            &nbsp;
+        </td>
+        <td>
+            <pmc:ScrollingDropDown ID="cblPayTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
+                DropDownListType="Pay Type" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+            <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
+                UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+            </ext:ScrollableDropdownExtender>
+        </td>
+        <td>
+            &nbsp;
         </td>
     </tr>
 </table>
