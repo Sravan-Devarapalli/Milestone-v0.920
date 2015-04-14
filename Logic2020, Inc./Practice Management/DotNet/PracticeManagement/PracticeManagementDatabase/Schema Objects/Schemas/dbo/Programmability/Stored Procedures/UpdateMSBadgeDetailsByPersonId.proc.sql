@@ -30,6 +30,11 @@ BEGIN
 								StartDate DATETIME,
 								PlannedEnd DATETIME
 							 )
+	DECLARE @ManualBadgeStartSource	BIT,
+			@ManualBadgeEndSource		BIT
+
+	SELECT @ManualBadgeStartSource = CASE WHEN BadgeStartDateSource = 'Manual Entry' THEN 1 ELSE 0 END, @ManualBadgeEndSource = CASE WHEN BadgeEndDateSource = 'Manual Entry' THEN 1 ELSE 0 END
+	FROM dbo.MSBadge WHERE PersonId = @PersonId
 
 	SET ANSI_WARNINGS OFF;
 	;WITH BadgeDetails
@@ -84,25 +89,47 @@ BEGIN
 
 	
 	UPDATE M
-	SET BadgeStartDate =   CASE	WHEN B.StartDate IS NULL THEN NULL
-								WHEN B.StartDate > @DefaultStartDate THEN B.StartDate 
-								ELSE @DefaultStartDate END,
-		BadgeEndDate =	 CASE	WHEN B.StartDate IS NULL THEN NULL
-								WHEN B.StartDate > @DefaultStartDate THEN (CASE WHEN DATEADD(MM,18,B.StartDate)-1 > B.PlannedEnd THEN DATEADD(MM,18,B.StartDate)-1 ELSE B.PlannedEnd END) 
-								ELSE (CASE WHEN DATEADD(MM,18,@DefaultStartDate)-1 > B.PlannedEnd THEN DATEADD(MM,18,@DefaultStartDate)-1 ELSE B.PlannedEnd END) END,
+	SET BadgeStartDate =   CASE	WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 0 THEN NULL
+								WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 1 THEN M.BadgeStartDate
+								WHEN B.StartDate IS NOT NULL AND @ManualBadgeStartSource = 1 THEN (CASE WHEN M.BadgeStartDate < dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate) THEN M.BadgeStartDate ELSE dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate) END)
+								WHEN @ManualBadgeStartSource = 0 THEN dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate)
+								END,
+
+		BadgeEndDate =	 CASE	WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 0 THEN NULL
+								WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 1 THEN M.BadgeEndDate
+								WHEN B.StartDate IS NOT NULL AND @ManualBadgeStartSource = 1 THEN (CASE WHEN M.BadgeStartDate < dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate) THEN M.BadgeEndDate ELSE (CASE WHEN B.StartDate > @DefaultStartDate THEN dbo.GreaterDateBetweenTwo(DATEADD(MM,18,B.StartDate)-1,B.PlannedEnd) ELSE dbo.GreaterDateBetweenTwo(DATEADD(MM,18,@DefaultStartDate)-1,B.PlannedEnd) END) END)
+								WHEN @ManualBadgeEndSource = 0 THEN (CASE WHEN B.StartDate > @DefaultStartDate THEN dbo.GreaterDateBetweenTwo(DATEADD(MM,18,B.StartDate)-1,B.PlannedEnd)
+																	 ELSE  dbo.GreaterDateBetweenTwo(DATEADD(MM,18,@DefaultStartDate)-1,B.PlannedEnd) END)
+								END,
+
 		PlannedEndDate = B.PlannedEnd,
-		BadgeStartDateSource = CASE	WHEN B.StartDate IS NULL THEN NULL
-									ELSE B.BadgeStartSource END, -- BADGE HISTORY
-		BadgeEndDateSource = CASE WHEN B.StartDate IS NULL THEN NULL
-									ELSE B.BadgeStartSource END, -- BADGE HISTORY
+
+		BadgeStartDateSource = CASE	WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 0 THEN NULL
+									WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 1 THEN M.BadgeStartDateSource
+									WHEN B.StartDate IS NOT NULL AND @ManualBadgeStartSource = 1 THEN (CASE WHEN M.BadgeStartDate < dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate) THEN M.BadgeStartDateSource ELSE B.BadgeStartSource END)
+									ELSE B.BadgeStartSource END, 
+
+		BadgeEndDateSource = CASE	WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 0 THEN NULL
+									WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 1 THEN M.BadgeStartDateSource
+									WHEN B.StartDate IS NOT NULL AND @ManualBadgeStartSource = 1 THEN (CASE WHEN M.BadgeStartDate < dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate) THEN M.BadgeStartDateSource ELSE B.BadgeStartSource END)
+									ELSE B.BadgeStartSource END, 
+
 		PlannedEndDateSource = CASE	WHEN B.StartDate IS NULL THEN NULL
-									ELSE B.PlannedEndSource END, -- BADGE HISTORY
-		BreakStartDate = CASE 	WHEN B.StartDate IS NULL THEN NULL
-								WHEN B.StartDate > @DefaultStartDate THEN (CASE WHEN DATEADD(MM,18,B.StartDate)-1 > B.PlannedEnd THEN DATEADD(MM,18,B.StartDate) ELSE B.PlannedEnd+1 END)-- DATEADD(MM,18,B.StartDate) 
-								ELSE (CASE WHEN DATEADD(MM,18,@DefaultStartDate)-1 > B.PlannedEnd THEN DATEADD(MM,18,@DefaultStartDate) ELSE B.PlannedEnd+1 END) END,
-		BreakEndDate =	CASE	WHEN B.StartDate IS NULL THEN NULL
-								WHEN B.StartDate > @DefaultStartDate THEN (CASE WHEN DATEADD(MM,18,B.StartDate)-1 > B.PlannedEnd THEN DATEADD(MM,24,B.StartDate)-1 ELSE DATEADD(MM,6,B.PlannedEnd) END) --DATEADD(MM,24,B.StartDate)-1 
-								ELSE (CASE WHEN DATEADD(MM,18,@DefaultStartDate)-1 > B.PlannedEnd THEN DATEADD(MM,24,@DefaultStartDate)-1 ELSE DATEADD(MM,6,B.PlannedEnd) END) END
+									ELSE B.PlannedEndSource END, 
+
+		BreakStartDate = CASE 	WHEN B.StartDate IS NULL AND @ManualBadgeEndSource = 0 THEN NULL
+								WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 1 THEN M.BreakStartDate
+								WHEN B.StartDate IS NOT NULL AND @ManualBadgeStartSource = 1 THEN (CASE WHEN M.BadgeStartDate < dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate) THEN M.BreakStartDate ELSE (CASE WHEN B.StartDate > @DefaultStartDate THEN dbo.GreaterDateBetweenTwo(DATEADD(MM,18,B.StartDate),B.PlannedEnd+1) ELSE dbo.GreaterDateBetweenTwo(DATEADD(MM,18,@DefaultStartDate),B.PlannedEnd+1) END) END)
+								WHEN @ManualBadgeEndSource = 0 THEN (CASE WHEN B.StartDate > @DefaultStartDate THEN dbo.GreaterDateBetweenTwo(DATEADD(MM,18,B.StartDate),B.PlannedEnd+1) 
+																	 ELSE dbo.GreaterDateBetweenTwo(DATEADD(MM,18,@DefaultStartDate),B.PlannedEnd+1) END)
+								END,
+
+		BreakEndDate =	CASE	WHEN B.StartDate IS NULL AND @ManualBadgeEndSource = 0 THEN NULL
+								WHEN B.StartDate IS NULL AND @ManualBadgeStartSource = 1 THEN M.BreakEndDate
+								WHEN B.StartDate IS NOT NULL AND @ManualBadgeStartSource = 1 THEN (CASE WHEN M.BadgeStartDate < dbo.GreaterDateBetweenTwo(B.StartDate,@DefaultStartDate) THEN M.BreakEndDate ELSE (CASE WHEN B.StartDate > @DefaultStartDate THEN dbo.GreaterDateBetweenTwo(DATEADD(MM,24,B.StartDate)-1,DATEADD(MM,6,B.PlannedEnd)) ELSE dbo.GreaterDateBetweenTwo(DATEADD(MM,24,@DefaultStartDate)-1,DATEADD(MM,6,B.PlannedEnd)) END) END)
+								WHEN @ManualBadgeStartSource = 0 THEN (CASE WHEN B.StartDate > @DefaultStartDate THEN dbo.GreaterDateBetweenTwo(DATEADD(MM,24,B.StartDate)-1, DATEADD(MM,6,B.PlannedEnd))
+																	      ELSE dbo.GreaterDateBetweenTwo(DATEADD(MM,24,@DefaultStartDate)-1,DATEADD(MM,6,B.PlannedEnd)) END)
+							    END
 	FROM MSBadge M
 	LEFT JOIN @BadgeTable2 B ON B.PersonId = M.PersonId
 	WHERE (@PersonId IS NULL OR m.PersonId = @PersonId)
@@ -125,17 +152,17 @@ BEGIN
 							 ELSE M.PlannedEndDate END,
 	   BadgeStartDateSource = CASE WHEN BadgeStartDate IS NULL AND ExceptionStartDate IS NULL THEN NULL
 							  WHEN BadgeStartDate IS NULL AND ExceptionStartDate IS NOT NULL THEN 'MS Exception'
-							  WHEN BadgeStartDate IS NOT NULL AND ExceptionStartDate IS NULL THEN B.BadgeStartSource
-							  WHEN BadgeStartDate < ExceptionStartDate THEN B.BadgeStartSource
+							  WHEN BadgeStartDate IS NOT NULL AND ExceptionStartDate IS NULL THEN M.BadgeStartDateSource
+							  WHEN BadgeStartDate <= ExceptionStartDate THEN M.BadgeStartDateSource
 							  ELSE 'MS Exception' END,
 	   PlannedEndDateSource = CASE WHEN BadgeStartDate IS NULL AND ExceptionStartDate IS NULL THEN NULL
 							  WHEN BadgeStartDate IS NULL AND ExceptionStartDate IS NOT NULL THEN 'MS Exception'
-							  WHEN BadgeStartDate IS NOT NULL THEN B.PlannedEndSource END,
+							  WHEN BadgeStartDate IS NOT NULL THEN M.PlannedEndDateSource END,
 
 	   BadgeEndDateSource =	  CASE WHEN BadgeStartDate IS NULL AND ExceptionStartDate IS NULL THEN NULL
 							  WHEN BadgeStartDate IS NULL AND ExceptionStartDate IS NOT NULL THEN 'MS Exception'
-							  WHEN BadgeStartDate IS NOT NULL AND ExceptionStartDate IS NULL THEN B.BadgeStartSource
-							  WHEN ExceptionEndDate < BadgeEndDate THEN B.BadgeStartSource
+							  WHEN BadgeStartDate IS NOT NULL AND ExceptionStartDate IS NULL THEN M.BadgeEndDateSource
+							  WHEN ExceptionEndDate < BadgeEndDate THEN M.BadgeEndDateSource
 							  ELSE 'MS Exception' END,
 
 	   BreakStartDate = CASE WHEN BadgeEndDate IS NULL AND ExceptionEndDate IS NULL THEN NULL
@@ -199,3 +226,4 @@ BEGIN
 	END
 
 END
+
