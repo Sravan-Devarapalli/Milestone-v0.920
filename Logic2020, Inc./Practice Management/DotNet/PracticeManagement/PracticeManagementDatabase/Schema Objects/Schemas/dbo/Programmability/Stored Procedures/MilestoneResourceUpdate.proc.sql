@@ -13,15 +13,22 @@ BEGIN
 		SET ANSI_WARNINGS OFF
 		DECLARE @FutureDate DATETIME
 		SET @FutureDate = dbo.GetFutureDate()
+		DECLARE @DefaultStartDate DATETIME = '20140701'
 
 		--Get the active start date and active end date of the mile stone person in the selected date range.
-		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME)
-		INSERT INTO @PersonActiveDates 
+		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME, CurrentBadgeStartDate DATETIME, CurrentBadgeEndDate DATETIME)
+		INSERT INTO @PersonActiveDates(PersonId,ActiveStartDate,ActiveEndDate)
 		SELECT MP.PersonId,MIN(C.Date) AS ActiveStartDate,MAX(C.Date) AS ActiveEndDate
 		FROM dbo.MilestonePerson MP 
 		INNER JOIN dbo.Calendar C ON C.Date BETWEEN @StartDate AND @ProjectedDeliveryDate AND MP.MilestoneId = @MilestoneId
 		INNER JOIN dbo.v_PersonHistory PH ON MP.PersonId = PH.PersonId AND C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) 
 		GROUP BY MP.PersonId
+
+		UPDATE P
+		SET P.CurrentBadgeStartDate = M.BadgeStartDate,
+			P.CurrentBadgeEndDate = M.BadgeEndDate
+		FROM @PersonActiveDates P
+		INNER JOIN dbo.MSBadge M ON M.PersonId = P.PersonId
 
 		--Delete milestone person entries which don't have atleast 1 active day in the selected range.
 		DECLARE @DeleteMileStonePersonEntriesTable TABLE(MilestonePersonId INT)
@@ -114,7 +121,8 @@ BEGIN
 
 	    UPDATE mpentry
 			   SET StartDate = P.ActiveStartDate,
-			   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL ELSE P.ActiveStartDate END,
+			   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL
+									 WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate) > P.CurrentBadgeStartDate THEN dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate) ELSE P.CurrentBadgeStartDate END) ELSE NULL END,
 			   IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
 			  FROM MilestonePersonEntry as mpentry
 			  INNER JOIN 
@@ -131,7 +139,9 @@ BEGIN
 
 		UPDATE mpentry
 				SET EndDate =  P.ActiveEndDate,
-				BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL ELSE P.ActiveEndDate END,
+				BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL 
+									WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN P.ActiveEndDate > P.CurrentBadgeEndDate THEN P.CurrentBadgeEndDate ELSE P.ActiveEndDate END)
+									ELSE NULL END,
 				IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
 			    FROM MilestonePersonEntry as mpentry
 				INNER JOIN 
@@ -157,11 +167,11 @@ BEGIN
 				   BadgeEndDate = CASE	WHEN mpe.BadgeEndDate IS NULL THEN NULL
 										WHEN @IsStartDateChangeReflectedForMilestoneAndPersons =1 THEN 
 										( CASE
-											 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.StartDate
-											 ELSE mpe.EndDate
+											 WHEN ( mpe.BadgeStartDate > mpe.BadgeEndDate) THEN  mpe.BadgeStartDate
+											 ELSE mpe.BadgeEndDate
 										   END
 										) 
-										ELSE mpe.EndDate END,
+										ELSE mpe.BadgeEndDate END,
 				  StartDate = CASE WHEN @IsEndDateChangeReflectedForMilestoneAndPersons =1 THEN 
 								( CASE
 									 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.EndDate
@@ -171,11 +181,11 @@ BEGIN
 				  BadgeStartDate = CASE WHEN mpe.BadgeStartDate IS NULL THEN NULL
 										WHEN @IsEndDateChangeReflectedForMilestoneAndPersons =1 THEN 
 											( CASE
-												 WHEN ( mpe.StartDate > mpe.EndDate) THEN  mpe.EndDate
-												 ELSE mpe.StartDate
+												 WHEN ( mpe.BadgeStartDate > mpe.BadgeEndDate) THEN  mpe.BadgeEndDate
+												 ELSE mpe.BadgeStartDate
 											   END
 											) 
-										ELSE mpe.StartDate END
+										ELSE mpe.BadgeStartDate END
 			  FROM dbo.MilestonePersonEntry AS mpe
 				   INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
 				   INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId
