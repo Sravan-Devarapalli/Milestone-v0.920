@@ -235,7 +235,7 @@ namespace PraticeManagement
             get
             {
                 CompanyPerformanceState.Filter = GetFilterSettings();
-                bool isProjectSummaryCachedToday = ServiceCallers.Custom.Project(p => p.IsProjectSummaryCachedToday());
+                bool isProjectSummaryCachedToday = false;
                 if ((ddlPeriod.SelectedValue == "-13" || ddlPeriod.SelectedValue == "13") && isProjectSummaryCachedToday)
                 {
                     CompanyPerformanceState.Filter.FinancialsFromCache = true;
