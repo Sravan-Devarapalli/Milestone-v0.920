@@ -43,7 +43,7 @@ BEGIN
 			LEFT JOIN dbo.MilestonePersonEntry AS MPE ON MP.MilestonePersonId = MPE.MilestonePersonId
 			LEFT JOIN dbo.person AS P ON P.PersonId = MP.PersonId 
 			LEFT JOIN dbo.PersonCalendarAuto PC ON PC.PersonId = MP.PersonId
-			WHERE  (Pro.StartDate <= @EndDateLocal AND @StartDateLocal <= Pro.EndDate) AND
+			WHERE  Pro.projectid != 174 AND (Pro.StartDate <= @EndDateLocal AND @StartDateLocal <= Pro.EndDate) AND
 				   (@PracticeIds IS NULL OR Pro.PracticeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))) AND
 			       Pro.ClientId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@AccountIds)) AND
 				   Pro.GroupId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@BusinessUnitIds)) AND
