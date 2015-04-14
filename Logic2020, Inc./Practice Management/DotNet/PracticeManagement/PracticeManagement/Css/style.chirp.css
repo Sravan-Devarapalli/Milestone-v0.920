@@ -8326,3 +8326,12 @@ table#ctl00_body_login tr td label
     width: 220px;
     z-index: 20000;
 }
+.DeactivateDateValidationpopUp
+{
+    background-color: White;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    width: 700px;
+    padding: 10px;
+}
