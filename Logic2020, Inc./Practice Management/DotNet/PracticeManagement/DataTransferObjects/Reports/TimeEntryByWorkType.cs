@@ -21,6 +21,15 @@ namespace DataTransferObjects.Reports
         [DataMember]
         public double NonBillableHours { get; set; }
 
+        [DataMember]
+        public double ForecastedHoursDaily { get; set; }
+
+        [DataMember]
+        public double BillRate { get; set; }
+
+        [DataMember]
+        public string BillingType { get; set; }
+
         /// <summary>
         /// Hourly Bill Rate from MilestonePerson
         /// </summary>
@@ -80,3 +89,4 @@ namespace DataTransferObjects.Reports
         }
     }
 }
+
