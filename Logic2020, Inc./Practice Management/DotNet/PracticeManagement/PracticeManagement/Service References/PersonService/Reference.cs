@@ -90,6 +90,15 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
         DataTransferObjects.PersonBadgeHistories GetBadgeHistoryByPersonId(int personId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckIfPersonInProjectsForThisPeriod", ReplyAction="http://tempuri.org/IPersonService/CheckIfPersonInProjectsForThisPeriodResponse")]
+        bool CheckIfPersonInProjectsForThisPeriod(System.Nullable<System.DateTime> modifiedEndDate, System.Nullable<System.DateTime> oldEndDate, System.Nullable<System.DateTime> modifiedStartDate, System.Nullable<System.DateTime> oldStartDate, int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetBadgeRecordsAfterDeactivatedDate", ReplyAction="http://tempuri.org/IPersonService/GetBadgeRecordsAfterDeactivatedDateResponse")]
+        DataTransferObjects.MSBadge[] GetBadgeRecordsAfterDeactivatedDate(int personId, System.DateTime deactivatedDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetBadgeRecordsByProjectId", ReplyAction="http://tempuri.org/IPersonService/GetBadgeRecordsByProjectIdResponse")]
+        DataTransferObjects.MSBadge[] GetBadgeRecordsByProjectId(int projectId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -344,7 +353,8 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-       public PersonServiceClient(string endpointConfigurationName) : 
+       
+        public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
@@ -450,6 +460,18 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.PersonBadgeHistories GetBadgeHistoryByPersonId(int personId) {
             return base.Channel.GetBadgeHistoryByPersonId(personId);
+        }
+        
+        public bool CheckIfPersonInProjectsForThisPeriod(System.Nullable<System.DateTime> modifiedEndDate, System.Nullable<System.DateTime> oldEndDate, System.Nullable<System.DateTime> modifiedStartDate, System.Nullable<System.DateTime> oldStartDate, int personId) {
+            return base.Channel.CheckIfPersonInProjectsForThisPeriod(modifiedEndDate, oldEndDate, modifiedStartDate, oldStartDate, personId);
+        }
+        
+        public DataTransferObjects.MSBadge[] GetBadgeRecordsAfterDeactivatedDate(int personId, System.DateTime deactivatedDate) {
+            return base.Channel.GetBadgeRecordsAfterDeactivatedDate(personId, deactivatedDate);
+        }
+        
+        public DataTransferObjects.MSBadge[] GetBadgeRecordsByProjectId(int projectId) {
+            return base.Channel.GetBadgeRecordsByProjectId(projectId);
         }
         
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
