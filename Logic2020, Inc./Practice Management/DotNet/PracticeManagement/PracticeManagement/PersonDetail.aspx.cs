@@ -71,8 +71,8 @@ namespace PraticeManagement
         private bool? _userIsOperationsValue;
         private bool? _userIsHRValue;
         private bool? _userIsRecruiterValue;
-        private bool IsErrorPanelDisplay;
-        private bool IsOtherPanelDisplay;
+        public bool IsErrorPanelDisplay;
+        public bool IsOtherPanelDisplay;
         private Pay payForcvEmployeePayTypeChangeViolation;
         private ExceptionDetail internalException;
         private bool _disableValidatecustTerminateDateTE;
@@ -543,6 +543,14 @@ namespace PraticeManagement
             }
         }
 
+        public Button SaveButton
+        {
+            get
+            {
+                return btnSave;
+            }
+        }
+
         #endregion Properties
 
         #region Events
@@ -981,7 +989,7 @@ namespace PraticeManagement
             }
         }
 
-        protected void btnSave_Click(object sender, EventArgs e)
+        public void btnSave_Click(object sender, EventArgs e)
         {
             var updatePersonStatusDropdown = true;
             custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = !IsStatusChangeClicked;
