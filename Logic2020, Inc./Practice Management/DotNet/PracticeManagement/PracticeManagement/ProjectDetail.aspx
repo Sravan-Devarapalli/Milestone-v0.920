@@ -517,8 +517,8 @@
                                                     ToolTip="The project number already exists in the system." ValidationGroup="Project"
                                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="custNumberExistsInSystem_ServerValidate"></asp:CustomValidator>
-                                                <asp:CustomValidator ID="custFormat" runat="server" ErrorMessage="Project Number should start with P followed by 6 digits."
-                                                    ToolTip="Project Number should start with P followed by 6 digits."
+                                                <asp:CustomValidator ID="custFormat" runat="server" ErrorMessage="Project number should be in the format P + 6 Digits or P + 6 Digits + 1 Alphabet." 
+                                                    ToolTip="Project number should be in the format P + 6 Digits or P + 6 Digits + 1 Alphabet."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="custFormat_ServerValidate"></asp:CustomValidator>
                                                 <asp:CustomValidator ID="custInternalNumber" runat="server" ErrorMessage="The Project numbers from P999900 to P999999 are designed to Internal projects."
