@@ -9,6 +9,11 @@
         /// </summary>
         public class ColumnNames
         {
+            public static string ExcludeInReports= "ExcludeInReports";
+            public static string ForecastedHoursDaily= "ForecastedHoursDaily";
+            public static string OrganicBreakEndDate= "OrganicBreakEndDate";
+            public static string OrganicBreakStartDate= "OrganicBreakStartDate";
+            public static string DeactivatedDate= "DeactivatedDate";
             public static string NewBadgeEndDate = "NewBadgeEndDate";
             public static string NewBadgeStartDate = "NewBadgeStartDate";
             public static string BadgeRequestDate = "BadgeRequestDate";
@@ -572,6 +577,11 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string ExcludeFromReports = "@ExcludeFromReports";
+            public static string IsThisWeek = "@IsThisWeek";
+            public static string OrganicBreakEnd = "@OrganicBreakEnd";
+            public static string OrganicBreakStart = "@OrganicBreakStart";
+            public static string DeactivatedDate = "@DeactivatedDate";
             public static string BreakEndDate = "@BreakEndDate";
             public static string BreakStartDate = "@BreakStartDate";
             public static string EndDateSource = "@EndDateSource";
@@ -1068,6 +1078,8 @@
 
             public class Person
             {
+                public const string GetBadgeRecordsByProjectId = "dbo.GetBadgeRecordsByProjectId";
+                public const string GetBadgeRecordsAfterDeactivatedDate = "dbo.GetBadgeRecordsAfterDeactivatedDate";
                 public const string CheckIfPersonInProjectsForThisPeriod = "dbo.CheckIfPersonInProjectsForThisPeriod";
                 public const string GetBadgeHistoryByPersonId = "dbo.GetBadgeHistoryByPersonId";
                 public const string UpdateMSBadgeDetailsByPersonId = "dbo.UpdateMSBadgeDetailsByPersonId";
