@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[ListBadgeResourcesByType]
 (
+   @PayTypeIds		NVARCHAR(MAX)=NULL,
    @StartDate		DATETIME,
    @EndDate			DATETIME,
    @IsNotBadged		BIT=0,
@@ -14,8 +15,17 @@ BEGIN
 	DECLARE @StartDateLocal DATETIME ,
 			@EndDateLocal DATETIME
 
+	DECLARE @PayTypeIdsTable TABLE ( Ids INT )
+	DECLARE @PayTypeIdsLocal	NVARCHAR(MAX)
+	SET @PayTypeIdsLocal = @PayTypeIds
+
+	INSERT INTO @PayTypeIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@PayTypeIdsLocal)
+
 	SELECT @StartDateLocal = CONVERT(DATE, @StartDate)
 		 , @EndDateLocal = CONVERT(DATE, @EndDate)
+
 	IF(@BadgedOnProject =1)
 	BEGIN
 				SELECT DISTINCT M.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,C.ClientId,C.Name AS ClientName,Pr.ProjectId,Pr.Name AS ProjectName,
@@ -27,13 +37,17 @@ BEGIN
 				INNER JOIN dbo.MSBadge M ON M.PersonId = MP.PersonId
 				INNER JOIN v_Person P ON P.PersonId = M.PersonId 
 				INNER JOIN dbo.Client C ON C.ClientId = Pr.ClientId
+				LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
 				WHERE mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND Pr.ProjectStatusId IN (1,2,3,4)
+					  AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 				
 				UNION ALL
 				SELECT P.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,2,'Microsoft',-1,'Previous MS Badge History','',M.LastBadgeStartDate,M.LastBadgeEndDate,M.LastBadgeStartDate,M.LastBadgeEndDate,1
 				FROM dbo.MSBadge M
 				INNER JOIN v_Person P ON P.PersonId = M.PersonId
+				LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
 				WHERE M.IsPreviousBadge = 1 AND (M.LastBadgeStartDate <= @EndDateLocal AND @StartDateLocal <= M.LastBadgeEndDate)
+						AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 
 				UNION ALL
 				SELECT DISTINCT M.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,C.ClientId,C.Name AS ClientName,Pr.ProjectId,Pr.Name AS ProjectName,
@@ -76,7 +90,9 @@ BEGIN
 			 INNER JOIN v_Person P ON P.PersonId = M.PersonId 
 			 INNER JOIN v_PersonHistory PH ON PH.PersonId = M.PersonId AND PH.HireDate <= @EndDateLocal AND (PH.TerminationDate IS NULL OR @StartDateLocal <= PH.TerminationDate)
 			 LEFT JOIN BadgedOnProject BP ON BP.PersonId = M.PersonId 
+			 LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
 			 WHERE BP.PersonId IS NULL AND (@StartDateLocal <= M.BadgeEndDate AND M.BadgeStartDate <= @EndDateLocal)
+					AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 			 ORDER BY P.LastName,P.FirstName
 	END
 	IF(@IsBlocked=1)
@@ -110,8 +126,10 @@ BEGIN
 		   INNER JOIN v_PersonHistory PH ON PH.PersonId = M.PersonId AND PH.HireDate <= @EndDateLocal AND (PH.TerminationDate IS NULL OR @StartDateLocal <= PH.TerminationDate)
 		   LEFT JOIN BadgedOnProject BP ON BP.PersonId = M.PersonId 
 		   LEFT JOIN BadgedNotOnProject BNP ON BNP.PersonId = M.PersonId
+		   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
 		   WHERE (@StartDateLocal <= M.BlockEndDate AND M.BlockStartDate <= @EndDateLocal)
 				 AND BP.PersonId IS NULL AND BNP.PersonId IS NULL
+				 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		   ORDER BY P.LastName,P.FirstName
 	END
 	IF(@IsBreak=1)
@@ -153,7 +171,9 @@ BEGIN
 		   LEFT JOIN BlockedPeople B ON B.PersonId = M.PersonId
 		   LEFT JOIN BadgedOnProject BP ON BP.PersonId = M.PersonId
 		   LEFT JOIN BadgedNotOnProject BNP ON BNP.PersonId = M.PersonId
+		   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
 		   WHERE (@StartDateLocal <= M.BreakEndDate AND M.BreakStartDate <= @EndDateLocal) AND BNP.PersonId IS NULL AND BP.PersonId IS NULL AND B.PersonId IS NULL
+				 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		   ORDER BY P.LastName,P.FirstName
 	END
 	IF(@IsClockNotStart=1)
@@ -203,7 +223,9 @@ BEGIN
 		   LEFT JOIN BlockedPeople B ON B.PersonId = P.PersonId
 		   LEFT JOIN BadgedOnProject BP ON BP.PersonId = P.PersonId
 		   LEFT JOIN BadgedNotOnProject BNP ON BNP.PersonId = P.PersonId
+		   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
 		   WHERE (M.BadgeStartDate IS NULL OR @EndDateLocal < M.BadgeStartDate) AND BNP.PersonId IS NULL AND BP.PersonId IS NULL AND B.PersonId IS NULL AND Brk.PersonId IS NULL
+				AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 		   ORDER BY P.LastName,P.FirstName
 	END
 END
