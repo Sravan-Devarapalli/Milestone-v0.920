@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Resources on 6-Month Break" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="BadgeBreakReport.aspx.cs" Inherits="PraticeManagement.Reports.Badge.BadgeBreakReport" %>
-
+    <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
@@ -9,6 +9,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+ <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
@@ -69,6 +71,23 @@
                         <asp:Button ID="btnUpdateView" runat="server" Text="View Report" OnClick="btnUpdateView_Click" />
                     </td>
                 </tr>
+                <tr style="white-space: nowrap">
+                    <td class="ReportFilterLabels" >
+                        Pay Type:&nbsp;
+                    </td>
+                    <td colspan="4" style="padding-top: 5px;">
+                        <pmc:ScrollingDropDown ID="cblPayTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
+                            DropDownListType="Pay Type" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+                         <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
+                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td class="textLeft Width90Percent">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
                 <tr class="height30P">
                     <td colspan="5">
                         &nbsp;
@@ -86,16 +105,18 @@
                 <table id="tblRange" runat="server" class="WholeWidth">
                     <tr>
                         <td style="font-weight: bold; font-size: 16px;">
-                            Projected Range: <asp:Label ID="lblRange" runat="server"></asp:Label>
+                            Projected Range:
+                            <asp:Label ID="lblRange" runat="server"></asp:Label>
                         </td>
                         <td style="text-align: right; padding-right: 30px;">
                             <asp:Button ID="btnExportToExcel" runat="server" Text="Export" OnClick="btnExportToExcel_OnClick"
                                 Enabled="true" UseSubmitBehavior="false" ToolTip="Export To Excel" />
                         </td>
                     </tr>
-                     <tr>
+                    <tr>
                         <td class="PaddingTop10Px">
-                            <asp:Label ID="lblTitle" runat="server" Text="Resources on 6-Month Break:" Style="font-weight:bold;font-size:20px;"></asp:Label>
+                            <asp:Label ID="lblTitle" runat="server" Text="Resources on 6-Month Break:" Style="font-weight: bold;
+                                font-size: 20px;"></asp:Label>
                         </td>
                         <td>
                             &nbsp;&nbsp;
