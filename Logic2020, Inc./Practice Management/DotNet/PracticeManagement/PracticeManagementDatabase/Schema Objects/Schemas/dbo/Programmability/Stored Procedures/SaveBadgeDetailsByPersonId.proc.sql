@@ -11,31 +11,49 @@
 	@IsException		BIT,
 	@ExceptionStartDate	DATETIME,
 	@ExceptionEndDate	DATETIME,
-	@UpdatedBy			INT
+	@UpdatedBy			INT,
+	@BadgeStartDate		DATETIME,
+	@BadgeEndDate		DATETIME,
+	@StartDateSource	NVARCHAR(30),
+	@EndDateSource		NVARCHAR(30),
+	@BreakStartDate		DATETIME,
+	@BreakEndDate		DATETIME
 )
 AS
 BEGIN
 
-  IF EXISTS(SELECT 1 FROM dbo.MSBadge WHERE PersonId = @PersonId)
-  BEGIN
+	UPDATE dbo.MSBadge 
+	SET IsBlocked = @IsBlocked,
+		BlockStartDate = @BlockStartDate,
+		BlockEndDate = @BlockEndDate,
+		IsPreviousBadge = @IsPreviousBadge,
+		PreviousBadgeAlias = @PreviousBadgeAlias,
+		LastBadgeStartDate = @LastBadgeStartDate,
+		LastBadgeEndDate = @LastBadgeEndDate,
+		IsException = @IsException,
+		ExceptionStartDate = @ExceptionStartDate,
+		ExceptionEndDate = @ExceptionEndDate,
+		BadgeStartDate = @BadgeStartDate,
+		BadgeEndDate = @BadgeEndDate,
+		BreakStartDate = @BreakStartDate,
+		BreakEndDate = @BreakEndDate,
+		BadgeStartDateSource = @StartDateSource,
+		BadgeEndDateSource = @EndDateSource
+	WHERE PersonId = @PersonId
+
+	IF(@StartDateSource = 'Manual Entry' OR @EndDateSource = 'Manual Entry')
+	BEGIN
+
 		UPDATE dbo.MSBadge 
-		SET IsBlocked = @IsBlocked,
-			BlockStartDate = @BlockStartDate,
-			BlockEndDate = @BlockEndDate,
-			IsPreviousBadge = @IsPreviousBadge,
-			PreviousBadgeAlias = @PreviousBadgeAlias,
-			LastBadgeStartDate = @LastBadgeStartDate,
-			LastBadgeEndDate = @LastBadgeEndDate,
-			IsException = @IsException,
-			ExceptionStartDate = @ExceptionStartDate,
-			ExceptionEndDate = @ExceptionEndDate
+		SET BadgeStartDate = @BadgeStartDate,
+			BadgeEndDate = @BadgeEndDate,
+			BreakStartDate = @BreakStartDate,
+			BreakEndDate = @BreakEndDate,
+			BadgeStartDateSource = @StartDateSource,
+			BadgeEndDateSource = @EndDateSource
 		WHERE PersonId = @PersonId
-  END
-  ELSE
-  BEGIN
-	    INSERT INTO dbo.MSBadge(PersonId,IsBlocked,BlockStartDate,BlockEndDate,IsPreviousBadge,PreviousBadgeAlias,LastBadgeStartDate,LastBadgeEndDate,IsException,ExceptionStartDate,ExceptionEndDate)
-		SELECT	@PersonId,@IsBlocked,@BlockStartDate,@BlockEndDate,@IsPreviousBadge,@PreviousBadgeAlias,@LastBadgeStartDate,@LastBadgeEndDate,@IsException,@ExceptionStartDate,@ExceptionEndDate
-  END 
+
+	END
   
   EXEC [dbo].[UpdateMSBadgeDetailsByPersonId] @PersonId = @PersonId,@UpdatedBy = @UpdatedBy
 
