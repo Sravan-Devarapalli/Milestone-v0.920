@@ -14,6 +14,7 @@ using PraticeManagement.Utils.Excel;
 using PraticeManagement.Utils;
 using DataTransferObjects.Reports;
 using System.Text;
+using PraticeManagement.Controls;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -118,6 +119,8 @@ namespace PraticeManagement.Reports.Badge
             {
                 dtpEnd.DateValue = DataTransferObjects.Utils.Generic.MonthEndDate(DateTime.Now);
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
+                DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
+                cblPayTypes.SelectItems(new List<int>() { 1,2 });
             }
         }
 
@@ -177,14 +180,15 @@ namespace PraticeManagement.Reports.Badge
                 case 5: url = Constants.ApplicationPages.BadgeBreakReport;
                     break;
             }
-            return Utils.Generic.GetTargetUrlWithReturn(String.Format(url, startDate.ToShortDateString(), endDate.ToShortDateString()),
+            return Utils.Generic.GetTargetUrlWithReturn(String.Format(url, startDate.ToShortDateString(), endDate.ToShortDateString(), cblPayTypes.areAllSelected ? "null" : cblPayTypes.SelectedItems),
                                                         Constants.ApplicationPages.BadgedResourcesByTimeReport);
         }
 
         public void PopulateChart()
         {
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
-            var data = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
+            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var data = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes,dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
             BadgedResources = data;
             chartReport.DataSource = data.Select(p => new { month = p.StartDate.ToString(FormattedDate), badgedOnProjectcount = p.BadgedOnProjectCount, badgedNotOnProjectcount = p.BadgedNotOnProjectCount, clockNotStartedCount = p.ClockNotStartedCount, blockedCount = p.BlockedCount, breakCount = p.InBreakPeriodCount }).ToList();
             chartReport.DataBind();
@@ -351,7 +355,8 @@ namespace PraticeManagement.Reports.Badge
             var filename = string.Format("BadgedResourceByTime_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var report = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
+            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var report = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes,dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
             BadgedResources = report;
             if (BadgedResources.Count > 0)
             {
@@ -510,3 +515,4 @@ namespace PraticeManagement.Reports.Badge
         }
     }
 }
+
