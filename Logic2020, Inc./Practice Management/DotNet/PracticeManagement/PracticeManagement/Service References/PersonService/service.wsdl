@@ -153,6 +153,24 @@
   <wsdl:message name="IPersonService_GetBadgeHistoryByPersonId_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetBadgeHistoryByPersonIdResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonInProjectsForThisPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonInProjectsForThisPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonInProjectsForThisPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonInProjectsForThisPeriodResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeRecordsAfterDeactivatedDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeRecordsAfterDeactivatedDate" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeRecordsAfterDeactivatedDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeRecordsAfterDeactivatedDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeRecordsByProjectId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeRecordsByProjectId" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetBadgeRecordsByProjectId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeRecordsByProjectIdResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -681,6 +699,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonId" message="tns:IPersonService_GetBadgeHistoryByPersonId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonIdResponse" message="tns:IPersonService_GetBadgeHistoryByPersonId_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonInProjectsForThisPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonInProjectsForThisPeriod" message="tns:IPersonService_CheckIfPersonInProjectsForThisPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonInProjectsForThisPeriodResponse" message="tns:IPersonService_CheckIfPersonInProjectsForThisPeriod_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeRecordsAfterDeactivatedDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetBadgeRecordsAfterDeactivatedDate" message="tns:IPersonService_GetBadgeRecordsAfterDeactivatedDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetBadgeRecordsAfterDeactivatedDateResponse" message="tns:IPersonService_GetBadgeRecordsAfterDeactivatedDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeRecordsByProjectId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetBadgeRecordsByProjectId" message="tns:IPersonService_GetBadgeRecordsByProjectId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetBadgeRecordsByProjectIdResponse" message="tns:IPersonService_GetBadgeRecordsByProjectId_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -1173,6 +1203,33 @@
     </wsdl:operation>
     <wsdl:operation name="GetBadgeHistoryByPersonId">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonInProjectsForThisPeriod">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfPersonInProjectsForThisPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeRecordsAfterDeactivatedDate">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetBadgeRecordsAfterDeactivatedDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeRecordsByProjectId">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetBadgeRecordsByProjectId" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
