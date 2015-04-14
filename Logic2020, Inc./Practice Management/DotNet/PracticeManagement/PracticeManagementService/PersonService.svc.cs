@@ -1191,6 +1191,21 @@ namespace PracticeManagementService
             return PersonDAL.GetBadgeHistoryByPersonId(personId);
         }
 
+        public bool CheckIfPersonInProjectsForThisPeriod(DateTime? modifiedEndDate, DateTime? oldEndDate, DateTime? modifiedStartDate, DateTime? oldStartDate, int personId)
+        {
+            return PersonDAL.CheckIfPersonInProjectsForThisPeriod(modifiedEndDate, oldEndDate, modifiedStartDate, oldStartDate, personId);
+        }
+
+        public List<MSBadge> GetBadgeRecordsAfterDeactivatedDate(int personId, DateTime deactivatedDate)
+        {
+            return PersonDAL.GetBadgeRecordsAfterDeactivatedDate(personId, deactivatedDate);
+        }
+
+        public List<MSBadge> GetBadgeRecordsByProjectId(int projectId)
+        {
+            return PersonDAL.GetBadgeRecordsByProjectId(projectId);
+        }
+
         #endregion IPersonService Members
     }
 }
