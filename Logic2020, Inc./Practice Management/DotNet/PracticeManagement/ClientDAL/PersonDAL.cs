@@ -4233,6 +4233,7 @@ namespace DataAccess
                 int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
                 int badgeDurationIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeDuration);
                 int isApprovedIndex = reader.GetOrdinal(Constants.ColumnNames.IsApproved);
+                int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
 
                 while (reader.Read())
                 {
@@ -4246,7 +4247,11 @@ namespace DataAccess
                             Name = reader.GetString(projectNameIndex),
                             ProjectNumber = reader.GetString(projectNumberIndex),
                             StartDate = reader.GetDateTime(startDateIndex),
-                            EndDate = reader.GetDateTime(endDateIndex)
+                            EndDate = reader.GetDateTime(endDateIndex),
+                            Status = new ProjectStatus()
+                            {
+                                Id = reader.GetInt32(projectStatusIdIndex)
+                            }
                         },
                         BadgeDuration = reader.GetInt32(badgeDurationIndex),
                         IsApproved = reader.GetBoolean(isApprovedIndex)
@@ -4273,6 +4278,14 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsException, msBadge.IsException);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExceptionStartDate, msBadge.ExceptionStartDate.HasValue ? (object)msBadge.ExceptionStartDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExceptionEndDate, msBadge.ExceptionEndDate.HasValue ? (object)msBadge.ExceptionEndDate.Value : DBNull.Value);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.BadgeStartDate, msBadge.BadgeStartDate.HasValue ? (object)msBadge.BadgeStartDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BadgeEndDate, msBadge.BadgeEndDate.HasValue ? (object)msBadge.BadgeEndDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateSource, msBadge.BadgeStartDateSource);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateSource, msBadge.BadgeEndDateSource);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BreakStartDate, msBadge.BreakStartDate.HasValue ? (object)msBadge.BreakStartDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.BreakEndDate, msBadge.BreakEndDate.HasValue ? (object)msBadge.BreakEndDate.Value : DBNull.Value);
+
                 command.Parameters.AddWithValue(Constants.ParameterNames.UpdatedBy, msBadge.ModifiedById);
 
                 connection.Open();
@@ -4505,6 +4518,131 @@ namespace DataAccess
                             result.BadgeHistory = new List<MSBadge>();
                         result.BadgeHistory.Add(badge);
                     }
+                }
+            }
+        }
+
+        public static bool CheckIfPersonInProjectsForThisPeriod(DateTime? modifiedEndDate, DateTime? oldEndDate, DateTime? modifiedStartDate, DateTime? oldStartDate, int personId)
+        {
+            bool result;
+            try
+            {
+                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfPersonInProjectsForThisPeriod, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ModifiedEndDate, modifiedEndDate.HasValue ? (object)modifiedEndDate : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.OldEndDate, oldEndDate.HasValue ? (object)oldEndDate : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ModifiedStartDate, modifiedStartDate.HasValue ? (object)modifiedStartDate : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.OldStartDate, oldStartDate.HasValue ? (object)oldStartDate : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+
+                    connection.Open();
+                    result = Convert.ToBoolean(command.ExecuteScalar());
+                }
+            }
+            catch (Exception ex)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public static List<MSBadge> GetBadgeRecordsAfterDeactivatedDate(int personId, DateTime deactivatedDate)
+        {
+            var result = new List<MSBadge>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetBadgeRecordsAfterDeactivatedDate, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DeactivatedDate, deactivatedDate);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadBadgeRecordsAfterDeactivatedDate(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadBadgeRecordsAfterDeactivatedDate(SqlDataReader reader, List<MSBadge> result)
+        {
+            if (reader.HasRows)
+            {
+
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+
+                while (reader.Read())
+                {
+                    var badge = new MSBadge()
+                    {
+                        BadgeStartDate = reader.IsDBNull(badgeStartDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeStartDateIndex),
+                        BadgeEndDate = reader.IsDBNull(badgeEndDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEndDateIndex),
+                    };
+                    result.Add(badge);
+                }
+            }
+        }
+
+        public static List<MSBadge> GetBadgeRecordsByProjectId(int projectId)
+        {
+            var result = new List<MSBadge>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetBadgeRecordsByProjectId, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadBadgeRecordsByProjectId(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadBadgeRecordsByProjectId(SqlDataReader reader, List<MSBadge> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                int IsBadgeExceptionIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeException);
+
+                while (reader.Read())
+                {
+                    var badge = new MSBadge()
+                    {
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        },
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            LastName = reader.GetString(lastNameIndex)
+                        },
+                        BadgeStartDate = reader.IsDBNull(badgeStartDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeStartDateIndex),
+                        BadgeEndDate = reader.IsDBNull(badgeEndDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEndDateIndex),
+                        IsException = reader.GetBoolean(IsBadgeExceptionIndex)
+                    };
+                    result.Add(badge);
                 }
             }
         }
