@@ -52,16 +52,16 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.ProjectLevelGroupedHours[] NonBillableReport(System.DateTime startDate, System.DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BadgedResourcesByTimeReport", ReplyAction="http://tempuri.org/IReportService/BadgedResourcesByTimeReportResponse")]
-        DataTransferObjects.Reports.BadgedResourcesByTime[] BadgedResourcesByTimeReport(System.DateTime startDate, System.DateTime endDate, int step);
+        DataTransferObjects.Reports.BadgedResourcesByTime[] BadgedResourcesByTimeReport(string payTypes, System.DateTime startDate, System.DateTime endDate, int step);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ListBadgeResourcesByType", ReplyAction="http://tempuri.org/IReportService/ListBadgeResourcesByTypeResponse")]
-        DataTransferObjects.MSBadge[] ListBadgeResourcesByType(System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject);
+        DataTransferObjects.MSBadge[] ListBadgeResourcesByType(string paytypes, System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ResourcesByPracticeReport", ReplyAction="http://tempuri.org/IReportService/ResourcesByPracticeReportResponse")]
-        DataTransferObjects.Reports.GroupByPractice[] ResourcesByPracticeReport(string practices, System.DateTime startDate, System.DateTime endDate, int step);
+        DataTransferObjects.Reports.GroupByPractice[] ResourcesByPracticeReport(string paytypes, string practices, System.DateTime startDate, System.DateTime endDate, int step);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ResourcesByTitleReport", ReplyAction="http://tempuri.org/IReportService/ResourcesByTitleReportResponse")]
-        DataTransferObjects.Reports.GroupbyTitle[] ResourcesByTitleReport(string titles, System.DateTime startDate, System.DateTime endDate, int step);
+        DataTransferObjects.Reports.GroupbyTitle[] ResourcesByTitleReport(string paytypes, string titles, System.DateTime startDate, System.DateTime endDate, int step);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetBadgeRequestNotApprovedList", ReplyAction="http://tempuri.org/IReportService/GetBadgeRequestNotApprovedListResponse")]
         DataTransferObjects.MSBadge[] GetBadgeRequestNotApprovedList();
@@ -94,7 +94,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectSummaryReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, string personRoleNames);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectDetailReportByResource", ReplyAction="http://tempuri.org/IReportService/ProjectDetailReportByResourceResponse")]
-        DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectDetailReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, string personRoleNames);
+        DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectDetailReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, string personRoleNames, bool isExport);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType", ReplyAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse")]
         DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, string categoryNames);
@@ -213,7 +213,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-      
+       
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -270,20 +270,20 @@ namespace PraticeManagement.ReportService {
             return base.Channel.NonBillableReport(startDate, endDate, projectNumber, directorIds, businessUnitIds, practiceIds);
         }
         
-        public DataTransferObjects.Reports.BadgedResourcesByTime[] BadgedResourcesByTimeReport(System.DateTime startDate, System.DateTime endDate, int step) {
-            return base.Channel.BadgedResourcesByTimeReport(startDate, endDate, step);
+        public DataTransferObjects.Reports.BadgedResourcesByTime[] BadgedResourcesByTimeReport(string payTypes, System.DateTime startDate, System.DateTime endDate, int step) {
+            return base.Channel.BadgedResourcesByTimeReport(payTypes, startDate, endDate, step);
         }
         
-        public DataTransferObjects.MSBadge[] ListBadgeResourcesByType(System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject) {
-            return base.Channel.ListBadgeResourcesByType(startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject);
+        public DataTransferObjects.MSBadge[] ListBadgeResourcesByType(string paytypes, System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject) {
+            return base.Channel.ListBadgeResourcesByType(paytypes, startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject);
         }
         
-        public DataTransferObjects.Reports.GroupByPractice[] ResourcesByPracticeReport(string practices, System.DateTime startDate, System.DateTime endDate, int step) {
-            return base.Channel.ResourcesByPracticeReport(practices, startDate, endDate, step);
+        public DataTransferObjects.Reports.GroupByPractice[] ResourcesByPracticeReport(string paytypes, string practices, System.DateTime startDate, System.DateTime endDate, int step) {
+            return base.Channel.ResourcesByPracticeReport(paytypes, practices, startDate, endDate, step);
         }
         
-        public DataTransferObjects.Reports.GroupbyTitle[] ResourcesByTitleReport(string titles, System.DateTime startDate, System.DateTime endDate, int step) {
-            return base.Channel.ResourcesByTitleReport(titles, startDate, endDate, step);
+        public DataTransferObjects.Reports.GroupbyTitle[] ResourcesByTitleReport(string paytypes, string titles, System.DateTime startDate, System.DateTime endDate, int step) {
+            return base.Channel.ResourcesByTitleReport(paytypes, titles, startDate, endDate, step);
         }
         
         public DataTransferObjects.MSBadge[] GetBadgeRequestNotApprovedList() {
@@ -326,8 +326,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.ProjectSummaryReportByResource(projectNumber, mileStoneId, startDate, endDate, personRoleNames);
         }
         
-        public DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectDetailReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, string personRoleNames) {
-            return base.Channel.ProjectDetailReportByResource(projectNumber, mileStoneId, startDate, endDate, personRoleNames);
+        public DataTransferObjects.Reports.PersonLevelGroupedHours[] ProjectDetailReportByResource(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, string personRoleNames, bool isExport) {
+            return base.Channel.ProjectDetailReportByResource(projectNumber, mileStoneId, startDate, endDate, personRoleNames, isExport);
         }
         
         public DataTransferObjects.Reports.WorkTypeLevelGroupedHours[] ProjectSummaryReportByWorkType(string projectNumber, System.Nullable<int> mileStoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate, string categoryNames) {
