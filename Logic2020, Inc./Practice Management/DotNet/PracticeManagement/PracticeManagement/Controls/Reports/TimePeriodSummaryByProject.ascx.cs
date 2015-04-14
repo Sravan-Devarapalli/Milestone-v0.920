@@ -344,7 +344,7 @@ namespace PraticeManagement.Controls.Reports
 
                 var list = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(SelectedProjectNumber, null,
                      HostingPage.StartDate, HostingPage.EndDate,
-                    null)).ToList();
+                    null,false)).ToList();
 
                 totalHours = GetDoubleFormat(list.Sum(l => l.TotalHours));
                 ucGroupByBusinessDevelopment.Visible = false;
