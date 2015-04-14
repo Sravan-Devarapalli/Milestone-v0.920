@@ -13,13 +13,40 @@ namespace PraticeManagement.Controls.Persons {
     public partial class MSBadge {
         
         /// <summary>
-        /// txtBadgeStart control.
+        /// dpBadgeStart control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBadgeStart;
+        protected global::PraticeManagement.Controls.DatePicker dpBadgeStart;
+        
+        /// <summary>
+        /// reqBadgeStart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBadgeStart;
+        
+        /// <summary>
+        /// compBadgeStart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compBadgeStart;
+        
+        /// <summary>
+        /// custBeforeJuly control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custBeforeJuly;
         
         /// <summary>
         /// lblBadgeStartDateSource control.
@@ -85,13 +112,76 @@ namespace PraticeManagement.Controls.Persons {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPreviousAlias;
         
         /// <summary>
-        /// txtBadgeEnd control.
+        /// dpBadgeEnd control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBadgeEnd;
+        protected global::PraticeManagement.Controls.DatePicker dpBadgeEnd;
+        
+        /// <summary>
+        /// reqBadgeEnd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqBadgeEnd;
+        
+        /// <summary>
+        /// compBadgeEnd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compBadgeEnd;
+        
+        /// <summary>
+        /// compBadgeEndLess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compBadgeEndLess;
+        
+        /// <summary>
+        /// custLessThan18Mo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLessThan18Mo;
+        
+        /// <summary>
+        /// custMoreThan18Mo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custMoreThan18Mo;
+        
+        /// <summary>
+        /// custProjectsAssigned control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custProjectsAssigned;
+        
+        /// <summary>
+        /// cust18moNotInEmployment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cust18moNotInEmployment;
         
         /// <summary>
         /// lblBadgeEndDateSource control.
