@@ -325,6 +325,8 @@ namespace UpdatePracticeAndSeniority
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 02:00:00, then we need to run Project Summary Cache Task.
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
+                    //Runs at 06:00:00 every day.
+                    RunFeedbackMails(currentDateTimeWithTimeZone);
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on every monday.
@@ -333,8 +335,7 @@ namespace UpdatePracticeAndSeniority
                     RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
-                    //Runs at 08:00:00 every day.
-                    RunFeedbackMails(currentDateTimeWithTimeZone);
+                    
                 }
 
                 while (true)
@@ -350,11 +351,11 @@ namespace UpdatePracticeAndSeniority
                     currentDateTimeWithTimeZone = currentDateTimeWithTimeZone.Add(sleepTimeSpan);
                     //Runs at 00:01:00 every day.
                     RunTasks(currentDateTimeWithTimeZone);
-
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
-
                     currentDateTimeWithTimeZone = CurrentPMTime;
+                    //Runs at 06:00:00 every day.
+                    RunFeedbackMails(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on 3rd and 18th of every month.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on every monday.
@@ -363,8 +364,7 @@ namespace UpdatePracticeAndSeniority
                     RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
-                    //Runs at 08:00:00 every day.
-                    RunFeedbackMails(currentDateTimeWithTimeZone);
+                   
                 }
             }
             catch (Exception ex)
@@ -768,7 +768,7 @@ namespace UpdatePracticeAndSeniority
             }
             catch (Exception ex)
             {
-                WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(ResourceExceptionReportFailedFormat, ex.Message), nextRunTime);
+                WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(ResourceExceptionReportFailedFormat, ex.Message + (ex.InnerException != null ? ": " + ex.InnerException.Message : string.Empty)), nextRunTime);
             }
         }
 
@@ -1545,7 +1545,7 @@ namespace UpdatePracticeAndSeniority
             }
             catch (Exception ex)
             {
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FeedbackIntialMailFailedFormat, ex.Message), nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FeedbackIntialMailFailedFormat, ex.Message + (ex.InnerException != null ? ": " + ex.InnerException.Message : string.Empty)), nextRun);
             }
         }
 
@@ -1590,7 +1590,7 @@ namespace UpdatePracticeAndSeniority
             }
             catch (Exception ex)
             {
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FeedbackRemainderMailFailedFormat, ex.Message), nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(FeedbackRemainderMailFailedFormat, ex.Message + (ex.InnerException != null ? ": " + ex.InnerException.Message : string.Empty)), nextRun);
             }
         }
 
