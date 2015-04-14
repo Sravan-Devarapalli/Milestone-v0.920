@@ -29,12 +29,13 @@ BEGIN
 
 	DECLARE @ProjectRanksList TABLE (projectNumber INT,projectNumberRank INT)
 	INSERT INTO @ProjectRanksList 
-	SELECT Convert(INT,SUBSTRING(p.ProjectNumber,2,7)) as projectNumber ,
-		   RANK() OVER (ORDER BY Convert(INT,SUBSTRING(p.ProjectNumber,2,7)))+@LowerLimitRange-1 AS  projectNumberRank
+	SELECT Convert(INT,SUBSTRING(p.ProjectNumber,2,6)) as projectNumber ,
+		   RANK() OVER (ORDER BY Convert(INT,SUBSTRING(p.ProjectNumber,2,6)))+@LowerLimitRange-1 AS  projectNumberRank
 		FROM dbo.Project p 
-		WHERE ISNUMERIC( SUBSTRING(ProjectNumber,2,7))  = 1 
+		WHERE LEN(p.ProjectNumber) = 7
+		AND	 ISNUMERIC( SUBSTRING(ProjectNumber,2,6))  = 1 
 		--AND p.IsInternal = @IsInternalProject 
-		AND CONVERT(NUMERIC,SUBSTRING(ProjectNumber,2,7)) BETWEEN  @LowerLimitRange AND @HigherLimitRange
+		AND CONVERT(NUMERIC,SUBSTRING(ProjectNumber,2,6)) BETWEEN  @LowerLimitRange AND @HigherLimitRange
 
 	INSERT INTO @ProjectRanksList 
 	SELECT -1,MAX(projectNumberRank)+1 FROM @ProjectRanksList 
