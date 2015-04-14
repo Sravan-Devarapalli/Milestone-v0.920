@@ -4479,13 +4479,14 @@ namespace DataAccess
             }
         }
 
-        public static List<BadgedResourcesByTime> BadgedResourcesByTimeReport(DateTime startDate, DateTime endDate, int step)
+        public static List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes, DateTime startDate, DateTime endDate, int step)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.BadgedResourcesByTimeReport, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, payTypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Step, step);
@@ -4534,13 +4535,14 @@ namespace DataAccess
             }
         }
 
-        public static List<MSBadge> ListBadgeResourcesByType(DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak,bool badgedOnProject)
+        public static List<MSBadge> ListBadgeResourcesByType(string paytypes,DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak,bool badgedOnProject)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ListBadgeResourcesByType, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, paytypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsNotBadged, isNotBadged);
@@ -4584,6 +4586,7 @@ namespace DataAccess
                 int startDateIndex = -1;
                 int endDateIndex = -1;
                 int isApprovedByOpsIndex = -1;
+                int deactivatedDateIndex = -1;
                 try
                 {
                     titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
@@ -4687,6 +4690,12 @@ namespace DataAccess
                 }
                 catch
                 { }
+                try
+                {
+                    deactivatedDateIndex = reader.GetOrdinal(Constants.ColumnNames.DeactivatedDate);
+                }
+                catch
+                { }
 
                 while (reader.Read())
                 {
@@ -4738,6 +4747,8 @@ namespace DataAccess
                     }
                     if (isApprovedByOpsIndex != -1)
                         badgeResource.IsApproved = reader.GetInt32(isApprovedByOpsIndex) == 1;
+                    if(deactivatedDateIndex != -1)
+                        badgeResource.DeactivatedDate = reader.IsDBNull(deactivatedDateIndex) ? null : (DateTime?)reader.GetDateTime(deactivatedDateIndex);
                     result.Add(badgeResource);
                 }
             }
@@ -4748,13 +4759,14 @@ namespace DataAccess
             }
         }
 
-        public static List<GroupByPractice> ResourcesByPracticeReport(string practices,DateTime startDate, DateTime endDate, int step)
+        public static List<GroupByPractice> ResourcesByPracticeReport(string paytypes,string practices,DateTime startDate, DateTime endDate, int step)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourcesByPracticeReport, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, paytypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Practices, practices);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
@@ -4826,13 +4838,14 @@ namespace DataAccess
             }
         }
 
-        public static List<GroupbyTitle> ResourcesByTitleReport(string titles, DateTime startDate, DateTime endDate, int step)
+        public static List<GroupbyTitle> ResourcesByTitleReport(string paytypes,string titles, DateTime startDate, DateTime endDate, int step)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourcesByTitleReport, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, paytypes);
                 command.Parameters.AddWithValue(Constants.ParameterNames.TitleIds, titles);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
