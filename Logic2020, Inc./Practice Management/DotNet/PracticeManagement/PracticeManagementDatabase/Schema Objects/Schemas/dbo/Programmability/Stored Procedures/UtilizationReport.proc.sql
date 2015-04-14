@@ -62,19 +62,20 @@ BEGIN
 		INNER JOIN dbo.Project PRO ON PRO.ProjectId = M.ProjectId							
 	  WHERE MP.PersonId = @PersonIdLocal 
 			AND PRO.ProjectStatusId IN (3,4) -- 3	Active, 4	Completed
+			AND PRO.Projectid <> 174
 	  GROUP BY P.PersonId
 	)
 	,
 	BillableEntries
 	AS
 	(
-		 SELECT ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 THEN TEH.ActualHours 
+		 SELECT ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND PRO.ProjectNumber != 'P031000' THEN TEH.ActualHours 
 						 ELSE 0 
 					END),2) AS BillableHours,
-				ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND TE.ChargeCodeDate < @NOW THEN TEH.ActualHours 
+				ROUND(SUM(CASE WHEN TEH.IsChargeable = 1 AND TE.ChargeCodeDate < @NOW AND PRO.ProjectNumber != 'P031000' THEN TEH.ActualHours 
 						 ELSE 0 
 					END),2) AS BillableHoursUntilToday,
-				ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 THEN TEH.ActualHours 
+				ROUND(SUM(CASE WHEN TEH.IsChargeable = 0 OR PRO.ProjectNumber = 'P031000' THEN TEH.ActualHours 
 						 ELSE 0 
 					END),2) AS NonBillableHours,
 					@PersonTotalHours AS AvailableHours,
@@ -103,3 +104,4 @@ BEGIN
 	FULL JOIN BillableEntries B ON B.PersonId = P.PersonId
 
 END
+
