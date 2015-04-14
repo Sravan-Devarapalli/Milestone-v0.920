@@ -22,6 +22,14 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        public string PayTypes
+        {
+            get
+            {
+                return cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            }
+        }
+
         public string TitleIds
         {
             get
@@ -86,7 +94,11 @@ namespace PraticeManagement.Controls.Reports
                     tdPractices.Visible = false;
                     lblCategory.Text = "Title";
                 }
+
+                DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
+                cblPayTypes.SelectItems(new List<int>() { 1, 2 });
             }
         }
     }
 }
+
