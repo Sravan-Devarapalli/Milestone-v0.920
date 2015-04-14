@@ -65,7 +65,7 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void Page_Load(object sender, EventArgs e)
         {
-          custExceptionNotMoreThan18moEndDate.Enabled =  custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = chbBadgeRequiredInsert.Checked;
+          custExceptionNotMoreThan18moEndDate.Enabled =  custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = chbBadgeRequiredInsert.Checked;
         }
 
         #region Validation
@@ -433,7 +433,7 @@ namespace PraticeManagement.Controls.Milestones
             if (chbBadgeRequiredInsert.Checked)
             {
                 dpBadgeEndInsert.EnabledTextBox = dpBadgeStartInsert.EnabledTextBox = chbBadgeExceptionInsert.Enabled =
-                custExceptionNotMoreThan18moEndDate.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = true;
+                custExceptionNotMoreThan18moEndDate.Enabled = custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = true;
                 dpBadgeStartInsert.ReadOnly = dpBadgeEndInsert.ReadOnly = false;
                 chbOpsApprovedInsert.Enabled = IsAdmin || IsOperations;
                 Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
@@ -457,7 +457,7 @@ namespace PraticeManagement.Controls.Milestones
             else
             {
                 dpBadgeEndInsert.EnabledTextBox = dpBadgeStartInsert.EnabledTextBox = chbBadgeExceptionInsert.Enabled = chbOpsApprovedInsert.Enabled =
-                custExceptionNotMoreThan18moEndDate.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = false;
+                custExceptionNotMoreThan18moEndDate.Enabled = custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = false;
                 dpBadgeStartInsert.ReadOnly = dpBadgeEndInsert.ReadOnly = true;
                 dpBadgeStartInsert.TextValue = dpBadgeEndInsert.TextValue = string.Empty;
                 chbOpsApprovedInsert.Checked = chbBadgeExceptionInsert.Checked = false;
@@ -482,6 +482,11 @@ namespace PraticeManagement.Controls.Milestones
             Person person = HostingControl.GetPersonBySelectedValue(ddlPerson.SelectedValue);
             Dictionary<string, List<DateTime>> PersonDatesViolations = HostingControl.IsRangeInThePersonEmpHistory(person, dpBadgeStartInsert.DateValue.Date, dpBadgeEndInsert.DateValue.Date);
             args.IsValid = !(PersonDatesViolations.Count > 0);
+        }
+
+        protected void custBadgeAfterJuly_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            args.IsValid = (dpPersonStartInsert.DateValue >= new DateTime(2014, 7, 1) && dpPersonEndInsert.DateValue >= new DateTime(2014, 7, 1));
         }
 
         protected void custBadgeHasMoredays_ServerValidate(object source, ServerValidateEventArgs args)
