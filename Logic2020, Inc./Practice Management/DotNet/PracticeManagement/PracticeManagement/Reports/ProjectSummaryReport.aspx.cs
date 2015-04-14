@@ -1068,7 +1068,7 @@ namespace PraticeManagement.Reporting
                 PeriodSelected == "*" ? null : EndDate, ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
             List<PersonLevelGroupedHours> detailData = ServiceCallers.Custom.Report(r => r.ProjectDetailReportByResource(ProjectNumber, MilestoneId,
                PeriodSelected == "*" ? null : StartDate, PeriodSelected == "*" ? null : EndDate,
-               ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat)).ToList();
+               ByResourceControl.cblProjectRolesControl.SelectedItemsXmlFormat,false)).ToList();
 
             HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
             string filename = string.Format("{0}_{1}_{2}.pdf", project.ProjectNumber, project.Name, "_ByResource").Replace(' ', '_');
