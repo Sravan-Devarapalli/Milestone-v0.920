@@ -29,3 +29,4 @@ BEGIN
 	INNER JOIN dbo.Person P ON P.PersonId = M.PersonId
 	WHERE M.PersonId = @PersonId
 END
+
