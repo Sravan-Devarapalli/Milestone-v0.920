@@ -262,24 +262,24 @@ namespace PracticeManagementService
             return ReportDAL.NonBillableReport(startDate, endDate, projectNumber, directorIds, businessUnitIds, practiceIds);
         }
 
-        public List<BadgedResourcesByTime> BadgedResourcesByTimeReport(DateTime startDate, DateTime endDate, int step)
+        public List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes, DateTime startDate, DateTime endDate, int step)
         {
-            return ReportDAL.BadgedResourcesByTimeReport(startDate, endDate, step);
+            return ReportDAL.BadgedResourcesByTimeReport(payTypes,startDate, endDate, step);
         }
 
-        public List<MSBadge> ListBadgeResourcesByType(DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject)
+        public List<MSBadge> ListBadgeResourcesByType(string paytypes,DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject)
         {
-            return ReportDAL.ListBadgeResourcesByType(startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject);
+            return ReportDAL.ListBadgeResourcesByType(paytypes,startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject);
         }
 
-        public List<GroupByPractice> ResourcesByPracticeReport(string practices, DateTime startDate, DateTime endDate, int step)
+        public List<GroupByPractice> ResourcesByPracticeReport(string paytypes,string practices, DateTime startDate, DateTime endDate, int step)
         {
-            return ReportDAL.ResourcesByPracticeReport(practices, startDate, endDate, step);
+            return ReportDAL.ResourcesByPracticeReport(paytypes,practices, startDate, endDate, step);
         }
 
-        public List<GroupbyTitle> ResourcesByTitleReport(string titles, DateTime startDate, DateTime endDate, int step)
+        public List<GroupbyTitle> ResourcesByTitleReport(string paytypes,string titles, DateTime startDate, DateTime endDate, int step)
         {
-            return ReportDAL.ResourcesByTitleReport(titles, startDate, endDate, step);
+            return ReportDAL.ResourcesByTitleReport(paytypes,titles, startDate, endDate, step);
         }
 
         public List<MSBadge> GetBadgeRequestNotApprovedList()
