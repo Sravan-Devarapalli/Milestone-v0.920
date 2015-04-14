@@ -229,7 +229,7 @@ namespace PracticeManagementService
         /// <param name="currentUser">current logged in user name</param>
         [OperationContract]
         [FaultContract(typeof(DataAccessFault))]
-        int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay,string userLogin);
+        int SavePersonDetail(Person person, string currentUser, string loginPageUrl, bool saveCurrentPay, string userLogin);
 
         [OperationContract]
         void PersonValidations(Person person);
@@ -490,6 +490,15 @@ namespace PracticeManagementService
 
         [OperationContract]
         PersonBadgeHistories GetBadgeHistoryByPersonId(int personId);
+
+        [OperationContract]
+        bool CheckIfPersonInProjectsForThisPeriod(DateTime? modifiedEndDate, DateTime? oldEndDate, DateTime? modifiedStartDate, DateTime? oldStartDate, int personId);
+
+        [OperationContract]
+        List<MSBadge> GetBadgeRecordsAfterDeactivatedDate(int personId, DateTime deactivatedDate);
+
+        [OperationContract]
+        List<MSBadge> GetBadgeRecordsByProjectId(int projectId);
     }
 }
 
