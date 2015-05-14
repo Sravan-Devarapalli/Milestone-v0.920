@@ -18,6 +18,14 @@
 	ExceptionEndDate	DATETIME	NULL,
 	BadgeStartDateSource NVARCHAR(30) NULL,
 	PlannedEndDateSource NVARCHAR(30) NULL,
-	BadgeEndDateSource NVARCHAR(30) NULL
+	BadgeEndDateSource NVARCHAR(30) NULL,
+	DeactivatedDate		DATETIME	NULL,
+	OrganicBreakStartDate	DATETIME	NULL,
+	OrganicBreakEndDate		DATETIME	NULL,
+	ExcludeInReports	BIT			NULL,
+	ManualStartDate		DATETIME	NULL,
+	ManualEndDate		DATETIME	NULL,
+	ManualBreakStart	DATETIME	NULL,
+	ManualBreakEnd		DATETIME	NULL
 )
 
