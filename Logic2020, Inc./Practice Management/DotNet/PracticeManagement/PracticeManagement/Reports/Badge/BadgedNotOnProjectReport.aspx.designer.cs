@@ -130,6 +130,24 @@ namespace PraticeManagement.Reports.Badge {
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePayTypes;
         
         /// <summary>
+        /// cblPersonStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblPersonStatus;
+        
+        /// <summary>
+        /// sdePersonStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePersonStatus;
+        
+        /// <summary>
         /// valSum control.
         /// </summary>
         /// <remarks>
