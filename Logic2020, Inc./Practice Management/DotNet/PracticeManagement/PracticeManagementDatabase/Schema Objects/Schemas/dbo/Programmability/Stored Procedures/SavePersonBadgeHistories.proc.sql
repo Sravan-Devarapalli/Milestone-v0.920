@@ -15,7 +15,9 @@ BEGIN
 			@CurrentOverrideStartDate DATETIME,
 			@CurrentOverrideEndDate DATETIME,
 			@CurrentPMTime DATETIME,
-
+			@CurrentDeactivatedDate	DATETIME,
+			
+			@DeactivatedDate DATETIME,
 			@BadgeStartDate DATETIME,
 			@BadgeEndDate DATETIME,
 			@PlannedEndDate	DATETIME,
@@ -31,7 +33,7 @@ BEGIN
 	SELECT @OverrideStartDate = OverrideStartDate, @OverrideEndDate = OverrideEndDate
 	FROM dbo.OverrideExceptionHistory WHERE Id =(SELECT MAX(Id) FROM dbo.OverrideExceptionHistory WHERE PersonId = @PersonId GROUP BY PersonId)
 
-	SELECT @BadgeStartDate = BadgeStartDate, @BadgeEndDate = BadgeEndDate,@PlannedEndDate = ProjectPlannedEndDate
+	SELECT @BadgeStartDate = BadgeStartDate, @BadgeEndDate = BadgeEndDate,@PlannedEndDate = ProjectPlannedEndDate, @DeactivatedDate = DeactivatedDate
 	FROM dbo.BadgeHistory WHERE Id =(SELECT MAX(Id) FROM dbo.BadgeHistory WHERE PersonId = @PersonId GROUP BY PersonId)
 
 	SELECT	@CurrentBlockStartDate = BlockStartDate,
@@ -40,7 +42,8 @@ BEGIN
 			@CurrentOverrideEndDate = ExceptionEndDate,
 			@CurrentBadgeStartDate = BadgeStartDate,
 			@CurrentBadgeEndDate = BadgeEndDate,
-			@CurrentPlannedEndDate = PlannedEndDate
+			@CurrentPlannedEndDate = PlannedEndDate,
+			@CurrentDeactivatedDate = DeactivatedDate
 	FROM dbo.MSBadge WHERE PersonId = @PersonId
 
 	IF((ISNULL(@BlockStartDate,@MinDate) <> ISNULL(@CurrentBlockStartDate,@MinDate)) OR (ISNULL(@BlockEndDate,@MinDate) <> ISNULL(@CurrentBlockEndDate,@MinDate)))
@@ -59,14 +62,15 @@ BEGIN
 
 	END
 
-	IF((ISNULL(@BadgeStartDate,@MinDate) <> ISNULL(@CurrentBadgeStartDate,@MinDate)) OR (ISNULL(@BadgeEndDate,@MinDate) <> ISNULL(@CurrentBadgeEndDate,@MinDate)) OR (ISNULL(@PlannedEndDate,@MinDate) <> ISNULL(@CurrentPlannedEndDate,@MinDate)))
+	IF((ISNULL(@BadgeStartDate,@MinDate) <> ISNULL(@CurrentBadgeStartDate,@MinDate)) OR (ISNULL(@BadgeEndDate,@MinDate) <> ISNULL(@CurrentBadgeEndDate,@MinDate)) OR (ISNULL(@PlannedEndDate,@MinDate) <> ISNULL(@CurrentPlannedEndDate,@MinDate)) OR (ISNULL(@DeactivatedDate,@MinDate) <> ISNULL(@CurrentDeactivatedDate,@MinDate)))
 	BEGIN
 
-		INSERT INTO dbo.BadgeHistory(PersonId,BadgeStartDate,BadgeEndDate,BadgeStartDateSource,BadgeEndDateSource,BreakStartDate,BreakEndDate,ProjectPlannedEndDate,ProjectPlannedEndDateSource,ModifiedDate,ModifiedBy)
-		SELECT PersonId,BadgeStartDate,BadgeEndDate,BadgeStartDateSource,BadgeEndDateSource,BreakStartDate,BreakEndDate,PlannedEndDate,PlannedEndDateSource,@CurrentPMTime,@UpdatedBy
+		INSERT INTO dbo.BadgeHistory(PersonId,BadgeStartDate,BadgeEndDate,BadgeStartDateSource,BadgeEndDateSource,BreakStartDate,BreakEndDate,ProjectPlannedEndDate,ProjectPlannedEndDateSource,ModifiedDate,ModifiedBy,DeactivatedDate,OrganicBreakStartDate,OrganicBreakEndDate,ExcludeInReports)
+		SELECT PersonId,BadgeStartDate,BadgeEndDate,BadgeStartDateSource,BadgeEndDateSource,BreakStartDate,BreakEndDate,PlannedEndDate,PlannedEndDateSource,@CurrentPMTime,@UpdatedBy,DeactivatedDate,OrganicBreakStartDate,OrganicBreakEndDate,ExcludeInReports
 		FROM dbo.MSBadge 
 		WHERE PersonId = @PersonId
 
 	END
 
 END
+
