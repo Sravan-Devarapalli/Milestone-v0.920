@@ -15,6 +15,8 @@ using PraticeManagement.Utils;
 using DataTransferObjects.Reports;
 using System.Text;
 using PraticeManagement.Controls;
+using PraticeManagement.PersonStatusService;
+using System.ServiceModel;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -107,6 +109,25 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PersonStatus
+        {
+            get
+            {
+                var clientList = new StringBuilder();
+                foreach (ListItem item in cblPersonStatus.Items)
+                {
+                    if (item.Selected)
+                        clientList.Append(item.Value).Append(',');
+                    if (item.Value == "1" && item.Selected)
+                    {
+                        clientList.Append("2").Append(',');
+                        clientList.Append("5").Append(',');
+                    }
+                }
+                return clientList.ToString();
+            }
+        }
+
         public List<DataTransferObjects.Reports.BadgedResourcesByTime> BadgedResources
         {
             get;
@@ -121,6 +142,26 @@ namespace PraticeManagement.Reports.Badge
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
                 DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
                 cblPayTypes.SelectItems(new List<int>() { 1,2 });
+                FillPersonStatusList();
+                cblPersonStatus.SelectItems(new List<int>() { 1,5 });
+            }
+        }
+
+        public void FillPersonStatusList()
+        {
+            using (var serviceClient = new PersonStatusServiceClient())
+            {
+                try
+                {
+                    var statuses = serviceClient.GetPersonStatuses();
+                    statuses = statuses.Where(p => p.Id != 2 && p.Id != 5).ToArray();
+                    DataHelper.FillListDefault(cblPersonStatus, Resources.Controls.AllTypes,statuses, false);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
             }
         }
 
@@ -180,7 +221,7 @@ namespace PraticeManagement.Reports.Badge
                 case 5: url = Constants.ApplicationPages.BadgeBreakReport;
                     break;
             }
-            return Utils.Generic.GetTargetUrlWithReturn(String.Format(url, startDate.ToShortDateString(), endDate.ToShortDateString(), cblPayTypes.areAllSelected ? "null" : cblPayTypes.SelectedItems),
+            return Utils.Generic.GetTargetUrlWithReturn(String.Format(url, startDate.ToShortDateString(), endDate.ToShortDateString(), cblPayTypes.areAllSelected ? "null" : cblPayTypes.SelectedItems, PersonStatus),
                                                         Constants.ApplicationPages.BadgedResourcesByTimeReport);
         }
 
@@ -188,7 +229,8 @@ namespace PraticeManagement.Reports.Badge
         {
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
-            var data = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes,dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
+            var statuses = PersonStatus;
+            var data = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
             BadgedResources = data;
             chartReport.DataSource = data.Select(p => new { month = p.StartDate.ToString(FormattedDate), badgedOnProjectcount = p.BadgedOnProjectCount, badgedNotOnProjectcount = p.BadgedNotOnProjectCount, clockNotStartedCount = p.ClockNotStartedCount, blockedCount = p.BlockedCount, breakCount = p.InBreakPeriodCount }).ToList();
             chartReport.DataBind();
@@ -298,12 +340,12 @@ namespace PraticeManagement.Reports.Badge
             var list = new List<ReportTable>();
             var badgednotProject = new ReportTable()
             {
-                Category = "# Badged not on Project",
+                Category = "# 18mos Clock Active Resources Not on Project",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedNotOnProjectCount, TypeNo = 1 }).ToList()
             };
             var badgedProject = new ReportTable()
             {
-                Category = "# Badged on Project",
+                Category = "# Badged resources on Project",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedOnProjectCount, TypeNo = 2 }).ToList()
             };
             var clocknotStarted = new ReportTable()
@@ -356,7 +398,8 @@ namespace PraticeManagement.Reports.Badge
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
-            var report = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes,dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
+            var statuses = PersonStatus;
+            var report = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
             BadgedResources = report;
             if (BadgedResources.Count > 0)
             {
@@ -382,7 +425,7 @@ namespace PraticeManagement.Reports.Badge
             if ((int)chartReport.Height.Value < 550)
                 chartReport.Height = 550;
             var units = 60 * count;
-            chartReport.Width = units < 550 ? 550 : units > 1700 ? 1700 : units;
+            chartReport.Width = units < 800 ? 800 : units > 1700 ? 1700 : units;
             InitAxis(chartReport.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, true, SelectedView == 1 ? "Day" : SelectedView == 7 ? "Week" : "Month", false);
             InitAxis(chartReport.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, false, "Number of Resources", true);
             UpdateChartTitle();
@@ -419,13 +462,14 @@ namespace PraticeManagement.Reports.Badge
         public void AddLegendItems(Legend legend)
         {
             var ltBadgedNotOnProject = new LegendItem();
-            ltBadgedNotOnProject.Name = "Badged not on project";
+            ltBadgedNotOnProject.Name = "18mos Clock Active Resources Not on Project";
             ltBadgedNotOnProject.ImageStyle = LegendImageStyle.Rectangle;
             ltBadgedNotOnProject.MarkerStyle = MarkerStyle.Square;
             ltBadgedNotOnProject.MarkerSize = 10;
             ltBadgedNotOnProject.MarkerColor = Color.Black;
             ltBadgedNotOnProject.Color = Color.Blue;
             legend.CustomItems.Add(ltBadgedNotOnProject);
+
             var ltClockNotStarted = new LegendItem();
             ltClockNotStarted.Name = "18 Month Clock Not Started";
             ltClockNotStarted.ImageStyle = LegendImageStyle.Rectangle;
@@ -443,7 +487,7 @@ namespace PraticeManagement.Reports.Badge
             ltBreak.Color = Color.DarkBlue;
             legend.CustomItems.Add(ltBreak);
             var ltBadgedProject = new LegendItem();
-            ltBadgedProject.Name = "Badged on project";
+            ltBadgedProject.Name = "Badged resources on project";
             ltBadgedProject.ImageStyle = LegendImageStyle.Rectangle;
             ltBadgedProject.MarkerStyle = MarkerStyle.Square;
             ltBadgedProject.MarkerSize = 10;
