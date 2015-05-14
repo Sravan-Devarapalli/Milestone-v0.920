@@ -22,7 +22,7 @@ BEGIN
 	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
 	WHERE MPE.IsBadgeRequired = 1 AND MP.PersonId = @PersonId
 	AND P.ClientId = 2 -- ClientId = 2 for MICROSOFT
-	AND P.ProjectStatusId IN (2,3,4)
+	AND P.ProjectStatusId IN (1,2,3,4)
 
 
 	UNION ALL
