@@ -56,11 +56,26 @@
                             onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
                             DropDownListType="Pay Type" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
                         <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
-                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
-                    <td style="text-align:right;padding-right:1.8%">
+                    <td style="text-align: right; padding-right: 1.8%">
                         <asp:Button ID="btnUpdateView" runat="server" Text="View Report" OnClick="btnUpdateView_Click" />
+                    </td>
+                </tr>
+                <tr style="white-space: nowrap">
+                    <td class="ReportFilterLabels">
+                        Person Status:&nbsp;
+                    </td>
+                    <td style="padding-top: 5px;">
+                        <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')" NoItemsType="All"
+                            PluralForm="es" DropDownListType="Person Status" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+                        <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td>
                     </td>
                 </tr>
             </table>
@@ -93,6 +108,9 @@
                                             Pay Type
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Level
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             18-Month Clock Start Date
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
@@ -120,6 +138,9 @@
                                 <%# Eval("Person.CurrentPay.TimescaleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Person.Title.HtmlEncodedTitleName")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeStartDate"))%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -143,6 +164,9 @@
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# Eval("Person.CurrentPay.TimescaleName")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeStartDate"))%>
