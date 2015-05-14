@@ -37,6 +37,32 @@
         <td style="width: 100px;">
             <asp:LinkButton ID="lnkHistory" runat="server" Text="History" OnClick="lnkHistory_Click"></asp:LinkButton>
         </td>
+        <td>
+            Badge Deactivated Date:
+        </td>
+        <td>
+            <uc:datepicker id="dpDeactivatedDate" runat="server" onselectionchanged="dpDeactivatedDate_Change"
+                autopostback="true" />
+            <asp:CompareValidator ID="compDeactivatedDate" runat="server" ControlToValidate="dpDeactivatedDate"
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Text="*" Type="Date" EnableClientScript="false"></asp:CompareValidator>
+            <asp:CustomValidator ID="custDeactivateNeed18moDates" runat="server" ControlToValidate="dpDeactivatedDate"
+                ErrorMessage="Cannot enter Badge deactivated date when there are no 18 month dates."
+                ToolTip="Cannot enter Badge deactivated date when there are no 18 month dates."
+                Text="*" Display="Dynamic" EnableTheming="True" SetFocusOnError="True" OnServerValidate="custDeactivateNeed18moDates_ServerValidate"
+                EnableClientScript="false"></asp:CustomValidator>
+            <asp:CustomValidator ID="custDeactivateDateIn18moDates" runat="server" ControlToValidate="dpDeactivatedDate"
+                ErrorMessage="Badge deactivated date should be within 18-Month start date and end dates."
+                ToolTip="Badge deactivated date should be within 18-Month start date and end dates."
+                Text="*" Display="Dynamic" EnableTheming="True" SetFocusOnError="True" OnServerValidate="custDeactivateDateIn18moDates_ServerValidate"
+                EnableClientScript="false"></asp:CustomValidator>
+            <asp:CustomValidator ID="custDeactivateDatePriorProjectDates" runat="server" ControlToValidate="dpDeactivatedDate"
+                ErrorMessage="You’re entering a deactivation date prior to approved badge dates, please clear or change deactivation date."
+                ToolTip="You’re entering a deactivation date prior to approved badge dates, please clear or change deactivation date."
+                Text="*" Display="Dynamic" EnableTheming="True" SetFocusOnError="True" OnServerValidate="custDeactivateDatePriorProjectDates_ServerValidate"
+                EnableClientScript="false"></asp:CustomValidator>
+        </td>
     </tr>
     <tr>
         <td class="MsBadgeTd1">
@@ -57,6 +83,15 @@
             <asp:RequiredFieldValidator ID="reqPreviousAlias" runat="server" ControlToValidate="txtPreviousBadgeAlias"
                 ErrorMessage="Previous badge alias is required." ToolTip="Previous badge alias is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
+        </td>
+        <td>
+            &nbsp;
+        </td>
+        <td>
+            6-Month Organic Start
+        </td>
+        <td>
+            <asp:TextBox ID="txtOrganicStart" runat="server" ReadOnly="true"></asp:TextBox>
         </td>
     </tr>
     <tr>
@@ -117,6 +152,15 @@
                 ToolTip="Last badge start cannot be in the future." SetFocusOnError="True" OnServerValidate="custNotFuture_ServerValidate"
                 EnableClientScript="false"></asp:CustomValidator>
         </td>
+        <td>
+            &nbsp;
+        </td>
+        <td>
+            6-Month Organic End
+        </td>
+        <td>
+            <asp:TextBox ID="txtOrganicEnd" runat="server" ReadOnly="true"></asp:TextBox>
+        </td>
     </tr>
     <tr>
         <td class="MsBadgeTd1">
@@ -131,8 +175,8 @@
         <td class="MsBadgeTd1">
             Last Badge End
         </td>
-        <td>
-            <uc:DatePicker ID="dtpLastBadgeEnd" runat="server" />
+        <td colspan="3">
+            <uc:datepicker id="dtpLastBadgeEnd" runat="server" />
             <asp:RequiredFieldValidator ID="reqLastbadgeEnd" runat="server" ControlToValidate="dtpLastBadgeEnd"
                 ErrorMessage="Last badge end date is required." ToolTip="Last badge end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -154,7 +198,7 @@
         <td>
             <asp:TextBox ID="txtBreakEnd" runat="server" ReadOnly="true"></asp:TextBox>
         </td>
-        <td colspan="3">
+        <td colspan="5">
             &nbsp;
         </td>
     </tr>
@@ -163,9 +207,12 @@
             <asp:CheckBox ID="chbBlockFromMS" runat="server" Checked="false" Text="Block from MS Projects"
                 AutoPostBack="true" OnCheckedChanged="chbBlockFromMS_CheckedChanged" />
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <asp:CheckBox ID="chbException" runat="server" Checked="false" Text="Project Override Exception"
                 AutoPostBack="true" OnCheckedChanged="chbException_CheckedChanged" />
+        </td>
+        <td colspan="2" id="tdExcludeInReports" runat="server">
+            <asp:CheckBox ID="chbExcludeInReports" runat="server" Checked="false" Text="Exclude from 18-month Reports" />
         </td>
     </tr>
     <tr>
@@ -173,7 +220,7 @@
             Block Start
         </td>
         <td colspan="2">
-            <uc:DatePicker ID="dtpBlockStart" runat="server" />
+            <uc:datepicker id="dtpBlockStart" runat="server" />
             <asp:RequiredFieldValidator ID="reqBlockStart" runat="server" ControlToValidate="dtpBlockStart"
                 ErrorMessage="Block start date is required." ToolTip="Block start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -185,8 +232,8 @@
         <td class="MsBadgeTd1">
             Exception Start
         </td>
-        <td>
-            <uc:DatePicker ID="dtpExceptionStart" runat="server" />
+        <td colspan="3">
+            <uc:datepicker id="dtpExceptionStart" runat="server" />
             <asp:RequiredFieldValidator ID="reqExceptionStart" runat="server" ControlToValidate="dtpExceptionStart"
                 ErrorMessage="Exception start date is required." ToolTip="Exception start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -205,7 +252,7 @@
             Block End
         </td>
         <td colspan="2">
-            <uc:DatePicker ID="dtpBlockEnd" runat="server" />
+            <uc:datepicker id="dtpBlockEnd" runat="server" />
             <asp:RequiredFieldValidator ID="reqBlockEnd" runat="server" ControlToValidate="dtpBlockEnd"
                 ErrorMessage="Block end date is required." ToolTip="Block end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -233,8 +280,8 @@
         <td class="MsBadgeTd1">
             Exception End
         </td>
-        <td>
-            <uc:DatePicker ID="dtpExceptionEnd" runat="server" />
+        <td colspan="3">
+            <uc:datepicker id="dtpExceptionEnd" runat="server" />
             <asp:RequiredFieldValidator ID="reqExceptionEnd" runat="server" ControlToValidate="dtpExceptionEnd"
                 ErrorMessage="Exception end date is required." ToolTip="Exception end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -260,9 +307,9 @@
                 OnServerValidate="custExceptionMorethan18_ServerValidate" Text="*" EnableClientScript="false"
                 SetFocusOnError="true"></asp:CustomValidator>
             <asp:CustomValidator ID="custExceptionNotMoreThan18moEndDate" runat="server" ErrorMessage="Requested exception will shorten the person’s 18-month clock. Please remove exception."
-                ToolTip="Requested exception will shorten the person’s 18-month clock. Please remove exception." Display="Dynamic"
-                OnServerValidate="custExceptionNotMoreThan18moEndDate_ServerValidate" Text="*" EnableClientScript="false"
-                SetFocusOnError="true"></asp:CustomValidator>
+                ToolTip="Requested exception will shorten the person’s 18-month clock. Please remove exception."
+                Display="Dynamic" OnServerValidate="custExceptionNotMoreThan18moEndDate_ServerValidate"
+                Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
         </td>
     </tr>
 </table>
@@ -392,6 +439,34 @@
         <tr>
             <td class="Padding10 textCenter">
                 <asp:Button ID="btnOKValidationPanel" runat="server" ToolTip="OK" Text="OK" CssClass="Width100Px" />
+            </td>
+        </tr>
+    </table>
+</asp:Panel>
+<asp:HiddenField ID="hdnDeactivateWithinProject" runat="server" />
+<AjaxControlToolkit:ModalPopupExtender ID="mpeDeactivateWithinProject" runat="server"
+    TargetControlID="hdnDeactivateWithinProject" BehaviorID="mpeBadgeBehaviourId"
+    BackgroundCssClass="modalBackground" PopupControlID="pnlDeactivateWithinProject"
+    CancelControlID="btnCancel" DropShadow="false" />
+<asp:Panel ID="pnlDeactivateWithinProject" runat="server" CssClass="DeactivateDateValidationpopUp"
+    Style="display: none;">
+    <table class="WholeWidth">
+        <tr>
+            <td>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:CustomValidator ID="custDeactivateWithinProject" runat="server" ControlToValidate="dpDeactivatedDate"
+                    ErrorMessage="You are trying to enter a badge deactivation date, but the resource has an active badge. Click ‘Change Badge End Date(s)’ to change the badge end date to the deactivation date. Click ‘Cancel’ to change the deactivation date."
+                    ToolTip="You are trying to enter a badge deactivation date, but the resource has an active badge. Click ‘Change Badge End Date(s)’ to change the badge end date to the deactivation date. Click ‘Cancel’ to change the deactivation date."
+                    Text="You are trying to enter a badge deactivation date, but the resource has an active badge. Click ‘Change Badge End Date(s)’ to change the badge end date to the deactivation date. Click ‘Cancel’ to change the deactivation date."
+                    Display="Dynamic" EnableTheming="True" SetFocusOnError="True" OnServerValidate="custDeactivateWithinProject_ServerValidate"
+                    EnableClientScript="false"></asp:CustomValidator>
+            </td>
+        </tr>
+        <tr>
+            <td class="Padding10 textCenter">
+                <asp:Button ID="btnOk" runat="server" ToolTip="Change Badge End Date(s)" Text="Change Badge End Date(s)"
+                    OnClick="btnOk_Click" />
+                <asp:Button ID="btnCancel" runat="server" ToolTip="Cancel" Text="Cancel" CssClass="Width100Px" />
             </td>
         </tr>
     </table>
