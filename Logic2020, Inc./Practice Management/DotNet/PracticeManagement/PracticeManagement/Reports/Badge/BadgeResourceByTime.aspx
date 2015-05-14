@@ -13,7 +13,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-   <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
         type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
@@ -42,7 +42,7 @@
                         Projected Range:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <uc:DatePicker ID="dtpStart" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" />
+                        <uc:DatePicker ID="dtpStart" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" ValidationGroup="Badge"/>
                         <asp:RequiredFieldValidator ID="reqBadgeStart" runat="server" ControlToValidate="dtpStart"
                             ValidationGroup="BadgeReport" ErrorMessage="Start date is required." ToolTip="Start date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -55,7 +55,7 @@
                         &nbsp;to&nbsp;
                     </td>
                     <td>
-                        <uc:DatePicker ID="dtpEnd" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" />
+                        <uc:DatePicker ID="dtpEnd" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" ValidationGroup="Badge"/>
                         <asp:RequiredFieldValidator ID="reqbadgeEnd" runat="server" ControlToValidate="dtpEnd"
                             ValidationGroup="BadgeReport" ErrorMessage="End date is required." ToolTip="End date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -92,15 +92,32 @@
                     </td>
                 </tr>
                 <tr style="white-space: nowrap">
-                 <td class="ReportFilterLabels">
+                    <td class="ReportFilterLabels">
                         Pay Type:&nbsp;
                     </td>
-                    <td colspan="4" style="padding-top:5px;">
+                    <td colspan="4" style="padding-top: 5px;">
                         <pmc:ScrollingDropDown ID="cblPayTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
                             DropDownListType="Pay Type" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
-                         <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
-                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td class="textLeft Width90Percent">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                  <tr style="white-space: nowrap">
+                    <td class="ReportFilterLabels">
+                        Person Status:&nbsp;
+                    </td>
+                    <td colspan="4" style="padding-top: 5px;">
+                        <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')" NoItemsType="All" PluralForm="es"
+                            DropDownListType="Person Status" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+                        <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td class="textLeft Width90Percent">
@@ -137,7 +154,7 @@
                 <asp:Chart ID="chartReport" runat="server" EnableViewState="true">
                     <Series>
                         <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            BorderWidth="2" LegendText="Badged not on project" IsVisibleInLegend="false"
+                            BorderWidth="2" LegendText="18mos Clock Active Resources Not on Project" IsVisibleInLegend="false"
                             Color="Blue" XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
                             YValueMembers="badgedNotOnProjectcount" ToolTip="#VALY Resources">
                         </asp:Series>
