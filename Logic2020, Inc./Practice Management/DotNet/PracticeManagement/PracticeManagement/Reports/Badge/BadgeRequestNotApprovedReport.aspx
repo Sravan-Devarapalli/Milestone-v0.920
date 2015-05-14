@@ -20,7 +20,7 @@
                                 Enabled="true" UseSubmitBehavior="false" ToolTip="Export To Excel" />
                         </td>
                     </tr>
-                      <tr>
+                    <tr>
                         <td class="paddingBottom10px">
                             <asp:Label ID="lblTitle" runat="server" Text="Badge Requests Not Yet Approved:" Style="font-weight: bold;
                                 font-size: 20px;"></asp:Label>
@@ -30,14 +30,17 @@
                 <asp:Repeater ID="repbadgeNotApproved" runat="server">
                     <HeaderTemplate>
                         <div class="minheight250Px">
-                            <table id="tblAccountSummaryByBusinessReport" class="tablesorter PersonSummaryReport zebra">
+                            <table id="tblNotApproved" class="tablesorter PersonSummaryReport zebra">
                                 <thead>
                                     <tr>
-                                        <th class="TextAlignLeftImp Padding5Imp">
+                                        <th class="TextAlignLeftImp Padding5Imp Width300Px">
                                             Current Badge Requests Not Yet Approved
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Project #
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Project Stage
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Request Date
@@ -47,6 +50,9 @@
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Badge End
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            18-mos Clock End Date
                                         </th>
                                     </tr>
                                 </thead>
@@ -63,6 +69,9 @@
                                 </asp:HyperLink>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Project.Status.StatusType")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("PlannedEndDate"))%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -70,6 +79,9 @@
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeEndDate"))%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# GetDateFormat((DateTime?)Eval("ProjectBadgeEndDate"))%>
                             </td>
                         </tr>
                     </ItemTemplate>
@@ -84,6 +96,9 @@
                                 </asp:HyperLink>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Project.Status.StatusType")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("PlannedEndDate"))%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -91,6 +106,9 @@
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeEndDate"))%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# GetDateFormat((DateTime?)Eval("ProjectBadgeEndDate"))%>
                             </td>
                         </tr>
                     </AlternatingItemTemplate>
