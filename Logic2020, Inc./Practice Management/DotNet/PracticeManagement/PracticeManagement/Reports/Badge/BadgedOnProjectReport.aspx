@@ -32,7 +32,7 @@
                         Projected Range:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <uc:DatePicker ID="dtpStart" runat="server" />
+                        <uc:DatePicker ID="dtpStart" runat="server" ValidationGroup="Badge"/>
                         <asp:RequiredFieldValidator ID="reqBadgeStart" runat="server" ControlToValidate="dtpStart"
                             ValidationGroup="BadgeReport" ErrorMessage="Start date is required." ToolTip="Start date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -44,8 +44,8 @@
                     <td>
                         &nbsp;to&nbsp;
                     </td>
-                    <td colspan="3">
-                        <uc:DatePicker ID="dtpEnd" runat="server" />
+                    <td>
+                        <uc:DatePicker ID="dtpEnd" runat="server" ValidationGroup="Badge"/>
                         <asp:RequiredFieldValidator ID="reqbadgeEnd" runat="server" ControlToValidate="dtpEnd"
                             ValidationGroup="BadgeReport" ErrorMessage="End date is required." ToolTip="End date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -67,6 +67,7 @@
                             ValidationGroup="BadgeReport" Text="*" EnableClientScript="false" OnServerValidate="custNotBeforeJuly_ServerValidate"
                             SetFocusOnError="true"></asp:CustomValidator>
                     </td>
+                    <td colspan="2">&nbsp;</td>
                     <td>
                         <asp:Button ID="btnUpdateView" runat="server" Text="View Report" OnClick="btnUpdateView_Click" />
                     </td>
@@ -80,7 +81,24 @@
                             onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
                             DropDownListType="Pay Type" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
                        <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
-                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td class="textLeft Width90Percent">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr style="white-space: nowrap">
+                    <td class="ReportFilterLabels">
+                        Person Status:&nbsp;
+                    </td>
+                    <td colspan="4" style="padding-top: 5px;">
+                        <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')" NoItemsType="All" PluralForm="es"
+                            DropDownListType="Person Status" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+                        <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td class="textLeft Width90Percent">
@@ -129,7 +147,7 @@
                             <table id="tblAccountSummaryByBusinessReport" class="tablesorter PersonSummaryReport zebra">
                                 <thead>
                                     <tr>
-                                        <th class="TextAlignLeftImp Padding5Imp">
+                                        <th class="TextAlignLeftImp Padding5Imp Width300Px">
                                             List of Badged Resources on Project
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
