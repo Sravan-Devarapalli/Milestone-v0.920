@@ -9,6 +9,9 @@
         /// </summary>
         public class ColumnNames
         {
+            public static string BadgedNotOnProjectExceptionCount= "BadgedNotOnProjectExceptionCount";
+            public static string BadgedOnProjectExceptionCount= "BadgedOnProjectExceptionCount";
+            public static string ClockEndDate= "ClockEndDate";
             public static string ExcludeInReports= "ExcludeInReports";
             public static string ForecastedHoursDaily= "ForecastedHoursDaily";
             public static string OrganicBreakEndDate= "OrganicBreakEndDate";
@@ -577,6 +580,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string IsNotBadgedException = "@IsNotBadgedException";
+            public static string IsBadgedException = "@IsBadgedException";
             public static string ExcludeFromReports = "@ExcludeFromReports";
             public static string IsThisWeek = "@IsThisWeek";
             public static string OrganicBreakEnd = "@OrganicBreakEnd";
