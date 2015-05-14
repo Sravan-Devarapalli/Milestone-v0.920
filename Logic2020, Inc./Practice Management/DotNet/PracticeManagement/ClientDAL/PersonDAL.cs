@@ -4168,6 +4168,10 @@ namespace DataAccess
                 int badgeStartDateSourceIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDateSource);
                 int plannedEndDateSourceIndex = reader.GetOrdinal(Constants.ColumnNames.PlannedEndDateSource);
                 int badgeEndDateSourceIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDateSource);
+                int deactivatedDateIndex = reader.GetOrdinal(Constants.ColumnNames.DeactivatedDate);
+                int organicBreakStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakStartDate);
+                int organicBreakEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakEndDate);
+                int ExcludeInReportsIndex = reader.GetOrdinal(Constants.ColumnNames.ExcludeInReports);
                 while (reader.Read())
                 {
                     var badge = new MSBadge()
@@ -4195,7 +4199,11 @@ namespace DataAccess
                         PreviousBadgeAlias = reader.IsDBNull(previousBadgeAliasIndex) ? string.Empty : reader.GetString(previousBadgeAliasIndex),
                         BadgeStartDateSource = reader.IsDBNull(badgeStartDateSourceIndex) ? string.Empty : reader.GetString(badgeStartDateSourceIndex),
                         PlannedEndDateSource = reader.IsDBNull(plannedEndDateSourceIndex) ? string.Empty : reader.GetString(plannedEndDateSourceIndex),
-                        BadgeEndDateSource = reader.IsDBNull(badgeEndDateSourceIndex) ? string.Empty : reader.GetString(badgeEndDateSourceIndex)
+                        BadgeEndDateSource = reader.IsDBNull(badgeEndDateSourceIndex) ? string.Empty : reader.GetString(badgeEndDateSourceIndex),
+                        DeactivatedDate = reader.IsDBNull(deactivatedDateIndex) ? null : (DateTime?)reader.GetDateTime(deactivatedDateIndex),
+                        OrganicBreakStartDate = reader.IsDBNull(organicBreakStartDateIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakStartDateIndex),
+                        OrganicBreakEndDate = reader.IsDBNull(organicBreakEndDateIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakEndDateIndex),
+                        ExcludeInReports = reader.GetBoolean(ExcludeInReportsIndex)
                     };
                     result.Add(badge);
                 }
@@ -4286,6 +4294,11 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.BreakStartDate, msBadge.BreakStartDate.HasValue ? (object)msBadge.BreakStartDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BreakEndDate, msBadge.BreakEndDate.HasValue ? (object)msBadge.BreakEndDate.Value : DBNull.Value);
 
+                command.Parameters.AddWithValue(Constants.ParameterNames.DeactivatedDate, msBadge.DeactivatedDate.HasValue ? (object)msBadge.DeactivatedDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrganicBreakStart, msBadge.OrganicBreakStartDate.HasValue ? (object)msBadge.OrganicBreakStartDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OrganicBreakEnd, msBadge.OrganicBreakEndDate.HasValue ? (object)msBadge.OrganicBreakEndDate.Value : DBNull.Value);
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeFromReports, msBadge.ExcludeInReports);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UpdatedBy, msBadge.ModifiedById);
 
                 connection.Open();
