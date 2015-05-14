@@ -99,6 +99,14 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string SelectedPersonStatuses
+        {
+            get
+            {
+                return filter.PersonStatus;
+            }
+        }
+
         public int SelectedView
         {
             get
@@ -192,7 +200,7 @@ namespace PraticeManagement.Reports.Badge
                 return;
             }
             divWholePage.Style.Remove("display");
-            var data = ServiceCallers.Custom.Report(r => r.ResourcesByTitleReport(SelectedPayTypes,SelectedTitles, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
+            var data = ServiceCallers.Custom.Report(r => r.ResourcesByTitleReport(SelectedPayTypes, SelectedPersonStatuses,SelectedTitles, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
             TitleList = data;
             if (TitleList.Count > 0)
             {
@@ -458,7 +466,7 @@ namespace PraticeManagement.Reports.Badge
             var filename = string.Format("AvailableResourceByBusinessConsultants_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var report = ServiceCallers.Custom.Report(r => r.ResourcesByTitleReport(SelectedPayTypes,SelectedTitles, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
+            var report = ServiceCallers.Custom.Report(r => r.ResourcesByTitleReport(SelectedPayTypes, SelectedPersonStatuses, SelectedTitles, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
             TitleList = report;
             if (TitleList.Count > 0)
             {
