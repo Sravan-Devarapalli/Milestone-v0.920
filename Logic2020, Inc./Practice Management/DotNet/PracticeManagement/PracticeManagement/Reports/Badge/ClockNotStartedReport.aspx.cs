@@ -9,6 +9,9 @@ using PraticeManagement.Utils.Excel;
 using System.Data;
 using PraticeManagement.Utils;
 using PraticeManagement.Controls;
+using PraticeManagement.PersonStatusService;
+using System.ServiceModel;
+using System.Text;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -17,6 +20,8 @@ namespace PraticeManagement.Reports.Badge
         public const string StartDateKey = "StartDate";
         public const string EndDateKey = "EndDate";
         public const string PayTypesKey = "PayTypes";
+        public const string PersonStatusesKey = "PersonStatuses";
+
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
 
@@ -101,6 +106,33 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PersonStatusFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[PersonStatusesKey];
+            }
+        }
+
+        public string PersonStatus
+        {
+            get
+            {
+                var clientList = new StringBuilder();
+                foreach (ListItem item in cblPersonStatus.Items)
+                {
+                    if (item.Selected)
+                        clientList.Append(item.Value).Append(',');
+                    if (item.Value == "1" && item.Selected)
+                    {
+                        clientList.Append("2").Append(',');
+                        clientList.Append("5").Append(',');
+                    }
+                }
+                return clientList.ToString();
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -109,12 +141,33 @@ namespace PraticeManagement.Reports.Badge
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
                 DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
                 cblPayTypes.SelectItems(new List<int>() { 1, 2 });
+                FillPersonStatusList();
+                cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
                 if (!String.IsNullOrEmpty(StartDateFromQueryString))
                 {
                     dtpStart.DateValue = Convert.ToDateTime(StartDateFromQueryString);
                     dtpEnd.DateValue = Convert.ToDateTime(EndDateFromQueryString);
                     cblPayTypes.SelectedItems = PayTypesFromQueryString == "null" ? null : PayTypesFromQueryString;
+                    cblPersonStatus.SelectedItems = PersonStatusFromQueryString;
                     btnUpdateView_Click(btnUpdateView, new EventArgs());
+                }
+            }
+        }
+
+        public void FillPersonStatusList()
+        {
+            using (var serviceClient = new PersonStatusServiceClient())
+            {
+                try
+                {
+                    var statuses = serviceClient.GetPersonStatuses();
+                    statuses = statuses.Where(p => p.Id != 2 && p.Id != 5).ToArray();
+                    DataHelper.FillListDefault(cblPersonStatus, Resources.Controls.AllTypes, statuses, false);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
                 }
             }
         }
@@ -150,7 +203,8 @@ namespace PraticeManagement.Reports.Badge
         {
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
-            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,dtpStart.DateValue, dtpEnd.DateValue, false, true, false, false, false).ToList());
+            var statuses = PersonStatus;
+            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, true, false, false, false).ToList());
             repclocknotStarted.DataSource = resources;
             repclocknotStarted.DataBind();
             if (resources.Count > 0)
@@ -183,7 +237,8 @@ namespace PraticeManagement.Reports.Badge
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
-            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,dtpStart.DateValue, dtpEnd.DateValue, false, true, false, false, false).ToList());
+            var statuses = PersonStatus;
+            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, true, false, false, false).ToList());
             if (report.Count > 0)
             {
                 string dateRangeTitle = string.Format("18 Month clock not started report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
