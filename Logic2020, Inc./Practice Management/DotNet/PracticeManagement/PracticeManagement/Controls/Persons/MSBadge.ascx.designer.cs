@@ -76,6 +76,51 @@ namespace PraticeManagement.Controls.Persons {
         protected global::System.Web.UI.WebControls.LinkButton lnkHistory;
         
         /// <summary>
+        /// dpDeactivatedDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.DatePicker dpDeactivatedDate;
+        
+        /// <summary>
+        /// compDeactivatedDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compDeactivatedDate;
+        
+        /// <summary>
+        /// custDeactivateNeed18moDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custDeactivateNeed18moDates;
+        
+        /// <summary>
+        /// custDeactivateDateIn18moDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custDeactivateDateIn18moDates;
+        
+        /// <summary>
+        /// custDeactivateDatePriorProjectDates control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custDeactivateDatePriorProjectDates;
+        
+        /// <summary>
         /// txtPlannedEnd control.
         /// </summary>
         /// <remarks>
@@ -110,6 +155,15 @@ namespace PraticeManagement.Controls.Persons {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPreviousAlias;
+        
+        /// <summary>
+        /// txtOrganicStart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtOrganicStart;
         
         /// <summary>
         /// dpBadgeEnd control.
@@ -229,6 +283,15 @@ namespace PraticeManagement.Controls.Persons {
         protected global::System.Web.UI.WebControls.CustomValidator custNotFuture;
         
         /// <summary>
+        /// txtOrganicEnd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtOrganicEnd;
+        
+        /// <summary>
         /// txtBreakStart control.
         /// </summary>
         /// <remarks>
@@ -299,6 +362,24 @@ namespace PraticeManagement.Controls.Persons {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chbException;
+        
+        /// <summary>
+        /// tdExcludeInReports control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdExcludeInReports;
+        
+        /// <summary>
+        /// chbExcludeInReports control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbExcludeInReports;
         
         /// <summary>
         /// dtpBlockStart control.
@@ -560,6 +641,60 @@ namespace PraticeManagement.Controls.Persons {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnOKValidationPanel;
+        
+        /// <summary>
+        /// hdnDeactivateWithinProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnDeactivateWithinProject;
+        
+        /// <summary>
+        /// mpeDeactivateWithinProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeDeactivateWithinProject;
+        
+        /// <summary>
+        /// pnlDeactivateWithinProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlDeactivateWithinProject;
+        
+        /// <summary>
+        /// custDeactivateWithinProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custDeactivateWithinProject;
+        
+        /// <summary>
+        /// btnOk control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOk;
+        
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancel;
     }
 }
 
