@@ -35,7 +35,7 @@ namespace PraticeManagement.Reports.Badge
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
 
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
-                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount > 12 ? coloumnsCount : 13 - 1 });
+                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount > 5 ? coloumnsCount : 6 - 1 });
                 sheetStyle.IsAutoResize = false;
 
                 return sheetStyle;
@@ -60,7 +60,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -150,17 +150,21 @@ namespace PraticeManagement.Reports.Badge
 
             data.Columns.Add("Current Badge Requests Not Yet Approved");
             data.Columns.Add("Project #");
+            data.Columns.Add("Project Stage");
             data.Columns.Add("Request Date");
             data.Columns.Add("Badge Start");
             data.Columns.Add("Badge End");
+            data.Columns.Add("18-mos Clock End Date");
             foreach (var reportItem in report)
             {
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
                 row.Add(reportItem.Project.ProjectNumber);
+                row.Add(reportItem.Project.Status.StatusType.ToString());
                 row.Add(reportItem.PlannedEndDate.HasValue ? reportItem.PlannedEndDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeStartDate.HasValue ? reportItem.BadgeStartDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
+                row.Add(reportItem.ProjectBadgeEndDate.HasValue ? reportItem.ProjectBadgeEndDate.Value.ToShortDateString() : string.Empty);
                 data.Rows.Add(row.ToArray());
             }
             return data;
