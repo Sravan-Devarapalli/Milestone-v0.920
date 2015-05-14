@@ -18,8 +18,10 @@
         <td class="BorderBottom1px Width8Per">
             Pay Type
         </td>
-        <td>
-            &nbsp;
+        <td class="Width2PercentImp">
+        </td>
+        <td class="BorderBottom1px Width8Per">
+            Person Status
         </td>
     </tr>
     <tr>
@@ -70,6 +72,14 @@
         </td>
         <td>
             &nbsp;
+        </td>
+        <td>
+            <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')" NoItemsType="All"
+                PluralForm="es" DropDownListType="Person Status" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+            <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
+                UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+            </ext:ScrollableDropdownExtender>
         </td>
     </tr>
 </table>
