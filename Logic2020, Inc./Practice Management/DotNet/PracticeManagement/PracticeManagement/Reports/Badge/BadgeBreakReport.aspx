@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="Resources on 6-Month Break" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="BadgeBreakReport.aspx.cs" Inherits="PraticeManagement.Reports.Badge.BadgeBreakReport" %>
-    <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
+
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Register Src="~/Controls/Generic/Filtering/DateInterval.ascx" TagPrefix="uc"
     TagName="DateInterval" %>
@@ -9,7 +10,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
- <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
         type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
@@ -32,7 +33,7 @@
                         Projected Range:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <uc:DatePicker ID="dtpStart" runat="server" />
+                        <uc:DatePicker ID="dtpStart" runat="server" ValidationGroup="Badge" />
                         <asp:RequiredFieldValidator ID="reqBadgeStart" runat="server" ControlToValidate="dtpStart"
                             ValidationGroup="BadgeReport" ErrorMessage="Start date is required." ToolTip="Start date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -44,8 +45,8 @@
                     <td>
                         &nbsp;to&nbsp;
                     </td>
-                    <td colspan="3">
-                        <uc:DatePicker ID="dtpEnd" runat="server" />
+                    <td>
+                        <uc:DatePicker ID="dtpEnd" runat="server" ValidationGroup="Badge" />
                         <asp:RequiredFieldValidator ID="reqbadgeEnd" runat="server" ControlToValidate="dtpEnd"
                             ValidationGroup="BadgeReport" ErrorMessage="End date is required." ToolTip="End date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -67,20 +68,40 @@
                             ValidationGroup="BadgeReport" Text="*" EnableClientScript="false" OnServerValidate="custNotBeforeJuly_ServerValidate"
                             SetFocusOnError="true"></asp:CustomValidator>
                     </td>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
                     <td>
                         <asp:Button ID="btnUpdateView" runat="server" Text="View Report" OnClick="btnUpdateView_Click" />
                     </td>
                 </tr>
                 <tr style="white-space: nowrap">
-                    <td class="ReportFilterLabels" >
+                    <td class="ReportFilterLabels">
                         Pay Type:&nbsp;
                     </td>
                     <td colspan="4" style="padding-top: 5px;">
                         <pmc:ScrollingDropDown ID="cblPayTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
                             DropDownListType="Pay Type" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
-                         <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
-                            UseAdvanceFeature="true" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td class="textLeft Width90Percent">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr style="white-space: nowrap">
+                    <td class="ReportFilterLabels">
+                        Person Status:&nbsp;
+                    </td>
+                    <td colspan="4" style="padding-top: 5px;">
+                        <pmc:ScrollingDropDown ID="cblPersonStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblPersonStatus','Person Status','es')" NoItemsType="All"
+                            PluralForm="es" DropDownListType="Person Status" CellPadding="3" CssClass="AllEmpClockCblTimeScales" />
+                        <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
+                            UseAdvanceFeature="true" Width="245px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td class="textLeft Width90Percent">
@@ -126,10 +147,10 @@
                 <asp:Repeater ID="repblocked" runat="server" OnItemDataBound="repblocked_ItemDataBound">
                     <HeaderTemplate>
                         <div class="minheight250Px" style="padding-top: 20px;">
-                            <table id="tblAccountSummaryByBusinessReport" class="tablesorter PersonSummaryReport zebra">
+                            <table id="tblBreak" class="tablesorter PersonSummaryReport zebra">
                                 <thead>
                                     <tr>
-                                        <th class="TextAlignLeftImp Padding5Imp">
+                                        <th class="TextAlignLeftImp Padding5Imp Width300Px">
                                             List of Resources on 6 month break
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
