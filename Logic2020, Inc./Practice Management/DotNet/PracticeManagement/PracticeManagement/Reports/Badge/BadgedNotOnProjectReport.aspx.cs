@@ -9,6 +9,9 @@ using PraticeManagement.Utils.Excel;
 using System.Data;
 using PraticeManagement.Utils;
 using PraticeManagement.Controls;
+using PraticeManagement.PersonStatusService;
+using System.ServiceModel;
+using System.Text;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -17,6 +20,7 @@ namespace PraticeManagement.Reports.Badge
         public const string StartDateKey = "StartDate";
         public const string EndDateKey = "EndDate";
         public const string PayTypesKey = "PayTypes";
+        public const string PersonStatusesKey = "PersonStatuses";
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
 
@@ -64,7 +68,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -101,6 +105,33 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PersonStatusFromQueryString
+        {
+            get
+            {
+                return Request.QueryString[PersonStatusesKey];
+            }
+        }
+
+        public string PersonStatus
+        {
+            get
+            {
+                var clientList = new StringBuilder();
+                foreach (ListItem item in cblPersonStatus.Items)
+                {
+                    if (item.Selected)
+                        clientList.Append(item.Value).Append(',');
+                    if (item.Value == "1" && item.Selected)
+                    {
+                        clientList.Append("2").Append(',');
+                        clientList.Append("5").Append(',');
+                    }
+                }
+                return clientList.ToString();
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -109,12 +140,33 @@ namespace PraticeManagement.Reports.Badge
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
                 DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
                 cblPayTypes.SelectItems(new List<int>() { 1, 2 });
+                FillPersonStatusList();
+                cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
                 if (!String.IsNullOrEmpty(StartDateFromQueryString))
                 {
                     dtpStart.DateValue = Convert.ToDateTime(StartDateFromQueryString);
                     dtpEnd.DateValue = Convert.ToDateTime(EndDateFromQueryString);
                     cblPayTypes.SelectedItems = PayTypesFromQueryString == "null" ? null : PayTypesFromQueryString;
+                    cblPersonStatus.SelectedItems = PersonStatusFromQueryString;
                     btnUpdateView_Click(btnUpdateView, new EventArgs());
+                }
+            }
+        }
+
+        public void FillPersonStatusList()
+        {
+            using (var serviceClient = new PersonStatusServiceClient())
+            {
+                try
+                {
+                    var statuses = serviceClient.GetPersonStatuses();
+                    statuses = statuses.Where(p => p.Id != 2 && p.Id != 5).ToArray();
+                    DataHelper.FillListDefault(cblPersonStatus, Resources.Controls.AllTypes, statuses, false);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
                 }
             }
         }
@@ -150,7 +202,8 @@ namespace PraticeManagement.Reports.Badge
         {
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
-            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,dtpStart.DateValue, dtpEnd.DateValue, true, false, false, false, false).ToList());
+            var statuses = PersonStatus;
+            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,statuses,dtpStart.DateValue, dtpEnd.DateValue, true, false, false, false, false).ToList());
             repBadgedNotProject.DataSource = resources;
             repBadgedNotProject.DataBind();
             if (resources.Count > 0)
@@ -172,8 +225,10 @@ namespace PraticeManagement.Reports.Badge
                 var dataItem = (MSBadge)e.Item.DataItem;
                 var lblBadgeStart = e.Item.FindControl("lblBadgeStart") as Label;
                 var lblBadgeEnd = e.Item.FindControl("lblBadgeEnd") as Label;
+                var lblDeactivateDate = e.Item.FindControl("lblDeactivateDate") as Label;
                 lblBadgeEnd.Text = dataItem.BadgeEndDate.HasValue ? dataItem.BadgeEndDate.Value.ToShortDateString() : string.Empty;
                 lblBadgeStart.Text = dataItem.BadgeStartDate.HasValue ? dataItem.BadgeStartDate.Value.ToShortDateString() : string.Empty;
+                lblDeactivateDate.Text = dataItem.DeactivatedDate.HasValue ? dataItem.DeactivatedDate.Value.ToShortDateString() : string.Empty;
             }
         }
 
@@ -183,7 +238,8 @@ namespace PraticeManagement.Reports.Badge
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
-            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,dtpStart.DateValue, dtpEnd.DateValue, true, false, false, false, false).ToList());
+            var statuses = PersonStatus;
+            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes,statuses,dtpStart.DateValue, dtpEnd.DateValue, true, false, false, false, false).ToList());
             if (report.Count > 0)
             {
                 string dateRangeTitle = string.Format("Badged not on project report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
@@ -221,12 +277,14 @@ namespace PraticeManagement.Reports.Badge
 
             data.Columns.Add("List of Resources Badged not on Project");
             data.Columns.Add("18 Month Start");
+            data.Columns.Add("Date Badge Deactivated");
             data.Columns.Add("18 Month End");
             foreach (var reportItem in report)
             {
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
                 row.Add(reportItem.BadgeStartDate.HasValue?reportItem.BadgeStartDate.Value.ToShortDateString():string.Empty);
+                row.Add(reportItem.DeactivatedDate.HasValue ? reportItem.DeactivatedDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
                 data.Rows.Add(row.ToArray());
             }
