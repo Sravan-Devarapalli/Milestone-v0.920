@@ -161,22 +161,22 @@ namespace PracticeManagementService
         List<ProjectLevelGroupedHours> NonBillableReport(DateTime startDate, DateTime endDate, string projectNumber, string directorIds, string businessUnitIds, string practiceIds);
 
         [OperationContract]
-        List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes, DateTime startDate, DateTime endDate, int step);
+        List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes,string personStatusIds, DateTime startDate, DateTime endDate, int step);
 
         [OperationContract]
-        List<MSBadge> ListBadgeResourcesByType(string paytypes,DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject);
+        List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject);
 
         [OperationContract]
-        List<GroupByPractice> ResourcesByPracticeReport(string paytypes, string practices, DateTime startDate, DateTime endDate, int step);
+        List<GroupByPractice> ResourcesByPracticeReport(string paytypes, string PersonStatuses, string practices, DateTime startDate, DateTime endDate, int step);
 
         [OperationContract]
-        List<GroupbyTitle> ResourcesByTitleReport(string paytypes,string titles, DateTime startDate, DateTime endDate, int step);
+        List<GroupbyTitle> ResourcesByTitleReport(string paytypes,string personStatuses,string titles, DateTime startDate, DateTime endDate, int step);
 
         [OperationContract]
         List<MSBadge> GetBadgeRequestNotApprovedList();
 
         [OperationContract]
-        List<MSBadge> GetAllBadgeDetails(string payTypes);
+        List<MSBadge> GetAllBadgeDetails(string payTypes, string personStatuses);
 
         [OperationContract]
         PersonTimeEntriesTotals UtilizationReport(int personId, DateTime startDate, DateTime endDate);
