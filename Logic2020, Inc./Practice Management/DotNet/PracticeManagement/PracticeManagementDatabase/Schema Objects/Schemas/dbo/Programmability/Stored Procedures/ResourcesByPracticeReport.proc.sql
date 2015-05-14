@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[ResourcesByPracticeReport]
 (
 	@PayTypeIds			NVARCHAR(MAX)=NULL,
+	@PersonStatusIds	NVARCHAR(MAX),
 	@Practices			NVARCHAR(MAX),
 	@StartDate			DATETIME,
 	@EndDate			DATETIME,
@@ -13,14 +14,21 @@ BEGIN
 			@EndDateLocal DATETIME
 
 	DECLARE @PracticeIdsTable TABLE ( Ids INT )
+	DECLARE @PersonStatusIdsTable TABLE ( Ids INT )
 
 	DECLARE @PayTypeIdsTable TABLE ( Ids INT )
-	DECLARE @PayTypeIdsLocal	NVARCHAR(MAX)
+	DECLARE @PayTypeIdsLocal	NVARCHAR(MAX),
+			@PersonStatusIdsLocal NVARCHAR(MAX)
 	SET @PayTypeIdsLocal = @PayTypeIds
+	SET @PersonStatusIdsLocal = @PersonStatusIds
 
 	INSERT INTO @PayTypeIdsTable( Ids)
 	SELECT ResultId
 	FROM dbo.ConvertStringListIntoTable(@PayTypeIdsLocal)
+
+	INSERT INTO @PersonStatusIdsTable(Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@PersonStatusIdsLocal)
 
 	INSERT INTO @PracticeIdsTable( Ids)
 	SELECT ResultId
@@ -92,6 +100,7 @@ BEGIN
 		SELECT R.DefaultPractice,R.StartDate,R.EndDate,COUNT(DISTINCT R.PersonId) AS BadgedNotOnProjectCount 
 		FROM BadgedNotOnProject R
 		INNER JOIN v_PersonHistory P ON P.PersonId = R.PersonId AND P.HireDate <= R.EndDate AND (P.TerminationDate IS NULL OR R.StartDate <= p.TerminationDate)
+		WHERE P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
 		GROUP BY R.DefaultPractice,R.StartDate,R.EndDate 
 	 ),
 	 BadgedProjectCount
@@ -100,6 +109,7 @@ BEGIN
 	    SELECT BP.DefaultPractice,BP.StartDate,BP.EndDate,COUNT(DISTINCT BP.PersonId) AS BadgedOnProjectCount
 		FROM BadgedOnProject BP
 		INNER JOIN v_PersonHistory P ON P.PersonId = BP.PersonId AND P.HireDate <= BP.EndDate AND (P.TerminationDate IS NULL OR BP.StartDate <= p.TerminationDate)
+		WHERE P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
 		GROUP BY BP.DefaultPractice,BP.StartDate,BP.EndDate
 	 ),
 	 ClockNotStarted
@@ -144,6 +154,7 @@ BEGIN
 	   LEFT JOIN BadgedOnProject BP ON BP.StartDate = C.StartDate AND BP.PersonId = C.PersonId
 	   LEFT JOIN BadgedNotOnProject BNP ON BNP.StartDate = C.StartDate AND BNP.PersonId = C.PersonId
 	   WHERE BNP.PersonId IS NULL AND BP.PersonId IS NULL AND B.PersonId IS NULL AND Brk.PersonId IS NULL
+			 AND P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
 	   GROUP BY C.DefaultPractice,C.StartDate,C.EndDate
 	  )
 
