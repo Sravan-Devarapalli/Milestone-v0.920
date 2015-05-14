@@ -16,19 +16,13 @@ BEGIN
 		DECLARE @DefaultStartDate DATETIME = '20140701'
 
 		--Get the active start date and active end date of the mile stone person in the selected date range.
-		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME, CurrentBadgeStartDate DATETIME, CurrentBadgeEndDate DATETIME)
+		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME)
 		INSERT INTO @PersonActiveDates(PersonId,ActiveStartDate,ActiveEndDate)
 		SELECT MP.PersonId,MIN(C.Date) AS ActiveStartDate,MAX(C.Date) AS ActiveEndDate
 		FROM dbo.MilestonePerson MP 
 		INNER JOIN dbo.Calendar C ON C.Date BETWEEN @StartDate AND @ProjectedDeliveryDate AND MP.MilestoneId = @MilestoneId
 		INNER JOIN dbo.v_PersonHistory PH ON MP.PersonId = PH.PersonId AND C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) 
 		GROUP BY MP.PersonId
-
-		UPDATE P
-		SET P.CurrentBadgeStartDate = M.BadgeStartDate,
-			P.CurrentBadgeEndDate = M.BadgeEndDate
-		FROM @PersonActiveDates P
-		INNER JOIN dbo.MSBadge M ON M.PersonId = P.PersonId
 
 		--Delete milestone person entries which don't have atleast 1 active day in the selected range.
 		DECLARE @DeleteMileStonePersonEntriesTable TABLE(MilestonePersonId INT)
@@ -122,7 +116,8 @@ BEGIN
 	    UPDATE mpentry
 			   SET StartDate = P.ActiveStartDate,
 			   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL
-									 WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate) > P.CurrentBadgeStartDate THEN dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate) ELSE P.CurrentBadgeStartDate END) ELSE NULL END,
+									 WHEN P.ActiveEndDate >= @DefaultStartDate THEN (dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate)) 
+									 ELSE NULL END,
 			   IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
 			  FROM MilestonePersonEntry as mpentry
 			  INNER JOIN 
@@ -140,7 +135,7 @@ BEGIN
 		UPDATE mpentry
 				SET EndDate =  P.ActiveEndDate,
 				BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL 
-									WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN P.ActiveEndDate > P.CurrentBadgeEndDate THEN P.CurrentBadgeEndDate ELSE P.ActiveEndDate END)
+									WHEN P.ActiveEndDate >= @DefaultStartDate THEN (P.ActiveEndDate)
 									ELSE NULL END,
 				IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
 			    FROM MilestonePersonEntry as mpentry
