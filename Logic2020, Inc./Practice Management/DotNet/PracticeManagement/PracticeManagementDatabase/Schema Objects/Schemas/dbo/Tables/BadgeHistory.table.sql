@@ -12,6 +12,10 @@
 	BadgeEndDateSource NVARCHAR(30) NULL,
 	ModifiedDate		DATETIME	NOT NULL,
 	ModifiedBy			INT			NULL,
+	DeactivatedDate		DATETIME	NULL,
+	OrganicBreakStartDate	DATETIME	NULL,
+	OrganicBreakEndDate		DATETIME	NULL,
+	ExcludeInReports	BIT			NULL
 	CONSTRAINT PK_BadgeHistory PRIMARY KEY (Id)
 )
 
