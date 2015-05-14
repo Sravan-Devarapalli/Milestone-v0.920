@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
+using PraticeManagement.PersonStatusService;
+using System.ServiceModel;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -27,6 +29,25 @@ namespace PraticeManagement.Controls.Reports
             get
             {
                 return cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            }
+        }
+
+        public string PersonStatus
+        {
+            get
+            {
+                var clientList = new StringBuilder();
+                foreach (ListItem item in cblPersonStatus.Items)
+                {
+                    if (item.Selected)
+                        clientList.Append(item.Value).Append(',');
+                    if (item.Value == "1" && item.Selected)
+                    {
+                        clientList.Append("2").Append(',');
+                        clientList.Append("5").Append(',');
+                    }
+                }
+                return clientList.ToString();
             }
         }
 
@@ -97,6 +118,26 @@ namespace PraticeManagement.Controls.Reports
 
                 DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
                 cblPayTypes.SelectItems(new List<int>() { 1, 2 });
+                FillPersonStatusList();
+                cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
+            }
+        }
+
+        public void FillPersonStatusList()
+        {
+            using (var serviceClient = new PersonStatusServiceClient())
+            {
+                try
+                {
+                    var statuses = serviceClient.GetPersonStatuses();
+                    statuses = statuses.Where(p => p.Id != 2 && p.Id != 5).ToArray();
+                    DataHelper.FillListDefault(cblPersonStatus, Resources.Controls.AllTypes, statuses, false);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
             }
         }
     }
