@@ -48,7 +48,7 @@
                         &nbsp; Projected Range:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <uc:DatePicker ID="dtpStart" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" />
+                        <uc:DatePicker ID="dtpStart" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" ValidationGroup="Badge"/>
                         <asp:RequiredFieldValidator ID="reqBadgeStart" runat="server" ControlToValidate="dtpStart"
                             ValidationGroup="BadgeReport" ErrorMessage="Start date is required." ToolTip="Start date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -61,7 +61,7 @@
                         &nbsp;to&nbsp;
                     </td>
                     <td>
-                        <uc:DatePicker ID="dtpEnd" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" />
+                        <uc:DatePicker ID="dtpEnd" runat="server" AutoPostBack="true" OnSelectionChanged="dtpStart_SelectionChanged" ValidationGroup="Badge"/>
                         <asp:RequiredFieldValidator ID="reqbadgeEnd" runat="server" ControlToValidate="dtpEnd"
                             ValidationGroup="BadgeReport" ErrorMessage="End date is required." ToolTip="End date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
