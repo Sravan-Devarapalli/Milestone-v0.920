@@ -9,9 +9,12 @@ BEGIN
 
 	IF EXISTS(SELECT 1 FROM dbo.MilestonePersonEntry MPE
 					   JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-					   WHERE MPE.IsBadgeRequired = 1 AND 
-							(MPE.StartDate <= @EndDate AND @StartDate <= MPE.EndDate)
-							AND MP.PersonId = @PersonId)
+					   JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+					   JOIN dbo.Project P ON P.ProjectId = M.ProjectId
+					   WHERE MPE.IsBadgeRequired = 1 
+							AND (MPE.BadgeStartDate <= @EndDate AND @StartDate <= MPE.BadgeEndDate)
+							AND MP.PersonId = @PersonId 
+							AND P.ProjectStatusId IN (2,3))
 	BEGIN
 			SELECT CONVERT(BIT,1) Result 
 	END
