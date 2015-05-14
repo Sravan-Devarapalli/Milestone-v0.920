@@ -9,6 +9,9 @@ using PraticeManagement.Controls;
 using PraticeManagement.Utils;
 using PraticeManagement.Utils.Excel;
 using System.Data;
+using PraticeManagement.PersonStatusService;
+using System.ServiceModel;
+using System.Text;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -61,7 +64,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle,dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -74,13 +77,52 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PersonStatus
+        {
+            get
+            {
+                var clientList = new StringBuilder();
+                foreach (ListItem item in cblPersonStatus.Items)
+                {
+                    if (item.Selected)
+                        clientList.Append(item.Value).Append(',');
+                    if (item.Value == "1" && item.Selected)
+                    {
+                        clientList.Append("2").Append(',');
+                        clientList.Append("5").Append(',');
+                    }
+                }
+                return clientList.ToString();
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
                 cblPayTypes.SelectItems(new List<int>() { 2 });
+                FillPersonStatusList();
+                cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
                 PopulateData(true);
+            }
+        }
+
+        public void FillPersonStatusList()
+        {
+            using (var serviceClient = new PersonStatusServiceClient())
+            {
+                try
+                {
+                    var statuses = serviceClient.GetPersonStatuses();
+                    statuses = statuses.Where(p => p.Id != 2 && p.Id != 5).ToArray();
+                    DataHelper.FillListDefault(cblPersonStatus, Resources.Controls.AllTypes, statuses, false);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
             }
         }
 
@@ -89,7 +131,7 @@ namespace PraticeManagement.Reports.Badge
             var filename = "AllEmployees18MoClockReport.xls";
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var report = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(cblPayTypes.SelectedItems)).ToList();
+            var report = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(cblPayTypes.SelectedItems,PersonStatus)).ToList();
             if (report.Count > 0)
             {
                 string dateRangeTitle = "All Employees' 18-Month Clock Dates";
@@ -129,6 +171,7 @@ namespace PraticeManagement.Reports.Badge
 
             data.Columns.Add("Resource Name");
             data.Columns.Add("Pay Type");
+            data.Columns.Add("Level");
             data.Columns.Add("18-Month Clock Start Date");
             data.Columns.Add("18-Month Clock End Date");
             data.Columns.Add("Time Left on Clock");
@@ -157,6 +200,7 @@ namespace PraticeManagement.Reports.Badge
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
                 row.Add(reportItem.Person.CurrentPay.TimescaleName);
+                row.Add(reportItem.Person.Title.TitleName);
                 row.Add(reportItem.BadgeStartDate.HasValue ? reportItem.BadgeStartDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
                 row.Add(timeLeft);
@@ -175,7 +219,7 @@ namespace PraticeManagement.Reports.Badge
 
         public void PopulateData(bool isFromUpdateBtn)
         {
-            var badgeList = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(isFromUpdateBtn ? cblPayTypes.SelectedItems : null));
+            var badgeList = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(isFromUpdateBtn ? cblPayTypes.SelectedItems : null,PersonStatus));
             if (badgeList.Length > 0)
             {
                 divEmptyMessage.Style.Add("display", "none");
@@ -219,3 +263,4 @@ namespace PraticeManagement.Reports.Badge
         }
     }
 }
+
