@@ -30,7 +30,6 @@
         <siteMapNode url="~/Reports/TimeEntryReport_new.aspx" title="Reports"  VirtualPath="~/Reports/TimeEntryReport_new.aspx" QuickLinkTitle="Reports"  description="Reports" ShowURL="true"/>
         <siteMapNode url="~/Reports/NonBillableReport.aspx" title="Non billable"  VirtualPath="~/Reports/NonBillableReport.aspx" QuickLinkTitle="Non billable"  description="Non billable" ShowURL="true"/>
         <siteMapNode url="~/Reports/Audit.aspx" title="Audit"  VirtualPath="~/Reports/Audit.aspx" QuickLinkTitle="Audit"  description="Audit" ShowURL="true"/>
-        <siteMapNode url="~/Reports/CalendarReport.aspx" title="Time Off"  VirtualPath="~/Reports/CalendarReport.aspx" QuickLinkTitle="Time Off"  description="Calendar Report" ShowURL="true"/>
       </siteMapNode>
       <siteMapNode url="~/Reports/AccountSummaryReport.aspx" title="Account"  VirtualPath="~/Reports/AccountSummaryReport.aspx" QuickLinkTitle="Account"  description="Account" ShowURL="true"/>
       <siteMapNode url="~/Reports/HumanCapital.aspx" title="Human Capital"  VirtualPath="~/Reports/HumanCapital.aspx" QuickLinkTitle="Human Capital"  description="Human Capital" ShowURL="true"/>
