@@ -238,7 +238,6 @@
         <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="includeCompanyHolidays" type="xs:boolean" />
-        <xs:element minOccurs="0" name="personId" nillable="true" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
