@@ -35,8 +35,8 @@ AS
 	END
 
 	INSERT INTO dbo.MilestonePersonEntry
-	            (MilestonePersonId, StartDate, EndDate, PersonRoleId, Amount,IsBadgeRequired,BadgeStartDate,BadgeEndDate,IsBadgeException,IsApproved,BadgeRequestDate, HoursPerDay, Location)
-	     VALUES (@MilestonePersonId, @StartDate, @EndDate, @PersonRoleId, @Amount,@IsBadgeRequired,@BadgeStartDate,@BadgeEndDate,@IsBadgeException,@IsApproved,@RequestDate, @HoursPerDay, @Location)
+	            (MilestonePersonId, StartDate, EndDate, PersonRoleId, Amount,IsBadgeRequired,BadgeStartDate,BadgeEndDate,IsBadgeException,IsApproved,BadgeRequestDate, HoursPerDay, Location,Requester)
+	     VALUES (@MilestonePersonId, @StartDate, @EndDate, @PersonRoleId, @Amount,@IsBadgeRequired,@BadgeStartDate,@BadgeEndDate,@IsBadgeException,@IsApproved,@RequestDate, @HoursPerDay, @Location,@UpdatedBy)
 
 		SET @Id = SCOPE_IDENTITY()
 	     
