@@ -226,6 +226,20 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public string Requester
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int? RequesterId
+        {
+            get;
+            set;
+        }
     }
 }
 
