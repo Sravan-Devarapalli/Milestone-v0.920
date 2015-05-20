@@ -35,9 +35,8 @@ BEGIN
 	SELECT @RequestDate = ISNULL(@RequestDate,@OldRequestDate)	
 
 	UPDATE dbo.MilestonePersonEntry
-	SET  StartDate = @StartDate, EndDate = @EndDate, PersonRoleId=@PersonRoleId, Amount=@Amount, HoursPerDay=@HoursPerDay, IsBadgeRequired = @IsBadgeRequired, BadgeStartDate = @BadgeStartDate, BadgeEndDate = @BadgeEndDate, IsBadgeException = @IsBadgeException, IsApproved = @IsApproved, BadgeRequestDate = @RequestDate
+	SET  StartDate = @StartDate, EndDate = @EndDate, PersonRoleId=@PersonRoleId, Amount=@Amount, HoursPerDay=@HoursPerDay, IsBadgeRequired = @IsBadgeRequired, BadgeStartDate = @BadgeStartDate, BadgeEndDate = @BadgeEndDate, IsBadgeException = @IsBadgeException, IsApproved = @IsApproved, BadgeRequestDate = @RequestDate, Requester = @UpdatedBy
 	WHERE Id = @Id          
-	     
 	     
 	IF (@PersonId IS NOT NULL AND @OldPersonId != @PersonId)
 	BEGIN 
