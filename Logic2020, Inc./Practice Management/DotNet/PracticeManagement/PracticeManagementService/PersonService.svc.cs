@@ -1151,9 +1151,9 @@ namespace PracticeManagementService
             return PersonDAL.GetAllCohortAssignments();
         }
 
-        public List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays, int? personId)
+        public List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays)
         {
-            return PersonDAL.GetPTOReport(startDate, endDate, includeCompanyHolidays, personId);
+            return PersonDAL.GetPTOReport(startDate, endDate, includeCompanyHolidays);
         }
 
         public List<MSBadge> GetBadgeDetailsByPersonId(int personId)
