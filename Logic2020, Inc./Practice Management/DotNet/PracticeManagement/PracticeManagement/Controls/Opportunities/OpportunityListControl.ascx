@@ -980,7 +980,7 @@
 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
     <Triggers>
         <asp:PostBackTrigger ControlID="btnExportToExcel" />
-    </Triggers> 
+    </Triggers>
     <ContentTemplate>
         <asp:Panel ID="oppNameToolTipHolder" runat="server" CssClass="ToolTip PanelOppNameToolTipHolder">
             <table cellpadding="0" cellspacing="0">
@@ -998,7 +998,7 @@
                     <td class="lbor">
                     </td>
                     <td class="content WordWrap">
-                            <asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap Width100Per" runat="server"></asp:Label>
+                        <asp:Label ID="lbloppNameTooltipContent" CssClass="WordWrap Width100Per" runat="server"></asp:Label>
                     </td>
                     <td class="rbor">
                     </td>
@@ -1043,10 +1043,6 @@
             </div>
             <asp:Panel CssClass="summary WhiteSpaceNoWrap OverflowxAuto" ID="pnlSummary" runat="server">
             </asp:Panel>
-        </div>
-        <div class="textRightImp PaddingBottom3 PaddingTop3">
-            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click" CssClass="Width100Px"
-                Text="Export" />
         </div>
         <div id="opportunity-list">
             <asp:ListView ID="lvOpportunities" runat="server" DataKeyNames="Id" EnableViewState="true"
@@ -1141,7 +1137,7 @@
                             </td>
                             <td class="Width7Percent">
                                 <div class="ie-bg no-wrap">
-                                    <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Sales Person" CommandName="Sort"
+                                    <asp:LinkButton ID="btnSalespersonSort" runat="server" Text="Sales Team" CommandName="Sort"
                                         CssClass="arrow" CommandArgument="Salesperson" />
                                 </div>
                             </td>
@@ -1353,6 +1349,10 @@
                     </tr>
                 </EmptyDataTemplate>
             </asp:ListView>
+        </div>
+        <div class="textRightImp">
+            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
+                Text="Export" />
         </div>
         <asp:HiddenField ID="hdnRedirectOpportunityId" runat="server" />
         <asp:HiddenField ID="hdnClickedRowIndex" runat="server" />
