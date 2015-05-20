@@ -267,9 +267,9 @@ namespace PracticeManagementService
             return ReportDAL.BadgedResourcesByTimeReport(payTypes, personStatusIds,startDate, endDate, step);
         }
 
-        public List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject)
+        public List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject, bool isBadgedException, bool isNotBadgedException)
         {
-            return ReportDAL.ListBadgeResourcesByType(paytypes, personStatuses,startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject);
+            return ReportDAL.ListBadgeResourcesByType(paytypes, personStatuses,startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject,isBadgedException,isNotBadgedException);
         }
 
         public List<GroupByPractice> ResourcesByPracticeReport(string paytypes,string PersonStatuses,string practices, DateTime startDate, DateTime endDate, int step)
