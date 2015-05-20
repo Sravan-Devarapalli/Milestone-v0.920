@@ -12,7 +12,8 @@
 	BadgeEndDate		DATETIME		NULL,
 	IsBadgeException	BIT				NULL,
 	IsApproved			BIT				NULL,
-	BadgeRequestDate	DATETIME		NULL
+	BadgeRequestDate	DATETIME		NULL,
+	Requester			INT				NULL
 );
 
  
