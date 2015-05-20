@@ -5,7 +5,8 @@
 	@ProjectedDeliveryDate    DATETIME,
 	@IsStartDateChangeReflectedForMilestoneAndPersons BIT,
 	@IsEndDateChangeReflectedForMilestoneAndPersons   BIT,
-	@IsExtendedORCompleteOutOfRange BIT
+	@IsExtendedORCompleteOutOfRange BIT,
+	@UserLogin				 NVARCHAR(255)
 )
 AS
 BEGIN
@@ -14,6 +15,9 @@ BEGIN
 		DECLARE @FutureDate DATETIME
 		SET @FutureDate = dbo.GetFutureDate()
 		DECLARE @DefaultStartDate DATETIME = '20140701'
+
+		DECLARE @UpdatedBy INT
+		SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
 
 		--Get the active start date and active end date of the mile stone person in the selected date range.
 		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME)
@@ -66,11 +70,11 @@ BEGIN
 		WHERE MP.MilestoneId = @MilestoneId 
 			AND ( MPE.StartDate > @ProjectedDeliveryDate OR MPE.EndDate < @StartDate )
 			
-		INSERT INTO dbo.MilestonePersonEntry(MilestonePersonId,StartDate,EndDate,PersonRoleId,Amount,Location,HoursPerDay,IsBadgeRequired,BadgeStartDate,BadgeEndDate,IsBadgeException,IsApproved)
+		INSERT INTO dbo.MilestonePersonEntry(MilestonePersonId,StartDate,EndDate,PersonRoleId,Amount,Location,HoursPerDay,IsBadgeRequired,BadgeStartDate,BadgeEndDate,IsBadgeException,IsApproved,Requester)
 		SELECT TEMPmpe.MilestonePersonId,@StartDate,@StartDate,TEMPmpe.PersonRoleId,TEMPmpe.Amount, NULL, TEMPmpe.HoursPerDay,TEMPmpe.IsBadgeRequired,
 			   CASE WHEN TEMPmpe.IsBadgeRequired = 1 THEN @StartDate ELSE NULL END,
 			    CASE WHEN TEMPmpe.IsBadgeRequired = 1 THEN @StartDate ELSE NULL END,
-				TEMPmpe.IsBadgeException,TEMPmpe.IsApproved
+				TEMPmpe.IsBadgeException,TEMPmpe.IsApproved,@UpdatedBy
 		FROM @TempMPE AS TEMPmpe
 		WHERE NOT EXISTS (SELECT 1 FROM dbo.MilestonePersonEntry MPE
 						 WHERE  TEMPmpe.MilestonePersonId = MPE.MilestonePersonId 
@@ -118,7 +122,8 @@ BEGIN
 			   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL
 									 WHEN P.ActiveEndDate >= @DefaultStartDate THEN (dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate)) 
 									 ELSE NULL END,
-			   IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
+			   IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END,
+			   Requester = @UpdatedBy
 			  FROM MilestonePersonEntry as mpentry
 			  INNER JOIN 
 						(
@@ -137,7 +142,8 @@ BEGIN
 				BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL 
 									WHEN P.ActiveEndDate >= @DefaultStartDate THEN (P.ActiveEndDate)
 									ELSE NULL END,
-				IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END
+				IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END,
+				Requester = @UpdatedBy
 			    FROM MilestonePersonEntry as mpentry
 				INNER JOIN 
 					(
