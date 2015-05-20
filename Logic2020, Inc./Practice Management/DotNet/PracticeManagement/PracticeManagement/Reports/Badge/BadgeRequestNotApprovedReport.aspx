@@ -6,10 +6,32 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
+        type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+    <script src="../../Scripts/jquery.tablesorter.yui.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblNotApproved").tablesorter(
+            {
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
+        });
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        function endRequestHandle(sender, Args) {
+
+            $("#tblNotApproved").tablesorter(
+            {
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
+        }
+    </script>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <div id="divWholePage" runat="server">
@@ -46,6 +68,9 @@
                                             Request Date
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Requester
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Badge Start
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
@@ -75,6 +100,9 @@
                                 <%# GetDateFormat((DateTime?)Eval("PlannedEndDate"))%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Requester")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeStartDate"))%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -100,6 +128,9 @@
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("PlannedEndDate"))%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Requester")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeStartDate"))%>
