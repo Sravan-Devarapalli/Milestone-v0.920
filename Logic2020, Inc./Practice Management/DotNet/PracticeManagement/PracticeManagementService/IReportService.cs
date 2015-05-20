@@ -164,7 +164,7 @@ namespace PracticeManagementService
         List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes,string personStatusIds, DateTime startDate, DateTime endDate, int step);
 
         [OperationContract]
-        List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject);
+        List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject, bool isBadgedException, bool isNotBadgedException);
 
         [OperationContract]
         List<GroupByPractice> ResourcesByPracticeReport(string paytypes, string PersonStatuses, string practices, DateTime startDate, DateTime endDate, int step);
