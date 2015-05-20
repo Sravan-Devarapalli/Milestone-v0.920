@@ -55,7 +55,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.BadgedResourcesByTime[] BadgedResourcesByTimeReport(string payTypes, string personStatusIds, System.DateTime startDate, System.DateTime endDate, int step);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ListBadgeResourcesByType", ReplyAction="http://tempuri.org/IReportService/ListBadgeResourcesByTypeResponse")]
-        DataTransferObjects.MSBadge[] ListBadgeResourcesByType(string paytypes, string personStatuses, System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject);
+        DataTransferObjects.MSBadge[] ListBadgeResourcesByType(string paytypes, string personStatuses, System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject, bool isBadgedException, bool isNotBadgedException);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ResourcesByPracticeReport", ReplyAction="http://tempuri.org/IReportService/ResourcesByPracticeReportResponse")]
         DataTransferObjects.Reports.GroupByPractice[] ResourcesByPracticeReport(string paytypes, string PersonStatuses, string practices, System.DateTime startDate, System.DateTime endDate, int step);
@@ -274,8 +274,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.BadgedResourcesByTimeReport(payTypes, personStatusIds, startDate, endDate, step);
         }
         
-        public DataTransferObjects.MSBadge[] ListBadgeResourcesByType(string paytypes, string personStatuses, System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject) {
-            return base.Channel.ListBadgeResourcesByType(paytypes, personStatuses, startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject);
+        public DataTransferObjects.MSBadge[] ListBadgeResourcesByType(string paytypes, string personStatuses, System.DateTime startDate, System.DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject, bool isBadgedException, bool isNotBadgedException) {
+            return base.Channel.ListBadgeResourcesByType(paytypes, personStatuses, startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject, isBadgedException, isNotBadgedException);
         }
         
         public DataTransferObjects.Reports.GroupByPractice[] ResourcesByPracticeReport(string paytypes, string PersonStatuses, string practices, System.DateTime startDate, System.DateTime endDate, int step) {
