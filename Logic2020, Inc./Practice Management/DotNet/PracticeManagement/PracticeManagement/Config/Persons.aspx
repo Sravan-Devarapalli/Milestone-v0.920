@@ -105,10 +105,10 @@
                         </td>
                     </tr>
                     <tr class="Height35Px vBottom">
-                        <td colspan="2" class="ValSumSearch Width80PercentImp">
+                        <td colspan="2" class="ValSumSearch">
                             <asp:ValidationSummary ID="valsumSearch" runat="server" ValidationGroup="ValSearch" />
                         </td>
-                        <td class="Width15Per textRight">
+                        <td class="Width10Per TextAlignRight">
                             <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
                                 AutoPostBack="true">
                                 <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -117,19 +117,7 @@
                                 <asp:ListItem Text="View All" Value="-1" Selected="True"></asp:ListItem>
                             </asp:DropDownList>
                         </td>
-                    </tr>
-                    <tr class="Height35Px vBottom">
-                        <td colspan="2">
-                        </td>
-                        <td class="Width15Per textRight">
-                            <asp:Button ID="btnExpandedExcel" runat="server" OnClick="btnExpandedExcel_Click" Style="margin-right: 0px;float: none"
-                                Text="Expanded Export" /> &nbsp;&nbsp;
-                            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
-                                Style="margin-right: 0px;float: none" Text="Export" />
-                        </td>
-                    </tr>
-                    <div class="textRightImp PaddingBottom3 PaddingTop3">
-                    </div>
+                    </tr>     
                 </table>
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
@@ -372,6 +360,8 @@
                                         <asp:Label ID="lblRecords" runat="server" CssClass="fontBold ColorBlack"></asp:Label>
                                     </td>
                                     <td class="Width15Per PaddingRight10Px WhiteSpaceNoWrap TextAlignRight">
+                                     <asp:Button ID="btnExportToExcel" CssClass="Width100Per" runat="server" OnClick="btnExportToExcel_Click"
+                                            Text="Export" />
                                     </td>
                                 </tr>
                             </table>
@@ -382,7 +372,6 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnExportToExcel" />
-            <asp:PostBackTrigger ControlID="btnExpandedExcel"/>
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>
