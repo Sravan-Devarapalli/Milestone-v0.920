@@ -1315,8 +1315,7 @@ namespace PraticeManagement.Controls
             var filename = string.Format("PTOReport_{0}_{1}.xls", yearStartDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter), yearEndDate.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
             var dataSetList = new List<DataSet>();
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
-            var loggedInPerson = DataHelper.CurrentPerson;
-            var report = ServiceCallers.Custom.Person(p => p.GetPTOReport(yearStartDate, yearEndDate, chbIncludeCompanyHolidays.Checked, loggedInPerson.Id.Value)).ToArray();
+            var report = ServiceCallers.Custom.Person(p => p.GetPTOReport(yearStartDate, yearEndDate, chbIncludeCompanyHolidays.Checked)).ToArray();
             if (report.Length > 0)
             {
                 string dateRangeTitle = string.Format("PTO Report For the Period: {0} to {1}", yearStartDate.ToString(Constants.Formatting.EntryDateFormat), yearEndDate.ToString(Constants.Formatting.EntryDateFormat));
@@ -1350,6 +1349,7 @@ namespace PraticeManagement.Controls
         private DataTable PrepareDataTable(Person[] personsList)
         {
             DataTable data = new DataTable();
+            List<object> rownew;
             List<object> row;
 
             data.Columns.Add("Person ID");
@@ -1370,23 +1370,29 @@ namespace PraticeManagement.Controls
 
             foreach (var pro in personsList)
             {
-                row = new List<object>();
-                row.Add(pro.EmployeeNumber);
-                row.Add(pro.PersonLastFirstName);
-                row.Add(pro.TimeOff.TimeType.Name);
-                row.Add(pro.TimeOff.TimeOffStartDate);
-                row.Add(pro.TimeOff.TimeOffEndDate);
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.ProjectNumber != null) ? pro.TimeOff.Project.ProjectNumber : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.Name != null) ? pro.TimeOff.Project.Name : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.Status.Name != null) ? pro.TimeOff.Project.Status.Name : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.Client.Id != null) ? pro.TimeOff.Project.Client.Name : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.BusinessGroup.Id != null) ? pro.TimeOff.Project.BusinessGroup.Name : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.Group.Id != null) ? pro.TimeOff.Project.Group.Name : "");
-                row.Add((pro.TimeOff.Project != null) ? pro.TimeOff.Project.Practice.Name : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.ProjectManagerNames != null) ? pro.TimeOff.Project.ProjectManagerNames : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.SeniorManagerName != null) ? pro.TimeOff.Project.SeniorManagerName : "");
-                row.Add((pro.TimeOff.Project != null && pro.TimeOff.Project.Director.Id != null) ? pro.TimeOff.Project.Director.Name : "");
-                data.Rows.Add(row.ToArray());
+                foreach (var timeHistory in pro.TimeOffHistory)
+                {
+                    foreach (var project in timeHistory.Projects)
+                    {
+                        row = new List<object>();
+                        row.Add(pro.EmployeeNumber);
+                        row.Add(pro.PersonLastFirstName);
+                        row.Add(timeHistory.TimeType.Name);
+                        row.Add(timeHistory.TimeOffStartDate);
+                        row.Add(timeHistory.TimeOffEndDate);
+                        row.Add((project != null && project.ProjectNumber != null) ? project.ProjectNumber : "");
+                        row.Add((project != null && project.Name != null) ? project.Name : "");
+                        row.Add((project != null && project.Status.Name != null) ? project.Status.Name : "");
+                        row.Add((project != null && project.Client.Id != null) ? project.Client.Name : "");
+                        row.Add((project != null && project.BusinessGroup.Id != null) ? project.BusinessGroup.Name : "");
+                        row.Add((project != null && project.Group.Id != null) ? project.Group.Name : "");
+                        row.Add((project != null && project.Practice.Id != null) ? project.Practice.Name : "");
+                        row.Add((project != null && project.ProjectManagerNames != null) ? project.ProjectManagerNames : "");
+                        row.Add((project != null && project.SeniorManagerName != null) ? project.SeniorManagerName : "");
+                        row.Add((project != null && project.Director.Id != null) ? project.Director.Name : "");
+                        data.Rows.Add(row.ToArray());
+                    }
+                }
             }
             return data;
         }
