@@ -208,7 +208,7 @@ namespace PraticeManagement.Reports.Badge
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             var statuses = PersonStatus;
-            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, true).ToList());
+            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, true, false, false).ToList());
             repblocked.DataSource = resources;
             repblocked.DataBind();
             if (resources.Count > 0)
@@ -269,7 +269,7 @@ namespace PraticeManagement.Reports.Badge
             var dataSetList = new List<DataSet>();
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             var statuses = PersonStatus;
-            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, true).ToList());
+            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, true, false, false).ToList());
             if (report.Count > 0)
             {
                 string dateRangeTitle = string.Format("Badged on Project report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
