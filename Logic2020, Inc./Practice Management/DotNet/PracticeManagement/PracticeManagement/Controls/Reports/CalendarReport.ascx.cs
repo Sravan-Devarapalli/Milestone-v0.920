@@ -99,7 +99,7 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateData()
         {
-            var report = ServiceCallers.Custom.Person(p => p.GetPTOReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludeCompanyHolidays,null)).ToList();
+            var report = ServiceCallers.Custom.Person(p => p.GetPTOReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludeCompanyHolidays)).ToList();
             repSummary.DataSource = report;
             repSummary.DataBind();
         }
@@ -109,7 +109,7 @@ namespace PraticeManagement.Controls.Reports
             var filename = string.Format("TimeOffReport_{0}_{1}.xls", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
             var dataSetList = new List<DataSet>();
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
-            var report = ServiceCallers.Custom.Person(p => p.GetPTOReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludeCompanyHolidays,null)).ToArray();
+            var report = ServiceCallers.Custom.Person(p => p.GetPTOReport(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.IncludeCompanyHolidays)).ToArray();
             if (report.Length > 0)
             {
                 string dateRangeTitle = string.Format("Time Off Report For the Period: {0} to {1}", HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
@@ -185,3 +185,4 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
+
