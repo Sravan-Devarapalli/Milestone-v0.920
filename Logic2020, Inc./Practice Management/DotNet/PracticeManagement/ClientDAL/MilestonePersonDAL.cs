@@ -1599,7 +1599,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsExtendedORCompleteOutOfRange,
                     milestoneUpdateObj.IsExtendedORCompleteOutOfRange.HasValue ?
                    (object)milestoneUpdateObj.IsExtendedORCompleteOutOfRange.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(UserLoginParam, userName);
                 connection.Open();
 
                 SqlTransaction trn = connection.BeginTransaction(IsolationLevel.ReadCommitted);
