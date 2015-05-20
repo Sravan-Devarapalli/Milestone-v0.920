@@ -12,10 +12,32 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
         type="text/javascript"></script>
+    <link href="<%# Generic.GetClientUrl("~/Css/TableSortStyle.min.css", this) %>" rel="stylesheet"
+        type="text/css" />
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+    <script src="../../Scripts/jquery.tablesorter.yui.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tblBadgedNotOnProject").tablesorter(
+            {
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
+        });
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequestHandle);
+        function endRequestHandle(sender, Args) {
+
+            $("#tblBadgedNotOnProject").tablesorter(
+            {
+                sortList: [[0, 0]],
+                sortForce: [[0, 0]]
+            });
+        }
+    </script>
     <asp:UpdatePanel ID="upnlBody" runat="server">
         <ContentTemplate>
             <table class="WholeWidth">
