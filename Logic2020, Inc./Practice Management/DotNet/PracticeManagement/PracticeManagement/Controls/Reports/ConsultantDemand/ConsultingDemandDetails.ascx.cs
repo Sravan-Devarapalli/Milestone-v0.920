@@ -7,9 +7,6 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using DataTransferObjects.Reports.ConsultingDemand;
-using PraticeManagement.Utils.Excel;
-using System.Data;
-using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls.Reports.ConsultantDemand
 {
@@ -26,9 +23,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         private string OnMouseOut = "onmouseout";
         private string sortColumn_Key = "sortColumn_Key";
         private string sortOrder_Key = "sortOrder_Key";
-        private int coloumnsCount = 1;
-        private int headerRowsCount = 1;
-        private string ConsultantDetailReportExport = "Consultant detail Report Export";
 
         public int GrandTotal = 0;
 
@@ -136,71 +130,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             }
         }
 
-        private SheetStyles HeaderSheetStyle
-        {
-            get
-            {
-                CellStyles cellStyle = new CellStyles();
-                cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
-                cellStyle.FontHeight = 350;
-                CellStyles[] cellStylearray = { cellStyle };
-                RowStyles headerrowStyle = new RowStyles(cellStylearray);
-                headerrowStyle.Height = 500;
-
-                CellStyles dataCellStyle = new CellStyles();
-                CellStyles[] dataCellStylearray = { dataCellStyle };
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
-
-                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
-
-                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
-                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
-                sheetStyle.IsAutoResize = false;
-
-                return sheetStyle;
-            }
-        }
-
-        private SheetStyles DataSheetStyle
-        {
-            get
-            {
-                CellStyles headerCellStyle = new CellStyles();
-                headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                headerCellStyleList.Add(headerCellStyle);
-                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
-
-                CellStyles dataCellStyle = new CellStyles();
-
-                CellStyles dataDateCellStyle = new CellStyles();
-                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
-
-                CellStyles[] dataCellStylearray = { dataCellStyle,
-                                                    dataCellStyle, 
-                                                    dataCellStyle,
-                                                    dataCellStyle,
-                                                    dataCellStyle,
-                                                    dataCellStyle,
-                                                    dataCellStyle,
-                                                    dataDateCellStyle,
-                                                    dataCellStyle
-                                                  };
-
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
-
-                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
-                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
-                sheetStyle.TopRowNo = headerRowsCount;
-                sheetStyle.IsFreezePane = true;
-                sheetStyle.FreezePanColSplit = 0;
-                sheetStyle.FreezePanRowSplit = headerRowsCount;
-
-                return sheetStyle;
-            }
-        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -602,86 +531,12 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             PopulateData(true, "SalesStage", true);
         }
 
-        protected void btnExportToExcel_OnClick(object sender, EventArgs e)
-        {
-            DataHelper.InsertExportActivityLogMessage(ConsultantDetailReportExport);
-            var filename = string.Format("{0}_{1}_{2}.xls", "ConsultantDetail", HostingPage.StartDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter), HostingPage.EndDate.Value.ToString(Constants.Formatting.DateFormatWithoutDelimiter));
-            var dataSetList = new List<DataSet>();
-            List<SheetStyles> sheetStylesList = new List<SheetStyles>();
-            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
-            {
-                var report = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, "")).ToList();
-                if (report.Count > 0)
-                {
-                    string dateRangeTitle = string.Format("Period: {0} to {1}", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-                    DataTable header = new DataTable();
-                    header.Columns.Add(dateRangeTitle);
-                    headerRowsCount = header.Rows.Count + 3;
-                    var data = PrepareDataTable(report);
-                    coloumnsCount = data.Columns.Count;
-                    sheetStylesList.Add(HeaderSheetStyle);
-                    sheetStylesList.Add(DataSheetStyle);
-                    var dataset = new DataSet();
-                    dataset.DataSetName = "ConsultingDemandDetails";
-                    dataset.Tables.Add(header);
-                    dataset.Tables.Add(data);
-                    dataSetList.Add(dataset);
-                }
-                else
-                {
-                    string dateRangeTitle = "No Consultants are there for the selected period.";
-                    DataTable header = new DataTable();
-                    header.Columns.Add(dateRangeTitle);
-                    sheetStylesList.Add(HeaderSheetStyle);
-                    var dataset = new DataSet();
-                    dataset.DataSetName = "ConsultingDemandDetails";
-                    dataset.Tables.Add(header);
-                    dataSetList.Add(dataset);
-                }
-                NPOIExcel.Export(filename, dataSetList, sheetStylesList);
-            }
-        }
-
-        private DataTable PrepareDataTable(List<ConsultantGroupbyTitleSkill> projectsList)
-        {
-            DataTable data = new DataTable();
-            List<object> row;
-
-            data.Columns.Add("Title");
-            data.Columns.Add("Skill Set");
-            data.Columns.Add("Sales Stage");
-            data.Columns.Add("Opportunity Number");
-            data.Columns.Add("Project Number");
-            data.Columns.Add("Account Name");
-            data.Columns.Add("Project Name");
-            data.Columns.Add("Resource Start Date");
-            data.Columns.Add("Total");
-
-            foreach (var pro in projectsList)
-            {
-                foreach (var item in pro.ConsultantDetails)
-                {
-                    row = new List<object>();
-                    row.Add(pro.Title != null ? pro.HtmlEncodedTitle : "");
-                    row.Add(pro.Skill != null ? pro.HtmlEncodedSkill : "");
-                    row.Add(item.SalesStage != null ? item.SalesStage : "");
-                    row.Add((item.OpportunityNumber != null) ? item.OpportunityNumber : "");
-                    row.Add((item.ProjectNumber != null) ? item.ProjectNumber : "");
-                    row.Add((item.AccountName != null) ? item.HtmlEncodedAccountName : "");
-                    row.Add(item.ProjectName != null ? item.HtmlEncodedProjectName : "");
-                    row.Add(item.ResourceStartDate != null && item.ResourceStartDate != DateTime.MinValue ? item.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat) : "");
-                    row.Add(item.Count);
-                    data.Rows.Add(row.ToArray());
-                }
-            }
-            return data;
-        }
-
         public void PopulateData(bool isFromHostingPageOrGroupByMonth, string sortColumns = "", bool isGroupBySales = false)
         {
             if (!string.IsNullOrEmpty(_hdIsSummaryPage.Value) && _hdIsSummaryPage.Value == true.ToString())
             {
-                btnGroupBy.Visible = btnGroupBySales.Visible = btnExport.Visible = lblExport.Visible = false;
+                btnGroupBy.Visible = false;
+                btnGroupBySales.Visible = false;
             }
             string title = string.IsNullOrEmpty(hdTitle.Value) ? null : HttpUtility.HtmlDecode(hdTitle.Value);
             string skill = string.IsNullOrEmpty(hdSkill.Value) ? null : HttpUtility.HtmlDecode(hdSkill.Value);
