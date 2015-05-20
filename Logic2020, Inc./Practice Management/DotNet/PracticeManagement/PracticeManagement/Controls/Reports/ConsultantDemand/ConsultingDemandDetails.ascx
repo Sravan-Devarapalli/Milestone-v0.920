@@ -4,7 +4,7 @@
 <asp:HiddenField ID="hdnCollapsed" runat="server" Value="true" />
 <table class="WholeWidthWithHeight">
     <tr>
-        <td colspan="3" class="Width90Percent PaddingBottom3">
+        <td colspan="4" class="Width90Percent PaddingBottom3">
             <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" UseSubmitBehavior="false"
                 CssClass="Width100Px" ToolTip="Collapse All" />
             &nbsp;&nbsp;
@@ -17,10 +17,6 @@
             <asp:HiddenField ID="hdSkill" runat="server" />
             <asp:HiddenField ID="hdTitle" runat="server" />
             <asp:HiddenField ID="hdIsSummaryPage" runat="server" />
-        </td>
-        <td class="textRight">
-            <asp:Label ID="lblExport" runat="server" Text="Export: "></asp:Label>
-            <asp:Button ID="btnExport" runat="server" Text="Excel" OnClick="btnExportToExcel_OnClick"/>
         </td>
     </tr>
 </table>
