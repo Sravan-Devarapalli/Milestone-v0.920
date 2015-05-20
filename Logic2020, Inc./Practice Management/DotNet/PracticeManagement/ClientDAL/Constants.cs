@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public static string Requester= "Requester";
+            public static string RequesterId= "RequesterId";
             public static string BadgedNotOnProjectExceptionCount= "BadgedNotOnProjectExceptionCount";
             public static string BadgedOnProjectExceptionCount= "BadgedOnProjectExceptionCount";
             public static string ClockEndDate= "ClockEndDate";
