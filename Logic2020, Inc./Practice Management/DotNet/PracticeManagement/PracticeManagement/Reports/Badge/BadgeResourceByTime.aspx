@@ -158,6 +158,11 @@
                             Color="Blue" XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
                             YValueMembers="badgedNotOnProjectcount" ToolTip="#VALY Resources">
                         </asp:Series>
+                        <asp:Series Name="chartSeries11" ChartArea="MainArea" ChartType="Line" XValueType="String"
+                            BorderWidth="2" LegendText="18mos Clock Active Resources Not on Project: Person-Based Exceptions" IsVisibleInLegend="false"
+                            Color="Brown" XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
+                            YValueMembers="badgedNotOnProjectExceptioncount" ToolTip="#VALY Resources">
+                        </asp:Series>
                         <asp:Series Name="chartSeries2" ChartArea="MainArea" ChartType="Line" XValueType="String"
                             Color="Gray" BorderWidth="2" LegendText="18 Month Clock Not Started" IsVisibleInLegend="false"
                             XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
@@ -172,6 +177,11 @@
                             Color="Red" BorderWidth="2" LegendText="Badged on project" IsVisibleInLegend="false"
                             XAxisType="Primary" YAxisType="Primary" YValueType="Int32" ToolTip="#VALY Resources"
                             XValueMember="month" YValueMembers="badgedOnProjectcount">
+                        </asp:Series>
+                        <asp:Series Name="chartSeries12" ChartArea="MainArea" ChartType="Line" XValueType="String"
+                            Color="Pink" BorderWidth="2" LegendText="Badged on project: Project-Based Exceptions"
+                            IsVisibleInLegend="false" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
+                            ToolTip="#VALY Resources" XValueMember="month" YValueMembers="badgedProjectExceptioncount">
                         </asp:Series>
                         <asp:Series Name="chartSeries3" ChartArea="MainArea" ChartType="Line" XValueType="String"
                             Color="Orange" BorderWidth="2" LegendText="Blocked" IsVisibleInLegend="false"
@@ -201,6 +211,16 @@
                             Color="DarkBlue" BorderWidth="2" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
                             XValueMember="month" YValueMembers="breakCount" IsVisibleInLegend="false" ToolTip="#VALY Resources">
                         </asp:Series>
+                        <asp:Series Name="chartSeries13" ChartArea="MainArea" ChartType="Point" XValueType="String"
+                            Color="Brown" BorderWidth="2" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
+                            XValueMember="month" YValueMembers="badgedNotOnProjectExceptioncount" IsVisibleInLegend="false"
+                            ToolTip="#VALY Resources">
+                        </asp:Series>
+                        <asp:Series Name="chartSeries14" ChartArea="MainArea" ChartType="Point" XValueType="String"
+                            Color="Pink" BorderWidth="2" XAxisType="Primary" YAxisType="Primary" YValueType="Int32"
+                            XValueMember="month" YValueMembers="badgedProjectExceptioncount" IsVisibleInLegend="false"
+                            ToolTip="#VALY Resources">
+                        </asp:Series>
                     </Series>
                     <ChartAreas>
                         <asp:ChartArea Name="MainArea">
@@ -209,19 +229,24 @@
                 </asp:Chart>
                 <asp:Repeater ID="repReportTable" runat="server" OnItemDataBound="repReportTable_ItemDataBound">
                     <HeaderTemplate>
-                        <div class="minheight250Px WholeWidth" style="overflow-x: scroll;">
+                        <div class="minheight250Px" style="overflow-x: auto;">
                             <table class="tablesorter PersonSummaryReport zebra">
                                 <thead>
                                     <tr>
-                                        <th style="padding-left: 60px; padding-right: 60px">
+                                        <th style="width:1px; padding-left: 200px;">
                                             &nbsp;
                                         </th>
                                         <asp:Repeater ID="repDatesHeaders" runat="server">
                                             <ItemTemplate>
-                                                <th class="DayTotalHoursBorderLeft" style="padding-left: 8px; padding-right: 8px;">
+                                                <th class="DayTotalHoursBorderLeft" style="padding-left:4px;padding-right:4px; width: 100px; white-space:nowrap;">
                                                     <%# Eval("date")%>
                                                 </th>
                                             </ItemTemplate>
+                                            <FooterTemplate>
+                                                <th class="DayTotalHoursBorderLeft" style="padding-left: 8px; padding-right: 8px;">
+                                                    TOTALS
+                                                </th>
+                                            </FooterTemplate>
                                         </asp:Repeater>
                                     </tr>
                                 </thead>
@@ -233,6 +258,7 @@
                                 <asp:Label ID="lblCategory" runat="server"></asp:Label>
                             </td>
                             <asp:Repeater ID="repCount" runat="server" OnItemDataBound="repCount_ItemDataBound">
+                            <HeaderTemplate></HeaderTemplate>
                                 <ItemTemplate>
                                     <td class="DayTotalHoursBorderLeft">
                                         <asp:HyperLink ID="hlCount" runat="server" Text='<%# Eval("BadgedOnProjectCount")%>'
@@ -240,6 +266,11 @@
                                         <asp:Label ID="lblCount" runat="server" Text='<%# Eval("BadgedOnProjectCount")%>'></asp:Label>
                                     </td>
                                 </ItemTemplate>
+                                <FooterTemplate>
+                                    <td class="DayTotalHoursBorderLeft">
+                                        <asp:Label ID="lblTotal" runat="server"></asp:Label>
+                                    </td>
+                                </FooterTemplate>
                             </asp:Repeater>
                         </tr>
                     </ItemTemplate>
@@ -249,6 +280,7 @@
                                 <asp:Label ID="lblCategory" runat="server"></asp:Label>
                             </td>
                             <asp:Repeater ID="repCount" runat="server" OnItemDataBound="repCount_ItemDataBound">
+                            <HeaderTemplate></HeaderTemplate>
                                 <ItemTemplate>
                                     <td class="DayTotalHoursBorderLeft">
                                         <asp:HyperLink ID="hlCount" runat="server" Text='<%# Eval("BadgedOnProjectCount")%>'
@@ -256,10 +288,20 @@
                                         <asp:Label ID="lblCount" runat="server" Text='<%# Eval("BadgedOnProjectCount")%>'></asp:Label>
                                     </td>
                                 </ItemTemplate>
+                                <FooterTemplate>
+                                    <td class="DayTotalHoursBorderLeft">
+                                       <asp:Label ID="lblTotal" runat="server"></asp:Label>
+                                    </td>
+                                </FooterTemplate>
                             </asp:Repeater>
                         </tr>
                     </AlternatingItemTemplate>
                     <FooterTemplate>
+                       <%-- <tr class="ReportItemTemplate">
+                            <td>
+                            TOTALS
+                            </td>
+                        </tr>--%>
                         </tbody> </table> </div>
                     </FooterTemplate>
                 </asp:Repeater>
