@@ -468,7 +468,7 @@ namespace PracticeManagementService
         List<CohortAssignment> GetAllCohortAssignments();
 
         [OperationContract]
-        List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays,int? personId);
+        List<Person> GetPTOReport(DateTime startDate, DateTime endDate, bool includeCompanyHolidays);
 
         [OperationContract]
         List<MSBadge> GetBadgeDetailsByPersonId(int personId);
