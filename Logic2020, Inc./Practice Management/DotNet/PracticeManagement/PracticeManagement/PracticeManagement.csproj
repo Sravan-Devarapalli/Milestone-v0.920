@@ -551,7 +551,9 @@
     <Content Include="Reports\Badge\AllEmployees18MoClockReport.aspx" />
     <Content Include="Reports\Badge\BadgeBlockedReport.aspx" />
     <Content Include="Reports\Badge\BadgeBreakReport.aspx" />
+    <Content Include="Reports\Badge\BadgedNotOnPersonBasedExceptionReport.aspx" />
     <Content Include="Reports\Badge\BadgedNotOnProjectReport.aspx" />
+    <Content Include="Reports\Badge\BadgedOnProjectBasedExceptionReport.aspx" />
     <Content Include="Reports\Badge\BadgedOnProjectReport.aspx" />
     <Content Include="Reports\Badge\BadgeRequestNotApprovedReport.aspx" />
     <Content Include="Reports\Badge\BadgeResourceByTime.aspx" />
@@ -2258,12 +2260,26 @@
     <Compile Include="Reports\Badge\BadgeBreakReport.aspx.designer.cs">
       <DependentUpon>BadgeBreakReport.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Badge\BadgedNotOnPersonBasedExceptionReport.aspx.cs">
+      <DependentUpon>BadgedNotOnPersonBasedExceptionReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgedNotOnPersonBasedExceptionReport.aspx.designer.cs">
+      <DependentUpon>BadgedNotOnPersonBasedExceptionReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Badge\BadgedNotOnProjectReport.aspx.cs">
       <DependentUpon>BadgedNotOnProjectReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\Badge\BadgedNotOnProjectReport.aspx.designer.cs">
       <DependentUpon>BadgedNotOnProjectReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgedOnProjectBasedExceptionReport.aspx.cs">
+      <DependentUpon>BadgedOnProjectBasedExceptionReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\BadgedOnProjectBasedExceptionReport.aspx.designer.cs">
+      <DependentUpon>BadgedOnProjectBasedExceptionReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Badge\BadgedOnProjectReport.aspx.cs">
       <DependentUpon>BadgedOnProjectReport.aspx</DependentUpon>
@@ -3976,4 +3992,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
