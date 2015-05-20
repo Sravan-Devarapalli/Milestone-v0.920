@@ -324,7 +324,6 @@
                 <Triggers>
                     <asp:PostBackTrigger ControlID="ucSummary$btnExportToExcel" />
                     <asp:PostBackTrigger ControlID="ucGraphs$ctrDetails$btnExportToExcel" />
-                    <asp:PostBackTrigger ControlID="ucDetails$btnExport"/>
                 </Triggers>
             </asp:UpdatePanel>
         </ContentTemplate>
