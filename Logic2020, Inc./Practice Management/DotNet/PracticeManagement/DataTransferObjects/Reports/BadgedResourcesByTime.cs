@@ -60,6 +60,20 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
+        public int BadgedOnProjectExceptionCount //6
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int BadgedNotOnProjectExceptionCount //7
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public int TypeNo
         {
             get;
