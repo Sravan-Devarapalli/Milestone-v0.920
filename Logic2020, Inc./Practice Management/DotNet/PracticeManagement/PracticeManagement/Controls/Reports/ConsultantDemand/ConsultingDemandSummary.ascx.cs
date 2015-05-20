@@ -72,35 +72,25 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-
-                CellStyles headerCellDateStyle = new CellStyles();
-                headerCellDateStyle.IsBold = true;
-                headerCellDateStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                headerCellDateStyle.DataFormat = "[$-409]mmmm yyyy;@";
-
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 headerCellStyleList.Add(headerCellStyle);
-                headerCellStyleList.Add(headerCellStyle);
-                for (int i = 0; i < GetTotalMonths(); i++)
-                {
-                    headerCellStyleList.Add(headerCellDateStyle);
-                }
-                headerCellStyleList.Add(headerCellStyle);
-
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                List<CellStyles> dataCellStylearray = new List<CellStyles>(){ dataCellStyle,
-                                                    dataCellStyle, 
-                                                    dataCellStyle
-                                                  };
-                for (int i = 0; i < GetTotalMonths(); i++)
-                {
-                    dataCellStylearray.Add(dataCellStyle);
-                }
+                CellStyles dataDateCellStyle = new CellStyles();
+                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
 
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
+                CellStyles[] dataCellStylearray = { dataCellStyle,
+                                                    dataCellStyle, 
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataCellStyle,
+                                                    dataDateCellStyle
+                                                  };
+
+                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
 
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
@@ -116,18 +106,6 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         protected void Page_Load(object sender, EventArgs e)
         {
             cblSkill.OKButtonId = cblTitle.OKButtonId = btnFilterOK.ClientID;
-        }
-
-        private int GetTotalMonths()
-        {
-            if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
-            {
-                var mounthsInPeriod =
-               (HostingPage.EndDate.Value.Year - HostingPage.StartDate.Value.Year) * Constants.Dates.LastMonth +
-               (HostingPage.EndDate.Value.Month - HostingPage.StartDate.Value.Month + 1);
-                return mounthsInPeriod;
-            }
-            return 0;
         }
 
         protected void repResource_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -187,7 +165,7 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var report = ServiceCallers.Custom.Report(r => r.ConsultingDemandSummary(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems)).ToList();
+                var report = ServiceCallers.Custom.Report(r => r.ConsultingDemandDetailsByTitleSkill(HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblTitle.SelectedItems, cblSkill.SelectedItems, "")).ToList();
                 if (report.Count > 0)
                 {
                     string dateRangeTitle = string.Format("Period: {0} to {1}", HostingPage.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), HostingPage.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat));
@@ -223,23 +201,29 @@ namespace PraticeManagement.Controls.Reports.ConsultantDemand
         {
             DataTable data = new DataTable();
             List<object> row;
+
             data.Columns.Add("Title");
             data.Columns.Add("Skill Set");
-            var periodStart = HostingPage.StartDate.Value;
-            for (int i = 0; i < GetTotalMonths(); i++)
-            {
-                data.Columns.Add(periodStart.AddMonths(i).ToString(Constants.Formatting.EntryDateFormat));
-            }
-            data.Columns.Add("Total");
+            data.Columns.Add("Opportunity Number");
+            data.Columns.Add("Project Number");
+            data.Columns.Add("Account Name");
+            data.Columns.Add("Project Name");
+            data.Columns.Add("Resource Start Date");
+
             foreach (var pro in projectsList)
             {
-                row = new List<object>();
-                row.Add(pro.HtmlEncodedTitle);
-                row.Add(pro.HtmlEncodedSkill);
-                for (int i = 0; i < HostingPage.MonthNames.Count; i++)
-                    row.Add(pro.MonthCount[HostingPage.MonthNames[i]]);
-                row.Add(pro.TotalCount);
-                data.Rows.Add(row.ToArray());
+                foreach (var item in pro.ConsultantDetails)
+                {
+                    row = new List<object>();
+                    row.Add(pro.Title != null ? pro.HtmlEncodedTitle : "");
+                    row.Add(pro.Skill != null ? pro.HtmlEncodedSkill : "");
+                    row.Add((item.OpportunityNumber != null) ? item.OpportunityNumber : "");
+                    row.Add((item.ProjectNumber != null) ? item.ProjectNumber : "");
+                    row.Add((item.AccountName != null) ? item.HtmlEncodedAccountName : "");
+                    row.Add(item.ProjectName != null ? item.HtmlEncodedProjectName : "");
+                    row.Add(item.ResourceStartDate != null && item.ResourceStartDate != DateTime.MinValue ? item.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat) : "");
+                    data.Rows.Add(row.ToArray());
+                }
             }
             return data;
         }
