@@ -348,7 +348,6 @@ namespace PraticeManagement
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
 
                 CellStyles monthNameHeaderCellStyle = new CellStyles();
                 monthNameHeaderCellStyle.DataFormat = "[$-409]mmmm-yy;@";
@@ -356,18 +355,17 @@ namespace PraticeManagement
                 monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                for (int i = 0; i < 6; i++)//there are 6 columns before month columns.
+                for (int i = 0; i < 13; i++)//there are 13 columns before month columns.
                     headerCellStyleList.Add(headerCellStyle);
 
                 if (renderMonthColumns)
                 {
                     var monthsInPeriod = GetPeriodLength();
-                    for (int i = 0; i < monthsInPeriod * 2; i++)
+                    for (int i = 0; i < monthsInPeriod; i++)
                     {
                         headerCellStyleList.Add(monthNameHeaderCellStyle);
                     }
                 }
-                headerCellStyleList.Add(headerCellStyle);
                 headerCellStyleList.Add(headerCellStyle);
 
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
@@ -383,45 +381,37 @@ namespace PraticeManagement
                 CellStyles dataNumberDateCellStyle = new CellStyles();
                 dataNumberDateCellStyle.DataFormat = "$#,##0.00_);($#,##0.00)";
 
-                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle };
+                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
 
                 if (renderMonthColumns)
                 {
                     var monthsInPeriod = GetPeriodLength();
-                    for (int i = 0; i < monthsInPeriod * 2; i++)
+                    for (int i = 0; i < monthsInPeriod; i++)
                     {
                         dataCellStyleList.Add(dataNumberDateCellStyle);
                     }
                 }
                 dataCellStyleList.Add(dataNumberDateCellStyle);
-                dataCellStyleList.Add(dataNumberDateCellStyle);
+                dataCellStyleList.Add(wrapdataCellStyle);
+                dataCellStyleList.Add(dataCellStyle);
+                dataCellStyleList.Add(dataCellStyle);
+                dataCellStyleList.Add(dataCellStyle);
                 //CAST OWNER dataCellStyleList.Add(dataCellStyle);
-                CellStyles[] emptyDataCellStylearray = { dataCellStyle };
-                RowStyles emptyDatarowStyle = new RowStyles(emptyDataCellStylearray);
 
                 RowStyles datarowStyle = new RowStyles(dataCellStyleList.ToArray());
 
-                RowStyles[] rowStylearray = { headerrowStyle, headerrowStyle, datarowStyle };
+                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
                 sheetStyle.TopRowNo = headerRowsCount;
-                for (int i = 0; i < 6; i++)
-                    sheetStyle.MergeRegion.Add(new int[] { 2, 3, i, i });
-                if (renderMonthColumns)
-                {
-                    for (int i = 0; i < GetPeriodLength() + 1; i++)
-                        sheetStyle.MergeRegion.Add(new int[] { 2, 2, (2 * i) + 6, (2 * i) + 7 });
-                }
-                else
-                {
-                    sheetStyle.MergeRegion.Add(new int[] { 2, 2, 6, 7 });
-                }
                 sheetStyle.IsFreezePane = true;
                 sheetStyle.FreezePanColSplit = 0;
-                sheetStyle.FreezePanRowSplit = headerRowsCount + 1;
+                sheetStyle.FreezePanRowSplit = headerRowsCount;
                 return sheetStyle;
             }
         }
+
+        private string ErrorMessage { get; set; }
 
         #endregion Properties
 
@@ -1219,7 +1209,7 @@ namespace PraticeManagement
                 ddlView.SelectedIndex = ddlView.Items.IndexOf(ddlView.Items.FindByValue(filter.ViewSelected.ToString()));
                 ddlCalculateRange.SelectedIndex = ddlCalculateRange.Items.IndexOf(ddlCalculateRange.Items.FindByValue(filter.CalculateRangeSelected.ToString()));
 
-                ddlCalculationsType.SelectedValue = filter.CalculationsType.ToString();
+                ddlCalculationsType.SelectedValue = filter.CalculationsType == 0 ? "1" : filter.CalculationsType.ToString();
             }
             else
             {
@@ -1633,12 +1623,54 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
+                                    BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
+                                    BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                    Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                    BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
-                                    EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty
+                                    EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                    PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                    Type = Revenue,
+                                    Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                    ProjectManagers = string.Empty,
+                                    SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
+                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                    PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                 }).ToList();//Note: If you add any extra property to this anonymous type object then change insertPosition of month cells in RowDataBound.
-            projectsData = projectsData.OrderBy(s => (s.Status == ProjectStatusType.Projected.ToString()) ? s.StartDate : s.EndDate).ThenBy(s => s.ProjectNumber).ToList();
+
+            var projectsDataWithMargin = (from pro in ExportProjectList
+                                          where pro != null
+                                          select new
+                                          {
+                                              ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
+                                              ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
+                                              Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
+                                              BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
+                                              BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                              Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
+                                              ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                              BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType) : string.Empty,
+                                              Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
+                                              StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                              EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                              PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                              Type = Margin,
+                                              Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                              ProjectManagers = string.Empty,
+                                              SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
+                                              Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                              PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
+                                          }).ToList();
+
+            projectsData.AddRange(projectsDataWithMargin);
+            projectsData = projectsData.OrderBy(s => (s.Status == ProjectStatusType.Projected.ToString()) ? s.StartDate : s.EndDate).ThenBy(s => s.ProjectNumber).ThenByDescending(s => s.Type).ToList();
+
             renderMonthColumns = true;
             var data = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), false);
             var dataActual = PrepareDataTable(ExportProjectList, (object[])projectsData.ToArray(), true);
@@ -1690,36 +1722,32 @@ namespace PraticeManagement
 
             data.Columns.Add("Project Number");
             data.Columns.Add("Account");
+            data.Columns.Add("House Account");
+            data.Columns.Add("Business Group");
+            data.Columns.Add("Business Unit");
+            data.Columns.Add("Buyer");
             data.Columns.Add("Project Name");
+            data.Columns.Add("New/Extension");
             data.Columns.Add("Status");
             data.Columns.Add("Start Date");
             data.Columns.Add("End Date");
-            List<string> coloumnsAll = new List<string>();
+            data.Columns.Add("Practice Area");
+            data.Columns.Add("Type");
             //Add Month and Total columns.
             if (renderMonthColumns)
             {
                 for (int i = 0; i < monthsInPeriod; i++)
                 {
-                    coloumnsAll.Add(periodStart.AddMonths(i).ToString("MMMM yyyy"));
-                    coloumnsAll.Add("");
+                    data.Columns.Add(periodStart.AddMonths(i).ToString(Constants.Formatting.EntryDateFormat));
                 }
             }
-            coloumnsAll.Add("Total");
-            coloumnsAll.Add("");
-            foreach (var item in coloumnsAll)
-                data.Columns.Add(item);
-
-            var emptyObject = new object[data.Columns.Count];
-            for (int i = 0; i < 6; i++)
-                emptyObject[i] = "";
-            for (int i = 6; i < data.Columns.Count; i++)
-            {
-                if (i % 2 == 0)
-                    emptyObject[i] = "Revenue";
-                else
-                    emptyObject[i] = "Margin";
-            }
-            data.Rows.Add(emptyObject);
+            data.Columns.Add("Total");
+            data.Columns.Add("Salesperson");
+            data.Columns.Add("Project Manager(s)");
+            data.Columns.Add("Senior Manager");
+            data.Columns.Add("Director");
+            data.Columns.Add("Pricing List");
+            data.Columns.Add("PO Number");
             foreach (var propertyBag in propertyBags)
             {
                 var objects = new object[data.Columns.Count];
@@ -1734,10 +1762,9 @@ namespace PraticeManagement
                         {
                             project = projectsList.Where(p => p.ProjectNumber == property.GetValue(propertyBag).ToString()).FirstOrDefault();
                         }
-                        if (property.Name == "EndDate")
+                        if (property.Name == "Type")
                         {
-
-                            //bool isMargin = property.GetValue(propertyBag).ToString() == Margin;
+                            bool isMargin = property.GetValue(propertyBag).ToString() == Margin;
                             //Add month columns.
 
                             SeniorityAnalyzer personListAnalyzer = new SeniorityAnalyzer(DataHelper.CurrentPerson);
@@ -1746,8 +1773,7 @@ namespace PraticeManagement
                             //PracticeManagementCurrency columnValue = 0M;
                             //columnValue.FormatStyle = marginType ? NumberFormatStyle.Margin : NumberFormatStyle.Revenue;
 
-                            var columnValueRevenue = 0M;
-                            var columnValueMargin = 0M;
+                            var columnValue = 0M;
                             if (renderMonthColumns)
                             {
                                 var monthStart = periodStart;
@@ -1757,9 +1783,9 @@ namespace PraticeManagement
                                     k++, monthStart = monthStart.AddMonths(1))
                                 {
                                     column++;
-                                    columnValueRevenue = 0M;
-                                    columnValueMargin = 0M;
+                                    columnValue = 0M;
                                     DateTime monthEnd = GetMonthEnd(ref monthStart);
+
                                     if (project.ProjectedFinancialsByMonth != null)
                                     {
                                         foreach (KeyValuePair<DateTime, ComputedFinancials> interestValue in
@@ -1767,40 +1793,37 @@ namespace PraticeManagement
                                         {
                                             if (IsInMonth(interestValue.Key, monthStart, monthEnd))
                                             {
-                                                columnValueRevenue = useActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue;
-                                                columnValueMargin = useActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin;//isMargin ? (useActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin) : (useActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue);
+                                                columnValue = isMargin ? (useActuals ? interestValue.Value.ActualGrossMargin : interestValue.Value.GrossMargin) : (useActuals ? interestValue.Value.ActualRevenue : interestValue.Value.Revenue);
                                                 break;
                                             }
                                         }
                                     }
-                                    string revenueColor = columnValueRevenue < 0 ? "red" : "green";
-                                    objects[column] = string.Format(NPOIExcel.CustomColorKey, revenueColor, columnValueRevenue);
-                                    column++;
-                                    string marginColor = columnValueMargin < 0 ? "red" : "purple";
-                                    objects[column] = string.Format(NPOIExcel.CustomColorKey, marginColor, greaterSeniorityExists ? (object)"(Hidden)" : columnValueMargin);
-                                    //string.Format(NPOIExcel.CustomColorKey, color, greaterSeniorityExists && isMargin ? (object)"(Hidden)" : columnValue);
+
+                                    string color = columnValue < 0 ? "red" : isMargin ? "purple" : "green";
+                                    objects[column] = string.Format(NPOIExcel.CustomColorKey, color, greaterSeniorityExists && isMargin ? (object)"(Hidden)" : columnValue);
                                 }
                             }
 
                             column++;
-                            columnValueRevenue = 0M;
-                            columnValueMargin = 0M;
+                            columnValue = 0M;
                             if (project.ComputedFinancials != null && !greaterSeniorityExists)
                             {
-                                columnValueRevenue = useActuals ? project.ComputedFinancials.ActualRevenue : project.ComputedFinancials.Revenue;
-                                columnValueMargin = useActuals ? project.ComputedFinancials.ActualGrossMargin : project.ComputedFinancials.GrossMargin;//isMargin ? (useActuals ? project.ComputedFinancials.ActualGrossMargin : project.ComputedFinancials.GrossMargin) : (useActuals ? project.ComputedFinancials.ActualRevenue : project.ComputedFinancials.Revenue);
+                                columnValue = isMargin ? (useActuals ? project.ComputedFinancials.ActualGrossMargin : project.ComputedFinancials.GrossMargin) : (useActuals ? project.ComputedFinancials.ActualRevenue : project.ComputedFinancials.Revenue);
                             }
-                            string totalColomnRevenuecolor = columnValueRevenue < 0 ? "red" : "green";
-                            objects[column] = string.Format(NPOIExcel.CustomColorKey, totalColomnRevenuecolor, columnValueRevenue);
-                            column++;
-                            string totalColumnMarginColor = columnValueMargin < 0 ? "red" : "purple";
-                            objects[column] = string.Format(NPOIExcel.CustomColorKey, totalColumnMarginColor, greaterSeniorityExists ? (object)"(Hidden)" : columnValueMargin);
+                            string totalColomncolor = columnValue < 0 ? "red" : isMargin ? "purple" : "green";
+                            objects[column] = string.Format(NPOIExcel.CustomColorKey, totalColomncolor, greaterSeniorityExists && isMargin ? (object)"(Hidden)" : columnValue);
+                        }
+                        else if (property.Name == "ProjectManagers")
+                        {
+                            objects[column] = project.ProjectManagers != null ? GetProjectManagers(project.ProjectManagers) : string.Empty;
                         }
                         column++;
                     }
                 }
+
                 data.Rows.Add(objects);
             }
+
             return data;
         }
 
@@ -1817,37 +1840,70 @@ namespace PraticeManagement
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
                                     Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
+                                    BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
+                                    BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                    Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
                                     ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                    BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
                                     Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
-                                    EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty
+                                    EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                    PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                    Type = Revenue,
+                                    Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                    ProjectManagers = string.Empty,
+                                    SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
+                                    Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                    PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                    PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
                                 }).ToList();//Note:- Change insertPosition Of Total cell in RowDataBound if any modifications in projectsData.
 
-            projectsData = projectsData.OrderBy(s => s.ProjectID).ToList();
+            var projectsDataWithMargin = (from pro in projectsList
+                                          where pro != null
+                                          select new
+                                          {
+                                              ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
+                                              ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
+                                              Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
+                                              BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
+                                              BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
+                                              Buyer = pro.BuyerName != null ? pro.BuyerName : string.Empty,
+                                              ProjectName = pro.Name != null ? pro.Name : string.Empty,
+                                              BusinessType = (pro.BusinessType != (BusinessType)0) ? DataHelper.GetDescription(pro.BusinessType).ToString() : string.Empty,
+                                              Status = (pro.Status != null && pro.Status.Name != null) ? pro.Status.Name.ToString() : string.Empty,
+                                              StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                              EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
+                                              PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                              Type = Margin,
+                                              Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
+                                              ProjectManagers = string.Empty,
+                                              SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
+                                              Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
+                                              PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
+                                              PONumber = (pro.PONumber != null && pro.PONumber != null) ? pro.PONumber : string.Empty
+                                          }).ToList();
+
+            projectsData.AddRange(projectsDataWithMargin);
+            projectsData = projectsData.OrderBy(s => s.ProjectID).ThenByDescending(s => s.Type).ToList();
 
             renderMonthColumns = false;
             var data = PrepareDataTable(projectsList.ToArray(), (object[])projectsData.ToArray(), false);
             var dataActual = PrepareDataTable(projectsList.ToArray(), (object[])projectsData.ToArray(), true);
-            DataTable header = new DataTable();
-            header.Columns.Add("Projects List");
-            headerRowsCount = header.Rows.Count + 3;
-            coloumnsCount = data.Columns.Count;
+
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
 
-            sheetStylesList.Add(HeaderSheetStyle);
             sheetStylesList.Add(DataSheetStyle);
-            sheetStylesList.Add(HeaderSheetStyle);
             sheetStylesList.Add(DataSheetStyle);
 
             var dataSetList = new List<DataSet>();
             var dataset = new DataSet();
             dataset.DataSetName = "Summary - Projected";
-            dataset.Tables.Add(header);
             dataset.Tables.Add(data);
             dataSetList.Add(dataset);
 
             var datasetActual = new DataSet();
-            datasetActual.Tables.Add(header.Clone());
             datasetActual.Tables.Add(dataActual);
             datasetActual.DataSetName = "Summary - Actuals";
             dataSetList.Add(datasetActual);
