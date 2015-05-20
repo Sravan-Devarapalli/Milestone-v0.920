@@ -27,6 +27,8 @@ namespace PraticeManagement.Reports.Badge
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
 
+        public List<int> TotalList { get; set; }
+
         public string FormattedDate
         {
             get
@@ -70,6 +72,12 @@ namespace PraticeManagement.Reports.Badge
         {
             get
             {
+                CellStyles headerWrapCellStyle = new CellStyles();
+                headerWrapCellStyle.IsBold = true;
+                headerWrapCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerWrapCellStyle.WrapText = true;
+                
+
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
@@ -80,7 +88,7 @@ namespace PraticeManagement.Reports.Badge
                 dataDateCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                headerCellStyleList.Add(headerCellStyle);
+                headerCellStyleList.Add(headerWrapCellStyle);
                 for (int i = 0; i < BadgedResources.Count; i++)
                     headerCellStyleList.Add(dataDateCellStyle);
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
@@ -90,6 +98,11 @@ namespace PraticeManagement.Reports.Badge
                 var dataCellStylearray = new List<CellStyles>() { dataCellStyle };
                 for (int i = 0; i < BadgedResources.Count; i++)
                     dataCellStylearray.Add(dataCellStyle);
+                //List<int> coloumnWidth = new List<int>();
+                //coloumnWidth.Add(30);
+                //for (int i = 0; i < BadgedResources.Count; i++)
+                //    coloumnWidth.Add(0);
+                
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
@@ -97,6 +110,7 @@ namespace PraticeManagement.Reports.Badge
                 sheetStyle.IsFreezePane = true;
                 sheetStyle.FreezePanColSplit = 0;
                 sheetStyle.FreezePanRowSplit = headerRowsCount;
+                //sheetStyle.ColoumnWidths = coloumnWidth;
                 return sheetStyle;
             }
         }
@@ -220,6 +234,10 @@ namespace PraticeManagement.Reports.Badge
                     break;
                 case 5: url = Constants.ApplicationPages.BadgeBreakReport;
                     break;
+                case 6: url = Constants.ApplicationPages.BadgedOnProjectException;
+                    break;
+                case 7: url = Constants.ApplicationPages.BadgedNotOnProjectException;
+                    break;
             }
             return Utils.Generic.GetTargetUrlWithReturn(String.Format(url, startDate.ToShortDateString(), endDate.ToShortDateString(), cblPayTypes.areAllSelected ? "null" : cblPayTypes.SelectedItems, PersonStatus),
                                                         Constants.ApplicationPages.BadgedResourcesByTimeReport);
@@ -232,7 +250,7 @@ namespace PraticeManagement.Reports.Badge
             var statuses = PersonStatus;
             var data = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
             BadgedResources = data;
-            chartReport.DataSource = data.Select(p => new { month = p.StartDate.ToString(FormattedDate), badgedOnProjectcount = p.BadgedOnProjectCount, badgedNotOnProjectcount = p.BadgedNotOnProjectCount, clockNotStartedCount = p.ClockNotStartedCount, blockedCount = p.BlockedCount, breakCount = p.InBreakPeriodCount }).ToList();
+            chartReport.DataSource = data.Select(p => new { month = p.StartDate.ToString(FormattedDate), badgedOnProjectcount = p.BadgedOnProjectCount, badgedProjectExceptioncount = p.BadgedOnProjectExceptionCount , badgedNotOnProjectExceptioncount = p.BadgedNotOnProjectExceptionCount, badgedNotOnProjectcount = p.BadgedNotOnProjectCount, clockNotStartedCount = p.ClockNotStartedCount, blockedCount = p.BlockedCount, breakCount = p.InBreakPeriodCount }).ToList();
             chartReport.DataBind();
             InitChart(data.Count);
         }
@@ -291,6 +309,7 @@ namespace PraticeManagement.Reports.Badge
 
         protected void repReportTable_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+            var dataItem = (ReportTable)e.Item.DataItem;
             if (e.Item.ItemType == ListItemType.Header)
             {
                 var repDatesHeaders = e.Item.FindControl("repDatesHeaders") as Repeater;
@@ -300,20 +319,28 @@ namespace PraticeManagement.Reports.Badge
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var dataItem = (ReportTable)e.Item.DataItem;
                 var lblCategory = e.Item.FindControl("lblCategory") as Label;
                 var repCount = e.Item.FindControl("repCount") as Repeater;
                 lblCategory.Text = dataItem.Category;
+                if (lblCategory.Text == "TOTALS")
+                {
+                    lblCategory.CssClass = "fontBold";
+                }
                 repCount.DataSource = dataItem.Count;
                 repCount.DataBind();
             }
+            //else
+            //{
+            //    var lblTotal = e.Item.FindControl("lblTotal") as Label;
+            //    lblTotal.Text = dataItem.Count.Sum(r => r.BadgedOnProjectCount).ToString();
+            //}
         }
 
         protected void repCount_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Header)
             {
-
+                TotalList = new List<int>();
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -321,17 +348,26 @@ namespace PraticeManagement.Reports.Badge
                 var lblCategory = e.Item.FindControl("lblCategory") as Label;
                 var lblCount = e.Item.FindControl("lblCount") as Label;
                 var hlCount = e.Item.FindControl("hlCount") as HyperLink;
-                //if (dataItem.TypeNo == 1 || dataItem.TypeNo == 3 || dataItem.TypeNo == 4)
-                //{
+                TotalList.Add(dataItem.BadgedOnProjectCount);
+                if (dataItem.TypeNo == 0)
+                {
+                    hlCount.Visible = false;
+                    lblCount.Visible = true;
+                    if (dataItem.TypeNo == 0)
+                        lblCount.CssClass = "fontBold";
+                }
+                else
+                {
                     hlCount.Visible = true;
                     lblCount.Visible = false;
                     hlCount.NavigateUrl = GetLink(dataItem.TypeNo, dataItem.StartDate, dataItem.EndDate);
-                //}
-                //else
-                //{
-                //    hlCount.Visible = false;
-                //    lblCount.Visible = true;
-                //}
+                }
+            }
+            else
+            {
+                var lblTotal = e.Item.FindControl("lblTotal") as Label;
+                lblTotal.CssClass = "fontBold";
+                lblTotal.Text = TotalList.Sum().ToString();
             }
         }
 
@@ -343,10 +379,20 @@ namespace PraticeManagement.Reports.Badge
                 Category = "# 18mos Clock Active Resources Not on Project",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedNotOnProjectCount, TypeNo = 1 }).ToList()
             };
+            var badgednotProjectException = new ReportTable()
+            {
+                Category = "# 18mos Clock Active Resources Not on Project: Person - Based Exceptions",
+                Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedNotOnProjectExceptionCount, TypeNo = 7 }).ToList()
+            };
             var badgedProject = new ReportTable()
             {
                 Category = "# Badged resources on Project",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedOnProjectCount, TypeNo = 2 }).ToList()
+            };
+            var badgedProjectException = new ReportTable()
+            {
+                Category = "# Badged resources on Project: Project - Based Exceptions",
+                Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedOnProjectExceptionCount, TypeNo = 6 }).ToList()
             };
             var clocknotStarted = new ReportTable()
             {
@@ -363,11 +409,19 @@ namespace PraticeManagement.Reports.Badge
                 Category = "# On 6-Month Break",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.InBreakPeriodCount, TypeNo = 5 }).ToList()
             };
+            var totals = new ReportTable()
+            {
+                Category = "TOTALS",
+                Count = BadgedResources.Select(c => new BadgedResourcesByTime() { BadgedOnProjectCount = c.BadgedNotOnProjectCount + c.BadgedNotOnProjectExceptionCount + c.BadgedOnProjectCount + c.BadgedOnProjectExceptionCount + c.ClockNotStartedCount + c.BlockedCount + c.InBreakPeriodCount, TypeNo = 0 }).ToList()
+            };
             list.Add(badgednotProject);
+            list.Add(badgednotProjectException);
             list.Add(badgedProject);
+            list.Add(badgedProjectException);
             list.Add(clocknotStarted);
             list.Add(blocked);
             list.Add(breakPeriod);
+            list.Add(totals);
             return list;
         }
 
@@ -381,12 +435,14 @@ namespace PraticeManagement.Reports.Badge
             {
                 data.Columns.Add(header.StartDate.ToShortDateString());
             }
+            data.Columns.Add("TOTALS");
             foreach (var reportItem in report)
             {
                 row = new List<object>();
                 row.Add(reportItem.Category);
                 foreach (var item in reportItem.Count)
                     row.Add(item.BadgedOnProjectCount);
+                row.Add(reportItem.Count.Sum(p=>p.BadgedOnProjectCount));
                 data.Rows.Add(row.ToArray());
             }
             return data;
@@ -425,7 +481,7 @@ namespace PraticeManagement.Reports.Badge
             if ((int)chartReport.Height.Value < 550)
                 chartReport.Height = 550;
             var units = 60 * count;
-            chartReport.Width = units < 800 ? 800 : units > 1700 ? 1700 : units;
+            chartReport.Width = units < 1000 ? 1000 : units > 1900 ? 1900 : units;
             InitAxis(chartReport.ChartAreas[MAIN_CHART_AREA_NAME].AxisX, true, SelectedView == 1 ? "Day" : SelectedView == 7 ? "Week" : "Month", false);
             InitAxis(chartReport.ChartAreas[MAIN_CHART_AREA_NAME].AxisY, false, "Number of Resources", true);
             UpdateChartTitle();
@@ -437,10 +493,11 @@ namespace PraticeManagement.Reports.Badge
           
             chartReport.Legends.Add(legend);
             chartReport.Legends["Legend2"].DockedToChartArea = MAIN_CHART_AREA_NAME;
-            chartReport.Legends["Legend2"].Docking = Docking.Bottom;
-            chartReport.Legends["Legend2"].LegendStyle = LegendStyle.Table;
+            chartReport.Legends["Legend2"].Docking = Docking.Right;
+            chartReport.Legends["Legend2"].LegendStyle = LegendStyle.Column;
             chartReport.Legends["Legend2"].Alignment = StringAlignment.Center;
             chartReport.Legends["Legend2"].ItemColumnSpacing = 70;
+
             chartReport.Legends["Legend2"].Font = new System.Drawing.Font("Arial", 10, FontStyle.Regular);
            
             chartReport.Legends["Legend2"].IsDockedInsideChartArea = false;
@@ -461,47 +518,84 @@ namespace PraticeManagement.Reports.Badge
 
         public void AddLegendItems(Legend legend)
         {
-            var ltBadgedNotOnProject = new LegendItem();
-            ltBadgedNotOnProject.Name = "18mos Clock Active Resources Not on Project";
-            ltBadgedNotOnProject.ImageStyle = LegendImageStyle.Rectangle;
-            ltBadgedNotOnProject.MarkerStyle = MarkerStyle.Square;
-            ltBadgedNotOnProject.MarkerSize = 10;
-            ltBadgedNotOnProject.MarkerColor = Color.Black;
-            ltBadgedNotOnProject.Color = Color.Blue;
-            legend.CustomItems.Add(ltBadgedNotOnProject);
+            var ltBadgedNotOnProjectException = new LegendItem();
+            ltBadgedNotOnProjectException.Name = "18mos Clock Active Resources Not on Project: Person-Based Exceptions";
+            ltBadgedNotOnProjectException.ImageStyle = LegendImageStyle.Rectangle;
+            ltBadgedNotOnProjectException.MarkerStyle = MarkerStyle.Square;
+            ltBadgedNotOnProjectException.MarkerSize = 10;
+            ltBadgedNotOnProjectException.SeparatorType = LegendSeparatorStyle.DoubleLine;
+            ltBadgedNotOnProjectException.SeparatorColor = Color.White;
+            ltBadgedNotOnProjectException.MarkerColor = Color.Black;
+            ltBadgedNotOnProjectException.Color = Color.Brown;
+            
+            legend.CustomItems.Add(ltBadgedNotOnProjectException);
 
             var ltClockNotStarted = new LegendItem();
             ltClockNotStarted.Name = "18 Month Clock Not Started";
             ltClockNotStarted.ImageStyle = LegendImageStyle.Rectangle;
             ltClockNotStarted.MarkerStyle = MarkerStyle.Square;
+            ltClockNotStarted.SeparatorType = LegendSeparatorStyle.DoubleLine;
+            ltClockNotStarted.SeparatorColor = Color.White;
             ltClockNotStarted.MarkerSize = 10;
             ltClockNotStarted.MarkerColor = Color.Black;
             ltClockNotStarted.Color = Color.Gray;
             legend.CustomItems.Add(ltClockNotStarted);
+
+            var ltBadgedNotOnProject = new LegendItem();
+            ltBadgedNotOnProject.Name = "18mos Clock Active Resources Not on Project";
+            ltBadgedNotOnProject.ImageStyle = LegendImageStyle.Rectangle;
+            ltBadgedNotOnProject.MarkerStyle = MarkerStyle.Square;
+            ltBadgedNotOnProject.MarkerSize = 10;
+            ltBadgedNotOnProject.SeparatorType = LegendSeparatorStyle.DoubleLine;
+            ltBadgedNotOnProject.SeparatorColor = Color.White;
+            ltBadgedNotOnProject.MarkerColor = Color.Black;
+            ltBadgedNotOnProject.Color = Color.Blue;
+            legend.CustomItems.Add(ltBadgedNotOnProject);
+
             var ltBreak = new LegendItem();
             ltBreak.Name = "On 6-Month Break";
             ltBreak.ImageStyle = LegendImageStyle.Rectangle;
             ltBreak.MarkerStyle = MarkerStyle.Square;
+            ltBreak.SeparatorType = LegendSeparatorStyle.DoubleLine;
+            ltBreak.SeparatorColor = Color.White;
             ltBreak.MarkerSize = 10;
             ltBreak.MarkerColor = Color.Black;
             ltBreak.Color = Color.DarkBlue;
             legend.CustomItems.Add(ltBreak);
-            var ltBadgedProject = new LegendItem();
-            ltBadgedProject.Name = "Badged resources on project";
-            ltBadgedProject.ImageStyle = LegendImageStyle.Rectangle;
-            ltBadgedProject.MarkerStyle = MarkerStyle.Square;
-            ltBadgedProject.MarkerSize = 10;
-            ltBadgedProject.MarkerColor = Color.Black;
-            ltBadgedProject.Color = Color.Red;
-            legend.CustomItems.Add(ltBadgedProject);
+
             var ltBlocked = new LegendItem();
             ltBlocked.Name = "Blocked";
             ltBlocked.ImageStyle = LegendImageStyle.Rectangle;
+            ltBlocked.SeparatorType = LegendSeparatorStyle.DoubleLine;
+            ltBlocked.SeparatorColor = Color.White;
             ltBlocked.MarkerStyle = MarkerStyle.Square;
             ltBlocked.MarkerSize = 10;
             ltBlocked.MarkerColor = Color.Black;
             ltBlocked.Color = Color.Orange;
             legend.CustomItems.Add(ltBlocked);
+
+            var ltBadgedProjectException = new LegendItem();
+            ltBadgedProjectException.Name = "Badged resources on project: Project-Based Exceptions";
+            ltBadgedProjectException.ImageStyle = LegendImageStyle.Rectangle;
+            ltBadgedProjectException.MarkerStyle = MarkerStyle.Square;
+            ltBadgedProjectException.SeparatorType = LegendSeparatorStyle.DoubleLine;
+            ltBadgedProjectException.SeparatorColor = Color.White;
+            ltBadgedProjectException.MarkerSize = 10;
+            ltBadgedProjectException.MarkerColor = Color.Black;
+            ltBadgedProjectException.Color = Color.Pink;
+            legend.CustomItems.Add(ltBadgedProjectException);
+
+            var ltBadgedProject = new LegendItem();
+            ltBadgedProject.Name = "Badged resources on project";
+            ltBadgedProject.ImageStyle = LegendImageStyle.Rectangle;
+            ltBadgedProject.SeparatorType = LegendSeparatorStyle.DoubleLine;
+            ltBadgedProject.SeparatorColor = Color.White;
+            ltBadgedProject.MarkerStyle = MarkerStyle.Square;
+            ltBadgedProject.MarkerSize = 10;
+            ltBadgedProject.MarkerColor = Color.Black;
+            ltBadgedProject.Color = Color.Red;
+            legend.CustomItems.Add(ltBadgedProject);
+            
         }
 
         private void UpdateChartTitle()
