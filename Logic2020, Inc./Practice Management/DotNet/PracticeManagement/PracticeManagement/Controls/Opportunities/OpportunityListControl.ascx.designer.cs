@@ -94,15 +94,6 @@ namespace PraticeManagement.Controls.Opportunities {
         protected global::System.Web.UI.WebControls.Panel pnlSummary;
         
         /// <summary>
-        /// btnExportToExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
-        
-        /// <summary>
         /// lvOpportunities control.
         /// </summary>
         /// <remarks>
@@ -110,6 +101,15 @@ namespace PraticeManagement.Controls.Opportunities {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListView lvOpportunities;
+        
+        /// <summary>
+        /// btnExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
         
         /// <summary>
         /// hdnRedirectOpportunityId control.
