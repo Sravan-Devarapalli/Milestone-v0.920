@@ -60,7 +60,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataCellStyle, dataDateCellStyle,dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -152,6 +152,7 @@ namespace PraticeManagement.Reports.Badge
             data.Columns.Add("Project #");
             data.Columns.Add("Project Stage");
             data.Columns.Add("Request Date");
+            data.Columns.Add("Requester");
             data.Columns.Add("Badge Start");
             data.Columns.Add("Badge End");
             data.Columns.Add("18-mos Clock End Date");
@@ -162,6 +163,7 @@ namespace PraticeManagement.Reports.Badge
                 row.Add(reportItem.Project.ProjectNumber);
                 row.Add(reportItem.Project.Status.StatusType.ToString());
                 row.Add(reportItem.PlannedEndDate.HasValue ? reportItem.PlannedEndDate.Value.ToShortDateString() : string.Empty);
+                row.Add(reportItem.Requester);
                 row.Add(reportItem.BadgeStartDate.HasValue ? reportItem.BadgeStartDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.ProjectBadgeEndDate.HasValue ? reportItem.ProjectBadgeEndDate.Value.ToShortDateString() : string.Empty);
