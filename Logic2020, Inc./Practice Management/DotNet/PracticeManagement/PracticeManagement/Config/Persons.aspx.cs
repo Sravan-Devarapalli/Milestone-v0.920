@@ -183,74 +183,6 @@ namespace PraticeManagement.Config
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                CellStyles dataDateCellStyle = new CellStyles();
-                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
-
-                CellStyles[] dataCellStylearray = { dataCellStyle,
-                                                    dataDateCellStyle, 
-                                                    dataDateCellStyle, 
-                                                    dataCellStyle, 
-                                                    dataCellStyle,
-                                                    dataCellStyle,
-                                                    dataDateCellStyle,
-                                                    dataCellStyle,
-                                                    dataCellStyle
-                                                  };
-
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
-                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
-                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
-                sheetStyle.TopRowNo = headerRowsCount;
-                sheetStyle.IsFreezePane = true;
-                sheetStyle.FreezePanColSplit = 0;
-                sheetStyle.FreezePanRowSplit = headerRowsCount;
-                return sheetStyle;
-            }
-        }
-
-        private SheetStyles HeaderSheetStyle
-        {
-            get
-            {
-                CellStyles cellStyle = new CellStyles();
-                cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
-                cellStyle.FontHeight = 350;
-                CellStyles[] cellStylearray = { cellStyle };
-                RowStyles headerrowStyle = new RowStyles(cellStylearray);
-                headerrowStyle.Height = 500;
-
-                CellStyles dataCellStyle = new CellStyles();
-                dataCellStyle.IsBold = true;
-                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
-                dataCellStyle.FontHeight = 200;
-                CellStyles[] dataCellStylearray = { dataCellStyle };
-                RowStyles datarowStyle = new RowStyles(dataCellStylearray);
-                datarowStyle.Height = 350;
-
-                RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
-
-                SheetStyles sheetStyle = new SheetStyles(rowStylearray);
-                sheetStyle.MergeRegion.Add(new int[] { 0, 0, 0, coloumnsCount - 1 });
-                sheetStyle.IsAutoResize = false;
-
-                return sheetStyle;
-            }
-        }
-
-        private SheetStyles DataSheetStyleForAll
-        {
-            get
-            {
-                CellStyles headerCellStyle = new CellStyles();
-                headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                headerCellStyleList.Add(headerCellStyle);
-                RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
-
-                CellStyles dataCellStyle = new CellStyles();
-
                 CellStyles wrapdataCellStyle = new CellStyles();
                 wrapdataCellStyle.WrapText = true;
 
@@ -367,10 +299,6 @@ namespace PraticeManagement.Config
                 bool userIsHR =
                     Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.HRRoleName); //#2817: userIsHR is added as per  requirement.
 
-                //Expanded export button should be seen only by 'Administrators'
-
-                btnExpandedExcel.Enabled = userIsAdministrator;
-
                 // Recruiters should see a complete list their recruits
                 //practiceFilter.ActiveOnly = userIsAdministrator || userIsHR; //#2817: userIsHR is added as per  requirement.
 
@@ -444,7 +372,8 @@ namespace PraticeManagement.Config
                     gvPersons.Sort("LastName", SortDirection.Ascending);
                     SetFilterValues();
                 }
-               lnkAddPerson.Visible = UserIsAdministrator || userIsHR || UserIsRecruiter;
+
+
             }
 
 
@@ -502,15 +431,11 @@ namespace PraticeManagement.Config
             gvPersons.DataBind();
             hdnCleartoDefaultView.Value = "true";
             btnClearResults.Enabled = true;
-            btnExportToExcel.Visible = true;
-            btnExpandedExcel.Visible = true;
             if (gvPersons.Rows.Count == 0)
             {
                 string txt = txtSearch.Text;
                 txt = "<b>" + txt + "</b>";
                 gvPersons.EmptyDataText = string.Format("No results found for {0}", txt);
-                btnExportToExcel.Visible = false;
-                btnExpandedExcel.Visible = false;
             }
 
             if (previousLetter != null)
@@ -531,8 +456,6 @@ namespace PraticeManagement.Config
 
         protected void Alphabet_Clicked(object sender, EventArgs e)
         {
-            btnExportToExcel.Visible = true;
-            btnExpandedExcel.Visible = true;
             btnClearResults.Enabled = false;
             CurrentIndex = 0;
             if (previousLetter != null)
@@ -615,8 +538,7 @@ namespace PraticeManagement.Config
             gvPersons.Sort("LastName", SortDirection.Ascending);
             gvPersons.PageIndex = 0;
             CurrentIndex = 0;
-            SaveFilterSettings();
-            btnExpandedExcel.Visible = btnExportToExcel.Visible = true;
+            SaveFilterSettings(); 
         }
 
         protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
@@ -647,34 +569,7 @@ namespace PraticeManagement.Config
             gvPersons.DataBind();
         }
 
-        protected void btnExportToExcel_Click(object sender, EventArgs e)
-        {
-            using (var serviceClient = new PersonServiceClient())
-            {
-                try
-                {
-                    DataHelper.InsertExportActivityLogMessage("Person");
-                    var dataSetList = new List<DataSet>();
-                    List<SheetStyles> sheetStylesList = new List<SheetStyles>();
-                    var report = GetPersonsList().ToList();
-                    var data = PrepareDataTable(report);
-                    coloumnsCount = data.Columns.Count;
-                    sheetStylesList.Add(DataSheetStyle);
-                    var dataset = new DataSet();
-                    dataset.DataSetName = "Person_List";
-                    dataset.Tables.Add(data);
-                    dataSetList.Add(dataset);
-                    NPOIExcel.Export("Person_List.xls", dataSetList, sheetStylesList);
-                }
-                catch (CommunicationException)
-                {
-                    serviceClient.Abort();
-                    throw;
-                }
-            }
-        }
-
-        protected void btnExpandedExcel_Click(object sender, EventArgs e)
+       protected void btnExportToExcel_Click(object sender, EventArgs e)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -999,55 +894,6 @@ namespace PraticeManagement.Config
         #endregion
 
         #region Methods
-
-        public Person[] GetPersonsList()
-        {
-            var practiceIdsSelected = PracticeIdsSelectedKey;
-            var active = hdnActive.Value;
-            var pageSize = GetPageSize(ddlView.SelectedValue);
-            var pageNo = 0;
-            var looked = hdnLooked.Value;
-            var recruitersSelected = RecruiterIdsSelectedKey;
-            var sortBy = "LastName";
-            var payTypeIdsSelected = PayTypeIdsSelectedKey;
-            var projected = hdnProjected.Value;
-            var terminated = hdnTerminated.Value;
-            var terminatedPending = hdnTerminatedPending.Value;
-            var alphabet = hdnAlphabet.Value;
-            return Persons.GetPersons(practiceIdsSelected, Convert.ToBoolean(active), pageSize, pageNo, looked, 0, 0, recruitersSelected, sortBy, payTypeIdsSelected,
-                Convert.ToBoolean(projected), Convert.ToBoolean(terminated), Convert.ToBoolean(terminatedPending), !string.IsNullOrEmpty(alphabet) ? (char?)Convert.ToChar(alphabet) : null);
-        }
-
-        public DataTable PrepareDataTable(List<Person> reportData)
-        {
-            DataTable data = new DataTable();
-            List<object> row;
-
-            data.Columns.Add("Person Name");
-            data.Columns.Add("Start Date");
-            data.Columns.Add("End Date");
-            data.Columns.Add("Practice Area");
-            data.Columns.Add("Pay Type");
-            data.Columns.Add("Status");
-            data.Columns.Add("Last Login");
-            data.Columns.Add("Title");
-            data.Columns.Add("Career Manager");
-            foreach (var person in reportData)
-            {
-                row = new List<object>();
-                row.Add(person.Name);
-                row.Add(person.HireDate);
-                row.Add(person.TerminationDate.HasValue ? person.TerminationDate.Value.ToShortDateString() : string.Empty);
-                row.Add(person.DefaultPractice != null ? person.DefaultPractice.Name : string.Empty);
-                row.Add(person.CurrentPay != null ? person.CurrentPay.TimescaleName : string.Empty);
-                row.Add(person.Status.Name);
-                row.Add(person.LastLogin.HasValue ? person.LastLogin.Value.ToShortDateString() : string.Empty);
-                row.Add(person.Title.TitleName);
-                row.Add(person.DefaultCareerCounselour);
-                data.Rows.Add(row.ToArray());
-            }
-            return data;
-        }
 
         protected override void Display()
         {
