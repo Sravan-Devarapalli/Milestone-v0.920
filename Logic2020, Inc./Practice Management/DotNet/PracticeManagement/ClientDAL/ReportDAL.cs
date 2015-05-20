@@ -4539,7 +4539,9 @@ namespace DataAccess
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
                 int badgedOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedOnProjectCount);
+                int badgedOnProjectExceptionCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedOnProjectExceptionCount);
                 int badgedNotOnProjectCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedNotOnProjectCount);
+                int badgedNotOnProjectExceptionCountIndex = reader.GetOrdinal(Constants.ColumnNames.BadgedNotOnProjectExceptionCount);
                 int clockNotStartedCountIndex = reader.GetOrdinal(Constants.ColumnNames.ClockNotStartedCount);
                 int blockedCountIndex = reader.GetOrdinal(Constants.ColumnNames.BlockedCount);
                 int inBreakPeriodCountIndex = reader.GetOrdinal(Constants.ColumnNames.InBreakPeriodCount);
@@ -4555,6 +4557,8 @@ namespace DataAccess
                         ClockNotStartedCount = reader.GetInt32(clockNotStartedCountIndex),
                         BlockedCount = reader.GetInt32(blockedCountIndex),
                         InBreakPeriodCount = reader.GetInt32(inBreakPeriodCountIndex),
+                        BadgedNotOnProjectExceptionCount = reader.GetInt32(badgedNotOnProjectExceptionCountIndex),
+                        BadgedOnProjectExceptionCount = reader.GetInt32(badgedOnProjectExceptionCountIndex)
                     };
                     result.Add(badgeResource);
                 }
@@ -4566,7 +4570,7 @@ namespace DataAccess
             }
         }
 
-        public static List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject)
+        public static List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject, bool isBadgedException, bool isNotBadgedException)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ListBadgeResourcesByType, connection))
@@ -4582,6 +4586,8 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsBlocked, isBlocked);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsBreak, isBreak);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BadgedOnProject, badgedOnProject);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsBadgedException, isBadgedException);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsNotBadgedException, isNotBadgedException);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
@@ -4978,6 +4984,8 @@ namespace DataAccess
                 int badgeRequestDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeRequestDate);
                 int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
                 int clockEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ClockEndDate);
+                int RequesterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RequesterId);
+                int RequesterIndex = reader.GetOrdinal(Constants.ColumnNames.Requester);
 
                 while (reader.Read())
                 {
@@ -5001,7 +5009,9 @@ namespace DataAccess
                         BadgeStartDate = reader.GetDateTime(badgeStartDateIndex),
                         BadgeEndDate = reader.GetDateTime(badgeEndDateIndex),
                         PlannedEndDate = reader.IsDBNull(badgeRequestDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeRequestDateIndex),
-                        ProjectBadgeEndDate = reader.IsDBNull(clockEndDateIndex) ? null : (DateTime?)reader.GetDateTime(clockEndDateIndex)
+                        ProjectBadgeEndDate = reader.IsDBNull(clockEndDateIndex) ? null : (DateTime?)reader.GetDateTime(clockEndDateIndex),
+                        RequesterId = reader.IsDBNull(RequesterIdIndex) ? null : (int?)reader.GetInt32(RequesterIdIndex),
+                        Requester = reader.IsDBNull(RequesterIndex) ? string.Empty : reader.GetString(RequesterIndex)
                     };
                     result.Add(badgeResource);
                 }
