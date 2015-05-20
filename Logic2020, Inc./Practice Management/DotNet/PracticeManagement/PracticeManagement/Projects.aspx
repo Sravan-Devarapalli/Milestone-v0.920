@@ -383,39 +383,6 @@
                             </td>
                         </tr>
                     </table>
-                    <div class="padding5Right10">
-                        <table class="WholeWidth">
-                            <tr>
-                                <td class="padLeft40Percent">
-                                    <div class="ProjectSummaryPageCountTd">
-                                    </div>
-                                </td>
-                                <td align="right">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click" Style="margin-right:0px;width:90px;"
-                                                    Text="Export" CssClass="WholeWidth" />
-                                            </td>
-                                            <td>
-                                                <asp:Image ID="imgExportAllToExcel" runat="server" ImageUrl="~/Images/Dropdown_Arrow_22.png"
-                                                    onclick="imgArrow_click();" onmouseover="imgArrow_mouseOver();" onmouseout="imgArrow_mouseOut();" />
-                                            </td>
-                                </tr>
-                                <tr onmouseover="Exportall_click_mouseOver();" onmouseout="imgArrow_mouseOut();">
-                                    <td colspan="2" class="ExportAndExportAll">
-                                        <ul id="popupmenu" class="pmenu">
-                                            <li>
-                                                <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
-                                                    Text="Export All" CssClass="bgcolor_CCCCCC" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                </table> </td>
-                            </tr>
-                        </table>
-                    </div>
                 </div>
                 <asp:Panel ID="pnlFilters" runat="server">
                     <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0"
@@ -784,12 +751,22 @@
                             <table>
                                 <tr>
                                     <td>
+                                        <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
+                                            Text="Export" CssClass="WholeWidth" />
                                     </td>
                                     <td>
+                                        <asp:Image ID="imgExportAllToExcel" runat="server" ImageUrl="~/Images/Dropdown_Arrow_22.png"
+                                            onclick="imgArrow_click();" onmouseover="imgArrow_mouseOver();" onmouseout="imgArrow_mouseOut();" />
                                     </td>
                                 </tr>
                                 <tr onmouseover="Exportall_click_mouseOver();" onmouseout="imgArrow_mouseOut();">
                                     <td colspan="2" class="ExportAndExportAll">
+                                        <ul id="popupmenu" class="pmenu">
+                                            <li>
+                                                <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
+                                                    Text="Export All" CssClass="bgcolor_CCCCCC" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
+                                            </li>
+                                        </ul>
                                     </td>
                                 </tr>
                             </table>
