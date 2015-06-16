@@ -76,10 +76,12 @@ BEGIN
 			UNION ALL
 			SELECT M.PersonId,P.TitleId,R.StartDate,R.EndDate
 			FROM dbo.MSBadge M
+			INNER JOIN v_CurrentMSBadge MB ON M.PersonId = MB.PersonId
 			INNER JOIN Person P ON P.PersonId = M.PersonId 
 			INNER JOIN Ranges R ON M.LastBadgeStartDate <= R.EndDate AND R.StartDate <= M.LastBadgeEndDate
 			LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
 			WHERE M.ExcludeInReports = 0 AND M.IsPreviousBadge = 1 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
+					AND (M.LastBadgeStartDate <= MB.BadgeEndDate AND MB.BadgeStartDate <= M.LastBadgeEndDate)
 		)P
 		GROUP BY P.PersonId,P.TitleId,P.StartDate,P.EndDate
 	 ),
