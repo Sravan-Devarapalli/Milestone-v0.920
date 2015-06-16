@@ -47,7 +47,7 @@ BEGIN
 	       INNER JOIN dbo.Milestone AS m ON mp.MilestoneId = m.MilestoneId
 	       INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	       LEFT JOIN dbo.PersonRole AS r ON mpe.PersonRoleId = r.PersonRoleId
-		    LEFT JOIN dbo.MSBadge MS ON MS.PersonId = p.PersonId
+		    LEFT JOIN v_CurrentMSBadge MS ON MS.PersonId = p.PersonId
 	       LEFT JOIN dbo.TimeEntries as te on te.MilestonePersonId = mp.MilestonePersonId
 		  AND (te.MilestoneDate BETWEEN mpe.StartDate AND  mpe.EndDate)
 	  WHERE mp.MilestoneId = @MilestoneId
