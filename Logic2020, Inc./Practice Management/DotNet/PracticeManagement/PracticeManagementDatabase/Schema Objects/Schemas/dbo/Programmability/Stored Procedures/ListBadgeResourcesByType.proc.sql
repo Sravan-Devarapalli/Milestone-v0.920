@@ -42,28 +42,30 @@ BEGIN
 				;WITH BadgedProjects
 				AS
 				(
-					SELECT DISTINCT M.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,C.ClientId,C.Name AS ClientName,Pr.ProjectId,Pr.Name AS ProjectName,
+					SELECT DISTINCT MP.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,C.ClientId,C.Name AS ClientName,Pr.ProjectId,Pr.Name AS ProjectName,
 						   Pr.ProjectNumber,Pr.StartDate,Pr.EndDate,MPE.BadgeStartDate AS ProjectBadgeStartDate,MPE.BadgeEndDate AS ProjectBadgeEndDate,MPE.IsApproved,MPE.IsBadgeException
 					FROM dbo.MilestonePersonEntry MPE
 					INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 					INNER JOIN dbo.Milestone MS ON MS.MilestoneId = MP.MilestoneId
 					INNER JOIN dbo.Project Pr ON Pr.ProjectId = MS.ProjectId
-					INNER JOIN dbo.MSBadge M ON M.PersonId = MP.PersonId
-					INNER JOIN v_Person P ON P.PersonId = M.PersonId 
+					INNER JOIN v_Person P ON P.PersonId = MP.PersonId 
 					INNER JOIN dbo.Client C ON C.ClientId = Pr.ClientId
 					INNER JOIN v_PersonHistory PH ON PH.PersonId = P.PersonId AND PH.HireDate <= @EndDateLocal AND (PH.TerminationDate IS NULL OR @StartDateLocal <= PH.TerminationDate)
+					LEFT JOIN v_CurrentMSBadge M ON M.PersonId = MP.PersonId
 					LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
-					WHERE M.ExcludeInReports = 0 AND mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND Pr.ProjectStatusId IN (1,2,3,4)
+					WHERE ISNULL(M.ExcludeInReports,0) = 0 AND mpe.IsbadgeRequired = 1 AND (MPE.BadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MPE.BadgeEndDate) AND Pr.ProjectStatusId IN (1,2,3,4)
 						  AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 						  AND (PH.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable))
 				
 					UNION ALL
-					SELECT P.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,2,'Microsoft',-1,'Previous MS Badge History','',M.LastBadgeStartDate,M.LastBadgeEndDate,M.LastBadgeStartDate,M.LastBadgeEndDate,1,0
-					FROM dbo.MSBadge M
+					SELECT P.PersonId,P.FirstName,P.LastName,P.Title,M.BadgeStartDate,M.BadgeEndDate,2,'Microsoft',-1,'Previous MS Badge History','',MB.LastBadgeStartDate,MB.LastBadgeEndDate,MB.LastBadgeStartDate,MB.LastBadgeEndDate,1,0
+					FROM v_CurrentMSBadge M
+					INNER JOIN dbo.MSBadge MB ON MB.PersonId = M.PersonId
 					INNER JOIN v_Person P ON P.PersonId = M.PersonId
 					INNER JOIN v_PersonHistory PH ON PH.PersonId = P.PersonId AND PH.HireDate <= @EndDateLocal AND (PH.TerminationDate IS NULL OR @StartDateLocal <= PH.TerminationDate)
 					LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
-					WHERE M.ExcludeInReports = 0 AND M.IsPreviousBadge = 1 AND (M.LastBadgeStartDate <= @EndDateLocal AND @StartDateLocal <= M.LastBadgeEndDate)
+					WHERE M.ExcludeInReports = 0 AND MB.IsPreviousBadge = 1 AND (MB.LastBadgeStartDate <= @EndDateLocal AND @StartDateLocal <= MB.LastBadgeEndDate)
+							AND (MB.LastBadgeStartDate <= M.BadgeEndDate AND M.BadgeStartDate <= MB.LastBadgeEndDate)
 							AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 							AND (PH.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable))
 
@@ -119,7 +121,7 @@ BEGIN
 				FROM dbo.MSBadge M
 				WHERE M.ExcludeInReports = 0 AND M.IsPreviousBadge = 1 AND (M.LastBadgeStartDate <= @EndDateLocal AND @StartDateLocal <= M.LastBadgeEndDate)
 			 )
-			 SELECT DISTINCT M.PersonId,p.FirstName,p.LastName,m.BadgeStartDate,m.BadgeEndDate,m.DeactivatedDate
+			 SELECT DISTINCT M.PersonId,p.FirstName,p.LastName,m.BadgeStartDate,m.BadgeEndDate,m.DeactivatedDate,P.Title
 			 FROM v_CurrentMSBadge M 
 			 INNER JOIN v_Person P ON P.PersonId = M.PersonId 
 			 INNER JOIN dbo.MSBadge MB ON MB.PersonId = M.PersonId
@@ -157,7 +159,7 @@ BEGIN
 		 AS
 		 (
 			SELECT DISTINCT M.PersonId
-			FROM dbo.MSBadge M 
+			FROM v_CurrentMSBadge M 
 			LEFT JOIN BadgedOnProject BP ON BP.PersonId = M.PersonId 
 			WHERE M.ExcludeInReports = 0 AND BP.PersonId IS NULL AND (@StartDateLocal <= M.BadgeEndDate AND M.BadgeStartDate <= @EndDateLocal)
 			AND (M.IsBlocked = 0 OR (M.IsBlocked = 1 AND (@StartDateLocal > M.BlockEndDate OR M.BlockStartDate > @EndDateLocal)))
@@ -263,16 +265,17 @@ BEGIN
 		   FROM v_CurrentMSBadge M 
 		   WHERE M.ExcludeInReports = 0 AND @StartDateLocal <= M.BreakEndDate AND M.BreakStartDate <= @EndDateLocal
 		 )
-		SELECT P.PersonId,P.FirstName,P.LastName,M.BadgeStartDate,M.BadgeEndDate
+		SELECT P.PersonId,P.FirstName,P.LastName,M.BadgeStartDate,M.BadgeEndDate,P.Title
 		FROM v_Person P
-		LEFT JOIN MSBadge M ON M.PersonId = P.PersonId
+		INNER JOIN dbo.MSBadge MB ON MB.PersonId = P.PersonId
+		LEFT JOIN v_CurrentMSBadge M ON M.PersonId = P.PersonId
 		INNER JOIN v_PersonHistory PH ON PH.PersonId = P.PersonId AND PH.HireDate <= @EndDateLocal AND (PH.TerminationDate IS NULL OR @StartDateLocal <= PH.TerminationDate)
 		LEFT JOIN InBreakPeriod Brk ON Brk.PersonId = P.PersonId
 		LEFT JOIN BlockedPeople B ON B.PersonId = P.PersonId
 		LEFT JOIN BadgedOnProject BP ON BP.PersonId = P.PersonId
 		LEFT JOIN BadgedNotOnProject BNP ON BNP.PersonId = P.PersonId
 		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
-		WHERE ISNULL(M.ExcludeInReports,0) = 0 AND BNP.PersonId IS NULL AND BP.PersonId IS NULL AND B.PersonId IS NULL AND Brk.PersonId IS NULL
+		WHERE ISNULL(MB.ExcludeInReports,0) = 0 AND BNP.PersonId IS NULL AND BP.PersonId IS NULL AND B.PersonId IS NULL AND Brk.PersonId IS NULL
 			AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 			AND (PH.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable))
 		ORDER BY P.LastName,P.FirstName
