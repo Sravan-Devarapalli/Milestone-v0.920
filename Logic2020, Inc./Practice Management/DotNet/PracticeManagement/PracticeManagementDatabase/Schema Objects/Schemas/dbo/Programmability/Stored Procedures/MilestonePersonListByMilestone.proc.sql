@@ -56,7 +56,7 @@ AS
 	  FROM dbo.v_MilestonePerson AS mp
 	  INNER JOIN dbo.Person AS p ON mp.PersonId = p.PersonId
 	  LEFT JOIN MileStonePersonActiveDates AS MPAD ON MPAD.PersonId = P.PersonId
-	  LEFT JOIN dbo.MSBadge MS ON MS.PersonId = p.PersonId
+	  LEFT JOIN v_CurrentMSBadge MS ON MS.PersonId = p.PersonId
 	  WHERE mp.MilestoneId = @MilestoneIdLocal
 
 	 SELECT  personid,Date,ActualHours 
