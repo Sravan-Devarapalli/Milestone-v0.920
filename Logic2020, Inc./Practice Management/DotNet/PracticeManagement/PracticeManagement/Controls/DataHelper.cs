@@ -911,8 +911,11 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
-                    Person[] persons = serviceClient.PersonListShortByRoleAndStatus(statusids, roleName);
+                    string statusIds = ((int)DataTransferObjects.PersonStatusType.Active).ToString();
+                    string paytypeIds = ((int)TimescaleType.Salary).ToString();
+                    
+                    var persons = ServiceCallers.Custom.Person(p => p.GetPersonsByPayTypesAndByStatusIds(statusIds, paytypeIds)).OrderBy(p=>p.LastName).ThenBy(p=>p.FirstName).ToArray();
+
                     FillListDefault(control, firstItemText, persons, noFirstItem, "Id", "PersonLastFirstName");
                     ListItem unasigned = new ListItem("Unassigned", "-1");
                     control.Items.Add(unasigned);
