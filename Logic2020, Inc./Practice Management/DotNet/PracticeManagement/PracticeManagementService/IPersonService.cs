@@ -499,6 +499,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<MSBadge> GetBadgeRecordsByProjectId(int projectId);
+
+        [OperationContract]
+        bool IsPersonSalaryTypeInGivenRange(int personId, DateTime startDate, DateTime endDate);
     }
 }
 
