@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Badged Resources on Project: Project-Based Exceptions" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="Resources with Project-Based Exceptions" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="BadgedOnProjectBasedExceptionReport.aspx.cs"
     Inherits="PraticeManagement.Reports.Badge.BadgedOnProjectBasedExceptionReport" %>
 
@@ -133,7 +133,7 @@
                     </tr>
                     <tr>
                         <td class="PaddingTop10Px">
-                            <asp:Label ID="lblTitle" runat="server" Text="Badged Resources on Project: Project-Based Exceptions:" Style="font-weight: bold;
+                            <asp:Label ID="lblTitle" runat="server" Text="Resources with Project-Based Exceptions:" Style="font-weight: bold;
                                 font-size: 20px;"></asp:Label>
                         </td>
                         <td>
@@ -148,7 +148,7 @@
                                 <thead>
                                     <tr>
                                         <th class="TextAlignLeftImp Padding5Imp Width300Px">
-                                            List of Badged Resources on Project: Project-Based Exceptions
+                                            List of Resources with Project-Based Exceptions
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Resource Level
@@ -276,7 +276,7 @@
                     </FooterTemplate>
                 </asp:Repeater>
                 <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
-                    There are no resources who are badged with Project based Exceptions resources for the selected dates.
+                    There are no resources with Project based Exceptions for the selected dates.
                 </div>
             </div>
         </ContentTemplate>
