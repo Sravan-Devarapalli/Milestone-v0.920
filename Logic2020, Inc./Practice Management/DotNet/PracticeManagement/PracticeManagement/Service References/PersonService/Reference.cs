@@ -99,6 +99,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetBadgeRecordsByProjectId", ReplyAction="http://tempuri.org/IPersonService/GetBadgeRecordsByProjectIdResponse")]
         DataTransferObjects.MSBadge[] GetBadgeRecordsByProjectId(int projectId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/IsPersonSalaryTypeInGivenRange", ReplyAction="http://tempuri.org/IPersonService/IsPersonSalaryTypeInGivenRangeResponse")]
+        bool IsPersonSalaryTypeInGivenRange(int personId, System.DateTime startDate, System.DateTime endDate);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -472,6 +475,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.MSBadge[] GetBadgeRecordsByProjectId(int projectId) {
             return base.Channel.GetBadgeRecordsByProjectId(projectId);
+        }
+        
+        public bool IsPersonSalaryTypeInGivenRange(int personId, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.IsPersonSalaryTypeInGivenRange(personId, startDate, endDate);
         }
         
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
