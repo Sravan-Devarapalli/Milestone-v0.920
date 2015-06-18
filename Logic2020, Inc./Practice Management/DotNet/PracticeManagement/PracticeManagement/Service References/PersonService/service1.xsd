@@ -393,6 +393,22 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="IsPersonSalaryTypeInGivenRange">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsPersonSalaryTypeInGivenRangeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsPersonSalaryTypeInGivenRangeResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SaveUserTemporaryCredentials">
     <xs:complexType>
       <xs:sequence>
