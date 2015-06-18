@@ -69,7 +69,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle,dataCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -275,12 +275,14 @@ namespace PraticeManagement.Reports.Badge
             List<object> row;
 
             data.Columns.Add("List of Resources with 18-Month Clock Not Started");
+            data.Columns.Add("Resource Level");
             data.Columns.Add("18 Month Start");
             data.Columns.Add("18 Month End");
             foreach (var reportItem in report)
             {
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
+                row.Add(reportItem.Person.Title.TitleName);
                 row.Add(reportItem.BadgeStartDate.HasValue ? reportItem.BadgeStartDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
                 data.Rows.Add(row.ToArray());
