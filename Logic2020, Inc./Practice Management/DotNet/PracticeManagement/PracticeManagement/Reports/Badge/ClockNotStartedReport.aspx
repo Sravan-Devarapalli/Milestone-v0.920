@@ -176,6 +176,9 @@
                                             List of Resources with 18-Month Clock Not Started
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Resource Level
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             18 Month Start
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
@@ -191,6 +194,9 @@
                                 <%# Eval("Person.HtmlEncodedName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Person.Title.HtmlEncodedTitleName")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -202,6 +208,9 @@
                         <tr class="alterrow">
                             <td class="padLeft5 textLeft">
                                 <%# Eval("Person.HtmlEncodedName")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
