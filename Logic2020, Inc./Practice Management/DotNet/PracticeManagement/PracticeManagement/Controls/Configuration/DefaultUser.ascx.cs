@@ -178,6 +178,7 @@ namespace PraticeManagement.Controls.Configuration
             {
                 EnsureChildControls();
                 btnSetDefault.Visible = AllowChange;
+                //Career Manager list should be populated with w2-salary pay type irrespective of roles.
                 DataHelper.FillDefaultManager(ddlActivePersons, string.Empty, PersonsRole, !InsertFirtItem,_personToSelect == null);
             }
 
