@@ -59,6 +59,9 @@
                                             Current Badge Requests Not Yet Approved
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Resource Level
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Project #
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
@@ -87,6 +90,9 @@
                         <tr class="ReportItemTemplate">
                             <td class="padLeft5 textLeft">
                                 <%# Eval("Person.HtmlEncodedName")%>
+                            </td>
+                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                 <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
@@ -117,6 +123,9 @@
                         <tr class="alterrow">
                             <td class="padLeft5 textLeft">
                                 <%# Eval("Person.HtmlEncodedName")%>
+                            </td>
+                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                 <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
