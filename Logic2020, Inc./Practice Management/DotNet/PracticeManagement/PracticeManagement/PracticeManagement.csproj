@@ -78,7 +78,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>PracticeManagementStrongNameKey.snk</AssemblyOriginatorKeyFile>
@@ -141,6 +141,10 @@
     <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral">
+      <HintPath>..\packages\Tamir.SharpSSH.1.1.1.13\lib\Tamir.SharpSSH.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -558,6 +562,7 @@
     <Content Include="Reports\Badge\BadgeRequestNotApprovedReport.aspx" />
     <Content Include="Reports\Badge\BadgeResourceByTime.aspx" />
     <Content Include="Reports\Badge\ClockNotStartedReport.aspx" />
+    <Content Include="Reports\Badge\MSReportsLandingPage.aspx" />
     <Content Include="Reports\Badge\ResourceByBusinessConsultants.aspx" />
     <Content Include="Reports\Badge\ResourceByPracticeReport.aspx" />
     <Content Include="Reports\Badge\ResourcesByTechnicalConsultants.aspx" />
@@ -583,6 +588,9 @@
     <Content Include="Controls\Generic\Filtering\PersonReportFilter.ascx" />
     <Content Include="Controls\PersonPicture.ashx" />
     <Content Include="Controls\Projects\AttachmentUpload.ashx" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\DataSources\DataTransferObjects.Attribution.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.BusinessGroup.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CohortAssignment.datasource" />
@@ -2309,6 +2317,13 @@
     <Compile Include="Reports\Badge\ClockNotStartedReport.aspx.designer.cs">
       <DependentUpon>ClockNotStartedReport.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Badge\MSReportsLandingPage.aspx.cs">
+      <DependentUpon>MSReportsLandingPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\MSReportsLandingPage.aspx.designer.cs">
+      <DependentUpon>MSReportsLandingPage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Badge\ResourceByBusinessConsultants.aspx.cs">
       <DependentUpon>ResourceByBusinessConsultants.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3992,3 +4007,4 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
+
