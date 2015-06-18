@@ -60,7 +60,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataCellStyle, dataDateCellStyle,dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle,dataCellStyle, dataCellStyle, dataCellStyle, dataDateCellStyle,dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -149,6 +149,7 @@ namespace PraticeManagement.Reports.Badge
             List<object> row;
 
             data.Columns.Add("Current Badge Requests Not Yet Approved");
+            data.Columns.Add("Resource Level");
             data.Columns.Add("Project #");
             data.Columns.Add("Project Stage");
             data.Columns.Add("Request Date");
@@ -160,6 +161,7 @@ namespace PraticeManagement.Reports.Badge
             {
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
+                row.Add(reportItem.Person.Title.TitleName);
                 row.Add(reportItem.Project.ProjectNumber);
                 row.Add(reportItem.Project.Status.StatusType.ToString());
                 row.Add(reportItem.PlannedEndDate.HasValue ? reportItem.PlannedEndDate.Value.ToShortDateString() : string.Empty);
@@ -173,3 +175,4 @@ namespace PraticeManagement.Reports.Badge
         }
     }
 }
+
