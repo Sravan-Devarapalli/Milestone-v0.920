@@ -203,6 +203,8 @@
       <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
       <xs:element minOccurs="0" name="ProjectBadgeEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ProjectBadgeStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Requester" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequesterId" nillable="true" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MSBadge" nillable="true" type="tns:MSBadge" />
@@ -211,6 +213,7 @@
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
       <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
       <xs:element minOccurs="0" name="AttributionList" nillable="true" type="tns:ArrayOfAttribution" />
+      <xs:element minOccurs="0" name="BaseLine" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BusinessGroup" nillable="true" type="tns:BusinessGroup" />
       <xs:element minOccurs="0" name="BusinessType" type="tns:BusinessType" />
