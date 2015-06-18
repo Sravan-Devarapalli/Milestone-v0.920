@@ -1085,6 +1085,7 @@
 
             public class Person
             {
+                public const string IsPersonSalaryTypeInGivenRange = "dbo.IsPersonSalaryTypeInGivenRange";
                 public const string GetBadgeRecordsByProjectId = "dbo.GetBadgeRecordsByProjectId";
                 public const string GetBadgeRecordsAfterDeactivatedDate = "dbo.GetBadgeRecordsAfterDeactivatedDate";
                 public const string CheckIfPersonInProjectsForThisPeriod = "dbo.CheckIfPersonInProjectsForThisPeriod";
