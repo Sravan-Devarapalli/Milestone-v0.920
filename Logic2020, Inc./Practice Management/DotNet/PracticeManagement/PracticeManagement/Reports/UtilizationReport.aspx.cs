@@ -80,14 +80,20 @@ namespace PraticeManagement.Reports
             var userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             var totalHours = new PersonTimeEntriesTotals();
             var personId = userIsAdministrator ? Convert.ToInt32(ddlPerson.SelectedValue) : currentPerson.Id.Value;
-            totalHours = ServiceCallers.Custom.Report(r => r.UtilizationReport(personId, YearStartDate, YTDEndDate));
-            lblTargetHours.Text = totalHours.AvailableHours.ToString();
-            lblBillableTime.Text =  totalHours.BillableHoursUntilToday.ToString();
+            var isSalaryType = ServiceCallers.Custom.Person(r => r.IsPersonSalaryTypeInGivenRange(personId, YearStartDate, YTDEndDate));
+            if (isSalaryType)
+            {
+                totalHours = ServiceCallers.Custom.Report(r => r.UtilizationReport(personId, YearStartDate, YTDEndDate));
+            }
+            lblTargetHours.Text = isSalaryType? totalHours.AvailableHours.ToString():"N/A";
+            lblBillableTime.Text = isSalaryType ? totalHours.BillableHoursUntilToday.ToString() : "N/A";
             //lblBillableTime2.Text = totalHours.BillableHoursUntilToday.ToString();
             //lblAllocatedBillable.Text = totalHours.ProjectedHours.ToString();
-            lblUtilization.Text = totalHours.BillableUtilizationPercentage;
+            lblUtilization.Text = isSalaryType? totalHours.BillableUtilizationPercentage:"N/A";
             //lblAllocatedVsTarget.Text = totalHours.BillableAllocatedVsTarget;
             //lblAllocatedVsTarget.Style["color"] = totalHours.BillableAllocatedVsTargetValue >= 0 ? "Black" : "#F00";
+
         }
     }
 }
+
