@@ -68,7 +68,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -203,7 +203,7 @@ namespace PraticeManagement.Reports.Badge
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             var statuses = PersonStatus;
-            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, false,false,true).ToList());
+            var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, false, false, true).ToList());
             repBadgedNotProject.DataSource = resources;
             repBadgedNotProject.DataBind();
             if (resources.Count > 0)
@@ -232,15 +232,15 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            var filename = string.Format("BadgeNotOnProjectPersonBasedExceptionReport_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
+            var filename = string.Format("PersonBasedExceptionResourcesReport_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             var statuses = PersonStatus;
-            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, false,false, true).ToList());
+            var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, false, false, false, false, false, true).ToList());
             if (report.Count > 0)
             {
-                string dateRangeTitle = string.Format("18mos Clock Active Resources not on project - Person Based Exception report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
+                string dateRangeTitle = string.Format("Resources with Person-Based Exceptions report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
                 DataTable header = new DataTable();
                 header.Columns.Add(dateRangeTitle);
                 headerRowsCount = header.Rows.Count + 3;
@@ -249,19 +249,19 @@ namespace PraticeManagement.Reports.Badge
                 sheetStylesList.Add(HeaderSheetStyle);
                 sheetStylesList.Add(DataSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = "ActiveResourcesNotOnProject_PersonBasedException";
+                dataset.DataSetName = "PersonBasedExceptionResources";
                 dataset.Tables.Add(header);
                 dataset.Tables.Add(data);
                 dataSetList.Add(dataset);
             }
             else
             {
-                string dateRangeTitle = "There are no resources who are badged not on project with person based exception for the selected dates.";
+                string dateRangeTitle = "There are no resources with person based exception for the selected dates.";
                 DataTable header = new DataTable();
                 header.Columns.Add(dateRangeTitle);
                 sheetStylesList.Add(HeaderSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = "ActiveResourcesNotOnProject_PersonBasedException";
+                dataset.DataSetName = "PersonBasedExceptionResources";
                 dataset.Tables.Add(header);
                 dataSetList.Add(dataset);
             }
@@ -273,15 +273,17 @@ namespace PraticeManagement.Reports.Badge
             DataTable data = new DataTable();
             List<object> row;
 
-            data.Columns.Add("List of Resources 18mos Clock Active Resources not on Project");
+            data.Columns.Add("List of Resources with Person-Based Exceptions");
+            data.Columns.Add("Resource Level");
             data.Columns.Add("18 Month Start");
             data.Columns.Add("18 Month End");
             foreach (var reportItem in report)
             {
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
+                row.Add(reportItem.Person.Title.TitleName);
                 row.Add(reportItem.BadgeStartDate.HasValue ? reportItem.BadgeStartDate.Value.ToShortDateString() : string.Empty);
-                row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty); 
+                row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
                 data.Rows.Add(row.ToArray());
             }
             return data;
