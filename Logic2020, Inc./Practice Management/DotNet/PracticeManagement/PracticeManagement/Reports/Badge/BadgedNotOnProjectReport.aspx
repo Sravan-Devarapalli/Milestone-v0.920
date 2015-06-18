@@ -1,4 +1,4 @@
-﻿<%@ Page Title="18mos Clock Active Resources Not on Project" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+﻿<%@ Page Title="Resources with Active Clocks, Not on Project" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
     AutoEventWireup="true" CodeBehind="BadgedNotOnProjectReport.aspx.cs" Inherits="PraticeManagement.Reports.Badge.BadgedNotOnProjectReport" %>
 
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
@@ -158,7 +158,7 @@
                     </tr>
                     <tr>
                         <td class="PaddingTop10Px">
-                            <asp:Label ID="lblTitle" runat="server" Text="18mos Clock Active Resources Not on Project:"
+                            <asp:Label ID="lblTitle" runat="server" Text="Resources with Active Clocks, Not on Project:"
                                 Style="font-weight: bold; font-size: 20px;"></asp:Label>
                         </td>
                         <td>
@@ -173,7 +173,10 @@
                                 <thead>
                                     <tr>
                                         <th class="TextAlignLeftImp Padding5Imp Width300Px">
-                                            List of 18mos Clock Active Resources not on Project
+                                            List of Resources with Active Clocks, Not on Project
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Resource Level
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             18 Month Start
@@ -193,6 +196,9 @@
                             <td class="padLeft5 textLeft">
                                 <%# Eval("Person.HtmlEncodedName")%>
                             </td>
+                              <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                 <%# Eval("Person.Title.HtmlEncodedTitleName")%>
+                            </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
                             </td>
@@ -208,6 +214,9 @@
                         <tr class="alterrow">
                             <td class="padLeft5 textLeft">
                                 <%# Eval("Person.HtmlEncodedName")%>
+                            </td>
+                              <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                 <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -225,7 +234,7 @@
                     </FooterTemplate>
                 </asp:Repeater>
                 <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
-                    There are no resources with badged not on project for the selected dates.
+                    There are no resources with active clocks and not on Project for the selected dates.
                 </div>
             </div>
         </ContentTemplate>
