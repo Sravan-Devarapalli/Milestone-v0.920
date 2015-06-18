@@ -108,7 +108,7 @@
                                             Pay Type
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
-                                            Level
+                                            Resource Level
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             18-Month Clock Start Date
@@ -146,7 +146,7 @@
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeEndDate"))%>
                             </td>
-                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                            <td sorttable_customkey='<%# Eval("BadgeDuration") %>' class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblDuration" runat="server"></asp:Label>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -174,7 +174,7 @@
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BadgeEndDate"))%>
                             </td>
-                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                            <td class="DayTotalHoursBorderLeft Padding5Imp" sorttable_customkey='<%# Eval("BadgeDuration") %>'>
                                 <asp:Label ID="lblDuration" runat="server"></asp:Label>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
