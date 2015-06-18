@@ -4678,6 +4678,33 @@ namespace DataAccess
             }
         }
 
+        public static bool IsPersonSalaryTypeInGivenRange(int personId,DateTime startDate,DateTime endDate)
+        {
+            bool result;
+            try
+            {
+                using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.IsPersonSalaryTypeInGivenRange, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+
+                    connection.Open();
+                    result = Convert.ToBoolean(command.ExecuteScalar());
+                }
+            }
+            catch (Exception ex)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }
