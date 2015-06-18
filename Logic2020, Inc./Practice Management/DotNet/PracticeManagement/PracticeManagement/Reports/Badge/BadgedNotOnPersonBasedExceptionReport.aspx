@@ -1,6 +1,6 @@
-﻿<%@ Page Title="18mos Clock Active Resources Not on Project: Person-Based Exceptions"
-    Language="C#" MasterPageFile="~/PracticeManagementMain.Master" AutoEventWireup="true"
-    CodeBehind="BadgedNotOnPersonBasedExceptionReport.aspx.cs" Inherits="PraticeManagement.Reports.Badge.BadgedNotOnPersonBasedExceptionReport" %>
+﻿<%@ Page Title="Resources with Person-Based Exceptions" Language="C#" MasterPageFile="~/PracticeManagementMain.Master"
+    AutoEventWireup="true" CodeBehind="BadgedNotOnPersonBasedExceptionReport.aspx.cs"
+    Inherits="PraticeManagement.Reports.Badge.BadgedNotOnPersonBasedExceptionReport" %>
 
 <%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Import Namespace="PraticeManagement.Utils" %>
@@ -157,7 +157,7 @@
                     </tr>
                     <tr>
                         <td class="PaddingTop10Px">
-                            <asp:Label ID="lblTitle" runat="server" Text="18mos Clock Active Resources Not on Project: Person-Based Exceptions:"
+                            <asp:Label ID="lblTitle" runat="server" Text="Resources with Person-Based Exceptions:"
                                 Style="font-weight: bold; font-size: 20px;"></asp:Label>
                         </td>
                         <td>
@@ -172,7 +172,10 @@
                                 <thead>
                                     <tr>
                                         <th class="TextAlignLeftImp Padding5Imp Width300Px">
-                                            List of Badged Not on Project- Person Based Exception Resources:
+                                            List of Resources with Person-Based Exceptions:
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Resource Level
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             18 Month Start
@@ -190,6 +193,9 @@
                                 <%# Eval("Person.HtmlEncodedName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Person.Title.HtmlEncodedTitleName")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -201,6 +207,9 @@
                         <tr class="alterrow">
                             <td class="padLeft5 textLeft">
                                 <%# Eval("Person.HtmlEncodedName")%>
+                            </td>
+                              <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -215,8 +224,7 @@
                     </FooterTemplate>
                 </asp:Repeater>
                 <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
-                    There are no resources who are badged not on project with person based exception
-                    for the selected dates.
+                    There are no resources with person based exception for the selected dates.
                 </div>
             </div>
         </ContentTemplate>
