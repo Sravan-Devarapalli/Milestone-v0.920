@@ -372,8 +372,7 @@ namespace PraticeManagement.Config
                     gvPersons.Sort("LastName", SortDirection.Ascending);
                     SetFilterValues();
                 }
-
-
+                lnkAddPerson.Visible = UserIsAdministrator || userIsHR || UserIsRecruiter;
             }
 
 
