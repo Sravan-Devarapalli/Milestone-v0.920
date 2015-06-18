@@ -376,12 +376,12 @@ namespace PraticeManagement.Reports.Badge
             var list = new List<ReportTable>();
             var badgednotProject = new ReportTable()
             {
-                Category = "# 18mos Clock Active Resources Not on Project",
+                Category = "# Resources with Active Clocks, Not on Project",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedNotOnProjectCount, TypeNo = 1 }).ToList()
             };
             var badgednotProjectException = new ReportTable()
             {
-                Category = "# 18mos Clock Active Resources Not on Project: Person - Based Exceptions",
+                Category = "# Resources with Person-Based Exceptions",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedNotOnProjectExceptionCount, TypeNo = 7 }).ToList()
             };
             var badgedProject = new ReportTable()
@@ -391,7 +391,7 @@ namespace PraticeManagement.Reports.Badge
             };
             var badgedProjectException = new ReportTable()
             {
-                Category = "# Badged resources on Project: Project - Based Exceptions",
+                Category = "# Resources with Project-Based Exceptions",
                 Count = BadgedResources.Select(c => new BadgedResourcesByTime() { StartDate = c.StartDate, EndDate = c.EndDate, BadgedOnProjectCount = c.BadgedOnProjectExceptionCount, TypeNo = 6 }).ToList()
             };
             var clocknotStarted = new ReportTable()
@@ -519,7 +519,7 @@ namespace PraticeManagement.Reports.Badge
         public void AddLegendItems(Legend legend)
         {
             var ltBadgedNotOnProjectException = new LegendItem();
-            ltBadgedNotOnProjectException.Name = "18mos Clock Active Resources Not on Project: Person-Based Exceptions";
+            ltBadgedNotOnProjectException.Name = "Resources with Person-Based Exceptions";
             ltBadgedNotOnProjectException.ImageStyle = LegendImageStyle.Rectangle;
             ltBadgedNotOnProjectException.MarkerStyle = MarkerStyle.Square;
             ltBadgedNotOnProjectException.MarkerSize = 10;
@@ -542,7 +542,7 @@ namespace PraticeManagement.Reports.Badge
             legend.CustomItems.Add(ltClockNotStarted);
 
             var ltBadgedNotOnProject = new LegendItem();
-            ltBadgedNotOnProject.Name = "18mos Clock Active Resources Not on Project";
+            ltBadgedNotOnProject.Name = "Resources with Active Clocks, Not on Project";
             ltBadgedNotOnProject.ImageStyle = LegendImageStyle.Rectangle;
             ltBadgedNotOnProject.MarkerStyle = MarkerStyle.Square;
             ltBadgedNotOnProject.MarkerSize = 10;
@@ -575,7 +575,7 @@ namespace PraticeManagement.Reports.Badge
             legend.CustomItems.Add(ltBlocked);
 
             var ltBadgedProjectException = new LegendItem();
-            ltBadgedProjectException.Name = "Badged resources on project: Project-Based Exceptions";
+            ltBadgedProjectException.Name = "Resources with Project-Based Exceptions";
             ltBadgedProjectException.ImageStyle = LegendImageStyle.Rectangle;
             ltBadgedProjectException.MarkerStyle = MarkerStyle.Square;
             ltBadgedProjectException.SeparatorType = LegendSeparatorStyle.DoubleLine;
