@@ -68,7 +68,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle,dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -234,7 +234,7 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
-            var filename = string.Format("BadgeNotOnProjectReport_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
+            var filename = string.Format("ResourcesWithActiveClocksAndNotOnProjectReport_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
@@ -242,7 +242,7 @@ namespace PraticeManagement.Reports.Badge
             var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, true, false, false, false, false, false, false).ToList());
             if (report.Count > 0)
             {
-                string dateRangeTitle = string.Format("Badged not on project report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
+                string dateRangeTitle = string.Format("Resources with active clocks and not on Project report for the period: {0} to {1}", dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat), dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat));
                 DataTable header = new DataTable();
                 header.Columns.Add(dateRangeTitle);
                 headerRowsCount = header.Rows.Count + 3;
@@ -251,19 +251,19 @@ namespace PraticeManagement.Reports.Badge
                 sheetStylesList.Add(HeaderSheetStyle);
                 sheetStylesList.Add(DataSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = "BadgedNotOnProject";
+                dataset.DataSetName = "ResourcesWithActiveClocksAndNotOnProject";
                 dataset.Tables.Add(header);
                 dataset.Tables.Add(data);
                 dataSetList.Add(dataset);
             }
             else
             {
-                string dateRangeTitle = "There are no resources with badged not on project for the selected dates.";
+                string dateRangeTitle = "There are no resources with active clocks and not on Project for the selected dates.";
                 DataTable header = new DataTable();
                 header.Columns.Add(dateRangeTitle);
                 sheetStylesList.Add(HeaderSheetStyle);
                 var dataset = new DataSet();
-                dataset.DataSetName = "BadgedNotOnProject";
+                dataset.DataSetName = "ResourcesWithActiveClocksAndNotOnProject";
                 dataset.Tables.Add(header);
                 dataSetList.Add(dataset);
             }
@@ -275,7 +275,8 @@ namespace PraticeManagement.Reports.Badge
             DataTable data = new DataTable();
             List<object> row;
 
-            data.Columns.Add("List of Resources Badged not on Project");
+            data.Columns.Add("List of Resources with Active Clocks, Not on Project");
+            data.Columns.Add("Resource Level");
             data.Columns.Add("18 Month Start");
             data.Columns.Add("Date Badge Deactivated");
             data.Columns.Add("18 Month End");
@@ -283,6 +284,7 @@ namespace PraticeManagement.Reports.Badge
             {
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
+                row.Add(reportItem.Person.Title.TitleName);
                 row.Add(reportItem.BadgeStartDate.HasValue?reportItem.BadgeStartDate.Value.ToShortDateString():string.Empty);
                 row.Add(reportItem.DeactivatedDate.HasValue ? reportItem.DeactivatedDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
