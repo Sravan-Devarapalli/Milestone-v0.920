@@ -4984,8 +4984,10 @@ namespace DataAccess
                 int badgeRequestDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeRequestDate);
                 int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusId);
                 int clockEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ClockEndDate);
-                int RequesterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RequesterId);
-                int RequesterIndex = reader.GetOrdinal(Constants.ColumnNames.Requester);
+                int requesterIdIndex = reader.GetOrdinal(Constants.ColumnNames.RequesterId);
+                int requesterIndex = reader.GetOrdinal(Constants.ColumnNames.Requester);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
 
                 while (reader.Read())
                 {
@@ -4994,7 +4996,12 @@ namespace DataAccess
                         Person = new Person()
                         {
                             LastName = reader.GetString(lastNameIndex),
-                            FirstName = reader.GetString(firstNameIndex)
+                            FirstName = reader.GetString(firstNameIndex),
+                            Title = new Title()
+                            {
+                                TitleId = reader.GetInt32(titleIdIndex),
+                                TitleName = reader.GetString(titleIndex)
+                            }
                         },
                         Project = new Project()
                         {
@@ -5010,8 +5017,8 @@ namespace DataAccess
                         BadgeEndDate = reader.GetDateTime(badgeEndDateIndex),
                         PlannedEndDate = reader.IsDBNull(badgeRequestDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeRequestDateIndex),
                         ProjectBadgeEndDate = reader.IsDBNull(clockEndDateIndex) ? null : (DateTime?)reader.GetDateTime(clockEndDateIndex),
-                        RequesterId = reader.IsDBNull(RequesterIdIndex) ? null : (int?)reader.GetInt32(RequesterIdIndex),
-                        Requester = reader.IsDBNull(RequesterIndex) ? string.Empty : reader.GetString(RequesterIndex)
+                        RequesterId = reader.IsDBNull(requesterIdIndex) ? null : (int?)reader.GetInt32(requesterIdIndex),
+                        Requester = reader.IsDBNull(requesterIndex) ? string.Empty : reader.GetString(requesterIndex)
                     };
                     result.Add(badgeResource);
                 }
