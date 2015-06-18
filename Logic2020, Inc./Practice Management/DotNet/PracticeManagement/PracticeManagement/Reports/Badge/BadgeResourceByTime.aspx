@@ -154,12 +154,12 @@
                 <asp:Chart ID="chartReport" runat="server" EnableViewState="true">
                     <Series>
                         <asp:Series Name="chartSeries1" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            BorderWidth="2" LegendText="18mos Clock Active Resources Not on Project" IsVisibleInLegend="false"
+                            BorderWidth="2" LegendText="Resources with Active Clocks, Not on Project" IsVisibleInLegend="false"
                             Color="Blue" XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
                             YValueMembers="badgedNotOnProjectcount" ToolTip="#VALY Resources">
                         </asp:Series>
                         <asp:Series Name="chartSeries11" ChartArea="MainArea" ChartType="Line" XValueType="String"
-                            BorderWidth="2" LegendText="18mos Clock Active Resources Not on Project: Person-Based Exceptions" IsVisibleInLegend="false"
+                            BorderWidth="2" LegendText="Resources with Person-Based Exceptions" IsVisibleInLegend="false"
                             Color="Brown" XAxisType="Primary" YAxisType="Primary" YValueType="Int32" XValueMember="month"
                             YValueMembers="badgedNotOnProjectExceptioncount" ToolTip="#VALY Resources">
                         </asp:Series>
