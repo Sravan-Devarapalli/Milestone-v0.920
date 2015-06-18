@@ -1206,6 +1206,11 @@ namespace PracticeManagementService
             return PersonDAL.GetBadgeRecordsByProjectId(projectId);
         }
 
+        public bool IsPersonSalaryTypeInGivenRange(int personId, DateTime startDate, DateTime endDate)
+        {
+            return PersonDAL.IsPersonSalaryTypeInGivenRange(personId, startDate, endDate);
+        }
+
         #endregion IPersonService Members
     }
 }
