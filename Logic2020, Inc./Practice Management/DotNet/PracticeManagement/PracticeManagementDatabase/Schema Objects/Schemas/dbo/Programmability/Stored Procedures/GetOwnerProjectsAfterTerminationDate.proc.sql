@@ -12,7 +12,7 @@ BEGIN
 		   proj.Name ProjectName,
 		   proj.ProjectNumber
 	FROM dbo.Project AS proj 
-	WHERE proj.ProjectOwnerId = @PersonId AND proj.ProjectStatusId =3 --Active Status
+	WHERE proj.ProjectManagerId = @PersonId AND proj.ProjectStatusId =3 --Active Status
 	ORDER BY proj.ProjectNumber
 	
 END
