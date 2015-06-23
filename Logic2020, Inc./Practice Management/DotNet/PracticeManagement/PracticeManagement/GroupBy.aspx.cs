@@ -693,7 +693,7 @@ namespace PraticeManagement
                     true);
 
                 PraticeManagement.Controls.DataHelper.FillProjectOwnerList(cblProjectOwner,
-                    "All Project Managers",
+                    "All People with Project Access",
                     true,
                     person);
 
