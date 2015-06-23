@@ -101,13 +101,13 @@
                 </tr>
                 <tr class="height30P">
                     <td class="ReportFilterLabels">
-                        Client Director:&nbsp;
+                        Executive in Charge:&nbsp;
                     </td>
                     <td class="textLeft Width90Percent">
                         <pmc:ScrollingDropDown ID="cblDirector" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            OnSelectedIndexChanged="cblDirector_OnSelectedIndexChanged" NoItemsType="All"
-                            onclick="scrollingDropdown_onclick('cblDirector','Client Director')" AutoPostBack="true"
-                            DropDownListType="Client Director" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
+                            OnSelectedIndexChanged="cblDirector_OnSelectedIndexChanged" NoItemsType="All" DropDownListTypePluralForm="Executives in Charge" DropdownListFirst="Executive" DropdownListSecond="in Charge"
+                            onclick="scrolling_onclick('cblDirector','Executive in Charge','s','Executives in Charge',33,'Executive','in Charge')" AutoPostBack="true"
+                            CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
                         <ext:ScrollableDropdownExtender ID="sdeDirector" runat="server" TargetControlID="cblDirector"
                             UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
