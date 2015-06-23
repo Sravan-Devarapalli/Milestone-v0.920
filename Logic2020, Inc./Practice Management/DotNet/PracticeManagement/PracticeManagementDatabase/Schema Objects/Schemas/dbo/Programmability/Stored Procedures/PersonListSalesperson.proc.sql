@@ -55,9 +55,9 @@ BEGIN
 				SP.PracticeOwnedName,
 				SP.TelephoneNumber
 		FROM Project P
-		LEFT JOIN ProjectManagers PM ON PM.ProjectId = P.ProjectId
+		LEFT JOIN ProjectAccess PM ON PM.ProjectId = P.ProjectId
 		JOIN v_Person SP ON SP.PersonId = P.SalesPersonId
-		WHERE (PM.ProjectManagerId = @PersonId OR P.SalesPersonId = @PersonId OR P.projectOwnerId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
+		WHERE (PM.ProjectAccessId = @PersonId OR P.SalesPersonId = @PersonId OR P.ProjectManagerId = @PersonId) --Logged in User should be Project Manager or Sales Person of the Project.
 			AND (SP.PersonStatusId IN (1,5) /* Active person only */
 					OR @IncludeInactive = 1)
 			AND sp.IsStrawman = 0
@@ -102,10 +102,10 @@ BEGIN
 			INSERT INTO @OwnerProjectSalesPersonList (PersonId) 
 			SELECT proj.SalesPersonId
 			FROM dbo.Project AS proj 
-			INNER JOIN  dbo.ProjectManagers AS projManagers ON proj.ProjectId = projManagers.ProjectId
-			WHERE projManagers.ProjectManagerId = @PersonId 
+			INNER JOIN  dbo.ProjectAccess AS projManagers ON proj.ProjectId = projManagers.ProjectId
+			WHERE projManagers.ProjectAccessId = @PersonId 
 				OR proj.SalesPersonId = @PersonId 
-				OR proj.projectOwnerId = @PersonId 
+				OR proj.ProjectManagerId = @PersonId 
 		END
 
 			;WITH    Salespersons
