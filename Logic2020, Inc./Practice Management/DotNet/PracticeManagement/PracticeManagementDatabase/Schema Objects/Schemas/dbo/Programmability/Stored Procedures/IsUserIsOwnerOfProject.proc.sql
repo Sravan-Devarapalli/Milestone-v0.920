@@ -14,9 +14,9 @@ AS
 	IF(@IsProjectId = 1)
 	BEGIN
 
-		IF EXISTS ( SELECT 1 FROM dbo.project AS p WHERE p.ProjectId = @Id AND ( p.ProjectOwnerId = @PersonId OR p.SalesPersonId = @PersonId))
+		IF EXISTS ( SELECT 1 FROM dbo.project AS p WHERE p.ProjectId = @Id AND ( p.ProjectManagerId = @PersonId OR p.SalesPersonId = @PersonId))
 			SELECT 'True'
-		ELSE IF EXISTS ( SELECT 1 FROM dbo.ProjectManagers AS pm WHERE pm.ProjectId = @Id AND ProjectManagerId = @PersonId )
+		ELSE IF EXISTS ( SELECT 1 FROM dbo.ProjectAccess AS pm WHERE pm.ProjectId = @Id AND ProjectAccessId = @PersonId )
 			SELECT 'True'
 		ELSE
 		SELECT 'False'
@@ -25,13 +25,13 @@ AS
 	BEGIN
 		IF EXISTS ( SELECT 1 FROM dbo.Milestone AS m
 						INNER JOIN dbo.project AS P ON P.projectId = m.projectId
-					WHERE m.MilestoneId = @Id AND (P.ProjectOwnerId = @PersonId OR p.SalesPersonId = @PersonId))
+					WHERE m.MilestoneId = @Id AND (P.ProjectManagerId = @PersonId OR p.SalesPersonId = @PersonId))
 			SELECT 'True'
-		ELSE IF EXISTS ( SELECT pm.ProjectManagerId  
+		ELSE IF EXISTS ( SELECT pm.ProjectAccessId  
 						FROM dbo.Milestone AS milestone 
-						INNER JOIN dbo.ProjectManagers AS pm ON pm.ProjectId = milestone.ProjectId
+						INNER JOIN dbo.ProjectAccess AS pm ON pm.ProjectId = milestone.ProjectId
 						WHERE milestone.MilestoneId = @Id 
-							AND ProjectManagerId = @PersonId 
+							AND ProjectAccessId = @PersonId 
 						)
 			SELECT 'True'
 		ELSE
