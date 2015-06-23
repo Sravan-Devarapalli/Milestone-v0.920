@@ -52,9 +52,9 @@ BEGIN
 		INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = P.GroupId
 		INNER JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
 		INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
-		LEFT JOIN dbo.Person PO ON PO.PersonId = P.ProjectOwnerId
+		LEFT JOIN dbo.Person PO ON PO.PersonId = P.ProjectManagerId
 		LEFT JOIN dbo.Person Mngr ON Mngr.PersonId = Pers.ManagerId
-		LEFT JOIN dbo.Person director ON director.PersonId = P.DirectorId
+		LEFT JOIN dbo.Person director ON director.PersonId = P.ExecutiveInChargeId
 		LEFT JOIN dbo.Title Ttle ON Ttle.TitleId = Pers.TitleId
 		WHERE P.ProjectStatusId NOT IN (1,5) -- not in inactive and experimental
 		 AND PerS.PersonStatusId IN(1,5)  AND P.ProjectId !=174 AND MPE.StartDate <= @Enddate AND @StartDate <= MPE.EndDate
@@ -75,9 +75,9 @@ BEGIN
 			P.ProjectNumber AS [Project Number],
 			P.Status,
 			P.ProjectName AS [Project Name],
-			ISNULL(P.ClientDirector,'') AS [Client Director],
-			ISNULL(P.ProjectOwner,'') AS [Project Owner],
-			dbo.GetProjectManagerNames(P.ProjectId) AS [Project Managers],
+			ISNULL(P.ClientDirector,'') AS [Executive in Charge],
+			ISNULL(P.ProjectOwner,'') AS [Project Manager],
+			dbo.GetProjectManagerNames(P.ProjectId) AS [Project Access],
 			P.Manager AS [Career Manager],
 			CONVERT(DATE,MIN(P.Date))[Roll on Date],
 			CONVERT(DATE,MAX(P.Date))[Roll off Date],
