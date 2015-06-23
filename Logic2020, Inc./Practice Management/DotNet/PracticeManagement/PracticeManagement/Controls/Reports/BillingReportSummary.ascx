@@ -49,7 +49,7 @@
                 <table id="tblBillingReport" class="tablesorter PersonSummaryReport WholeWidth zebra">
                     <thead>
                         <tr>
-                            <th class="TextAlignLeftImp Width7Percent">
+                            <th class="TextAlignLeftImp Width8Per">
                                 Project Number
                             </th>
                             <th class="Width5Percent">
@@ -71,7 +71,7 @@
                                     BehaviorID="pcePracticeFilter" PopupControlID="pnlFilterPractice" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width10PerImp bgcolorE2EBFFImp">
+                            <th class="Width6PercentImp bgcolorE2EBFFImp">
                                 <asp:Label ID="lblLifetoDateProjected" runat="server"></asp:Label>
                             </th>
                             <th class="Width5Percent bgcolorE2EBFFImp">
@@ -89,7 +89,7 @@
                             <th class="Width5Percent bgColorE0DAECImp">
                                 Difference
                             </th>
-                            <th class="Width5Percent">
+                            <th class="Width6PercentImp">
                                 SalesPerson
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgSalespersonFilter" />
@@ -99,7 +99,7 @@
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th class="Width10PerImp">
-                                Project Manager(s)
+                                Project Access
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgProjectManagerFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceProjectManagerFilter" runat="server"
@@ -107,8 +107,8 @@
                                     PopupControlID="pnlFilterProjectManager" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width5Percent">
-                                Senior Manager
+                            <th class="Width9Percent">
+                                Engagement Manager
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgSeniorManagerFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceSeniorManagerFilter" runat="server"
@@ -116,15 +116,15 @@
                                     PopupControlID="pnlFilterSeniorManager" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width5Percent">
-                                Director
+                            <th class="Width10PerImp">
+                                Executive in Charge
                                 <img alt="Filter" title="Filter" src="../../Images/search_filter.png" class="PosAbsolute"
                                     runat="server" id="imgDirectorFilter" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceDirectorFilter" runat="server" TargetControlID="imgDirectorFilter"
                                     BehaviorID="pceDirectorFilter" PopupControlID="pnlFilterDirector" Position="Bottom">
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
-                            <th class="Width5Percent">
+                            <th>
                                 PONumber
                             </th>
                         </tr>
