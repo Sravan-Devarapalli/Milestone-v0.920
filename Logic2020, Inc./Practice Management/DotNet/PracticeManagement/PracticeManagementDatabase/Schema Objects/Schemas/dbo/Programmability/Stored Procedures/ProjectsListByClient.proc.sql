@@ -27,7 +27,7 @@ AS
 			   p.ClientIsChargeable,
 			   p.ProjectIsChargeable,
 			   p.ProjectManagersIdFirstNameLastName,
-			   p.DirectorId,
+			   p.ExecutiveInChargeId AS DirectorId,
 			   p.DirectorFirstName,
 			   p.DirectorLastName
 		  FROM dbo.v_Project AS p
@@ -67,7 +67,7 @@ AS
 			   p.ClientIsChargeable,
 			   p.ProjectIsChargeable,
 			   p.ProjectManagersIdFirstNameLastName,
-			   p.DirectorId,
+			   p.ExecutiveInChargeId AS DirectorId,
 			   p.DirectorFirstName,
 			   p.DirectorLastName
 		  FROM dbo.v_Project AS p
