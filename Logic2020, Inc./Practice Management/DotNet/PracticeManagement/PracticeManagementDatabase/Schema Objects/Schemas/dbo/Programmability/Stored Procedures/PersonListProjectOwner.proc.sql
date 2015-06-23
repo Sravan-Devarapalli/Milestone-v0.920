@@ -53,9 +53,9 @@ AS
 				'Unknown' AS 'ManagerFirstName',	-- just stubs 
 				'Unknown' AS 'ManagerLastName'	-- just stubs
 		FROM dbo.Project Proj
-		LEFT JOIN dbo.ProjectManagers PM ON PM.ProjectId = Proj.ProjectId
-		JOIN dbo.Person Pers ON PM.ProjectManagerId = Pers.PersonId
-		WHERE (PM.ProjectManagerId = @PersonId OR Proj.SalesPersonId = @PersonId OR proj.projectOwnerId = @PersonId )
+		LEFT JOIN dbo.ProjectAccess PM ON PM.ProjectId = Proj.ProjectId
+		JOIN dbo.Person Pers ON PM.ProjectAccessId = Pers.PersonId
+		WHERE (PM.ProjectAccessId = @PersonId OR Proj.SalesPersonId = @PersonId OR proj.ProjectManagerId = @PersonId )
 			AND (@IncludeInactive = 1 OR pers.PersonStatusId != 4)
 
 	END
@@ -102,8 +102,8 @@ AS
 				'Unknown' AS 'ManagerFirstName',	-- just stubs 
 				'Unknown' AS 'ManagerLastName'	-- just stubs
 		FROM dbo.Project AS proj
-		INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
-		INNER JOIN dbo.Person AS pers ON ( projManagers.ProjectManagerId = pers.PersonId OR  proj.projectownerId = pers.PersonId )
+		INNER JOIN dbo.ProjectAccess AS projManagers ON projManagers.ProjectId = proj.ProjectId
+		INNER JOIN dbo.Person AS pers ON ( projManagers.ProjectAccessId = pers.PersonId OR  proj.ProjectManagerId = pers.PersonId )
 		WHERE (@IncludeInactive = 1 OR pers.PersonStatusId != 4)
 				AND ( @PersonId IS NULL
 					  OR pers.PersonId IN (
