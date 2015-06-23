@@ -27,7 +27,7 @@ BEGIN
 		ON UIR.UserId = U.UserId  AND (C.Date between UIR.StartDate and ISNULL(uir.EndDate, @FutureDate) or Year(C.Date) BETWEEN Year(UIR.StartDate) AND ISNULL(Year(UIR.EndDate), Year(@FutureDate))
 		AND Month(C.Date) BETWEEN Month(UIR.StartDate) AND ISNULL(Month(UIR.EndDate), Month(@FutureDate)))
 		LEFT JOIN dbo.aspnet_Roles UR ON UIR.RoleId = UR.RoleId AND UR.RoleName='Client Director'
-		LEFT JOIN dbo.Project Proj ON proj.DirectorId = P.PersonId AND (C.Date BETWEEN Proj.StartDate 
+		LEFT JOIN dbo.Project Proj ON proj.ExecutiveInChargeId = P.PersonId AND (C.Date BETWEEN Proj.StartDate 
 				AND ISNULL(Proj.EndDate, @FutureDate) or Year(C.Date) BETWEEN Year(Proj.StartDate) AND ISNULL(Year(Proj.EndDate), Year(@FutureDate))
 		AND Month(C.Date) BETWEEN Month(Proj.StartDate) AND ISNULL(Month(Proj.EndDate), Month(@FutureDate)))
 		LEFT JOIN dbo.CategoryItemBudget CIB ON CIB.CategoryTypeId = @CategoryTypeId 
