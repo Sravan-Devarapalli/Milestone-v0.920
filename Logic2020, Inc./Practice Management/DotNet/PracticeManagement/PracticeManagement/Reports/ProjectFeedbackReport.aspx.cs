@@ -387,7 +387,7 @@ namespace PraticeManagement.Reports
             using (var serviceClient = new PersonServiceClient())
             {
                 var directorsList = serviceClient.GetPersonListWithRole("Client Director");
-                DataHelper.FillListDefaultWithEncodedName(cblDirector, "All Client Directors", directorsList,
+                DataHelper.FillListDefaultWithEncodedName(cblDirector, "All Executives in Charge", directorsList,
                                             false);
                 foreach (ListItem item in cblDirector.Items)
                 {
@@ -539,3 +539,4 @@ namespace PraticeManagement.Reports
         }
     }
 }
+
