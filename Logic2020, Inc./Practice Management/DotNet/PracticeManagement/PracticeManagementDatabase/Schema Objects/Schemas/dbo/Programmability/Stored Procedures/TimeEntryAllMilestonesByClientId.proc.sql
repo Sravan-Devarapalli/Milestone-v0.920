@@ -23,13 +23,13 @@ BEGIN
                 INNER JOIN dbo.MilestonePersonEntry AS mpe ON mp.MilestonePersonId = mpe.MilestonePersonId
                 INNER JOIN dbo.Milestone AS m ON m.MilestoneId = mp.MilestoneId
                 INNER JOIN dbo.Project AS proj ON proj.ProjectId = m.ProjectId
-				INNER JOIN dbo.ProjectManagers AS projManagers ON proj.ProjectId = projManagers.ProjectId
+				INNER JOIN dbo.ProjectAccess AS projManagers ON proj.ProjectId = projManagers.ProjectId
         WHERE   (proj.ClientId =  @ClientId  OR @ClientId IS NULL)
 				AND (
 						@PersonId IS NULL
-						OR projManagers.ProjectManagerId = @PersonId
-						OR proj.ProjectOwnerId = @PersonId
-						OR proj.DirectorId = @PersonId
+						OR projManagers.ProjectAccessId = @PersonId
+						OR proj.ProjectManagerId = @PersonId
+						OR proj.ExecutiveInChargeId = @PersonId
 						OR proj.SalesPersonId = @PersonId
 					)
 				AND (@ShowAll = 1 OR (@ShowAll = 0 AND (proj.ProjectStatusId = 3 or proj.ProjectStatusId = 6) ) )
@@ -41,14 +41,14 @@ BEGIN
 				P.ProjectNumber,
 				P.ClientId
         FROM dbo.Project P
-		INNER JOIN dbo.ProjectManagers AS projManagers ON P.ProjectId = projManagers.ProjectId
+		INNER JOIN dbo.ProjectAccess AS projManagers ON P.ProjectId = projManagers.ProjectId
         INNER JOIN Milestone M ON M.ProjectId = P.ProjectId
         WHERE (@ClientId IS NULL OR P.ClientId = @ClientId)
 				AND (
 						@PersonId IS NULL
-						OR projManagers.ProjectManagerId = @PersonId
-						OR p.ProjectOwnerId = @PersonId
-						OR P.DirectorId = @PersonId
+						OR projManagers.ProjectAccessId = @PersonId
+						OR p.ProjectManagerId = @PersonId
+						OR P.ExecutiveInChargeId = @PersonId
 						OR P.SalesPersonId = @PersonId
 					)
               AND (@ShowAll = 1 OR (@ShowAll = 0 AND (P.ProjectStatusId = 3 or P.ProjectStatusId = 6) ) )
