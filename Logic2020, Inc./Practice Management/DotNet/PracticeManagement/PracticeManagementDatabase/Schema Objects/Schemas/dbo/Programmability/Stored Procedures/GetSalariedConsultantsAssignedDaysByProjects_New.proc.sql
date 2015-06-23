@@ -55,9 +55,9 @@ BEGIN
 		INNER JOIN dbo.ProjectGroup PG ON PG.GroupId = P.GroupId
 		INNER JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
 		INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
-		LEFT JOIN dbo.Person PO ON PO.PersonId = P.ProjectOwnerId
+		LEFT JOIN dbo.Person PO ON PO.PersonId = P.ProjectManagerId
 		LEFT JOIN dbo.Person Mngr ON Mngr.PersonId = Pers.ManagerId
-		LEFT JOIN dbo.Person director ON director.PersonId = P.DirectorId
+		LEFT JOIN dbo.Person director ON director.PersonId = P.ExecutiveInChargeId
 		LEFT JOIN dbo.Title Ttle ON Ttle.TitleId = Pers.TitleId
 		LEFT JOIN dbo.Practice practice ON practice.PracticeId = P.PracticeId
 		WHERE P.ProjectStatusId NOT IN (1,5) -- not in inactive and experimental
@@ -86,7 +86,7 @@ BEGIN
 			P.ProjectName AS [Project Name],
 			ISNULL(P.ClientDirector,'') AS [Client Director],
 			ISNULL(P.ProjectOwner,'') AS [Project Owner],
-			dbo.GetProjectManagerNames(P.ProjectId) AS [Project Managers],
+			dbo.GetProjectManagerNames(P.ProjectId) AS [Project Access],
 			P.Manager AS [Career Manager],
 			CONVERT(DATE,MIN(P.Date))[Roll on Date],
 			CONVERT(DATE,MAX(P.Date))[Roll off Date],
@@ -245,8 +245,8 @@ SELECT
 		ISNULL(P.BusinessUnitCode,T.[Business Unit]) AS [Business Unit],
 		ISNULL(P.[Business Unit],T.[Business Unit Name]) AS [Business Unit Name], 
 		ISNULL(P.[Business Group],T.BusinessGroup) AS [Business Group],
-		Po.LastName + ', '+ Po.FirstName AS ProjectOwner,
-		director.LastName + ', '+ director.FirstName AS ClientDirector,
+		Po.LastName + ', '+ Po.FirstName AS [Project Manager],
+		director.LastName + ', '+ director.FirstName AS [Executive in Charge],
 		dbo.GetProjectManagerNames(PRO.ProjectId) AS [Project Managers],
 		P.[Roll on Date],
 		P.[Roll off Date],
@@ -267,9 +267,9 @@ FULL JOIN TimeEntryCTE T ON T.PersonId = P.PersonId AND T.Project = P.[Project N
 INNER JOIN dbo.Project PRO ON PRO.ProjectNumber = ISNULL(T.Project , P.[Project Number])
 INNER JOIN  v_Person Pers ON Pers.PersonId = ISNULL(P.PersonId,T.PersonId)
 INNER JOIN dbo.PersonDivision pd ON pd.DivisionId = Pers.DivisionId
-LEFT JOIN dbo.Person PO ON PO.PersonId = PRO.ProjectOwnerId
+LEFT JOIN dbo.Person PO ON PO.PersonId = PRO.ProjectManagerId
 LEFT JOIN dbo.Title Ttle ON Ttle.TitleId = Pers.TitleId
-LEFT JOIN dbo.Person director ON director.PersonId = PRO.DirectorId
+LEFT JOIN dbo.Person director ON director.PersonId = PRO.ExecutiveInChargeId
 LEFT JOIN dbo.Person Mngr ON Mngr.PersonId = Pers.ManagerId
 ORDER BY ISNULL(T.Employee,P.[Last Name]+', '+P.[First Name]), T.Date
 END
