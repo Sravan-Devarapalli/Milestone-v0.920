@@ -45,9 +45,9 @@ BEGIN
 		   BG.Name AS [Business Group],
 		   PG.Name AS [Business Unit],
 		   pra.Name AS [Practice Area],
-		   dbo.GetProjectManagerNames(pro.ProjectId) AS [Project Manager(s)],
-		   smanager.LastName+', '+smanager.FirstName AS [Senior Manager],
-		   directorId.LastName+', '+directorId.FirstName AS Director 
+		   dbo.GetProjectManagerNames(pro.ProjectId) AS [Project Access],
+		   smanager.LastName+', '+smanager.FirstName AS [Engagement Manager],
+		   directorId.LastName+', '+directorId.FirstName AS [Executive in Charge] 
 	FROM PersonPTO PPT 
 	LEFT JOIN v_MilestonePerson VMP ON PPT.PersonId = VMP.PersonId 
 									AND VMP.StartDate <= PPT.EndDate AND PPT.StartDate <= VMP.EndDate 
@@ -60,8 +60,8 @@ BEGIN
 	LEFT JOIN dbo.ProjectGroup PG ON PG.GroupId = pro.GroupId	
 	LEFT JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
 	LEFT JOIN dbo.Practice pra ON pra.PracticeId = pro.PracticeId
-	LEFT JOIN dbo.Person smanager ON smanager.PersonId = pro.SeniorManagerId
-	LEFT JOIN dbo.Person directorId ON directorId.PersonId = pro.DirectorId
+	LEFT JOIN dbo.Person smanager ON smanager.PersonId = pro.EngagementManagerId
+	LEFT JOIN dbo.Person directorId ON directorId.PersonId = pro.ExecutiveInChargeId
 	LEFT JOIN dbo.Client C ON C.ClientId = pro.ClientId
 	GROUP BY   PPT.PersonId,
 			   p.EmployeeNumber,
@@ -84,9 +84,9 @@ BEGIN
 			   pro.PracticeId,
 			   pra.Name,
 			   pro.ProjectId,
-			   pro.SeniorManagerId,
+			   pro.EngagementManagerId,
 			   smanager.LastName+', '+smanager.FirstName,
-			   pro.DirectorId,
+			   pro.ExecutiveInChargeId,
 			   directorId.LastName,
 			   directorId.FirstName,
 			   PPT.DayOff,
