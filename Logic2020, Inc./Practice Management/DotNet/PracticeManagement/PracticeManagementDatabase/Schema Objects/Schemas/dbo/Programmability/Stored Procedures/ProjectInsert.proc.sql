@@ -63,7 +63,7 @@ BEGIN
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, DirectorId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectOwnerId, SowBudget, POAmount, Discount,PricingListId,BusinessTypeId,SeniorManagerId,IsSeniorManagerUnassigned,ReviewerId,PONumber,SalesPersonId)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, ExecutiveInChargeId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectManagerId, SowBudget, POAmount, Discount,PricingListId,BusinessTypeId,EngagementManagerId,IsSeniorManagerUnassigned,ReviewerId,PONumber,SalesPersonId)
 	     VALUES (@ClientId, @Terms, @Name, @PracticeId,
 	             @ProjectStatusId, @ProjectNumberLocal, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget, @POAmount, @Discount,@PricingListId,@BusinessTypeId,@SeniorManagerId,@IsSeniorManagerUnassigned,@CSATOwnerId,@PONumber,@SalesPersonId)
 	
@@ -90,7 +90,7 @@ BEGIN
 
 	END
 
-	INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
+	INSERT INTO ProjectAccess(ProjectId,ProjectAccessId)
 	SELECT  @ProjectId,ResultId
 	FROM    dbo.ConvertStringListIntoTable(@ProjectManagerIdsList)
 
