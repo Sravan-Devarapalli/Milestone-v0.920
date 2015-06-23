@@ -111,9 +111,9 @@ BEGIN
 		INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = P.ProjectStatusId
 		INNER JOIN dbo.Practice PR ON PR.PracticeId = P.PracticeId
 		INNER JOIN dbo.Person Per3 ON Per3.PersonId = P.SalesPersonId
-		INNER JOIN dbo.Person Per1 ON Per1.PersonId = P.ProjectOwnerId
+		INNER JOIN dbo.Person Per1 ON Per1.PersonId = P.ProjectManagerId
 		LEFT JOIN EstimatedRevenueByProject ERP ON ERP.ProjectId = P.ProjectId
-		LEFT JOIN dbo.Person Per2 ON Per2.PersonId = P.DirectorId
+		LEFT JOIN dbo.Person Per2 ON Per2.PersonId = P.ExecutiveInChargeId
 		LEFT JOIN dbo.Person CSATOwner ON CSATOwner.PersonId = P.ReviewerId
 		LEFT JOIN RecentProjectCompletedStatus RPCS ON RPCS.ProjectId = P.ProjectId 
 		LEFT JOIN ProjectsRecentlyUpdatedCSATS PRC ON P.ProjectId = PRC.ProjectId 
