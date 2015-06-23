@@ -17,7 +17,7 @@ namespace PraticeManagement.Controls
 
             DataHelper.FillProjectOwnerList(
                 msddPracticeManagers,
-                "All Project Managers",
+                "All People with Project Access",
                 null, true);
 
             DataHelper.FillPracticeList(
@@ -62,3 +62,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
