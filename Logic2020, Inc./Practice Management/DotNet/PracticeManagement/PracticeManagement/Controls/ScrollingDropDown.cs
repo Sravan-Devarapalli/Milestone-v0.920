@@ -417,6 +417,18 @@ namespace PraticeManagement.Controls
             set;
         }
 
+        public string DropdownListFirst
+        {
+            get;
+            set;
+        }
+
+        public string DropdownListSecond
+        {
+            get;
+            set;
+        }
+
         public bool isSelected
         {
             get
@@ -468,10 +480,15 @@ namespace PraticeManagement.Controls
                         text = "Multiple " + this.DropDownListTypePluralForm + " selected";
                     }
 
-                    if (counter == 0)
+                    if (counter == 0 && string.IsNullOrEmpty(DropdownListFirst))
                     {
                         this.PluralForm = string.IsNullOrEmpty(this.PluralForm) ? "s" : this.PluralForm;
                         text = "-- Select " + this.DropDownListType + "(" + this.PluralForm + ") --";
+                    }
+                    else if (counter == 0 && !string.IsNullOrEmpty(DropdownListFirst))
+                    {
+                        this.PluralForm = string.IsNullOrEmpty(this.PluralForm) ? "s" : this.PluralForm;
+                        text = "-- Select " + this.DropdownListFirst + "(" + this.PluralForm + ") " + this.DropdownListSecond + " --";
                     }
                 }
                 return text;
@@ -527,6 +544,19 @@ namespace PraticeManagement.Controls
                     }
                 }
             }
+        }
+
+        public bool IsItemSelected(int item)
+        {
+            foreach (ListItem itm in Items)
+            {
+                int val;
+                if (int.TryParse(itm.Value, out val))
+                {
+                    return val==item;
+                }
+            }
+            return false;
         }
 
         /// <summary>
