@@ -186,10 +186,10 @@ namespace PraticeManagement.Controls.Reports
             data.Columns.Add("Account");
             data.Columns.Add("Business Group");
             data.Columns.Add("Business Unit");
-            data.Columns.Add("Client Director");
-            data.Columns.Add("Senior Manager");
-            data.Columns.Add("Project Owner");
-            data.Columns.Add("Project Manager(s)");
+            data.Columns.Add("Executive in Charge");
+            data.Columns.Add("Engagement Manager");
+            data.Columns.Add("Project Manager");
+            data.Columns.Add("Project Access");
             data.Columns.Add("Review Period Start Date");
             data.Columns.Add("Review Period End Date");
             data.Columns.Add("Review Status");
@@ -535,7 +535,7 @@ namespace PraticeManagement.Controls.Reports
             var resources = new List<Person>();
             resources = reportData.SelectMany(b => b.Project.ProjectManagers.Select(r => new Person { Id = r.Id, FirstName = r.FirstName, LastName = r.LastName }).Distinct().ToList().OrderBy(s => s.Name)).ToList();
 
-            DataHelper.FillListDefault(cblProjectManagers.CheckBoxListObject, "All Project Managers", resources.Distinct().ToArray(), false, "Id", "Name");
+            DataHelper.FillListDefault(cblProjectManagers.CheckBoxListObject, "All People with Project Access", resources.Distinct().ToArray(), false, "Id", "Name");
             cblProjectManagers.SelectAllItems(true);
             return resources.Distinct().ToArray().Length;
         }
@@ -570,3 +570,4 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
+
