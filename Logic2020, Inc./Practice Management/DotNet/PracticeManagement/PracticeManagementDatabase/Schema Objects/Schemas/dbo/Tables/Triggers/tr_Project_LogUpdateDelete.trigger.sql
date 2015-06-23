@@ -27,21 +27,21 @@ BEGIN
 				,i.GroupId
 				,PG.Name AS 'ProjectGroup'
 				,i.Description
-				,i.DirectorId
-				,CASE WHEN i.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
+				,i.ExecutiveInChargeId AS DirectorId
+				,CASE WHEN i.ExecutiveInChargeId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
 				      ELSE '' 
-				      END AS 'ClientDirector'
+				      END AS 'ExecutiveInCharge'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
-				i.ProjectOwnerId,
-				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+				i.ProjectManagerId AS ProjectOwnerId,
+				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectManager]
 				, i.SowBudget
 				,i.BusinessTypeId
 				,bt.Name AS [BusinessType]
 				,i.PricingListId
 				,pt.Name AS [PricingList]
-				,i.SeniorManagerId
-				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
+				,i.EngagementManagerId AS SeniorManagerId
+				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS EngagementManager
 				,i.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 				,i.PONumber
@@ -55,12 +55,12 @@ BEGIN
 		       INNER JOIN dbo.Practice AS p ON i.PracticeId = p.PracticeId
 		       INNER JOIN dbo.Person AS pm ON p.PracticeManagerId = pm.PersonId
 		       INNER JOIN dbo.ProjectStatus AS s ON i.ProjectStatusId = s.ProjectStatusId
-			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectOwnerId
+			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectManagerId
 			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = i.GroupId
-			   LEFT  JOIN dbo.Person AS Dir ON Dir.PersonId = i.DirectorId
+			   LEFT  JOIN dbo.Person AS Dir ON Dir.PersonId = i.ExecutiveInChargeId
 			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = i.BusinessTypeId
 			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = i.PricingListId
-			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = i.SeniorManagerId
+			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = i.EngagementManagerId
 			   LEFT JOIN dbo.Person AS Rev ON Rev.PersonId = i.[ReviewerId]
 			   LEFT JOIN dbo.Person AS salesPerson ON salesPerson.PersonId = i.[SalesPersonId]
 	),
@@ -83,21 +83,21 @@ BEGIN
 				,d.GroupId
 				,PG.Name AS 'ProjectGroup'
 				,d.Description
-				,d.DirectorId
-				,CASE WHEN d.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
+				,d.ExecutiveInChargeId AS DirectorId
+				,CASE WHEN d.ExecutiveInChargeId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
 				      ELSE '' 
-				      END AS 'ClientDirector'
+				      END AS 'ExecutiveInCharge'
 				,CASE WHEN d.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
-						d.ProjectOwnerId,
-				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+						d.ProjectManagerId AS ProjectOwnerId,
+				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectManager]
 				,d.SowBudget
 				,d.BusinessTypeId
 				,bt.Name AS [BusinessType]
 				,d.PricingListId
 				,pt.Name AS [PricingList]
-				,d.SeniorManagerId
-				,CASE WHEN d.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
+				,d.EngagementManagerId AS SeniorManagerId
+				,CASE WHEN d.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS EngagementManager
 				,d.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 				,d.PONumber
@@ -111,12 +111,12 @@ BEGIN
 		       INNER JOIN dbo.Practice AS p ON d.PracticeId = p.PracticeId
 		       INNER JOIN dbo.Person AS pm ON p.PracticeManagerId = pm.PersonId
 		       INNER JOIN dbo.ProjectStatus AS s ON d.ProjectStatusId = s.ProjectStatusId
-			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = d.ProjectOwnerId
+			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = d.ProjectManagerId
 			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = d.GroupId
-			   LEFT JOIN dbo.Person AS Dir ON Dir.PersonId = d.DirectorId
+			   LEFT JOIN dbo.Person AS Dir ON Dir.PersonId = d.ExecutiveInChargeId
 			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = d.BusinessTypeId
 			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = d.PricingListId
-			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = d.SeniorManagerId
+			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = d.EngagementManagerId
 			   LEFT JOIN dbo.Person AS Rev ON Rev.PersonId = d.[ReviewerId]
 			   LEFT JOIN dbo.Person AS salesPerson ON salesPerson.PersonId = d.[SalesPersonId]
 	)
@@ -179,7 +179,7 @@ BEGIN
 	 WHERE i.ProjectId IS NULL -- deleted record
 	    -- Detect changes
 	    OR ISNULL(i.ClientId, 0) <> ISNULL(d.ClientId, 0)
-	    OR ISNULL(i.DirectorId, 0) <> ISNULL(d.DirectorId, 0)
+	    OR ISNULL(i.ExecutiveInChargeId, 0) <> ISNULL(d.ExecutiveInChargeId, 0)
 	    OR ISNULL(i.GroupId, 0) <> ISNULL(d.GroupId,0)
 	    OR ISNULL(i.Discount, 0) <> ISNULL(d.Discount, 0)
 	    OR ISNULL(i.Terms, 0) <> ISNULL(d.Terms, 0)
@@ -191,9 +191,9 @@ BEGIN
 	    OR ISNULL(i.StartDate, '2029-10-31') <> ISNULL(d.StartDate, '2029-10-31')
 	    OR ISNULL(i.EndDate, '2029-10-31') <> ISNULL(d.EndDate, '2029-10-31')
 	    OR i.IsChargeable <> d.IsChargeable
-		OR i.ProjectOwnerId <> d.ProjectOwnerId
+		OR i.ProjectManagerId <> d.ProjectManagerId
 		OR ISNULL(i.[ReviewerId], 0) <> ISNULL(d.[ReviewerId], 0)
-		OR ISNULL(i.SeniorManagerId, 0) <> ISNULL(d.SeniorManagerId, 0)
+		OR ISNULL(i.EngagementManagerId, 0) <> ISNULL(d.EngagementManagerId, 0)
 	    OR ISNULL(i.Description,'') <> ISNULL(d.Description, '')
 	    OR ISNULL(i.SowBudget, 0) <> ISNULL(d.SowBudget, 0)
 		OR ISNULL(i.BusinessTypeId, 0) <> ISNULL(d.BusinessTypeId, 0)
@@ -220,21 +220,21 @@ BEGIN
 				,i.GroupId
 				,PG.Name AS 'ProjectGroup'
 				,i.Description
-				,i.DirectorId
-				,CASE WHEN i.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
+				,i.ExecutiveInChargeId AS DirectorId
+				,CASE WHEN i.ExecutiveInChargeId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
 				      ELSE '' 
-				      END AS 'ClientDirector'
+				      END AS 'ExecutiveInCharge'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
-				i.ProjectOwnerId,
-				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+				i.ProjectManagerId AS ProjectOwnerId,
+				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectManager]
 				, i.SowBudget
 				,i.BusinessTypeId
 				,bt.Name AS [BusinessType]
 				,i.PricingListId
 				,pt.Name AS [PricingList]
-				,i.SeniorManagerId
-				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
+				,i.EngagementManagerId AS SeniorManagerId
+				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS EngagementManager
 				,i.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 				,i.PONumber
@@ -248,12 +248,12 @@ BEGIN
 		       INNER JOIN dbo.Practice AS p ON i.PracticeId = p.PracticeId
 		       INNER JOIN dbo.Person AS pm ON p.PracticeManagerId = pm.PersonId
 		       INNER JOIN dbo.ProjectStatus AS s ON i.ProjectStatusId = s.ProjectStatusId
-			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectOwnerId
+			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectManagerId
 			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = i.GroupId
-			   LEFT  JOIN dbo.Person AS Dir ON Dir.PersonId = i.DirectorId
+			   LEFT  JOIN dbo.Person AS Dir ON Dir.PersonId = i.ExecutiveInChargeId
 			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = i.BusinessTypeId
 			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = i.PricingListId
-			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = i.SeniorManagerId
+			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = i.EngagementManagerId
 			   LEFT JOIN dbo.Person AS Rev ON Rev.PersonId = i.[ReviewerId]
 			   LEFT JOIN dbo.Person AS salesPerson ON salesPerson.PersonId = i.[SalesPersonId]
 	),
@@ -277,21 +277,21 @@ BEGIN
 				,d.GroupId
 				,PG.Name AS 'ProjectGroup'
 				,d.Description
-				,d.DirectorId
-				,CASE WHEN d.DirectorId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
+				,d.ExecutiveInChargeId AS DirectorId
+				,CASE WHEN d.ExecutiveInChargeId IS NOT NULL THEN Dir.LastName + ', ' + Dir.FirstName 
 				      ELSE '' 
-				      END AS 'ClientDirector'
+				      END AS 'ExecutiveInCharge'
 				,CASE WHEN d.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
-						d.ProjectOwnerId,
-				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+						d.ProjectManagerId AS ProjectOwnerId,
+				ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectManager]
 				,d.SowBudget
 				,d.BusinessTypeId
 				,bt.Name AS [BusinessType]
 				,d.PricingListId
 				,pt.Name AS [PricingList]
-				,d.SeniorManagerId
-				,CASE WHEN d.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
+				,d.EngagementManagerId AS SeniorManagerId
+				,CASE WHEN d.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS EngagementManager
 				,d.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 				,d.PONumber
@@ -305,12 +305,12 @@ BEGIN
 		       INNER JOIN dbo.Practice AS p ON d.PracticeId = p.PracticeId
 		       INNER JOIN dbo.Person AS pm ON p.PracticeManagerId = pm.PersonId
 		       INNER JOIN dbo.ProjectStatus AS s ON d.ProjectStatusId = s.ProjectStatusId
-			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = d.ProjectOwnerId
+			   LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = d.ProjectManagerId
 			   INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = d.GroupId
-			   LEFT JOIN dbo.Person AS Dir ON Dir.PersonId = d.DirectorId
+			   LEFT JOIN dbo.Person AS Dir ON Dir.PersonId = d.ExecutiveInChargeId
 			   LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = d.BusinessTypeId
 			   LEFT JOIN dbo.PricingList pt ON pt.PricingListId = d.PricingListId
-			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = d.SeniorManagerId
+			   LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = d.EngagementManagerId
 			   LEFT JOIN dbo.Person AS Rev ON Rev.PersonId = d.[ReviewerId]
 			   LEFT JOIN dbo.Person AS salesPerson ON salesPerson.PersonId = d.[SalesPersonId]
 			   Left join inserted i on i.ProjectId = d.ProjectId
@@ -366,7 +366,7 @@ BEGIN
 	           WHEN i.ProjectId IS NULL THEN 5
 	           ELSE 4
 	       END AS ActivityTypeID,l.SessionID,l.SystemUser,l.Workstation,l.ApplicationName,l.UserLogin,l.PersonID,l.LastName,l.FirstName,
-		   Data = CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.ProjectId,NEW_VALUES.Name,NEW_VALUES.DirectorId,NEW_VALUES.ClientDirector,OLD_VALUES.ProjectId,OLD_VALUES.NewName as Name,OLD_VALUES.DirectorId,OLD_VALUES.ClientDirector
+		   Data = CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.ProjectId,NEW_VALUES.Name,NEW_VALUES.DirectorId,NEW_VALUES.ExecutiveInCharge,OLD_VALUES.ProjectId,OLD_VALUES.NewName as Name,OLD_VALUES.DirectorId,OLD_VALUES.ExecutiveInCharge
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.ProjectId = OLD_VALUES.ProjectId
 			           WHERE NEW_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId) OR OLD_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId)
@@ -375,7 +375,7 @@ BEGIN
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.ProjectId = d.ProjectId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
-	 WHERE i.ProjectId IS NULL OR ISNULL(i.DirectorId, 0) <> ISNULL(d.DirectorId, 0)
+	 WHERE i.ProjectId IS NULL OR ISNULL(i.ExecutiveInChargeId, 0) <> ISNULL(d.ExecutiveInChargeId, 0)
 	 UNION ALL
 	 SELECT CASE
 	           WHEN d.ProjectId IS NULL THEN 3 -- Actually is redundant
@@ -558,7 +558,7 @@ BEGIN
 	           WHEN i.ProjectId IS NULL THEN 5
 	           ELSE 4
 	       END AS ActivityTypeID,l.SessionID,l.SystemUser,l.Workstation,l.ApplicationName,l.UserLogin,l.PersonID,l.LastName,l.FirstName,
-		   Data = CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.ProjectId,NEW_VALUES.Name,NEW_VALUES.ProjectOwnerId,NEW_VALUES.ProjectOwner,OLD_VALUES.ProjectId,OLD_VALUES.NewName as Name,OLD_VALUES.ProjectOwnerId,OLD_VALUES.ProjectOwner
+		   Data = CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.ProjectId,NEW_VALUES.Name,NEW_VALUES.ProjectOwnerId,NEW_VALUES.ProjectManager,OLD_VALUES.ProjectId,OLD_VALUES.NewName as Name,OLD_VALUES.ProjectOwnerId,OLD_VALUES.ProjectManager
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.ProjectId = OLD_VALUES.ProjectId
 			           WHERE NEW_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId) OR OLD_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId)
@@ -567,7 +567,7 @@ BEGIN
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.ProjectId = d.ProjectId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
-	 WHERE i.ProjectId IS NULL OR i.ProjectOwnerId <> d.ProjectOwnerId
+	 WHERE i.ProjectId IS NULL OR i.ProjectManagerId <> d.ProjectManagerId
 	UNION ALL
 	 SELECT CASE
 	           WHEN d.ProjectId IS NULL THEN 3 -- Actually is redundant
@@ -591,7 +591,7 @@ BEGIN
 	           WHEN i.ProjectId IS NULL THEN 5
 	           ELSE 4
 	       END AS ActivityTypeID,l.SessionID,l.SystemUser,l.Workstation,l.ApplicationName,l.UserLogin,l.PersonID,l.LastName,l.FirstName,
-		   Data = CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.ProjectId,NEW_VALUES.Name,NEW_VALUES.SeniorManagerId,NEW_VALUES.SeniorManager,OLD_VALUES.ProjectId,OLD_VALUES.NewName as Name,OLD_VALUES.SeniorManagerId,OLD_VALUES.SeniorManager
+		   Data = CONVERT(NVARCHAR(MAX),(SELECT NEW_VALUES.ProjectId,NEW_VALUES.Name,NEW_VALUES.SeniorManagerId,NEW_VALUES.EngagementManager,OLD_VALUES.ProjectId,OLD_VALUES.NewName as Name,OLD_VALUES.SeniorManagerId,OLD_VALUES.EngagementManager
 					    FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.ProjectId = OLD_VALUES.ProjectId
 			           WHERE NEW_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId) OR OLD_VALUES.ProjectId = ISNULL(i.ProjectId, d.ProjectId)
@@ -600,7 +600,7 @@ BEGIN
 	  FROM inserted AS i
 	       FULL JOIN deleted AS d ON i.ProjectId = d.ProjectId
 	       INNER JOIN dbo.SessionLogData AS l ON l.SessionID = @@SPID
-	 WHERE i.ProjectId IS NULL OR ISNULL(i.SeniorManagerId, 0) <> ISNULL(d.SeniorManagerId, 0)
+	 WHERE i.ProjectId IS NULL OR ISNULL(i.EngagementManagerId, 0) <> ISNULL(d.EngagementManagerId, 0)
 	 	UNION ALL
 	 SELECT CASE
 	           WHEN d.ProjectId IS NULL THEN 3 -- Actually is redundant
