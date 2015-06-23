@@ -56,9 +56,9 @@ BEGIN
 		   pro.PracticeId,
 		   pra.Name AS PracticeAreaName,
 		   dbo.GetProjectManagerNames(pro.ProjectId) AS ProjectManagers,
-		   pro.SeniorManagerId,
+		   pro.EngagementManagerId AS SeniorManagerId,
 		   smanager.LastName+', '+smanager.FirstName AS SeniorManagerName,
-		   pro.DirectorId,
+		   pro.ExecutiveInChargeId AS DirectorId,
 		   directorId.LastName AS DirectorLastName,
 		   directorId.FirstName AS DirectorFirstName 
 	FROM PersonPTO PPT 
@@ -73,8 +73,8 @@ BEGIN
 	LEFT JOIN dbo.ProjectGroup PG ON PG.GroupId = pro.GroupId	
 	LEFT JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
 	LEFT JOIN dbo.Practice pra ON pra.PracticeId = pro.PracticeId
-	LEFT JOIN dbo.Person smanager ON smanager.PersonId = pro.SeniorManagerId
-	LEFT JOIN dbo.Person directorId ON directorId.PersonId = pro.DirectorId
+	LEFT JOIN dbo.Person smanager ON smanager.PersonId = pro.EngagementManagerId
+	LEFT JOIN dbo.Person directorId ON directorId.PersonId = pro.ExecutiveInChargeId
 	LEFT JOIN dbo.Client C ON C.ClientId = pro.ClientId
 	GROUP BY   PPT.PersonId,
 			   p.EmployeeNumber,
@@ -97,9 +97,9 @@ BEGIN
 			   pro.PracticeId,
 			   pra.Name,
 			   pro.ProjectId,
-			   pro.SeniorManagerId,
+			   pro.EngagementManagerId,
 			   smanager.LastName+', '+smanager.FirstName,
-			   pro.DirectorId,
+			   pro.ExecutiveInChargeId,
 			   directorId.LastName,
 			   directorId.FirstName,
 			   PPT.DayOff,
