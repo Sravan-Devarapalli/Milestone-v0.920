@@ -103,14 +103,14 @@ AS
 	        P.IsChargeable AS [ProjectIsChargeable],
 		   P.SalesPersonId ,
 		   sperson.LastName+', ' +sperson.FirstName AS 'SalespersonName' ,
-		   P.DirectorId,
+		   P.ExecutiveInChargeId AS DirectorId,
 		   d.LastName AS 'DirectorLastName',
 		   d.FirstName AS 'DirectorFirstName',
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments,
 		   M.MilestoneId,
 		   M.Description AS MilestoneName,
-		   P.ProjectOwnerId,
+		   P.ProjectManagerId AS ProjectOwnerId,
 		   Powner.LastName AS [ProjectOwnerLastName],
 		   Powner.FirstName AS [ProjectOwnerFirstName],
 		   dbo.GetProjectManagerList(P.ProjectId) AS ProjectManagersIdFirstNameLastName,
@@ -128,10 +128,10 @@ AS
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = P.GroupId
 	LEFT JOIN dbo.BusinessGroup AS BG ON PG.BusinessGroupId=BG.BusinessGroupId
 	LEFT JOIN dbo.PricingList AS PL ON P.PricingListId=PL.PricingListId 
-	LEFT JOIN dbo.Person as d on d.PersonId = P.DirectorId
+	LEFT JOIN dbo.Person as d on d.PersonId = P.ExecutiveInChargeId
 	LEFT JOIN dbo.Person AS sperson ON sperson.PersonId = P.SalesPersonId
-	LEFT JOIN dbo.Person AS Powner ON Powner.PersonId = P.ProjectOwnerId
-	LEFT JOIN dbo.Person as sm on sm.PersonId = p.SeniorManagerId
+	LEFT JOIN dbo.Person AS Powner ON Powner.PersonId = P.ProjectManagerId
+	LEFT JOIN dbo.Person as sm on sm.PersonId = p.EngagementManagerId
 	LEFT JOIN dbo.Person as re on re.PersonId = p.ReviewerId
 	OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = P.ProjectId) A
 	WHERE	   ( (P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))
@@ -139,8 +139,8 @@ AS
 			AND ( @ProjectGroupIds IS NULL OR P.GroupId IN (SELECT * FROM @ProjectGroupsList) )
 			AND ( @PracticeIds IS NULL OR P.PracticeId IN (SELECT * FROM @PracticesList) OR P.PracticeId IS NULL )
 			AND ( @ProjectOwnerIds IS NULL 
-					OR EXISTS (SELECT 1 FROM dbo.ProjectManagers AS projManagers
-								JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectManagerId
+					OR EXISTS (SELECT 1 FROM dbo.ProjectAccess AS projManagers
+								JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectAccessId
 									WHERE projManagers.ProjectId = P.ProjectId
 							  )
 					OR Powner.PersonId IN ( SELECT ID FROM @ProjectOwnersList)
@@ -161,7 +161,7 @@ AS
 			AND (@UserHasHighRoleThanProjectLead IS NULL
 					OR @UserHasHighRoleThanProjectLead > 0
 					OR (@UserHasHighRoleThanProjectLead = 0
-						AND ( EXISTS (SELECT 1 FROM dbo.ProjectManagers projManagers2 WHERE projManagers2.ProjectId = P.ProjectId AND projManagers2.ProjectManagerId = @PersonId) OR P.SalesPersonId = @PersonId)
+						AND ( EXISTS (SELECT 1 FROM dbo.ProjectAccess projManagers2 WHERE projManagers2.ProjectId = P.ProjectId AND projManagers2.ProjectAccessId = @PersonId) OR P.SalesPersonId = @PersonId)
 						)
 				)
 			AND P.IsAllowedToShow = 1
