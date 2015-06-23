@@ -53,13 +53,13 @@ BEGIN
 					,c.IsNoteRequired
 		FROM dbo.Client C
 		INNER JOIN dbo.Project P ON P.ClientId = C.ClientId
-		INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = P.ProjectId
+		INNER JOIN dbo.ProjectAccess AS projmanager ON projmanager.ProjectId = P.ProjectId
 		WHERE ((@ShowAll = 0 AND C.Inactive = 0) OR @ShowAll <> 0)
 		AND	(@PersonId IS null
-			OR ( ISNULL(@UserHasHighRoleThanProjectLead,1) <> 0 AND p.DirectorId = @PersonId )--if Only Project Lead Role then we are not considering Director. as per #2941.
+			OR ( ISNULL(@UserHasHighRoleThanProjectLead,1) <> 0 AND p.ExecutiveInChargeId = @PersonId )--if Only Project Lead Role then we are not considering Director. as per #2941.
 			OR P.SalesPersonId = @PersonId
-			OR projmanager.ProjectManagerId = @PersonId
-			OR P.projectOwnerId = @PersonId
+			OR projmanager.ProjectAccessId = @PersonId
+			OR P.ProjectManagerId = @PersonId
 			)
 		ORDER BY C.Name
 
@@ -94,10 +94,10 @@ BEGIN
 			INSERT INTO @OwnerProjectClientList (ClientId) 
 			SELECT proj.ClientId 
 			FROM dbo.Project AS proj
-			INNER JOIN dbo.ProjectManagers AS projmanager ON projmanager.ProjectId = proj.ProjectId
-			WHERE projmanager.ProjectManagerId = @PersonId 
+			INNER JOIN dbo.ProjectAccess AS projmanager ON projmanager.ProjectId = proj.ProjectId
+			WHERE projmanager.ProjectAccessId = @PersonId 
 					OR proj.SalesPersonId = @PersonId -- Adding Salesperson - Project clients into the list.
-					OR proj.projectOwnerId = @PersonId 
+					OR proj.ProjectManagerId = @PersonId 
 		END
 
 		IF @ShowAll = 0
