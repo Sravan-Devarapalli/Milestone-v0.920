@@ -498,7 +498,8 @@
                                             </td>
                                             <td>
                                                 <pmc:ScrollingDropDown ID="cblProjectOwner" runat="server" SetDirty="false" CssClass="ProjectSummaryScrollingDropDown"
-                                                    onclick="scrollingDropdown_onclick('cblProjectOwner','Project Manager')" DropDownListType="Project Manager" />
+                                                    onclick="scrollingDropdown_onclick('cblProjectOwner','Project Access','es','Project Accesses',33);" DropDownListType="Project Access" DropDownListTypePluralForm="Project Accesses"
+                                                    PluralForm="es"/>
                                                 <ext:ScrollableDropdownExtender ID="sdeCblProjectOwner" runat="server" TargetControlID="cblProjectOwner"
                                                     UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png" Width="240px">
                                                 </ext:ScrollableDropdownExtender>
