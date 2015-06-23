@@ -150,8 +150,10 @@ namespace PraticeManagement.Reports
         {
             get
             {
-                if (cblDirector.Items.Count == 0)
+                if (cblDirector.Items[0].Selected == true)
                     return null;
+                else if (cblDirector.Items.Count == 0)
+                    return string.Empty;
                 else
                 {
                     var directorsList = new StringBuilder();
@@ -212,7 +214,7 @@ namespace PraticeManagement.Reports
 
         private void FillInitDirectorsList()
         {
-            DataHelper.FillDirectorsList(cblDirector, "All Client Directors", null);
+            DataHelper.FillDirectorsList(cblDirector, "All Executives in Charge", null);
             cblDirector.SelectAll();
         }
 
@@ -276,7 +278,7 @@ namespace PraticeManagement.Reports
 
         private void SelectView()
         {
-            if (StartDate.HasValue && EndDate.HasValue && (!string.IsNullOrEmpty(AccountIds)) && (!string.IsNullOrEmpty(BusinessUnitIds)) && (PracticeIds != string.Empty) && (!string.IsNullOrEmpty(DirectorIds)))
+            if (StartDate.HasValue && EndDate.HasValue && (!string.IsNullOrEmpty(AccountIds)) && (!string.IsNullOrEmpty(BusinessUnitIds)) && (PracticeIds != string.Empty) && (DirectorIds != string.Empty))
             {
                 divWholePage.Style.Remove("display");
                 LoadActiveView();
@@ -322,3 +324,4 @@ namespace PraticeManagement.Reports
         }
     }
 }
+
