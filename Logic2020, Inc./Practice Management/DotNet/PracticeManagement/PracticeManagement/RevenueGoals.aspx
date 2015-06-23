@@ -50,7 +50,7 @@
                     <td class="Width235Px">
                         <asp:DropDownList ID="ddlGoalsFor" runat="server" onchange="ChangeResetButton();">
                             <asp:ListItem Text="Entire Company" Value="0"></asp:ListItem>
-                            <asp:ListItem Text="Client Directors" Value="1"></asp:ListItem>
+                            <asp:ListItem Text="Executives in Charge" Value="1"></asp:ListItem>
                             <asp:ListItem Text="Practice Areas" Value="2"></asp:ListItem>
                             <asp:ListItem Text="Business Development Managers" Value="3"></asp:ListItem>
                         </asp:DropDownList>
@@ -218,7 +218,7 @@
                                     <div class="ie-bg Width170Px">
                                         <asp:LinkButton ID="btnSortDirector" CommandArgument="0" CommandName="Sort" runat="server"
                                             CssClass="arrow">
-                                        Client Director
+                                        Executive in Charge
                                         </asp:LinkButton>
                                     </div>
                                 </td>
