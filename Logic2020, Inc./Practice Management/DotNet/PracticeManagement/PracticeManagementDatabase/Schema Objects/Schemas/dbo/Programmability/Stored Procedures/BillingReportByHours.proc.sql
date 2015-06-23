@@ -5,7 +5,7 @@
 	@PracticeIds	NVARCHAR(MAX)=NULL,
 	@AccountIds		NVARCHAR(MAX),
 	@BusinessUnitIds NVARCHAR(MAX),
-	@DirectorIds	NVARCHAR(MAX),
+	@DirectorIds	NVARCHAR(MAX)=NULL,
 	@SalesPersonIds NVARCHAR(MAX)=NULL,
 	@ProjectManagerIds NVARCHAR(MAX)=NULL,
 	@SeniorManagerIds NVARCHAR(MAX)=NULL
@@ -47,13 +47,13 @@ BEGIN
 				   (@PracticeIds IS NULL OR Pro.PracticeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))) AND
 			       Pro.ClientId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@AccountIds)) AND
 				   Pro.GroupId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@BusinessUnitIds)) AND
-				   Pro.DirectorId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds)) AND 
+				   (@DirectorIds IS NULL OR Pro.ExecutiveInChargeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds))) AND 
 				   Pro.StartDate IS NOT NULL AND Pro.EndDate IS NOT NULL
 				   AND PC.Date BETWEEN MPE.StartDate AND MPE.EndDate AND 
 				   (@SalesPersonIds IS NULL OR Pro.SalesPersonId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds))) AND
 			       (@ProjectManagerIds IS NULL OR 
-			         EXISTS (SELECT 1 FROM dbo.ProjectManagers PM WHERE PM.ProjectId = Pro.ProjectId AND PM.ProjectManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds)))) AND
-			       (@SeniorManagerIds IS NULL OR Pro.SeniorManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
+			         EXISTS (SELECT 1 FROM dbo.ProjectAccess PM WHERE PM.ProjectId = Pro.ProjectId AND PM.ProjectAccessId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds)))) AND
+			       (@SeniorManagerIds IS NULL OR Pro.EngagementManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
 				   
 			GROUP BY  Pro.ProjectId
 		),
@@ -105,11 +105,11 @@ BEGIN
 					AND (@PracticeIds IS NULL OR Pro.PracticeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))) AND
 			        Pro.ClientId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@AccountIds)) AND
 				    Pro.GroupId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@BusinessUnitIds)) AND
-				    Pro.DirectorId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds)) AND
+				    (@DirectorIds IS NULL OR Pro.ExecutiveInChargeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds))) AND
 					(@SalesPersonIds IS NULL OR Pro.SalesPersonId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds))) AND
 			  (@ProjectManagerIds IS NULL OR 
-			   EXISTS (SELECT 1 FROM dbo.ProjectManagers PM WHERE PM.ProjectId = Pro.ProjectId AND PM.ProjectManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds)))) AND
-			   (@SeniorManagerIds IS NULL OR Pro.SeniorManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
+			   EXISTS (SELECT 1 FROM dbo.ProjectAccess PM WHERE PM.ProjectId = Pro.ProjectId AND PM.ProjectAccessId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds)))) AND
+			   (@SeniorManagerIds IS NULL OR Pro.EngagementManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
 			GROUP BY  Pro.ProjectId
 		)
 	
@@ -126,13 +126,13 @@ BEGIN
 		ISNULL(TEH.BillableHours,0)+ISNULL(TEH.NonBillableHours,0) AS ActualHours,
 		sales.PersonId AS SalesPersonId,
 		sales.LastName+', '+ sales.FirstName as SalesPersonName,
-		P.DirectorId,
+		P.ExecutiveInChargeId AS DirectorId,
 	    director.LastName AS DirectorLastName,
 		director.FirstName AS DirectorFirstName,
 		P.PONumber,
-		P.SeniorManagerId,
+		P.EngagementManagerId AS SeniorManagerId,
 		senior.LastName+', '+senior.FirstName AS SeniorManagerName,
-		PM.ProjectManagerId,
+		PM.ProjectAccessId AS ProjectManagerId,
 		manager.FirstName AS ProjectManagerFirstName,
 		manager.LastName AS ProjectManagerLastName
 	FROM ProjectedHours PH 
@@ -141,12 +141,13 @@ BEGIN
 	INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
 	INNER JOIN dbo.Practice Pr ON Pr.PracticeId = P.PracticeId
 	INNER JOIN dbo.Person sales ON sales.PersonId = P.SalesPersonId
-	LEFT JOIN dbo.Person director ON director.PersonId = P.DirectorId
-	LEFT JOIN dbo.Person senior ON senior.PersonId = P.SeniorManagerId
-	LEFT JOIN dbo.ProjectManagers PM ON PM.ProjectId = p.ProjectId
-	LEFT JOIN dbo.Person manager ON manager.PersonId = PM.ProjectManagerId
+	LEFT JOIN dbo.Person director ON director.PersonId = P.ExecutiveInChargeId
+	LEFT JOIN dbo.Person senior ON senior.PersonId = P.EngagementManagerId
+	LEFT JOIN dbo.ProjectAccess PM ON PM.ProjectId = p.ProjectId
+	LEFT JOIN dbo.Person manager ON manager.PersonId = PM.ProjectAccessId
 	WHERE P.StartDate <= @EndDateLocal AND @StartDateLocal <= P.EndDate
 	AND P.ProjectStatusId IN (2,3,7)
+	AND p.projectid != 174
 	ORDER BY P.ProjectId 
 END
 
