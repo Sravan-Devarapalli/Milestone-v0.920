@@ -5,7 +5,7 @@
 	@PracticeIds	NVARCHAR(MAX)=NULL,
 	@AccountIds		NVARCHAR(MAX),
 	@BusinessUnitIds NVARCHAR(MAX),
-	@DirectorIds	NVARCHAR(MAX),
+	@DirectorIds	NVARCHAR(MAX)=NULL,
 	@SalesPersonIds NVARCHAR(MAX)=NULL,
 	@ProjectManagerIds NVARCHAR(MAX)=NULL,
 	@SeniorManagerIds NVARCHAR(MAX)=NULL
@@ -45,11 +45,11 @@ AS
 			  (@PracticeIds IS NULL OR Pro.PracticeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))) AND
 			  Pro.ClientId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@AccountIds)) AND
 			  Pro.GroupId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@BusinessUnitIds)) AND
-			  Pro.DirectorId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds)) AND
+			  (@DirectorIds IS NULL OR Pro.ExecutiveInChargeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds))) AND
 			   (@SalesPersonIds IS NULL OR Pro.SalesPersonId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds))) AND
 			  (@ProjectManagerIds IS NULL OR 
-			   EXISTS (SELECT 1 FROM dbo.ProjectManagers PM WHERE PM.ProjectId = Pro.ProjectId AND PM.ProjectManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@ProjectManagerIds)))) AND
-			   (@SeniorManagerIds IS NULL OR Pro.SeniorManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
+			   EXISTS (SELECT 1 FROM dbo.ProjectAccess PM WHERE PM.ProjectId = Pro.ProjectId AND PM.ProjectAccessId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@ProjectManagerIds)))) AND
+			   (@SeniorManagerIds IS NULL OR Pro.EngagementManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
 			GROUP BY Pro.ProjectId
 		 ) P ON p.ProjectId = CC.ProjectId
 	GROUP BY CC.ProjectId, TE.PersonId, TE.ChargeCodeDate,P.IsHourlyAmount
@@ -85,11 +85,11 @@ AS
 			  (@PracticeIds IS NULL OR P.PracticeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds))) AND
 			  P.ClientId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@AccountIds)) AND
 			  P.GroupId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@BusinessUnitIds)) AND
-			  P.DirectorId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds)) AND
+			  (@DirectorIds IS NULL OR P.ExecutiveInChargeId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@DirectorIds))) AND
 			   (@SalesPersonIds IS NULL OR P.SalesPersonId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SalesPersonIds))) AND
 			  (@ProjectManagerIds IS NULL OR 
-			   EXISTS (SELECT 1 FROM dbo.ProjectManagers PM WHERE PM.ProjectId = P.ProjectId AND PM.ProjectManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@ProjectManagerIds)))) AND
-			   (@SeniorManagerIds IS NULL OR P.SeniorManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
+			   EXISTS (SELECT 1 FROM dbo.ProjectAccess PM WHERE PM.ProjectId = P.ProjectId AND PM.ProjectAccessId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@ProjectManagerIds)))) AND
+			   (@SeniorManagerIds IS NULL OR P.EngagementManagerId IN (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@SeniorManagerIds)))
 		    GROUP BY  m.ProjectId,m.[MilestoneId],mp.PersonId,cal.Date,m.IsHourlyAmount ,m.IsDefault,MPE.Id,MPE.Amount
 ),
 CTE 
@@ -210,13 +210,13 @@ FROM ActualTimeEntries AS AE --ActualEntriesByPerson
 		CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenueInRange,0)) ActualRevenueInRange,
 		sales.PersonId AS SalesPersonId,
 		sales.LastName+', '+ sales.FirstName as SalesPersonName,
-		P.DirectorId,
+		P.ExecutiveInChargeId AS DirectorId,
 	     director.LastName AS DirectorLastName,
 		director.FirstName AS DirectorFirstName,
 		P.PONumber,
-		P.SeniorManagerId,
+		P.EngagementManagerId AS SeniorManagerId,
 		senior.LastName+', '+senior.FirstName AS SeniorManagerName,
-		PM.ProjectManagerId,
+		PM.ProjectAccessId AS ProjectManagerId,
 		manager.FirstName AS ProjectManagerFirstName,
 		manager.LastName AS ProjectManagerLastName
 	FROM ActualAndProjectedValuesMonthly APV
@@ -224,10 +224,10 @@ FROM ActualTimeEntries AS AE --ActualEntriesByPerson
 	INNER JOIN dbo.Client C ON C.ClientId = P.ClientId
 	INNER JOIN dbo.Practice Pr ON Pr.PracticeId = P.PracticeId
 	INNER JOIN dbo.Person sales ON sales.PersonId = P.SalesPersonId
-	LEFT JOIN dbo.Person director ON director.PersonId = P.DirectorId
-	LEFT JOIN dbo.Person senior ON senior.PersonId = P.SeniorManagerId
-	LEFT JOIN dbo.ProjectManagers PM ON PM.ProjectId = p.ProjectId
-	LEFT JOIN dbo.Person manager ON manager.PersonId = PM.ProjectManagerId
+	LEFT JOIN dbo.Person director ON director.PersonId = P.ExecutiveInChargeId
+	LEFT JOIN dbo.Person senior ON senior.PersonId = P.EngagementManagerId
+	LEFT JOIN dbo.ProjectAccess PM ON PM.ProjectId = p.ProjectId
+	LEFT JOIN dbo.Person manager ON manager.PersonId = PM.ProjectAccessId
 	ORDER BY ProjectId 
 END
 
