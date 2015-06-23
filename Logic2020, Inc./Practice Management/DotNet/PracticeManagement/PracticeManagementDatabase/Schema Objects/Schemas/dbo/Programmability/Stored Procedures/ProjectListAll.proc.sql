@@ -30,7 +30,7 @@ BEGIN
 	       p.ClientIsChargeable,
 	       p.ProjectIsChargeable,
 		   p.ProjectManagersIdFirstNameLastName,
-		   p.DirectorId,
+		   p.ExecutiveInChargeId AS DirectorId,
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
 		   pg.Name AS GroupName,
