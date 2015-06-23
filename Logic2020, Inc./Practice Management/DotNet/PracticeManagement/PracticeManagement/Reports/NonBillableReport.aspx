@@ -116,7 +116,7 @@
                             <asp:ListItem Text="-- Select a value -- " Value="0" Selected="True"></asp:ListItem>
                             <asp:ListItem Text="Project Number" Value="1"></asp:ListItem>
                             <asp:ListItem Text="All Projects" Value="2"></asp:ListItem>
-                            <asp:ListItem Text="Director" Value="3"></asp:ListItem>
+                            <asp:ListItem Text="Executive in Charge" Value="3"></asp:ListItem>
                             <asp:ListItem Text="Business Unit" Value="4"></asp:ListItem>
                             <asp:ListItem Text="Practice Area" Value="5"></asp:ListItem>
                         </asp:DropDownList>
@@ -137,9 +137,9 @@
                                 </td>
                             </tr>
                         </table>
-                        <pmc:ScrollingDropDown ID="cblDirectors" runat="server" SetDirty="false" AllSelectedReturnType="Null" AutoPostBack="true"
-                            Style="display: none;width:240px" NoItemsType="All" onclick="scrollingDropdown_onclick('cblDirectors','Client Director')"
-                            DropDownListType="Client Director" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
+                        <pmc:ScrollingDropDown ID="cblDirectors" runat="server" SetDirty="false" AllSelectedReturnType="Null" AutoPostBack="true" DropdownListFirst="Executive" DropdownListSecond="in Charge"
+                            Style="display: none;width:240px" NoItemsType="All" onclick="scrolling_onclick('cblDirector','Executive in Charge','s','Executives in Charge',33,'Executive','in Charge')" DropDownListTypePluralForm="Executives in Charge"
+                            DropDownListType="Executive in Charge" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" /> 
                         <ext:ScrollableDropdownExtender ID="sdeDirectors" runat="server" TargetControlID="cblDirectors"
                             Display="none" UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
