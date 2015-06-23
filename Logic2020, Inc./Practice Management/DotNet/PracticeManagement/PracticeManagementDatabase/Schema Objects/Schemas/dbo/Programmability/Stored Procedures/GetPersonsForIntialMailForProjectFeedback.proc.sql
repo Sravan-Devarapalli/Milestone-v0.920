@@ -28,9 +28,9 @@ BEGIN
 	FROM dbo.ProjectFeedback PF
 	INNER JOIN dbo.Person P ON P.PersonId = PF.PersonId 
 	INNER JOIN dbo.Project Pro ON Pro.ProjectId = PF.ProjectId
-	LEFT JOIN dbo.Person director ON director.PersonId = Pro.DirectorId
-	LEFT JOIN dbo.Person owner ON owner.PersonId = Pro.ProjectOwnerId
-	LEFT JOIN dbo.Person seniorManager ON seniorManager.PersonId = Pro.SeniorManagerId
+	LEFT JOIN dbo.Person director ON director.PersonId = Pro.ExecutiveInChargeId
+	LEFT JOIN dbo.Person owner ON owner.PersonId = Pro.ProjectManagerId
+	LEFT JOIN dbo.Person seniorManager ON seniorManager.PersonId = Pro.EngagementManagerId
 	LEFT JOIN dbo.Title T ON T.TitleId = P.TitleId
 	WHERE (@FeedbackId IS NOT NULL AND PF.FeedbackId = @FeedbackId)
 		   OR (@FeedbackId IS NULL AND CONVERT(NVARCHAR(10), PF.NextIntialMailSendDate, 111) = CONVERT(NVARCHAR(10), @Today, 111)
