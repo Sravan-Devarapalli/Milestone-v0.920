@@ -13,20 +13,20 @@
     [OpportunityId]    INT             NULL,
     [GroupId]          INT             NULL,
     [IsChargeable]     BIT             NULL,
-	[DirectorId]	   INT			   NULL,
+	[ExecutiveInChargeId]	   INT	   NULL,
 	[Description]      NVARCHAR (MAX)  NULL,
 	[CanCreateCustomWorkTypes]	BIT	   NOT NULL,
 	[IsInternal]	            BIT	   NOT NULL CONSTRAINT DF_Project_IsInternal DEFAULT 0,--added as internal client can be having external projects.
 	[IsAllowedToShow]			BIT	   NOT NULL CONSTRAINT DF_Project_IsAllowedToShow DEFAULT 1,--For not showing internal projects(like PTO,HOL,etc)/"Business Development" project in overall PM site.
 	[IsAdministrative]          BIT    NOT NULL CONSTRAINT [DF_Project_IsAdministrative] DEFAULT 0,
 	[IsNoteRequired]            BIT    NOT NULL CONSTRAINT DF_Project_IsNoteRequired DEFAULT (1),
-	[ProjectOwnerId]            INT NULL,
+	[ProjectManagerId]            INT NULL,
 	[SowBudget]					DECIMAL(18,2) NULL,
 	[POAmount]					DECIMAL(18,2) NULL,
 	[PricingListId]				INT NULL,
 	[BusinessTypeId]			INT NULL,
 	[ReviewerId]				INT NULL,
-	SeniorManagerId				INT NULL,
+	EngagementManagerId			INT NULL,
 	IsSeniorManagerUnassigned	BIT NOT NULL CONSTRAINT DF_Project_IsSeniorManagerUnassigned DEFAULT 0,
 	[PONumber]					NVARCHAR(100)  NULL,
 	SalesPersonId				INT				NULL
