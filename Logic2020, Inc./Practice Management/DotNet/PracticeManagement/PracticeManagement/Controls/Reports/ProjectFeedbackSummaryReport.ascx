@@ -102,7 +102,7 @@
                                 </AjaxControlToolkit:PopupControlExtender>
                             </th>
                             <th class="Width15Per">
-                                Project Manager(s)
+                                Project Access
                                 <img alt="Filter" title="Filter" src="~/Images/search_filter.png" runat="server"
                                     id="imgProjectManagers" class="PosAbsolute padLeft2" />
                                 <AjaxControlToolkit:PopupControlExtender ID="pceProjectManagers" runat="server" TargetControlID="imgProjectManagers"
