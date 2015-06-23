@@ -54,10 +54,10 @@ AS
 					AND (@PersonId IS NULL 
 					     OR GroupId IN (SELECT * FROM @GroupPermissions)
 						 OR GroupId IN (SELECT pro.GroupId FROM Project AS pro
-										INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = pro.ProjectId
-										WHERE projManagers.ProjectManagerId = @PersonId )
+										INNER JOIN dbo.ProjectAccess AS projManagers ON projManagers.ProjectId = pro.ProjectId
+										WHERE projManagers.ProjectAccessId = @PersonId )
 						 OR GroupId IN (SELECT pro.GroupId FROM Project AS pro
-										WHERE pro.ProjectOwnerId = @PersonId )
+										WHERE pro.ProjectManagerId = @PersonId )
 						 OR GroupId IN (SELECT proj.GroupId 
 										FROM Project AS proj
 										WHERE proj.SalesPersonId = @PersonId)
