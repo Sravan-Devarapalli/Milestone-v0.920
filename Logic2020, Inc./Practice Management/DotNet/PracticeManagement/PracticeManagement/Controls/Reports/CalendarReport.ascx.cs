@@ -157,9 +157,9 @@ namespace PraticeManagement.Controls.Reports
             data.Columns.Add("Business Group");
             data.Columns.Add("Business Unit");
             data.Columns.Add("Practice Area");
-            data.Columns.Add("Project Manager(s)");
-            data.Columns.Add("Senior Manager");
-            data.Columns.Add("Director");
+            data.Columns.Add("Project Access");
+            data.Columns.Add("Engagement Manager");
+            data.Columns.Add("Executive in Charge");
 
             foreach (var pro in personsList)
             {
