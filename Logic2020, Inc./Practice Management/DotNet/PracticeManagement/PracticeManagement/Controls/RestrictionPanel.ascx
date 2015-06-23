@@ -5,7 +5,7 @@
         <td><strong>Accounts</strong></td>
         <td><strong>Business Units</strong></td>
         <td><strong>Salespersons</strong></td>
-        <td><strong>Project Managers</strong></td>
+        <td><strong>Project Access</strong></td>
         <td><strong>Practice Areas</strong></td>
         </tr>
         <tr>
