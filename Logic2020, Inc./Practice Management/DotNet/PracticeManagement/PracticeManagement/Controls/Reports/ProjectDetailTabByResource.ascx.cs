@@ -523,7 +523,7 @@ namespace PraticeManagement.Controls.Reports
                             row.Add(byWorkType.TotalHours);
                             row.Add(byWorkType.ForecastedHoursDaily);
                             row.Add(byWorkType.BillingType == "Fixed" ? "FF" : byWorkType.BillRate.ToString());
-                            row.Add(byWorkType.HtmlEncodedNoteForExport);
+                            row.Add(byWorkType.NoteForExport);
                             data.Rows.Add(row.ToArray());
                         }
                     }
