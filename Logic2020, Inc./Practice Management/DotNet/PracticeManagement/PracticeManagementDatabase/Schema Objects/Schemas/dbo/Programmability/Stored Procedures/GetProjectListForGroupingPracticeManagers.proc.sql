@@ -93,7 +93,7 @@ BEGIN
 			PG.Name GroupName,
 		   pm.FirstName PracticeManagerFirstName,
 		   pm.LastName PracticeManagerLastName,
-		   p.DirectorId,
+		   p.ExecutiveInChargeId,
 		   p.DirectorLastName,
 		   p.DirectorFirstName,
 		   p.[Discount]
@@ -105,11 +105,11 @@ BEGIN
 			AND ( @ClientIds IS NULL OR p.ClientId IN (select Id from @ClientsList) )
 			AND ( @ProjectGroupIds IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @ProjectOwnerIds IS NULL 
-					OR EXISTS (SELECT 1 FROM dbo.ProjectManagers AS projManagers
-								JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectManagerId
+					OR EXISTS (SELECT 1 FROM dbo.ProjectAccess AS projManagers
+								JOIN @ProjectOwnersList POL ON POL.Id = projManagers.ProjectAccessId
 									WHERE projManagers.ProjectId = p.ProjectId
 								)
-					OR p.ProjectOwnerId IN (SELECT POL.Id  FROM @ProjectOwnersList POL)
+					OR p.ProjectManagerId IN (SELECT POL.Id  FROM @ProjectOwnersList POL)
 			    )
 			AND (    @SalespersonIds IS NULL 
 				  OR p.SalesPersonId IN (SELECT Id FROM @SalespersonsList)
@@ -327,7 +327,7 @@ BEGIN
 			   temp.MonthStartDate,
 			   temp.MonthEndDate,
 			   temp.Revenue AS 'Revenue',
-			   temp.GrossMargin+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))* (1 - temp.Discount/100)  as 'GrossMargin' 
+			   temp.GrossMargin+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))  as 'GrossMargin' 
 		FROM
 		(
 		SELECT f.ProjectId,
