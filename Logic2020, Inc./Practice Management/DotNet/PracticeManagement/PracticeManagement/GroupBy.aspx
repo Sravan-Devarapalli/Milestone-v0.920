@@ -199,8 +199,8 @@
                         <table>
                             <tr>
                                 <td>
-                                    <asp:CheckBox ID="chkShowDirector" runat="server" Text="Client Director" AutoPostBack="false"
-                                        ToolTip="Show Group By Client Director Report" Checked="true" onclick="ChangeResetButton();" />
+                                    <asp:CheckBox ID="chkShowDirector" runat="server" Text="Executive in Charge" AutoPostBack="false"
+                                        ToolTip="Show Group By Executive in Charge Report" Checked="true" onclick="ChangeResetButton();" />
                                 </td>
                             </tr>
                             <tr>
@@ -358,7 +358,7 @@
                                         Salesperson
                                     </td>
                                     <td>
-                                        Project Manager
+                                        Project Access
                                     </td>
                                 </tr>
                                 <tr>
@@ -399,7 +399,7 @@
                                     <td class="TextAlignCenterImp Width170PxImp">
                                         <div class="ie-bg Width170PxImp">
                                             <asp:LinkButton ID="btnSortDirector" CommandArgument="0" CommandName="Sort" runat="server"
-                                                CssClass="arrow">Client Director</asp:LinkButton>
+                                                CssClass="arrow">Executive in Charge</asp:LinkButton>
                                         </div>
                                     </td>
                                     <td class="TextAlignCenterImp Width180PxImp">
