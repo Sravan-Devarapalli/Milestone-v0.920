@@ -10,8 +10,8 @@ BEGIN
   
 	SELECT @Temp = @Temp + Pers.Alias +','
 	FROM Project P
-	JOIN ProjectManagers PM ON PM.ProjectId = P.ProjectId
-	JOIN Person Pers ON Pers.Personid = PM.ProjectManagerId
+	JOIN ProjectAccess PM ON PM.ProjectId = P.ProjectId
+	JOIN Person Pers ON Pers.Personid = PM.ProjectAccessId
 	WHERE P.ProjectId = @ProjectId
 
 	RETURN @Temp
