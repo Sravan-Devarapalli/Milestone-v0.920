@@ -25,21 +25,21 @@ BEGIN
 				,i.GroupId
 				,PG.Name AS 'ProjectGroup'
 				,i.Description
-				,i.DirectorId
-				,CASE WHEN i.DirectorId IS NOT NULL THEN D.LastName + ', ' + D.FirstName 
+				,i.ExecutiveInChargeId AS DirectorId
+				,CASE WHEN i.ExecutiveInChargeId IS NOT NULL THEN D.LastName + ', ' + D.FirstName 
 				      ELSE '' 
-				      END AS 'ClientDirector'
+				      END AS 'ExecutiveInCharge'
 				,CASE WHEN i.IsChargeable = 1 THEN 'Yes'
 						ELSE 'No' END AS 'IsChargeable',
-				i.ProjectOwnerId
-				,ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectOwner]
+				i.ProjectManagerId AS ProjectOwnerId
+				,ProjOwner.LastName + ', ' + ProjOwner.FirstName AS [ProjectManager]
 				, i.SowBudget
 				,i.BusinessTypeId
 				,bt.Name AS [BusinessType]
 				,i.PricingListId
 				,pt.Name AS [PricingList]
-				,i.SeniorManagerId
-				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS SeniorManager
+				,i.EngagementManagerId AS SeniorManagerId
+				,CASE WHEN i.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE SenManager.LastName + ', ' + SenManager.FirstName END AS EngagementManager
 				,i.[ReviewerId]
 				,Rev.LastName + ', ' + Rev.FirstName AS [Reviewer]
 				,i.PONumber
@@ -48,10 +48,10 @@ BEGIN
 		INNER JOIN dbo.Practice AS prac ON prac.PracticeId = i.PracticeId
 		INNER JOIN dbo.ProjectStatus AS ps ON ps.ProjectStatusId = i.ProjectStatusId
 		INNER JOIN dbo.ProjectGroup AS PG ON PG.GroupId = i.GroupId
-		LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectOwnerId -- While Converting opportunity to Project ProjectOwnerId will not be there.So here Left join is used instead of INNER JOIN.
-		LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = i.SeniorManagerId
+		LEFT JOIN dbo.Person AS ProjOwner ON ProjOwner.PersonId = i.ProjectManagerId -- While Converting opportunity to Project ProjectOwnerId will not be there.So here Left join is used instead of INNER JOIN.
+		LEFT JOIN dbo.Person AS SenManager ON SenManager.PersonId = i.EngagementManagerId
 		LEFT JOIN dbo.Person AS Rev ON Rev.PersonId = i.[ReviewerId]
-		LEFT JOIN dbo.Person AS D ON D.PersonId = i.DirectorId
+		LEFT JOIN dbo.Person AS D ON D.PersonId = i.ExecutiveInChargeId
 		LEFT JOIN dbo.BusinessType bt ON bt.BusinessTypeId = i.BusinessTypeId
 		LEFT JOIN dbo.PricingList pt ON pt.PricingListId = i.PricingListId
 	)
