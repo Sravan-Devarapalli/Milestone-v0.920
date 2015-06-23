@@ -105,10 +105,10 @@ BEGIN
 				EXEC dbo.SessionLogUnprepare
 			END
 			
-			IF EXISTS (SELECT ProjectId FROM dbo.ProjectManagers WHERE ProjectId = @ProjectID)
+			IF EXISTS (SELECT ProjectId FROM dbo.ProjectAccess WHERE ProjectId = @ProjectID)
 			BEGIN
 				DELETE 
-				FROM	dbo.ProjectManagers
+				FROM	dbo.ProjectAccess
 				WHERE ProjectId = @ProjectID
 			END
 			
