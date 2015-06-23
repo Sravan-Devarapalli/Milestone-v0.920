@@ -32,12 +32,12 @@ AS
 
 
 	INSERT INTO @ProjectManagerIdsList
-	SELECT pm.ProjectManagerId  
-	FROM ProjectManagers AS pm 
+	SELECT pm.ProjectAccessId  
+	FROM ProjectAccess AS pm 
 	WHERE pm.ProjectId = @Id
 
 	INSERT INTO @ProjectManagerIdsList
-	SELECT  p.ProjectOwnerId 
+	SELECT  p.ProjectManagerId 
 	FROM dbo.project AS p 
 	WHERE p.ProjectId = @Id
 	
