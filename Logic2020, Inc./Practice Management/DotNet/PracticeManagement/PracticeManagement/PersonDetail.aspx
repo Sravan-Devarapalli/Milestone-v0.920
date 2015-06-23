@@ -593,8 +593,8 @@
                                     </asp:UpdatePanel>
                                 </td>
                                 <td>
-                                    Cohort Assignment
-                                    <asp:DropDownList ID="ddlCohortAssignment" runat="server">
+                                    <asp:Label Text="Cohort Assignment" ID="lblCohort" runat="server" Style="display: none;"></asp:Label>
+                                    <asp:DropDownList ID="ddlCohortAssignment" runat="server" Style="display: none;">
                                     </asp:DropDownList>
                                     <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Manager to Practice Area Owner</asp:LinkButton>
                                     <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
