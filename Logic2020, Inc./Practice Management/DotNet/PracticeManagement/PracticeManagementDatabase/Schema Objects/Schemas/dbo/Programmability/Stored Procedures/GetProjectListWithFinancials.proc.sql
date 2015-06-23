@@ -129,7 +129,7 @@ BEGIN
 			sp.LastName AS SalespersonLastName,
 			pm.FirstName PracticeManagerFirstName,
 			pm.LastName PracticeManagerLastName,
-			p.DirectorId,
+			p.ExecutiveInChargeId,
 			p.DirectorLastName,
 			p.DirectorFirstName,
 			p.[Discount]
@@ -144,9 +144,9 @@ BEGIN
 			AND ( @ProjectGroupIdsLocal IS NULL OR p.GroupId IN (SELECT Id from @ProjectGroupsList) )
 			AND ( @PracticeIdsLocal IS NULL OR p.PracticeId IN (SELECT Id FROM @PracticesList) OR p.PracticeId IS NULL )
 			AND ( @ProjectOwnerIdsLocal IS NULL 
-				  OR p.ProjectOwnerId IN (SELECT POL.Id  FROM @ProjectOwnersList POL)
-				  OR EXISTS (SELECT 1 FROM dbo.ProjectManagers AS projManagers
-								WHERE projManagers.ProjectId = p.ProjectId AND projManagers.ProjectManagerId IN (SELECT POL.Id FROM @ProjectOwnersList POL)
+				  OR p.ProjectManagerId IN (SELECT POL.Id  FROM @ProjectOwnersList POL)
+				  OR EXISTS (SELECT 1 FROM dbo.ProjectAccess AS projManagers
+								WHERE projManagers.ProjectId = p.ProjectId AND projManagers.ProjectAccessId IN (SELECT POL.Id FROM @ProjectOwnersList POL)
 							)
 				)
 			AND (    @SalespersonIdsLocal IS NULL 
@@ -339,7 +339,7 @@ BEGIN
 		ISNULL(pf.FinancialDate,PEM.FinancialDate) FinancialDate,
 		ISNULL(pf.MonthEnd,PEM.MonthEnd) MonthEnd,
 		ISNULL(pf.Revenue,0) AS 'Revenue',
-		ISNULL(pf.GrossMargin,0)+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0))* (1 - ISNULL(pf.Discount,0)/100)  as 'GrossMargin',
+		ISNULL(pf.GrossMargin,0)+ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)  as 'GrossMargin',
 		ISNULL(PEM.Expense,0) as 'Expense',
 		ISNULL(PEM.Reimbursement,0)  ReimbursedExpense
 	FROM ( 
