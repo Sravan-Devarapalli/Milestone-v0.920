@@ -321,7 +321,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                             row.Add(buLevelGroupedHours.BusinessUnit.HtmlEncodedName);
                             row.Add(dateLevel.NonBillableHours);
                             row.Add(dateLevel.TotalHours);
-                            row.Add(dateLevel.HtmlEncodedNoteForExport);
+                            row.Add(dateLevel.NoteForExport);
                             data.Rows.Add(row.ToArray());
                         }
                     }
