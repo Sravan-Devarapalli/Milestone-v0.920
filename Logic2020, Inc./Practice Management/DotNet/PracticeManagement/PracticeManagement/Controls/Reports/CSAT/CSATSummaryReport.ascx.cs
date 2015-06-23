@@ -138,7 +138,7 @@ namespace PraticeManagement.Controls.Reports.CSAT
             data.Columns.Add("Project Status");
             data.Columns.Add("Buyer Name");
             data.Columns.Add("Project Name");
-            data.Columns.Add("Project Owner");
+            data.Columns.Add("Project Manager");
             data.Columns.Add("Estimated Revenue");
             data.Columns.Add("CSAT Eligible?");
             data.Columns.Add("Start Date");
@@ -146,8 +146,8 @@ namespace PraticeManagement.Controls.Reports.CSAT
             data.Columns.Add("Date of Project Completion");
             data.Columns.Add("Practice Area");
             data.Columns.Add("Salesperson");
-            data.Columns.Add("Client Director");
-            data.Columns.Add("Project Manager(s)");
+            data.Columns.Add("Executive in Charge");
+            data.Columns.Add("Project Access");
             data.Columns.Add("CSAT Owner");
             data.Columns.Add("CSAT Start Date");
             data.Columns.Add("CSAT End Date");
