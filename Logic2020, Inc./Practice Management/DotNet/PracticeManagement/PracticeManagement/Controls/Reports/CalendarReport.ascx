@@ -62,13 +62,13 @@
                             Practice Area
                         </th>
                         <th>
-                            Project Managers
+                            Project Access
                         </th>
                         <th>
-                            Senior Manager
+                            Engagement Manager
                         </th>
                         <th>
-                            Director
+                            Executive in Charge
                         </th>
                     </tr>
                 </thead>
