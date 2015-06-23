@@ -29,7 +29,7 @@ AS
 	       p.BuyerName,
            p.GroupId,
 		   p.IsAllowedToShow,
-		   p.ProjectOwnerId,
+		   p.ProjectManagerId,
 		   p.SalesPersonId
 	  FROM dbo.Milestone AS m
 	       INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
