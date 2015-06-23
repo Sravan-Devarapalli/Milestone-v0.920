@@ -141,9 +141,9 @@ namespace PraticeManagement.Controls.Reports
             data.Columns.Add("Project Name");
             data.Columns.Add("Practice Area");
             data.Columns.Add("Salesperson");
-            data.Columns.Add("Project Manager(s)");
-            data.Columns.Add("Senior Manager");
-            data.Columns.Add("Director");
+            data.Columns.Add("Project Access");
+            data.Columns.Add("Engagement Manager");
+            data.Columns.Add("Executive in Charge");
             data.Columns.Add("Resource");
             data.Columns.Add("Billable hours");
             data.Columns.Add("Non billable hours");
@@ -351,3 +351,4 @@ namespace PraticeManagement.Controls.Reports
         }
     }
 }
+
