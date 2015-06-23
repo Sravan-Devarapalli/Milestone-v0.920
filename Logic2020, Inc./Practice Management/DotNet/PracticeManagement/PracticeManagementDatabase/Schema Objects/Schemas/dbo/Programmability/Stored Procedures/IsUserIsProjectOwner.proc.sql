@@ -21,7 +21,7 @@ BEGIN
 
 	IF EXISTS (SELECT *
 				FROM Project P
-				WHERE ProjectOwnerId = @PersonId)
+				WHERE ProjectManagerId = @PersonId)
 	BEGIN
 		SELECT 'True'
 	END
