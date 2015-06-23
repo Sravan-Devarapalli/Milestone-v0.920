@@ -440,7 +440,7 @@ namespace PraticeManagement.Controls.Reports
                         row.Add(byWorkType.BillableHours);
                         row.Add(byWorkType.NonBillableHours);
                         row.Add(byWorkType.TotalHours);
-                        row.Add(byWorkType.HtmlEncodedNoteForExport);
+                        row.Add(byWorkType.NoteForExport);
                         data.Rows.Add(row.ToArray());
                     }
                 }
