@@ -23,7 +23,7 @@ AS
 		   p.BusinessTypeId,
 		   p.IsChargeable AS 'ProjectIsChargeable',
 		   dbo.GetProjectManagerList(p.ProjectId) AS ProjectManagersIdFirstNameLastName,
-		   p.DirectorId,
+		   p.ExecutiveInChargeId,
 		   d.LastName as 'DirectorLastName',
 		   d.FirstName as 'DirectorFirstName',
 		   p.Description,
@@ -32,7 +32,7 @@ AS
 		   p.IsInternal,
 		   c.IsInternal AS 'ClientIsInternal',
 		   p.IsNoteRequired,
-		   p.ProjectOwnerId,
+		   p.ProjectManagerId,
 		   p.SowBudget,
 		   p.POAmount,
 		   c.IsNoteRequired AS [ClientIsNoteRequired],
@@ -40,7 +40,7 @@ AS
 		   p.IsAdministrative,
 		   [dbo].[GetProjectCapabilities](p.ProjectId) AS ProjectCapabilityIds,
 			p.ReviewerId,
-			p.SeniorManagerId,
+			p.EngagementManagerId,
 			p.IsSeniorManagerUnassigned,
 			p.PONumber,
 			p.SalesPersonId
@@ -48,5 +48,5 @@ AS
 		   INNER JOIN dbo.Practice AS r ON p.PracticeId = r.PracticeId
 		   INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
 		   INNER JOIN dbo.ProjectStatus AS s ON p.ProjectStatusId = s.ProjectStatusId
-		   LEFT JOIN Person as d on d.PersonId = p.DirectorId
+		   LEFT JOIN Person as d on d.PersonId = p.ExecutiveInChargeId
 
