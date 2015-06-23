@@ -456,14 +456,14 @@ namespace PraticeManagement.Controls.Projects
             var fieldsList = new List<ListItem>();
             fieldsList.Add(new ListItem("Practice Areas", "PracticeAreas"));
             fieldsList.Add(new ListItem("SOW Budget", "SOWBudget"));
-            fieldsList.Add(new ListItem("Client Director", "ClientDirector"));
+            fieldsList.Add(new ListItem("Executive in Charge", "ClientDirector"));
             fieldsList.Add(new ListItem("PO Amount", "POAmount"));
             fieldsList.Add(new ListItem("Capabilities", "Capabilities"));
             fieldsList.Add(new ListItem("New/Extension", "New/Extension"));
             fieldsList.Add(new ListItem("PO Number", "PONumber"));
             fieldsList.Add(new ListItem("Project Status", "ProjectStatus"));
             fieldsList.Add(new ListItem("Sales Person", "SalesPerson"));
-            fieldsList.Add(new ListItem("Project Owner", "ProjectOwner"));
+            fieldsList.Add(new ListItem("Project Manager", "ProjectOwner"));
             DataHelper.FillListDefault(cblFields, "All Fields", fieldsList.ToArray(), false, "Value", "Text");
             //cblFields.DataSource = fieldsList;
             //cblFields.DataBind();
@@ -883,3 +883,4 @@ namespace PraticeManagement.Controls.Projects
         }
     }
 }
+
