@@ -1029,6 +1029,8 @@ namespace DataAccess
                 int isNoteRequiredIndex = -1;
                 int projectBusinessTypesIndex = -1;
                 int projectOwnerIdIndex = -1;
+                int projectOwnerFirstNameIndex = -1;
+                int projectOwnerLastNameIndex = -1;
                 int pricingListIdIndex = -1;
                 int pricingListNameIndex = -1;
                 int opportunityNumberIndex = -1;
@@ -1149,6 +1151,16 @@ namespace DataAccess
                 catch
                 {
                     projectOwnerIdIndex = -1;
+                }
+
+                try
+                {
+                    projectOwnerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerFirstName);
+                    projectOwnerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerLastName);
+                }
+                catch
+                {
+                    projectOwnerFirstNameIndex = -1;
                 }
 
                 try
@@ -1334,7 +1346,16 @@ namespace DataAccess
 
                     if (projectOwnerIdIndex > -1 && !reader.IsDBNull(projectOwnerIdIndex))
                     {
-                        project.ProjectOwner = new Person() { Id = reader.GetInt32(projectOwnerIdIndex) };
+                        project.ProjectOwner = new Person()
+                        {
+                            Id = reader.GetInt32(projectOwnerIdIndex)
+                        };
+                    }
+
+                    if (projectOwnerFirstNameIndex > -1 && project.ProjectOwner != null)
+                    {
+                        project.ProjectOwner.FirstName = reader.GetString(projectOwnerFirstNameIndex);
+                        project.ProjectOwner.LastName = reader.GetString(projectOwnerLastNameIndex);
                     }
 
                     if (isNoteRequiredIndex > -1)
