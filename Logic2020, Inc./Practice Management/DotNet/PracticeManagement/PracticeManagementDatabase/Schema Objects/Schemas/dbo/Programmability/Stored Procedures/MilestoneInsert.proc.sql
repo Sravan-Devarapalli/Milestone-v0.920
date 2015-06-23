@@ -39,21 +39,21 @@ BEGIN
 	BEGIN
 	
 		INSERT INTO dbo.Attribution(ProjectId,AttributionRecordTypeId,AttributionTypeId,TargetId,StartDate,EndDate,Percentage)
-		SELECT P.ProjectId,AR.AttributionRecordId,2 AS AttributionRecordTypeId,P.DirectorId,
+		SELECT P.ProjectId,AR.AttributionRecordId,2 AS AttributionRecordTypeId,P.ExecutiveInChargeId,
 					 CASE WHEN P.StartDate > pay.StartDate THEN P.StartDate ELSE pay.StartDate END,
 					 CASE WHEN P.EndDate < pay.Enddate  THEN P.EndDate ELSE pay.Enddate END,100 AS Percentage
 		FROM dbo.Project P 
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
-		INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = P.DirectorId 
-		WHERE P.DirectorId IS NOT NULL AND  (P.StartDate <= pay.Enddate) AND (pay.StartDate <= P.EndDate)
+		INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId = P.ExecutiveInChargeId 
+		WHERE P.ExecutiveInChargeId IS NOT NULL AND  (P.StartDate <= pay.Enddate) AND (pay.StartDate <= P.EndDate)
 		UNION 
-		SELECT  P.ProjectId,AR.AttributionRecordId,2,P.SeniorManagerId,
+		SELECT  P.ProjectId,AR.AttributionRecordId,2,P.EngagementManagerId,
 					 CASE WHEN P.StartDate > pay.StartDate THEN P.StartDate ELSE pay.StartDate END,
 					 CASE WHEN P.EndDate < pay.EndDate  THEN P.EndDate ELSE pay.EndDate END,100 AS Percentage
 		FROM dbo.Project P 
 		INNER JOIN dbo.AttributionRecordTypes AR ON AR.IsRangeType = 1 AND P.ProjectId = @ProjectId
-		INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId =  P.SeniorManagerId 
-		WHERE P.SeniorManagerId IS NOT NULL AND  (P.StartDate <= pay.EndDate) AND (pay.StartDate <= P.EndDate)
+		INNER JOIN dbo.[v_PersonValidAttributionRange] pay ON pay.PersonId =  P.EngagementManagerId 
+		WHERE P.EngagementManagerId IS NOT NULL AND  (P.StartDate <= pay.EndDate) AND (pay.StartDate <= P.EndDate)
 		UNION
 		SELECT  P.ProjectId,AR.AttributionRecordId,1,P.SalesPersonId,
 					 CASE WHEN P.StartDate > pay.StartDate THEN P.StartDate ELSE pay.StartDate END,
