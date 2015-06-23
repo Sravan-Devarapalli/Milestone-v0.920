@@ -64,13 +64,13 @@
                                 Sales person
                             </th>
                             <th class="Width150px">
-                                Project Managers
+                                Project Access
                             </th>
                             <th class="Width130px">
-                                Senior Manager
+                                Engagement Manager
                             </th>
                             <th class="Width130px">
-                                Director
+                                Executive in Charge
                             </th>
                             <th class="Width130Px">
                                 Resource
