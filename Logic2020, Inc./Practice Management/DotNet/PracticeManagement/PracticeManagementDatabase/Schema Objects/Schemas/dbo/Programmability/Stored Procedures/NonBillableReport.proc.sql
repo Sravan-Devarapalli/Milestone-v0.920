@@ -73,7 +73,7 @@ BEGIN
 													 FROM @GroupIdsTable )
 						)
 				   AND (@DirectorIds IS NULL
-							 OR PRO.DirectorId IN (SELECT Ids
+							 OR PRO.ExecutiveInChargeId IN (SELECT Ids
 												   FROM @DirectorIdsTable )
 						)
 				  AND (@PracticeIds IS NULL
@@ -119,7 +119,7 @@ BEGIN
 							OR Pro.GroupId IN (SELECT Ids	FROM @GroupIdsTable )
 					)
 				   AND (@DirectorIds IS NULL
-							 OR PRO.DirectorId IN (SELECT Ids FROM @DirectorIdsTable )
+							 OR PRO.ExecutiveInChargeId IN (SELECT Ids FROM @DirectorIdsTable )
 					)
 				  AND (@PracticeIds IS NULL
 							OR PRO.PracticeId IN (SELECT Ids FROM @PracticeIdsTable )
@@ -249,7 +249,7 @@ BEGIN
 		LEFT JOIN dbo.Person per ON per.PersonId = ISNULL(T.PersonId,M.PersonId)
 		LEFT JOIN dbo.Practice Pra ON Pra.PracticeId = P.PracticeId
 		LEFT JOIN dbo.Person sales ON sales.PersonId = P.SalesPersonId
-		LEFT JOIN dbo.Person director ON director.PersonId = P.DirectorId
-		LEFT JOIN dbo.Person smngr ON smngr.PersonId = P.SeniorManagerId
+		LEFT JOIN dbo.Person director ON director.PersonId = P.ExecutiveInChargeId
+		LEFT JOIN dbo.Person smngr ON smngr.PersonId = P.EngagementManagerId
 		WHERE ISNULL(M.RNo,1) = 1
 END
