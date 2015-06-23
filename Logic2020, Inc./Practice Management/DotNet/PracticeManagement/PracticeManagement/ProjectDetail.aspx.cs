@@ -514,7 +514,7 @@ namespace PraticeManagement
                     Response.Redirect(Constants.ApplicationPages.AccessDeniedPage);
                 }
 
-                ddlNotes.Enabled = (userIsAdministrator|| userIsOperations || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
+                ddlNotes.Enabled = (userIsAdministrator || userIsOperations || userIsDirector || (IsUserIsProjectOwner.HasValue && IsUserIsProjectOwner.Value));
 
                 txtProjectName.Focus();
 
@@ -1142,7 +1142,7 @@ namespace PraticeManagement
                     selectedText = ddlDirector.SelectedItem.Text;
                 }
             }
-            DataHelper.FillDirectorsList(ddlDirector, "-- Select Client Director --", excludingPersons);
+            DataHelper.FillDirectorsList(ddlDirector, "-- Select Executive in Charge --", excludingPersons);
             if (selectedValue != -1)
             {
                 ListItem selectedDirector = ddlDirector.Items.FindByValue(selectedValue.ToString());
@@ -1462,7 +1462,7 @@ namespace PraticeManagement
 
         private int SaveData()
         {
-            var previousProjectStatus = Project == null?null: Project.Status;
+            var previousProjectStatus = Project == null ? null : Project.Status;
             var project = new Project();
             PopulateData(project);
             int result = -1;
@@ -1563,11 +1563,11 @@ namespace PraticeManagement
             DataHelper.FillBusinessTypes(ddlBusinessOptions);
             PopulateDirectorsList();
             PopulateCSATOwnerList();
-            DataHelper.FillSeniorManagerList(ddlSeniorManager, "-- Select Senior Manager --");
+            DataHelper.FillSeniorManagerList(ddlSeniorManager, "-- Select Engagement Manager --");
             string statusids = (int)PersonStatusType.Active + ", " + (int)PersonStatusType.TerminationPending;
             Person[] persons = ServiceCallers.Custom.Person(p => p.OwnerListAllShort(statusids));
-            DataHelper.FillListDefault(cblProjectManagers, "All Project Managers", persons, false, "Id", "PersonLastFirstName");
-            DataHelper.FillListDefault(ddlProjectOwner, "-- Select Project Owner --", persons, false, "Id", "PersonLastFirstName");
+            DataHelper.FillListDefault(cblProjectManagers, "All People with Project Access", persons, false, "Id", "PersonLastFirstName");
+            DataHelper.FillListDefault(ddlProjectOwner, "-- Select Project Manager --", persons, false, "Id", "PersonLastFirstName");
 
             if (ProjectId.HasValue)
             {
