@@ -500,13 +500,13 @@
                                     <table id="tblSetProjectNumber" runat="server">
                                         <tr>
                                             <td>
-                                                <asp:RadioButton ID="rbAutoGenerate" runat="server" GroupName="ProjectNumber" Text="Auto generate project number" Checked="true"
-                                                    onchange="showProjectNumberTextBox(2)" />
+                                                <asp:RadioButton ID="rbAutoGenerate" runat="server" GroupName="ProjectNumber" Text="Auto generate project number"
+                                                    Checked="true" onchange="showProjectNumberTextBox(2)" />
                                                 <asp:RadioButton ID="rbOwnNumber" runat="server" GroupName="ProjectNumber" Text="Set own project number"
-                                                     onchange="showProjectNumberTextBox(1)" />
+                                                    onchange="showProjectNumberTextBox(1)" />
                                             </td>
                                             <td class="padLeft5">
-                                                <asp:TextBox ID="txtProjectNumber" runat="server" Style="display:none"></asp:TextBox>
+                                                <asp:TextBox ID="txtProjectNumber" runat="server" Style="display: none"></asp:TextBox>
                                                 &nbsp;
                                             </td>
                                             <td>
@@ -517,7 +517,7 @@
                                                     ToolTip="The project number already exists in the system." ValidationGroup="Project"
                                                     Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                                     OnServerValidate="custNumberExistsInSystem_ServerValidate"></asp:CustomValidator>
-                                                <asp:CustomValidator ID="custFormat" runat="server" ErrorMessage="Project number should be in the format P + 6 Digits or P + 6 Digits + 1 Alphabet." 
+                                                <asp:CustomValidator ID="custFormat" runat="server" ErrorMessage="Project number should be in the format P + 6 Digits or P + 6 Digits + 1 Alphabet."
                                                     ToolTip="Project number should be in the format P + 6 Digits or P + 6 Digits + 1 Alphabet."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="custFormat_ServerValidate"></asp:CustomValidator>
@@ -731,7 +731,7 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
-                                                Client Director
+                                                Executive in Charge
                                             </td>
                                             <td class="width60P">
                                                 <asp:DropDownList ID="ddlDirector" runat="server" CssClass="Width95Per" onchange="setDirty();"
@@ -792,7 +792,7 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
-                                                Project Owner
+                                                Project Manager
                                             </td>
                                             <td class="width60P">
                                                 <asp:DropDownList ID="ddlProjectOwner" runat="server" onchange="setDirty();" CssClass="Width95Per">
@@ -800,8 +800,8 @@
                                             </td>
                                             <td class="Width2Percent WhiteSpaceNoWrap">
                                                 <asp:RequiredFieldValidator ID="reqProjectOwner" runat="server" ControlToValidate="ddlProjectOwner"
-                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Owner is required."
-                                                    SetFocusOnError="true" Text="*" ToolTip="The Project Owner is required."></asp:RequiredFieldValidator>
+                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Manager is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Project Manager is required."></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvProjectOwner" runat="server" EnableClientScript="false"
                                                     ValidationGroup="Project" ErrorMessage="The selected owner has been terminated or made inactive.  Please select another owner."
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectOwner_OnServerValidate" SetFocusOnError="true"
@@ -863,7 +863,7 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td class="width30P">
-                                                Senior Manager
+                                                Engagement Manager
                                             </td>
                                             <td class="width60P WhiteSpaceNoWrap">
                                                 <asp:DropDownList ID="ddlSeniorManager" runat="server" CssClass="Width945Per" onchange="setDirty();">
@@ -871,8 +871,8 @@
                                             </td>
                                             <td class="Width2Percent WhiteSpaceNoWrap">
                                                 <asp:RequiredFieldValidator ID="req" runat="server" ControlToValidate="ddlSeniorManager"
-                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Senior Manager is required."
-                                                    SetFocusOnError="true" Text="*" ToolTip="The Senior Manager is required."></asp:RequiredFieldValidator>
+                                                    Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Engagement Manager is required."
+                                                    SetFocusOnError="true" Text="*" ToolTip="The Engagement Manager is required."></asp:RequiredFieldValidator>
                                             </td>
                                             <td class="Width8Percent">
                                                 <asp:ImageButton ID="imgMailToSeniorManager" runat="server" OnClick="imgMailToSeniorManager_OnClick"
@@ -932,25 +932,26 @@
                                     <table class="WholeWidth">
                                         <tr>
                                             <td class="LableProjectManager">
-                                                Project Manager(s)
+                                                Project Access
                                             </td>
                                             <td class="width60P">
                                                 <cc2:ScrollingDropDown ID="cblProjectManagers" runat="server" SetDirty="true" CssClass="ProjectDetailScrollingDropDown Width16point5PercentImp"
-                                                    AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Manager');"
-                                                    DropDownListType="Manager" />
+                                                    AllSelectedReturnType="AllItems" onclick="scrollingDropdown_onclick('cblProjectManagers','Project Access','es','Project Accesses',33);"
+                                                    DropDownListType="Project Access" DropDownListTypePluralForm="Project Accesses"
+                                                    PluralForm="es" />
                                                 <ext:ScrollableDropdownExtender ID="sdeProjectManagers" runat="server" TargetControlID="cblProjectManagers"
                                                     Width="94%" UseAdvanceFeature="true" EditImageUrl="Images/Dropdown_Arrow.png">
                                                 </ext:ScrollableDropdownExtender>
                                             </td>
                                             <td class="Width10Percent">
                                                 <asp:CustomValidator ID="cvProjectManager" runat="server" EnableClientScript="false"
-                                                    ValidationGroup="Project" ErrorMessage="The Project Manager(s) is required."
-                                                    ValidateEmptyText="true" OnServerValidate="cvProjectManager_OnServerValidate"
-                                                    SetFocusOnError="true" Text="*" ToolTip="The Project Manager(s) is required."></asp:CustomValidator>
+                                                    ValidationGroup="Project" ErrorMessage="The Project Access is required." ValidateEmptyText="true"
+                                                    OnServerValidate="cvProjectManager_OnServerValidate" SetFocusOnError="true" Text="*"
+                                                    ToolTip="The Project Access is required."></asp:CustomValidator>
                                                 <asp:CustomValidator ID="cvProjectManagerStatus" runat="server" EnableClientScript="false"
-                                                    ValidationGroup="Project" ErrorMessage="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."
+                                                    ValidationGroup="Project" ErrorMessage="The selected Project Access has been terminated or made inactive.  Please select another Project Access."
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectManagerStatus_OnServerValidate"
-                                                    SetFocusOnError="true" Text="*" ToolTip="The selected Project Manager(s) has been terminated or made inactive.  Please select another Project Manager(s)."></asp:CustomValidator>
+                                                    SetFocusOnError="true" Text="*" ToolTip="The selected Project Access has been terminated or made inactive.  Please select another Project Access."></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
