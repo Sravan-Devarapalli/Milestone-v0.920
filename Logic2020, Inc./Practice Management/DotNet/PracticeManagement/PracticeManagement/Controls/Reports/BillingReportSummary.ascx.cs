@@ -395,11 +395,11 @@ namespace PraticeManagement.Controls.Reports
             }
             if (!cblDirectorFilter.AllItemsSelected)
             {
-                filteredColoums.Add("Director");
+                filteredColoums.Add("Executive in Charge");
             }
             if (!cblProjectManagers.AllItemsSelected)
             {
-                filteredColoums.Add("Project Managers");
+                filteredColoums.Add("Project Access");
             }
             if (!cblSalespersonFilter.AllItemsSelected)
             {
@@ -407,7 +407,7 @@ namespace PraticeManagement.Controls.Reports
             }
             if (!cblSeniorManager.AllItemsSelected)
             {
-                filteredColoums.Add("Senior Manager");
+                filteredColoums.Add("Engagement Manager");
             }
 
             if (filteredColoums.Count > 0)
@@ -543,21 +543,20 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulateProjectManagerFilter(Person[] managers)
         {
-            DataHelper.FillListDefault(cblProjectManagers.CheckBoxListObject, "All Project Managers", managers, false);
+            DataHelper.FillListDefault(cblProjectManagers.CheckBoxListObject, "All People with Project Access", managers, false);
             cblProjectManagers.SelectAllItems(true);
         }
 
         private void PopulateSeniorManagerFilter(Practice[] seniorManagers)
         {
-            DataHelper.FillListDefault(cblSeniorManager.CheckBoxListObject, "All Senior Managers", seniorManagers, false);
+            DataHelper.FillListDefault(cblSeniorManager.CheckBoxListObject, "All Engagement Managers", seniorManagers, false);
             cblSeniorManager.SelectAllItems(true);
         }
 
         private void PopulateDirectorFilter(Person[] directors)
         {
-            DataHelper.FillListDefault(cblDirectorFilter.CheckBoxListObject, "All Directors", directors, false);
+            DataHelper.FillListDefault(cblDirectorFilter.CheckBoxListObject, "All Executives in Charge", directors, false);
             cblDirectorFilter.SelectAllItems(true);
-
         }
 
         public DataTable PrepareDataTable(List<BillingReport> reportData)
@@ -574,9 +573,9 @@ namespace PraticeManagement.Controls.Reports
             data.Columns.Add("Range Actual");
             data.Columns.Add("Difference");
             data.Columns.Add("Salesperson");
-            data.Columns.Add("Project Manager(s)");
-            data.Columns.Add("Senior Manager");
-            data.Columns.Add("Director");
+            data.Columns.Add("Project Access");
+            data.Columns.Add("Engagement Manager");
+            data.Columns.Add("Executive in Charge");
             data.Columns.Add("PONumber");
             foreach (var report in reportData)
             {
