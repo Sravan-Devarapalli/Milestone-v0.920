@@ -23,8 +23,8 @@ AS
 		pr.StartDate
 		
 		FROM Project pr 
-		    INNER JOIN ProjectManagers projManagers ON projManagers.ProjectId = pr.ProjectId
-			INNER JOIN Person p ON p.PersonId = projManagers.ProjectManagerId
+		    INNER JOIN ProjectAccess projManagers ON projManagers.ProjectId = pr.ProjectId
+			INNER JOIN Person p ON p.PersonId = projManagers.ProjectAccessId
 			INNER JOIN Practice pa ON pr.PracticeId = pa.PracticeId
 			INNER JOIN Person pm ON pm.PersonId = pa.PracticeManagerId
 			INNER JOIN Client c ON c.ClientId = pr.ClientId 
