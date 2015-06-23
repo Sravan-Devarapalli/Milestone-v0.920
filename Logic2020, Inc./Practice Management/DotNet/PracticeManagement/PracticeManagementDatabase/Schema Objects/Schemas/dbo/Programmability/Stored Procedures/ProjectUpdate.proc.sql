@@ -111,17 +111,17 @@ BEGIN
 				ProjectStatusId	= @ProjectStatusId,
 				BuyerName		= @BuyerName,
 				GroupId			= @GroupId,
-				DirectorId		= @DirectorId,
+				ExecutiveInChargeId		= @DirectorId,
 				Description		=@Description,
 				CanCreateCustomWorkTypes = @CanCreateCustomWorkTypes,
 				IsInternal		=@IsInternal,
 				IsNoteRequired  = @IsNoteRequired,
-				ProjectOwnerId  = @ProjectOwner,
+				ProjectManagerId  = @ProjectOwner,
 				SowBudget		= @SowBudget,
 				POAmount        = @POAmount,
 				PricingListId   = @PricingListId,
 				BusinessTypeId  = @BusinessTypeId,
-				SeniorManagerId = @SeniorManagerId,
+				EngagementManagerId = @SeniorManagerId,
 				IsSeniorManagerUnassigned  = @IsSeniorManagerUnassigned,
 				ReviewerId = @CSATOwnerId,
 				PONumber		= @PONumber,
@@ -196,17 +196,17 @@ BEGIN
 
 
 	    DELETE pm
-		FROM dbo.ProjectManagers pm
+		FROM dbo.ProjectAccess pm
 		LEFT JOIN [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
-		ON pm.ProjectId = @ProjectId AND pm.ProjectManagerId = p.ResultId 
+		ON pm.ProjectId = @ProjectId AND pm.ProjectAccessId = p.ResultId 
 		WHERE p.ResultId IS NULL and pm.ProjectId = @ProjectId
 
-		INSERT INTO dbo.ProjectManagers(ProjectId,ProjectManagerId)
+		INSERT INTO dbo.ProjectAccess(ProjectId,ProjectAccessId)
 		SELECT @ProjectId ,p.ResultId
 		FROM [dbo].ConvertStringListIntoTable(@ProjectManagerIdsList) AS p 
-		LEFT JOIN dbo.ProjectManagers pm
-		ON p.ResultId = pm.ProjectManagerId AND pm.ProjectId=@ProjectId
-		WHERE pm.ProjectManagerId IS NULL
+		LEFT JOIN dbo.ProjectAccess pm
+		ON p.ResultId = pm.ProjectAccessId AND pm.ProjectId=@ProjectId
+		WHERE pm.ProjectAccessId IS NULL
 
 		EXEC dbo.SessionLogUnprepare
 		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
