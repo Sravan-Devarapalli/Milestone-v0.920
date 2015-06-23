@@ -144,7 +144,7 @@ SET NOCOUNT ON
 											  (CASE WHEN CONVERT(XML,a.Data).exist('(/Project)') = 1 AND @SOWBudget = 1 AND ISNULL(CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@SowBudget)[1]', 'DECIMAL(18,2)'),-1) <> ISNULL(CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@SowBudget)[1]', 'DECIMAL(18,2)'),-1)
 											   THEN 1
 												ELSE 0 END) +
-											  (CASE WHEN CONVERT(XML,a.Data).exist('(/Project)') = 1 and @ClientDirector = 1 and CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@ClientDirector)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@ClientDirector)[1]', 'NVARCHAR(100)')
+											  (CASE WHEN CONVERT(XML,a.Data).exist('(/Project)') = 1 and @ClientDirector = 1 and CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@ExecutiveInCharge)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@ExecutiveInCharge)[1]', 'NVARCHAR(100)')
 											   THEN 1
 												ELSE 0 END) +
 											  (CASE WHEN CONVERT(XML,a.Data).exist('(/Project)') = 1 AND @POAmount = 1 AND 
@@ -166,7 +166,7 @@ SET NOCOUNT ON
 									   THEN 1
 									
 											ELSE 0 END) +
-											  (CASE WHEN CONVERT(XML,a.Data).exist('(/Project)') = 1 AND @ProjectOwner = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@ProjectOwner)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@ProjectOwner)[1]', 'NVARCHAR(100)')
+											  (CASE WHEN CONVERT(XML,a.Data).exist('(/Project)') = 1 AND @ProjectOwner = 1 AND CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/@ProjectManager)[1]', 'NVARCHAR(100)') <> CONVERT(XML, a.Data).value('(/Project/NEW_VALUES/OLD_VALUES/@ProjectManager)[1]', 'NVARCHAR(100)')
 											   THEN 1
 											   ELSE 0 END)) > 0
 									   
