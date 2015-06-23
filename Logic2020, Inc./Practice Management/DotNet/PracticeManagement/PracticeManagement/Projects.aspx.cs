@@ -1173,7 +1173,7 @@ namespace PraticeManagement
                     true);
 
                 PraticeManagement.Controls.DataHelper.FillProjectOwnerList(cblProjectOwner,
-                    "All Project Managers",
+                    "All People with Project Access",
                     true,
                     person);
 
@@ -1635,7 +1635,7 @@ namespace PraticeManagement
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
                                     Type = Revenue,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                    ProjectManagers = string.Empty,
+                                    ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                     PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
@@ -1661,7 +1661,7 @@ namespace PraticeManagement
                                               PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
                                               Type = Margin,
                                               Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                              ProjectManagers = string.Empty,
+                                              ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                               PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
@@ -1743,9 +1743,9 @@ namespace PraticeManagement
             }
             data.Columns.Add("Total");
             data.Columns.Add("Salesperson");
-            data.Columns.Add("Project Manager(s)");
-            data.Columns.Add("Senior Manager");
-            data.Columns.Add("Director");
+            data.Columns.Add("Project Manager");
+            data.Columns.Add("Engagement Manager");
+            data.Columns.Add("Executive in Charge");
             data.Columns.Add("Pricing List");
             data.Columns.Add("PO Number");
             foreach (var propertyBag in propertyBags)
@@ -1852,7 +1852,7 @@ namespace PraticeManagement
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
                                     Type = Revenue,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                    ProjectManagers = string.Empty,
+                                    ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
                                     SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                     Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                     PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
@@ -1878,7 +1878,7 @@ namespace PraticeManagement
                                               PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
                                               Type = Margin,
                                               Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
-                                              ProjectManagers = string.Empty,
+                                              ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
                                               SeniorManager = (pro.SeniorManagerName != null) ? pro.SeniorManagerName : string.Empty,
                                               Director = (pro.Director != null && pro.Director.Name != null) ? pro.Director.Name.ToString() : string.Empty,
                                               PricingList = (pro.PricingList != null && pro.PricingList.Name != null) ? pro.PricingList.Name : string.Empty,
