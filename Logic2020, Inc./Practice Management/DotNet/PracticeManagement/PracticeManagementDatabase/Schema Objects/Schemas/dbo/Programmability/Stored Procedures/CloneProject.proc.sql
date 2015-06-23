@@ -30,16 +30,16 @@ AS
 				 PricingListId, 
 				 BusinessTypeId,
 				 IsChargeable, 
-				 DirectorId, 
+				 ExecutiveInChargeId, 
 				 OpportunityId,
 				 Description,
 				 CanCreateCustomWorkTypes,
 				 IsInternal,
 				 IsNoteRequired,
-				 ProjectOwnerId,
+				 ProjectManagerId,
 				 SalesPersonId,
 				 PONumber,
-				 SeniorManagerId)
+				 EngagementManagerId)
                 SELECT  p.ClientId,
                         p.Discount,
                         p.Terms,
@@ -54,16 +54,16 @@ AS
 						p.PricingListId,
 						p.BusinessTypeId,
                         p.IsChargeable,                     
-						p.DirectorId,
+						p.ExecutiveInChargeId,
 						p.OpportunityId,
 						p.Description,
 						p.CanCreateCustomWorkTypes,
 						p.IsInternal,
 						p.IsNoteRequired,
-						p.ProjectOwnerId,
+						p.ProjectManagerId,
 						p.SalesPersonId,
 						p.PONumber,
-						p.SeniorManagerId
+						p.EngagementManagerId
                 FROM    dbo.Project AS p
                 WHERE   p.ProjectId = @projectId
                 
@@ -72,9 +72,9 @@ AS
 		INSERT INTO dbo.ProjectTimeType
 		SELECT @ClonedProjectId,TimeTypeId,IsAllowedToShow FROM dbo.ProjectTimeType WHERE ProjectId = @ProjectId
 
-		INSERT INTO ProjectManagers(ProjectId,ProjectManagerId)
-		SELECT  @ClonedProjectId,pm.ProjectManagerId
-		FROM    dbo.ProjectManagers AS pm
+		INSERT INTO ProjectAccess(ProjectId,ProjectAccessId)
+		SELECT  @ClonedProjectId,pm.ProjectAccessId
+		FROM    dbo.ProjectAccess AS pm
         WHERE   pm.ProjectId = @projectId
 
 		INSERT INTO dbo.ProjectCapabilities(ProjectId,CapabilityId)
