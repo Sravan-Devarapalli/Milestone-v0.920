@@ -86,8 +86,8 @@ BEGIN
 	AS
 	(
 	    SELECT ProjectId
-		FROM dbo.ProjectManagers 
-		WHERE ProjectManagerId IN (SELECT Ids FROM @ProjectManagersTable)
+		FROM dbo.ProjectAccess 
+		WHERE ProjectAccessId IN (SELECT Ids FROM @ProjectManagersTable)
 	)
 	SELECT FeedbackId,
 		   PF.PersonId,
@@ -114,7 +114,7 @@ BEGIN
 		   Manager.PersonId AS ProjectManagerId,
 		   Manager.LastName AS ProjectManagerLastName,
 		   Manager.FirstName AS ProjectManagerFirstName,
-		   Pro.ProjectOwnerId,
+		   Pro.ProjectManagerId AS ProjectOwnerId,
 		   owner.LastName ProjectOwnerLastName,
 		   owner.FirstName ProjectOwnerFirstName,
 		   PF.ReviewPeriodStartDate AS ReviewStartDate,
@@ -133,12 +133,12 @@ BEGIN
 	INNER JOIN dbo.ProjectStatus PS ON PS.ProjectStatusId = Pro.ProjectStatusId
 	LEFT JOIN dbo.ProjectGroup PG ON PG.GroupId = Pro.GroupId
 	LEFT JOIN dbo.BusinessGroup BG ON BG.BusinessGroupId = PG.BusinessGroupId
-	LEFT JOIN dbo.Person director ON director.PersonId = Pro.DirectorId
-	LEFT JOIN dbo.Person SM ON SM.PersonId = Pro.SeniorManagerId
+	LEFT JOIN dbo.Person director ON director.PersonId = Pro.ExecutiveInChargeId
+	LEFT JOIN dbo.Person SM ON SM.PersonId = Pro.EngagementManagerId
 	LEFT JOIN dbo.Person StatusUpdatedBy ON StatusUpdatedBy.PersonId = PF.CompletionCertificateBy
-	LEFT JOIN dbo.ProjectManagers PM ON PM.ProjectId = Pro.ProjectId
-	LEFT JOIN dbo.Person Manager ON Manager.PersonId = PM.ProjectManagerId
-	LEFT JOIN dbo.Person owner ON owner.PersonId = Pro.ProjectOwnerId
+	LEFT JOIN dbo.ProjectAccess PM ON PM.ProjectId = Pro.ProjectId
+	LEFT JOIN dbo.Person Manager ON Manager.PersonId = PM.ProjectAccessId
+	LEFT JOIN dbo.Person owner ON owner.PersonId = Pro.ProjectManagerId
 	WHERE (@IsExport = 1 OR (
 							 @IsExport = 0 AND (@AccountIds IS NULL OR (Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)))	
 							 AND (@BusinessGroupIds IS NULL OR (BG.BusinessGroupId IN (SELECT Ids FROM @BusinessGroupIdsTable)))
