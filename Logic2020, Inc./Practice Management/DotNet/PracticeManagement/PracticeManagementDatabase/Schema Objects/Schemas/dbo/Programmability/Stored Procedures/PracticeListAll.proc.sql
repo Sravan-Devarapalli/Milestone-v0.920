@@ -37,8 +37,8 @@ AS
 		(
 			SELECT DISTINCT Proj.PracticeId
 			FROM Project Proj
-			LEFT JOIN ProjectManagers PM ON PM.ProjectId = Proj.ProjectId
-			WHERE (PM.ProjectManagerId = @PersonId OR Proj.SalesPersonId = @PersonId OR Proj.projectownerId = @PersonId )
+			LEFT JOIN ProjectAccess PM ON PM.ProjectId = Proj.ProjectId
+			WHERE (PM.ProjectAccessId = @PersonId OR Proj.SalesPersonId = @PersonId OR Proj.ProjectManagerId = @PersonId )
 			GROUP BY Proj.PracticeId
 		)
 
@@ -113,10 +113,10 @@ AS
 			INSERT INTO @OwnerProjectPracticeList (PracticeId) 
 			SELECT proj.PracticeId
 			FROM dbo.Project AS proj 
-			INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = proj.ProjectId
-			WHERE projManagers.ProjectManagerId = @PersonId 
+			INNER JOIN dbo.ProjectAccess AS projManagers ON projManagers.ProjectId = proj.ProjectId
+			WHERE projManagers.ProjectAccessId = @PersonId 
 				OR proj.SalesPersonId = @PersonId   --as per #2914
-				OR proj.projectownerId = @PersonId
+				OR proj.ProjectManagerId = @PersonId
 		END
 	
 		SELECT 
