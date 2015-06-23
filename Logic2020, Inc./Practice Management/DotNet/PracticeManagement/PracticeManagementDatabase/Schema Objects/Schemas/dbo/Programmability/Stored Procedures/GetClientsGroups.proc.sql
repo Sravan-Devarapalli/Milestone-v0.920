@@ -82,10 +82,10 @@ BEGIN
 			WHERE       (@PersonId IS NULL 
 					     OR pg.GroupId IN (SELECT GroupId FROM @GroupPermissions)
 						 OR pg.GroupId IN (SELECT pro.GroupId FROM Project AS pro
-										INNER JOIN dbo.ProjectManagers AS projManagers ON projManagers.ProjectId = pro.ProjectId
-										WHERE projManagers.ProjectManagerId = @PersonId )
+										INNER JOIN dbo.ProjectAccess AS projManagers ON projManagers.ProjectId = pro.ProjectId
+										WHERE projManagers.ProjectAccessId = @PersonId )
 						 OR pg.GroupId IN (SELECT pro.GroupId FROM Project AS pro
-										WHERE pro.ProjectOwnerId = @PersonId OR pro.SalesPersonId = @PersonId)
+										WHERE pro.ProjectManagerId = @PersonId OR pro.SalesPersonId = @PersonId)
 						 )
 	END
 
