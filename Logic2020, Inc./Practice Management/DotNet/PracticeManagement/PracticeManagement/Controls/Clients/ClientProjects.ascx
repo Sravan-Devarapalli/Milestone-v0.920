@@ -13,7 +13,7 @@
                             <div class='ie-bg' > Business Unit</div>
                         </th>
                         <th class="CursorPointer color0898E6 fontUnderline">
-                             <div class='ie-bg' > Project Manager(s)</div>
+                             <div class='ie-bg' > Project Access</div>
                         </th>
                         <th class="CursorPointer color0898E6 fontUnderline">
                              <div class='ie-bg' > Start Date</div>
