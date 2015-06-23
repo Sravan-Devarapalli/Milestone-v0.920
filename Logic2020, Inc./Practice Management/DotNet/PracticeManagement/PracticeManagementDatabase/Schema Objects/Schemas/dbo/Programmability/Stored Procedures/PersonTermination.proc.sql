@@ -74,12 +74,12 @@ BEGIN
 	--3.Set client director as project owner to the projects for which the person is project owner.
 	
 	UPDATE Pro
-	SET Pro.ProjectOwnerId = Pro.DirectorId
+	SET Pro.ProjectManagerId = Pro.ExecutiveInChargeId
 	FROM dbo.Project Pro 
 	INNER JOIN dbo.Person P ON P.PersonId = @PersonId
-								AND Pro.ProjectOwnerId = P.PersonId
-								AND Pro.DirectorId IS NOT NULL
-								AND Pro.ProjectOwnerId != Pro.DirectorId
+								AND Pro.ProjectManagerId = P.PersonId
+								AND Pro.ExecutiveInChargeId IS NOT NULL
+								AND Pro.ProjectManagerId != Pro.ExecutiveInChargeId
 	WHERE @PersonStatusId = 2 -- termination status
 
 
