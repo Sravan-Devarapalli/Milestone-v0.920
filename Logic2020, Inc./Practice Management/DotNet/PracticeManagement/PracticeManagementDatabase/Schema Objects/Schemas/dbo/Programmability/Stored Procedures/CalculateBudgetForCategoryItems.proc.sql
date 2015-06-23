@@ -71,7 +71,7 @@ BEGIN
 			LEFT JOIN dbo.aspnet_UsersRolesHistory  UIR
 			ON UIR.UserId = U.UserId  AND C.Date >= UIR.StartDate AND (C.Date <= UIR.EndDate OR UIR.EndDate IS NULL)
 			LEFT JOIN dbo.aspnet_Roles UR ON UIR.RoleId = UR.RoleId AND UR.RoleName='Client Director'
-			LEFT JOIN dbo.Project Proj ON proj.DirectorId = P.PersonId AND C.Date BETWEEN Proj.StartDate 
+			LEFT JOIN dbo.Project Proj ON proj.ExecutiveInChargeId = P.PersonId AND C.Date BETWEEN Proj.StartDate 
 					AND ISNULL(Proj.EndDate,@FutureDateLocal)
 			LEFT JOIN dbo.CategoryItemBudget CIB ON CIB.CategoryTypeId = @CategoryTypeId 
 							AND CIB.MonthStartDate  BETWEEN @StartDateLocal AND @EndDateLocal 
@@ -235,14 +235,14 @@ BEGIN
 		FROM ClientDirectors CD
 		LEFT JOIN 
 		(
-		SELECT P.DirectorId,
+		SELECT P.ExecutiveInChargeId AS DirectorId,
 			   F.MonthStartDate,
 			   SUM(Revenue) AS Revenue
 		FROM dbo.Project P
 		JOIN ProjectMonthlyFinancials F
 				ON F.ProjectId = P.ProjectId
-		WHERE P.DirectorId IS NOT NULL
-		GROUP BY P.DirectorId,MonthStartDate
+		WHERE P.ExecutiveInChargeId IS NOT NULL
+		GROUP BY P.ExecutiveInChargeId,MonthStartDate
 		) B
 		ON CD.PersonId = B.DirectorId AND B.MonthStartDate = CD.MonthStartDate
 		ORDER BY CD.LastName, CD.FirstName
