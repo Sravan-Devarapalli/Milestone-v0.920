@@ -286,7 +286,7 @@ FinancialsRetro AS
 		ISNULL(APV.MonthEnd,PEM.MonthEnd) MonthEnd,
 		'M'+CONVERT(NVARCHAR,ISNULL(APV.MonthNumber,PEM.MonthNumber)) AS RangeType,
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedRevenue,0)) AS 'Revenue',
-		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedRevenueNet,0))   as 'RevenueNet',
+		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedRevenueNet,0)+ISNULL(PEM.Reimbursement,0)) as 'RevenueNet',
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedCogs,0)) Cogs ,
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedGrossMargin,0)+(ISNULL(PEM.Reimbursement,0)-ISNULL(PEM.Expense,0)))  as 'GrossMargin',
 		CONVERT(DECIMAL(18,2),ISNULL(APV.ProjectedHoursPerMonth,0)) Hours,
