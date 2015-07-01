@@ -36,5 +36,8 @@ BEGIN
 		AND P.ProjectStatusId IN (3,6)
 		AND P.ProjectId NOT IN (SELECT ProjectId FROM UsedProjectIds)
 		AND P.IsAdministrative = 0
+		AND (ISNULL(P.InvisibleInTimeEntry,0) = 0)
 	ORDER BY P.ProjectNumber
+
 END
+
