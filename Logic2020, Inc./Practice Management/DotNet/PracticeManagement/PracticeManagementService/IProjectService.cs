@@ -310,7 +310,7 @@ namespace PracticeManagementService
         List<Project> GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        Project GetBusinessDevelopmentProject();
+        List<Project> GetBusinessDevelopmentProject();
 
         [OperationContract]
         Project GetProjectByIdShort(int projectId);
