@@ -11,5 +11,6 @@ BEGIN
 			P.ProjectNumber,
 			P.IsNoteRequired
 	FROM [dbo].[Project] AS P
-	WHERE ProjectNumber = 'P999918'
+	WHERE (ProjectNumber IN ('P999918') OR P.IsBusinessDevelopment = 1)
 END
+
