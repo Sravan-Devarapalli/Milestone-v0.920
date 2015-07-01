@@ -56,7 +56,7 @@ BEGIN
 		fin.FinancialDate,
 		fin.MonthEnd,
 		ISNULL(Revenue,0) as 'Revenue',
-		ISNULL(RevenueNet,0) as 'RevenueNet',
+		ISNULL(RevenueNet,0)+ISNULL(Me.ReimbursedExpense,0) as 'RevenueNet',
 		ISNULL(Cogs,0) Cogs,
 		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))  as 'GrossMargin',
 		fin.Hours,
@@ -65,7 +65,7 @@ BEGIN
 		case 
 			when ISNULL(Revenue,0)  <> 0
 				then (ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0)))  * 100 / 
-				ISNULL(Revenue,0)
+				(ISNULL(RevenueNet,0)+ISNULL(Me.ReimbursedExpense,0))
 			else
 				0
 		end as 'TargetMargin'
