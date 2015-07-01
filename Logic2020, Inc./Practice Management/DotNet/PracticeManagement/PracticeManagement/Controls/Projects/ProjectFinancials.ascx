@@ -4,7 +4,7 @@
     <table class="alterrow">
         <tr>
             <td>
-                Estimated Revenue
+                Estimated Services Revenue
             </td>
             <td class="textRightImp">
                 <asp:Label ID="lblEstimatedRevenue" runat="server" CssClass="Revenue">Unavailable</asp:Label>
@@ -95,3 +95,4 @@
         </tr>
     </table>
 </asp:Panel>
+
