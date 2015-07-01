@@ -243,9 +243,10 @@ namespace DataTransferObjects
         /// </summary>
         public decimal TargetMargin
         {
-            get { return Revenue != 0M ? GrossMargin.Value * 100M / Revenue.Value : 0M; }
+            get { return RevenueNet != 0M ? GrossMargin.Value * 100M / RevenueNet.Value : 0M; }
         }
 
         #endregion Calculated Values
     }
 }
+
