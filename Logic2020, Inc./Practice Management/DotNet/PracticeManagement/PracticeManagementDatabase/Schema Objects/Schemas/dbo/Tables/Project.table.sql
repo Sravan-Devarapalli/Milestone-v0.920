@@ -29,7 +29,9 @@
 	EngagementManagerId			INT NULL,
 	IsSeniorManagerUnassigned	BIT NOT NULL CONSTRAINT DF_Project_IsSeniorManagerUnassigned DEFAULT 0,
 	[PONumber]					NVARCHAR(100)  NULL,
-	SalesPersonId				INT				NULL
+	SalesPersonId				INT				NULL,
+	[InvisibleInTimeEntry]		BIT NULL,
+	[IsBusinessDevelopment]		BIT NOT NULL CONSTRAINT DF_Project_IsBusinessDevelopment DEFAULT 0 -- to indicate the projects responsible for Business Development hours
     FOREIGN KEY ([GroupId]) REFERENCES [dbo].[ProjectGroup] ([GroupId]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
