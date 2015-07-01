@@ -206,7 +206,7 @@ namespace PraticeManagement.Controls.TimeEntry
                         OnWeekChanged(PreviousWeekSelectedDay.Value);
                     }
                 }
-
+                HostingPage.FillInternalProjects();
             }
             UpdateWeekLabel();
 
