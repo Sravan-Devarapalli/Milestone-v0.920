@@ -70,6 +70,7 @@ BEGIN
 											AND TE.ChargeCodeDate <= @LifeToDateEndDate
 											AND CC.TimeEntrySectionId <> 2
 											AND Pro.ProjectNumber != 'P031000'
+											AND Pro.IsBusinessDevelopment <> 1 ---- Added this condition as part of PP29 changes by Nick.
 										THEN TEH.ActualHours
 										ELSE 0
 									END), 2) AS NonBillableHours,
@@ -82,6 +83,7 @@ BEGIN
 											AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
 											AND CC.TimeEntrySectionId <> 2
 											AND Pro.ProjectNumber != 'P031000'
+											AND Pro.IsBusinessDevelopment <> 1 ---- Added this condition as part of PP29 changes by Nick.
 										THEN TEH.ActualHours
 										ELSE 0
 									END), 2) AS NonBillableHoursInRange						
