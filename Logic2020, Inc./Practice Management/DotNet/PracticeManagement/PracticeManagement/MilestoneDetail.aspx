@@ -553,7 +553,7 @@
                         <table class="alterrow">
                             <tr>
                                 <td>
-                                    Estimated Revenue
+                                    Estimated Services Revenue
                                 </td>
                                 <td class="textRight">
                                     <asp:Label ID="lblTotalRevenue" runat="server" class="fontBold"></asp:Label>
@@ -1181,13 +1181,13 @@
                         </th>
                     </tr>
                     <tr>
-                        <td style="padding:10px;">
+                        <td style="padding: 10px;">
                             “Approved by Ops” has been unchecked as person badge dates are changed with change
                             in milestone dates. Request for Operations for the approval has been sent.
                         </td>
                     </tr>
                     <tr>
-                        <td class="textCenter" style="padding-bottom:5px;">
+                        <td class="textCenter" style="padding-bottom: 5px;">
                             <asp:Button ID="btnOk" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp" />
                         </td>
                     </tr>
