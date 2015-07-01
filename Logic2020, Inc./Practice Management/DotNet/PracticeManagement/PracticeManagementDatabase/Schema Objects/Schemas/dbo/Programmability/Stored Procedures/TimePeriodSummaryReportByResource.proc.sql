@@ -168,11 +168,11 @@ AS
 											   THEN TEH.ActualHours
 											   ELSE 0
 										  END), 2) AS ProjectNonBillableHours ,
-								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 2
+								ROUND(SUM(CASE WHEN (CC.TimeEntrySectionId = 2 OR PRO.IsBusinessDevelopment = 1) -- Added this condition as part of PP29 changes by Nick.
 											   THEN TEH.ActualHours
 											   ELSE 0
 										  END), 2) AS BusinessDevelopmentHours ,
-								ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 3
+								ROUND(SUM(CASE WHEN (CC.TimeEntrySectionId = 3 AND Pro.IsBusinessDevelopment <> 1) -- Added this condition as part of PP29 changes by Nick.
 													OR Pro.ProjectNumber = 'P031000'
 											   THEN TEH.ActualHours
 											   ELSE 0
