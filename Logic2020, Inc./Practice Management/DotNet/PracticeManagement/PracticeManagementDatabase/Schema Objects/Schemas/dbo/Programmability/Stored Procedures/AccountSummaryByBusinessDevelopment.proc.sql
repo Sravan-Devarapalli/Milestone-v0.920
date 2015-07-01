@@ -38,20 +38,23 @@ BEGIN
 		INNER JOIN dbo.TimeEntryHours TEH
 			ON TEH.TimeEntryId = TE.TimeEntryId AND TE.ChargeCodeDate BETWEEN @StartDateLocal AND @EndDateLocal
 		INNER JOIN dbo.ChargeCode CC
-			ON CC.Id = TE.ChargeCodeId AND CC.TimeEntrySectionId = 2 --Here 2 is Business Development section.
+			ON CC.Id = TE.ChargeCodeId 
 		INNER JOIN dbo.ProjectGroup PG
 			ON PG.GroupId = CC.ProjectGroupId
 		INNER JOIN dbo.TimeType AS TT
 			ON TT.TimeTypeId = CC.TimeTypeId
 		INNER JOIN dbo.Person P
 			ON P.PersonId = TE.PersonId AND TE.ChargeCodeDate <= ISNULL(P.TerminationDate, @FutureDate)
+		INNER JOIN dbo.Project Pro
+		    ON Pro.ProjectId = CC.ProjectId
 
 	WHERE
 		CC.ClientId = @AccountIdLocal
 		AND (@BusinessUnitIdsLocal IS NULL
-		OR PG.GroupId IN (SELECT ResultId
+					   OR PG.GroupId IN (SELECT ResultId
 						  FROM
-							  dbo.ConvertStringListIntoTable(@BusinessUnitIdsLocal)))
+					      dbo.ConvertStringListIntoTable(@BusinessUnitIdsLocal)))
+	    AND(CC.TimeEntrySectionId = 2 OR Pro.IsBusinessDevelopment = 1) -- Added this condition as part of PP29 changes by Nick.
 	ORDER BY
 		P.LastName
 	  , P.FirstName
@@ -59,3 +62,4 @@ BEGIN
 	  , TT.Name
 
  END
+
