@@ -69,7 +69,7 @@ namespace PraticeManagement.Controls.Projects
                     lblEstimatedRevenue.Text = Financials.Revenue.ToString();
                 }
                 lblDiscount.Text = String.Format(nfi, "{0}", project.Discount);
-                var discountAmt = (Financials.Revenue.Value - Financials.RevenueNet.Value);
+                var discountAmt = (Financials.Revenue.Value * project.Discount/100);
                 lblDiscountAmount.Text = discountAmt >= 0 ?
                     String.Format(nfi, "{0:c}", discountAmt) : ((PracticeManagementCurrency)discountAmt).ToString();
                 lblRevenueNet.Text = Financials.RevenueNet.Value >= 0 ?
