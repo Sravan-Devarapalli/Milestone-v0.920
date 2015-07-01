@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public static string IsBusinessDevelopment= "IsBusinessDevelopment";
             public static string Requester= "Requester";
             public static string RequesterId= "RequesterId";
             public static string BadgedNotOnProjectExceptionCount= "BadgedNotOnProjectExceptionCount";
@@ -582,6 +583,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string MilestoneNewStartDate = "@MilestoneNewStartDate";
+            public static string MilestoneNewEndDate = "@MilestoneNewEndDate";
             public static string IsNotBadgedException = "@IsNotBadgedException";
             public static string IsBadgedException = "@IsBadgedException";
             public static string ExcludeFromReports = "@ExcludeFromReports";
@@ -1479,6 +1482,7 @@
 
             public class MilestonePerson
             {
+                public const string GetPeopleAssignedInOtherProjectsForGivenRange = "dbo.GetPeopleAssignedInOtherProjectsForGivenRange";
                 public const string ShouldAttributionDateExtend = "dbo.ShouldAttributionDateExtend";
                 public const string ConsultantMilestones = "dbo.ConsultantMilestones";
                 public const string MilestonePersonListByProject = "dbo.MilestonePersonListByProject";
