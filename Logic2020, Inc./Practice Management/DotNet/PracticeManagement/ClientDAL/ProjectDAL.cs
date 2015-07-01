@@ -2951,9 +2951,9 @@ namespace DataAccess
             return projectList;
         }
 
-        public static Project GetBusinessDevelopmentProject()
+        public static List<Project> GetBusinessDevelopmentProject()
         {
-            Project project = null;
+            List<Project> project = null;
             using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetBusinessDevelopmentProject, connection))
             {
@@ -2962,9 +2962,10 @@ namespace DataAccess
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
+                    project = new List<Project>();
                     while (reader.Read())
                     {
-                        project = ReadProjectShort(reader);
+                        project.Add(ReadProjectShort(reader));
                     }
                 }
             }
