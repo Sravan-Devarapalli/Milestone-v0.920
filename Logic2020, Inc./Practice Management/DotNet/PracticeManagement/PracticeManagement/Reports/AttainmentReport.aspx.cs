@@ -19,6 +19,7 @@ namespace PraticeManagement.Reports
     public partial class AttainmentReport : System.Web.UI.Page
     {
         private const string Revenue = "Revenue";
+        private const string ServiceRevenue = "Services Revenue";
         private const string Margin = "Cont. Margin";
         private const string ExportDateRangeFormat = "Date Range: {0} - {1}";
 
@@ -625,7 +626,7 @@ namespace PraticeManagement.Reports
 
                         else if (property.Name == "Type")
                         {
-                            objects[column] = property.GetValue(propertyBag);
+                            objects[column] = property.GetValue(propertyBag) == Revenue ? ServiceRevenue: property.GetValue(propertyBag);
                             column++;
                             bool isMargin = property.GetValue(propertyBag).ToString() == Margin;
                             //Add month columns.
