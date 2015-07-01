@@ -50,7 +50,7 @@ BEGIN
 		ISNULL(f.FinancialDate,M.StartDate) FinancialDate,
 		ISNULL(f.MonthEnd,M.ProjectedDeliveryDate) MonthEnd,
 		ISNULL(f.Revenue,0) as 'Revenue',
-		ISNULL(RevenueNet,0) as 'RevenueNet',
+		ISNULL(RevenueNet,0)+ISNULL(Me.ReimbursedExpense,0) as 'RevenueNet',
 		ISNULL(Cogs,0) Cogs,
 		ISNULL(GrossMargin,0)+((ISNULL(Me.ReimbursedExpense,0) -ISNULL(ME.Expense,0))) as 'GrossMargin',
 		ISNULL(Hours,0) Hours,
