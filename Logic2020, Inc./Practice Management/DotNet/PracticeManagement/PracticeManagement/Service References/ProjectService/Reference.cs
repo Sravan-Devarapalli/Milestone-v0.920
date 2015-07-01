@@ -19,9 +19,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project[] GetProjectsListByProjectGroupId(int projectGroupId, bool isInternal, int personId, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetBusinessDevelopmentProject", ReplyAction="http://tempuri.org/IProjectService/GetBusinessDevelopmentProjectResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
-        DataTransferObjects.Project GetBusinessDevelopmentProject();
+        DataTransferObjects.Project[] GetBusinessDevelopmentProject();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectByIdShort", ReplyAction="http://tempuri.org/IProjectService/GetProjectByIdShortResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
@@ -265,7 +263,7 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
         
-        public DataTransferObjects.Project GetBusinessDevelopmentProject() {
+        public DataTransferObjects.Project[] GetBusinessDevelopmentProject() {
             return base.Channel.GetBusinessDevelopmentProject();
         }
         
