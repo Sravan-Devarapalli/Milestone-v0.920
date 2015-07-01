@@ -329,8 +329,7 @@ namespace PraticeManagement.Controls.Reports
 
             var businessDevelopmentProj = ServiceCallers.Custom.Project(p => p.GetBusinessDevelopmentProject());
             string totalHours = string.Empty;
-
-            if (businessDevelopmentProj.ProjectNumber.ToUpper() == SelectedProjectNumber.ToUpper())
+            if (businessDevelopmentProj.Any(p=>p.ProjectNumber.ToUpper() == SelectedProjectNumber.ToUpper()))
             {
                 HostingPage.AccountId = Convert.ToInt32(lnkProject.Attributes["AccountId"]);
                 HostingPage.BusinessUnitIds = lnkProject.Attributes["GroupId"] + ",";
@@ -485,12 +484,10 @@ namespace PraticeManagement.Controls.Reports
 
         }
 
-
         protected void btnFilterOK_OnClick(object sender, EventArgs e)
         {
             PopulateByProjectData(false);
         }
-
 
     }
 }
