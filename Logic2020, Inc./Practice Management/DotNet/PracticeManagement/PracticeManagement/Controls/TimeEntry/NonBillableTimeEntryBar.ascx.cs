@@ -144,8 +144,8 @@ namespace PraticeManagement.Controls.TimeEntry
             DateTime[] dates = HostingPage.SelectedDates;
 
             //Remove Worktype from xml
-            var project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject());
-            bool isBusinessDevelopment = project.Id == projectId;
+            //var project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject(HostingPage.SelectedPerson.Id))[0];  -- As part of PP29 Changes by Nick
+            bool isBusinessDevelopment = false;//project.Id == projectId;
             HostingPage.RemoveWorktypeFromXMLForBusinessDevelopmentAndInternalSection(accountId, businessUnitId, projectId, repItemIndex, isBusinessDevelopment);
 
 
