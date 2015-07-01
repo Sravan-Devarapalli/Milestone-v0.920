@@ -919,7 +919,7 @@ namespace PracticeManagementService
             return ProjectDAL.GetProjectsListByProjectGroupId(projectGroupId, isInternal, personId, startDate, endDate);
         }
 
-        public Project GetBusinessDevelopmentProject()
+        public List<Project> GetBusinessDevelopmentProject()
         {
             return ProjectDAL.GetBusinessDevelopmentProject();
         }
