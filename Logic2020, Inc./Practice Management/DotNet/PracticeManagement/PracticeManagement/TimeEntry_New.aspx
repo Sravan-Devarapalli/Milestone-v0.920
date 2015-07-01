@@ -38,11 +38,11 @@
             setFooterPlacementinLastItemTemplate();
 
             var pnlProjectSection = document.getElementById("<%=pnlProjectSection.ClientID %>");
-            var pnlBusinessDevelopmentSection = document.getElementById("<%=pnlBusinessDevelopmentSection.ClientID %>");
+           
             var pnlInternalSection = document.getElementById("<%=pnlInternalSection.ClientID %>");
             var pnlAdministrativeSection = document.getElementById("<%=pnlAdministrativeSection.ClientID %>");
             ExpandCollapseTimeEntryPage(pnlProjectSection);
-            ExpandCollapseTimeEntryPage(pnlBusinessDevelopmentSection);
+          
             ExpandCollapseTimeEntryPage(pnlInternalSection);
             ExpandCollapseTimeEntryPage(pnlAdministrativeSection);
 
@@ -54,6 +54,12 @@
                     pnlSection.style.height = "auto";
                 }
             }
+        }
+
+        function makeDefaultValue() {
+            var projectddl = document.getElementById("<%=ddlProjectInternal.ClientID %>");
+            projectddl.value = '';
+            ddlChild_onchange(projectddl);
         }
 
         function enterPressed(evn) {
@@ -360,11 +366,11 @@
                         var hdIsWeekOrPersonChanged = document.getElementById('<%= hdIsWeekOrPersonChanged.ClientID %>');
                         if (hdIsWeekOrPersonChanged.value.toLowerCase() == 'true') {
                             var lbProjectSection = document.getElementById('<%=lbProjectSection.ClientID %>');
-                            var lbBusinessDevelopmentSection = document.getElementById('<%=lbBusinessDevelopmentSection.ClientID %>');
+                            
                             var lbInternalSection = document.getElementById('<%=lbInternalSection.ClientID %>');
                             var lbAdministrativeSection = document.getElementById('<%=lbAdministrativeSection.ClientID %>');
                             expandCollapseSections('cpeProjectSection', lbProjectSection);
-                            expandCollapseSections('cpeBusinessDevelopmentSection', lbBusinessDevelopmentSection);
+                   
                             expandCollapseSections('cpeInternalSection', lbInternalSection);
                             expandCollapseSections('cpeAdministrative', lbAdministrativeSection);
                             hdIsWeekOrPersonChanged.value = 'false';
@@ -509,7 +515,7 @@
                             </AlternatingItemTemplate>
                         </asp:Repeater>
                     </asp:Panel>
-                    <div class="buttons-block">
+<%--                    <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
                                 <td class="font14Px">
@@ -644,7 +650,7 @@
                                 </div>
                             </AlternatingItemTemplate>
                         </asp:Repeater>
-                    </asp:Panel>
+                    </asp:Panel>--%>
                     <div class="buttons-block">
                         <table cellpadding="0" cellspacing="0" class="WholeWidth">
                             <tr>
@@ -1062,7 +1068,7 @@
                         </tr>
                     </table>
                 </asp:Panel>
-                <AjaxControlToolkit:ModalPopupExtender ID="mpeBusinessDevelopmentSectionPopup" runat="server"
+<%--                <AjaxControlToolkit:ModalPopupExtender ID="mpeBusinessDevelopmentSectionPopup" runat="server"
                     TargetControlID="btnAddAccount" CancelControlID="btnCancelBusinessDevelopmentSection"
                     BehaviorID="mpeBusinessDevelopmentSectionPopup" BackgroundCssClass="modalBackground"
                     PopupControlID="pnlBusinessDevelopmentSectionPopup" DropShadow="false" />
@@ -1126,7 +1132,7 @@
                             </td>
                         </tr>
                     </table>
-                </asp:Panel>
+                </asp:Panel>--%>
                 <AjaxControlToolkit:ModalPopupExtender ID="mpeInternalProjectSectionPopup" runat="server"
                     TargetControlID="btnAddInternalProject" CancelControlID="btnCancelInternalProjectSection"
                     BehaviorID="mpeInternalProjectSectionPopup" BackgroundCssClass="modalBackground"
@@ -1138,34 +1144,34 @@
                             <th>
                                 Add Project
                                 <asp:Button ID="btnCloseInternalProjectSection" runat="server" CssClass="mini-report-closeNew"
-                                    ToolTip="Cancel" OnClientClick="$find('mpeInternalProjectSectionPopup').hide(); return false;"
+                                    ToolTip="Cancel" OnClientClick="makeDefaultValue(); $find('mpeInternalProjectSectionPopup').hide(); return false;"
                                     Text="X"></asp:Button>
                             </th>
                         </tr>
                         <tr>
                             <td class="Padding10" colspan="2">
                                 <table class="TimeEntryAddPopUpTable">
-                                    <tr>
+                                    <%--<tr>
                                         <td class="FirstTrTd1">
-                                            Business Unit :
+                                            Division :
                                         </td>
                                         <td class="FirstTrTd2">
                                             <asp:DropDownList ID="ddlBusinessUnitInternal" onchange="ddlParent_onchange(this);"
                                                 runat="server" />
                                         </td>
-                                    </tr>
+                                    </tr>--%>
                                     <tr>
                                         <td class="SecondTrTd1">
                                             Project :
                                         </td>
                                         <td class="SecondTrTd2">
-                                            <asp:DropDownList ID="ddlProjectInternal" onchange="ddlChild_onchange(this);" runat="server" />
-                                            <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
+                                            <asp:DropDownList ID="ddlProjectInternal" runat="server" onchange="ddlChild_onchange(this);"/>
+                                          <%--  <AjaxControlToolkit:CascadingDropDown ID="cddProjectsInternal" runat="server" ParentControlID="ddlBusinessUnitInternal"
                                                 TargetControlID="ddlProjectInternal" Category="Group" LoadingText="Loading Projects..."
                                                 EmptyText="No Projects found" PromptText="- - Select Project - -" PromptValue="-1"
                                                 BehaviorID="cddProjectsInternal" ScriptPath="~/Scripts/CascadingDropDownBehavior.min.js"
                                                 ServicePath="~/CompanyPerfomanceServ.asmx" ServiceMethod="GetProjectsListByProjectGroupId"
-                                                UseContextKey="true" />
+                                                UseContextKey="true" />--%>
                                         </td>
                                     </tr>
                                 </table>
@@ -1181,7 +1187,7 @@
                                         </td>
                                         <td class="SecondTd">
                                             <asp:Button ID="btnCancelInternalProjectSection" runat="server" Text="Cancel" ToolTip="Cancel"
-                                                OnClientClick="$find('mpeInternalProjectSectionPopup').hide(); return false;" />
+                                                OnClientClick="makeDefaultValue(); $find('mpeInternalProjectSectionPopup').hide(); return false;" />
                                         </td>
                                     </tr>
                                 </table>
