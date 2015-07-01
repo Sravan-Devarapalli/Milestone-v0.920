@@ -85,10 +85,11 @@ BEGIN
 						ROUND(SUM(CASE WHEN TEH.IsChargeable = 0
 											AND CC.TimeEntrySectionId <> 2
 											AND Pro.ProjectNumber != 'P031000'
+											AND Pro.IsBusinessDevelopment <> 1 ---- Added this condition as part of PP29 changes by Nick.
 										THEN TEH.ActualHours
 										ELSE 0
 									END), 2) AS NonBillableHours ,
-						ROUND(SUM(CASE WHEN CC.TimeEntrySectionId = 2
+						ROUND(SUM(CASE WHEN (CC.TimeEntrySectionId = 2 OR Pro.IsBusinessDevelopment = 1) -- Added this condition as part of PP29 changes by Nick.
 										THEN TEH.ActualHours
 										ELSE 0
 									END), 2) AS BusinessDevelopmentHours
@@ -165,3 +166,4 @@ BEGIN
 		
 
 END
+
