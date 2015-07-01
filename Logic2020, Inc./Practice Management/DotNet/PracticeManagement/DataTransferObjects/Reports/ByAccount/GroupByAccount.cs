@@ -73,8 +73,9 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.BusinessDevelopmentHours) : GroupedProjects.Where(p => p.Project.TimeEntrySectionId == (int)TimeEntrySectionType.BusinessDevelopment).Sum(p => p.NonBillableHours);
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.BusinessDevelopmentHours) : GroupedProjects.Where(p => p.Project.IsBusinessDevelopment == true).Sum(p => p.NonBillableHours);
             }
         }
     }
 }
+
