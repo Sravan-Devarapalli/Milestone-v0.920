@@ -226,6 +226,7 @@ SELECT C.ClientId
 			   ELSE
 				   ISNULL(EBP.EstBillings,0)
 		   END) AS EstimatedBillings
+		, CASE WHEN ISNULL(HD.TimeEntrySectionId,-1) = 2 THEN 1 ELSE ISNULL(P.IsBusinessDevelopment,0) END AS IsBusinessDevelopment
 	FROM
 		HoursData HD
 		FULL JOIN ProjectForeCastedHoursUntilToday pfh
@@ -323,3 +324,4 @@ SELECT C.ClientId
 		INNER JOIN PersonsCountCTE AS PC ON 1 = 1
 	WHERE C.ClientId = @AccountId
 END	
+
