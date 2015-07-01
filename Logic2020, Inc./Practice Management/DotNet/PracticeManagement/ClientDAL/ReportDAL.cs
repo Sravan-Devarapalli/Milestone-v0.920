@@ -542,6 +542,17 @@ namespace DataAccess
             int timeEntrySectionIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeEntrySectionId);
             int forecastedHoursIndex;
             int estimatedBillingsIndex;
+            int isBusinessDevelopmentIndex;
+
+            try
+            {
+                isBusinessDevelopmentIndex = reader.GetOrdinal(Constants.ColumnNames.IsBusinessDevelopment);
+            }
+            catch
+            {
+                isBusinessDevelopmentIndex = -1;
+            }
+
 
             int groupIdIndex = -1;
 
@@ -602,6 +613,11 @@ namespace DataAccess
                 if (groupIdIndex > -1)
                 {
                     project.Group.Id = reader.GetInt32(groupIdIndex);
+                }
+
+                if (isBusinessDevelopmentIndex > -1)
+                {
+                    project.IsBusinessDevelopment = Convert.ToBoolean(reader.GetInt32(isBusinessDevelopmentIndex));
                 }
 
                 plgh.Project = project;
