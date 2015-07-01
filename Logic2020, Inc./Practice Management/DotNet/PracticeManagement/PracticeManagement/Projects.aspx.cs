@@ -67,6 +67,7 @@ namespace PraticeManagement
         private const string HintDivCssClass = "hint";
         private const string OneGreaterSeniorityExistsKey = "ProjectsListOneGreaterSeniorityExists";
         private const string Revenue = "Revenue";
+        private const string ServiceRevenue = "Services Revenue";
         private const string Margin = "Cont. Margin";
 
         private const string CompanyPerformanceFilterKey = "CompanyPerformanceFilterKey";
@@ -1757,7 +1758,7 @@ namespace PraticeManagement
                 {
                     if (property.Name != "ProjectID")
                     {
-                        objects[column] = property.GetValue(propertyBag);
+                        objects[column] = (property.GetValue(propertyBag) == Revenue) ? ServiceRevenue : property.GetValue(propertyBag);
                         if (property.Name == "ProjectNumber")
                         {
                             project = projectsList.Where(p => p.ProjectNumber == property.GetValue(propertyBag).ToString()).FirstOrDefault();
