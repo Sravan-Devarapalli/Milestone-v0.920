@@ -474,6 +474,9 @@ namespace DataTransferObjects
         [DataMember]
         public string MailBody { get; set; }
 
+        [DataMember]
+        public bool IsBusinessDevelopment { get; set; }
+
         #endregion Properties
 
         #region Formatting
