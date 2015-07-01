@@ -4,93 +4,96 @@
 )
 AS
 BEGIN 
+	
+	--REMOVING INSERT CACHE FUNCTIONALITY AS WE ARE NOT USING IT ANY MORE - 6/30/2015
+
 	--SET NOCOUNT ON
 	--SET ANSI_WARNINGS OFF
 	
-		DECLARE @StartDate DATETIME,
-				@EndDate DATETIME ,
-				@InsertingTime DATETIME,
-				@ProjectId   NVARCHAR(2500),
-				@BackupDays INT = 3,
-				@ErrorMessage NVARCHAR(MAX),
-				@LogData NVARCHAR(200)
-		SELECT @BackupDays = CONVERT(INT,Value) FROM dbo.Settings s WHERE s.SettingsKey = 'ProjectSummaryCacheValuesBackUpDays'
-		SELECT @InsertingTime = dbo.InsertingTime()
-		SELECT	@BackupDays = ISNULL(@BackupDays ,3),
-				@StartDate = DATEADD(yy,-1,DATEADD(yy,DATEDIFF(yy,0,@InsertingTime),0)),
-				@EndDate = DATEADD(ms,-3,DATEADD(yy,0,DATEADD(yy,DATEDIFF(yy,0,@InsertingTime)+1,0)))
+		DECLARE @StartDate DATETIME--,
+		--		@EndDate DATETIME ,
+		--		@InsertingTime DATETIME,
+		--		@ProjectId   NVARCHAR(2500),
+		--		@BackupDays INT = 3,
+		--		@ErrorMessage NVARCHAR(MAX),
+		--		@LogData NVARCHAR(200)
+		--SELECT @BackupDays = CONVERT(INT,Value) FROM dbo.Settings s WHERE s.SettingsKey = 'ProjectSummaryCacheValuesBackUpDays'
+		--SELECT @InsertingTime = dbo.InsertingTime()
+		--SELECT	@BackupDays = ISNULL(@BackupDays ,3),
+		--		@StartDate = DATEADD(yy,-1,DATEADD(yy,DATEDIFF(yy,0,@InsertingTime),0)),
+		--		@EndDate = DATEADD(ms,-3,DATEADD(yy,0,DATEADD(yy,DATEDIFF(yy,0,@InsertingTime)+1,0)))
 
-		SELECT  @ProjectId = ISNULL(@ProjectId,'') + ',' + CONVERT(VARCHAR,P.ProjectId)
-		FROM	dbo.Project AS P
-		WHERE	((P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))
-				AND P.ProjectId NOT IN (SELECT ProjectId FROM dbo.DefaultMilestoneSetting)
-				AND P.IsAllowedToShow = 1
+		--SELECT  @ProjectId = ISNULL(@ProjectId,'') + ',' + CONVERT(VARCHAR,P.ProjectId)
+		--FROM	dbo.Project AS P
+		--WHERE	((P.EndDate >= @StartDate AND P.StartDate <= @EndDate) OR (P.StartDate IS NULL AND P.EndDate IS NULL))
+		--		AND P.ProjectId NOT IN (SELECT ProjectId FROM dbo.DefaultMilestoneSetting)
+		--		AND P.IsAllowedToShow = 1
 		
 		
-			BEGIN TRY
-				BEGIN TRAN  ProjSummaryCacheValue_Tran
+		--	BEGIN TRY
+		--		BEGIN TRAN  ProjSummaryCacheValue_Tran
 
-				DELETE [dbo].[ProjectSummaryCache] 
-				WHERE CacheDate = CONVERT(DATE,@InsertingTime - @BackupDays)
+		--		DELETE [dbo].[ProjectSummaryCache] 
+		--		WHERE CacheDate = CONVERT(DATE,@InsertingTime - @BackupDays)
 				
-				--SET @LogData = 'Delete Sucessfully FROM [InsertProjectSummaryCacheValue]'
-				--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
+		--		--SET @LogData = 'Delete Sucessfully FROM [InsertProjectSummaryCacheValue]'
+		--		--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
 
-				COMMIT TRAN  ProjSummaryCacheValue_Tran
-			END TRY
-			BEGIN CATCH
-				ROLLBACK TRAN ProjSummaryCacheValue_Tran
-				SET @ErrorMessage = 'From Sproc' +ERROR_MESSAGE()
-				RAISERROR( @ErrorMessage, 16, 1)
-			END CATCH
+		--		COMMIT TRAN  ProjSummaryCacheValue_Tran
+		--	END TRY
+		--	BEGIN CATCH
+		--		ROLLBACK TRAN ProjSummaryCacheValue_Tran
+		--		SET @ErrorMessage = 'From Sproc' +ERROR_MESSAGE()
+		--		RAISERROR( @ErrorMessage, 16, 1)
+		--	END CATCH
 
-			BEGIN TRY
-				BEGIN TRAN  ProjSummaryCacheValue_Tran1
+		--	BEGIN TRY
+		--		BEGIN TRAN  ProjSummaryCacheValue_Tran1
 
-				IF NOT EXISTS (SELECT 1 FROM [dbo].[ProjectSummaryCache]  WHERE CacheDate = CONVERT(DATE,@InsertingTime) and ismonthlyrecorD = 1)
-					BEGIN
-						INSERT  [dbo].[ProjectSummaryCache] 
-						([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,PreviousMonthActualRevenue,PreviousMonthActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
-						EXEC dbo.FinancialsListByProjectPeriod @StartDate=@StartDate ,@EndDate=@EndDate,@UseActuals=1,@ProjectId= @ProjectId
+		--		IF NOT EXISTS (SELECT 1 FROM [dbo].[ProjectSummaryCache]  WHERE CacheDate = CONVERT(DATE,@InsertingTime) and ismonthlyrecorD = 1)
+		--			BEGIN
+		--				INSERT  [dbo].[ProjectSummaryCache] 
+		--				([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,PreviousMonthActualRevenue,PreviousMonthActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
+		--				EXEC dbo.FinancialsListByProjectPeriod @StartDate=@StartDate ,@EndDate=@EndDate,@UseActuals=1,@ProjectId= @ProjectId
 
-						INSERT  [dbo].[ProjectSummaryCache] 
-						([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,PreviousMonthActualRevenue,PreviousMonthActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
-						EXEC dbo.AttainmentFinancialListByProject @StartDate=@StartDate ,@EndDate=@EndDate ,@ProjectId= @ProjectId,@CalculateMonthValues = 0,@CalculateQuarterValues = 1,@CalculateYearToDateValues = 1,@IsSummaryCache = 1
+		--				INSERT  [dbo].[ProjectSummaryCache] 
+		--				([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,PreviousMonthActualRevenue,PreviousMonthActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
+		--				EXEC dbo.AttainmentFinancialListByProject @StartDate=@StartDate ,@EndDate=@EndDate ,@ProjectId= @ProjectId,@CalculateMonthValues = 0,@CalculateQuarterValues = 1,@CalculateYearToDateValues = 1,@IsSummaryCache = 1
 
-						EXEC [dbo].[UpdateCurrentQuarterActualValuesInCache]
+		--				EXEC [dbo].[UpdateCurrentQuarterActualValuesInCache]
 
-						--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Month'
-						--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
-					END	
+		--				--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Month'
+		--				--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
+		--			END	
 
-				COMMIT TRAN  ProjSummaryCacheValue_Tran1
-			END TRY
-			BEGIN CATCH
-				ROLLBACK TRAN ProjSummaryCacheValue_Tran1
-				SET @ErrorMessage = 'From Sproc' +ERROR_MESSAGE()
-				RAISERROR( @ErrorMessage, 16, 1)
-			END CATCH
+		--		COMMIT TRAN  ProjSummaryCacheValue_Tran1
+		--	END TRY
+		--	BEGIN CATCH
+		--		ROLLBACK TRAN ProjSummaryCacheValue_Tran1
+		--		SET @ErrorMessage = 'From Sproc' +ERROR_MESSAGE()
+		--		RAISERROR( @ErrorMessage, 16, 1)
+		--	END CATCH
 
-			BEGIN TRY
-				BEGIN TRAN  ProjSummaryCacheValue_Tran2
-					IF NOT EXISTS (SELECT 1 FROM [dbo].[ProjectSummaryCache]  WHERE CacheDate = CONVERT(DATE,@InsertingTime) and ismonthlyrecorD = 0)
-						BEGIN
-							INSERT  [dbo].[ProjectSummaryCache] 
-							([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
-							EXEC dbo.FinancialsListByProjectPeriodTotal @UseActuals=1,@ProjectId = @ProjectId 
+		--	BEGIN TRY
+		--		BEGIN TRAN  ProjSummaryCacheValue_Tran2
+		--			IF NOT EXISTS (SELECT 1 FROM [dbo].[ProjectSummaryCache]  WHERE CacheDate = CONVERT(DATE,@InsertingTime) and ismonthlyrecorD = 0)
+		--				BEGIN
+		--					INSERT  [dbo].[ProjectSummaryCache] 
+		--					([ProjectId],[MonthStartDate],[MonthEndDate],RangeType,ProjectRevenue,ProjectRevenueNet,Cogs,GrossMargin,ProjectedhoursperMonth,Expense,ReimbursedExpense,ActualRevenue,ActualGrossMargin,PreviousMonthActualRevenue,PreviousMonthActualGrossMargin,IsMonthlyRecord,CreatedDate,CacheDate) 
+		--					EXEC dbo.FinancialsListByProjectPeriodTotal @UseActuals=1,@ProjectId = @ProjectId 
 							
-							--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Total'
-							--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
-						END	
-				COMMIT TRAN  ProjSummaryCacheValue_Tran2
-			END TRY
-			BEGIN CATCH
-				ROLLBACK TRAN ProjSummaryCacheValue_Tran2
-				SET @ErrorMessage = 'From Sproc' +ERROR_MESSAGE()
-				RAISERROR( @ErrorMessage, 16, 1)
-			END CATCH
+		--					--SET @LogData = 'Inserted Sucessfully FROM [InsertProjectSummaryCacheValue] for Total'
+		--					--EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
+		--				END	
+		--		COMMIT TRAN  ProjSummaryCacheValue_Tran2
+		--	END TRY
+		--	BEGIN CATCH
+		--		ROLLBACK TRAN ProjSummaryCacheValue_Tran2
+		--		SET @ErrorMessage = 'From Sproc' +ERROR_MESSAGE()
+		--		RAISERROR( @ErrorMessage, 16, 1)
+		--	END CATCH
 
-			SET @LogData = '<Cache><NEW_VALUES Status="Cached the Projects Data" CacheTime = "'+ CONVERT(NVARCHAR,@CurrentDate) +'"></NEW_VALUES><OLD_VALUES /></Cache>'
-			EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
+		--	SET @LogData = '<Cache><NEW_VALUES Status="Cached the Projects Data" CacheTime = "'+ CONVERT(NVARCHAR,@CurrentDate) +'"></NEW_VALUES><OLD_VALUES /></Cache>'
+		--	EXEC [dbo].[UserActivityLogInsert]  @ActivityTypeID	= 6, @LogData = @LogData
 END
 
