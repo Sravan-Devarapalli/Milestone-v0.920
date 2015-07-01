@@ -1382,7 +1382,7 @@ namespace PraticeManagement
                 lblClientDiscount.Text = Milestone.Project.Discount.ToString("##0.00");
 
                 lblClientDiscountAmount.Text =
-                    (Milestone.ComputedFinancials.Revenue - Milestone.ComputedFinancials.RevenueNet).ToString();
+                    (Milestone.ComputedFinancials.Revenue * Milestone.Project.Discount / 100).ToString();
             }
             else
             {
