@@ -69,6 +69,17 @@ SELECT @ProjectEndDateWeekday = EndDate+(7-DATEPART(dw,EndDate))
 		  AND ProjectGroupId = @ProjectGroupId 
 		  AND TimeEntrySectionId = @TimeEntrySectionId
 
+  IF EXISTS(SELECT 1 FROM dbo.Project WHERE ProjectId = @ProjectId AND ProjectNumber IN ('P999918','P999900','P999901','P999902','P999903','P999908','P999909','P999910','P999911','P999912','P999913','P999914','P999915','P999916','P999917'))
+  BEGIN
+      IF @RecursiveRecordStartDate IS NULL AND @StartDate < '20150103'
+	  BEGIN
+			SET @ProjectEndDateWeekday = '20150103'
+	  END 
+	  IF @RecursiveRecordStartDate IS NOT NULL AND @RecursiveRecordStartDate < '20150103'
+	  BEGIN
+			SET @ProjectEndDateWeekday = '20150103'
+	  END 
+  END
 
 	IF @RecursiveRecordStartDate  IS NULL
 	BEGIN
