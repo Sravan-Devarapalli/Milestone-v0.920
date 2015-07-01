@@ -148,78 +148,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Repeater repProjectSections;
         
         /// <summary>
-        /// cpeBusinessDevelopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.CollapsiblePanelExtender cpeBusinessDevelopmentSection;
-        
-        /// <summary>
-        /// lbBusinessDevelopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbBusinessDevelopmentSection;
-        
-        /// <summary>
-        /// Image1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image Image1;
-        
-        /// <summary>
-        /// btnAddAccount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAddAccount;
-        
-        /// <summary>
-        /// pnlBusinessDevelopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlBusinessDevelopmentSection;
-        
-        /// <summary>
-        /// pnlBusinessDevelopmentSectionHeader control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlBusinessDevelopmentSectionHeader;
-        
-        /// <summary>
-        /// repBusinessDevelopmentSectionHeader control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repBusinessDevelopmentSectionHeader;
-        
-        /// <summary>
-        /// repBusinessDevelopmentSections control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repBusinessDevelopmentSections;
-        
-        /// <summary>
         /// cpeInternalSection control.
         /// </summary>
         /// <remarks>
@@ -616,78 +544,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCancelProjectSection;
         
         /// <summary>
-        /// mpeBusinessDevelopmentSectionPopup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ModalPopupExtender mpeBusinessDevelopmentSectionPopup;
-        
-        /// <summary>
-        /// pnlBusinessDevelopmentSectionPopup control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlBusinessDevelopmentSectionPopup;
-        
-        /// <summary>
-        /// btnCloseBusinessDevelopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCloseBusinessDevelopmentSection;
-        
-        /// <summary>
-        /// ddlAccountBusinessDevlopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlAccountBusinessDevlopmentSection;
-        
-        /// <summary>
-        /// ddlBusinessUnitBusinessDevlopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessUnitBusinessDevlopmentSection;
-        
-        /// <summary>
-        /// cddBusinessUnitBDSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.CascadingDropDown cddBusinessUnitBDSection;
-        
-        /// <summary>
-        /// btnAddBusinessDevelopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAddBusinessDevelopmentSection;
-        
-        /// <summary>
-        /// btnCancelBusinessDevelopmentSection control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelBusinessDevelopmentSection;
-        
-        /// <summary>
         /// mpeInternalProjectSectionPopup control.
         /// </summary>
         /// <remarks>
@@ -715,15 +571,6 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnCloseInternalProjectSection;
         
         /// <summary>
-        /// ddlBusinessUnitInternal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBusinessUnitInternal;
-        
-        /// <summary>
         /// ddlProjectInternal control.
         /// </summary>
         /// <remarks>
@@ -731,15 +578,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ddlProjectInternal;
-        
-        /// <summary>
-        /// cddProjectsInternal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.CascadingDropDown cddProjectsInternal;
         
         /// <summary>
         /// btnAddInternalProjectSection control.
