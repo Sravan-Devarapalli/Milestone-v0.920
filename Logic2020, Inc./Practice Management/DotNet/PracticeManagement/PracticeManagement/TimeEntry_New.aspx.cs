@@ -535,20 +535,27 @@ namespace PraticeManagement
             LockdownTimeEntry();
             btnAddProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeProjectSection.BehaviorID + "');";
             btnAddInternalProjectSection.Attributes["onclick"] = "ExpandPanel('" + cpeInternalSection.BehaviorID + "');";
-            btnAddBusinessDevelopmentSection.Attributes["onclick"] = "ExpandPanel('" + cpeBusinessDevelopmentSection.BehaviorID + "');";
+            //btnAddBusinessDevelopmentSection.Attributes["onclick"] = "ExpandPanel('" + cpeBusinessDevelopmentSection.BehaviorID + "');";
 
             if (!IsPostBack)
             {
                 var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
                 var activeClients = allClients.Where(C => !C.Inactive).ToArray();
                 DataHelper.FillListDefault(ddlAccountProjectSection, "- - Select Account - -", allClients, false);
-                DataHelper.FillListDefault(ddlAccountBusinessDevlopmentSection, "- - Select Account - -", activeClients, false);
-                var groups = ServiceCallers.Custom.Group(client => client.GetInternalBusinessUnits());
-                DataHelper.FillListDefault(ddlBusinessUnitInternal, "- - Select Business Unit - -", groups, false);
-
+                //DataHelper.FillListDefault(ddlAccountBusinessDevlopmentSection, "- - Select Account - -", activeClients, false);
+                //var groups = ServiceCallers.Custom.Group(client => client.GetInternalBusinessUnits());
+                //DataHelper.FillListDefault(ddlBusinessUnitInternal, "- - Select Division - -", groups, false);
                 AddAttributes();
             }
             SpreadSheetTotalCalculatorExtenderId = extTotalHours.ClientID + ";" + extNonBillableGrandTotal.ClientID + ";" + extBillableGrandTotal.ClientID;
+        }
+
+        public void FillInternalProjects()
+        {
+            var startDate = SelectedDates[0];
+            var endDate = SelectedDates[SelectedDates.Length - 1];
+            var projects = ServiceCallers.Custom.Project(p => p.GetProjectsListByProjectGroupId(138, true, SelectedPerson.Id.Value, startDate, endDate)).ToArray();
+            DataHelper.FillListDefault(ddlProjectInternal, "- - Select Project - -", projects, false);
         }
 
         protected void Page_PreRender(object sender, EventArgs eventArgs)
@@ -560,7 +567,7 @@ namespace PraticeManagement
             if (!IsPostBack)
             {
                 cpeProjectSection.Collapsed = !(repProjectSections.Items.Count > 0);
-                cpeBusinessDevelopmentSection.Collapsed = !(repBusinessDevelopmentSections.Items.Count > 0);
+                //cpeBusinessDevelopmentSection.Collapsed = !(repBusinessDevelopmentSections.Items.Count > 0);
                 cpeInternalSection.Collapsed = !(repInternalSections.Items.Count > 0);
                 var xdoc = XDocument.Parse(AdministrativeSectionXml);
                 cpeAdministrative.Collapsed = !(xdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count > 0);
@@ -568,20 +575,20 @@ namespace PraticeManagement
                 ScriptManager.RegisterStartupScript(updTimeEntries, updTimeEntries.GetType(), "RegisterStartupScript", "setFooterPlacementinLastItemTemplate();", true);
             }
 
-            ddlAccountProjectSection.Attributes[personIdAttribute] =
-            ddlAccountBusinessDevlopmentSection.Attributes[personIdAttribute] =
-            ddlBusinessUnitInternal.Attributes[personIdAttribute] = SelectedPerson.Id.ToString();
+            ddlAccountProjectSection.Attributes[personIdAttribute] = SelectedPerson.Id.ToString();
+            //ddlAccountBusinessDevlopmentSection.Attributes[personIdAttribute] = 
+            //ddlBusinessUnitInternal.Attributes[personIdAttribute] = 
 
-            ddlAccountProjectSection.Attributes[startDateAttribute] =
-            ddlAccountBusinessDevlopmentSection.Attributes[startDateAttribute] =
-            ddlBusinessUnitInternal.Attributes[startDateAttribute] = SelectedDates[0].ToString();
+            ddlAccountProjectSection.Attributes[startDateAttribute] = SelectedDates[0].ToString();
+            //ddlAccountBusinessDevlopmentSection.Attributes[startDateAttribute] = 
+            //ddlBusinessUnitInternal.Attributes[startDateAttribute] = 
 
-            ddlAccountProjectSection.Attributes[endDateAttribute] =
-            ddlAccountBusinessDevlopmentSection.Attributes[endDateAttribute] =
-            ddlBusinessUnitInternal.Attributes[endDateAttribute] = SelectedDates[SelectedDates.Length - 1].ToString();
+            ddlAccountProjectSection.Attributes[endDateAttribute] = SelectedDates[SelectedDates.Length - 1].ToString();
+            //ddlAccountBusinessDevlopmentSection.Attributes[endDateAttribute] = 
+            //ddlBusinessUnitInternal.Attributes[endDateAttribute] = 
 
             lbProjectSection.Attributes[RowsCountAttribute] = repProjectSections.Items.Count.ToString();
-            lbBusinessDevelopmentSection.Attributes[RowsCountAttribute] = repBusinessDevelopmentSections.Items.Count.ToString();
+            //lbBusinessDevelopmentSection.Attributes[RowsCountAttribute] = repBusinessDevelopmentSections.Items.Count.ToString();
             lbInternalSection.Attributes[RowsCountAttribute] = repInternalSections.Items.Count.ToString();
             var administrativeXdoc = XDocument.Parse(AdministrativeSectionXml);
             int administrativeTECount = administrativeXdoc.Descendants(XName.Get(TimeEntryRecordXname)).ToList().Count;
@@ -589,11 +596,11 @@ namespace PraticeManagement
 
             DataBindSectionHeader(repProjectSections, pnlProjectSectionHeader, repProjectSectionHeader, btnExpandCollapseFilter);
             DataBindSectionHeader(repInternalSections, pnlInternalSectionHeader, repInternalSectionHeader, Image2);
-            DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader, Image1);
+            //DataBindSectionHeader(repBusinessDevelopmentSections, pnlBusinessDevelopmentSectionHeader, repBusinessDevelopmentSectionHeader, Image1);
             DataBindSectionHeader(repAdministrativeTes, pnlAdministrativeSection, repAdministrativeTesHeader, btnAdmistrativeExpandCollapseFilter);
             if (Lockouts.Any(p => p.HtmlEncodedName == "Add Time entries" && p.IsLockout && SelectedDates[6].Date <= p.LockoutDate.Value.Date))
             {
-                btnSave.Enabled = btnAddAccount.Enabled = btnAddProject.Enabled = btnAddInternalProject.Enabled = false;
+                btnSave.Enabled = btnAddProject.Enabled = btnAddInternalProject.Enabled = false;//btnAddAccount.Enabled
             }
         }
 
@@ -1101,21 +1108,21 @@ namespace PraticeManagement
                     imgBtnDeleteProjectSection.Attributes["onclick"] = "return DeleteSection('" + cpeProjectSection.BehaviorID + "','" + repProjectSections.Items.Count.ToString() + "','" + imgBtnDeleteProjectSection.ClientID + "','1');";
                 }
 
-                foreach (RepeaterItem barItem in repBusinessDevelopmentSections.Items)
-                {
-                    var repBusinessDevelopmentTes = barItem.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
+                //foreach (RepeaterItem barItem in repBusinessDevelopmentSections.Items)
+                //{
+                //    var repBusinessDevelopmentTes = barItem.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
 
-                    foreach (RepeaterItem item in repBusinessDevelopmentTes.Items)
-                    {
-                        var bar = item.FindControl(teBarId) as NonBillableTimeEntryBar;
-                        controlIDList += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
-                        NonBillableControlIds += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
-                        bar.UpdateVerticalTotalCalculatorExtenderId(index, extColumnDayTotalHours.ClientID);
-                    }
+                //    foreach (RepeaterItem item in repBusinessDevelopmentTes.Items)
+                //    {
+                //        var bar = item.FindControl(teBarId) as NonBillableTimeEntryBar;
+                //        controlIDList += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
+                //        NonBillableControlIds += bar.NonBillableTbAcutualHoursClientIds[index] + ";";
+                //        bar.UpdateVerticalTotalCalculatorExtenderId(index, extColumnDayTotalHours.ClientID);
+                //    }
 
-                    var imgBtnDeleteBusinessDevelopmentSection = barItem.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
-                    imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "return DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "','" + imgBtnDeleteBusinessDevelopmentSection.ClientID + "','2');";
-                }
+                //    var imgBtnDeleteBusinessDevelopmentSection = barItem.FindControl(imgBtnDeleteBusinessDevelopmentSectionImage) as ImageButton;
+                //    imgBtnDeleteBusinessDevelopmentSection.Attributes["onclick"] = "return DeleteSection('" + cpeBusinessDevelopmentSection.BehaviorID + "','" + repBusinessDevelopmentSections.Items.Count.ToString() + "','" + imgBtnDeleteBusinessDevelopmentSection.ClientID + "','2');";
+                //}
 
                 foreach (RepeaterItem barItem in repInternalSections.Items)
                 {
@@ -1246,62 +1253,62 @@ namespace PraticeManagement
             IsDirty = true;
         }
 
-        protected void imgPlusBusinessDevelopmentSection_OnClick(object sender, EventArgs e)
-        {
-            var imgPlusBusinessDevelopmentSection = ((ImageButton)(sender));
-            var projectId = imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname] == String.Empty ? ((int)486).ToString() : imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname];
-            var accountId = imgPlusBusinessDevelopmentSection.Attributes[AccountIdXname];
-            var businessUnitId = imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname];
+        //protected void imgPlusBusinessDevelopmentSection_OnClick(object sender, EventArgs e)
+        //{
+        //    var imgPlusBusinessDevelopmentSection = ((ImageButton)(sender));
+        //    var projectId = imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname] == String.Empty ? ((int)486).ToString() : imgPlusBusinessDevelopmentSection.Attributes[ProjectIdXname];
+        //    var accountId = imgPlusBusinessDevelopmentSection.Attributes[AccountIdXname];
+        //    var businessUnitId = imgPlusBusinessDevelopmentSection.Attributes[BusinessUnitIdXname];
 
-            var xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
+        //    var xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
 
-            List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+        //    List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-            var xelem = xlist.First(element => element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId && element.Attribute(XName.Get(AccountIdXname)).Value == accountId && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId);
+        //    var xelem = xlist.First(element => element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId && element.Attribute(XName.Get(AccountIdXname)).Value == accountId && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId);
 
-            int ttypeId = xelem.Descendants(XName.Get(WorkTypeXname)).ToList().Min(k => Convert.ToInt32(k.Attribute(XName.Get(IdXname)).Value));
+        //    int ttypeId = xelem.Descendants(XName.Get(WorkTypeXname)).ToList().Min(k => Convert.ToInt32(k.Attribute(XName.Get(IdXname)).Value));
 
-            StringBuilder xml = new StringBuilder();
-            xml.Append(string.Format(workTypeXmlOpen, ttypeId < 1 ? ttypeId - 1 : -1));
+        //    StringBuilder xml = new StringBuilder();
+        //    xml.Append(string.Format(workTypeXmlOpen, ttypeId < 1 ? ttypeId - 1 : -1));
 
-            CalendarItems = CalendarItems ??
-                               ServiceCallers.Custom.Calendar(
-                                                                c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
-                                                              );
+        //    CalendarItems = CalendarItems ??
+        //                       ServiceCallers.Custom.Calendar(
+        //                                                        c => c.GetPersonCalendar(wsChoose.SelectedDates[0], wsChoose.SelectedDates[wsChoose.SelectedDates.Length - 1], pcPersons.SelectedPerson.Id.Value, null)
+        //                                                      );
 
-            /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
-            //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
+        //    /// For Non-Billable Time entries Notes are Mandatory.So, not considering the value of Practice Level and ProjectLevel
+        //    //var isNoteRequiredForProject = Convert.ToBoolean(xelem.Attribute(XName.Get(IsNoteRequiredXname)).Value);
 
-            IsNoteRequiredList = IsNoteRequiredList ??
-                                DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
-            ;
+        //    IsNoteRequiredList = IsNoteRequiredList ??
+        //                        DataHelper.GetIsNoteRequiredDetailsForSelectedDateRange(wsChoose.SelectedStartDate, wsChoose.SelectedEndDate, pcPersons.SelectedPersonId);
+        //    ;
 
-            int _projectId = Convert.ToInt32(projectId);
-            int personId = SelectedPerson.Id.Value;
-            DateTime startDate = SelectedDates[0];
-            DateTime endDate = SelectedDates[SelectedDates.Length - 1];
-            IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(_projectId, personId, startDate, endDate));
+        //    int _projectId = Convert.ToInt32(projectId);
+        //    int personId = SelectedPerson.Id.Value;
+        //    DateTime startDate = SelectedDates[0];
+        //    DateTime endDate = SelectedDates[SelectedDates.Length - 1];
+        //    IsHourlyRevenueList = ServiceCallers.Custom.Project(p => p.GetIsHourlyRevenueByPeriod(_projectId, personId, startDate, endDate));
 
-            foreach (CalendarItem day in CalendarItems)
-            {
-                var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
-                xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass,
-                                                                                    (IsNoteRequiredList[day.Date]),
-                                                                                    IsHourlyRevenueList[day.Date], false));
-                xml.Append(calendarItemXmlClose);
-            }
-            xml.Append(workTypeXmlClose);
+        //    foreach (CalendarItem day in CalendarItems)
+        //    {
+        //        var cssClass = Utils.Calendar.GetCssClassByCalendarItem(day);
+        //        xml.Append(string.Format(calendarItemXmlOpen, day.Date, cssClass,
+        //                                                                            (IsNoteRequiredList[day.Date]),
+        //                                                                            IsHourlyRevenueList[day.Date], false));
+        //        xml.Append(calendarItemXmlClose);
+        //    }
+        //    xml.Append(workTypeXmlClose);
 
-            var xlement = XElement.Parse(xml.ToString());
+        //    var xlement = XElement.Parse(xml.ToString());
 
-            xelem.Add(xlement);
+        //    xelem.Add(xlement);
 
-            BusinessDevelopmentSectionXml = xdoc.ToString();
+        //    BusinessDevelopmentSectionXml = xdoc.ToString();
 
-            DatabindRepeater(repBusinessDevelopmentSections, xlist);
+        //    DatabindRepeater(repBusinessDevelopmentSections, xlist);
 
-            IsDirty = true;
-        }
+        //    IsDirty = true;
+        //}
 
         protected void imgPlusAdministrativeSection_OnClick(object sender, EventArgs e)
         {
@@ -1356,12 +1363,12 @@ namespace PraticeManagement
                     cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecursiveProjectSectionExtender) as ConfirmButtonExtender;
                     cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "project", "project ends");
                 }
-                else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
-                {
-                    xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
-                    cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
-                    cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "account", "account is disabled");
-                }
+                //else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
+                //{
+                //    xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
+                //    cbeimgBtnRecursiveSection = repeaterItem.FindControl(cbeImgBtnRecurrenceBusinessDevelopmentSectionExtender) as ConfirmButtonExtender;
+                //    cbeimgBtnRecursiveSection.ConfirmText = string.Format(Convert.ToBoolean(isRecursive) ? recursiveSectionConfirmTextFormat : nonRecursiveSectionConfirmTextFormat, "account", "account is disabled");
+                //}
                 else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
                 {
                     xdoc = PrePareXmlForInternalSectionFromRepeater();
@@ -1409,11 +1416,11 @@ namespace PraticeManagement
                 imgBtnRecursiveSection = imgBtnDeleteSection.NamingContainer.FindControl(imgBtnRecursiveProjectSectionImage) as ImageButton;
                 xdoc = PrePareXmlForProjectSectionFromRepeater();
             }
-            else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
-            {
-                imgBtnRecursiveSection = imgBtnDeleteSection.NamingContainer.FindControl(imgBtnRecurrenceBusinessDevelopmentSectionImage) as ImageButton;
-                xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
-            }
+            //else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
+            //{
+            //    imgBtnRecursiveSection = imgBtnDeleteSection.NamingContainer.FindControl(imgBtnRecurrenceBusinessDevelopmentSectionImage) as ImageButton;
+            //    xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
+            //}
             else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
             {
                 imgBtnRecursiveSection = imgBtnDeleteSection.NamingContainer.FindControl(imgBtnRecurrenceInternalSectionImage) as ImageButton;
@@ -1434,11 +1441,11 @@ namespace PraticeManagement
                 ProjectSectionXml = xdoc.ToString();
                 DatabindRepeater(repProjectSections, xlist);
             }
-            else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
-            {
-                BusinessDevelopmentSectionXml = xdoc.ToString();
-                DatabindRepeater(repBusinessDevelopmentSections, xlist);
-            }
+            //else if ((int)TimeEntrySectionType.BusinessDevelopment == timeEntrySectionId)
+            //{
+            //    BusinessDevelopmentSectionXml = xdoc.ToString();
+            //    DatabindRepeater(repBusinessDevelopmentSections, xlist);
+            //}
             else if ((int)TimeEntrySectionType.Internal == timeEntrySectionId)
             {
                 InternalSectionXml = xdoc.ToString();
@@ -1496,55 +1503,55 @@ namespace PraticeManagement
             ddlAccountProjectSection.SelectedIndex = 0;
         }
 
-        protected void btnAddBusinessDevelopmentSection_OnClick(object sender, EventArgs e)
-        {
-            var project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject());
-            var businessUnitId = Convert.ToInt32(ddlBusinessUnitBusinessDevlopmentSection.SelectedValue);
-            var accountId = Convert.ToInt32(ddlAccountBusinessDevlopmentSection.SelectedValue);
-            var selectedBusinessunitText = ddlBusinessUnitBusinessDevlopmentSection.SelectedItem.Text;
-            var businessunitName = selectedBusinessunitText.Substring(0, selectedBusinessunitText.IndexOf(":::"));
+        //protected void btnAddBusinessDevelopmentSection_OnClick(object sender, EventArgs e)
+        //{
+        //    var project = ServiceCallers.Custom.Project(pro => pro.GetBusinessDevelopmentProject(SelectedPerson.Id))[0];
+        //    var businessUnitId = Convert.ToInt32(ddlBusinessUnitBusinessDevlopmentSection.SelectedValue);
+        //    var accountId = Convert.ToInt32(ddlAccountBusinessDevlopmentSection.SelectedValue);
+        //    var selectedBusinessunitText = ddlBusinessUnitBusinessDevlopmentSection.SelectedItem.Text;
+        //    var businessunitName = selectedBusinessunitText.Substring(0, selectedBusinessunitText.IndexOf(":::"));
 
-            XDocument xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
+        //    XDocument xdoc = PrePareXmlForBusinessDevelopmentSectionFromRepeater();
 
-            List<XElement> xelementsList = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+        //    List<XElement> xelementsList = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-            if (!xelementsList.Any(element => Convert.ToInt32(element.Attribute(XName.Get(AccountIdXname)).Value) == accountId && Convert.ToInt32(element.Attribute(XName.Get(BusinessUnitIdXname)).Value) == businessUnitId && Convert.ToInt32(element.Attribute(XName.Get(ProjectIdXname)).Value) == project.Id))
-            {
-                var teSection = new TimeEntrySection()
-                {
-                    Project = new Project() { Id = project.Id, Name = project.Name, ProjectNumber = project.ProjectNumber },
-                    Account = new Client() { Id = accountId, Name = ddlAccountBusinessDevlopmentSection.SelectedItem.Text },
-                    BusinessUnit = new ProjectGroup() { Id = businessUnitId, Name = businessunitName },
-                    SectionId = TimeEntrySectionType.BusinessDevelopment,
-                    IsRecursive = false
-                };
+        //    if (!xelementsList.Any(element => Convert.ToInt32(element.Attribute(XName.Get(AccountIdXname)).Value) == accountId && Convert.ToInt32(element.Attribute(XName.Get(BusinessUnitIdXname)).Value) == businessUnitId && Convert.ToInt32(element.Attribute(XName.Get(ProjectIdXname)).Value) == project.Id))
+        //    {
+        //        var teSection = new TimeEntrySection()
+        //        {
+        //            Project = new Project() { Id = project.Id, Name = project.Name, ProjectNumber = project.ProjectNumber },
+        //            Account = new Client() { Id = accountId, Name = ddlAccountBusinessDevlopmentSection.SelectedItem.Text },
+        //            BusinessUnit = new ProjectGroup() { Id = businessUnitId, Name = businessunitName },
+        //            SectionId = TimeEntrySectionType.BusinessDevelopment,
+        //            IsRecursive = false
+        //        };
 
-                StringBuilder xml = new StringBuilder();
+        //        StringBuilder xml = new StringBuilder();
 
-                PrePareXmlForAccountProjectSelection(xml, teSection);
+        //        PrePareXmlForAccountProjectSelection(xml, teSection);
 
-                xdoc.Descendants(XName.Get(SectionXname)).First().Add(XElement.Parse(xml.ToString()));
+        //        xdoc.Descendants(XName.Get(SectionXname)).First().Add(XElement.Parse(xml.ToString()));
 
-                BusinessDevelopmentSectionXml = xdoc.ToString();
+        //        BusinessDevelopmentSectionXml = xdoc.ToString();
 
-                DatabindRepeater(repBusinessDevelopmentSections, xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList());
-            }
+        //        DatabindRepeater(repBusinessDevelopmentSections, xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList());
+        //    }
 
-            ddlBusinessUnitBusinessDevlopmentSection.SelectedIndex = 0;
-            ddlAccountBusinessDevlopmentSection.SelectedIndex = 0;
+        //    ddlBusinessUnitBusinessDevlopmentSection.SelectedIndex = 0;
+        //    ddlAccountBusinessDevlopmentSection.SelectedIndex = 0;
 
-            int personId = SelectedPerson.Id.Value;
-            DateTime[] dates = SelectedDates;
-            int timeEntrySectionId = (int)TimeEntrySectionType.BusinessDevelopment;
-            ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, project.Id.Value, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
-        }
+        //    int personId = SelectedPerson.Id.Value;
+        //    DateTime[] dates = SelectedDates;
+        //    int timeEntrySectionId = (int)TimeEntrySectionType.BusinessDevelopment;
+        //    ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, accountId, businessUnitId, project.Id.Value, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
+        //}
 
         protected void btnAddInternalProjectSection_OnClick(object sender, EventArgs e)
         {
-            var businessUnitId = Convert.ToInt32(ddlBusinessUnitInternal.SelectedValue);
+            var businessUnitId = 138;//Convert.ToInt32(ddlBusinessUnitInternal.SelectedValue);
             var projectId = Convert.ToInt32(ddlProjectInternal.SelectedValue);
             var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetById(projectId));
-            var businessunitName = ddlBusinessUnitInternal.SelectedItem.Text;
+            var businessunitName = "Operations";//ddlBusinessUnitInternal.SelectedItem.Text;
             var account = ServiceCallers.Custom.Client(c => c.GetInternalAccount());
 
             XDocument xdoc = PrePareXmlForInternalSectionFromRepeater();
@@ -1574,12 +1581,13 @@ namespace PraticeManagement
             }
 
             ddlProjectInternal.SelectedIndex = 0;
-            ddlBusinessUnitInternal.SelectedIndex = 0;
+            //ddlBusinessUnitInternal.SelectedIndex = 0;
 
             int personId = SelectedPerson.Id.Value;
             DateTime[] dates = SelectedDates;
             int timeEntrySectionId = (int)TimeEntrySectionType.Internal;
             ServiceCallers.Custom.TimeEntry(t => t.SetPersonTimeEntrySelection(personId, account.Id.Value, businessUnitId, projectId, timeEntrySectionId, false, dates[0], dates[dates.Length - 1], Context.User.Identity.Name));
+            FillInternalProjects();
         }
 
         protected void pcPersons_PersonChanged(object sender, PersonChangedEventArguments args)
@@ -1587,6 +1595,7 @@ namespace PraticeManagement
             IsWeekOrPersonChanged = true;
             UpdateTimeEntries();
             wsChoose.UpdateWeekLabel();
+            FillInternalProjects();
         }
 
         protected void wsChoose_WeekChanged(object sender, WeekChangedEventArgs args)
@@ -1680,16 +1689,16 @@ namespace PraticeManagement
                 }
             }
 
-            foreach (RepeaterItem barItem in repBusinessDevelopmentSections.Items)
-            {
-                var repBusinessDevelopmentTes = barItem.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
+            //foreach (RepeaterItem barItem in repBusinessDevelopmentSections.Items)
+            //{
+            //    var repBusinessDevelopmentTes = barItem.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
 
-                foreach (RepeaterItem item in repBusinessDevelopmentTes.Items)
-                {
-                    var bar = item.FindControl(teBarId) as NonBillableTimeEntryBar;
-                    bar.ValidateAll();
-                }
-            }
+            //    foreach (RepeaterItem item in repBusinessDevelopmentTes.Items)
+            //    {
+            //        var bar = item.FindControl(teBarId) as NonBillableTimeEntryBar;
+            //        bar.ValidateAll();
+            //    }
+            //}
 
             foreach (RepeaterItem barItem in repInternalSections.Items)
             {
@@ -1732,22 +1741,22 @@ namespace PraticeManagement
         private void AddAttributes()
         {
             ddlAccountProjectSection.Attributes[addAttribute] = ddlProjectProjectSection.Attributes[addAttribute] = btnAddProjectSection.ClientID;
-            ddlBusinessUnitBusinessDevlopmentSection.Attributes[addAttribute] = ddlAccountBusinessDevlopmentSection.Attributes[addAttribute] = btnAddBusinessDevelopmentSection.ClientID;
-            ddlProjectInternal.Attributes[addAttribute] = ddlBusinessUnitInternal.Attributes[addAttribute] = btnAddInternalProjectSection.ClientID;
+            //ddlBusinessUnitBusinessDevlopmentSection.Attributes[addAttribute] = ddlAccountBusinessDevlopmentSection.Attributes[addAttribute] = btnAddBusinessDevelopmentSection.ClientID;
+            ddlProjectInternal.Attributes[addAttribute] = btnAddInternalProjectSection.ClientID; //ddlBusinessUnitInternal.Attributes[addAttribute] =
 
             ddlAccountProjectSection.Attributes[childDropDownClientIdAttribute] = ddlProjectProjectSection.ClientID;
-            ddlAccountBusinessDevlopmentSection.Attributes[childDropDownClientIdAttribute] = ddlBusinessUnitBusinessDevlopmentSection.ClientID;
-            ddlBusinessUnitInternal.Attributes[childDropDownClientIdAttribute] = ddlProjectInternal.ClientID;
+            //ddlAccountBusinessDevlopmentSection.Attributes[childDropDownClientIdAttribute] = ddlBusinessUnitBusinessDevlopmentSection.ClientID;
+            //ddlBusinessUnitInternal.Attributes[childDropDownClientIdAttribute] = ddlProjectInternal.ClientID;
 
             btnAddProject.Attributes[parentDropDownClientIdAttribute] = ddlAccountProjectSection.ClientID;
             btnAddProject.Attributes[childDropDownClientIdAttribute] = ddlProjectProjectSection.ClientID;
             btnAddProject.Attributes[btnAddAttribute] = btnAddProjectSection.ClientID;
 
-            btnAddAccount.Attributes[parentDropDownClientIdAttribute] = ddlAccountBusinessDevlopmentSection.ClientID;
-            btnAddAccount.Attributes[childDropDownClientIdAttribute] = ddlBusinessUnitBusinessDevlopmentSection.ClientID;
-            btnAddAccount.Attributes[btnAddAttribute] = btnAddBusinessDevelopmentSection.ClientID;
+            //btnAddAccount.Attributes[parentDropDownClientIdAttribute] = ddlAccountBusinessDevlopmentSection.ClientID;
+            //btnAddAccount.Attributes[childDropDownClientIdAttribute] = ddlBusinessUnitBusinessDevlopmentSection.ClientID;
+            //btnAddAccount.Attributes[btnAddAttribute] = btnAddBusinessDevelopmentSection.ClientID;
 
-            btnAddInternalProject.Attributes[parentDropDownClientIdAttribute] = ddlBusinessUnitInternal.ClientID;
+            //btnAddInternalProject.Attributes[parentDropDownClientIdAttribute] = ddlBusinessUnitInternal.ClientID;
             btnAddInternalProject.Attributes[childDropDownClientIdAttribute] = ddlProjectInternal.ClientID;
             btnAddInternalProject.Attributes[btnAddAttribute] = btnAddInternalProjectSection.ClientID;
         }
@@ -1780,14 +1789,14 @@ namespace PraticeManagement
         {
             IsSaving = true;
             ProjectSectionXml = PrePareXmlForProjectSectionFromRepeater().ToString();
-            BusinessDevelopmentSectionXml = PrePareXmlForBusinessDevelopmentSectionFromRepeater().ToString();
+            //BusinessDevelopmentSectionXml = PrePareXmlForBusinessDevelopmentSectionFromRepeater().ToString();
             InternalSectionXml = PrePareXmlForInternalSectionFromRepeater().ToString();
             AdministrativeSectionXml = PrePareXmlForAdminstrativeSectionFromRepeater(true).ToString();
 
             StringBuilder resultXml = new StringBuilder();
             resultXml.Append(sectionsXmlOpen);
             resultXml.Append(ProjectSectionXml);
-            resultXml.Append(BusinessDevelopmentSectionXml);
+            //resultXml.Append(BusinessDevelopmentSectionXml);
             resultXml.Append(InternalSectionXml);
             resultXml.Append(AdministrativeSectionXml);
             resultXml.Append(sectionsXmlClose);
@@ -2004,32 +2013,32 @@ namespace PraticeManagement
             return xdoc;
         }
 
-        private XDocument PrePareXmlForBusinessDevelopmentSectionFromRepeater()
-        {
-            var xdoc = XDocument.Parse(BusinessDevelopmentSectionXml);
-            var accountAndProjectSelectionElements = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
-            for (int i = 0; i < accountAndProjectSelectionElements.Count; i++)
-            {
-                var accountAndProjectSelectionElement = accountAndProjectSelectionElements[i];
-                var workTypeElements = accountAndProjectSelectionElement.Descendants(XName.Get(WorkTypeXname)).ToList();
+        //private XDocument PrePareXmlForBusinessDevelopmentSectionFromRepeater()
+        //{
+        //    var xdoc = XDocument.Parse(BusinessDevelopmentSectionXml);
+        //    var accountAndProjectSelectionElements = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+        //    for (int i = 0; i < accountAndProjectSelectionElements.Count; i++)
+        //    {
+        //        var accountAndProjectSelectionElement = accountAndProjectSelectionElements[i];
+        //        var workTypeElements = accountAndProjectSelectionElement.Descendants(XName.Get(WorkTypeXname)).ToList();
 
-                RepeaterItem barItem = repBusinessDevelopmentSections.Items[i];
-                var repBusinessDevelopmentTes = barItem.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
+        //        RepeaterItem barItem = repBusinessDevelopmentSections.Items[i];
+        //        var repBusinessDevelopmentTes = barItem.FindControl(repBusinessDevelopmentTesRepeater) as Repeater;
 
-                for (int j = 0; j < workTypeElements.Count; j++)
-                {
-                    var workTypeElement = workTypeElements[j];
-                    var calendarItemElements = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
-                    RepeaterItem repProjectTesItem = repBusinessDevelopmentTes.Items[j];
-                    var bar = repProjectTesItem.FindControl(teBarId) as NonBillableTimeEntryBar;
+        //        for (int j = 0; j < workTypeElements.Count; j++)
+        //        {
+        //            var workTypeElement = workTypeElements[j];
+        //            var calendarItemElements = workTypeElement.Descendants(XName.Get(CalendarItemXname)).ToList();
+        //            RepeaterItem repProjectTesItem = repBusinessDevelopmentTes.Items[j];
+        //            var bar = repProjectTesItem.FindControl(teBarId) as NonBillableTimeEntryBar;
 
-                    bar.UpdateWorkType(workTypeElement, accountAndProjectSelectionElement);
-                    bar.UpdateNoteAndActualHours(calendarItemElements);
-                }
-            }
+        //            bar.UpdateWorkType(workTypeElement, accountAndProjectSelectionElement);
+        //            bar.UpdateNoteAndActualHours(calendarItemElements);
+        //        }
+        //    }
 
-            return xdoc;
-        }
+        //    return xdoc;
+        //}
 
         private XDocument PrePareXmlForInternalSectionFromRepeater()
         {
@@ -2125,7 +2134,7 @@ namespace PraticeManagement
                     List<XElement> xadminiStrativeSectionlist = adminiStrativeSection.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
                     DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
-                    DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
+                    //DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
                     DatabindRepeater(repInternalSections, xinternalSectionlist, false);
                     DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
                 }
@@ -2250,7 +2259,7 @@ namespace PraticeManagement
 
         public void RemoveWorktypeFromXMLForBusinessDevelopmentAndInternalSection(int accountId, int businessUnitId, int projectId, int workTypeindex, bool isBusinessDevelopment)
         {
-            var xdoc = isBusinessDevelopment ? PrePareXmlForBusinessDevelopmentSectionFromRepeater() : PrePareXmlForInternalSectionFromRepeater();
+            var xdoc = PrePareXmlForInternalSectionFromRepeater();
 
             List<XElement> xlist = xdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
             var accountAndProjectSelectionElement = xlist.First(element => element.Attribute(XName.Get(AccountIdXname)).Value == accountId.ToString() && element.Attribute(XName.Get(BusinessUnitIdXname)).Value == businessUnitId.ToString() && element.Attribute(XName.Get(ProjectIdXname)).Value == projectId.ToString());
@@ -2295,8 +2304,8 @@ namespace PraticeManagement
 
             if (isBusinessDevelopment)
             {
-                BusinessDevelopmentSectionXml = xdoc.ToString();
-                DatabindRepeater(repBusinessDevelopmentSections, xlist);
+                //BusinessDevelopmentSectionXml = xdoc.ToString();
+                //DatabindRepeater(repBusinessDevelopmentSections, xlist);
             }
             else
             {
@@ -2319,24 +2328,24 @@ namespace PraticeManagement
         {
             CalendarItems = calendarItems;
             var projectSectionXdoc = UpdateCalendarItems(PrePareXmlForProjectSectionFromRepeater());
-            var businessDevelopmentSectionXdoc = UpdateCalendarItems(PrePareXmlForBusinessDevelopmentSectionFromRepeater());
+            //var businessDevelopmentSectionXdoc = UpdateCalendarItems(PrePareXmlForBusinessDevelopmentSectionFromRepeater());
             var internalSectionXdoc = UpdateCalendarItems(PrePareXmlForInternalSectionFromRepeater());
             var administrativeSectionXdoc = UpdateCalendarItems(XDocument.Parse(AdministrativeSectionXml));
 
             List<XElement> xProjectSelectionlist = projectSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
-            List<XElement> xbusinessDevelopmentlist = businessDevelopmentSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
+            //List<XElement> xbusinessDevelopmentlist = businessDevelopmentSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
             List<XElement> xinternalSectionlist = internalSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
             List<XElement> xadminiStrativeSectionlist = administrativeSectionXdoc.Descendants(XName.Get(AccountAndProjectSelectionXname)).ToList();
 
             DatabindRepeater(repProjectSections, xProjectSelectionlist, false);
-            DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
+            //DatabindRepeater(repBusinessDevelopmentSections, xbusinessDevelopmentlist, false);
             DatabindRepeater(repInternalSections, xinternalSectionlist, false);
             DatabindRepeater(repAdministrativeTes, xadminiStrativeSectionlist);
             ProjectSectionXml = projectSectionXdoc.ToString();
-            BusinessDevelopmentSectionXml = businessDevelopmentSectionXdoc.ToString();
+            //BusinessDevelopmentSectionXml = businessDevelopmentSectionXdoc.ToString();
             InternalSectionXml = internalSectionXdoc.ToString();
             AdministrativeSectionXml = administrativeSectionXdoc.ToString();
         }
