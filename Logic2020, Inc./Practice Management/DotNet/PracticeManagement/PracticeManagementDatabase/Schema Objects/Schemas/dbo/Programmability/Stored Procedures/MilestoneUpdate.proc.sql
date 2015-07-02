@@ -18,9 +18,6 @@ BEGIN
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-	DECLARE @ProjectNewStartDate	DATETIME,
-			@ProjectNewEndDate		DATETIME
-
 	-- Change the milestone
 	UPDATE dbo.Milestone
 	   SET ProjectId = @ProjectId,
@@ -33,22 +30,18 @@ BEGIN
 	       ConsultantsCanAdjust = @ConsultantsCanAdjust
 	 WHERE MilestoneId = @MilestoneId
 
-	 SELECT @ProjectNewStartDate=MIN(M.StartDate),
-	        @ProjectNewEndDate = MAX(M.ProjectedDeliveryDate)
-	 FROM dbo.Milestone M 
-	 WHERE M.ProjectId = @ProjectId
-	 GROUP BY M.ProjectId 
+	 --Adjust Expenses in Milestone level, but not in Project level
 
 	 UPDATE dbo.ProjectExpense 
-	 SET StartDate = CASE WHEN StartDate <= @ProjectNewStartDate THEN @ProjectNewStartDate ELSE StartDate END,
-	     EndDate = CASE WHEN EndDate <= @ProjectNewEndDate THEN EndDate ELSE @ProjectNewEndDate END
-	 WHERE StartDate <= @ProjectNewEndDate AND @ProjectNewStartDate <= EndDate
+	 SET StartDate = CASE WHEN StartDate <= @StartDate THEN @StartDate ELSE StartDate END,
+	     EndDate = CASE WHEN EndDate <= @ProjectedDeliveryDate THEN EndDate ELSE @ProjectedDeliveryDate END
+	 WHERE StartDate <= @ProjectedDeliveryDate AND @StartDate <= EndDate
 		   AND ProjectId = @ProjectId
 		   
 	 UPDATE dbo.ProjectExpense 
-	 SET StartDate = @ProjectNewStartDate,
-		 EndDate = @ProjectNewEndDate
-	 WHERE StartDate > @ProjectNewEndDate OR @ProjectNewStartDate > EndDate
+	 SET StartDate = @StartDate,
+		 EndDate = @ProjectedDeliveryDate
+	 WHERE StartDate > @ProjectedDeliveryDate OR @StartDate > EndDate
 			AND ProjectId = @ProjectId
 
 	-- End logging session
