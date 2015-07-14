@@ -310,7 +310,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             GroupByAccount report;
             if (isPopulateFilters)
             {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.ProjectStatusIds, null));
             }
             else
             {
@@ -412,7 +412,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
         {
             if (HostingPage.SetSelectedFilters)
             {
-                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null));
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByProject(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.ProjectStatusIds, null));
                 var businessUnitList = report.GroupedProjects.Select(r => new { Name = r.Project.Group.Name, Id = r.Project.Group.Id }).Distinct().Select(a => new ProjectGroup { Id = a.Id, Name = a.Name }).ToList().OrderBy(s => s.Name).ToArray();
 
                 PopulateBusinessUnitFilter(businessUnitList);
