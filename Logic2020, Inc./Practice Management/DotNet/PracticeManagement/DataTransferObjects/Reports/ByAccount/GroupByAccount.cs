@@ -30,7 +30,7 @@ namespace DataTransferObjects.Reports.ByAccount
         {
             get
             {
-                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ActiveProjectsCount) + GroupedBusinessUnits.Sum(g => g.CompletedProjectsCount) : GroupedProjects.Count;
+                return GroupedBusinessUnits != null ? GroupedBusinessUnits.Sum(g => g.ProjectsCount) : GroupedProjects.Count;
             }
         }
 
