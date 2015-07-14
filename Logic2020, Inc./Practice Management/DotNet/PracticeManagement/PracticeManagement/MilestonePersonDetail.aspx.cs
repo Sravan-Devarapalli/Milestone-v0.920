@@ -15,6 +15,7 @@ using PraticeManagement.Utils;
 using Resources;
 using System.Web.UI.HtmlControls;
 using System.Linq;
+using PraticeManagement.ProjectService;
 
 
 
@@ -32,7 +33,7 @@ namespace PraticeManagement
         private const string DuplPersonName = "The specified person is already assigned on this milestone.";
         private const string lblTargetMargin = "lblTargetMargin";
         private const string milestoneHasTimeEntries = "Cannot delete milesone person because this person has already entered time for this milestone.";
-
+        private const string milestoneHasFeedbackEntries = "This person cannot be deleted from this milestone because project feedback has been marked as completed.  The person can be deleted from the milestone if the status of the feedback is changed to 'Not Completed' or 'Canceled'. Please navigate to the 'Project Feedback' tab for more information to make the necessary adjustments.";
         #endregion
 
         #region Fields
@@ -539,6 +540,22 @@ namespace PraticeManagement
             lblResultMessage.ClearMessage();
         }
 
+        private bool CheckFeedbackExists(int milestonePersonId,DateTime? startDate,DateTime? endDate)
+        {
+            using (var serviceClient = new ProjectServiceClient())
+            {
+                try
+                {
+                    return serviceClient.CheckIfFeedbackExists(milestonePersonId, null,startDate,endDate);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         protected void gvMilestonePersonEntries_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             var milestonePersonEntriesList = MilestonePerson.Entries;
@@ -548,6 +565,11 @@ namespace PraticeManagement
             if (CheckTimeEntriesExist(entry.MilestonePersonId, entry.StartDate, entry.EndDate, true, true))
             {
                 lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
+                return;
+            }
+            else if (CheckFeedbackExists(entry.MilestonePersonId,entry.StartDate,entry.EndDate))
+            {
+                lblResultMessage.ShowErrorMessage(milestoneHasFeedbackEntries);
                 return;
             }
             milestonePersonEntriesList.RemoveAt(e.RowIndex);
