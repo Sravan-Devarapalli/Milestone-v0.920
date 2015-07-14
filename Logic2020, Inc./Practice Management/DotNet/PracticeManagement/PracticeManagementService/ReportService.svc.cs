@@ -102,9 +102,9 @@ namespace PracticeManagementService
             return ReportDAL.TimeEntryAuditReportByProject(startDate, endDate);
         }
 
-        public GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, string projectStatusIds, DateTime startDate, DateTime endDate)
         {
-            return ReportDAL.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
+            return ReportDAL.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, projectStatusIds, startDate, endDate);
         }
 
         public GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate, string projectStatusIds, string projectBillingTypes)
@@ -262,24 +262,24 @@ namespace PracticeManagementService
             return ReportDAL.NonBillableReport(startDate, endDate, projectNumber, directorIds, businessUnitIds, practiceIds);
         }
 
-        public List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes,string personStatusIds, DateTime startDate, DateTime endDate, int step)
+        public List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes, string personStatusIds, DateTime startDate, DateTime endDate, int step)
         {
-            return ReportDAL.BadgedResourcesByTimeReport(payTypes, personStatusIds,startDate, endDate, step);
+            return ReportDAL.BadgedResourcesByTimeReport(payTypes, personStatusIds, startDate, endDate, step);
         }
 
         public List<MSBadge> ListBadgeResourcesByType(string paytypes, string personStatuses, DateTime startDate, DateTime endDate, bool isNotBadged, bool isClockNotStart, bool isBlocked, bool isBreak, bool badgedOnProject, bool isBadgedException, bool isNotBadgedException)
         {
-            return ReportDAL.ListBadgeResourcesByType(paytypes, personStatuses,startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject,isBadgedException,isNotBadgedException);
+            return ReportDAL.ListBadgeResourcesByType(paytypes, personStatuses, startDate, endDate, isNotBadged, isClockNotStart, isBlocked, isBreak, badgedOnProject, isBadgedException, isNotBadgedException);
         }
 
-        public List<GroupByPractice> ResourcesByPracticeReport(string paytypes,string PersonStatuses,string practices, DateTime startDate, DateTime endDate, int step)
+        public List<GroupByPractice> ResourcesByPracticeReport(string paytypes, string PersonStatuses, string practices, DateTime startDate, DateTime endDate, int step)
         {
             return ReportDAL.ResourcesByPracticeReport(paytypes, PersonStatuses, practices, startDate, endDate, step);
         }
 
-        public List<GroupbyTitle> ResourcesByTitleReport(string paytypes,string personStatuses, string titles, DateTime startDate, DateTime endDate, int step)
+        public List<GroupbyTitle> ResourcesByTitleReport(string paytypes, string personStatuses, string titles, DateTime startDate, DateTime endDate, int step)
         {
-            return ReportDAL.ResourcesByTitleReport(paytypes, personStatuses,titles, startDate, endDate, step);
+            return ReportDAL.ResourcesByTitleReport(paytypes, personStatuses, titles, startDate, endDate, step);
         }
 
         public List<MSBadge> GetBadgeRequestNotApprovedList()
