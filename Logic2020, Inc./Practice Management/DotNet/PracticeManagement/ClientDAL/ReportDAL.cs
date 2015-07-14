@@ -640,7 +640,7 @@ namespace DataAccess
             }
         }
 
-        public static GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, DateTime startDate, DateTime endDate)
+        public static GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, string projectStatusIds, DateTime startDate, DateTime endDate)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.AccountSummaryReportByBusinessUnit, connection))
@@ -649,6 +649,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdParam, accountId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.BusinessUnitIdsParam, businessUnitIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusIdsParam, projectStatusIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
 
@@ -720,8 +721,10 @@ namespace DataAccess
             int businessDevelopmentHoursIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessDevelopmentHours);
             int activeProjectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.ActiveProjectsCount);
             int completedProjectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.CompletedProjectsCount);
+            int projectsCountIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectsCount);
             int projectedHoursIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHours);
             int forecastedHoursUntilTodayIndex = reader.GetOrdinal(Constants.ColumnNames.ForecastedHoursUntilToday);
+
 
 
             while (reader.Read())
@@ -752,6 +755,7 @@ namespace DataAccess
                   !reader.IsDBNull(forecastedHoursUntilTodayIndex) ? reader.GetDouble(forecastedHoursUntilTodayIndex) : 0d,
                     ActiveProjectsCount = !reader.IsDBNull(activeProjectsCountIndex) ? reader.GetInt32(activeProjectsCountIndex) : 0,
                     CompletedProjectsCount = !reader.IsDBNull(completedProjectsCountIndex) ? reader.GetInt32(completedProjectsCountIndex) : 0,
+                    ProjectsCount = !reader.IsDBNull(projectsCountIndex) ? reader.GetInt32(projectsCountIndex) : 0,
                     BusinessUnit = pg
                 };
 
