@@ -370,7 +370,7 @@ namespace PracticeManagementService
         void SaveFeedbackCancelationDetails(int feedbackId, int? statusId, bool isCanceled, string cancelationReason, string userLogin, bool sendReactivationMail);
 
         [OperationContract]
-        bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, int? projectId);
+        bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, DateTime? startDate, DateTime? endDate);
 
         [OperationContract]
         bool CheckIfProjectNumberExists(string projectNumber);
