@@ -18,6 +18,10 @@ AS
 		SELECT @ErrorMessage = [dbo].[GetErrorMessage](70019)
 		RAISERROR (@ErrorMessage, 16, 1)
 	END
+	ELSE IF EXISTS (SELECT 1 FROM dbo.ProjectFeedback WHERE MilestonePersonId = @MilestonePersonId AND FeedbackStatusId = 1)
+	BEGIN
+	    RAISERROR ('This person cannot be deleted from this milestone because project feedback has been marked as completed.  The person can be deleted from the milestone if the status of the feedback is changed to ''Not Completed'' or ''Canceled''. Please navigate to the ''Project Feedback'' tab for more information to make the necessary adjustments..', 16, 1)
+	END
 	ELSE
 	BEGIN
 	    
