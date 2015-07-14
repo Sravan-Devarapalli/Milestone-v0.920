@@ -118,7 +118,7 @@ namespace PraticeManagement.ReportService {
         DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory[] TimeEntryAuditReportByProject(System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnit", ReplyAction="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnitResponse")]
-        DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate);
+        DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, string projectStatusIds, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/AccountSummaryReportByProject", ReplyAction="http://tempuri.org/IReportService/AccountSummaryReportByProjectResponse")]
         DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes);
@@ -213,7 +213,7 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-        
+       
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -358,8 +358,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.TimeEntryAuditReportByProject(startDate, endDate);
         }
         
-        public DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate) {
-            return base.Channel.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, startDate, endDate);
+        public DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByBusinessUnit(int accountId, string businessUnitIds, string projectStatusIds, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.AccountSummaryReportByBusinessUnit(accountId, businessUnitIds, projectStatusIds, startDate, endDate);
         }
         
         public DataTransferObjects.Reports.ByAccount.GroupByAccount AccountSummaryReportByProject(int accountId, string businessUnitIds, System.DateTime startDate, System.DateTime endDate, string projectStatusIds, string projectBillingTypes) {
