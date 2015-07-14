@@ -1150,7 +1150,7 @@ namespace PraticeManagement.Controls.Milestones
             var endDatevalue = lblConsultantsEnd.Attributes["DateValue"];
             var dpBadgeEnd = ((Control)source).Parent.FindControl("dpBadgeEnd") as DatePicker;
             var badgeEndDate = Convert.ToDateTime(endDatevalue);
-            args.IsValid = !(badgeEndDate.Date >= dpBadgeEnd.DateValue.Date);
+            args.IsValid = !(badgeEndDate.Date > dpBadgeEnd.DateValue.Date);
             if (!args.IsValid)
                 ShowExceptionPopup = true;
         }
@@ -2388,7 +2388,7 @@ namespace PraticeManagement.Controls.Milestones
                     return;
                 }
                 //if there are any project feedback records
-                if (CheckFeedbackExists(entry.MilestonePersonId))
+                if (CheckFeedbackExists(entry.MilestonePersonId, entry.StartDate, entry.EndDate))
                 {
                     lblResultMessage.ShowErrorMessage(milestoneHasFeedbackEntries);
                     tblValidation.Visible = true;
@@ -3038,14 +3038,13 @@ namespace PraticeManagement.Controls.Milestones
             }
         }
 
-        private bool CheckFeedbackExists(int MilestonePersonId)
+        private bool CheckFeedbackExists(int MilestonePersonId,DateTime startDate,DateTime? endDate)
         {
             using (var serviceClient = new ProjectServiceClient())
             {
                 try
                 {
-                    return serviceClient.CheckIfFeedbackExists(MilestonePersonId, null, null);
-
+                    return serviceClient.CheckIfFeedbackExists(MilestonePersonId, null,startDate,endDate);
                 }
                 catch (CommunicationException)
                 {
