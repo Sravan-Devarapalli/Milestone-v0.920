@@ -129,6 +129,7 @@ BEGIN
 				PG.Code AS GroupCode,
 				SUM(CASE WHEN P.ProjectStatusId = 4 THEN 1 ELSE 0 END) AS CompletedProjectsCount,
 				SUM(CASE WHEN P.ProjectStatusId = 3 THEN 1 ELSE 0 END) AS ActiveProjectsCount,
+				SUM(CASE WHEN P.ProjectStatusId IS NULL THEN 0 ELSE 1 END) AS ProjectsCount,
 			    CAST((ROUND(ISNULL(SUM(PH.ForecastedHours),0), 2)) AS float) as ForecastedHours,
 				CAST((ROUND(ISNULL(SUM(PH.ForecastedHoursUntilToday),0), 2)) AS float) as ForecastedHoursUntilToday,
 				ROUND(ISNULL(SUM(TH.BillableHours),0), 2) as BillableHours,
