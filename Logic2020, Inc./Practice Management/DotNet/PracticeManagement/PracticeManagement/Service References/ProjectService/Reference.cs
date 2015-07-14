@@ -83,7 +83,7 @@ namespace PraticeManagement.ProjectService {
         void SaveFeedbackCancelationDetails(int feedbackId, System.Nullable<int> statusId, bool isCanceled, string cancelationReason, string userLogin, bool sendReactivationMail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CheckIfFeedbackExists", ReplyAction="http://tempuri.org/IProjectService/CheckIfFeedbackExistsResponse")]
-        bool CheckIfFeedbackExists(System.Nullable<int> milestonePersonId, System.Nullable<int> milestoneId, System.Nullable<int> projectId);
+        bool CheckIfFeedbackExists(System.Nullable<int> milestonePersonId, System.Nullable<int> milestoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/CheckIfProjectNumberExists", ReplyAction="http://tempuri.org/IProjectService/CheckIfProjectNumberExistsResponse")]
         bool CheckIfProjectNumberExists(string projectNumber);
@@ -241,7 +241,6 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
-        
        
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -343,8 +342,8 @@ namespace PraticeManagement.ProjectService {
             base.Channel.SaveFeedbackCancelationDetails(feedbackId, statusId, isCanceled, cancelationReason, userLogin, sendReactivationMail);
         }
         
-        public bool CheckIfFeedbackExists(System.Nullable<int> milestonePersonId, System.Nullable<int> milestoneId, System.Nullable<int> projectId) {
-            return base.Channel.CheckIfFeedbackExists(milestonePersonId, milestoneId, projectId);
+        public bool CheckIfFeedbackExists(System.Nullable<int> milestonePersonId, System.Nullable<int> milestoneId, System.Nullable<System.DateTime> startDate, System.Nullable<System.DateTime> endDate) {
+            return base.Channel.CheckIfFeedbackExists(milestonePersonId, milestoneId, startDate, endDate);
         }
         
         public bool CheckIfProjectNumberExists(string projectNumber) {
