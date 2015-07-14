@@ -3552,7 +3552,7 @@ namespace DataAccess
             }
         }
 
-        public static bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, int? projectId)
+        public static bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId,DateTime? startDate,DateTime? endDate)
         {
             bool result;
             try
@@ -3568,7 +3568,8 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.MilestonePersonId, milestonePersonId.HasValue ? (object)milestonePersonId : DBNull.Value);
                     command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId.HasValue ? (object)milestoneId : DBNull.Value);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId.HasValue ? (object)projectId : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate.HasValue ? (object)startDate : DBNull.Value);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate.HasValue ? (object)endDate : DBNull.Value);
 
                     connection.Open();
                     result = Convert.ToBoolean(command.ExecuteScalar());
