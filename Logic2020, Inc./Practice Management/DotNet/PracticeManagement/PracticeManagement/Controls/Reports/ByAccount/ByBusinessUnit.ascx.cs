@@ -155,11 +155,11 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             GroupByAccount report;
             if (isPopulateFilters)
             {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.ProjectStatusIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
             }
             else
             {
-                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.ProjectStatusIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
             }
 
             DataBindBusinesUnit(report.GroupedBusinessUnits.ToArray(), isPopulateFilters);
@@ -211,7 +211,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             if (HostingPage.SetSelectedFilters)
             {
 
-                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                var report = ServiceCallers.Custom.Report(r => r. AccountSummaryReportByBusinessUnit(HostingPage.AccountId, HostingPage.BusinessUnitIds, HostingPage.ProjectStatusIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
 
                 var businessUnitList = report.GroupedBusinessUnits.Select(r => new ProjectGroup { Name = r.BusinessUnit.Name, Id = r.BusinessUnit.Id }).Distinct().ToList().OrderBy(s => s.Name).ToArray();
 
@@ -252,7 +252,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             var dataSetList = new List<DataSet>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
+                var report = ServiceCallers.Custom.Report(r => r.AccountSummaryReportByBusinessUnit(HostingPage.AccountId, BusinessUnitIds, HostingPage.ProjectStatusIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value));
                 var reportdata = report.GroupedBusinessUnits.ToList();
 
                 string filterApplied = "Filters applied to columns: ";
