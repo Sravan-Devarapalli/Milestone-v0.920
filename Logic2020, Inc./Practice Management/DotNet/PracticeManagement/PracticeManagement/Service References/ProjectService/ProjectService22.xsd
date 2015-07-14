@@ -206,6 +206,7 @@
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LastTerminationDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LengthOfTenture" type="xs:int" />
+      <xs:element minOccurs="0" name="Location" nillable="true" type="tns:Location" />
       <xs:element minOccurs="0" name="LockedOut" type="xs:boolean" />
       <xs:element minOccurs="0" name="Manager" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="ModifiedDate" nillable="true" type="xs:dateTime" />
@@ -478,6 +479,17 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Employment" nillable="true" type="tns:Employment" />
+  <xs:complexType name="Location">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LocationCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LocationId" type="xs:int" />
+      <xs:element minOccurs="0" name="LocationName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Parent" nillable="true" type="tns:Location" />
+      <xs:element minOccurs="0" name="TimeZone" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Location" nillable="true" type="tns:Location" />
   <xs:complexType name="ArrayOfPersonOverhead">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonOverhead" nillable="true" type="tns:PersonOverhead" />
