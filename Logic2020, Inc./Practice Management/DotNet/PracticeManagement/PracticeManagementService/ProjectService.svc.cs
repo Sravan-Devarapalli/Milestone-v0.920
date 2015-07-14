@@ -1026,9 +1026,9 @@ namespace PracticeManagementService
                 SendReactivationMail((int?)feedbackId);
         }
 
-        public bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, int? projectId)
+        public bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, DateTime? startDate, DateTime? endDate)
         {
-            return ProjectDAL.CheckIfFeedbackExists(milestonePersonId, milestoneId, projectId);
+            return ProjectDAL.CheckIfFeedbackExists(milestonePersonId, milestoneId, startDate, endDate);
         }
 
         public void SendReactivationMail(int? feedbackId)
