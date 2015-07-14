@@ -78,6 +78,9 @@ namespace DataTransferObjects.Reports.ByAccount
         [DataMember]
         public int CompletedProjectsCount { get; set; }
 
+        [DataMember]
+        public int ProjectsCount { get; set; }
+
         public double TotalHours
         {
             get
