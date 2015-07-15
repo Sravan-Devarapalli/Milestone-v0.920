@@ -425,24 +425,9 @@ namespace PraticeManagement
                 args.IsValid = true;
             else
             {
-                if (!custProjectNumberRequired.IsValid || !custFormat.IsValid || !custInternalNumber.IsValid)
-                    return;
-                args.IsValid = !ServiceCallers.Custom.Project(p => p.CheckIfProjectNumberExists(txtProjectNumber.Text.Trim()));
-            }
-        }
-
-        protected void custInternalNumber_ServerValidate(object sender, ServerValidateEventArgs args)
-        {
-            if (ProjectId.HasValue || rbAutoGenerate.Checked)
-                args.IsValid = true;
-            else
-            {
                 if (!custProjectNumberRequired.IsValid || !custFormat.IsValid)
                     return;
-                var projectNumber = txtProjectNumber.Text.Trim();
-                var number = Convert.ToInt32(projectNumber.Substring(1, 6));
-                if (number >= 999900 && number <= 999999)
-                    args.IsValid = false;
+                args.IsValid = !ServiceCallers.Custom.Project(p => p.CheckIfProjectNumberExists(txtProjectNumber.Text.Trim()));
             }
         }
 
@@ -536,7 +521,7 @@ namespace PraticeManagement
 
             ddlCSATOwner.Enabled = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
 
-            if (!userIsAdministrator || !userIsOperations)
+            if (!userIsAdministrator && !userIsOperations)
             {
                 lblOppLinking.Style["display"] = "none";
                 imgLink.Style["display"] = "none";
