@@ -2811,7 +2811,7 @@ namespace PraticeManagement
                     if (ActiveWizard == 3)
                     {
                         ActiveWizard = _finalWizardView;
-                        personBadge.chbBlockFromMS_CheckedChanged(personBadge.BlockCheckBox,new EventArgs());
+                        personBadge.chbBlockFromMS_CheckedChanged(personBadge.BlockCheckBox, new EventArgs());
                         personBadge.chbException_CheckedChanged(personBadge.ExceptionCheckBox, new EventArgs());
                         personBadge.ddlPreviousAtMS_OnIndexChanged(personBadge.PreviousBadgeDdl, new EventArgs());
                     }
