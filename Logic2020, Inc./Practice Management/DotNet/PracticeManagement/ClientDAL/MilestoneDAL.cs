@@ -927,6 +927,70 @@ namespace DataAccess
             }
             return extendAttributionList;
         }
+
+        public static List<MSBadge> GetPeopleAssignedInOtherProjectsForGivenRange(DateTime milestoneNewStartDate,DateTime milestoneNewEnddate,int milestoneId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.MilestonePerson.GetPeopleAssignedInOtherProjectsForGivenRange, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneNewStartDate, milestoneNewStartDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneNewEndDate, milestoneNewEnddate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.MilestoneId, milestoneId);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<MSBadge>();
+                    ReadPersonBadges(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadPersonBadges(SqlDataReader reader, List<MSBadge> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+
+                while (reader.Read())
+                {
+                    var badgeResource = new MSBadge()
+                    {
+                        Person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            FirstName = reader.GetString(firstNameIndex)
+                        },
+                        BadgeStartDate = reader.IsDBNull(badgeStartDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeStartDateIndex),//reader.GetDateTime(badgeStartDateIndex),
+                        BadgeEndDate = reader.IsDBNull(badgeEndDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEndDateIndex),
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        }
+                    };
+                    result.Add(badgeResource);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
