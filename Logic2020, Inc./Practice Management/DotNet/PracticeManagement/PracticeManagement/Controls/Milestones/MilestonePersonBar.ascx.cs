@@ -486,7 +486,7 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void custBadgeAfterJuly_ServerValidate(object sender, ServerValidateEventArgs args)
         {
-            args.IsValid = (dpPersonStartInsert.DateValue >= new DateTime(2014, 7, 1) && dpPersonEndInsert.DateValue >= new DateTime(2014, 7, 1));
+            args.IsValid = (dpBadgeStartInsert.DateValue >= new DateTime(2014, 7, 1) && dpBadgeEndInsert.DateValue >= new DateTime(2014, 7, 1));
         }
 
         protected void custBadgeHasMoredays_ServerValidate(object source, ServerValidateEventArgs args)
