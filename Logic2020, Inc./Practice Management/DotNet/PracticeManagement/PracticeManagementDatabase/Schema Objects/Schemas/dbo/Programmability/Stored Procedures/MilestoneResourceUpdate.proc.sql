@@ -20,13 +20,19 @@ BEGIN
 		SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
 
 		--Get the active start date and active end date of the mile stone person in the selected date range.
-		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME)
+		DECLARE @PersonActiveDates TABLE (PersonId INT ,ActiveStartDate DATETIME,ActiveEndDate DATETIME, CurrentBadgeStartDate DATETIME, CurrentBadgeEndDate DATETIME)
 		INSERT INTO @PersonActiveDates(PersonId,ActiveStartDate,ActiveEndDate)
 		SELECT MP.PersonId,MIN(C.Date) AS ActiveStartDate,MAX(C.Date) AS ActiveEndDate
 		FROM dbo.MilestonePerson MP 
 		INNER JOIN dbo.Calendar C ON C.Date BETWEEN @StartDate AND @ProjectedDeliveryDate AND MP.MilestoneId = @MilestoneId
 		INNER JOIN dbo.v_PersonHistory PH ON MP.PersonId = PH.PersonId AND C.Date BETWEEN PH.HireDate AND ISNULL(PH.TerminationDate,@FutureDate) 
 		GROUP BY MP.PersonId
+
+		UPDATE P
+		SET P.CurrentBadgeStartDate = M.BadgeStartDate,
+			P.CurrentBadgeEndDate = M.BadgeEndDate
+		FROM @PersonActiveDates P
+		INNER JOIN v_CurrentMSBadge M ON M.PersonId = P.PersonId
 
 		--Delete milestone person entries which don't have atleast 1 active day in the selected range.
 		DECLARE @DeleteMileStonePersonEntriesTable TABLE(MilestonePersonId INT)
@@ -59,9 +65,8 @@ BEGIN
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId 
 		INNER JOIN dbo.Person AS p ON p.PersonId = MP.PersonId AND p.IsStrawman = 0
 		WHERE MP.MilestoneId = @MilestoneId 
-			AND ( MPE.StartDate > @ProjectedDeliveryDate OR MPE.EndDate < @StartDate )
+			AND (MPE.StartDate > @ProjectedDeliveryDate OR MPE.EndDate < @StartDate)
 		GROUP BY MPE.MilestonePersonId,MPE.PersonRoleId
-		
 		
 		DELETE  MPE 
 		FROM dbo.MilestonePersonEntry MPE
@@ -120,42 +125,48 @@ BEGIN
 	    UPDATE mpentry
 			   SET StartDate = P.ActiveStartDate,
 			   BadgeStartDate = CASE WHEN BadgeStartDate IS NULL THEN NULL
-									 WHEN P.ActiveEndDate >= @DefaultStartDate THEN (dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate)) 
+									 WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN P.CurrentBadgeEndDate >= P.ActiveStartDate THEN dbo.SmallerDateBetweenTwo(P.CurrentBadgeEndDate,(dbo.GreaterDateBetweenTwo(P.ActiveStartDate,@DefaultStartDate))) ELSE NULL END)
 									 ELSE NULL END,
 			   IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END,
-			   Requester = @UpdatedBy
-			  FROM MilestonePersonEntry as mpentry
-			  INNER JOIN 
-						(
-						 SELECT RANK() OVER(PARTITION BY  mpe.MilestonePersonId,ISNULL(mpe.PersonRoleId,0) ORDER BY StartDate) AS RANKnO,
-								mpe.Id,
-								mp.MilestoneId,
-								mp.PersonId
-						 FROM dbo.MilestonePersonEntry AS mpe
-						 INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
-						 ) AS q ON mpentry.Id = q.Id
-			  INNER JOIN @PersonActiveDates AS p ON p.PersonId = q.PersonId
-			  WHERE 1 = q.RANKnO AND q.MilestoneId = @MilestoneId  AND @IsStartDateChangeReflectedForMilestoneAndPersons = 1 
+			   Requester = @UpdatedBy,
+			   IsBadgeRequired = CASE WHEN BadgeStartDate IS NULL THEN 0
+									 WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN P.CurrentBadgeEndDate >= P.ActiveStartDate THEN 1 ELSE 0 END)
+									 ELSE 0 END
+		FROM MilestonePersonEntry as mpentry
+		INNER JOIN 
+				(
+					SELECT RANK() OVER(PARTITION BY  mpe.MilestonePersonId,ISNULL(mpe.PersonRoleId,0) ORDER BY StartDate) AS RANKnO,
+						mpe.Id,
+						mp.MilestoneId,
+						mp.PersonId
+					FROM dbo.MilestonePersonEntry AS mpe
+					INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
+					) AS q ON mpentry.Id = q.Id
+		INNER JOIN @PersonActiveDates AS p ON p.PersonId = q.PersonId
+		WHERE 1 = q.RANKnO AND q.MilestoneId = @MilestoneId  AND @IsStartDateChangeReflectedForMilestoneAndPersons = 1 
 
 		UPDATE mpentry
 				SET EndDate =  P.ActiveEndDate,
 				BadgeEndDate = CASE WHEN BadgeEndDate IS NULL THEN NULL 
-									WHEN P.ActiveEndDate >= @DefaultStartDate THEN (P.ActiveEndDate)
+									WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN P.CurrentBadgeEndDate >= P.ActiveStartDate THEN dbo.SmallerDateBetweenTwo(P.CurrentBadgeEndDate,P.ActiveEndDate) ELSE NULL END)
 									ELSE NULL END,
 				IsApproved = CASE WHEN BadgeStartDate IS NULL THEN NULL WHEN @IsExtendedORCompleteOutOfRange = 1 THEN 0 ELSE IsApproved END,
-				Requester = @UpdatedBy
-			    FROM MilestonePersonEntry as mpentry
-				INNER JOIN 
-					(
-					 SELECT RANK() OVER(PARTITION BY  mpe.MilestonePersonId,ISNULL(mpe.PersonRoleId,0) ORDER BY EndDate DESC) AS RANKnO,
-							mpe.Id,
-							mp.MilestoneId,
-							mp.PersonId
-					 FROM dbo.MilestonePersonEntry AS mpe
-					 INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
-					 ) AS q ON mpentry.Id = q.Id
-				INNER JOIN @PersonActiveDates AS p ON p.PersonId = q.PersonId
-				WHERE  1 = q.RANKnO AND q.MilestoneId = @MilestoneId AND  @IsEndDateChangeReflectedForMilestoneAndPersons = 1 
+				Requester = @UpdatedBy,
+				IsBadgeRequired = CASE WHEN BadgeEndDate IS NULL THEN 0
+									WHEN P.ActiveEndDate >= @DefaultStartDate THEN (CASE WHEN P.CurrentBadgeEndDate >= P.ActiveStartDate THEN 1 ELSE 0 END)
+									ELSE 0 END
+		FROM MilestonePersonEntry as mpentry
+		INNER JOIN 
+			(
+				SELECT RANK() OVER(PARTITION BY  mpe.MilestonePersonId,ISNULL(mpe.PersonRoleId,0) ORDER BY EndDate DESC) AS RANKnO,
+					mpe.Id,
+					mp.MilestoneId,
+					mp.PersonId
+				FROM dbo.MilestonePersonEntry AS mpe
+				INNER JOIN dbo.MilestonePerson AS mp ON mp.MilestonePersonId = mpe.MilestonePersonId
+				) AS q ON mpentry.Id = q.Id
+		INNER JOIN @PersonActiveDates AS p ON p.PersonId = q.PersonId
+		WHERE  1 = q.RANKnO AND q.MilestoneId = @MilestoneId AND  @IsEndDateChangeReflectedForMilestoneAndPersons = 1 
 
 		--Ensure that now wrong data is present
 	    UPDATE mpe
