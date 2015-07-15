@@ -14,7 +14,7 @@ BEGIN
 					   WHERE MPE.IsBadgeRequired = 1 
 							AND (MPE.BadgeStartDate <= @EndDate AND @StartDate <= MPE.BadgeEndDate)
 							AND MP.PersonId = @PersonId 
-							AND P.ProjectStatusId IN (2,3))
+							AND P.ProjectStatusId IN (1,2,3,4))
 	BEGIN
 			SELECT CONVERT(BIT,1) Result 
 	END
