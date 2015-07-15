@@ -4661,6 +4661,12 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\IsPersonSalaryTypeInGivenRange.proc.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\GetPeopleAssignedInOtherProjectsForGivenRange.proc.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\SmallerDateBetweenTwo.function.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
@@ -4710,3 +4716,4 @@
     </NotInBuild>
   </ItemGroup>
 </Project>
+
