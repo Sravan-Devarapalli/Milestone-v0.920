@@ -564,7 +564,7 @@
                                     Preferred First Name
                                 </td>
                                 <td>
-                                     <asp:TextBox ID="txtPrefferedFirstName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
+                                    <asp:TextBox ID="txtPrefferedFirstName" runat="server" CssClass="Width250Px" onchange="setDirty();"></asp:TextBox>
                                 </td>
                                 <td>
                                     <asp:RegularExpressionValidator ControlToValidate="txtPrefferedFirstName" ID="valRegPrefferedFirstName"
@@ -754,8 +754,8 @@
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic" OnServerValidate="custEmailAddress_ServerValidate"></asp:CustomValidator>
                                     <asp:CustomValidator ID="custUserName" runat="server" ControlToValidate="txtEmailAddress"
-                                        ErrorMessage="Unknown error occures. Please contact your system administrator."
-                                        ToolTip="Unknown error occures. Please contact your system administrator." ValidateEmptyText="true"
+                                        ErrorMessage="Unknown error occured. Please contact your system administrator."
+                                        ToolTip="Unknown error occured. Please contact your system administrator." ValidateEmptyText="true"
                                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                                         ValidationGroup="Person" OnServerValidate="custUserName_ServerValidate"></asp:CustomValidator>&nbsp;
                                 </td>
