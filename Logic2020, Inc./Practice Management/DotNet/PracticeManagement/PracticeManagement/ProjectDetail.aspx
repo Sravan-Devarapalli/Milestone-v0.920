@@ -521,10 +521,6 @@
                                                     ToolTip="Project number should be in the format P + 6 Digits or P + 6 Digits + 1 Alphabet."
                                                     ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                                     Display="Dynamic" OnServerValidate="custFormat_ServerValidate"></asp:CustomValidator>
-                                                <asp:CustomValidator ID="custInternalNumber" runat="server" ErrorMessage="The Project numbers from P999900 to P999999 are designed to Internal projects."
-                                                    ToolTip="The Project numbers from P999900 to P999999 are designed to Internal projects."
-                                                    ValidationGroup="Project" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                                    Display="Dynamic" OnServerValidate="custInternalNumber_ServerValidate"></asp:CustomValidator>
                                             </td>
                                         </tr>
                                     </table>
@@ -803,9 +799,9 @@
                                                     Display="Dynamic" EnableClientScript="false" ValidationGroup="Project" ErrorMessage="The Project Manager is required."
                                                     SetFocusOnError="true" Text="*" ToolTip="The Project Manager is required."></asp:RequiredFieldValidator>
                                                 <asp:CustomValidator ID="cvProjectOwner" runat="server" EnableClientScript="false"
-                                                    ValidationGroup="Project" ErrorMessage="The selected owner has been terminated or made inactive.  Please select another owner."
+                                                    ValidationGroup="Project" ErrorMessage="The selected Project Manager has been terminated or made inactive.  Please select another Manager."
                                                     ValidateEmptyText="true" OnServerValidate="cvProjectOwner_OnServerValidate" SetFocusOnError="true"
-                                                    Display="Dynamic" Text="*" ToolTip="The selected owner has been terminated or made inactive.  Please select another owner."></asp:CustomValidator>
+                                                    Display="Dynamic" Text="*" ToolTip="The selected Project Manager has been terminated or made inactive.  Please select another Manager."></asp:CustomValidator>
                                             </td>
                                             <td class="Width8Percent">
                                                 <asp:ImageButton ID="imgMailToProjectOwner" runat="server" OnClick="imgMailToProjectOwner_OnClick"
