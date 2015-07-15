@@ -1193,6 +1193,80 @@
                     </tr>
                 </table>
             </asp:Panel>
+            <asp:CustomValidator runat="server" ID="custMilestoneDatesConflict" OnServerValidate="custMilestoneDatesConflict_ServerValidate"
+                ValidationGroup="MilestoneDatesConflict"></asp:CustomValidator>
+            <asp:HiddenField ID="hdnMilestoneDatesConflict" Value="false" runat="server" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeMilestoneDatesConflict" runat="server"
+                TargetControlID="hdnMilestoneDatesConflict" BehaviorID="mpeMilestoneDatesConflictBehaviourId"
+                BackgroundCssClass="modalBackground" OkControlID="btnnOk" PopupControlID="pnlMilestoneDatesConflict"
+                DropShadow="false" />
+            <asp:Panel ID="pnlMilestoneDatesConflict" runat="server" CssClass="popUp" Style="display: none;">
+                <table class="WholeWidth">
+                    <tr class="PopUpHeader">
+                        <th>
+                            Attention!
+                            <asp:Button ID="btnCancel" runat="server" CssClass="mini-report-closeNew" ToolTip="Cancel Changes"
+                                OnClick="btnCancel_OnClick" Text="X"></asp:Button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">
+                            Milestone cannot be moved as the following people are assigned to projects which
+                            are after 18-Month End date.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="Padding5Imp">
+                            <asp:Repeater runat="server" ID="repBadgePeople">
+                                <HeaderTemplate>
+                                    <table class="border1Px WholeWidth">
+                                        <thead>
+                                            <tr class="textLeft border1Px Height25Px">
+                                                <th class="paddingLeft5pxImp">
+                                                    Person
+                                                </th>
+                                                <th class="borderLeft paddingLeft5pxImp">
+                                                    Project
+                                                </th>
+                                                <th class="borderLeft paddingLeft5pxImp">
+                                                    Badge Start Date
+                                                </th>
+                                                <th class="borderLeft paddingLeft5pxImp">
+                                                    Badge End Date
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <tr class="border1Px Height25Px">
+                                        <td class="paddingLeft5pxImp">
+                                            <%# Eval("Person.HtmlEncodedName")%>
+                                        </td>
+                                        <td class="borderLeft paddingLeft5pxImp">
+                                            <%# Eval("Project.HtmlEncodedName")%>
+                                        </td>
+                                        <td class="borderLeft paddingLeft5pxImp">
+                                            <%# GetDateFormat((DateTime)Eval("BadgeStartDate"))%>
+                                        </td>
+                                        <td class="borderLeft paddingLeft5pxImp">
+                                            <%# GetDateFormat((DateTime)Eval("BadgeEndDate"))%>
+                                        </td>
+                                    </tr>
+                                </ItemTemplate>
+                                <FooterTemplate>
+                                    </tbody> </table>
+                                </FooterTemplate>
+                            </asp:Repeater>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="textCenter paddingBottom5px PaddingTop20">
+                            <asp:Button ID="btnnOk" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
             <uc:LoadingProgress ID="lpOpportunityDetails" runat="server" />
         </ContentTemplate>
     </asp:UpdatePanel>
