@@ -264,8 +264,10 @@
       <xs:element minOccurs="0" name="BlockStartDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="BreakEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="BreakStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DeactivatedDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ExceptionEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ExceptionStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ExcludeInReports" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsApproved" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsBlocked" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsException" type="xs:boolean" />
@@ -275,6 +277,8 @@
       <xs:element minOccurs="0" name="ModifiedBy" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ModifiedById" type="xs:int" />
       <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OrganicBreakEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OrganicBreakStartDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="PlannedEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="PlannedEndDateSource" nillable="true" type="xs:string" />
@@ -282,6 +286,8 @@
       <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
       <xs:element minOccurs="0" name="ProjectBadgeEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ProjectBadgeStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Requester" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequesterId" nillable="true" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MSBadge" nillable="true" type="tns:MSBadge" />
@@ -311,6 +317,7 @@
       <xs:element minOccurs="0" name="HasTimeEntries" type="xs:boolean" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="IsAssignedProject" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsBusinessDevelopment" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsCSATEligible" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHolidayProject" type="xs:boolean" />
@@ -687,6 +694,9 @@
       <xs:enumeration value="Consulting" />
       <xs:enumeration value="Operations" />
       <xs:enumeration value="Recruiting" />
+      <xs:enumeration value="TechnologyConsulting" />
+      <xs:enumeration value="BusinessConsulting" />
+      <xs:enumeration value="Director" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PersonDivisionType" nillable="true" type="tns:PersonDivisionType" />
