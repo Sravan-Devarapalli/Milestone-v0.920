@@ -182,17 +182,20 @@ namespace PracticeManagementService
         [OperationContract]
         List<Attribution> IsProjectAttributionConflictsWithMilestoneChanges(int milestoneId, DateTime startDate, DateTime endDate, bool isUpdate);
 
-         [OperationContract]
+        [OperationContract]
         List<bool> ShouldAttributionDateExtend(int milestoneId, DateTime startDate, DateTime endDate);
 
-         [OperationContract]
-         List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate);
+        [OperationContract]
+        List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate);
 
-         [OperationContract]
-         void SendBadgeRequestMail(Project project);
-        
-         [OperationContract]
-         void SendBadgeRequestApprovedMail(string personName, string toAddress);
+        [OperationContract]
+        void SendBadgeRequestMail(Project project);
+
+        [OperationContract]
+        void SendBadgeRequestApprovedMail(string personName, string toAddress);
+
+        [OperationContract]
+        List<MSBadge> GetPeopleAssignedInOtherProjectsForGivenRange(DateTime milestoneNewStartDate, DateTime milestoneNewEnddate, int milestoneId);
     }
 }
 
