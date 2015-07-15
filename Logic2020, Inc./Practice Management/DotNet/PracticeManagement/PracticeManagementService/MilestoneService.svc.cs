@@ -288,12 +288,17 @@ namespace PracticeManagementService
 
         public void SendBadgeRequestMail(Project project)
         {
-             MailUtil.SendMSBadgeRequestEmail(project);
+            MailUtil.SendMSBadgeRequestEmail(project);
         }
 
         public void SendBadgeRequestApprovedMail(string personName, string toAddress)
         {
-            MailUtil.SendMSBadgeRequestApprovedEmail(personName,toAddress);
+            MailUtil.SendMSBadgeRequestApprovedEmail(personName, toAddress);
+        }
+
+        public List<MSBadge> GetPeopleAssignedInOtherProjectsForGivenRange(DateTime milestoneNewStartDate, DateTime milestoneNewEnddate, int milestoneId)
+        {
+            return MilestoneDAL.GetPeopleAssignedInOtherProjectsForGivenRange(milestoneNewStartDate, milestoneNewEnddate, milestoneId);
         }
 
         #endregion Implementation of IDataTransferObjectManipulator<ProjectExpense> and custom methods
