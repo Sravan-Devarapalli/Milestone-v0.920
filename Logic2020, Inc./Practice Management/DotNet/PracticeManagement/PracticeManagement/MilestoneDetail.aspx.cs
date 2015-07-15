@@ -803,6 +803,26 @@ namespace PraticeManagement
             }
         }
 
+        protected void custMilestoneDatesConflict_ServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            DateTime oldStartDate;
+            var newMilestoneStartDate = dtpPeriodFrom.DateValue;
+            var newMilestoneEndDate = dtpPeriodTo.DateValue;
+            if (DateTime.TryParse(hdnPeriodFrom.Value, out oldStartDate) && MilestoneId.HasValue)
+            {
+                if (oldStartDate.Date >= dtpPeriodFrom.DateValue.Date)
+                {
+                    var badgedPeople = ServiceCallers.Custom.Milestone(m => m.GetPeopleAssignedInOtherProjectsForGivenRange(newMilestoneStartDate, newMilestoneEndDate, MilestoneId.Value)).ToList();
+                    e.IsValid = badgedPeople.Count == 0;
+                    if (!e.IsValid)
+                    {
+                        mpeMilestoneDatesConflict.Show();
+                        repBadgePeople.DataSource = badgedPeople;
+                        repBadgePeople.DataBind();
+                    }
+                }
+            }
+        }
 
         protected void cvAttributionPopup_ServerValidate(object sender, ServerValidateEventArgs e)
         {
@@ -947,7 +967,7 @@ namespace PraticeManagement
             {
                 try
                 {
-                    e.IsValid = !serviceClient.CheckIfFeedbackExists(null, MilestoneId.Value, null);
+                    e.IsValid = !serviceClient.CheckIfFeedbackExists(null, MilestoneId.Value,null,null);
                 }
                 catch (CommunicationException)
                 {
@@ -1129,6 +1149,10 @@ namespace PraticeManagement
                 {
                     hdnIsUpdate.Value = true.ToString();
                     Page.Validate("AttributionPopup");
+                }
+                if (Page.IsValid)
+                {
+                    Page.Validate("MilestoneDatesConflict");
                 }
                 if (Page.IsValid)
                 {
@@ -1874,6 +1898,11 @@ namespace PraticeManagement
                     }
                 }
             }
+        }
+
+        protected string GetDateFormat(DateTime date)
+        {
+            return date.ToString(Constants.Formatting.EntryDateFormat);
         }
 
         #region Implementation of IPostBackEventHandler
