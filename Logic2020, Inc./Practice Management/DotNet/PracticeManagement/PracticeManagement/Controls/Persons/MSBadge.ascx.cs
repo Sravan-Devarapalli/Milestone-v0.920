@@ -179,6 +179,13 @@ namespace PraticeManagement.Controls.Persons
             args.IsValid = dtpExceptionStart.DateValue >= new DateTime(2014, 7, 1);
         }
 
+        protected void custBlockStartAfterJuly_ServerValidate(object sender, ServerValidateEventArgs args)
+        {
+            if (!reqBlockStart.IsValid || !reqBlockEnd.IsValid || !cvBlockStart.IsValid || !cvBlockEnd.IsValid || !cvBlockDateRange.IsValid)
+                return;
+            args.IsValid = dtpBlockStart.DateValue >= new DateTime(2014, 7, 1);
+        }
+
         protected void custDeactivateNeed18moDates_ServerValidate(object sender, ServerValidateEventArgs args)
         {
             if(BadgeDetails == null)
@@ -252,7 +259,10 @@ namespace PraticeManagement.Controls.Persons
             }
             IsFirstValidation = true;
             IsDeactivatePriorValidated = false;
-            reqBadgeStart.Enabled = reqBadgeEnd.Enabled = false;
+            if (string.IsNullOrEmpty(dpBadgeStart.TextValue) && string.IsNullOrEmpty(dpBadgeEnd.TextValue))
+            {
+                reqBadgeStart.Enabled = reqBadgeEnd.Enabled = false;
+            }
         }
 
         protected void custNotFuture_ServerValidate(object sender, ServerValidateEventArgs args)
@@ -300,7 +310,7 @@ namespace PraticeManagement.Controls.Persons
 
         protected void custProjectsAssigned_ServerValidate(object sender, ServerValidateEventArgs args)
         {
-            if (lblBadgeStartDateSource.Text != "Manual Entry")
+            if (lblBadgeStartDateSource.Text != "Manual Entry" || dpBadgeStart.DateValue == DateTime.MinValue)
                 return;
             if (BadgeDetails == null || !BadgeDetails.BadgeStartDate.HasValue)
                 return;
@@ -416,12 +426,13 @@ namespace PraticeManagement.Controls.Persons
             lblPlannedDateSource.Text = string.IsNullOrEmpty(badge.PlannedEndDateSource) ? "Available Now" : badge.PlannedEndDateSource;
             lblBadgeStartDateSource.Text = string.IsNullOrEmpty(badge.BadgeStartDateSource) ? "Available Now" : badge.BadgeStartDateSource;
             lblBadgeEndDateSource.Text = string.IsNullOrEmpty(badge.BadgeEndDateSource) ? "Available Now" : badge.BadgeEndDateSource;
-            reqBlockStart.Enabled = reqBlockEnd.Enabled = cvBlockStart.Enabled = cvBlockEnd.Enabled = cvBlockDateRange.Enabled = custBlockDatesInEmpHistory.Enabled = custPersonInProject.Enabled = chbBlockFromMS.Checked;
+            reqBlockStart.Enabled = reqBlockEnd.Enabled = cvBlockStart.Enabled = custBlockStartAfterJuly.Enabled = cvBlockEnd.Enabled = cvBlockDateRange.Enabled = custBlockDatesInEmpHistory.Enabled = custPersonInProject.Enabled = chbBlockFromMS.Checked;
             compDeactivatedDate.Enabled = custDeactivateNeed18moDates.Enabled = custDeactivateDateIn18moDates.Enabled = custDeactivateDatePriorProjectDates.Enabled = custDeactivateWithinProject.Enabled = cust18moNotInEmployment.Enabled = true;
-            reqBadgeStart.Enabled = compBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEnd.Enabled = compBadgeEndLess.Enabled = custLessThan18Mo.Enabled = custMoreThan18Mo.Enabled = custBeforeJuly.Enabled = custProjectsAssigned.Enabled = BadgeDetails.BadgeStartDate.HasValue;
+            reqBadgeStart.Enabled =  reqBadgeEnd.Enabled =  custLessThan18Mo.Enabled = custMoreThan18Mo.Enabled = custBeforeJuly.Enabled = custProjectsAssigned.Enabled = BadgeDetails.BadgeStartDate.HasValue;
             custExceptionDatesOverlappsBlock.Enabled = custExceptionMorethan18.Enabled = custExceptionNotMoreThan18moEndDate.Enabled =
             custBlockDatesOverlappedException.Enabled = reqExceptionEnd.Enabled = reqExceptionStart.Enabled = cvExceptionStartAfterJuly.Enabled = cvExceptionStart.Enabled = cvExceptionDateRanges.Enabled = cvExceptionEnd.Enabled = custExceptionInEmpHistory.Enabled = chbException.Checked;
             reqPreviousAlias.Enabled = reqLastBadgeStart.Enabled = reqLastbadgeEnd.Enabled = cvLastbadgeEnd.Enabled = cvLastBadgeRange.Enabled = custNotFuture.Enabled = cvLastBadgeStart.Enabled = ddlPreviousAtMS.SelectedValue == "1";
+            compBadgeStart.Enabled = compBadgeEnd.Enabled = compBadgeEndLess.Enabled = true;
             BindBadgeHistory();
             badgeHistory.PopulateData();
             pnlHistoryPanel.Attributes["class"] = badgeHistory.Width;
@@ -451,7 +462,7 @@ namespace PraticeManagement.Controls.Persons
                 dtpBlockEnd.TextValue = string.Empty;
             }
             custExceptionDatesOverlappsBlock.Enabled =
-              custPersonInProject.Enabled = custBlockDatesOverlappedException.Enabled = reqBlockStart.Enabled = reqBlockEnd.Enabled = cvBlockStart.Enabled = cvBlockEnd.Enabled = cvBlockDateRange.Enabled = custBlockDatesInEmpHistory.Enabled = chbBlockFromMS.Checked;
+              custPersonInProject.Enabled = custBlockDatesOverlappedException.Enabled = custBlockStartAfterJuly.Enabled = reqBlockStart.Enabled = reqBlockEnd.Enabled = cvBlockStart.Enabled = cvBlockEnd.Enabled = cvBlockDateRange.Enabled = custBlockDatesInEmpHistory.Enabled = chbBlockFromMS.Checked;
         }
 
         public void chbException_CheckedChanged(object sender, EventArgs e)
@@ -553,28 +564,28 @@ namespace PraticeManagement.Controls.Persons
         {
             cust18moNotInEmployment.ValidationGroup = custProjectsAssigned.ValidationGroup = custBeforeJuly.ValidationGroup = custMoreThan18Mo.ValidationGroup = custLessThan18Mo.ValidationGroup = compBadgeEndLess.ValidationGroup = compBadgeEnd.ValidationGroup = reqBadgeEnd.ValidationGroup = reqBadgeStart.ValidationGroup = compBadgeStart.ValidationGroup = reqPreviousAlias.ValidationGroup = reqLastBadgeStart.ValidationGroup = cvLastBadgeStart.ValidationGroup = cvLastbadgeEnd.ValidationGroup = custNotFuture.ValidationGroup = cvLastBadgeRange.ValidationGroup = reqLastbadgeEnd.ValidationGroup = cvBlockStart.ValidationGroup = reqBlockStart.ValidationGroup = dtpLastBadgeStart.ValidationGroup = dtpLastBadgeEnd.ValidationGroup = dtpBlockStart.ValidationGroup =
             custPersonInProject.ValidationGroup = custBlockDatesOverlappedException.ValidationGroup = custDeactivateDateIn18moDates.ValidationGroup = custDeactivateNeed18moDates.ValidationGroup = compDeactivatedDate.ValidationGroup = custDeactivateDatePriorProjectDates.ValidationGroup = custDeactivateWithinProject.ValidationGroup =
-            custExceptionDatesOverlappsBlock.ValidationGroup = custExceptionMorethan18.ValidationGroup = custExceptionNotMoreThan18moEndDate.ValidationGroup = dtpExceptionStart.ValidationGroup = custExceptionInEmpHistory.ValidationGroup = 
-            custBlockDatesInEmpHistory.ValidationGroup = cvExceptionStartAfterJuly.ValidationGroup = cvExceptionStart.ValidationGroup = reqExceptionStart.ValidationGroup = dtpBlockEnd.ValidationGroup = cvBlockEnd.ValidationGroup = cvBlockDateRange.ValidationGroup = reqBlockEnd.ValidationGroup = dtpExceptionEnd.ValidationGroup = cvExceptionDateRanges.ValidationGroup = cvExceptionEnd.ValidationGroup = reqExceptionEnd.ValidationGroup = ValidationGroup;
+            custExceptionDatesOverlappsBlock.ValidationGroup = custExceptionMorethan18.ValidationGroup = custExceptionNotMoreThan18moEndDate.ValidationGroup = dtpExceptionStart.ValidationGroup = custExceptionInEmpHistory.ValidationGroup =
+            custBlockDatesInEmpHistory.ValidationGroup = cvExceptionStartAfterJuly.ValidationGroup = cvExceptionStart.ValidationGroup = reqExceptionStart.ValidationGroup = dtpBlockEnd.ValidationGroup = custBlockStartAfterJuly.ValidationGroup = cvBlockEnd.ValidationGroup = cvBlockDateRange.ValidationGroup = reqBlockEnd.ValidationGroup = dtpExceptionEnd.ValidationGroup = cvExceptionDateRanges.ValidationGroup = cvExceptionEnd.ValidationGroup = reqExceptionEnd.ValidationGroup = ValidationGroup;
         }
 
         public void ValidateMSBadgeDetails()
         {
             if (Page.IsValid)
             {
+                compBadgeStart.Validate();
+                compBadgeEnd.Validate();
+                reqBadgeStart.Validate();
+                reqBadgeEnd.Validate();
                 cust18moNotInEmployment.Validate();
                 custProjectsAssigned.Validate();
                 custBeforeJuly.Validate();
                 custMoreThan18Mo.Validate();
                 custLessThan18Mo.Validate();
                 compBadgeEndLess.Validate();
-                compBadgeEnd.Validate();
                 compDeactivatedDate.Validate();
                 custDeactivateNeed18moDates.Validate();
                 custDeactivateDateIn18moDates.Validate();
                 custDeactivateDatePriorProjectDates.Validate();
-                reqBadgeEnd.Validate();
-                reqBadgeStart.Validate();
-                compBadgeStart.Validate();
                 reqPreviousAlias.Validate();
                 reqLastBadgeStart.Validate();
                 cvLastBadgeStart.Validate();
@@ -586,6 +597,7 @@ namespace PraticeManagement.Controls.Persons
                 reqBlockEnd.Validate();
                 cvBlockDateRange.Validate();
                 cvBlockStart.Validate();
+                custBlockStartAfterJuly.Validate();
                 reqExceptionStart.Validate();
                 reqExceptionEnd.Validate();
                 cvExceptionDateRanges.Validate();
@@ -631,39 +643,44 @@ namespace PraticeManagement.Controls.Persons
         protected void dpBadgeStart_Changed(object sender, EventArgs e)
         {
             var startdate = new DateTime();
-            custBeforeJuly.Validate();
-            if (custBeforeJuly.IsValid)
+            compBadgeStart.Validate();
+            compBadgeEnd.Validate();
+            if (compBadgeStart.IsValid && compBadgeEnd.IsValid)
             {
-                if (DateTime.TryParse(dpBadgeStart.TextValue, out startdate))
+                custBeforeJuly.Validate();
+                if (custBeforeJuly.IsValid)
                 {
-                    if (BadgeDetails != null && BadgeDetails.BadgeStartDate.HasValue && BadgeDetails.BadgeStartDate.Value.Date == startdate.Date)
+                    if (DateTime.TryParse(dpBadgeStart.TextValue, out startdate))
                     {
-                        dpBadgeEnd.TextValue = BadgeDetails.BadgeEndDate.HasValue ? BadgeDetails.BadgeEndDate.Value.ToShortDateString() : string.Empty;
-                        txtBreakStart.Text = BadgeDetails.BreakStartDate.HasValue ? BadgeDetails.BreakStartDate.Value.ToShortDateString() : string.Empty;
-                        txtBreakEnd.Text = BadgeDetails.BreakEndDate.HasValue ? BadgeDetails.BreakEndDate.Value.ToShortDateString() : string.Empty;
-                        lblBadgeStartDateSource.Text = string.IsNullOrEmpty(BadgeDetails.BadgeStartDateSource) ? "Available Now" : BadgeDetails.BadgeStartDateSource;
-                        lblBadgeEndDateSource.Text = string.IsNullOrEmpty(BadgeDetails.BadgeEndDateSource) ? "Available Now" : BadgeDetails.BadgeEndDateSource;
-                        lblPlannedDateSource.Text = string.IsNullOrEmpty(BadgeDetails.PlannedEndDateSource) ? "Available Now" : BadgeDetails.PlannedEndDateSource;
+                        if (BadgeDetails != null && BadgeDetails.BadgeStartDate.HasValue && BadgeDetails.BadgeStartDate.Value.Date == startdate.Date)
+                        {
+                            dpBadgeEnd.TextValue = BadgeDetails.BadgeEndDate.HasValue ? BadgeDetails.BadgeEndDate.Value.ToShortDateString() : string.Empty;
+                            txtBreakStart.Text = BadgeDetails.BreakStartDate.HasValue ? BadgeDetails.BreakStartDate.Value.ToShortDateString() : string.Empty;
+                            txtBreakEnd.Text = BadgeDetails.BreakEndDate.HasValue ? BadgeDetails.BreakEndDate.Value.ToShortDateString() : string.Empty;
+                            lblBadgeStartDateSource.Text = string.IsNullOrEmpty(BadgeDetails.BadgeStartDateSource) ? "Available Now" : BadgeDetails.BadgeStartDateSource;
+                            lblBadgeEndDateSource.Text = string.IsNullOrEmpty(BadgeDetails.BadgeEndDateSource) ? "Available Now" : BadgeDetails.BadgeEndDateSource;
+                            lblPlannedDateSource.Text = string.IsNullOrEmpty(BadgeDetails.PlannedEndDateSource) ? "Available Now" : BadgeDetails.PlannedEndDateSource;
+                        }
+                        else
+                        {
+                            dpBadgeEnd.TextValue = startdate.AddMonths(18).AddDays(-1).ToString("MM/dd/yyyy");
+                            var breakstart = startdate.AddMonths(18);
+                            txtBreakStart.Text = breakstart.ToString("MM/dd/yyyy");
+                            txtBreakEnd.Text = breakstart.AddMonths(6).AddDays(-1).ToString("MM/dd/yyyy");
+                            lblBadgeStartDateSource.Text = "Manual Entry";
+                            lblBadgeEndDateSource.Text = "Manual Entry";
+                        }
                     }
                     else
                     {
-                        dpBadgeEnd.TextValue = startdate.AddMonths(18).AddDays(-1).ToString("MM/dd/yyyy");
-                        var breakstart = startdate.AddMonths(18);
-                        txtBreakStart.Text = breakstart.ToString("MM/dd/yyyy");
-                        txtBreakEnd.Text = breakstart.AddMonths(6).AddDays(-1).ToString("MM/dd/yyyy");
-                        lblBadgeStartDateSource.Text = "Manual Entry";
-                        lblBadgeEndDateSource.Text = "Manual Entry";
+                        dpBadgeEnd.TextValue = txtBreakStart.Text = txtBreakEnd.Text = txtPlannedEnd.Text = string.Empty;
+                        lblBadgeStartDateSource.Text = lblBadgeEndDateSource.Text = lblPlannedDateSource.Text = "Available Now";
                     }
                 }
                 else
                 {
-                    dpBadgeEnd.TextValue = txtBreakStart.Text = txtBreakEnd.Text = txtPlannedEnd.Text = string.Empty;
-                    lblBadgeStartDateSource.Text = lblBadgeEndDateSource.Text = lblPlannedDateSource.Text = "Available Now";
+                    HostingPage.IsErrorPanelDisplay = true;
                 }
-            }
-            else
-            {
-                HostingPage.IsErrorPanelDisplay = true;
             }
         }
 
@@ -689,11 +706,13 @@ namespace PraticeManagement.Controls.Persons
                         lblBadgeEndDateSource.Text = "Manual Entry";
                         lblBadgeStartDateSource.Text = "Manual Entry";
                     }
+                    reqBadgeStart.Enabled = true;
                 }
                 else
                 {
                     dpBadgeStart.TextValue = txtBreakStart.Text = txtBreakEnd.Text = string.Empty;
                     lblBadgeStartDateSource.Text = lblBadgeEndDateSource.Text = "Available Now";
+                    reqBadgeStart.Enabled = false;
                 }
             }
             else
