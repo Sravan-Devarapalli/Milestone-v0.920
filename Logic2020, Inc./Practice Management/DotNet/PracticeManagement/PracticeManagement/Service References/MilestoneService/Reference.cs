@@ -110,6 +110,11 @@ namespace PraticeManagement.MilestoneService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/SendBadgeRequestApprovedMail", ReplyAction="http://tempuri.org/IMilestoneService/SendBadgeRequestApprovedMailResponse")]
         void SendBadgeRequestApprovedMail(string personName, string toAddress);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/GetPeopleAssignedInOtherProjectsForGivenRang" +
+            "e", ReplyAction="http://tempuri.org/IMilestoneService/GetPeopleAssignedInOtherProjectsForGivenRang" +
+            "eResponse")]
+        DataTransferObjects.MSBadge[] GetPeopleAssignedInOtherProjectsForGivenRange(System.DateTime milestoneNewStartDate, System.DateTime milestoneNewEnddate, int milestoneId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -255,6 +260,10 @@ namespace PraticeManagement.MilestoneService {
         
         public void SendBadgeRequestApprovedMail(string personName, string toAddress) {
             base.Channel.SendBadgeRequestApprovedMail(personName, toAddress);
+        }
+        
+        public DataTransferObjects.MSBadge[] GetPeopleAssignedInOtherProjectsForGivenRange(System.DateTime milestoneNewStartDate, System.DateTime milestoneNewEnddate, int milestoneId) {
+            return base.Channel.GetPeopleAssignedInOtherProjectsForGivenRange(milestoneNewStartDate, milestoneNewEnddate, milestoneId);
         }
     }
 }
