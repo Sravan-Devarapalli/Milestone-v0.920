@@ -423,4 +423,20 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetPeopleAssignedInOtherProjectsForGivenRange">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="milestoneNewStartDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="milestoneNewEnddate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="milestoneId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPeopleAssignedInOtherProjectsForGivenRangeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetPeopleAssignedInOtherProjectsForGivenRangeResult" nillable="true" type="q25:ArrayOfMSBadge" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
