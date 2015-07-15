@@ -191,6 +191,12 @@
   <wsdl:message name="IMilestoneService_SendBadgeRequestApprovedMail_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendBadgeRequestApprovedMailResponse" />
   </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetPeopleAssignedInOtherProjectsForGivenRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPeopleAssignedInOtherProjectsForGivenRange" />
+  </wsdl:message>
+  <wsdl:message name="IMilestoneService_GetPeopleAssignedInOtherProjectsForGivenRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPeopleAssignedInOtherProjectsForGivenRangeResponse" />
+  </wsdl:message>
   <wsdl:portType name="IMilestoneService">
     <wsdl:operation name="SaveDefaultMilestone">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/SaveDefaultMilestone" message="tns:IMilestoneService_SaveDefaultMilestone_InputMessage" />
@@ -311,6 +317,10 @@
     <wsdl:operation name="SendBadgeRequestApprovedMail">
       <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/SendBadgeRequestApprovedMail" message="tns:IMilestoneService_SendBadgeRequestApprovedMail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/SendBadgeRequestApprovedMailResponse" message="tns:IMilestoneService_SendBadgeRequestApprovedMail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPeopleAssignedInOtherProjectsForGivenRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMilestoneService/GetPeopleAssignedInOtherProjectsForGivenRange" message="tns:IMilestoneService_GetPeopleAssignedInOtherProjectsForGivenRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMilestoneService/GetPeopleAssignedInOtherProjectsForGivenRangeResponse" message="tns:IMilestoneService_GetPeopleAssignedInOtherProjectsForGivenRange_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IMilestoneService" type="tns:IMilestoneService">
@@ -578,6 +588,15 @@
     </wsdl:operation>
     <wsdl:operation name="SendBadgeRequestApprovedMail">
       <soap:operation soapAction="http://tempuri.org/IMilestoneService/SendBadgeRequestApprovedMail" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPeopleAssignedInOtherProjectsForGivenRange">
+      <soap:operation soapAction="http://tempuri.org/IMilestoneService/GetPeopleAssignedInOtherProjectsForGivenRange" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
