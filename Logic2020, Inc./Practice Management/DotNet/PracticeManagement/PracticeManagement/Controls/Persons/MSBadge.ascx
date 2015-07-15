@@ -9,8 +9,8 @@
         </td>
         <td>
             <%--<asp:TextBox ID="txtBadgeStart" runat="server" ReadOnly="true"></asp:TextBox>--%>
-            <uc:datepicker id="dpBadgeStart" runat="server" onselectionchanged="dpBadgeStart_Changed"
-                autopostback="true" />
+            <uc:DatePicker ID="dpBadgeStart" runat="server" OnSelectionChanged="dpBadgeStart_Changed"
+                AutoPostBack="true" />
             <asp:RequiredFieldValidator ID="reqBadgeStart" runat="server" ControlToValidate="dpBadgeStart"
                 ErrorMessage="18-Month Badge start date is required." ToolTip="18-Month Badge start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -41,8 +41,8 @@
             Badge Deactivated Date:
         </td>
         <td>
-            <uc:datepicker id="dpDeactivatedDate" runat="server" onselectionchanged="dpDeactivatedDate_Change"
-                autopostback="true" />
+            <uc:DatePicker ID="dpDeactivatedDate" runat="server" OnSelectionChanged="dpDeactivatedDate_Change"
+                AutoPostBack="true" />
             <asp:CompareValidator ID="compDeactivatedDate" runat="server" ControlToValidate="dpDeactivatedDate"
                 Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
                 Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
@@ -100,8 +100,8 @@
         </td>
         <td>
             <%--<asp:TextBox ID="txtBadgeEnd" runat="server" ReadOnly="true"></asp:TextBox>--%>
-            <uc:datepicker id="dpBadgeEnd" runat="server" onselectionchanged="dpBadgeEnd_Changed"
-                autopostback="true" />
+            <uc:DatePicker ID="dpBadgeEnd" runat="server" OnSelectionChanged="dpBadgeEnd_Changed"
+                AutoPostBack="true" />
             <asp:RequiredFieldValidator ID="reqBadgeEnd" runat="server" ControlToValidate="dpBadgeEnd"
                 ErrorMessage="18-Month Badge end date is required." ToolTip="18-Month Badge end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -139,7 +139,7 @@
             Last Badge Start
         </td>
         <td>
-            <uc:datepicker id="dtpLastBadgeStart" runat="server" />
+            <uc:DatePicker ID="dtpLastBadgeStart" runat="server" />
             <asp:RequiredFieldValidator ID="reqLastBadgeStart" runat="server" ControlToValidate="dtpLastBadgeStart"
                 ErrorMessage="Last badge start date is required." ToolTip="Last badge start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -176,7 +176,7 @@
             Last Badge End
         </td>
         <td colspan="3">
-            <uc:datepicker id="dtpLastBadgeEnd" runat="server" />
+            <uc:DatePicker ID="dtpLastBadgeEnd" runat="server" />
             <asp:RequiredFieldValidator ID="reqLastbadgeEnd" runat="server" ControlToValidate="dtpLastBadgeEnd"
                 ErrorMessage="Last badge end date is required." ToolTip="Last badge end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -220,7 +220,7 @@
             Block Start
         </td>
         <td colspan="2">
-            <uc:datepicker id="dtpBlockStart" runat="server" />
+            <uc:DatePicker ID="dtpBlockStart" runat="server" />
             <asp:RequiredFieldValidator ID="reqBlockStart" runat="server" ControlToValidate="dtpBlockStart"
                 ErrorMessage="Block start date is required." ToolTip="Block start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -228,12 +228,16 @@
                 Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
                 Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
+            <asp:CustomValidator ID="custBlockStartAfterJuly" runat="server" ErrorMessage="Block start date should not be before 7/1/2014."
+                ToolTip="Block start date should not be before 7/1/2014." Display="Dynamic"
+                OnServerValidate="custBlockStartAfterJuly_ServerValidate" Text="*" EnableClientScript="false"
+                SetFocusOnError="true"></asp:CustomValidator>
         </td>
         <td class="MsBadgeTd1">
             Exception Start
         </td>
         <td colspan="3">
-            <uc:datepicker id="dtpExceptionStart" runat="server" />
+            <uc:DatePicker ID="dtpExceptionStart" runat="server" />
             <asp:RequiredFieldValidator ID="reqExceptionStart" runat="server" ControlToValidate="dtpExceptionStart"
                 ErrorMessage="Exception start date is required." ToolTip="Exception start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -252,7 +256,7 @@
             Block End
         </td>
         <td colspan="2">
-            <uc:datepicker id="dtpBlockEnd" runat="server" />
+            <uc:DatePicker ID="dtpBlockEnd" runat="server" />
             <asp:RequiredFieldValidator ID="reqBlockEnd" runat="server" ControlToValidate="dtpBlockEnd"
                 ErrorMessage="Block end date is required." ToolTip="Block end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -281,7 +285,7 @@
             Exception End
         </td>
         <td colspan="3">
-            <uc:datepicker id="dtpExceptionEnd" runat="server" />
+            <uc:DatePicker ID="dtpExceptionEnd" runat="server" />
             <asp:RequiredFieldValidator ID="reqExceptionEnd" runat="server" ControlToValidate="dtpExceptionEnd"
                 ErrorMessage="Exception end date is required." ToolTip="Exception end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -433,7 +437,7 @@
     <table class="WholeWidth">
         <tr>
             <td>
-                <uc:badgehistory id="badgeHistory" runat="server" />
+                <uc:BadgeHistory ID="badgeHistory" runat="server" />
             </td>
         </tr>
         <tr>
