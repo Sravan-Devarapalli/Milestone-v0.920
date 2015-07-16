@@ -135,7 +135,8 @@ BEGIN
 		BadgeStartDateSource = CASE	WHEN B.StartDate IS NULL THEN NULL
 									ELSE B.BadgeStartSource END, -- BADGE HISTORY
 		BadgeEndDateSource = CASE WHEN B.StartDate IS NULL THEN NULL
-									ELSE B.BadgeStartSource END, -- BADGE HISTORY
+								  WHEN B.PlannedEnd > DATEADD(MM,18,B.StartDate)-1 AND B.PlannedEnd > DATEADD(MM,18,@DefaultStartDate)-1 THEN B.PlannedEndSource
+								  ELSE B.BadgeStartSource END,
 		PlannedEndDateSource = CASE	WHEN B.StartDate IS NULL THEN NULL
 									ELSE (CASE WHEN B.PlannedEndSource IN ('Manual Entry','Badge Deactivation Date') THEN NULL ELSE B.PlannedEndSource END) END, -- BADGE HISTORY
 		BreakStartDate = CASE 	WHEN B.StartDate IS NULL THEN NULL
@@ -286,9 +287,11 @@ BEGIN
 					   CASE	WHEN B.BadgeStartDateSource = 'MS Exception' THEN (SELECT DATEADD(MM,6,ExceptionEndDate) FROM MSBadge WHERE PersonId = @PersonId)
 							WHEN B.StartDate > @DefaultStartDate THEN (CASE WHEN DATEADD(MM,18,B.StartDate)-1 > B.PlannedEnd THEN DATEADD(MM,24,B.StartDate)-1 ELSE DATEADD(MM,6,B.PlannedEnd) END) --DATEADD(MM,24,B.StartDate)-1 
 							ELSE (CASE WHEN DATEADD(MM,18,@DefaultStartDate)-1 > B.PlannedEnd THEN DATEADD(MM,24,@DefaultStartDate)-1 ELSE DATEADD(MM,6,B.PlannedEnd) END) END,
-						B.BadgeStartDateSource,
-						B.BadgeStartDateSource,
-						CASE WHEN B.PlannedEndDateSource IN ('Manual Entry','Badge Deactivation Date') THEN NULL ELSE B.PlannedEndDateSource END
+					   B.BadgeStartDateSource,
+					   CASE WHEN B.BadgeStartDateSource = 'MS Exception' THEN 'MS Exception'
+							WHEN B.PlannedEnd > DATEADD(MM,18,B.StartDate)-1 AND B.PlannedEnd > DATEADD(MM,18,@DefaultStartDate)-1 THEN B.PlannedEndDateSource
+							ELSE B.BadgeStartDateSource END,
+					   CASE WHEN B.PlannedEndDateSource IN ('Manual Entry','Badge Deactivation Date') THEN NULL ELSE B.PlannedEndDateSource END
 	FROM @BadgeTable3 B
 
 	IF NOT EXISTS(SELECT 1 FROM BadgeHistoryForReports WHERE PersonId = @PersonId)
