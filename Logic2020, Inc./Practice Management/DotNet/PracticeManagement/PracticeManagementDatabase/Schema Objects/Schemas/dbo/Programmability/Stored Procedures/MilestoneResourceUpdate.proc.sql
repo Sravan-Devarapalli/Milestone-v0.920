@@ -46,11 +46,6 @@ BEGIN
 		 
 		DELETE MPE FROM dbo.MilestonePersonEntry MPE
 		JOIN @DeleteMileStonePersonEntriesTable Temp ON Temp.MilestonePersonId = MPE.MilestonePersonId
-		 
-		DELETE PF
-		FROM dbo.ProjectFeedback PF
-		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = PF.MilestonePersonId
-		INNER JOIN @DeleteMileStonePersonEntriesTable Temp ON Temp.MilestonePersonId = MP.MilestonePersonId
 
 		DELETE MP FROM dbo.MilestonePerson MP
 		JOIN @DeleteMileStonePersonEntriesTable Temp ON Temp.MilestonePersonId = MP.MilestonePersonId
@@ -84,12 +79,6 @@ BEGIN
 		WHERE NOT EXISTS (SELECT 1 FROM dbo.MilestonePersonEntry MPE
 						 WHERE  TEMPmpe.MilestonePersonId = MPE.MilestonePersonId 
 								AND TEMPmpe.PersonRoleId = MPE.PersonRoleId)
-		DELETE PF
-		FROM dbo.ProjectFeedback PF
-		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = PF.MilestonePersonId
-		LEFT JOIN dbo.MilestonePersonEntry MPE ON MPE.MilestonePersonId = MP.MilestonePersonId
-		WHERE MPE.MilestonePersonId IS NULL AND MP.MilestoneId = @MilestoneId
-		
 		
 		DELETE MP 
 		FROM dbo.MilestonePerson MP
