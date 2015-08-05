@@ -356,7 +356,7 @@ namespace PraticeManagement
                 monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
-                for (int i = 0; i < 13; i++)//there are 13 columns before month columns.
+                for (int i = 0; i < 14; i++)//there are 14 columns before month columns.
                     headerCellStyleList.Add(headerCellStyle);
 
                 if (renderMonthColumns)
@@ -382,8 +382,14 @@ namespace PraticeManagement
                 CellStyles dataNumberDateCellStyle = new CellStyles();
                 dataNumberDateCellStyle.DataFormat = "$#,##0.00_);($#,##0.00)";
 
-                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle };
+                CellStyles[] dataCellStylearray = { dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataCellStyle, dataCellStyle, dataCellStyle };
                 List<CellStyles> dataCellStyleList = dataCellStylearray.ToList();
+                
+                var coloumnWidth = new List<int>();
+                for (int i = 0; i < 12; i++)
+                    coloumnWidth.Add(0);
+                coloumnWidth.Add(50);
+                coloumnWidth.Add(0);
 
                 if (renderMonthColumns)
                 {
@@ -408,6 +414,7 @@ namespace PraticeManagement
                 sheetStyle.IsFreezePane = true;
                 sheetStyle.FreezePanColSplit = 0;
                 sheetStyle.FreezePanRowSplit = headerRowsCount;
+                sheetStyle.ColoumnWidths = coloumnWidth;
                 return sheetStyle;
             }
         }
@@ -1634,6 +1641,7 @@ namespace PraticeManagement
                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                    Capabilities = (pro.Capabilities != null && pro.Capabilities != string.Empty) ? pro.Capabilities.TrimEnd(',',' ') : string.Empty,
                                     Type = Revenue,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                     ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
@@ -1660,6 +1668,7 @@ namespace PraticeManagement
                                               StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                               EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                               PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                              Capabilities = (pro.Capabilities != null && pro.Capabilities != string.Empty) ? pro.Capabilities.TrimEnd(',', ' ') : string.Empty,
                                               Type = Margin,
                                               Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                               ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
@@ -1733,6 +1742,7 @@ namespace PraticeManagement
             data.Columns.Add("Start Date");
             data.Columns.Add("End Date");
             data.Columns.Add("Practice Area");
+            data.Columns.Add("Capabilities");
             data.Columns.Add("Type");
             //Add Month and Total columns.
             if (renderMonthColumns)
@@ -1851,6 +1861,7 @@ namespace PraticeManagement
                                     StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                     PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                    Capabilities = (pro.Capabilities != null && pro.Capabilities != string.Empty) ? pro.Capabilities.TrimEnd(',', ' ') : string.Empty,
                                     Type = Revenue,
                                     Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                     ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
@@ -1877,6 +1888,7 @@ namespace PraticeManagement
                                               StartDate = pro.StartDate.HasValue ? pro.StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                               EndDate = pro.EndDate.HasValue ? pro.EndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
                                               PracticeArea = (pro.Practice != null && pro.Practice.Name != null) ? pro.Practice.Name : string.Empty,
+                                              Capabilities = (pro.Capabilities != null && pro.Capabilities != string.Empty) ? pro.Capabilities.TrimEnd(',', ' ') : string.Empty,
                                               Type = Margin,
                                               Salesperson = (pro.SalesPersonName != null) ? pro.SalesPersonName : string.Empty,
                                               ProjectManager = (pro.ProjectOwner != null) ? pro.ProjectOwner.Name : string.Empty,
