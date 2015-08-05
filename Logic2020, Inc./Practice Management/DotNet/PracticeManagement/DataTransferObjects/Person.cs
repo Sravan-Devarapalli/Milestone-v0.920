@@ -559,6 +559,17 @@ namespace DataTransferObjects
                 return string.Empty;
             }
         }
+
+        public string FormatName
+        {
+            get
+            {
+                if (Id.HasValue && Id != -1)
+                    return HtmlEncodedName;
+                return "Unassigned";
+            }
+        }
+
         #endregion Properties - data members
 
         #region Properties - calculated
