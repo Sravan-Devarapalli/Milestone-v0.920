@@ -114,6 +114,8 @@ begin transaction
 	--exec dbo.ExpensesClone @OldMilestoneId = @MilestoneId, @NewMilestoneId = @MilestoneCloneId
 	
 	exec dbo.NotesClone @OldTargetId = @MilestoneId, @NewTargetId = @MilestoneCloneId
+
+	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneCloneId
 	
 commit transaction
 
