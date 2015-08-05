@@ -15,8 +15,8 @@
                 ErrorMessage="18-Month Badge start date is required." ToolTip="18-Month Badge start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="compBadgeStart" runat="server" ControlToValidate="dpBadgeStart"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter 18-month start date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter 18-month start date in the correct format: MM/DD/YYYY."
                 Text="*" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CustomValidator ID="custBeforeJuly" runat="server" ControlToValidate="dpBadgeStart"
                 Text="*" Display="Dynamic" EnableTheming="True" ErrorMessage="18 months start date cannot be set before 7/1/2014."
@@ -44,8 +44,8 @@
             <uc:DatePicker ID="dpDeactivatedDate" runat="server" OnSelectionChanged="dpDeactivatedDate_Change"
                 AutoPostBack="true" />
             <asp:CompareValidator ID="compDeactivatedDate" runat="server" ControlToValidate="dpDeactivatedDate"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter badge deactivation date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter badge deactivation date in the correct format: MM/DD/YYYY."
                 Text="*" Type="Date" EnableClientScript="false"></asp:CompareValidator>
             <asp:CustomValidator ID="custDeactivateNeed18moDates" runat="server" ControlToValidate="dpDeactivatedDate"
                 ErrorMessage="Cannot enter Badge deactivated date when there are no 18 month dates."
@@ -106,8 +106,8 @@
                 ErrorMessage="18-Month Badge end date is required." ToolTip="18-Month Badge end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="compBadgeEnd" runat="server" ControlToValidate="dpBadgeEnd"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter 18-month end date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter 18-month end date in the correct format: MM/DD/YYYY."
                 Text="*" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CompareValidator ID="compBadgeEndLess" runat="server" ControlToValidate="dpBadgeEnd"
                 ControlToCompare="dpBadgeStart" Operator="GreaterThanEqual" Type="Date" ErrorMessage="18-Month Badge end date should be greater than or equal to 18-Month Badge start date."
@@ -144,8 +144,8 @@
                 ErrorMessage="Last badge start date is required." ToolTip="Last badge start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="cvLastBadgeStart" runat="server" ControlToValidate="dtpLastBadgeStart"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter last badge start date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter last bagde start date in the correct format: MM/DD/YYYY."
                 Text="*" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CustomValidator ID="custNotFuture" runat="server" ControlToValidate="dtpLastBadgeStart"
                 Text="*" Display="Dynamic" EnableTheming="True" ErrorMessage="Last badge start cannot be in the future."
@@ -181,8 +181,8 @@
                 ErrorMessage="Last badge end date is required." ToolTip="Last badge end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="cvLastbadgeEnd" runat="server" ControlToValidate="dtpLastBadgeEnd"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter last badge date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter last badge date in the correct format: MM/DD/YYYY."
                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CompareValidator ID="cvLastBadgeRange" runat="server" ControlToValidate="dtpLastBadgeEnd"
                 ControlToCompare="dtpLastBadgeStart" Operator="GreaterThanEqual" Type="Date"
@@ -225,8 +225,8 @@
                 ErrorMessage="Block start date is required." ToolTip="Block start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="cvBlockStart" runat="server" ControlToValidate="dtpBlockStart"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter block start date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter block start date in the correct format: MM/DD/YYYY."
                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CustomValidator ID="custBlockStartAfterJuly" runat="server" ErrorMessage="Block start date should not be before 7/1/2014."
                 ToolTip="Block start date should not be before 7/1/2014." Display="Dynamic"
@@ -242,8 +242,8 @@
                 ErrorMessage="Exception start date is required." ToolTip="Exception start date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="cvExceptionStart" runat="server" ControlToValidate="dtpExceptionStart"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter exception start date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter exception start date in the correct format: MM/DD/YYYY."
                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CustomValidator ID="cvExceptionStartAfterJuly" runat="server" ErrorMessage="Exception start date should not be before 7/1/2014."
                 ToolTip="Exception start date should not be before 7/1/2014." Display="Dynamic"
@@ -261,8 +261,8 @@
                 ErrorMessage="Block end date is required." ToolTip="Block end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="cvBlockEnd" runat="server" ControlToValidate="dtpBlockEnd"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter block end date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter block end date in the correct format: MM/DD/YYYY."
                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CompareValidator ID="cvBlockDateRange" runat="server" ControlToValidate="dtpBlockEnd"
                 ControlToCompare="dtpBlockStart" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Block end date should be greater than or equal to Block start date."
@@ -276,7 +276,7 @@
                 ToolTip="This person currently has a block in place, exception cannot be set. If you have questions, please connect with Operations."
                 Display="Dynamic" OnServerValidate="custBlockDatesOverlappedException_ServerValidate"
                 Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
-            <asp:CustomValidator ID="custPersonInProject" runat="server" ErrorMessage="This person is currently assigned to a project/milestone during the requested dates."
+            <asp:CustomValidator ID="custPersonInProject" runat="server" ErrorMessage="This person is currently assigned to a project/milestone during the requested block dates."
                 ToolTip="This person is currently assigned to a project/milestone during the requested dates."
                 Display="Dynamic" OnServerValidate="custPersonInProject_ServerValidate" Text="*"
                 EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
@@ -290,8 +290,8 @@
                 ErrorMessage="Exception end date is required." ToolTip="Exception end date is required."
                 Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
             <asp:CompareValidator ID="cvExceptionEnd" runat="server" ControlToValidate="dtpExceptionEnd"
-                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter exception end date in the correct format: MM/DD/YYYY."
+                Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter exception end date in the correct format: MM/DD/YYYY."
                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CompareValidator ID="cvExceptionDateRanges" runat="server" ControlToValidate="dtpExceptionEnd"
                 ControlToCompare="dtpExceptionStart" Operator="GreaterThanEqual" Type="Date"
@@ -306,8 +306,8 @@
                 ToolTip="This person currently has an exception in place, block cannot be set."
                 Display="Dynamic" OnServerValidate="custExceptionDatesOverlappsBlock_ServerValidate"
                 Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
-            <asp:CustomValidator ID="custExceptionMorethan18" runat="server" ErrorMessage="Exception dates duration cann't be less than 18 months."
-                ToolTip="Exception dates duration cann't be less than 18 months." Display="Dynamic"
+            <asp:CustomValidator ID="custExceptionMorethan18" runat="server" ErrorMessage="Exception dates duration cannot be less than 18 months."
+                ToolTip="Exception dates duration cannot be less than 18 months." Display="Dynamic"
                 OnServerValidate="custExceptionMorethan18_ServerValidate" Text="*" EnableClientScript="false"
                 SetFocusOnError="true"></asp:CustomValidator>
             <asp:CustomValidator ID="custExceptionNotMoreThan18moEndDate" runat="server" ErrorMessage="Requested exception will shorten the person’s 18-month clock. Please remove exception."
