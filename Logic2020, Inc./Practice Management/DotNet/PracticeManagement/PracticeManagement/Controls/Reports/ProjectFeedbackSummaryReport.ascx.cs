@@ -258,7 +258,7 @@ namespace PraticeManagement.Controls.Reports
                 var hlProjectNumber = e.Item.FindControl("hlProjectNumber") as HyperLink;
                 for (i = 0; i < dataItem.Project.ProjectManagers.Count; i++)
                 {
-                    lblProjectManagers.Text += dataItem.Project.ProjectManagers[i].HtmlEncodedName;
+                    lblProjectManagers.Text += dataItem.Project.ProjectManagers[i].Id != -1? dataItem.Project.ProjectManagers[i].FormatName: string.Empty;
                     if (i != dataItem.Project.ProjectManagers.Count - 1)
                     {
                         lblProjectManagers.Text += "; ";
@@ -535,7 +535,7 @@ namespace PraticeManagement.Controls.Reports
             var resources = new List<Person>();
             resources = reportData.SelectMany(b => b.Project.ProjectManagers.Select(r => new Person { Id = r.Id, FirstName = r.FirstName, LastName = r.LastName }).Distinct().ToList().OrderBy(s => s.Name)).ToList();
 
-            DataHelper.FillListDefault(cblProjectManagers.CheckBoxListObject, "All People with Project Access", resources.Distinct().ToArray(), false, "Id", "Name");
+            DataHelper.FillListDefault(cblProjectManagers.CheckBoxListObject, "All People with Project Access", resources.Distinct().OrderBy(p=>p.LastName).ToArray(), false, "Id", "FormatName");
             cblProjectManagers.SelectAllItems(true);
             return resources.Distinct().ToArray().Length;
         }
