@@ -535,13 +535,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlPersonType;
         
         /// <summary>
-        /// chbLockedOut control.
+        /// ddlLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbLockedOut;
+        protected global::System.Web.UI.WebControls.DropDownList ddlLocation;
+        
+        /// <summary>
+        /// reqLocation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqLocation;
         
         /// <summary>
         /// txtTelephoneNumber control.
@@ -569,6 +578,15 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTelephoneNumber;
+        
+        /// <summary>
+        /// chbLockedOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbLockedOut;
         
         /// <summary>
         /// lblEmployeeNumber control.
