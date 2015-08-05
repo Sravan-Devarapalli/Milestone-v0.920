@@ -79,6 +79,7 @@ namespace PraticeManagement.Controls.Projects
                 var lblCompletedCertification = e.Item.FindControl("lblCompletedCertification") as Label;
                 var imgCancel = e.Item.FindControl("imgCancel") as ImageButton;
                 var lnkCanceled = e.Item.FindControl("lnkCanceled") as LinkButton;
+                var lblAsterik = e.Item.FindControl("lblAsterik") as Label;
                 
                 DataHelper.FillListDefaultWithEncodedName(ddlStatus, string.Empty, GetStatus.ToArray(), true);
                 ddlStatus.SelectedValue = dataItem.Status.Id.Value.ToString();
@@ -105,6 +106,7 @@ namespace PraticeManagement.Controls.Projects
                     var item = ddlStatus.Items.FindByValue("3"); //canceled status should not be listed for other status records.
                         ddlStatus.Items.Remove(item);
                 }
+                lblAsterik.Visible = dataItem.IsGap;
             }
         }
 
@@ -176,3 +178,4 @@ namespace PraticeManagement.Controls.Projects
         }
     }
 }
+
