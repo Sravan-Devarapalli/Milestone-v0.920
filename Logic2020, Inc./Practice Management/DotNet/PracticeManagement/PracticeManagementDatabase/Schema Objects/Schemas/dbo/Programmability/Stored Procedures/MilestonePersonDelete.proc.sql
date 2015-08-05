@@ -13,12 +13,23 @@ AS
 	SET NOCOUNT ON
 	DECLARE @ErrorMessage NVARCHAR(2048)
 
+	DECLARE @PersonId	INT,
+			@StartDate  DATETIME,
+			@EndDate	DATETIME,
+			@ProjectId  INT
+
+	SELECT @PersonId = MP.PersonId, @StartDate = MIN(MPE.StartDate), @EndDate = MAX(MPE.EndDate),@ProjectId = m.ProjectId
+	FROM dbo.MilestonePerson MP
+	JOIN dbo.MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId
+	JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+	GROUP BY MP.PersonId,M.ProjectId
+
 	IF EXISTS (SELECT TOP 1 1 FROM dbo.TimeEntries AS te WHERE te.MilestonePersonId = @MilestonePersonId)
 	BEGIN
 		SELECT @ErrorMessage = [dbo].[GetErrorMessage](70019)
 		RAISERROR (@ErrorMessage, 16, 1)
 	END
-	ELSE IF EXISTS (SELECT 1 FROM dbo.ProjectFeedback WHERE MilestonePersonId = @MilestonePersonId AND FeedbackStatusId = 1)
+	ELSE IF EXISTS (SELECT 1 FROM dbo.ProjectFeedback WHERE PersonId = @PersonId AND @ProjectId = ProjectId AND FeedbackStatusId = 1 AND ReviewPeriodStartDate <= @EndDate AND @StartDate <= ReviewPeriodEndDate AND ReviewPeriodEndDate >= '20140701')
 	BEGIN
 	    RAISERROR ('This person cannot be deleted from this milestone because project feedback has been marked as completed.  The person can be deleted from the milestone if the status of the feedback is changed to ''Not Completed'' or ''Canceled''. Please navigate to the ''Project Feedback'' tab for more information to make the necessary adjustments..', 16, 1)
 	END
