@@ -82,12 +82,17 @@ BEGIN
 	SELECT ResultId
 	FROM dbo.ConvertStringListIntoTable(@Statuses)
 
+	DECLARE @NullExists BIT = 0
+	SELECT @NullExists = 1 FROM @ProjectManagersTable WHERE Ids = -1
+
 	;WITH ProjectsForProjectManagers
 	AS
 	(
-	    SELECT ProjectId
-		FROM dbo.ProjectAccess 
-		WHERE ProjectAccessId IN (SELECT Ids FROM @ProjectManagersTable)
+	    SELECT P.ProjectId
+		FROM Project P
+		LEFT JOIN dbo.ProjectAccess PA ON PA.ProjectId = P.ProjectId
+		WHERE PA.ProjectAccessId IN (SELECT Ids FROM @ProjectManagersTable) 
+			  OR (@NullExists = 1 AND PA.Id IS NULL)
 	)
 	SELECT FeedbackId,
 		   PF.PersonId,
