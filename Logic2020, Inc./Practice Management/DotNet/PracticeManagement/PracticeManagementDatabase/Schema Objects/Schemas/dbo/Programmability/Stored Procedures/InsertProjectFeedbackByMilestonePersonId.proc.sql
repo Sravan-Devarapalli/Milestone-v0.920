@@ -61,7 +61,7 @@ BEGIN
 				AND (@ProjectId  IS NULL OR M.ProjectId = @ProjectId)
 				AND Per.IsStrawman = 0
 				AND T.Title NOT IN ('Senior Director','Client Director','Practice Director')
-				AND pay.Timescale IN (1,2,3,4) -- 
+				AND pay.Timescale = 2 
 				AND M.ProjectId <> 174
 				AND P.IsAllowedToShow = 1
 			)
