@@ -45,7 +45,8 @@ AS
 		   p.PONumber,
 		   P.ProjectManagerId AS ProjectOwnerId,
 		   Powner.LastName AS [ProjectOwnerLastName],
-		   Powner.FirstName AS [ProjectOwnerFirstName]
+		   Powner.FirstName AS [ProjectOwnerFirstName],
+		   dbo.GetProjectCapabilitiesNames(P.ProjectId) AS ProjectCapabilities
 	FROM v_Project p
 	LEFT JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	LEFT JOIN dbo.Person cp ON cp.PersonId = p.SalesPersonId
