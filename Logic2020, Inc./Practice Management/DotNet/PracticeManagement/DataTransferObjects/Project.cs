@@ -477,6 +477,9 @@ namespace DataTransferObjects
         [DataMember]
         public bool IsBusinessDevelopment { get; set; }
 
+        [DataMember]
+        public string Capabilities { get; set; }
+
         #endregion Properties
 
         #region Formatting
@@ -501,6 +504,16 @@ namespace DataTransferObjects
                 return
                     String.Format(Constants.Formatting.ProjectNameNumberFormat,
                                     Name, ProjectNumber);
+            }
+        }
+
+        public string ProjectNumberName
+        {
+            get
+            {
+                return
+                    String.Format(Constants.Formatting.ProjectNameNumberFormat,
+                                    ProjectNumber, Name);
             }
         }
 
