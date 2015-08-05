@@ -213,19 +213,47 @@ namespace PraticeManagement.Controls.Clients
 
             if (!Page.IsValid) return;
             string groupName = txtNewGroupName.Text;
+            ProjectGroup group;
             if (ClientId == 0)
             {
                 var tmp = ClientGroupsList;
-                var group = new ProjectGroup { Id = (ClientGroupsList.Any() ? ClientGroupsList.Min(g => g.Id) - 1 : 0), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
+                group = new ProjectGroup { Id = (ClientGroupsList.Any() ? ClientGroupsList.Min(g => g.Id) - 1 : 0), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
                 plusMakeVisible(true);
                 tmp.Add(@group);
                 ClientGroupsList = tmp;
             }
             else
             {
+                group = new ProjectGroup { Id = AddProjectGroup(groupName, chbGroupActive.Checked), Name = groupName, IsActive = chbGroupActive.Checked, InUse = false };
                 ClientGroupsList = null;
             }
             DisplayGroups(ClientGroupsList);
+        }
+
+        private int AddProjectGroup(string groupName, bool isActive)
+        {
+            if (ClientId.HasValue)
+                using (var serviceGroups = new ProjectGroupServiceClient())
+                {
+                    try
+                    {
+                        ProjectGroup projectGroup = new ProjectGroup();
+                        projectGroup.Name = groupName;
+                        projectGroup.IsActive = isActive;
+                        projectGroup.ClientId = ClientId.Value;
+                        projectGroup.BusinessGroupId = Convert.ToInt32(ddlAddBusinessGroup.SelectedValue);
+                        int result = serviceGroups.ProjectGroupInsert(projectGroup, HostingPage.User.Identity.Name);
+                        plusMakeVisible(true);
+                        return result;
+                    }
+                    catch (FaultException<ExceptionDetail>)
+                    {
+                        serviceGroups.Abort();
+                        throw;
+                    }
+                }
+
+            return -1;
         }
 
         public void DisplayGroups(List<ProjectGroup> groups, bool fromMainPage = false)
