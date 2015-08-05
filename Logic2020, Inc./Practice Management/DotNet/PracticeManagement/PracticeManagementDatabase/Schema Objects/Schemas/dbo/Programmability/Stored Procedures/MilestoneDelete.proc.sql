@@ -12,7 +12,12 @@ CREATE PROCEDURE [dbo].[MilestoneDelete]
 )
 AS
 	SET NOCOUNT ON
-	DECLARE @ErrorMessage NVARCHAR(2048)
+	DECLARE @ErrorMessage NVARCHAR(2048),
+			@ProjectId	  INT
+
+	SELECT @ProjectId = ProjectId
+	FROM dbo.Milestone WHERE MilestoneId = @MilestoneId
+
 	IF EXISTS (SELECT TOP 1 1 FROM dbo.v_TimeUnrestrictedEntriesUnrestricted AS te WHERE te.MilestoneId = @MilestoneId)
 	BEGIN
 		SELECT @ErrorMessage = [dbo].[GetErrorMessage](70017)
@@ -33,12 +38,6 @@ AS
 		DELETE FROM dbo.Note
 			  WHERE TargetId = @MilestoneId 
 						AND NoteTargetId = 1
-		DELETE PF
-		FROM dbo.ProjectFeedback PF 
-		INNER JOIN dbo.MilestonePersonEntry AS MPE ON MPE.MilestonePersonId = PF.MilestonePersonId
-		INNER JOIN  dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-		INNER JOIN  dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-		WHERE M.MilestoneId = @MilestoneId
 
 		DELETE MPE
 	    FROM dbo.MilestonePersonEntry AS MPE
@@ -48,6 +47,8 @@ AS
 
 		DELETE FROM dbo.Milestone
 			  WHERE MilestoneId = @MilestoneId
+
+		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = NULL,@ProjectId = @ProjectId
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
