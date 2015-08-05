@@ -1039,6 +1039,14 @@ namespace DataAccess
                 int poNumberIndex = -1;
                 int isHouseAccountIndex = -1;
                 int poAmountIndex = -1;
+                int projectCapabilitiesIndex = -1;
+                try
+                {
+                    projectCapabilitiesIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectCapabilities);
+                }
+                catch
+                { }
+
                 try
                 {
                     ProjectOwnerAlias = reader.GetOrdinal(Constants.ColumnNames.ProjectOwnerAlias);
@@ -1321,6 +1329,10 @@ namespace DataAccess
                         },
                         ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex))
                     };
+                    if (projectCapabilitiesIndex >= 0)
+                    {
+                        project.Capabilities = !reader.IsDBNull(projectCapabilitiesIndex) ? reader.GetString(projectCapabilitiesIndex).Replace(";", ", ") : string.Empty;
+                    }
                     if (ToAddressListIndex > -1)
                     {
                         project.ToAddressList = !reader.IsDBNull(ToAddressListIndex) ? reader.GetString(ToAddressListIndex) : string.Empty;
@@ -1647,6 +1659,14 @@ namespace DataAccess
                 int seniorManagerIdIndex = -1;
                 int isHouseAccountIndex = -1;
 
+                int projectCapabilitiesIndex = -1;
+                try
+                {
+                    projectCapabilitiesIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectCapabilities);
+                }
+                catch
+                { }
+
                 try
                 {
                     isHouseAccountIndex = reader.GetOrdinal(Constants.ColumnNames.IsHouseAccount);
@@ -1772,6 +1792,11 @@ namespace DataAccess
                             ProjectManagers = Utils.stringToProjectManagersList(reader.GetString(pmIndex)),
                             SowBudget = !reader.IsDBNull(sowBudgetIndex) ? (Decimal?)reader.GetDecimal(sowBudgetIndex) : null
                         };
+
+                        if (projectCapabilitiesIndex >= 0)
+                        {
+                            project.Capabilities = !reader.IsDBNull(projectCapabilitiesIndex) ? reader.GetString(projectCapabilitiesIndex).Replace(";",", ") : string.Empty;
+                        }
 
                         if (projectGroupIdIndex >= 0)
                         {
@@ -3455,6 +3480,7 @@ namespace DataAccess
                 int completionCertificateDateIndex = reader.GetOrdinal(Constants.ColumnNames.CompletionCertificateDate);
                 int isCanceledIndex = reader.GetOrdinal(Constants.ColumnNames.IsCanceled);
                 int cancelationReasonIndex = reader.GetOrdinal(Constants.ColumnNames.CancelationReason);
+                int isGapIndex = reader.GetOrdinal(Constants.ColumnNames.IsGap);
 
                 while (reader.Read())
                 {
@@ -3483,7 +3509,8 @@ namespace DataAccess
                         CompletionCertificateBy = !reader.IsDBNull(completionCertificateByIndex) ? reader.GetString(completionCertificateByIndex) : string.Empty,
                         CompletionCertificateDate = !reader.IsDBNull(completionCertificateDateIndex) ? reader.GetDateTime(completionCertificateDateIndex) : DateTime.MinValue,
                         IsCanceled = reader.GetBoolean(isCanceledIndex),
-                        CancelationReason = !reader.IsDBNull(cancelationReasonIndex) ? reader.GetString(cancelationReasonIndex) : string.Empty
+                        CancelationReason = !reader.IsDBNull(cancelationReasonIndex) ? reader.GetString(cancelationReasonIndex) : string.Empty,
+                        IsGap = reader.GetBoolean(isGapIndex)
                     };
                     result.Add(feedback);
                 }
@@ -3552,7 +3579,7 @@ namespace DataAccess
             }
         }
 
-        public static bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId,DateTime? startDate,DateTime? endDate)
+        public static bool CheckIfFeedbackExists(int? milestonePersonId, int? milestoneId, DateTime? startDate, DateTime? endDate)
         {
             bool result;
             try
