@@ -19,13 +19,16 @@ BEGIN
 		   C.FirstName+' '+C.LastName AS CompletionCertificateBy,
 		   PF.CompletionCertificateDate,
 		   PF.IsCanceled,
-		   PF.CancelationReason
+		   PF.CancelationReason,
+		   ISNULL(PF.IsGap,0) IsGap
 	FROM dbo.ProjectFeedback PF
 	INNER JOIN dbo.ProjectFeedbackStatus PFS ON PFS.FeedbackStatusId = PF.FeedbackStatusId
 	INNER JOIN dbo.Person P ON P.PersonId = PF.PersonId
 	INNER JOIN dbo.Title T ON T.TitleId = P.TitleId
 	LEFT JOIN dbo.Person C ON C.PersonId = PF.CompletionCertificateBy
 	WHERE PF.ProjectId = @ProjectId
+		  AND PF.ReviewPeriodEndDate >= '20140701'
 	ORDER BY P.LastName,P.FirstName,PF.ReviewPeriodStartDate
 
 END
+
