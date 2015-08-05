@@ -86,6 +86,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public bool IsGap
+        {
+            get;
+            set;
+        }
     }
 }
 
