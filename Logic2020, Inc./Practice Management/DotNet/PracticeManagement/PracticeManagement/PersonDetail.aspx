@@ -1709,9 +1709,9 @@
                                                 ToolTip="To Active the person the Hire Date should be specified." ValidationGroup="ChangePersonStatusToActive"
                                                 Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                             <asp:CompareValidator ID="cvActiveHireDateFormat" runat="server" ControlToValidate="dtpActiveHireDate"
-                                                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                                                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter hire date in the correct format: MM/DD/YYYY."
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToActive"
-                                                ToolTip="Please enter a date in the correct format: MM/DD/YYYY." Type="Date"
+                                                ToolTip="Please enter hire date in the correct format: MM/DD/YYYY." Type="Date"
                                                 EnableClientScript="false">*</asp:CompareValidator>
                                             <asp:CustomValidator ID="cvWithTerminationDate" runat="server" ControlToValidate="dtpActiveHireDate"
                                                 ErrorMessage="New Hire Date should be greater than previous Termination date."
@@ -1741,9 +1741,9 @@
                                                 ToolTip="To Terminate the person the Termination Date should be specified." ValidationGroup="ChangePersonStatusToTerminate"
                                                 Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                             <asp:CompareValidator ID="cvTerminationDateFormat" runat="server" ControlToValidate="dtpPopUpTerminateDate"
-                                                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                                                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter termination date in the correct format: MM/DD/YYYY."
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToTerminate"
-                                                ToolTip="Please enter a date in the correct format: MM/DD/YYYY." Type="Date"
+                                                ToolTip="Please enter termination date in the correct format: MM/DD/YYYY." Type="Date"
                                                 EnableClientScript="false">*</asp:CompareValidator>
                                             <asp:CompareValidator ID="cvWithHireDate" runat="server" ControlToValidate="dtpPopUpTerminateDate"
                                                 ControlToCompare="dtpHireDate" Operator="GreaterThanEqual" Type="Date" ErrorMessage="Termination date should be greater than or equal to Hire date."
@@ -1781,7 +1781,7 @@
                                                 ToolTip="To Contingent the person the Hire Date should be specified." ValidationGroup="ChangePersonStatusToContingent"
                                                 Display="Dynamic" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                             <asp:CompareValidator ID="cvContingentHireDateFormat" runat="server" ControlToValidate="dtpContingentHireDate"
-                                                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
+                                                Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter hire date in the correct format: MM/DD/YYYY."
                                                 Operator="DataTypeCheck" SetFocusOnError="True" ValidationGroup="ChangePersonStatusToContingent"
                                                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
                                             <asp:CompareValidator ID="cvWithTermiantionDate" runat="server" ControlToValidate="dtpContingentHireDate"
