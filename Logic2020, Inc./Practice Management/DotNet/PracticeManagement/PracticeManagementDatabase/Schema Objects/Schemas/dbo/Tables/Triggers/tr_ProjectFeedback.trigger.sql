@@ -27,7 +27,7 @@ AS
 			i.CompletionCertificateBy AS StatusUpdatedById,
 			StatusUpdate.LastName+', '+StatusUpdate.FirstName AS [StatusUpdatedBy],
 			i.CancelationReason,
-			i.MilestonePersonId
+			CASE WHEN i.IsGap = 1 THEN 'YES' ELSE 'NO' END AS [IsGap]
 	FROM inserted AS i
 	INNER JOIN dbo.Project P ON P.ProjectId = i.ProjectId
 	INNER JOIN dbo.Person person ON person.PersonId = i.PersonId 
@@ -52,7 +52,7 @@ AS
 			d.CompletionCertificateBy AS StatusUpdatedById,
 			StatusUpdate.LastName+', '+StatusUpdate.FirstName AS [StatusUpdatedBy],
 			d.CancelationReason,
-			d.MilestonePersonId
+			CASE WHEN d.IsGap = 1 THEN 'YES' ELSE 'NO' END AS [IsGap]
 	FROM deleted AS d
 	INNER JOIN dbo.Project P ON P.ProjectId = d.ProjectId
 	INNER JOIN dbo.Person person ON person.PersonId = d.PersonId 
@@ -108,9 +108,9 @@ AS
 						,NEW_VALUES.StatusUpdatedById
 						,NEW_VALUES.[StatusUpdatedBy]
 						,NEW_VALUES.CancelationReason 
-						,NEW_VALUES.MilestonePersonId
+						,NEW_VALUES.IsGap
 
-						, OLD_VALUES.FeedbackId 
+						,OLD_VALUES.FeedbackId 
 						,OLD_VALUES.ProjectId
 						,OLD_VALUES.Project
 						,OLD_VALUES.PersonId
@@ -125,8 +125,7 @@ AS
 						,OLD_VALUES.StatusUpdatedById
 						,OLD_VALUES.[StatusUpdatedBy]
 						,OLD_VALUES.CancelationReason 
-						,OLD_VALUES.MilestonePersonId
-
+						,OLD_VALUES.IsGap
 					  FROM NEW_VALUES
 					         FULL JOIN OLD_VALUES ON NEW_VALUES.FeedbackId = OLD_VALUES.FeedbackId
 			            WHERE NEW_VALUES.FeedbackId = ISNULL(i.FeedbackId , d.FeedbackId ) OR OLD_VALUES.FeedbackId = ISNULL(i.FeedbackId , d.FeedbackId)
@@ -140,3 +139,4 @@ AS
 	 EXEC dbo.SessionLogUnprepare
 
     END
+
