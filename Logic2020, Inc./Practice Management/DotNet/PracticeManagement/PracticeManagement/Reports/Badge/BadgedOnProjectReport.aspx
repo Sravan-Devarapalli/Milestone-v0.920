@@ -37,8 +37,8 @@
                             ValidationGroup="BadgeReport" ErrorMessage="Start date is required." ToolTip="Start date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                         <asp:CompareValidator ID="cvLastBadgeStart" runat="server" ControlToValidate="dtpStart"
-                            ValidationGroup="BadgeReport" Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                            Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                            ValidationGroup="BadgeReport" Display="Dynamic" EnableTheming="True" ErrorMessage="Please enter projected range start date in the correct format: MM/DD/YYYY."
+                            Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter projected range start date in the correct format: MM/DD/YYYY."
                             Text="*" Type="Date" EnableClientScript="false">*</asp:CompareValidator>
                     </td>
                     <td>
@@ -50,8 +50,8 @@
                             ValidationGroup="BadgeReport" ErrorMessage="End date is required." ToolTip="End date is required."
                             Display="Dynamic" Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:RequiredFieldValidator>
                         <asp:CompareValidator ID="cvbadgeEnd" runat="server" ControlToValidate="dtpEnd" Display="Dynamic"
-                            ValidationGroup="BadgeReport" EnableTheming="True" ErrorMessage="Please enter a date in the correct format: MM/DD/YYYY."
-                            Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter a date in the correct format: MM/DD/YYYY."
+                            ValidationGroup="BadgeReport" EnableTheming="True" ErrorMessage="Please enter projected range end date in the correct format: MM/DD/YYYY."
+                            Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter projected range end date in the correct format: MM/DD/YYYY."
                             Type="Date" EnableClientScript="false">*</asp:CompareValidator>
                         <asp:CompareValidator ID="cvBadgeRange" runat="server" ControlToValidate="dtpEnd"
                             ControlToCompare="dtpStart" Operator="GreaterThanEqual" Type="Date" ValidationGroup="BadgeReport"
