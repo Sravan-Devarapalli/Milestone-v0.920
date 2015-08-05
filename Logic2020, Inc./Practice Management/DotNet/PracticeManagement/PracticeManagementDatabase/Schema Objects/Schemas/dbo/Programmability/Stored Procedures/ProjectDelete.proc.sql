@@ -20,7 +20,7 @@ BEGIN
 	BEGIN
 		RAISERROR ('This project cannot be deleted, because it is set as Default Milestone Project',16,1)
 	END
-	ELSE IF EXISTS (SELECT 1 FROM dbo.ProjectFeedback WHERE ProjectId = @ProjectId AND FeedbackStatusId = 1)
+	ELSE IF EXISTS (SELECT 1 FROM dbo.ProjectFeedback WHERE ProjectId = @ProjectId AND FeedbackStatusId = 1 AND ReviewPeriodEndDate >= '20140701')
 	BEGIN
 	    RAISERROR ('This project cannot be deleted, because there are project feedback records related to it.', 16, 1)
 	END
