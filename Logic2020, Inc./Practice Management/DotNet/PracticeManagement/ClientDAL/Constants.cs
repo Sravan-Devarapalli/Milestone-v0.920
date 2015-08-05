@@ -9,39 +9,59 @@
         /// </summary>
         public class ColumnNames
         {
-            public static string IsBusinessDevelopment= "IsBusinessDevelopment";
-            public static string Requester= "Requester";
-            public static string RequesterId= "RequesterId";
-            public static string BadgedNotOnProjectExceptionCount= "BadgedNotOnProjectExceptionCount";
-            public static string BadgedOnProjectExceptionCount= "BadgedOnProjectExceptionCount";
-            public static string ClockEndDate= "ClockEndDate";
-            public static string ExcludeInReports= "ExcludeInReports";
-            public static string ForecastedHoursDaily= "ForecastedHoursDaily";
-            public static string OrganicBreakEndDate= "OrganicBreakEndDate";
-            public static string OrganicBreakStartDate= "OrganicBreakStartDate";
-            public static string DeactivatedDate= "DeactivatedDate";
-            public static string NewBadgeEndDate = "NewBadgeEndDate";
-            public static string NewBadgeStartDate = "NewBadgeStartDate";
-            public static string BadgeRequestDate = "BadgeRequestDate";
-            public static string BadgeEndDateSource = "BadgeEndDateSource";
-            public static string ProjectPlannedEndDateSource = "ProjectPlannedEndDateSource";
-            public static string ProjectPlannedEndDate = "ProjectPlannedEndDate";
-            public static string OverrideEndDate = "OverrideEndDate";
-            public static string OverrideStartDate = "OverrideStartDate";
-            public static string ProjectBadgeStartDate = "ProjectBadgeStartDate";
-            public static string ProjectBadgeEndDate = "ProjectBadgeEndDate";
-            public static string InBreakPeriodCount = "InBreakPeriodCount";
-            public static string BlockedCount = "BlockedCount";
-            public static string ClockNotStartedCount = "ClockNotStartedCount";
-            public static string BadgedNotOnProjectCount = "BadgedNotOnProjectCount";
-            public static string BadgedOnProjectCount = "BadgedOnProjectCount";
-            public static string ProjectOwnerAlias = "ProjectOwnerAlias";
-            public static string ToAddressList = "ToAddressList";
-            public static string ConsultantEndDate = "ConsultantEndDate";
-            public static string IsApproved = "IsApproved";
-            public static string IsBadgeException = "IsBadgeException";
-            public static string IsBadgeRequired = "IsBadgeRequired";
-            public static string PreferredFirstName = "PreferredFirstName";
+            public const string ProjectManager = "ProjectManager";
+            public const string ProjectAccessesADPIds = "ProjectAccessesADPIds";
+            public const string Version = "Version";
+            public const string BaseLine = "BaseLine";
+            public const string BaseLineId = "BaseLineId";
+            public const string ProjectCapabilities = "ProjectCapabilities";
+            public const string CFDivisionId = "CFDivisionId";
+            public const string Country = "Country";
+            public const string TimeZone = "TimeZone";
+            public const string ParentLocationCode = "ParentLocationCode";
+            public const string ManagerPayChexId = "ManagerPayChexId";
+            public const string TimescaleCode = "TimescaleCode";
+            public const string LocationName = "LocationName";
+            public const string LocationCode = "LocationCode";
+            public const string LocationId = "LocationId";
+            public const string ParentDivisionName = "ParentDivisionName";
+            public const string ParentDivisionCode = "ParentDivisionCode";
+            public const string ParentId = "ParentId";
+            public const string DivisionName = "DivisionName";
+            public const string DivisionCode= "DivisionCode";
+            public const string IsBusinessDevelopment= "IsBusinessDevelopment";
+            public const string Requester= "Requester";
+            public const string RequesterId= "RequesterId";
+            public const string BadgedNotOnProjectExceptionCount= "BadgedNotOnProjectExceptionCount";
+            public const string BadgedOnProjectExceptionCount= "BadgedOnProjectExceptionCount";
+            public const string ClockEndDate= "ClockEndDate";
+            public const string ExcludeInReports= "ExcludeInReports";
+            public const string ForecastedHoursDaily= "ForecastedHoursDaily";
+            public const string OrganicBreakEndDate= "OrganicBreakEndDate";
+            public const string OrganicBreakStartDate= "OrganicBreakStartDate";
+            public const string DeactivatedDate= "DeactivatedDate";
+            public const string NewBadgeEndDate = "NewBadgeEndDate";
+            public const string NewBadgeStartDate = "NewBadgeStartDate";
+            public const string BadgeRequestDate = "BadgeRequestDate";
+            public const string BadgeEndDateSource = "BadgeEndDateSource";
+            public const string ProjectPlannedEndDateSource = "ProjectPlannedEndDateSource";
+            public const string ProjectPlannedEndDate = "ProjectPlannedEndDate";
+            public const string OverrideEndDate = "OverrideEndDate";
+            public const string OverrideStartDate = "OverrideStartDate";
+            public const string ProjectBadgeStartDate = "ProjectBadgeStartDate";
+            public const string ProjectBadgeEndDate = "ProjectBadgeEndDate";
+            public const string InBreakPeriodCount = "InBreakPeriodCount";
+            public const string BlockedCount = "BlockedCount";
+            public const string ClockNotStartedCount = "ClockNotStartedCount";
+            public const string BadgedNotOnProjectCount = "BadgedNotOnProjectCount";
+            public const string BadgedOnProjectCount = "BadgedOnProjectCount";
+            public const string ProjectOwnerAlias = "ProjectOwnerAlias";
+            public const string ToAddressList = "ToAddressList";
+            public const string ConsultantEndDate = "ConsultantEndDate";
+            public const string IsApproved = "IsApproved";
+            public const string IsBadgeException = "IsBadgeException";
+            public const string IsBadgeRequired = "IsBadgeRequired";
+            public const string PreferredFirstName = "PreferredFirstName";
             public const string PlannedEndDateSource = "PlannedEndDateSource";
             public const string BadgeStartDateSource = "BadgeStartDateSource";
             public const string PreviousBadgeAlias = "PreviousBadgeAlias";
@@ -583,6 +603,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public static string All = "@All";
+            public static string LocationId = "@LocationId";
             public static string MilestoneNewStartDate = "@MilestoneNewStartDate";
             public static string MilestoneNewEndDate = "@MilestoneNewEndDate";
             public static string IsNotBadgedException = "@IsNotBadgedException";
@@ -1060,6 +1082,8 @@
 
             public class Configuration
             {
+                public const string GetLocations = "dbo.GetLocations";
+                public const string GetCFDivisions = "dbo.GetCFDivisions";
                 public const string SaveLockoutDetails = "dbo.SaveLockoutDetails";
                 public const string GetLockoutDetails = "dbo.GetLockoutDetails";
                 public const string GetCompanyNameProcedure = "dbo.GetCompanyName";
@@ -1088,6 +1112,8 @@
 
             public class Person
             {
+                public const string GetSalaryPayTypes = "dbo.GetSalaryPayTypes";
+                public const string GetUsersForCF = "dbo.GetUsersForCF";
                 public const string IsPersonSalaryTypeInGivenRange = "dbo.IsPersonSalaryTypeInGivenRange";
                 public const string GetBadgeRecordsByProjectId = "dbo.GetBadgeRecordsByProjectId";
                 public const string GetBadgeRecordsAfterDeactivatedDate = "dbo.GetBadgeRecordsAfterDeactivatedDate";
@@ -1408,6 +1434,8 @@
 
             public class Project
             {
+                public const string GetBaseLineValues = "dbo.GetBaseLineValues";
+                public const string CreateBaseLine = "dbo.CreateBaseLine";
                 public const string ProjectGetShortById = "dbo.ProjectGetShortById";
                 public const string CheckIfPersonIsRestrictedByProjectId = "dbo.CheckIfPersonIsRestrictedByProjectId";
                 public const string CheckIfPersonInProjectForDates = "dbo.CheckIfPersonInProjectForDates";
