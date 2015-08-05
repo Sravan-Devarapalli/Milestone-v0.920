@@ -4469,9 +4469,6 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\InsertProjectFeedbackByMilestonePersonId.proc.sql">
       <SubType>Code</SubType>
     </Build>
-    <Build Include="Schema Objects\Schemas\dbo\Tables\Keys\FK_Feedback_MilestonePersonId.fkey.sql">
-      <SubType>Code</SubType>
-    </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Stored Procedures\ProjectFeedbackReport.proc.sql">
       <SubType>Code</SubType>
     </Build>
@@ -4665,6 +4662,9 @@
       <SubType>Code</SubType>
     </Build>
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\SmallerDateBetweenTwo.function.sql">
+      <SubType>Code</SubType>
+    </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetProjectCapabilitiesNames.function.sql">
       <SubType>Code</SubType>
     </Build>
   </ItemGroup>
