@@ -100,3 +100,5 @@ AS
 	 WHERE StartDate > @ProjectNewEndDate OR @ProjectNewStartDate > EndDate
 	 AND ProjectId = @ProjectId
 
+	 EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneId
+
