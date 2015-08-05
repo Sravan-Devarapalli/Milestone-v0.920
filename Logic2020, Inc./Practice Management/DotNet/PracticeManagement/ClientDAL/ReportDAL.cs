@@ -4045,7 +4045,7 @@ namespace DataAccess
                     var feedbackId = reader.GetInt32(feedbackIdIndex);
                     var projectManager = new Person()
                     {
-                        Id = !reader.IsDBNull(projectManagerIdIndex) ? (int?)reader.GetInt32(projectManagerIdIndex) : null,
+                        Id = !reader.IsDBNull(projectManagerIdIndex) ? (int?)reader.GetInt32(projectManagerIdIndex) : -1,
                         FirstName = !reader.IsDBNull(projectManagerFirstNameIndex) ? reader.GetString(projectManagerFirstNameIndex) : "",
                         LastName = !reader.IsDBNull(projectManagerLastNameIndex) ? reader.GetString(projectManagerLastNameIndex) : ""
                     };
