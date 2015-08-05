@@ -67,9 +67,11 @@ BEGIN
 			WHERE Id=@Id
 
 		END
+
 	END 
 
-	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = @MilestonePersonId,@MilestoneId = NULL
+	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneId
+
 	EXEC UpdateMSBadgeDetailsByPersonId @PersonId = @PersonId,@UpdatedBy=@UpdatedBy
 
 	IF @OldPersonId IS NOT NULL
