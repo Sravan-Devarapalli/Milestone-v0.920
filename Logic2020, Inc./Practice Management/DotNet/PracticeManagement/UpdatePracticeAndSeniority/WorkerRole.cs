@@ -326,7 +326,7 @@ namespace UpdatePracticeAndSeniority
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 06:00:00 every day.
-                    RunFeedbackMails(currentDateTimeWithTimeZone);
+                    //RunFeedbackMails(currentDateTimeWithTimeZone); //Commented out as per 'Nick' statement in a cal on 20150805
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on every monday.
@@ -355,7 +355,7 @@ namespace UpdatePracticeAndSeniority
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 06:00:00 every day.
-                    RunFeedbackMails(currentDateTimeWithTimeZone);
+                    //RunFeedbackMails(currentDateTimeWithTimeZone); //Commented out as per 'Nick' statement in a cal on 20150805
                     //Runs at 07:00:00 on 3rd and 18th of every month.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on every monday.
