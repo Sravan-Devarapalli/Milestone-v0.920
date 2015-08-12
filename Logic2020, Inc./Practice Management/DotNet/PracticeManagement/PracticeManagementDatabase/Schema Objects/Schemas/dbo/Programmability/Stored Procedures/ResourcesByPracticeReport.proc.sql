@@ -56,6 +56,23 @@ BEGIN
 			WHERE c.date BETWEEN @StartDateLocal and @EndDateLocal
 			AND @Step = 1
 		 ),
+	 ActiveConsultantsRange
+	 AS
+	 (
+		SELECT per.DefaultPractice,R.StartDate,R.EndDate,COUNT(*) as Count
+		FROM Ranges R
+		CROSS JOIN v_PersonHistory P 
+		INNER JOIN dbo.MSBadge M ON M.PersonId = P.PersonId
+		INNER JOIN Person per ON per.PersonId = p.PersonId
+		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
+		WHERE   ISNULL(M.ExcludeInReports,0) = 0 AND
+				P.HireDate <= R.EndDate AND 
+				(P.TerminationDate IS NULL OR R.StartDate <= p.TerminationDate) AND 
+				(P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)) AND
+				(@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable)) AND
+				(per.DefaultPractice IN (SELECT Ids FROM @PracticeIdsTable))
+		GROUP BY per.DefaultPractice,R.StartDate,R.EndDate
+	 ),
 	 BadgedOnProject
 	 AS
 	 (
@@ -65,12 +82,14 @@ BEGIN
 		SELECT MP.PersonId,P.DefaultPractice,R.StartDate,R.EndDate
 		FROM dbo.MilestonePersonEntry MPE
 		INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+		INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
 		INNER JOIN Ranges R ON MPE.BadgeStartDate <= R.EndDate AND R.StartDate <= MPE.BadgeEndDate
 		INNER JOIN dbo.Person P ON P.PersonId = MP.PersonId 
+		INNER JOIN dbo.Project Pr ON Pr.ProjectId = M.ProjectId
 		INNER JOIN dbo.MSBadge MB ON MB.PersonId = MP.PersonId
 		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
 		WHERE MB.ExcludeInReports = 0 AND mpe.IsbadgeRequired = 1
-				AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
+				AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))  AND Pr.ProjectStatusId IN (1,2,3,4) 
 		UNION ALL
 
 		SELECT M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate
@@ -82,6 +101,7 @@ BEGIN
 		WHERE M.ExcludeInReports = 0 AND M.IsPreviousBadge = 1 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 			  AND (M.LastBadgeStartDate <= MB.BadgeEndDate AND MB.BadgeStartDate <= M.LastBadgeEndDate)
 		) P
+		WHERE P.DefaultPractice IN (SELECT Ids FROM @PracticeIdsTable)
 		GROUP BY P.PersonId,P.DefaultPractice,P.StartDate,P.EndDate
 	 ),
 	 BadgedNotOnProject
@@ -91,9 +111,12 @@ BEGIN
 		FROM v_CurrentMSBadge M 
 		INNER JOIN Ranges R ON R.StartDate <= M.BadgeEndDate AND M.BadgeStartDate <= R.EndDate
 		INNER JOIN dbo.Person P ON P.PersonId = M.PersonId
+		INNER JOIN dbo.MSBadge MB ON MB.PersonId = P.PersonId
 		LEFT JOIN BadgedOnProject BP ON BP.StartDate = R.StartDate AND BP.PersonId = M.PersonId
 		LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
 		WHERE M.ExcludeInReports = 0 AND BP.PersonId IS NULL AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
+			  AND P.DefaultPractice IN (SELECT Ids FROM @PracticeIdsTable)
+			  AND (MB.IsBlocked = 0 OR (MB.IsBlocked = 1 AND (R.StartDate > MB.BlockEndDate OR MB.BlockStartDate > R.EndDate)))
 		GROUP BY M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate 
 	 ),
 	  BadgedNotOnProjectCount
@@ -114,60 +137,93 @@ BEGIN
 		WHERE P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
 		GROUP BY BP.DefaultPractice,BP.StartDate,BP.EndDate
 	 ),
-	 ClockNotStarted
-	 AS
-	 (
-	   SELECT M.PersonId,Per.DefaultPractice,R.StartDate,R.EndDate
-	   FROM v_CurrentMSBadge M 
-	   INNER JOIN dbo.Person Per ON Per.PersonId = M.PersonId
-	   INNER JOIN Ranges R ON R.EndDate < M.BadgeStartDate
-	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
-	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
-	   GROUP BY M.PersonId,Per.DefaultPractice,R.StartDate,R.EndDate
-	 ),
+	 --ClockNotStarted
+	 --AS
+	 --(
+	 --  SELECT M.PersonId,Per.DefaultPractice,R.StartDate,R.EndDate
+	 --  FROM v_CurrentMSBadge M 
+	 --  INNER JOIN dbo.Person Per ON Per.PersonId = M.PersonId
+	 --  INNER JOIN Ranges R ON R.EndDate < M.BadgeStartDate
+	 --  LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
+	 --  WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
+	 --  GROUP BY M.PersonId,Per.DefaultPractice,R.StartDate,R.EndDate
+	 --),
 	  BlockedPeople
 	 AS
 	 (
-	   SELECT M.PersonId,R.StartDate,R.EndDate
+	   SELECT M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate
 	   FROM dbo.MSBadge M 
+	   JOIN dbo.Person P ON P.PersonId = M.PersonId
 	   JOIN Ranges R ON R.StartDate <= M.BlockEndDate AND M.BlockStartDate <= R.EndDate
 	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
 	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
-	   GROUP BY M.PersonId,R.StartDate,R.EndDate
+	   AND P.DefaultPractice IN (SELECT Ids FROM @PracticeIdsTable)
+	   GROUP BY M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate
 	 ),
 	  InBreakPeriod
 	 AS
 	 (
-	   SELECT M.PersonId,R.StartDate,R.EndDate
+	   SELECT M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate
 	   FROM v_CurrentMSBadge M 
+	   JOIN dbo.Person P ON P.PersonId = M.PersonId
 	   JOIN Ranges R ON R.StartDate <= M.BreakEndDate AND M.BreakStartDate <= R.EndDate
 	   LEFT JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = M.PersonId
 	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
-	   GROUP BY M.PersonId,R.StartDate,R.EndDate
+	   AND P.DefaultPractice IN (SELECT Ids FROM @PracticeIdsTable)
+	   GROUP BY M.PersonId,P.DefaultPractice,R.StartDate,R.EndDate
 	 ),
-	  ClockNotStartedCount
+	 BlockedPeopleCount
+	 AS
+	 (
+	    SELECT B.DefaultPractice,B.StartDate,B.EndDate,COUNT(DISTINCT B.PersonId) AS BlockedPeopleCount
+		FROM BlockedPeople B
+		INNER JOIN v_PersonHistory P ON P.PersonId = B.PersonId AND P.HireDate <= B.EndDate AND (P.TerminationDate IS NULL OR B.StartDate <= p.TerminationDate)
+		LEFT JOIN BadgedOnProject BP ON BP.StartDate = B.StartDate AND BP.PersonId = B.PersonId
+	    LEFT JOIN BadgedNotOnProject BNP ON BNP.StartDate = B.StartDate AND BNP.PersonId = B.PersonId
+	    WHERE BNP.PersonId IS NULL AND BP.PersonId IS NULL AND (P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable))
+				and P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
+	    GROUP BY B.DefaultPractice,B.StartDate,B.EndDate
+	 ),
+	  InBreakPeriodCount
 	  AS
 	  (
-	   SELECT C.DefaultPractice,C.StartDate,C.EndDate,COUNT(C.PersonId) AS ClockNotStartedCount
-	   FROM ClockNotStarted C
-	   INNER JOIN v_PersonHistory P ON P.PersonId = C.PersonId AND P.HireDate <= C.EndDate AND (P.TerminationDate IS NULL OR C.StartDate <= p.TerminationDate)
-	   LEFT JOIN InBreakPeriod Brk ON Brk.StartDate = C.StartDate AND Brk.PersonId = C.PersonId
-	   LEFT JOIN BlockedPeople B ON B.StartDate = C.StartDate AND B.PersonId = C.PersonId
-	   LEFT JOIN BadgedOnProject BP ON BP.StartDate = C.StartDate AND BP.PersonId = C.PersonId
-	   LEFT JOIN BadgedNotOnProject BNP ON BNP.StartDate = C.StartDate AND BNP.PersonId = C.PersonId
-	   WHERE BNP.PersonId IS NULL AND BP.PersonId IS NULL AND B.PersonId IS NULL AND Brk.PersonId IS NULL
-			 AND P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
-	   GROUP BY C.DefaultPractice,C.StartDate,C.EndDate
+		SELECT B.DefaultPractice,B.StartDate,B.EndDate,COUNT(DISTINCT B.PersonId) AS BreakCount
+		FROM InBreakPeriod B
+		INNER JOIN v_PersonHistory P ON P.PersonId = B.PersonId AND P.HireDate <= B.EndDate AND (P.TerminationDate IS NULL OR B.StartDate <= p.TerminationDate)
+		LEFT JOIN BlockedPeople Blck ON Blck.StartDate = B.StartDate AND Blck.PersonId = B.PersonId
+		LEFT JOIN BadgedOnProject BP ON BP.StartDate = B.StartDate AND BP.PersonId = B.PersonId
+	    LEFT JOIN BadgedNotOnProject BNP ON BNP.StartDate = B.StartDate AND BNP.PersonId = B.PersonId
+	    WHERE BNP.PersonId IS NULL AND BP.PersonId IS NULL AND (P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable))
+				and P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
+	    GROUP BY B.DefaultPractice,B.StartDate,B.EndDate
 	  )
+	  --ClockNotStartedCount
+	  --AS
+	  --(
+	  -- SELECT C.DefaultPractice,C.StartDate,C.EndDate,COUNT(C.PersonId) AS ClockNotStartedCount
+	  -- FROM ClockNotStarted C          
+	  -- INNER JOIN v_PersonHistory P ON P.PersonId = C.PersonId AND P.HireDate <= C.EndDate AND (P.TerminationDate IS NULL OR C.StartDate <= p.TerminationDate)
+	  -- LEFT JOIN InBreakPeriod Brk ON Brk.StartDate = C.StartDate AND Brk.PersonId = C.PersonId
+	  -- LEFT JOIN BlockedPeople B ON B.StartDate = C.StartDate AND B.PersonId = C.PersonId
+	  -- LEFT JOIN BadgedOnProject BP ON BP.StartDate = C.StartDate AND BP.PersonId = C.PersonId
+	  -- LEFT JOIN BadgedNotOnProject BNP ON BNP.StartDate = C.StartDate AND BNP.PersonId = C.PersonId
+	  -- WHERE BNP.PersonId IS NULL AND BP.PersonId IS NULL AND B.PersonId IS NULL AND Brk.PersonId IS NULL
+			-- AND P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
+	  -- GROUP BY C.DefaultPractice,C.StartDate,C.EndDate
+	  --)
 
 	 SELECT Pr.PracticeId,Pr.Name AS PracticeName,R.StartDate,R.EndDate,ISNULL(BP.BadgedOnProjectCount,0) AS BadgedOnProjectCount,
 			ISNULL(BNP.BadgedNotOnProjectCount,0) AS BadgedNotOnProjectCount,
-			ISNULL(C.ClockNotStartedCount,0) AS ClockNotStartedCount
+			 --ISNULL(C.ClockNotStartedCount,0) AS ClockNotStartedCount,
+			 ISNULL(A.Count,0)-(ISNULL(BP.BadgedOnProjectCount,0) + ISNULL(BNP.BadgedNotOnProjectCount,0)+ ISNULL(B.BlockedPeopleCount,0) + ISNULL(Brk.BreakCount,0)) AS ClockNotStartedCount
 	 FROM Ranges R
 	 CROSS JOIN dbo.Practice Pr 
+	 LEFT JOIN ActiveConsultantsRange A ON A.StartDate = R.StartDate AND A.DefaultPractice = Pr.PracticeId
 	 LEFT JOIN BadgedProjectCount BP ON BP.StartDate = R.StartDate AND BP.DefaultPractice = Pr.PracticeId
 	 LEFT JOIN BadgedNotOnProjectCount BNP ON BNP.StartDate = R.StartDate AND BNP.DefaultPractice = Pr.PracticeId
-	 LEFT JOIN ClockNotStartedCount C ON C.StartDate = R.StartDate AND C.DefaultPractice = Pr.PracticeId
+	 LEFT JOIN BlockedPeopleCount B ON B.StartDate = R.StartDate AND B.DefaultPractice = Pr.PracticeId
+	 LEFT JOIN InBreakPeriodCount Brk ON Brk.StartDate = R.StartDate AND Brk.DefaultPractice = Pr.PracticeId
+	 --LEFT JOIN ClockNotStartedCount C ON C.StartDate = R.StartDate AND C.DefaultPractice = Pr.PracticeId
 	 WHERE Pr.PracticeId IN (SELECT Ids FROM @PracticeIdsTable)
 	 ORDER BY R.StartDate,Pr.Name
 END
