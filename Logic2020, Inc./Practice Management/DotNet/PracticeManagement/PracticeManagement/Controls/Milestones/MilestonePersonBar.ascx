@@ -61,8 +61,8 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
                     <asp:CompareValidator ID="compPersonStartType" runat="server" ControlToValidate="dpPersonStartInsert"
-                        ErrorMessage="The Person Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                        ToolTip="The Person Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                        ErrorMessage="The Person Start Date has an incorrect format. It must be 'MM/DD/YYYY'."
+                        ToolTip="The Person Start Date has an incorrect format. It must be 'MM/DD/YYYY'."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         Operator="DataTypeCheck" Type="Date" ValidationGroup="<%# GetValidationGroup() %>"></asp:CompareValidator>
                     <asp:CustomValidator ID="custPersonStartInsert" runat="server" ControlToValidate="dpPersonStartInsert"
@@ -103,8 +103,8 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         OnServerValidate="custPersonEndInsert_ServerValidate" ValidationGroup="<%# GetValidationGroup() %>"></asp:CustomValidator>
                     <asp:CompareValidator ID="compPersonEndType" runat="server" ControlToValidate="dpPersonEndInsert"
-                        ErrorMessage="The Person End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                        ToolTip="The Person End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                        ErrorMessage="The Person End Date has an incorrect format. It must be 'MM/DD/YYYY'."
+                        ToolTip="The Person End Date has an incorrect format. It must be 'MM/DD/YYYY'."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         Operator="DataTypeCheck" Type="Date" ValidationGroup="<%# GetValidationGroup() %>"></asp:CompareValidator>
                     <asp:CompareValidator ID="compPersonEndInsert" runat="server" ControlToValidate="dpPersonEndInsert"
@@ -224,8 +224,8 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         ValidationGroup="<%# GetValidationGroup() %>"></asp:RequiredFieldValidator>
                     <asp:CompareValidator ID="compBadgeStartType" runat="server" ControlToValidate="dpBadgeStartInsert"
-                        ErrorMessage="The Badge Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                        ToolTip="The Badge Start Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                        ErrorMessage="The Badge Start Date has an incorrect format. It must be 'MM/DD/YYYY'."
+                        ToolTip="The Badge Start Date has an incorrect format. It must be 'MM/DD/YYYY'."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         Operator="DataTypeCheck" Type="Date" ValidationGroup="<%# GetValidationGroup() %>"></asp:CompareValidator>
                     <asp:CustomValidator ID="custBadgeStart" runat="server" ControlToValidate="dpBadgeStartInsert"
@@ -260,8 +260,8 @@
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         OnServerValidate="custBadgeEnd_ServerValidate" ValidationGroup="<%# GetValidationGroup() %>"></asp:CustomValidator>
                     <asp:CompareValidator ID="compBadgeEndType" runat="server" ControlToValidate="dpBadgeEndInsert"
-                        ErrorMessage="The Badge End Date has an incorrect format. It must be 'MM/dd/yyyy'."
-                        ToolTip="The Badge End Date has an incorrect format. It must be 'MM/dd/yyyy'."
+                        ErrorMessage="The Badge End Date has an incorrect format. It must be 'MM/DD/YYYY'."
+                        ToolTip="The Badge End Date has an incorrect format. It must be 'MM/DD/YYYY'."
                         Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"
                         Operator="DataTypeCheck" Type="Date" ValidationGroup="<%# GetValidationGroup() %>"></asp:CompareValidator>
                     <asp:CompareValidator ID="compBadgeEnd" runat="server" ControlToValidate="dpBadgeEndInsert"
