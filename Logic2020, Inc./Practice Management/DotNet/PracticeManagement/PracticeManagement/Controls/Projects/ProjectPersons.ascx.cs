@@ -12,6 +12,11 @@ namespace PraticeManagement.Controls.Projects
 
         }
 
+        protected string GetDoubleFormat(decimal value)
+        {
+            return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
         #region Redirects
 
         protected string GetMilestonePersonRedirectUrl(object milestoneId, object milestonePersonId)
