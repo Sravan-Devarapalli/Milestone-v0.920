@@ -173,16 +173,22 @@
                                 <thead>
                                     <tr>
                                         <th class="TextAlignLeftImp Padding5Imp Width300Px">
-                                            List of Resources on 6 month break
+                                            Resource Name
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Resource Level
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
-                                            6mos Start
+                                            6-Month Break Start Date
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
-                                            6mos End
+                                            6-Month Break End Date
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            6-Month Organic Start Date
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            6-Month Organic End Date
                                         </th>
                                     </tr>
                                 </thead>
@@ -202,6 +208,12 @@
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeEnd" runat="server"></asp:Label>
                             </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:Label ID="lblOrganicStart" runat="server"></asp:Label>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:Label ID="lblOrganicEnd" runat="server"></asp:Label>
+                            </td>
                         </tr>
                     </ItemTemplate>
                     <AlternatingItemTemplate>
@@ -217,6 +229,12 @@
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <asp:Label ID="lblBadgeEnd" runat="server"></asp:Label>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:Label ID="lblOrganicStart" runat="server"></asp:Label>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:Label ID="lblOrganicEnd" runat="server"></asp:Label>
                             </td>
                         </tr>
                     </AlternatingItemTemplate>
