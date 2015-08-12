@@ -4645,6 +4645,22 @@ namespace DataAccess
                 int endDateIndex = -1;
                 int isApprovedByOpsIndex = -1;
                 int deactivatedDateIndex = -1;
+                int organicBreakStartIndex = -1;
+                int organicBreakEndIndex = -1;
+                try
+                {
+                    organicBreakStartIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakStartDate);
+                }
+                catch
+                { }
+
+                try
+                {
+                    organicBreakEndIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakEndDate);
+                }
+                catch
+                { }
+
                 try
                 {
                     titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
@@ -4783,6 +4799,10 @@ namespace DataAccess
                         badgeResource.BreakStartDate = reader.IsDBNull(breakStartdateIndex) ? null : (DateTime?)reader.GetDateTime(breakStartdateIndex);
                     if (breakEnddateIndex != -1)
                         badgeResource.BreakEndDate = reader.IsDBNull(breakEnddateIndex) ? null : (DateTime?)reader.GetDateTime(breakEnddateIndex);
+                    if (organicBreakStartIndex != -1)
+                        badgeResource.OrganicBreakStartDate = reader.IsDBNull(organicBreakStartIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakStartIndex);
+                    if (organicBreakEndIndex != -1)
+                        badgeResource.OrganicBreakEndDate = reader.IsDBNull(organicBreakEndIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakEndIndex);
                     if (clockStartDateIndex !=-1)
                         badgeResource.ProjectBadgeStartDate = reader.IsDBNull(clockStartDateIndex) ? null : (DateTime?)reader.GetDateTime(clockStartDateIndex);
                     if(clockEnddateIndex!=-1)
