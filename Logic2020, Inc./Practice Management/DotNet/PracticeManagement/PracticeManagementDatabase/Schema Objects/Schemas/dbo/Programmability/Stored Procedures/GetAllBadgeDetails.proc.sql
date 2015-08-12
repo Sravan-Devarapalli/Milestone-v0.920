@@ -35,13 +35,15 @@ BEGIN
 			P.TitleId,
 			P.Title
 	FROM dbo.v_Person P
+	INNER JOIN dbo.MSBadge MB ON MB.PersonId = P.PersonId
 	LEFT JOIN v_CurrentMSBadge M ON M.PersonId = P.PersonId
 	INNER JOIN dbo.GetCurrentPayTypeTable() CP ON CP.PersonId = P.PersonId
 	LEFT JOIN dbo.Timescale T ON T.TimescaleId = CP.Timescale
-	WHERE ISNULL(M.ExcludeInReports,0) = 0  AND P.PersonStatusId IN (1,5) -- Active and Termination Pending
+	WHERE ISNULL(MB.ExcludeInReports,0) = 0  AND P.PersonStatusId IN (1,5) -- Active and Termination Pending
 	AND P.IsStrawman = 0
 	AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	AND P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
 	ORDER BY P.LastName,P.FirstName
 
 END
+
