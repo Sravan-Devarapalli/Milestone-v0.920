@@ -261,10 +261,12 @@ namespace PraticeManagement.Reports.Badge
             DataTable data = new DataTable();
             List<object> row;
 
-            data.Columns.Add("List of Resources on 6 month break");
+            data.Columns.Add("Resource Name");
             data.Columns.Add("Resource Level");
-            data.Columns.Add("6mos Start");
-            data.Columns.Add("6mos End");
+            data.Columns.Add("6-Month Break Start Date");
+            data.Columns.Add("6-Month Break End Date");
+            data.Columns.Add("6-Month Organic Start Date");
+            data.Columns.Add("6-Month Organic End Date");
             foreach (var reportItem in report)
             {
                 row = new List<object>();
@@ -272,6 +274,8 @@ namespace PraticeManagement.Reports.Badge
                 row.Add(reportItem.Person.Title.TitleName);
                 row.Add(reportItem.BreakStartDate.HasValue ? reportItem.BreakStartDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BreakEndDate.HasValue ? reportItem.BreakEndDate.Value.ToShortDateString() : string.Empty);
+                row.Add(reportItem.OrganicBreakStartDate.HasValue ? reportItem.OrganicBreakStartDate.Value.ToShortDateString() : string.Empty);
+                row.Add(reportItem.OrganicBreakEndDate.HasValue ? reportItem.OrganicBreakEndDate.Value.ToShortDateString() : string.Empty);
                 data.Rows.Add(row.ToArray());
             }
             return data;
@@ -284,8 +288,12 @@ namespace PraticeManagement.Reports.Badge
                 var dataItem = (MSBadge)e.Item.DataItem;
                 var lblBadgeStart = e.Item.FindControl("lblBadgeStart") as Label;
                 var lblBadgeEnd = e.Item.FindControl("lblBadgeEnd") as Label;
+                var lblOrganicStart = e.Item.FindControl("lblOrganicStart") as Label;
+                var lblOrganicEnd = e.Item.FindControl("lblOrganicEnd") as Label;
                 lblBadgeEnd.Text = dataItem.BreakEndDate.HasValue ? dataItem.BreakEndDate.Value.ToShortDateString() : string.Empty;
                 lblBadgeStart.Text = dataItem.BreakStartDate.HasValue ? dataItem.BreakStartDate.Value.ToShortDateString() : string.Empty;
+                lblOrganicStart.Text = dataItem.OrganicBreakStartDate.HasValue ? dataItem.OrganicBreakStartDate.Value.ToShortDateString() : string.Empty;
+                lblOrganicEnd.Text = dataItem.OrganicBreakEndDate.HasValue ? dataItem.OrganicBreakEndDate.Value.ToShortDateString() : string.Empty;
             }
         }
     }
