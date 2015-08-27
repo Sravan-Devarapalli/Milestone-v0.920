@@ -48,7 +48,7 @@ namespace PraticeManagement.Reports.Badge
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -74,18 +74,18 @@ namespace PraticeManagement.Reports.Badge
             {
                 CellStyles headerWrapCellStyle = new CellStyles();
                 headerWrapCellStyle.IsBold = true;
-                headerWrapCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerWrapCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
                 headerWrapCellStyle.WrapText = true;
                 
 
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 CellStyles dataDateCellStyle = new CellStyles();
                 dataDateCellStyle.DataFormat = "mm/dd/yy;@";
                 dataDateCellStyle.IsBold = true;
-                dataDateCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                dataDateCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 headerCellStyleList.Add(headerWrapCellStyle);
