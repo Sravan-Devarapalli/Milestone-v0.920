@@ -71,7 +71,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -80,7 +80,7 @@ namespace PraticeManagement.Controls.Reports
                 CellStyles dataCellStyle = new CellStyles();
                 dataCellStyle.IsBold = true;
                 dataCellStyle.WrapText = true;
-                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 dataCellStyle.FontHeight = 200;
 
                 CellStyles[] dataCellStylearray = { dataCellStyle };
@@ -106,13 +106,13 @@ namespace PraticeManagement.Controls.Reports
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
 
                 CellStyles dateCellStyle = new CellStyles();
                 dateCellStyle.IsBold = true;
                 dateCellStyle.WrapText = true;
-                dateCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dateCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
 
                 dateCellStyle.DataFormat = Granularity == 30 ? "[$-409]mmm-yy;@" : "[$-409]d-mmm;@";
 
@@ -152,13 +152,13 @@ namespace PraticeManagement.Controls.Reports
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
 
                 CellStyles dateCellStyle = new CellStyles();
                 dateCellStyle.IsBold = true;
                 dateCellStyle.WrapText = true;
-                dateCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dateCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
 
                 dateCellStyle.DataFormat = Granularity == 30 ? "[$-409]mmm-yy;@" : "[$-409]d-mmm;@";
 
