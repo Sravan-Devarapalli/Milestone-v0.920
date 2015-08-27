@@ -282,7 +282,7 @@ namespace PraticeManagement.Controls.Projects
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -290,7 +290,7 @@ namespace PraticeManagement.Controls.Projects
 
                 CellStyles dataCellStyle = new CellStyles();
                 dataCellStyle.IsBold = true;
-                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 dataCellStyle.FontHeight = 200;
                 CellStyles[] dataCellStylearray = { dataCellStyle };
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
@@ -310,7 +310,7 @@ namespace PraticeManagement.Controls.Projects
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 headerCellStyleList.Add(headerCellStyle);
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
