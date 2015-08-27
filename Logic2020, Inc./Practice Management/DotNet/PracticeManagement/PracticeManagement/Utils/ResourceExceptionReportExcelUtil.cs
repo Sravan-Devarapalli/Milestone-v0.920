@@ -51,7 +51,7 @@ namespace PraticeManagement.Utils
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 220;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -79,8 +79,8 @@ namespace PraticeManagement.Utils
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.FontHeight = 220;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 1; i <= 11; i++)
@@ -120,7 +120,7 @@ namespace PraticeManagement.Utils
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 220;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -148,8 +148,8 @@ namespace PraticeManagement.Utils
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.FontHeight = 220;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 1; i <= 9; i++)
@@ -183,7 +183,7 @@ namespace PraticeManagement.Utils
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 220;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -211,8 +211,8 @@ namespace PraticeManagement.Utils
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
                 headerCellStyle.FontHeight = 220;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 1; i <= 10; i++)
