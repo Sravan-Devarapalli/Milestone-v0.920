@@ -61,9 +61,9 @@
             <cc2:ScrollingDropDown ID="cblTimeScales" runat="server" AllSelectedReturnType="AllItems"
                 AutoPostBack="false" onclick="scrollingDropdown_onclick('cblTimeScales','Pay Type')"
                 CellPadding="3" NoItemsType="All" SetDirty="False" 
-                DropDownListType="Pay Type" CssClass="PersonFilterSddAllTypes" />
+                DropDownListType="Pay Type" CssClass="PersonFilterSddAllTypes Width220PxImp" />
             <ext:ScrollableDropdownExtender ID="sdeTimeScales" runat="server" TargetControlID="cblTimeScales"
-                UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="190px">
+                UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="220px">
             </ext:ScrollableDropdownExtender>
         </td>
         <td class="Width15PxImp">
