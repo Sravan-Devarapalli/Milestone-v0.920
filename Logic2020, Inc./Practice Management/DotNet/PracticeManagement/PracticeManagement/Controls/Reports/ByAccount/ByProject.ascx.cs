@@ -28,7 +28,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
             {
                 var cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 var headerrowStyle = new RowStyles(cellStylearray);
@@ -36,7 +36,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
 
                 var dataCellStyle = new CellStyles();
                 dataCellStyle.IsBold = true;
-                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                dataCellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 dataCellStyle.FontHeight = 200;
                 CellStyles[] dataCellStylearray = { dataCellStyle };
                 var datarowStyle = new RowStyles(dataCellStylearray);
@@ -59,7 +59,7 @@ namespace PraticeManagement.Controls.Reports.ByAccount
                 var headerCellStyle = new CellStyles
                 {
                     IsBold = true,
-                    HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER
+                    HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center
                 };
                 var headerCellStyleList = new List<CellStyles> { headerCellStyle };
                 var headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
