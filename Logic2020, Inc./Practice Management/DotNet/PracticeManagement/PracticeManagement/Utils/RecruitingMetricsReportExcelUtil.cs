@@ -37,7 +37,7 @@ namespace PraticeManagement.Utils
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -63,7 +63,7 @@ namespace PraticeManagement.Utils
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 headerCellStyleList.Add(headerCellStyle);
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
