@@ -148,9 +148,9 @@
                                                 <td rowspan="2" class="floatRight SddRecruiter">
                                                     <cc2:ScrollingDropDown ID="cblRecruiters" runat="server" AllSelectedReturnType="AllItems"
                                                         onclick="scrollingDropdown_onclick('cblRecruiters','Recruiter')" NoItemsType="All"
-                                                        SetDirty="False" DropDownListType="Recruiter" CssClass="PersonPage_cblRecruiters" />
+                                                        SetDirty="False" DropDownListType="Recruiter" CssClass="PersonPage_cblRecruiters Width220PxImp" />
                                                     <ext:ScrollableDropdownExtender ID="sdeRecruiters" runat="server" TargetControlID="cblRecruiters"
-                                                        UseAdvanceFeature="True" Width="200px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                                                        UseAdvanceFeature="True" Width="220px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                                                     </ext:ScrollableDropdownExtender>
                                                 </td>
                                             </tr>
