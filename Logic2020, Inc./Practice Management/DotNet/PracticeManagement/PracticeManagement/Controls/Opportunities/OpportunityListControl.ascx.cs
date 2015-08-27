@@ -189,7 +189,7 @@ namespace PraticeManagement.Controls.Opportunities
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 headerCellStyleList.Add(headerCellStyle);
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
