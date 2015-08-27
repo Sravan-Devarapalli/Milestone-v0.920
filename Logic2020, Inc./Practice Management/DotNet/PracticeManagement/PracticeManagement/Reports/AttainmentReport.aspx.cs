@@ -79,7 +79,7 @@ namespace PraticeManagement.Reports
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -105,12 +105,12 @@ namespace PraticeManagement.Reports
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 CellStyles monthNameHeaderCellStyle = new CellStyles();
                 monthNameHeaderCellStyle.DataFormat = "[$-409]mmmm-yy;@";
                 monthNameHeaderCellStyle.IsBold = true;
-                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 0; i < 12; i++)//there are 12 columns before month columns.
@@ -177,7 +177,7 @@ namespace PraticeManagement.Reports
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -203,13 +203,13 @@ namespace PraticeManagement.Reports
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
                 CellStyles monthNameHeaderCellStyle = new CellStyles();
                 monthNameHeaderCellStyle.DataFormat = "[$-409]mmmm-yy;@";
                 monthNameHeaderCellStyle.IsBold = true;
-                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 1; i <= 3; i++)
@@ -269,7 +269,7 @@ namespace PraticeManagement.Reports
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -295,8 +295,8 @@ namespace PraticeManagement.Reports
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
-                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                headerCellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 1; i <= 14; i++)
