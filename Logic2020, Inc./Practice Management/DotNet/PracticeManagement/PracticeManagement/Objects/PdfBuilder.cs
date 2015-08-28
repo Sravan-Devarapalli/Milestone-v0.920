@@ -220,6 +220,66 @@ namespace PraticeManagement.Objects
             return _Pdftable;
         }
 
+        public PdfPTable GetPdftablePersonsByProject(String Pdftablevalues = "", TableStyles tableStyles = null, String rowSpliter = "~", String coloumSpliter = "!")
+        {
+            PdfPTable _Pdftable = null;
+            if (Pdftablevalues != "")
+            {
+                String[] rowSpliterArray = { rowSpliter };
+                String[] coloumSpliterArray = { coloumSpliter };
+
+                String[] _PdftableRows = Pdftablevalues.Split(rowSpliterArray, StringSplitOptions.None);
+
+                String[] _HeaderRow = _PdftableRows[0].Split(coloumSpliterArray, StringSplitOptions.None);
+                int noOfColoums = _HeaderRow.Length;
+
+                _Pdftable = new PdfPTable(noOfColoums);
+                int i = 0;
+                foreach (var _LableRow in _PdftableRows)
+                {
+                    i++;
+                    String[] _Lables = _LableRow.Split(coloumSpliterArray, StringSplitOptions.None);
+                    int count = 0;
+                    string milestoneLabel = "";
+                    for (int j = 0; j < _Lables.Length; j++)
+                    {
+                        if (count < 6 && j + 1 < _Lables.Length && _Lables[j + 1] == "!!!")
+                        {
+                            count++;
+                            if (count == 1)
+                            {
+                                milestoneLabel = _Lables[j];
+                            }
+                            if (count == 6)
+                            {
+                                PdfPCell ContentLable = new PdfPCell(new Phrase(milestoneLabel));
+                                ContentLable.MinimumHeight = 20;
+                                //ContentLable.FixedHeight = 25;
+                                ContentLable.Colspan = 6;
+                                _Pdftable.AddCell(ContentLable);
+                            }
+                        }
+                        else
+                        {
+                            PdfPCell ContentLable = new PdfPCell(new Phrase(_Lables[j] == "!!!" ? string.Empty : _Lables[j]));
+                            ContentLable.MinimumHeight = 20;
+                            _Pdftable.AddCell(ContentLable);
+                        }
+                    }
+                    if (i != _PdftableRows.Length)
+                    {
+                        _Pdftable.CompleteRow();
+                    }
+                }
+                if (tableStyles != null)
+                {
+                    tableStyles.ApplyTableStyles(_Pdftable);
+                }
+            }
+
+            return _Pdftable;
+        }
+
         /// <summary>
         /// Renders the PDF to an array of bytes
         /// </summary>
@@ -290,6 +350,7 @@ namespace PraticeManagement.Objects
         public TrStyles[] trStyles;
 
         public string AlternateBackgroundColor = "white";
+        public string AlternateBackgroundColorText = "alternative";
         public int[] BackgroundColorRGB = { 0, 0, 0 };
         public bool IsColoumBorders = true;
 
@@ -342,14 +403,20 @@ namespace PraticeManagement.Objects
                 {
                     if (rowno > 0)
                     {
-                        if (rowno % 2 == 0)
+                        if (trStyles[i].tdStyles.Any(b => b.bold))
                         {
-                            trStyles[i].BackgroundColor = AlternateBackgroundColor;
-                            trStyles[i].BackgroundColorRGB = BackgroundColorRGB;
+                            trStyles[i].BackgroundColorRGB = trStyles[i].BackgroundColorRGB;
                         }
                         else
                         {
-                            trStyles[i].BackgroundColor = "white";
+                            if (rowno % 2 == 0)
+                            {
+                                trStyles[i].BackgroundColor = AlternateBackgroundColorText;
+                            }
+                            else
+                            {
+                                trStyles[i].BackgroundColor = "white";
+                            }
                         }
                     }
                     trStyles[i].IsFirstRow = rowno == 0;
@@ -410,6 +477,11 @@ namespace PraticeManagement.Objects
                 int coloumCount = row.GetCells().Count();
                 foreach (PdfPCell cell in row.GetCells())
                 {
+                    if (cell == null)
+                    {
+                        coloumCount--;
+                        continue;
+                    }
                     if (!string.IsNullOrEmpty(BackgroundColor))
                     {
                         tdStyles[i].BackgroundColor = BackgroundColor;
@@ -526,6 +598,11 @@ namespace PraticeManagement.Objects
 
                 case "light-gray":
                     lable.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+                    break;
+                
+                case "alternative":
+                    iTextSharp.text.BaseColor customColor1 = new BaseColor(245, 250, 255);
+                    lable.BackgroundColor = customColor1;
                     break;
 
                 case "custom":
