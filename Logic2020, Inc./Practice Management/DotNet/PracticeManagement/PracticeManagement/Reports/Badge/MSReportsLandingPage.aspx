@@ -92,6 +92,19 @@
                             View all resources and respective clock dates
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td class="PaddingTop10">
+                            <asp:HyperLink ID="hlPersonsByProject" runat="server" Text="Persons By Project" ToolTip="Persons By Project"
+                                Target="_blank" NavigateUrl="~/Reports/Badge/PersonsByProject.aspx">
+                            </asp:HyperLink>
+                        </td>
+                        <td class="PaddingTop10">
+                            View all resources by project
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <br />
