@@ -377,6 +377,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         Project ProjectGetShortById(int projectId);
+
+        [OperationContract]
+        List<Project> PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal);
     }
 }
 
