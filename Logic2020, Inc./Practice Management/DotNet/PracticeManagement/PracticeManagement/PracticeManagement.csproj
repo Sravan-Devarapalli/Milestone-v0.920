@@ -563,6 +563,7 @@
     <Content Include="Reports\Badge\BadgeResourceByTime.aspx" />
     <Content Include="Reports\Badge\ClockNotStartedReport.aspx" />
     <Content Include="Reports\Badge\MSReportsLandingPage.aspx" />
+    <Content Include="Reports\Badge\PersonsByProject.aspx" />
     <Content Include="Reports\Badge\ResourceByBusinessConsultants.aspx" />
     <Content Include="Reports\Badge\ResourceByPracticeReport.aspx" />
     <Content Include="Reports\Badge\ResourcesByTechnicalConsultants.aspx" />
@@ -915,6 +916,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ProjectService\ProjectService23.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService25.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProjectService\ProjectService26.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService110.wsdl" />
@@ -2323,6 +2330,13 @@
     </Compile>
     <Compile Include="Reports\Badge\MSReportsLandingPage.aspx.designer.cs">
       <DependentUpon>MSReportsLandingPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\PersonsByProject.aspx.cs">
+      <DependentUpon>PersonsByProject.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\PersonsByProject.aspx.designer.cs">
+      <DependentUpon>PersonsByProject.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Badge\ResourceByBusinessConsultants.aspx.cs">
       <DependentUpon>ResourceByBusinessConsultants.aspx</DependentUpon>
