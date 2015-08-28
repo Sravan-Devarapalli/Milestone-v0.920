@@ -12,15 +12,15 @@ namespace PraticeManagement.Utils.Excel
     public class CellStyles
     {
         public IWorkbook parentWorkbook;
-        public NPOI.SS.UserModel.BorderStyle BorderStyle = NPOI.SS.UserModel.BorderStyle.THIN;
-        public HorizontalAlignment HorizontalAlignment = HorizontalAlignment.LEFT;
-        public VerticalAlignment VerticalAlignment = VerticalAlignment.TOP;
+        public NPOI.SS.UserModel.BorderStyle BorderStyle = NPOI.SS.UserModel.BorderStyle.Thin;
+        public HorizontalAlignment HorizontalAlignment = HorizontalAlignment.Left;
+        public VerticalAlignment VerticalAlignment = VerticalAlignment.Top;
         public bool ShrinkToFit = false;
         public string DataFormat = "";
         public bool WrapText = false;
-        public short BackGroundColorIndex = HSSFColor.WHITE.index;
+        public short BackGroundColorIndex = HSSFColor.White.Index;
         public bool IsBold = false;
-        public short FontColorIndex = HSSFColor.BLACK.index;
+        public short FontColorIndex = HSSFColor.Black.Index;
         public short FontHeight = 200;
 
         private void SetCellValue(ICell cell, string value)
@@ -48,19 +48,19 @@ namespace PraticeManagement.Utils.Excel
             switch (color)
             {
                 case "red":
-                    FontColorIndex = HSSFColor.RED.index;
+                    FontColorIndex = HSSFColor.Red.Index;
                     break;
 
                 case "purple":
-                    FontColorIndex = HSSFColor.VIOLET.index;
+                    FontColorIndex = HSSFColor.Violet.Index;
                     break;
 
                 case "green":
-                    FontColorIndex = HSSFColor.GREEN.index;
+                    FontColorIndex = HSSFColor.Green.Index;
                     break;
 
                 default:
-                    FontColorIndex = HSSFColor.BLACK.index;
+                    FontColorIndex = HSSFColor.Black.Index;
                     break;
             }
         }
@@ -68,7 +68,7 @@ namespace PraticeManagement.Utils.Excel
         public void ApplyStyles(ICell cell, List<ICellStyle> allCellStyles, Dictionary<string, short> allDataFormats)
         {
             if (parentWorkbook == null) return;
-            if (cell.CellType == CellType.STRING && cell.StringCellValue.StartsWith(NPOIExcel.CustomColorStartTag))
+            if (cell.CellType == CellType.String && cell.StringCellValue.StartsWith(NPOIExcel.CustomColorStartTag))
             {
                 string[] values = cell.StringCellValue.Split(new[] { '~' });
                 string cellValue = values[2];
@@ -76,7 +76,7 @@ namespace PraticeManagement.Utils.Excel
                 SetCellValue(cell, cellValue);
                 SetFontColorIndex(cellcolor);
             }
-            if (cell.CellType == CellType.STRING && cell.StringCellValue.StartsWith(NPOIExcel.SuperscriptStartTag))
+            if (cell.CellType == CellType.String && cell.StringCellValue.StartsWith(NPOIExcel.SuperscriptStartTag))
             {
                 string[] values = cell.StringCellValue.Split(new[] { '~' });
                 string cellValue = values[2];
@@ -85,7 +85,7 @@ namespace PraticeManagement.Utils.Excel
                 string cellLegend = values[4]; //cellLegend = 1 for Legend in bench cost report, 0 for others
                 SetFontColorIndex(cellcolor);
                 var fontSuperscript = parentWorkbook.CreateFont();
-                fontSuperscript.TypeOffset = FontFormatting.SS_SUPER;
+                fontSuperscript.TypeOffset = FontSuperScript.Super;
                 fontSuperscript.Color = FontColorIndex;
                 IRichTextString richtext;
                 if (cellLegend == "0")
@@ -100,26 +100,26 @@ namespace PraticeManagement.Utils.Excel
                 }
                 SetCellValue(cell, richtext);
             }
-            if (cell.CellType == CellType.STRING && cell.StringCellValue.StartsWith(NPOIExcel.CustomColorWithBoldStartTag))
+            if (cell.CellType == CellType.String && cell.StringCellValue.StartsWith(NPOIExcel.CustomColorWithBoldStartTag))
             {
                 string[] values = cell.StringCellValue.Split(new[] { '~' });
                 string cellValue = values[2];
                 string cellcolor = values[1];
                 SetFontColorIndex(cellcolor);
                 var fontInBold = parentWorkbook.CreateFont();
-                fontInBold.Boldweight = (short)FontBoldWeight.BOLD;
+                fontInBold.Boldweight = (short)FontBoldWeight.Bold;
                 fontInBold.Color = FontColorIndex;
                 IRichTextString richtext = new HSSFRichTextString(cellValue);
                 richtext.ApplyFont(fontInBold);
                 SetCellValue(cell, richtext);
             }
-            if (cell.CellType == CellType.STRING && cell.StringCellValue.Contains(NPOIExcel.BoldFontKeyStartTag))
+            if (cell.CellType == CellType.String && cell.StringCellValue.Contains(NPOIExcel.BoldFontKeyStartTag))
             {
                 string cellValue = cell.StringCellValue;
                 string tempValue = cellValue.Replace("<BoldFont>", "").Replace("</BoldFont>", "");
                 var fontInBold = parentWorkbook.CreateFont();
-                fontInBold.Boldweight = (short)FontBoldWeight.BOLD;
-
+                fontInBold.Boldweight = (short)FontBoldWeight.Bold;
+                
                 IRichTextString richtext = new HSSFRichTextString(tempValue);
                 int i=0;
                 int startIndex = 0;
@@ -159,11 +159,11 @@ namespace PraticeManagement.Utils.Excel
                 coloumnstyle.ShrinkToFit = ShrinkToFit;
                 coloumnstyle.WrapText = WrapText;
 
-                IFont font = parentWorkbook.FindFont(IsBold ? (short)FontBoldWeight.BOLD : (short)FontBoldWeight.NORMAL, FontColorIndex, FontHeight, "Arial", false, false, FontFormatting.SS_NONE, (byte)FontUnderlineType.NONE);
+                IFont font = parentWorkbook.FindFont(IsBold ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal, FontColorIndex, FontHeight, "Arial", false, false, FontSuperScript.None, (byte)FontUnderlineType.None);
                 if (font == null)
                 {
                     font = parentWorkbook.CreateFont();
-                    font.Boldweight = IsBold ? (short)FontBoldWeight.BOLD : (short)FontBoldWeight.NORMAL;
+                    font.Boldweight = IsBold ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal;
                     font.Color = FontColorIndex;
                     font.FontHeight = FontHeight;
                 }
@@ -202,7 +202,7 @@ namespace PraticeManagement.Utils.Excel
                                     c.VerticalAlignment == VerticalAlignment &&
                                     c.ShrinkToFit == ShrinkToFit &&
                                     c.WrapText == WrapText &&
-                                    c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL) &&
+                                    c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.Bold : FontBoldWeight.Normal) &&
                                     c.GetFont(parentWorkbook).Color == FontColorIndex &&
                                     c.GetFont(parentWorkbook).FontHeight == FontHeight &&
                                      (string.IsNullOrEmpty(DataFormat) || c.DataFormat == allDataFormats.First(k => k.Key == DataFormat).Value)
@@ -213,7 +213,7 @@ namespace PraticeManagement.Utils.Excel
                                        c.VerticalAlignment == VerticalAlignment &&
                                        c.ShrinkToFit == ShrinkToFit &&
                                        c.WrapText == WrapText &&
-                                       c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.BOLD : FontBoldWeight.NORMAL) &&
+                                       c.GetFont(parentWorkbook).Boldweight == (short)(IsBold ? FontBoldWeight.Bold : FontBoldWeight.Normal) &&
                                         c.GetFont(parentWorkbook).Color == FontColorIndex &&
                                         c.GetFont(parentWorkbook).FontHeight == FontHeight &&
                                         (string.IsNullOrEmpty(DataFormat) || c.DataFormat == allDataFormats.First(k => k.Key == DataFormat).Value)
