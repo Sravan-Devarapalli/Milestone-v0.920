@@ -164,6 +164,9 @@ namespace DataTransferObjects
         [DataMember]
         public DateTime StartDate { get; set; }
 
+        [DataMember]
+        public List<Person> People { get; set; }
+
         #endregion Properties - Data members
 
         #region Properties - calculated
