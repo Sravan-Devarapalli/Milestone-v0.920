@@ -31,6 +31,7 @@
     <MetadataFile FileName="ProjectService20.xsd" MetadataType="Schema" ID="e91e9d28-62a5-4ab0-8024-ef2e11d604bd" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd3" />
     <MetadataFile FileName="ProjectService22.xsd" MetadataType="Schema" ID="58ff2f7d-1210-464a-8a3e-c4dd2e232d1e" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd2" />
     <MetadataFile FileName="ProjectService23.xsd" MetadataType="Schema" ID="0882c870-5c61-4b5c-af34-c184b328d9e7" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd8" />
+    <MetadataFile FileName="ProjectService26.xsd" MetadataType="Schema" ID="24cb6829-aff8-48d9-99b7-b0a28e8632e8" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd9" />
     <MetadataFile FileName="ProjectService1.wsdl" MetadataType="Wsdl" ID="29309c6e-60d9-4d1c-9907-97bcaba58213" SourceId="1" SourceUrl="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?wsdl" />
   </Metadata>
   <Extensions>
