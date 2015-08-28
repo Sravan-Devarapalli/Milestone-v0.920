@@ -93,6 +93,9 @@ namespace PraticeManagement.ProjectService {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
         DataTransferObjects.Project ProjectGetShortById(int projectId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/PersonsByProjectReport", ReplyAction="http://tempuri.org/IProjectService/PersonsByProjectReportResponse")]
+        DataTransferObjects.Project[] PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClientGroup))]
@@ -352,6 +355,10 @@ namespace PraticeManagement.ProjectService {
         
         public DataTransferObjects.Project ProjectGetShortById(int projectId) {
             return base.Channel.ProjectGetShortById(projectId);
+        }
+        
+        public DataTransferObjects.Project[] PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal) {
+            return base.Channel.PersonsByProjectReport(payTypeIds, personStatusIds, practices, projectStatusIds, excludeInternal);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
