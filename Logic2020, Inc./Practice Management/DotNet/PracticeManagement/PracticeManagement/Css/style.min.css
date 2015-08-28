@@ -555,6 +555,7 @@ Width99PercentImp{width:99%!important}
 .Height35Px{height:35px}
 .Height40Px{height:40px}
 .Height80Px{height:80px}
+.Height80PxImp{height: 80px!important;}
 .Height125PxImp{height:125px!important}
 .Height160Px{height:160px}
 .Height160PxIMP{height:160px!important}
@@ -1605,4 +1606,8 @@ table#ctl00_body_login tr td label{float:left}
     border-width: 2px;
     width: 700px;
     padding: 10px;
+}
+.Width200PxImp
+{
+    width: 200px !important;
 }
