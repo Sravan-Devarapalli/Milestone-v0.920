@@ -5,12 +5,13 @@
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd7" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd8" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
@@ -156,6 +157,12 @@
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetShortById_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetShortByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PersonsByProjectReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonsByProjectReport" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_PersonsByProjectReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonsByProjectReportResponse" />
   </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
@@ -469,6 +476,10 @@
     <wsdl:operation name="ProjectGetShortById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetShortById" message="tns:IProjectService_ProjectGetShortById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/ProjectGetShortByIdResponse" message="tns:IProjectService_ProjectGetShortById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonsByProjectReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/PersonsByProjectReport" message="tns:IProjectService_PersonsByProjectReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/PersonsByProjectReportResponse" message="tns:IProjectService_PersonsByProjectReport_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
@@ -826,6 +837,15 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectGetShortById">
       <soap:operation soapAction="http://tempuri.org/IProjectService/ProjectGetShortById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PersonsByProjectReport">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/PersonsByProjectReport" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
