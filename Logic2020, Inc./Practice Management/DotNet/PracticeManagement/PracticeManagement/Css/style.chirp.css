@@ -2747,6 +2747,10 @@ Width99PercentImp
 {
     height: 80px;
 }
+.Height80PxImp
+{
+    height: 80px !important;
+}
 .Height125PxImp
 {
     height: 125px !important;
@@ -8277,9 +8281,9 @@ table#ctl00_body_login tr td label
 
 .MSBadgeEmptyDiv
 {
-    width: 60%; 
-    padding-top:10px;
-    font-size:13px;
+    width: 60%;
+    padding-top: 10px;
+    font-size: 13px;
 }
 .BadgeHistory
 {
@@ -8289,7 +8293,7 @@ table#ctl00_body_login tr td label
 }
 .BackImageMilestoneDetail
 {
-     background: url(../images/cp-header-bg_new.png) repeat-x 0 0 !important;
+    background: url(../images/cp-header-bg_new.png) repeat-x 0 0 !important;
 }
 .Height30PxImp
 {
@@ -8302,10 +8306,10 @@ table#ctl00_body_login tr td label
     border-style: solid;
     border-width: 2px;
     min-height: 60px;
-    min-width:500px;
-    max-width:900px;
-    overflow:auto;
-    max-height:500px;
+    min-width: 500px;
+    max-width: 900px;
+    overflow: auto;
+    max-height: 500px;
 }
 .Width1300Px
 {
@@ -8334,4 +8338,8 @@ table#ctl00_body_login tr td label
     border-width: 2px;
     width: 700px;
     padding: 10px;
+}
+.Width200PxImp
+{
+    width: 200px !important;
 }
