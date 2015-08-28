@@ -57,9 +57,14 @@ namespace PraticeManagement.Utils
             dsi.Company = "Logic 2020";
             hssfworkbook.DocumentSummaryInformation = dsi;
             MemoryStream file = new MemoryStream();
-            hssfworkbook.Write(file);           
+            hssfworkbook.Write(file);
             byte[] attachmentByte = file.ToArray();
             return attachmentByte;
+        }
+
+        private static int GetLowerNumber(int i, int j)
+        {
+            return i < j ? i : j;
         }
 
         private static HSSFWorkbook GetWorkbook(List<DataSet> dsInput, List<SheetStyles> sheetStylesList)
@@ -77,8 +82,9 @@ namespace PraticeManagement.Utils
                     int i = 0;
                     int tableStartRow = i;
                     ISheet sheet = hssfworkbook.CreateSheet(dataset.DataSetName);
-                    foreach (DataTable datatable in dataset.Tables)
+                    for (int table = 0; table < dataset.Tables.Count; table++)
                     {
+                        var datatable = dataset.Tables[table];
                         for (; i < tableStartRow + datatable.Rows.Count + 1; i++)
                         {
                             int j = 0;
@@ -107,17 +113,32 @@ namespace PraticeManagement.Utils
                                     IRow row = j == 0 ? sheet.CreateRow(i) : sheet.GetRow(i);
                                     ICell cell = row.CreateCell(j);
                                     var value = datatable.Rows[i - tableStartRow - 1][dc.ColumnName].ToString();
+
+                                    var sheetNumber = GetLowerNumber(k, sheetStylesList.Count - 1);
+                                    var rowNumber = GetLowerNumber(i - tableStartRow, sheetStylesList[sheetNumber].rowStyles.Length - 1);
+                                    var cellNumber = GetLowerNumber(j, sheetStylesList[sheetNumber].rowStyles[rowNumber].cellStyles.Length - 1);
+                                    var style = sheetStylesList[sheetNumber].rowStyles[rowNumber].cellStyles[cellNumber];
                                     bool boolvalue = false;
                                     double doubleValue;
                                     DateTime dateTimeValue;
-                                    if (Boolean.TryParse(value, out boolvalue))
-                                        cell.SetCellValue(boolvalue);
-                                    else if (double.TryParse(value, out doubleValue))
-                                        cell.SetCellValue(doubleValue);
-                                    else if (DateTime.TryParse(value, out dateTimeValue))
-                                        cell.SetCellValue(dateTimeValue);
+                                    if (style.DataFormat != string.Empty)
+                                    {
+                                        if (Boolean.TryParse(value, out boolvalue))
+                                            cell.SetCellValue(boolvalue);
+                                        else if (double.TryParse(value, out doubleValue))
+                                            cell.SetCellValue(doubleValue);
+                                        else if (DateTime.TryParse(value, out dateTimeValue))
+                                            cell.SetCellValue(dateTimeValue);
+                                        else
+                                            cell.SetCellValue(value);
+                                    }
                                     else
+                                    {
+                                        if (double.TryParse(value, out doubleValue))
+                                            cell.SetCellValue(doubleValue);
+                                        else
                                         cell.SetCellValue(value);
+                                    }
                                 }
                                 j++;
                             }
