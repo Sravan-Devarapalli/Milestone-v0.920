@@ -74,6 +74,20 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public DateTime? OrganicStartDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public DateTime? OrganicEndDate
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public bool IsPreviousBadge
         {
             get;
