@@ -550,6 +550,12 @@ namespace DataTransferObjects
         [DataMember]
         public PersonTimeOff TimeOff { get; set; }
 
+        [DataMember]
+        public List<ProjectFeedback> ProjectFeedbacks { get; set; }
+
+        [DataMember]
+        public List<ProjectFeedback> ErrorFeedbacks { get; set; }
+
         public string FormattedName
         {
             get
