@@ -1795,7 +1795,7 @@ namespace DataAccess
 
                         if (projectCapabilitiesIndex >= 0)
                         {
-                            project.Capabilities = !reader.IsDBNull(projectCapabilitiesIndex) ? reader.GetString(projectCapabilitiesIndex).Replace(";",", ") : string.Empty;
+                            project.Capabilities = !reader.IsDBNull(projectCapabilitiesIndex) ? reader.GetString(projectCapabilitiesIndex).Replace(";", ", ") : string.Empty;
                         }
 
                         if (projectGroupIdIndex >= 0)
@@ -3813,6 +3813,128 @@ namespace DataAccess
                 }
             }
             return project;
+        }
+
+        public static List<Project> PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.PersonsByProjectReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, payTypeIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIds, personStatusIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.Practices, practices);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectStatusIdsParam, projectStatusIds);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, excludeInternal);
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<Project>();
+                    ReadPersonsByProjectReport(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadPersonsByProjectReport(SqlDataReader reader, List<Project> projects)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int projectStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStartDate);
+                int ProjectEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectEndDate);
+                int milestoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+                int milestoneStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneStartDate);
+                int milestoneEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneEndDate);
+                int descriptionColumnIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int personStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
+                int personStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                int organicBreakStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakStartDate);
+                int organicBreakEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakEndDate);
+                int blockStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockStartDate);
+                int blockEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockEndDate);
+
+                while (reader.Read())
+                {
+                    var projectId = reader.GetInt32(projectIdIndex);
+                    var personId = reader.GetInt32(personIdIndex);
+                    var milestoneId = reader.GetInt32(milestoneIdIndex);
+                    var person = new Person()
+                    {
+                        Id = personId,
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        Title = new Title()
+                        {
+                            TitleId = reader.GetInt32(titleIdIndex),
+                            TitleName = reader.GetString(titleIndex)
+                        },
+                        Badge = new MSBadge()
+                        {
+                            BadgeStartDate = !reader.IsDBNull(badgeStartDateIndex) ? (DateTime?)reader.GetDateTime(badgeStartDateIndex) : null,
+                            BadgeEndDate = !reader.IsDBNull(badgeEndDateIndex) ? (DateTime?)reader.GetDateTime(badgeEndDateIndex) : null,
+                            OrganicBreakStartDate = !reader.IsDBNull(organicBreakStartDateIndex) ? (DateTime?)reader.GetDateTime(organicBreakStartDateIndex) : null,
+                            OrganicBreakEndDate = !reader.IsDBNull(organicBreakEndDateIndex) ? (DateTime?)reader.GetDateTime(organicBreakEndDateIndex) : null,
+                            BlockStartDate = !reader.IsDBNull(blockStartDateIndex) ? (DateTime?)reader.GetDateTime(blockStartDateIndex) : null,
+                            BlockEndDate = !reader.IsDBNull(blockEndDateIndex) ? (DateTime?)reader.GetDateTime(blockEndDateIndex) : null
+                        },
+                        Status = new PersonStatus()
+                        {
+                            Id = reader.GetInt32(personStatusIdIndex),
+                            Name = reader.GetString(personStatusNameIndex)
+                        }
+                    };
+                    var milestone = new Milestone()
+                    {
+                        Id = milestoneId,
+                        StartDate = reader.GetDateTime(milestoneStartDateIndex),
+                        ProjectedDeliveryDate = reader.GetDateTime(milestoneEndDateIndex),
+                        Description = reader.GetString(descriptionColumnIndex),
+                        People = new List<Person>() { person }
+                    };
+                    if (projects.Any(p => p.Id == projectId))
+                    {
+                        var project = projects.FirstOrDefault(p=>p.Id == projectId);
+                        //if (project.Milestones == null)
+                        //{
+                        //    project.Milestones = new List<Milestone>();
+                        //}
+                        if (project.Milestones.Any(m => m.Id == milestoneId))
+                        {
+                            var projectMilestone = project.Milestones.FirstOrDefault(m => m.Id == milestoneId);
+                            projectMilestone.People.Add(person);
+                        }
+                        else
+                        {
+                            project.Milestones.Add(milestone);
+                        }
+                    }
+                    else
+                    {
+                        var project = new Project()
+                        {
+                            Id = projectId,
+                            ProjectNumber = reader.GetString(projectNumberIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            StartDate = reader.GetDateTime(projectStartDateIndex),
+                            EndDate = reader.GetDateTime(ProjectEndDateIndex),
+                            Milestones = new List<Milestone>() { milestone }
+                        };
+                        projects.Add(project);
+                    }
+                }
+            }
         }
     }
 }
