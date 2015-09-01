@@ -133,7 +133,7 @@ namespace PraticeManagement.Controls.Reports
             var dataSetList = new List<DataSet>();
             if (HostingPage.StartDate.HasValue && HostingPage.EndDate.HasValue)
             {
-                var report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(null, null, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, null, null, false, null, null, null, null, null, null, true)).ToList();
+                var report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(null, null, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, null, null, false, null, null, null, null, null, null, true,null)).ToList();
 
                 if (report.Count > 0)
                 {
@@ -276,9 +276,9 @@ namespace PraticeManagement.Controls.Reports
         {
             ProjectFeedback[] report;
             if (applyFilters)
-                report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(HostingPage.AccountIds, HostingPage.BusinessGroupIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblProject.SelectedItems, HostingPage.DirectorIds, HostingPage.PracticeIds, HostingPage.ExcludeInternalPractices, cblResource.SelectedItems, cblTitle.SelectedItems, cblStartDateMonths.SelectedItems, cblEndDateMonths.SelectedItems, cblProjectManagers.SelectedItems, cblStatus.SelectedItems, false));
+                report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(HostingPage.AccountIds, HostingPage.BusinessGroupIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, cblProjectStatus.SelectedItems, cblProject.SelectedItems, HostingPage.DirectorIds, HostingPage.PracticeIds, HostingPage.ExcludeInternalPractices, cblResource.SelectedItems, cblTitle.SelectedItems, cblStartDateMonths.SelectedItems, cblEndDateMonths.SelectedItems, cblProjectManagers.SelectedItems, cblStatus.SelectedItems, false,HostingPage.PayTypes));
             else
-                report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(HostingPage.AccountIds, HostingPage.BusinessGroupIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, HostingPage.DirectorIds, HostingPage.PracticeIds, HostingPage.ExcludeInternalPractices, null, null, null, null, null, null, false));
+                report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(HostingPage.AccountIds, HostingPage.BusinessGroupIds, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, HostingPage.DirectorIds, HostingPage.PracticeIds, HostingPage.ExcludeInternalPractices, null, null, null, null, null, null, false, HostingPage.PayTypes));
 
             DataBindProject(report, isFromFilters);
 
@@ -332,7 +332,7 @@ namespace PraticeManagement.Controls.Reports
 
         private void PopulateFilterPanels(ProjectFeedback[] reportData, bool isFromFilters)
         {
-            var report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(null, null, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, null, null, HostingPage.ExcludeInternalPractices, null, null, null, null, null, null, true));
+            var report = ServiceCallers.Custom.Report(p => p.ProjectFeedbackReport(null, null, HostingPage.StartDate.Value, HostingPage.EndDate.Value, null, null, null, null, HostingPage.ExcludeInternalPractices, null, null, null, null, null, null, true,null));
             int count;
             count = PopulateResourceFilter(report);
             foreach (ListItem item in cblResource.Items)
