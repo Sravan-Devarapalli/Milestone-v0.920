@@ -530,7 +530,7 @@ namespace DataAccess
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue(Constants.ParameterNames.RecruitingMetricsId, recruitingMetricId);
-               
+
                 connection.Open();
                 command.ExecuteNonQuery();
             }
@@ -564,7 +564,7 @@ namespace DataAccess
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandTimeout = connection.ConnectionTimeout;
                     command.Parameters.AddWithValue(Constants.ParameterNames.LockoutPageId, lockoutPageId.HasValue ? lockoutPageId.Value : (object)DBNull.Value);
-                    
+
                     connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -610,5 +610,67 @@ namespace DataAccess
         }
 
         #endregion
+
+
+        public static List<Location> GetLocations()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                return GetLocations(connection);
+            }
+        }
+
+        public static List<Location> GetLocations(SqlConnection connection)
+        {
+            var locations = new List<Location>();
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetLocations, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadLocations(reader, locations);
+                }
+            }
+            return locations;
+        }
+
+        private static void ReadLocations(SqlDataReader reader, List<Location> locations)
+        {
+            if (!reader.HasRows) return;
+            int locationIdIndex = reader.GetOrdinal(Constants.ColumnNames.LocationId);
+            int locationCodeIndex = reader.GetOrdinal(Constants.ColumnNames.LocationCode);
+            int locationNameIndex = reader.GetOrdinal(Constants.ColumnNames.LocationName);
+            int parentIdIndex = reader.GetOrdinal(Constants.ColumnNames.ParentId);
+            int parentLocationCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ParentLocationCode);
+            int timeZoneIndex = reader.GetOrdinal(Constants.ColumnNames.TimeZone);
+            int countryIndex = reader.GetOrdinal(Constants.ColumnNames.Country);
+
+            while (reader.Read())
+            {
+                var location = new Location()
+                {
+                    LocationId = reader.GetInt32(locationIdIndex),
+                    LocationCode = reader.GetString(locationCodeIndex),
+                    LocationName = reader.GetString(locationNameIndex),
+                    Country = reader.GetString(countryIndex),
+                    TimeZone = reader.GetString(timeZoneIndex)
+                };
+                if (!reader.IsDBNull(parentIdIndex))
+                {
+                    location.Parent = new Location()
+                    {
+                        LocationId = reader.GetInt32(parentIdIndex),
+                        LocationCode = reader.GetString(parentLocationCodeIndex)
+                    };
+                }
+                locations.Add(location);
+            }
+        }
     }
 }
+
