@@ -40,7 +40,8 @@ namespace PraticeManagement.ReportService {
                     string reviewEnddateMonths, 
                     string projectmanagerIds, 
                     string statusIds, 
-                    bool isExport);
+                    bool isExport, 
+                    string payTypeIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/BillingReportByCurrency", ReplyAction="http://tempuri.org/IReportService/BillingReportByCurrencyResponse")]
         DataTransferObjects.Reports.BillingReport[] BillingReportByCurrency(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds);
@@ -213,7 +214,6 @@ namespace PraticeManagement.ReportService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
         
-       
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -254,8 +254,9 @@ namespace PraticeManagement.ReportService {
                     string reviewEnddateMonths, 
                     string projectmanagerIds, 
                     string statusIds, 
-                    bool isExport) {
-            return base.Channel.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus, projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport);
+                    bool isExport, 
+                    string payTypeIds) {
+            return base.Channel.ProjectFeedbackReport(accountIds, businessGroupIds, startDate, endDate, projectStatus, projectIds, directorIds, practiceIds, excludeInternalPractices, personIds, titleIds, reviewStartdateMonths, reviewEnddateMonths, projectmanagerIds, statusIds, isExport, payTypeIds);
         }
         
         public DataTransferObjects.Reports.BillingReport[] BillingReportByCurrency(System.DateTime startDate, System.DateTime endDate, string practiceIds, string accountIds, string businessUnitIds, string directorIds, string salesPersonIds, string projectManagerIds, string seniorManagerIds) {
