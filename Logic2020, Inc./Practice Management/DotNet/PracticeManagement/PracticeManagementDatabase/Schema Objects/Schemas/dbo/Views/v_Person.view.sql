@@ -33,6 +33,8 @@ AS
 	       manager.Alias AS 'ManagerAlias',
 	       manager.FirstName AS 'ManagerFirstName',
 	       manager.LastName AS 'ManagerLastName',
+		   manager.EmployeeNumber AS 'ManagerEmployeeNumber',
+		   manager.PaychexID AS 'ManagerADPID',
 	       -1 AS 'PracticeOwnedId', -- Obsolete, never used
 	       '' AS 'PracticeOwnedName', -- Obsolete, never used
 		   (SELECT  practice.PracticeId AS '@Id', 
@@ -52,7 +54,14 @@ AS
 			empRef.FirstName AS EmployeeReferralFirstName,
 			empRef.LastName AS EmployeeReferralLastName,
 			p.CohortAssignmentId,
-			CA.Name AS CohortAssignmentName
+			CA.Name AS CohortAssignmentName,
+			p.LocationId,
+			L.LocationCode,
+			L.LocationName,
+			p.IsMBO,
+			p.PracticeLeadershipId,
+			PLeadrsh.EmployeeNumber as PracticeLeadershipEmployeeNumber,
+			PLeadrsh.PaychexID as PracticeLeadershipADPID
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
@@ -61,5 +70,6 @@ AS
 		   LEFT JOIN dbo.Title AS T ON p.TitleId = T.TitleId
 		   LEFT JOIN dbo.Person AS empRef ON empRef.PersonId = p.EmployeeReferralId
 		   LEFT JOIN dbo.CohortAssignment AS CA ON CA.CohortAssignmentId = p.CohortAssignmentId 
-
+		   LEFT JOIN dbo.Location L ON L.LocationId = p.LocationId
+		   LEFT JOIN dbo.Person AS PLeadrsh ON PLeadrsh.PersonId = p.PracticeLeadershipId
 
