@@ -93,12 +93,6 @@
             }
         }
 
-        function ConfirmToDeleteProject() {
-            var hdnProject = document.getElementById('<%= hdnProjectDelete.ClientID %>');
-            var result = confirm("Do you really want to delete the project? The deletion cannot be undone");
-            hdnProject.value = result ? 1 : 0;
-        }
-
         function correctMonthMiniReportPosition(reportPanelId, headerId, scrollPanelId) {
             var reportPanel = $get(reportPanelId);
             var header = $get(headerId);
@@ -114,7 +108,7 @@
             var topValue = 0, leftValue = 0;
             while (obj) {
                 leftValue += obj.offsetLeft;
-                topValue += obj.offsetTop; 
+                topValue += obj.offsetTop;
                 obj = obj.offsetParent;
             }
 
@@ -280,35 +274,6 @@
         }
 
     </script>
-    <asp:HiddenField ID="hdnTargetErrorPanel" runat="server" />
-    <AjaxControlToolkit:ModalPopupExtender ID="mpeErrorPanel" runat="server" BehaviorID="mpeErrorPanelBehaviourId"
-        TargetControlID="hdnTargetErrorPanel" BackgroundCssClass="modalBackground" PopupControlID="pnlErrorPanel"
-        OkControlID="btnOKErrorPanel" CancelControlID="btnOKErrorPanel" DropShadow="false" />
-    <asp:Panel ID="pnlErrorPanel" runat="server" Style="display: none;" CssClass="ProjectDetailErrorPanel PanelPerson">
-        <table class="Width100Per">
-            <tr>
-                <th align="center" class="TextAlignCenter BackGroundColorGray vBottom">
-                    <b class="BtnClose">Attention!</b>
-                </th>
-            </tr>
-            <tr>
-                <td class="Padding10Px">
-                    <asp:Label ID="lblErrorMessage" CssClass="error-message" runat="server" Text='This project cannot be deleted because of the following reasons:'></asp:Label>
-                    <br />&nbsp;&nbsp;&nbsp;&nbsp;<span class="error-message">1.This project may have time entries</span>
-                    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                    <span class="error-message textCenter">OR/AND</span>
-                    <br />&nbsp;&nbsp;&nbsp;&nbsp;<span class="error-message">2.This project may have expenses added to it.</span>
-                </td>
-            </tr>
-            <tr>
-                <td class="Padding10Px TextAlignCenter">
-                    <asp:Button ID="btnOKErrorPanel" runat="server" ToolTip="OK" Text="OK" CssClass="Width100PxImp"
-                        OnClientClick="$find('mpeErrorPanelBehaviourId').hide();return false;" />
-                </td>
-            </tr>
-        </table>
-    </asp:Panel>
     <asp:UpdatePanel ID="flrPanel" runat="server">
         <ContentTemplate>
             <div class="filters">
@@ -379,7 +344,6 @@
                             <td class="PaddingTop5">
                                 <asp:Button ID="btnUpdateFilters" runat="server" Text="Refresh Report" OnClick="btnUpdateView_Click"
                                     ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
-                                <asp:HiddenField ID="hdnProjectDelete" runat="server" />
                             </td>
                         </tr>
                     </table>
@@ -602,45 +566,41 @@
             <asp:Panel runat="server" ID="horisontalScrollDiv" CssClass="xScrollAuto">
                 <asp:ListView ID="lvProjects" runat="server" DataKeyNames="Id" OnItemDataBound="lvProjects_ItemDataBound"
                     OnSorted="lvProjects_Sorted" OnDataBound="lvProjects_OnDataBound" OnSorting="lvProjects_Sorting"
-                    OnItemDeleting="lvProjects_ItemDeleting" OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
+                    OnPagePropertiesChanging="lvProjects_PagePropertiesChanging">
                     <LayoutTemplate>
                         <table id="lvProjects_table" runat="server" class="CompPerfTable WholeWidth">
-                            <tr runat="server" id="lvHeader" class="CompPerfHeader">
-                                <td class="CompPerfProjectState">
-                                    <div class="ie-bg">
-                                    </div>
-                                </td>
+                           <tr runat="server" id="lvHeader" class="CompPerfHeader">
                                 <td class="CompPerfProjectState">
                                     <div class="ie-bg">
                                     </div>
                                 </td>
                                 <td class="CompPerfProjectNumber">
                                     <div class="ie-bg">
-                                        <asp:LinkButton ID="btnSortProject" CommandArgument="2" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortProject" CommandArgument="1" CommandName="Sort" runat="server"
                                             CssClass="arrow">Project #</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfClient">
                                     <div class="ie-bg">
-                                        <asp:LinkButton ID="btnSortClient" CommandArgument="3" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortClient" CommandArgument="2" CommandName="Sort" runat="server"
                                             CssClass="arrow">Account</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfProject">
                                     <div class="ie-bg">
-                                        <asp:LinkButton ID="btnSortProjectName" CommandArgument="4" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortProjectName" CommandArgument="3" CommandName="Sort" runat="server"
                                             CssClass="arrow">Project</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfPeriod">
                                     <div class="ie-bg alignCenter">
-                                        <asp:LinkButton ID="btnSortStartDate" CommandArgument="5" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortStartDate" CommandArgument="4" CommandName="Sort" runat="server"
                                             CssClass="arrow">Start Date</asp:LinkButton>
                                     </div>
                                 </td>
                                 <td class="CompPerfPeriod">
                                     <div class="ie-bg  alignCenter">
-                                        <asp:LinkButton ID="btnSortEndDate" CommandArgument="6" CommandName="Sort" runat="server"
+                                        <asp:LinkButton ID="btnSortEndDate" CommandArgument="5" CommandName="Sort" runat="server"
                                             CssClass="arrow">End Date</asp:LinkButton>
                                     </div>
                                 </td>
@@ -651,7 +611,7 @@
                                 </td>
                             </tr>
                             <tr runat="server" id="lvSummary" class="summary">
-                                <td colspan="7">
+                                <td colspan="6">
                                     <div class="cell-pad">
                                         Financial Summary</div>
                                 </td>
@@ -683,11 +643,7 @@
                         </table>
                     </LayoutTemplate>
                     <ItemTemplate>
-                        <tr runat="server" id="boundingRow" class="bgcolorwhite">
-                            <td>
-                                <asp:ImageButton ID="imgProjectDelete" runat="server" ToolTip="Delete Project" CommandName="Delete"
-                                    ImageUrl="~/Images/icon-delete.png" OnClientClick="ConfirmToDeleteProject()" />
-                            </td>
+                        <tr runat="server" id="boundingRow" class="bgcolorwhite"> 
                             <td class="CompPerfProjectState">
                             </td>
                             <td class="CompPerfProjectNumber">
@@ -708,10 +664,6 @@
                     </ItemTemplate>
                     <AlternatingItemTemplate>
                         <tr runat="server" id="boundingRow" class="rowEven">
-                            <td>
-                                <asp:ImageButton ID="imgProjectDelete" runat="server" ToolTip="Delete Project" CommandName="Delete"
-                                    ImageUrl="~/Images/icon-delete.png" OnClientClick="ConfirmToDeleteProject()" />
-                            </td>
                             <td class="CompPerfProjectState">
                             </td>
                             <td class="CompPerfProjectNumber">
