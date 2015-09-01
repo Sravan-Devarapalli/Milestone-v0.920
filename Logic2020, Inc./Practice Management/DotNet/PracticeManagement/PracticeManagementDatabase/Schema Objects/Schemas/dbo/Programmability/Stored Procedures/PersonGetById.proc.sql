@@ -52,7 +52,12 @@ BEGIN
 		   p.EmployeeReferralFirstName,
 		   p.EmployeeReferralLastName,
 		   p.CohortAssignmentId,
-		   p.CohortAssignmentName
+		   p.CohortAssignmentName,
+		   p.LocationId,
+		   P.LocationCode,
+		   p.LocationName,
+		   p.PracticeLeadershipId,
+		   p.IsMBO
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 END
