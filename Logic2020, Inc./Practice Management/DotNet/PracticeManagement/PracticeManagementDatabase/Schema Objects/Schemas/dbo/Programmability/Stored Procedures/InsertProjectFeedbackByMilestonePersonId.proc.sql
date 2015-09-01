@@ -24,10 +24,12 @@ BEGIN
 	FROM dbo.ProjectFeedback PF
 	INNER JOIN dbo.MilestonePerson MP ON MP.PersonId = PF.PersonId
 	INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId 
-	WHERE (@MilestonePersonId IS NULL OR MP.MilestonePersonId = @MilestonePersonId)
+	WHERE (@MilestonePersonId IS NULL OR (PF.personid = @PersonId and PF.ProjectId = @ProjectIdLocal))
 		  AND (@MilestoneId IS NULL OR PF.ProjectId = @ProjectIdLocal)
 		  AND (@ProjectId  IS NULL OR PF.ProjectId = @ProjectId)
 		  AND (PF.FeedbackStatusId <> 1 AND PF.IsCanceled = 0)
+
+	EXEC [dbo].[InsertFeedbackByWeekWise] @MilestonePersonId = @MilestonePersonId, @MilestoneId =@MilestoneId, @ProjectId = @ProjectId
 
 		Declare @PersonIdC INT
 		Declare @NextPersonId INT
@@ -61,7 +63,7 @@ BEGIN
 				AND (@ProjectId  IS NULL OR M.ProjectId = @ProjectId)
 				AND Per.IsStrawman = 0
 				AND T.Title NOT IN ('Senior Director','Client Director','Practice Director')
-				AND pay.Timescale = 2 
+				AND pay.Timescale = 2 -- 
 				AND M.ProjectId <> 174
 				AND P.IsAllowedToShow = 1
 			)
@@ -78,6 +80,7 @@ BEGIN
 			FROM PersonHoursByDay PHD
 			LEFT JOIN dbo.ProjectFeedback PF ON PF.PersonId = PHD.PersonId AND PF.ProjectId = PHD.ProjectId AND PHD.Date BETWEEN PF.ReviewPeriodStartDate AND PF.ReviewPeriodEndDate AND (PF.FeedbackStatusId = 1 OR PF.IsCanceled = 1)
 			WHERE PF.FeedbackId IS NULL
+			AND PHD.Date >= '20150101'
 			ORDER BY PHD.PersonId,PHD.Date
 
 		OPEN cursor_temp
