@@ -34,6 +34,14 @@ namespace PraticeManagement.Reports
             }
         }
 
+        public string PayTypes
+        {
+            get
+            {
+                return cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            }
+        }
+
         public string BusinessGroupIds
         {
             get
@@ -267,6 +275,8 @@ namespace PraticeManagement.Reports
                 FillInitBusinessGroupList();
                 FillInitPracticesList();
                 FillInitDirectorsList();
+                DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
+                cblPayTypes.SelectAll();
             }
         }
 
@@ -398,7 +408,7 @@ namespace PraticeManagement.Reports
 
         private void SelectView()
         {
-            if (StartDate.HasValue && EndDate.HasValue && AccountIds != "" && BusinessGroupIds != "" && DirectorIds != "" && PracticeIds != "" && RangeSelected != "Please Select")
+            if (StartDate.HasValue && EndDate.HasValue && AccountIds != "" && BusinessGroupIds != "" && PayTypes != "" && DirectorIds != "" && PracticeIds != "" && RangeSelected != "Please Select")
             {
                 divWholePage.Style.Remove("display");
                 LoadActiveView();
@@ -461,7 +471,7 @@ namespace PraticeManagement.Reports
             SelectView();
         }
 
-        protected void chbExcludeInternal_CheckedChanged(object sender,EventArgs e)
+        protected void chbExcludeInternal_CheckedChanged(object sender, EventArgs e)
         {
             SelectView();
         }
@@ -472,6 +482,11 @@ namespace PraticeManagement.Reports
         }
 
         protected void cblPractice_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectView();
+        }
+
+        protected void cblPayTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
             SelectView();
         }
