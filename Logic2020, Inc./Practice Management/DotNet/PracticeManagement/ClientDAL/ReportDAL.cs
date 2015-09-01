@@ -3966,7 +3966,7 @@ namespace DataAccess
             }
         }
 
-        public static List<ProjectFeedback> ProjectFeedbackReport(string accountIds, string businessGroupIds, DateTime startDate, DateTime endDate, string projectStatus, string projectIds, string directorIds, string practiceIds, bool excludeInternalPractices, string personIds, string titleIds, string reviewStartdateMonths, string reviewEnddateMonths, string projectmanagerIds, string statusIds, bool isExport)
+        public static List<ProjectFeedback> ProjectFeedbackReport(string accountIds, string businessGroupIds, DateTime startDate, DateTime endDate, string projectStatus, string projectIds, string directorIds, string practiceIds, bool excludeInternalPractices, string personIds, string titleIds, string reviewStartdateMonths, string reviewEnddateMonths, string projectmanagerIds, string statusIds, bool isExport, string payTypeIds)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Project.ProjectFeedbackReport, connection))
@@ -3989,6 +3989,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectManagers, projectmanagerIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Statuses, statusIds ?? (Object)DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsExport, isExport);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, payTypeIds);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
