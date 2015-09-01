@@ -143,6 +143,7 @@
     <Compile Include="Employment.cs" />
     <Compile Include="Financials\QuarterRange.cs" />
     <Compile Include="Financials\RangeType.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Lockout.cs" />
     <Compile Include="MSBadge.cs" />
     <Compile Include="OpurtunityPerson.cs" />
@@ -327,3 +328,4 @@
   </Target>
   -->
 </Project>
+
