@@ -31,6 +31,9 @@
 	SourceId			INT						NULL,
 	TargetedCompanyId	INT						NULL,
 	EmployeeReferralId	INT						NULL,
-	CohortAssignmentId	INT						NULL
+	CohortAssignmentId	INT						NULL,
+	LocationId			INT						NULL,
+	IsMBO				BIT						NOT NULL CONSTRAINT DF_Person_IsMBO DEFAULT(0),
+	PracticeLeadershipId	INT					NULL
 );
 
