@@ -31,17 +31,16 @@ namespace PraticeManagement
     public partial class Projects : PracticeManagementSearchPageBase
     {
         #region Constants
-        HtmlAnchor anchor = new HtmlAnchor();
+
         private const string CurrencyDisplayFormat = "$###,###,###,###,###,##0";
         private const string CurrencyExcelReportFormat = "$####,###,###,###,###,##0.00";
-        private const int NumberOfFixedColumns = 7;
-        private const int ProjectStateColumnIndex = 1;
-        private const int ProjectNumberColumnIndex = 2;
-        private const int ClientNameColumnIndex = 3;
-        private const int ProjectNameColumnIndex = 4;
-        private const int StartDateColumnIndex = 5;
-        private const int EndDateColumnIndex = 6;
-        private const int DeleteProjectColumnIndex = 0;
+        private const int NumberOfFixedColumns = 6;
+        private const int ProjectStateColumnIndex = 0;
+        private const int ProjectNumberColumnIndex = 1;
+        private const int ClientNameColumnIndex = 2;
+        private const int ProjectNameColumnIndex = 3;
+        private const int StartDateColumnIndex = 4;
+        private const int EndDateColumnIndex = 5;
 
         private const int MaxPeriodLength = 24;
 
@@ -80,8 +79,6 @@ namespace PraticeManagement
         protected const string PagerPrevCommand = "Prev";
 
         private const string PageViewCountFormat = "Viewing {0} - {1} of {2} Projects";
-        private bool? _userIsAdministratorValue;
-        private bool? _userIsSeniorLeadershipValue;
 
         #endregion Constants
 
@@ -200,34 +197,6 @@ namespace PraticeManagement
             }
         }
 
-        private bool IsUserAdminRole
-        {
-            get
-            {
-                if (!_userIsAdministratorValue.HasValue)
-                {
-                    _userIsAdministratorValue =
-                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
-                }
-
-                return _userIsAdministratorValue.Value;
-            }
-        }
-
-        private bool IsUserSeniorLeadershipRole
-        {
-            get
-            {
-                if (!_userIsSeniorLeadershipValue.HasValue)
-                {
-                    _userIsSeniorLeadershipValue =
-                        Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName);
-                }
-
-                return _userIsSeniorLeadershipValue.Value;
-            }
-        }
-
         /// <summary>
         /// Gets a list of projects to be displayed.
         /// </summary>
@@ -322,7 +291,7 @@ namespace PraticeManagement
             {
                 CellStyles cellStyle = new CellStyles();
                 cellStyle.IsBold = true;
-                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.NONE;
+                cellStyle.BorderStyle = NPOI.SS.UserModel.BorderStyle.None;
                 cellStyle.FontHeight = 350;
                 CellStyles[] cellStylearray = { cellStyle };
                 RowStyles headerrowStyle = new RowStyles(cellStylearray);
@@ -348,12 +317,12 @@ namespace PraticeManagement
             {
                 CellStyles headerCellStyle = new CellStyles();
                 headerCellStyle.IsBold = true;
-                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 CellStyles monthNameHeaderCellStyle = new CellStyles();
                 monthNameHeaderCellStyle.DataFormat = "[$-409]mmmm-yy;@";
                 monthNameHeaderCellStyle.IsBold = true;
-                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.CENTER;
+                monthNameHeaderCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>();
                 for (int i = 0; i < 14; i++)//there are 14 columns before month columns.
@@ -699,8 +668,6 @@ namespace PraticeManagement
                         personListAnalyzer.OneWithGreaterSeniorityExists(project.ProjectPersons);
 
                         var htmlRow = e.Item.FindControl("boundingRow") as HtmlTableRow;
-
-                        FillProjectDeleteCell(e.Item, project);
                         FillProjectStateCell(htmlRow, cssClass, project.Status);
                         FillProjectNumberCell(e.Item, project);
                         FillClientNameCell(e.Item, project);
@@ -862,51 +829,6 @@ namespace PraticeManagement
             anchor.Attributes["onmouseout"] = "HidePanel();";
             anchor.Attributes["onmouseover"] = "SetTooltipText(this.attributes['Description'].value,this);";
             row.Cells[ProjectStateColumnIndex].Controls.Add(anchor);
-        }
-
-        private void FillProjectDeleteCell(ListViewItem e, Project project)
-        {
-            var imgProjectDelete = e.FindControl("imgProjectDelete") as ImageButton;
-            if (project.Status.StatusType == ProjectStatusType.Experimental || (project.Status.StatusType == ProjectStatusType.Inactive && (IsUserAdminRole || IsUserSeniorLeadershipRole)))
-            {
-                var row = e.FindControl("boundingRow") as HtmlTableRow;
-                // Client name cell content
-
-                imgProjectDelete.Attributes["ProjectId"] = project.Id.Value.ToString();
-                row.Cells[DeleteProjectColumnIndex].Controls.Add(imgProjectDelete);
-            }
-            else
-            {
-                imgProjectDelete.Visible = false;
-            }
-        }
-
-        protected void lvProjects_ItemDeleting(object sender, ListViewDeleteEventArgs e)
-        {
-            var anchor = sender as ImageButton;
-            var a = lvProjects.DataKeys[e.ItemIndex].Value.ToString();
-            int projectId;
-            int.TryParse(a, out projectId);
-            if (hdnProjectDelete.Value == "1")
-            {
-                using (var serviceClient = new ProjectService.ProjectServiceClient())
-                {
-                    try
-                    {
-                        serviceClient.ProjectDelete(projectId, User.Identity.Name);
-                    }
-                    catch (Exception ex)
-                    {
-                        serviceClient.Abort();
-                        mpeErrorPanel.Show();
-                    }
-                }
-                btnUpdateView_Click(btnUpdateFilters, new EventArgs());
-            }
-            else
-            {
-                btnUpdateView_Click(btnUpdateFilters, new EventArgs());
-            }
         }
 
         private void FillProjectNameCell(HtmlTableRow row, Project project)
@@ -1630,7 +1552,7 @@ namespace PraticeManagement
                                 {
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                    Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
                                     HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                     BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
@@ -1657,7 +1579,7 @@ namespace PraticeManagement
                                           {
                                               ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                               ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                              Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
                                               HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                               BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
@@ -1850,7 +1772,7 @@ namespace PraticeManagement
                                 {
                                     ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                     ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                    Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                    Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
                                     HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                     BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                     BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
@@ -1877,7 +1799,7 @@ namespace PraticeManagement
                                           {
                                               ProjectID = pro.Id != null ? pro.Id.ToString() : string.Empty,
                                               ProjectNumber = pro.ProjectNumber != null ? pro.ProjectNumber.ToString() : string.Empty,
-                                              Account = (pro.Client != null && pro.Client.HtmlEncodedName != null) ? pro.Client.HtmlEncodedName.ToString() : string.Empty,
+                                              Account = (pro.Client != null && pro.Client.Name != null) ? pro.Client.Name.ToString() : string.Empty,
                                               HouseAccount = (pro.Client != null && pro.Client.IsHouseAccount == true) ? "Yes" : string.Empty,
                                               BusinessGroup = (pro.BusinessGroup != null && pro.BusinessGroup.Name != null) ? pro.BusinessGroup.Name : string.Empty,
                                               BusinessUnit = (pro.Group != null && pro.Group.Name != null) ? pro.Group.Name : string.Empty,
