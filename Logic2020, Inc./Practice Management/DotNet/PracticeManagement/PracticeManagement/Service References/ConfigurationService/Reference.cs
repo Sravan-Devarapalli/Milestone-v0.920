@@ -104,6 +104,9 @@ namespace PraticeManagement.ConfigurationService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/SaveLockoutDetails", ReplyAction="http://tempuri.org/IConfigurationService/SaveLockoutDetailsResponse")]
         void SaveLockoutDetails(string lockoutXML);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IConfigurationService/GetLocations", ReplyAction="http://tempuri.org/IConfigurationService/GetLocationsResponse")]
+        DataTransferObjects.Location[] GetLocations();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -113,7 +116,7 @@ namespace PraticeManagement.ConfigurationService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ConfigurationServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ConfigurationService.IConfigurationService>, PraticeManagement.ConfigurationService.IConfigurationService {
-      
+        
         public ConfigurationServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -244,6 +247,10 @@ namespace PraticeManagement.ConfigurationService {
         
         public void SaveLockoutDetails(string lockoutXML) {
             base.Channel.SaveLockoutDetails(lockoutXML);
+        }
+        
+        public DataTransferObjects.Location[] GetLocations() {
+            return base.Channel.GetLocations();
         }
     }
 }
