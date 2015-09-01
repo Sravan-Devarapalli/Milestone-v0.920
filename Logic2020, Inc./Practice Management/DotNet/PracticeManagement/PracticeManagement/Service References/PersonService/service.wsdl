@@ -177,6 +177,12 @@
   <wsdl:message name="IPersonService_IsPersonSalaryTypeInGivenRange_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsPersonSalaryTypeInGivenRangeResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPracticeLeaderships_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeLeaderships" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPracticeLeaderships_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeLeadershipsResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -721,6 +727,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/IsPersonSalaryTypeInGivenRange" message="tns:IPersonService_IsPersonSalaryTypeInGivenRange_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/IsPersonSalaryTypeInGivenRangeResponse" message="tns:IPersonService_IsPersonSalaryTypeInGivenRange_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPracticeLeaderships">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPracticeLeaderships" message="tns:IPersonService_GetPracticeLeaderships_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPracticeLeadershipsResponse" message="tns:IPersonService_GetPracticeLeaderships_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -1249,6 +1259,15 @@
     </wsdl:operation>
     <wsdl:operation name="IsPersonSalaryTypeInGivenRange">
       <soap:operation soapAction="http://tempuri.org/IPersonService/IsPersonSalaryTypeInGivenRange" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPracticeLeaderships">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPracticeLeaderships" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
