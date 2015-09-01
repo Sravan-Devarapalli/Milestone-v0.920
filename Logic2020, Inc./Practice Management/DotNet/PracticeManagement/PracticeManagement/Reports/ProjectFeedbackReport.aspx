@@ -81,7 +81,7 @@
                     <td class="vBottom fontBold Width3Percent no-wrap">
                         &nbsp;Select report parameters:&nbsp;
                     </td>
-                    <td>
+                    <td colspan="2" class="Width15Per">
                     </td>
                     <td class="width60P">
                     </td>
@@ -91,23 +91,25 @@
                         Account:&nbsp;
                     </td>
                     <td class="textLeft Width10Per">
-                        <pmc:ScrollingDropDown ID="cblAccount" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            NoItemsType="All" onclick="scrollingDropdown_onclick('cblAccount','Account')"
-                            OnSelectedIndexChanged="cblAccount_SelectedIndexChanged" AutoPostBack="true"
-                            DropDownListType="Account" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
-                        <ext:ScrollableDropdownExtender ID="sdeAccount" runat="server" TargetControlID="cblAccount"
-                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                        </ext:ScrollableDropdownExtender>
+                        <pmc:scrollingdropdown id="cblAccount" runat="server" setdirty="false" allselectedreturntype="Null"
+                            noitemstype="All" onclick="scrollingDropdown_onclick('cblAccount','Account')"
+                            onselectedindexchanged="cblAccount_SelectedIndexChanged" autopostback="true"
+                            dropdownlisttype="Account" cellpadding="3" cssclass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
+                        <ext:scrollabledropdownextender id="sdeAccount" runat="server" targetcontrolid="cblAccount"
+                            useadvancefeature="true" width="250px" editimageurl="~/Images/Dropdown_Arrow.png">
+                        </ext:scrollabledropdownextender>
+                    </td>
+                    <td class="ReportFilterLabels">
+                        Business Group:&nbsp;
                     </td>
                     <td>
-                        <span class="ReportFilterLabels padLeft15">Business Group:</span> &nbsp;
-                        <pmc:ScrollingDropDown ID="cblBusinessGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            NoItemsType="All" onclick="scrollingDropdown_onclick('cblBusinessGroup','Business Group')"
-                            OnSelectedIndexChanged="cblBusinessGroup_SelectedIndexChanged" AutoPostBack="true"
-                            DropDownListType="Business Group" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
-                        <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblBusinessGroup"
-                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                        </ext:ScrollableDropdownExtender>
+                        <pmc:scrollingdropdown id="cblBusinessGroup" runat="server" setdirty="false" allselectedreturntype="Null"
+                            noitemstype="All" onclick="scrollingDropdown_onclick('cblBusinessGroup','Business Group')"
+                            onselectedindexchanged="cblBusinessGroup_SelectedIndexChanged" autopostback="true"
+                            dropdownlisttype="Business Group" cellpadding="3" cssclass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
+                        <ext:scrollabledropdownextender id="sdeProjectGroup" runat="server" targetcontrolid="cblBusinessGroup"
+                            useadvancefeature="true" width="250px" editimageurl="~/Images/Dropdown_Arrow.png">
+                        </ext:scrollabledropdownextender>
                     </td>
                 </tr>
                 <tr class="height30P">
@@ -115,14 +117,26 @@
                         Executive in Charge:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <pmc:ScrollingDropDown ID="cblDirector" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            NoItemsType="All" DropdownListFirst="Executive" DropdownListSecond="in Charge" OnSelectedIndexChanged="cblDirector_SelectedIndexChanged" AutoPostBack="true" onclick="scrolling_onclick('cblDirector','Executive in Charge','s','Executives in Charge',33,'Executive','in Charge')" DropDownListTypePluralForm="Executives in Charge"
-                            DropDownListType="Executive in Charge" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
-                        <ext:ScrollableDropdownExtender ID="sdeDirector" runat="server" TargetControlID="cblDirector"
-                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                        </ext:ScrollableDropdownExtender>
+                        <pmc:scrollingdropdown id="cblDirector" runat="server" setdirty="false" allselectedreturntype="Null"
+                            noitemstype="All" dropdownlistfirst="Executive" dropdownlistsecond="in Charge"
+                            onselectedindexchanged="cblDirector_SelectedIndexChanged" autopostback="true"
+                            onclick="scrolling_onclick('cblDirector','Executive in Charge','s','Executives in Charge',33,'Executive','in Charge')"
+                            dropdownlisttypepluralform="Executives in Charge" dropdownlisttype="Executive in Charge"
+                            cellpadding="3" cssclass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
+                        <ext:scrollabledropdownextender id="sdeDirector" runat="server" targetcontrolid="cblDirector"
+                            useadvancefeature="true" width="250px" editimageurl="~/Images/Dropdown_Arrow.png">
+                        </ext:scrollabledropdownextender>
+                    </td>
+                    <td class="ReportFilterLabels">
+                        Pay Type:&nbsp;
                     </td>
                     <td>
+                        <pmc:scrollingdropdown id="cblPayTypes" runat="server" setdirty="false" allselectedreturntype="Null" autopostback="true"
+                            onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" noitemstype="All" onselectedindexchanged="cblPayTypes_SelectedIndexChanged"
+                            dropdownlisttype="Pay Type" cellpadding="3" cssclass="AllEmpClockCblTimeScales" />
+                        <ext:scrollabledropdownextender id="sdePayTypes" runat="server" targetcontrolid="cblPayTypes"
+                            useadvancefeature="true" width="250px" editimageurl="~/Images/Dropdown_Arrow.png">
+                        </ext:scrollabledropdownextender>
                     </td>
                 </tr>
                 <tr class="height30P">
@@ -130,13 +144,13 @@
                         Practices:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <pmc:ScrollingDropDown ID="cblPractices" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            NoItemsType="All" onclick="scrollingDropdown_onclick('cblPractices','Practice')"
-                            OnSelectedIndexChanged="cblPractice_SelectedIndexChanged" AutoPostBack="true"
-                            DropDownListType="Practice" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
-                        <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
-                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                        </ext:ScrollableDropdownExtender>
+                        <pmc:scrollingdropdown id="cblPractices" runat="server" setdirty="false" allselectedreturntype="Null"
+                            noitemstype="All" onclick="scrollingDropdown_onclick('cblPractices','Practice')"
+                            onselectedindexchanged="cblPractice_SelectedIndexChanged" autopostback="true"
+                            dropdownlisttype="Practice" cellpadding="3" cssclass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
+                        <ext:scrollabledropdownextender id="sdePractices" runat="server" targetcontrolid="cblPractices"
+                            useadvancefeature="true" width="250px" editimageurl="~/Images/Dropdown_Arrow.png">
+                        </ext:scrollabledropdownextender>
                     </td>
                     <td>
                     </td>
@@ -152,20 +166,20 @@
                     </td>
                 </tr>
                 <tr class="height30P">
-                    <td colspan="2">
+                    <td colspan="3">
                         &nbsp;
                     </td>
                     <td>
                     </td>
                 </tr>
                 <tr class="height30P">
-                    <td colspan="2">
+                    <td colspan="3">
                     </td>
                     <td>
                     </td>
                 </tr>
                 <tr class="ReportBorderBottomByAccount">
-                    <td colspan="3">
+                    <td colspan="4">
                     </td>
                 </tr>
             </table>
@@ -177,8 +191,8 @@
                 <table class="WholeWidth">
                     <tr>
                         <td align="center">
-                            <uc:DateInterval ID="diRange" runat="server" IsFromDateRequired="true" IsToDateRequired="true"
-                                ValidationGroup="valCustom" FromToDateFieldCssClass="Width70Px" />
+                            <uc:dateinterval id="diRange" runat="server" isfromdaterequired="true" istodaterequired="true"
+                                validationgroup="valCustom" fromtodatefieldcssclass="Width70Px" />
                         </td>
                         <td>
                             <asp:CustomValidator ID="cstvalPeriodRange" runat="server" OnServerValidate="cstvalPeriodRange_ServerValidate"
@@ -323,7 +337,7 @@
                 <asp:MultiView ID="mvProjectFeedbackReport" runat="server" ActiveViewIndex="0">
                     <asp:View ID="vwFeedbackReport" runat="server">
                         <asp:Panel ID="pnlFeedbackReport" runat="server" CssClass="WholeWidth">
-                            <uc:FeedbackSummary ID="feedbackSummary" runat="server" />
+                            <uc:feedbacksummary id="feedbackSummary" runat="server" />
                         </asp:Panel>
                     </asp:View>
                 </asp:MultiView>
@@ -333,6 +347,6 @@
             <asp:PostBackTrigger ControlID="feedbackSummary$btnExportToExcel" />
         </Triggers>
     </asp:UpdatePanel>
-    <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
+    <uc:loadingprogress id="LoadingProgress1" runat="server" />
 </asp:Content>
 
