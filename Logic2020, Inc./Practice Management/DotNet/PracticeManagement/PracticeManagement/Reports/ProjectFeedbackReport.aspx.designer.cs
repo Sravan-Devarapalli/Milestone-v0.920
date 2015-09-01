@@ -121,6 +121,24 @@ namespace PraticeManagement.Reports {
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeDirector;
         
         /// <summary>
+        /// cblPayTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblPayTypes;
+        
+        /// <summary>
+        /// sdePayTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePayTypes;
+        
+        /// <summary>
         /// cblPractices control.
         /// </summary>
         /// <remarks>
