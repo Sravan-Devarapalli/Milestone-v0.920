@@ -1211,6 +1211,11 @@ namespace PracticeManagementService
             return PersonDAL.IsPersonSalaryTypeInGivenRange(personId, startDate, endDate);
         }
 
+        public List<Person> GetPracticeLeaderships(int? divisionId)
+        {
+            return PersonDAL.GetPracticeLeaderships(divisionId);
+        }
+
         #endregion IPersonService Members
     }
 }
