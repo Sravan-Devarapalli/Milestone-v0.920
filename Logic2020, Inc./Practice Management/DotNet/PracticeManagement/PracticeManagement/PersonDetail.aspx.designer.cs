@@ -580,13 +580,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTelephoneNumber;
         
         /// <summary>
-        /// chbLockedOut control.
+        /// ddlPracticeLeadership control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chbLockedOut;
+        protected global::System.Web.UI.WebControls.DropDownList ddlPracticeLeadership;
+        
+        /// <summary>
+        /// reqPracticeLeadership control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqPracticeLeadership;
         
         /// <summary>
         /// lblEmployeeNumber control.
@@ -641,6 +650,24 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custEmployeeNumber;
+        
+        /// <summary>
+        /// chbMBO control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbMBO;
+        
+        /// <summary>
+        /// chbLockedOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbLockedOut;
         
         /// <summary>
         /// custPersonData control.
