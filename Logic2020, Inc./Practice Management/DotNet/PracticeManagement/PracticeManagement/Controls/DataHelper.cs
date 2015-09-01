@@ -2603,6 +2603,26 @@ namespace PraticeManagement.Controls
 
             return check;
         }
+
+        public static void FillLocationList(DropDownList ddlLocations, string firstItemText)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    using (var config = new ConfigurationServiceClient())
+                    {
+                        var locations = config.GetLocations();
+                        FillListDefault(ddlLocations, firstItemText, locations, false, "LocationId", "FormattedLocation");
+                    }
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
     }
 }
 
