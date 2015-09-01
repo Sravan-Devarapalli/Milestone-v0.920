@@ -597,6 +597,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.CohortAssignment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Location3.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Lockout.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.MSBadge12.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.MSBadge3.datasource" />
@@ -733,6 +734,9 @@
     <None Include="Service References\ConfigurationService\ConfigurationService18.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ConfigurationService\ConfigurationService25.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\ConfigurationService\ConfigurationService5.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -812,6 +816,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\OpportunityService\OpportunityService21.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PersonService\DataTransferObjects.CornerStone2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PersonService\DataTransferObjects.Financials1.xsd">
@@ -958,6 +965,9 @@
     <None Include="Service References\ReportService\ReportService11144.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ReportService\ReportService12.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1073,7 +1083,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\ProjectGroupService\ProjectGroupService3.disco" />
     <Content Include="Scripts\UploaderRemovedFolder1.js" />
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
@@ -1081,6 +1090,7 @@
     <None Include="Service References\ReportService\ReportService110.disco" />
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
+    <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
