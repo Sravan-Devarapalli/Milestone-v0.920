@@ -502,6 +502,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         bool IsPersonSalaryTypeInGivenRange(int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<Person> GetPracticeLeaderships(int? divisionId);
     }
 }
 
