@@ -115,6 +115,7 @@
       <xs:element minOccurs="0" name="EmployeeReferralLastName" nillable="true" type="xs:string" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
       <xs:element minOccurs="0" name="EmploymentHistory" nillable="true" type="tns:ArrayOfEmployment" />
+      <xs:element minOccurs="0" name="ErrorFeedbacks" nillable="true" type="tns:ArrayOfProjectFeedback" />
       <xs:element minOccurs="0" name="FirstHireDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="HasPicture" type="xs:boolean" />
@@ -126,6 +127,7 @@
       <xs:element minOccurs="0" name="IsAdmin" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHighlighted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsMBO" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsOffshore" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsStrawMan" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsTerminatedDueToPay" type="xs:boolean" />
@@ -135,6 +137,7 @@
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LastTerminationDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LengthOfTenture" type="xs:int" />
+      <xs:element minOccurs="0" name="Location" nillable="true" type="tns:Location" />
       <xs:element minOccurs="0" name="LockedOut" type="xs:boolean" />
       <xs:element minOccurs="0" name="Manager" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="ModifiedDate" nillable="true" type="xs:dateTime" />
@@ -142,9 +145,12 @@
       <xs:element minOccurs="0" name="PaychexID" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PaymentHistory" nillable="true" type="tns:ArrayOfPay" />
       <xs:element minOccurs="0" name="PictureData" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="PracticeDirectorEmployeeNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PracticeLeadership" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="PracticesOwned" nillable="true" type="tns:ArrayOfPractice" />
       <xs:element minOccurs="0" name="PrefferedFirstName" nillable="true" type="xs:string" />
       <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Profiles" nillable="true" type="q5:ArrayOfProfile" />
+      <xs:element minOccurs="0" name="ProjectFeedbacks" nillable="true" type="tns:ArrayOfProjectFeedback" />
       <xs:element minOccurs="0" name="ProjectRoleName" nillable="true" type="xs:string" />
       <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q6:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
       <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Qualifications" nillable="true" type="q7:ArrayOfPersonQualification" />
@@ -196,6 +202,8 @@
       <xs:element minOccurs="0" name="ModifiedDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="OrganicBreakEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="OrganicBreakStartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OrganicEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OrganicStartDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="PlannedEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="PlannedEndDateSource" nillable="true" type="xs:string" />
@@ -213,7 +221,6 @@
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
       <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArrayOfProjectAttachment" />
       <xs:element minOccurs="0" name="AttributionList" nillable="true" type="tns:ArrayOfAttribution" />
-      <xs:element minOccurs="0" name="BaseLine" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="BillableType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BusinessGroup" nillable="true" type="tns:BusinessGroup" />
       <xs:element minOccurs="0" name="BusinessType" type="tns:BusinessType" />
@@ -222,6 +229,7 @@
       <xs:element minOccurs="0" name="CSATOwnerId" type="xs:int" />
       <xs:element minOccurs="0" name="CSATOwnerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CanCreateCustomWorkTypes" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Capabilities" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Client" nillable="true" type="tns:Client" />
       <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
       <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
@@ -235,6 +243,7 @@
       <xs:element minOccurs="0" name="HasTimeEntries" type="xs:boolean" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="IsAssignedProject" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsBusinessDevelopment" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsCSATEligible" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHolidayProject" type="xs:boolean" />
@@ -581,6 +590,7 @@
       <xs:element minOccurs="0" name="IsChargeable" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHourlyAmount" type="xs:boolean" />
       <xs:element minOccurs="0" name="MilestonePersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
+      <xs:element minOccurs="0" name="People" nillable="true" type="tns:ArrayOfPerson" />
       <xs:element minOccurs="0" name="PersonCount" type="xs:int" />
       <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
       <xs:element minOccurs="0" name="ProjectedDeliveryDate" type="xs:dateTime" />
@@ -653,6 +663,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfPractice" nillable="true" type="tns:ArrayOfPractice" />
+  <xs:complexType name="ArrayOfPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="PricingList">
     <xs:sequence>
       <xs:element minOccurs="0" name="ClientId" type="xs:int" />
@@ -664,12 +680,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PricingList" nillable="true" type="tns:PricingList" />
-  <xs:complexType name="ArrayOfPerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="ProjectStatus">
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
@@ -718,6 +728,47 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Employment" nillable="true" type="tns:Employment" />
+  <xs:complexType name="ArrayOfProjectFeedback">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfProjectFeedback" nillable="true" type="tns:ArrayOfProjectFeedback" />
+  <xs:complexType name="ProjectFeedback">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CancelationReason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompletionCertificateBy" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CompletionCertificateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsCanceled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsGap" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Person" nillable="true" type="tns:Person" />
+      <xs:element minOccurs="0" name="Project" nillable="true" type="tns:Project" />
+      <xs:element minOccurs="0" name="ReviewEndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ReviewStartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="tns:ProjectFeedbackStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
+  <xs:complexType name="ProjectFeedbackStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ProjectFeedbackStatus" nillable="true" type="tns:ProjectFeedbackStatus" />
+  <xs:complexType name="Location">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Country" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LocationCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LocationId" type="xs:int" />
+      <xs:element minOccurs="0" name="LocationName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Parent" nillable="true" type="tns:Location" />
+      <xs:element minOccurs="0" name="TimeZone" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Location" nillable="true" type="tns:Location" />
   <xs:complexType name="ArrayOfPersonOverhead">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonOverhead" nillable="true" type="tns:PersonOverhead" />
