@@ -763,7 +763,7 @@
                                     Division
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width256Px">
+                                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width256Px" AutoPostBack="true" OnSelectedIndexChanged="ddlDivision_SelectIndexChanged">
                                     </asp:DropDownList>
                                 </td>
                                 <td>
@@ -786,11 +786,15 @@
                                     &nbsp;
                                 </td>
                                 <td>
-                                    &nbsp;
+                                    Location
                                 </td>
                                 <td>
-                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
-                                        Text="Locked-Out" />
+                                    <asp:DropDownList ID="ddlLocation" runat="server" CssClass="Width140px">
+                                    </asp:DropDownList>
+                                    &nbsp;
+                                    <asp:RequiredFieldValidator ID="reqLocation" runat="server" ErrorMessage="The Location is required."
+                                        ControlToValidate="ddlLocation" ToolTip="The Location is required." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;&nbsp;
                                 </td>
                                 <td>
                                     &nbsp;
@@ -810,6 +814,19 @@
                                         ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>&nbsp;
                                     <asp:RequiredFieldValidator ID="rfvTelephoneNumber" runat="server" ErrorMessage="The Telephone number is required."
                                         ControlToValidate="txtTelephoneNumber" ToolTip="The Telephone number is required."
+                                        ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
+                                        Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                </td>
+                                <td>
+                                    Practice Leadership
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="ddlPracticeLeadership" runat="server" CssClass="Width220Px">
+                                    </asp:DropDownList>
+                                </td>
+                                <td>
+                                    <asp:RequiredFieldValidator ID="reqPracticeLeadership" runat="server" ErrorMessage="The Practice Leadership is required."
+                                        ControlToValidate="ddlPracticeLeadership" ToolTip="The Practice Leadership is required."
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
                                 </td>
@@ -833,6 +850,30 @@
                                         Display="Dynamic" EnableClientScript="false" ValidationGroup="Person" ErrorMessage="There is another Person with the same Employee Number."
                                         OnServerValidate="custEmployeeNumber_ServerValidate" SetFocusOnError="true" Text="*"
                                         ToolTip="There is another Person with the same Employee Number."></asp:CustomValidator>&nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <asp:CheckBox ID="chbMBO" runat="server" Text="MBO"/>
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    &nbsp;
+                                </td>
+                                 <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
+                                        Text="Locked-Out" />
+                                </td>
+                                <td>
+                                    &nbsp;
                                 </td>
                             </tr>
                         </table>
