@@ -1171,6 +1171,11 @@ namespace PraticeManagement
             }
         }
 
+        protected void ddlDivision_SelectIndexChanged(object sender, EventArgs e)
+        {
+            FillPracticeLeadership();
+        }
+
         protected void chblRoles_SelectedIndexChanged(object sender, EventArgs e)
         {
             IsDirty = true;
@@ -3322,7 +3327,11 @@ namespace PraticeManagement
             DataHelper.FillSenioritiesList(ddlSeniority, "-- Select Seniority --");
             DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, "-- Select Practice Area --");
             DataHelper.FillRecruiterList(ddlRecruiter, "--Select Recruiter--");
+            DataHelper.FillLocationList(ddlLocation, "--Select Location--");
+            var removableLocation = ddlLocation.Items.FindByValue("1");
+            ddlLocation.Items.Remove(removableLocation);
             DataHelper.FillPersonDivisionList(ddlDivision);
+            ddlLocation.SelectedValue = "2"; //Location default value is 'Seattle'
             ddlDivision.SelectedValue = "2";//Division default value is 'Consulting'
             DataHelper.FillTitleList(ddlPersonTitle, "-- Select Title --");
             DataHelper.FillCohortAssignments(ddlCohortAssignment);
@@ -3360,9 +3369,32 @@ namespace PraticeManagement
                 txtEmployeeNumber.Visible =
                 reqEmployeeNumber.Enabled =
                 btnResetPassword.Visible = false;
+                FillPracticeLeadership();
             }
             personOpportunities.DataBind();
+        }
 
+        public void FillPracticeLeadership()
+        {
+            int divisionId;
+            if (int.TryParse(ddlDivision.SelectedValue, out divisionId))
+            {
+                var list = ServiceCallers.Custom.Person(p => p.GetPracticeLeaderships((int?)divisionId)).ToArray();
+                if (list == null || list.Length == 0)
+                {
+                    ddlPracticeLeadership.Items.Clear();
+                    ddlPracticeLeadership.Items.Add(new ListItem() { Text = "None", Value = "-1" });
+                }
+                else
+                {
+                    DataHelper.FillListDefault(ddlPracticeLeadership, "-- Select Practice Leadership -- ", list, false);
+                }
+            }
+            else
+            {
+                ddlPracticeLeadership.Items.Clear();
+                ddlPracticeLeadership.Items.Add(new ListItem() { Text = "None", Value = "-1" });
+            }
         }
 
         private static Person GetPerson(int? id)
@@ -3557,6 +3589,17 @@ namespace PraticeManagement
             hdcvSLTApproval.Value = person.SLTApproval.ToString();
             hdcvSLTPTOApproval.Value = person.SLTPTOApproval.ToString();
             ddlCohortAssignment.SelectedValue = person.CohortAssignment != null ? person.CohortAssignment.Id.ToString() : "1";
+            ddlLocation.SelectedValue = person.Location != null ? person.Location.LocationId.ToString() : string.Empty;
+            FillPracticeLeadership();
+            if (person.PracticeLeadership != null && person.PracticeLeadership.Id.HasValue)
+            {
+                var item = ddlPracticeLeadership.Items.FindByValue(person.PracticeLeadership.Id.Value.ToString());
+                if (item != null)
+                {
+                    ddlPracticeLeadership.SelectedValue = item.Value;
+                }
+            }
+            chbMBO.Checked = person.IsMBO;
         }
 
         private void PopulatePracticeDropDown(Person person)
@@ -3721,6 +3764,18 @@ namespace PraticeManagement
                 Id = Convert.ToInt32(ddlCohortAssignment.SelectedValue),
                 Name = ddlCohortAssignment.SelectedItem.Text
             };
+            person.Location = new Location()
+            {
+                LocationId = Convert.ToInt32(ddlLocation.SelectedValue)
+            };
+            if (ddlPracticeLeadership.SelectedValue != string.Empty || ddlPracticeLeadership.SelectedValue != "-1")
+            {
+                person.PracticeLeadership = new Person()
+                {
+                    Id = Convert.ToInt32(ddlPracticeLeadership.SelectedValue)
+                };
+            }
+            person.IsMBO = chbMBO.Checked;
         }
 
         private List<string> GetSelectedRoles()
@@ -3757,7 +3812,7 @@ namespace PraticeManagement
                     SaveRoles(person, currentRoles);
 
                     serviceClient.SendAdministratorAddedEmail(person, oldPerson);
-                    
+
                     if (personId.Value < 0)
                     {
                         // Creating User error
