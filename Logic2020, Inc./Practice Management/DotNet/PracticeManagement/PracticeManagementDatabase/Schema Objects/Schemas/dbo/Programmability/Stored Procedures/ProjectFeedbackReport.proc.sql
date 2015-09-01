@@ -15,7 +15,8 @@
 	@ReviewEndDateMonths NVARCHAR(MAX) = NULL,
 	@ProjectManagers NVARCHAR(MAX) = NULL,
 	@Statuses NVARCHAR(MAX) = NULL,
-	@IsExport BIT = 0
+	@IsExport BIT = 0,
+	@PayTypeIds NVARCHAR(MAX) = NULL
 )
 AS
 BEGIN
@@ -32,6 +33,7 @@ BEGIN
 	DECLARE @StatusesTable TABLE ( Ids INT )
 	DECLARE @ProjectIdsTable TABLE ( Ids INT )
 	DECLARE @ProjectStatusTable TABLE ( Ids INT )
+	DECLARE @PayTypeIdsTable TABLE ( Ids INT )
 
 
 	INSERT INTO @AccountIdsTable( Ids)
@@ -82,6 +84,10 @@ BEGIN
 	SELECT ResultId
 	FROM dbo.ConvertStringListIntoTable(@Statuses)
 
+	INSERT INTO @PayTypeIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@PayTypeIds)
+
 	DECLARE @NullExists BIT = 0
 	SELECT @NullExists = 1 FROM @ProjectManagersTable WHERE Ids = -1
 
@@ -94,7 +100,7 @@ BEGIN
 		WHERE PA.ProjectAccessId IN (SELECT Ids FROM @ProjectManagersTable) 
 			  OR (@NullExists = 1 AND PA.Id IS NULL)
 	)
-	SELECT FeedbackId,
+	SELECT DISTINCT FeedbackId,
 		   PF.PersonId,
 		   P.FirstName,
 		   P.LastName,
@@ -144,6 +150,7 @@ BEGIN
 	LEFT JOIN dbo.ProjectAccess PM ON PM.ProjectId = Pro.ProjectId
 	LEFT JOIN dbo.Person Manager ON Manager.PersonId = PM.ProjectAccessId
 	LEFT JOIN dbo.Person owner ON owner.PersonId = Pro.ProjectManagerId
+	INNER JOIN v_Pay pay ON pay.PersonId = P.PersonId AND @StartDate <= pay.EndDateOrig-1 AND pay.StartDate <= @EndDate
 	WHERE (@IsExport = 1 OR (
 							 @IsExport = 0 AND (@AccountIds IS NULL OR (Pro.ClientId IN (SELECT Ids FROM @AccountIdsTable)))	
 							 AND (@BusinessGroupIds IS NULL OR (BG.BusinessGroupId IN (SELECT Ids FROM @BusinessGroupIdsTable)))
@@ -159,6 +166,7 @@ BEGIN
 							 AND (@ProjectManagers IS NULL OR ( Pro.ProjectId IN (SELECT ProjectId FROM ProjectsForProjectManagers)))
 							 AND (@Statuses IS NULL OR ( PF.FeedbackStatusId IN (SELECT Ids FROM @StatusesTable)))
 							 AND (@ExcludeInternalPractices = 0 OR (@ExcludeInternalPractices = 1 AND (Pro.PracticeId NOT IN (SELECT PracticeId FROM dbo.Practice WHERE IsCompanyInternal = 1))))
+							 AND (@PayTypeIds IS NULL OR (pay.Timescale IN (SELECT Ids FROM @PayTypeIdsTable)))
 						   ))
 		  AND PF.ReviewPeriodEndDate BETWEEN @StartDate AND @EndDate
 		  AND Pro.ProjectStatusId IN (3,4)
