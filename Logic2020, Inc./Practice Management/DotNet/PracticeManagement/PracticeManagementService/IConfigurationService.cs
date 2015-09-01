@@ -96,5 +96,10 @@ namespace PracticeManagementService
 
         [OperationContract]
         void SaveLockoutDetails(string lockoutXML);
+
+
+        [OperationContract]
+        List<Location> GetLocations();
     }
 }
+
