@@ -878,6 +878,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.TargetRecruitingMetricsId, person.TargetedCompanyRecruitingMetrics != null ? (object)person.TargetedCompanyRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EmployeeReferralId, person.EmployeeRefereral != null ? (object)person.EmployeeRefereral.Id.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CohortAssignmentId, person.CohortAssignment.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.LocationId, person.Location.LocationId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsMBO, person.IsMBO);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeLeadershipId, person.PracticeLeadership != null ? (object)person.PracticeLeadership.Id.Value : DBNull.Value);
 
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
@@ -992,6 +995,9 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.TargetRecruitingMetricsId, person.TargetedCompanyRecruitingMetrics != null ? (object)person.TargetedCompanyRecruitingMetrics.RecruitingMetricsId : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.EmployeeReferralId, person.EmployeeRefereral != null ? (object)person.EmployeeRefereral.Id.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CohortAssignmentId, person.CohortAssignment.Id);
+                command.Parameters.AddWithValue(Constants.ParameterNames.LocationId, person.Location.LocationId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsMBO, person.IsMBO);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeLeadershipId, person.PracticeLeadership != null ? (object)person.PracticeLeadership.Id.Value : DBNull.Value);
                 try
                 {
                     if (connection.State != ConnectionState.Open)
@@ -1886,6 +1892,31 @@ namespace DataAccess
                 int cohortAssignmentIdIndex = -1;
                 int cohortAssignmentNameIndex = -1;
                 int prefferedFirstNameIndex = -1;
+                int locationIdIndex = -1;
+                int locationCodeIndex = -1;
+                int locationNameIndex = -1;
+                int practiceLeadershipIdIndex = -1;
+                int isMbo = -1;
+                try
+                {
+                    practiceLeadershipIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeLeadershipId);
+                }
+                catch
+                { }
+                try
+                {
+                    isMbo = reader.GetOrdinal(Constants.ColumnNames.IsMBO);
+                }
+                catch
+                { }
+                try
+                {
+                    locationIdIndex = reader.GetOrdinal(Constants.ColumnNames.LocationId);
+                    locationCodeIndex = reader.GetOrdinal(Constants.ColumnNames.LocationCode);
+                    locationNameIndex = reader.GetOrdinal(Constants.ColumnNames.LocationName);
+                }
+                catch
+                { }
                 try
                 {
                     prefferedFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.PreferredFirstName);
@@ -2199,6 +2230,26 @@ namespace DataAccess
                         };
                     }
 
+                    if (locationIdIndex > -1 && !reader.IsDBNull(locationIdIndex))
+                    {
+                        person.Location = new Location()
+                        {
+                            LocationId = reader.GetInt32(locationIdIndex),
+                            LocationName = reader.GetString(locationNameIndex),
+                            LocationCode = reader.GetString(locationCodeIndex)
+                        };
+                    }
+                    if (practiceLeadershipIdIndex > -1 && !reader.IsDBNull(practiceLeadershipIdIndex))
+                    {
+                        person.PracticeLeadership = new Person()
+                        {
+                            Id = reader.GetInt32(practiceLeadershipIdIndex)
+                        };
+                    }
+                    if (isMbo > -1)
+                    {
+                        person.IsMBO = reader.GetBoolean(isMbo);
+                    }
                     personList.Add(person);
                 }
             }
@@ -4678,7 +4729,7 @@ namespace DataAccess
             }
         }
 
-        public static bool IsPersonSalaryTypeInGivenRange(int personId,DateTime startDate,DateTime endDate)
+        public static bool IsPersonSalaryTypeInGivenRange(int personId, DateTime startDate, DateTime endDate)
         {
             bool result;
             try
@@ -4706,6 +4757,48 @@ namespace DataAccess
         }
 
         #endregion
+
+        public static List<Person> GetPracticeLeaderships(int? divisionId)
+        {
+            var result = new List<Person>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPracticeLeaderships, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, divisionId.HasValue ? (object)divisionId.Value : DBNull.Value);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadPracticeLeaderships(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadPracticeLeaderships(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+                int divisionNameIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionName);
+
+                while (reader.Read())
+                {
+                    var person = new Person()
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstNameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex)
+                    };
+                    result.Add(person);
+                }
+            }
+        }
     }
 }
 
