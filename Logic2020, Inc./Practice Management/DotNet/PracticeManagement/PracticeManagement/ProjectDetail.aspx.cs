@@ -676,22 +676,21 @@ namespace PraticeManagement
 
         private void NeedToShowDeleteButton()
         {
-            if (!ProjectId.HasValue)
-                return;
-            btnDelete.Visible = true;
-            if (Project.Status.Id == 5)
+            if (ProjectId.HasValue && Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName))
             {
-                btnDelete.Enabled = true;
-            }
-            else if (Project.Status.Id == 1 && (Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName) || Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.SeniorLeadershipRoleName)))
-            {
-                btnDelete.Enabled = true;
-            }
-            else
-            {
-                btnDelete.Enabled = false;
+                btnDelete.Visible = true;
+
+                if (Project.Status.Id == 1 || Project.Status.Id == 5)//Status Ids 1 :-Inactive and 5:- Experimental.
+                {
+                    btnDelete.Enabled = true;
+                }
+                else
+                {
+                    btnDelete.Enabled = false;
+                }
             }
         }
+
 
         protected void custProjectDesciption_ServerValidation(object source, ServerValidateEventArgs args)
         {
