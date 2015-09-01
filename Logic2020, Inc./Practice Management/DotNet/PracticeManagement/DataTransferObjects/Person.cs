@@ -551,10 +551,22 @@ namespace DataTransferObjects
         public PersonTimeOff TimeOff { get; set; }
 
         [DataMember]
+        public Location Location { get; set; }
+
+        [DataMember]
         public List<ProjectFeedback> ProjectFeedbacks { get; set; }
 
         [DataMember]
         public List<ProjectFeedback> ErrorFeedbacks { get; set; }
+
+        [DataMember]
+        public bool IsMBO { get; set; }
+
+        [DataMember]
+        public Person PracticeLeadership { get; set; }
+
+        [DataMember]
+        public string PracticeDirectorEmployeeNumber { get; set; }
 
         public string FormattedName
         {
