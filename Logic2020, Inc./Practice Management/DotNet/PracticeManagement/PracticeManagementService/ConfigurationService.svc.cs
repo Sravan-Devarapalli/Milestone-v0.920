@@ -171,5 +171,11 @@ namespace PracticeManagementService
         {
             ConfigurationDAL.SaveLockoutDetails(lockoutXML);
         }
+
+        public List<Location> GetLocations()
+        {
+            return ConfigurationDAL.GetLocations();
+        }
     }
 }
+
