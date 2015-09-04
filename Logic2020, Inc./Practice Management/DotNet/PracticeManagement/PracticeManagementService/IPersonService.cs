@@ -486,7 +486,7 @@ namespace PracticeManagementService
         bool CheckIfPersonInProjectForDates(int personId, DateTime startDate, DateTime endDate);
 
         [OperationContract]
-        bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId);
+        bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId, DateTime chargeDate);
 
         [OperationContract]
         PersonBadgeHistories GetBadgeHistoryByPersonId(int personId);
