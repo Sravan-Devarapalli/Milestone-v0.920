@@ -27,6 +27,7 @@
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="7a01c046-a6b4-4e81-96de-99697ea3e220" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="DataTransferObjects.Financials1.xsd" MetadataType="Schema" ID="99ae1a5e-8eea-4f0b-8cd3-f1094078692c" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="b7f80b63-041d-4858-83db-42a420520150" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
+    <MetadataFile FileName="DataTransferObjects.CornerStone3.xsd" MetadataType="Schema" ID="f2fccd38-d3f7-4229-a238-20d9511247d0" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="DataTransferObjects.Skills1.xsd" MetadataType="Schema" ID="262c6cdf-d078-48aa-9932-107dc8827857" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="DataTransferObjects.TimeEntry5.xsd" MetadataType="Schema" ID="65c0549a-4847-4c8c-9c01-e8816271daa4" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
     <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="ceda29ae-28c0-4a7b-a996-14d9b919a956" SourceId="1" SourceUrl="http://localhost/PracticeManagementService/PersonService.svc/mex" />
