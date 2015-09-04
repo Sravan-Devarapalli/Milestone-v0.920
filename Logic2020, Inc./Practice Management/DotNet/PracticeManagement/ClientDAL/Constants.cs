@@ -610,6 +610,7 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string ChargeDate = "@ChargeDate";
             public const string PersonStatusIds = "@PersonStatusIds";
             public const string PracticeLeadershipId = "@PracticeLeadershipId";
             public const string IsMBO = "@IsMBO";
