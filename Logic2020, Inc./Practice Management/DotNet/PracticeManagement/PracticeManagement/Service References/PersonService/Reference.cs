@@ -84,7 +84,7 @@ namespace PraticeManagement.PersonService {
         bool CheckIfPersonInProjectForDates(int personId, System.DateTime startDate, System.DateTime endDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckIfPersonIsRestrictedByProjectId", ReplyAction="http://tempuri.org/IPersonService/CheckIfPersonIsRestrictedByProjectIdResponse")]
-        bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId);
+        bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId, System.DateTime chargeDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonId", ReplyAction="http://tempuri.org/IPersonService/GetBadgeHistoryByPersonIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
@@ -359,7 +359,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-        
+       
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -460,8 +460,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.CheckIfPersonInProjectForDates(personId, startDate, endDate);
         }
         
-        public bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId) {
-            return base.Channel.CheckIfPersonIsRestrictedByProjectId(personId, projectId);
+        public bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId, System.DateTime chargeDate) {
+            return base.Channel.CheckIfPersonIsRestrictedByProjectId(personId, projectId, chargeDate);
         }
         
         public DataTransferObjects.PersonBadgeHistories GetBadgeHistoryByPersonId(int personId) {
