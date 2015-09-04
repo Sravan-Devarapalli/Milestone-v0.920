@@ -373,7 +373,6 @@ namespace PraticeManagement.Controls.TimeEntry
         internal void ValidateAll()
         {
             bool isThereAtleastOneTimeEntryrecord = false;
-
             foreach (RepeaterItem tesItem in tes.Items)
             {
                 var billableAndNonbillableSte = tesItem.FindControl(steId) as BillableAndNonBillableSingleTimeEntry;
@@ -386,7 +385,8 @@ namespace PraticeManagement.Controls.TimeEntry
                 billableAndNonbillableSte.ValidateNoteAndHours();
                 if (!string.IsNullOrEmpty(billableAndNonbillableSte.BillableHours.Text) || !string.IsNullOrEmpty(billableAndNonbillableSte.NonBillableHours.Text))
                 {
-                    HostingPage.IsBadgeApprovedProject = !ServiceCallers.Custom.Person(p => p.CheckIfPersonIsRestrictedByProjectId(HostingPage.SelectedPerson.Id.Value, Convert.ToInt32(extEnableDisable.ProjectId)));
+                    var badgeApproved = !ServiceCallers.Custom.Person(p => p.CheckIfPersonIsRestrictedByProjectId(HostingPage.SelectedPerson.Id.Value, Convert.ToInt32(extEnableDisable.ProjectId), billableAndNonbillableSte.DateBehind.Date));
+                    HostingPage.IsBadgeApprovedProject = badgeApproved && HostingPage.IsBadgeApprovedProject;
                     if (!HostingPage.IsBadgeApprovedProject)
                     {
                         billableAndNonbillableSte.BillableHours.Style["background-color"] = "red";
