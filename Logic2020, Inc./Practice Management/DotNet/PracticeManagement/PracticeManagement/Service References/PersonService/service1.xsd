@@ -322,6 +322,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="personId" type="xs:int" />
         <xs:element minOccurs="0" name="projectId" type="xs:int" />
+        <xs:element minOccurs="0" name="chargeDate" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
