@@ -7,6 +7,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import />
