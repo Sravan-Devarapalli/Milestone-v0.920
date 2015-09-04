@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[CheckIfPersonIsRestrictedByProjectId]
 (
 	@ProjectId		INT,
-	@PersonId		INT
+	@PersonId		INT,
+	@ChargeDate		DATETIME
 )
 AS
 BEGIN
@@ -14,7 +15,9 @@ BEGIN
 				WHERE M.ProjectId = @ProjectId 
 					  AND P.ClientId = 2 --Microsoft Account
 					  AND MPE.IsBadgeRequired = 1 AND MPE.IsApproved = 0
-					  AND MP.PersonId = @PersonId)
+					  AND MP.PersonId = @PersonId
+					  AND (@ChargeDate BETWEEN MPE.BadgeStartDate AND MPE.BadgeEndDate)
+			 )
 	BEGIN
 			SELECT CONVERT(BIT,1) Result 
 	END
