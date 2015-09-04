@@ -4417,7 +4417,7 @@ namespace DataAccess
             return result;
         }
 
-        public static bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId)
+        public static bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId,DateTime chargeDate)
         {
             bool result;
             try
@@ -4430,6 +4430,7 @@ namespace DataAccess
 
                     command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProjectId, projectId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ChargeDate, chargeDate);
 
                     connection.Open();
                     result = Convert.ToBoolean(command.ExecuteScalar());
