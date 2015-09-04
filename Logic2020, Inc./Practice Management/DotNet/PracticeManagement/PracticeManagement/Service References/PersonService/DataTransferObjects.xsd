@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
@@ -10,6 +11,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TimescaleCode" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timescale" nillable="true" type="tns:Timescale" />
@@ -30,6 +32,7 @@
       <xs:element minOccurs="0" name="SLTPTOApproval" type="xs:boolean" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Timescale" type="tns:TimescaleType" />
+      <xs:element minOccurs="0" name="TimescaleCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TimescaleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TitleId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
@@ -102,18 +105,19 @@
       <xs:element minOccurs="0" name="Badge" nillable="true" type="tns:MSBadge" />
       <xs:element minOccurs="0" name="BadgedProjects" nillable="true" type="tns:ArrayOfMSBadge" />
       <xs:element minOccurs="0" name="BillableUtilizationPercent" type="xs:double" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" minOccurs="0" name="CFDivision" nillable="true" type="q1:DivisionCF" />
       <xs:element minOccurs="0" name="CohortAssignment" nillable="true" type="tns:CohortAssignment" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="ContactInfoList" nillable="true" type="q1:ArrayOfPersonContactInfo" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="ContactInfoList" nillable="true" type="q2:ArrayOfPersonContactInfo" />
       <xs:element minOccurs="0" name="CurrentPay" nillable="true" type="tns:Pay" />
       <xs:element minOccurs="0" name="DefaultPractice" nillable="true" type="tns:Practice" />
       <xs:element minOccurs="0" name="DivisionType" type="tns:PersonDivisionType" />
-      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q2:ArrayOfPersonDocument" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Documents" nillable="true" type="q3:ArrayOfPersonDocument" />
       <xs:element minOccurs="0" name="EmployeeNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EmployeeRefereral" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="EmployeeReferralFirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EmployeeReferralId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="EmployeeReferralLastName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q3:ArrayOfPersonEmployer" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Employers" nillable="true" type="q4:ArrayOfPersonEmployer" />
       <xs:element minOccurs="0" name="EmploymentHistory" nillable="true" type="tns:ArrayOfEmployment" />
       <xs:element minOccurs="0" name="ErrorFeedbacks" nillable="true" type="tns:ArrayOfProjectFeedback" />
       <xs:element minOccurs="0" name="FirstHireDate" nillable="true" type="xs:dateTime" />
@@ -123,7 +127,7 @@
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ImageUrl" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
-      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q4:ArrayOfPersonIndustry" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Industries" nillable="true" type="q5:ArrayOfPersonIndustry" />
       <xs:element minOccurs="0" name="IsAdmin" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsDefaultManager" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsHighlighted" type="xs:boolean" />
@@ -149,19 +153,19 @@
       <xs:element minOccurs="0" name="PracticeLeadership" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="PracticesOwned" nillable="true" type="tns:ArrayOfPractice" />
       <xs:element minOccurs="0" name="PrefferedFirstName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Profiles" nillable="true" type="q5:ArrayOfProfile" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Profiles" nillable="true" type="q6:ArrayOfProfile" />
       <xs:element minOccurs="0" name="ProjectFeedbacks" nillable="true" type="tns:ArrayOfProjectFeedback" />
       <xs:element minOccurs="0" name="ProjectRoleName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q6:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
-      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Qualifications" nillable="true" type="q7:ArrayOfPersonQualification" />
+      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q7:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Qualifications" nillable="true" type="q8:ArrayOfPersonQualification" />
       <xs:element minOccurs="0" name="RecruiterFirstName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RecruiterId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="RecruiterLastName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RoleNames" nillable="true" type="q8:ArrayOfstring" />
+      <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RoleNames" nillable="true" type="q9:ArrayOfstring" />
       <xs:element minOccurs="0" name="SLTApproval" type="xs:boolean" />
       <xs:element minOccurs="0" name="SLTPTOApproval" type="xs:boolean" />
       <xs:element minOccurs="0" name="Seniority" nillable="true" type="tns:Seniority" />
-      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Skills" nillable="true" type="q9:ArrayOfPersonSkill" />
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Skills" nillable="true" type="q10:ArrayOfPersonSkill" />
       <xs:element minOccurs="0" name="SourceRecruitingMetrics" nillable="true" type="tns:RecruitingMetrics" />
       <xs:element minOccurs="0" name="Status" nillable="true" type="tns:PersonStatus" />
       <xs:element minOccurs="0" name="TargetedCompanyRecruitingMetrics" nillable="true" type="tns:RecruitingMetrics" />
@@ -172,7 +176,7 @@
       <xs:element minOccurs="0" name="TimeOff" nillable="true" type="tns:PersonTimeOff" />
       <xs:element minOccurs="0" name="TimeOffHistory" nillable="true" type="tns:ArrayOfPersonTimeOff" />
       <xs:element minOccurs="0" name="Title" nillable="true" type="tns:Title" />
-      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q10:ArrayOfPersonTraining" />
+      <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" minOccurs="0" name="Trainings" nillable="true" type="q11:ArrayOfPersonTraining" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Person" nillable="true" type="tns:Person" />
@@ -264,6 +268,7 @@
       <xs:element minOccurs="0" name="PONumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Practice" nillable="true" type="tns:Practice" />
       <xs:element minOccurs="0" name="PricingList" nillable="true" type="tns:PricingList" />
+      <xs:element minOccurs="0" name="ProjectAccessesEmpNumbers" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectCapabilityIds" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectManagerIdsList" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProjectManagerNames" nillable="true" type="xs:string" />
@@ -272,8 +277,8 @@
       <xs:element minOccurs="0" name="ProjectOwner" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="ProjectPersons" nillable="true" type="tns:ArrayOfMilestonePerson" />
       <xs:element minOccurs="0" name="ProjectWorkTypesList" nillable="true" type="xs:string" />
-      <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q11:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
-      <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByRange" nillable="true" type="q12:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
+      <xs:element xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q12:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByRange" nillable="true" type="q13:ArrayOfKeyValueOfRangeTypeComputedFinancialsHDQ_P_Sb6D" />
       <xs:element minOccurs="0" name="RecentCompletedStatusDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="SalesPersonId" type="xs:int" />
       <xs:element minOccurs="0" name="SalesPersonName" nillable="true" type="xs:string" />
@@ -388,7 +393,7 @@
       <xs:element minOccurs="0" name="PracticeManagers" nillable="true" type="tns:ArrayOfPracticeManagerHistory" />
       <xs:element minOccurs="0" name="PracticeOwner" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="PracticeOwnerName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q13="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q13:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
+      <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedFinancialsByMonth" nillable="true" type="q14:ArrayOfKeyValueOfdateTimeComputedFinancialsfLTn8SS5" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Practice" nillable="true" type="tns:Practice" />
@@ -401,7 +406,7 @@
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Expenses" type="xs:decimal" />
       <xs:element minOccurs="0" name="FinancialDate" nillable="true" type="xs:dateTime" />
-      <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" minOccurs="0" name="FinancialRange" nillable="true" type="q14:RangeType" />
+      <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" minOccurs="0" name="FinancialRange" nillable="true" type="q15:RangeType" />
       <xs:element minOccurs="0" name="GrossMargin" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="HoursBilled" type="xs:decimal" />
       <xs:element minOccurs="0" name="PreviousMonthsActualMarginValue" type="tns:PracticeManagementCurrency" />
@@ -454,6 +459,8 @@
       <xs:element minOccurs="0" name="MaximumSalary" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="MinimumSalary" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PTOAccrual" type="xs:int" />
+      <xs:element minOccurs="0" name="Parent" nillable="true" type="tns:Title" />
+      <xs:element minOccurs="0" name="PositionId" type="xs:int" />
       <xs:element minOccurs="0" name="SortOrder" type="xs:int" />
       <xs:element minOccurs="0" name="TitleId" type="xs:int" />
       <xs:element minOccurs="0" name="TitleName" nillable="true" type="xs:string" />
@@ -640,7 +647,7 @@
       <xs:element minOccurs="0" name="MSBadgeRequired" type="xs:boolean" />
       <xs:element minOccurs="0" name="MilestonePersonId" type="xs:int" />
       <xs:element minOccurs="0" name="ParentMilestone" nillable="true" type="tns:Milestone" />
-      <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PersonTimeOffList" nillable="true" type="q15:ArrayOfKeyValueOfdateTimedecimal" />
+      <xs:element xmlns:q16="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PersonTimeOffList" nillable="true" type="q16:ArrayOfKeyValueOfdateTimedecimal" />
       <xs:element minOccurs="0" name="ProjectedWorkloadWithVacation" type="xs:decimal" />
       <xs:element minOccurs="0" name="RequestDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Role" nillable="true" type="tns:PersonRole" />
@@ -739,6 +746,7 @@
       <xs:element minOccurs="0" name="CancelationReason" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CompletionCertificateBy" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CompletionCertificateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Count" type="xs:int" />
       <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="IsCanceled" type="xs:boolean" />
@@ -835,7 +843,7 @@
       <xs:element minOccurs="0" name="Projects" nillable="true" type="tns:ArrayOfProject" />
       <xs:element minOccurs="0" name="TimeOffEndDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="TimeOffStartDate" type="xs:dateTime" />
-      <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="TimeType" nillable="true" type="q16:TimeTypeRecord" />
+      <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" minOccurs="0" name="TimeType" nillable="true" type="q17:TimeTypeRecord" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonTimeOff" nillable="true" type="tns:PersonTimeOff" />
@@ -1064,7 +1072,7 @@
   <xs:element name="ArrayOfSeniorityCategory" nillable="true" type="tns:ArrayOfSeniorityCategory" />
   <xs:complexType name="PersonPermission">
     <xs:sequence>
-      <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="permissions" nillable="true" type="q17:ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" />
+      <xs:element xmlns:q18="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="permissions" nillable="true" type="q18:ArrayOfKeyValueOfPermissionTargetArrayOfintrdkL8Uaz" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonPermission" nillable="true" type="tns:PersonPermission" />
@@ -1122,7 +1130,7 @@
   <xs:complexType name="DataAccessFault">
     <xs:sequence>
       <xs:element minOccurs="0" name="ErrorCode" type="tns:ErrorCode" />
-      <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="InnerException" nillable="true" type="q18:Exception" />
+      <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="InnerException" nillable="true" type="q19:Exception" />
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
