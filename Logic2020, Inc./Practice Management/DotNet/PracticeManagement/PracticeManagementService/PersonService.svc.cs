@@ -1181,9 +1181,9 @@ namespace PracticeManagementService
             return PersonDAL.CheckIfPersonInProjectForDates(personId,  startDate,  endDate);
         }
 
-        public bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId)
+        public bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId, DateTime chargeDate)
         {
-            return PersonDAL.CheckIfPersonIsRestrictedByProjectId(personId, projectId);
+            return PersonDAL.CheckIfPersonIsRestrictedByProjectId(personId, projectId, chargeDate);
         }
 
         public PersonBadgeHistories GetBadgeHistoryByPersonId(int personId)
