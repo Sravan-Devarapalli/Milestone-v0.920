@@ -825,10 +825,11 @@
                                     </asp:DropDownList>
                                 </td>
                                 <td>
-                                    <asp:RequiredFieldValidator ID="reqPracticeLeadership" runat="server" ErrorMessage="The Practice Leadership is required."
+                                    <%--<asp:RequiredFieldValidator ID="reqPracticeLeadership" runat="server" ErrorMessage="The Practice Leadership is required."
                                         ControlToValidate="ddlPracticeLeadership" ToolTip="The Practice Leadership is required."
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
-                                        Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
+                                        Display="Dynamic"></asp:RequiredFieldValidator>--%>
+                                        &nbsp;
                                 </td>
                             </tr>
                             <tr>
