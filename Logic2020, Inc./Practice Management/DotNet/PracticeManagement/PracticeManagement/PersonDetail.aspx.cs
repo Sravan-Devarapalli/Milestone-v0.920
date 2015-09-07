@@ -3768,7 +3768,7 @@ namespace PraticeManagement
             {
                 LocationId = Convert.ToInt32(ddlLocation.SelectedValue)
             };
-            if (ddlPracticeLeadership.SelectedValue != string.Empty || ddlPracticeLeadership.SelectedValue != "-1")
+            if (ddlPracticeLeadership.SelectedValue != string.Empty && ddlPracticeLeadership.SelectedValue != "-1")
             {
                 person.PracticeLeadership = new Person()
                 {
