@@ -5108,6 +5108,9 @@ namespace DataAccess
                 int badgeDurationIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeDuration);
                 int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
                 int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int organicBreakStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakStartDate);
+                int organicBreakEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakEndDate);
+                int organicBreakDurationIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakDuration);
 
                 while (reader.Read())
                 {
@@ -5132,7 +5135,10 @@ namespace DataAccess
                         BadgeEndDate = reader.IsDBNull(badgeEndDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEndDateIndex),
                         BreakStartDate = reader.IsDBNull(breakStartDateIndex) ? null : (DateTime?)reader.GetDateTime(breakStartDateIndex),
                         BreakEndDate = reader.IsDBNull(breakEndDateIndex) ? null : (DateTime?)reader.GetDateTime(breakEndDateIndex),
-                        BadgeDuration = reader.IsDBNull(badgeDurationIndex) ? 0 : reader.GetInt32(badgeDurationIndex)
+                        BadgeDuration = reader.IsDBNull(badgeDurationIndex) ? 0 : reader.GetInt32(badgeDurationIndex),
+                        OrganicBreakStartDate = reader.IsDBNull(organicBreakStartDateIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakStartDateIndex),
+                        OrganicBreakEndDate = reader.IsDBNull(organicBreakEndDateIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakEndDateIndex),
+                        OrganicBreakDuration = reader.IsDBNull(organicBreakDurationIndex) ? -1 : reader.GetInt32(organicBreakDurationIndex)
                     };
                     result.Add(badgeResource);
                 }
