@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string OrganicBreakDuration = "OrganicBreakDuration";
             public const string PositionId = "PositionId";
             public const string MilestoneEndDate = "MilestoneEndDate";
             public const string PracticeDirector = "PracticeDirector";
