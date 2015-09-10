@@ -676,6 +676,7 @@ namespace DataAccess
             int projectIdIndex = reader.GetOrdinal("ProjectId");
             int projectStatusIdIndex = -1;
             int projectStatusNameIndex = -1;
+            int projectNumberIndex = -1;
 
             int milestoneIdIndex = reader.GetOrdinal("MilestoneId");
             int descriptionIndex = reader.GetOrdinal("Description");
@@ -716,6 +717,15 @@ namespace DataAccess
                 isMarginColorInfoEnabledIndex = -1;
             }
 
+            try
+            {
+                projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+            }
+            catch
+            {
+                projectNumberIndex = -1;
+            }
+
             while (reader.Read())
             {
                 Milestone milestone = new Milestone
@@ -754,7 +764,10 @@ namespace DataAccess
                             Name = reader.GetString(projectStatusNameIndex)
                         };
                 }
-
+                if (projectNumberIndex >= 0)
+                {
+                    milestone.Project.ProjectNumber = reader.GetString(projectNumberIndex);
+                }
                 if (isMarginColorInfoEnabledIndex >= 0)
                 {
                     try
