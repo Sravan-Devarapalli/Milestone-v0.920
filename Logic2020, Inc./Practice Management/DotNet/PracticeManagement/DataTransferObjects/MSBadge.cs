@@ -130,6 +130,13 @@ namespace DataTransferObjects
         }
 
         [DataMember]
+        public int OrganicBreakDuration
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public bool IsException
         {
             get;
