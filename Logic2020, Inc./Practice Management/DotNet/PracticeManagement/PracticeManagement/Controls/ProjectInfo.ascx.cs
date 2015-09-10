@@ -33,7 +33,7 @@ namespace PraticeManagement.Controls
 		{
 			ProjectId = project.Id;
 
-			linkProjectName.Text = HttpUtility.HtmlEncode(project.Name);
+            linkProjectName.Text = HttpUtility.HtmlEncode(string.Format("{0} - {1}",project.ProjectNumber ,project.Name));
             // linkProjectName.NavigateUrl = GetProjectDetailsUrl(project.Id.Value);
             linkProjectName.NavigateUrl = Utils.Generic.GetTargetUrlWithReturn(GetProjectDetailsUrl(project.Id.Value), Request.Url.AbsoluteUri);           
 
