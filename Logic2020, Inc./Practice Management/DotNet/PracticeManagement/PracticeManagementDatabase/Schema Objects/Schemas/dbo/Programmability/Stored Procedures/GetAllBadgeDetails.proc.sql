@@ -33,7 +33,10 @@ BEGIN
 			T.Name AS TimescaleName,
 			DATEDIFF(MM,@Today,M.BadgeEndDate+1) BadgeDuration,
 			P.TitleId,
-			P.Title
+			P.Title,
+			MB.OrganicBreakStartDate,
+			MB.OrganicBreakEndDate,
+			DATEDIFF(MM,@Today,MB.OrganicBreakEndDate+1) OrganicBreakDuration
 	FROM dbo.v_Person P
 	INNER JOIN dbo.MSBadge MB ON MB.PersonId = P.PersonId
 	LEFT JOIN v_CurrentMSBadge M ON M.PersonId = P.PersonId
