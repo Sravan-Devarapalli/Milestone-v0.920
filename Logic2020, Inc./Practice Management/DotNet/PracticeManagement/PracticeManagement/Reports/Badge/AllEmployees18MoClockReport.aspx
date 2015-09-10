@@ -125,6 +125,15 @@
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             6-Month Break End Date
                                         </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Organic Break Start Date
+                                        </th>
+                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Organic Break End Date
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Time Left on Organic Break
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -155,6 +164,15 @@
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BreakEndDate"))%>
                             </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# GetDateFormat((DateTime?)Eval("OrganicBreakStartDate"))%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# GetDateFormat((DateTime?)Eval("OrganicBreakEndDate"))%>
+                            </td>
+                             <td sorttable_customkey='<%# Eval("OrganicBreakDuration") %>' class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:Label ID="lblOrganicDuration" runat="server"></asp:Label>
+                            </td>
                         </tr>
                     </ItemTemplate>
                     <AlternatingItemTemplate>
@@ -182,6 +200,15 @@
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
                                 <%# GetDateFormat((DateTime?)Eval("BreakEndDate"))%>
+                            </td>
+                              <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# GetDateFormat((DateTime?)Eval("OrganicBreakStartDate"))%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <%# GetDateFormat((DateTime?)Eval("OrganicBreakEndDate"))%>
+                            </td>
+                             <td sorttable_customkey='<%# Eval("OrganicBreakDuration") %>' class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:Label ID="lblOrganicDuration" runat="server"></asp:Label>
                             </td>
                         </tr>
                     </AlternatingItemTemplate>
