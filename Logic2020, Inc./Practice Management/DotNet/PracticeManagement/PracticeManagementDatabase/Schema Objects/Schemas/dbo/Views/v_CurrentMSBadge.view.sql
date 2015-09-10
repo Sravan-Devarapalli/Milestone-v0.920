@@ -34,6 +34,6 @@
 	FROM H1
 	INNER JOIN BadgeHistoryForReports B ON B.PersonId = H1.PersonId AND B.Id = H1.Id
 	INNER JOIN dbo.MSBadge M ON M.PersonId = H1.PersonId
-	WHERE (H1.StartDate IS NULL OR H1.StartDate <= dbo.GettingPMTime(GETUTCDATE())) AND (H1.EndDate IS NULL OR dbo.GettingPMTime(GETUTCDATE()) <= H1.EndDate)
+	WHERE (H1.StartDate IS NULL OR H1.StartDate <= CONVERT(DATE,dbo.GettingPMTime(GETUTCDATE()))) AND (H1.EndDate IS NULL OR CONVERT(DATE,dbo.GettingPMTime(GETUTCDATE())) <= H1.EndDate)
 
 
