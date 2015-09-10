@@ -19,6 +19,7 @@ BEGIN
 	       m.ProjectName,
 	       m.ProjectStartDate,
 	       m.ProjectEndDate,
+		   m.ProjectNumber,
 	       m.Discount,
 	       m.ClientName,
 	       m.ExpectedHours,
