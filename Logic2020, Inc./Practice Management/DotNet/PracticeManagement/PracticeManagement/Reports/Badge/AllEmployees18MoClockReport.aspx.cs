@@ -177,6 +177,9 @@ namespace PraticeManagement.Reports.Badge
             data.Columns.Add("Time Left on Clock");
             data.Columns.Add("6-Month Break Start Date");
             data.Columns.Add("6-Month Break End Date");
+            data.Columns.Add("Organic Break Start Date");
+            data.Columns.Add("Organic Break End Date");
+            data.Columns.Add("Time Left on Organic Break");
 
             foreach (var reportItem in report)
             {
@@ -189,14 +192,18 @@ namespace PraticeManagement.Reports.Badge
                     }
                     else
                     {
-                        timeLeft = reportItem.BadgeDuration >= 0 ? reportItem.BadgeDuration + " months" : "";
+                        timeLeft = reportItem.BadgeDuration > 0 ? (reportItem.BadgeDuration == 1 ? reportItem.BadgeDuration + " month" : reportItem.BadgeDuration + " months") : "";
                     }
                 }
                 else
                 {
                     timeLeft = "Clock not started yet";
                 }
-
+                var organicTimeLeft = "";
+                if (reportItem.OrganicBreakStartDate.HasValue && reportItem.OrganicBreakDuration > 0)
+                {
+                    organicTimeLeft =  reportItem.OrganicBreakDuration == 1 ? reportItem.OrganicBreakDuration + " month" : reportItem.OrganicBreakDuration + " months" ;
+                }
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
                 row.Add(reportItem.Person.CurrentPay.TimescaleName);
@@ -206,7 +213,9 @@ namespace PraticeManagement.Reports.Badge
                 row.Add(timeLeft);
                 row.Add(reportItem.BreakStartDate.HasValue ? reportItem.BreakStartDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BreakEndDate.HasValue ? reportItem.BreakEndDate.Value.ToShortDateString() : string.Empty);
-
+                row.Add(reportItem.OrganicBreakStartDate.HasValue ? reportItem.OrganicBreakStartDate.Value.ToShortDateString() : string.Empty);
+                row.Add(reportItem.OrganicBreakEndDate.HasValue ? reportItem.OrganicBreakEndDate.Value.ToShortDateString() : string.Empty);
+                row.Add(organicTimeLeft);
                 data.Rows.Add(row.ToArray());
             }
             return data;
@@ -246,6 +255,7 @@ namespace PraticeManagement.Reports.Badge
                 DateTime now = SettingsHelper.GetCurrentPMTime();
                 var dataItem = (MSBadge)e.Item.DataItem;
                 var lblDuration = e.Item.FindControl("lblDuration") as Label;
+                var lblOrganicDuration = e.Item.FindControl("lblOrganicDuration") as Label;
                 if (dataItem.BadgeStartDate.HasValue)
                 {
                     if (now.Date >= dataItem.BreakStartDate.Value.Date && now.Date <= dataItem.BreakEndDate.Value.Date)
@@ -253,11 +263,19 @@ namespace PraticeManagement.Reports.Badge
                         lblDuration.Text = "On 6-month break";
                         return;
                     }
-                    lblDuration.Text = dataItem.BadgeDuration >= 0 ? dataItem.BadgeDuration + " months" : "";
+                    lblDuration.Text = dataItem.BadgeDuration > 0 ? (dataItem.BadgeDuration == 1 ? dataItem.BadgeDuration + " month" : dataItem.BadgeDuration + " months") : "";
                 }
                 else
                 {
                     lblDuration.Text = "Clock not started yet";
+                }
+                if (dataItem.OrganicBreakStartDate.HasValue && dataItem.OrganicBreakDuration > 0)
+                {
+                    lblOrganicDuration.Text = dataItem.OrganicBreakDuration == 1 ? dataItem.OrganicBreakDuration + " month" : dataItem.OrganicBreakDuration + " months";
+                }
+                else
+                {
+                    lblOrganicDuration.Text = string.Empty;
                 }
             }
         }
