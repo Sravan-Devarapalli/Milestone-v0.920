@@ -61,12 +61,10 @@ BEGIN
 					PR.StartDate,
 					PR.EndDate,
 					PR.Timescale,
-				    (COUNT(CAL.Date) * 8) AS DefaultHours --Estimated working hours per day is 8.
+				    (COUNT(PCAL.Date) * 8) AS DefaultHours --Estimated working hours per day is 8.
 			FROM  PersonWithRanges PR
-			INNER JOIN dbo.v_PersonHistory AS P ON PR.PersonId = P.PersonId
-			INNER JOIN dbo.Calendar AS CAL ON CAL.Date BETWEEN PR.StartDate AND PR.EndDate
-												AND CAL.Date BETWEEN P.HireDate AND ISNULL(P.TerminationDate,@FutureDate)
-			WHERE DATENAME(weekday,CAL.Date) != 'Saturday' AND DATENAME(weekday,CAL.Date) != 'Sunday' AND CAL.Date < @CurrtenDate
+			INNER JOIN dbo.PersonCalendarAuto PCAL ON PCAL.PersonId = PR.PersonId AND PCAL.Date BETWEEN PR.StartDate AND PR.EndDate
+			WHERE DATENAME(weekday,PCAL.Date) != 'Saturday' AND DATENAME(weekday,PCAL.Date) != 'Sunday' AND PCAL.Date < @CurrtenDate
 			GROUP BY PR.Personid,PR.StartDate,PR.EndDate,PR.Timescale
 		),
 		PersonListWithBillingHours
