@@ -42,7 +42,7 @@ BEGIN
 			AND (
 					[Name] != @Name
 					OR ISNULL([Abbreviation],'') != ISNULL(@Abbreviation,'')
-					OR PracticeManagerId != @PracticeManagerId
+					OR ISNULL(PracticeManagerId,0) != ISNULL(@PracticeManagerId,0)
 					OR IsActive != @IsActive
 					OR IsCompanyInternal != @IsCompanyInternal
 				)
