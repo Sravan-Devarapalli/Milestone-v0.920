@@ -134,7 +134,7 @@ BEGIN
 			p.DirectorFirstName,
 			p.[Discount]
 	FROM	dbo.v_Project AS p
-	INNER JOIN dbo.Person pm ON pm.PersonId = p.PracticeManagerId AND P.IsAdministrative = 0 AND P.ProjectId != 174 
+	LEFT JOIN dbo.Person pm ON pm.PersonId = p.PracticeManagerId AND P.IsAdministrative = 0 AND P.ProjectId != 174 
 	INNER JOIN dbo.Practice pr ON pr.PracticeId = p.PracticeId
 	LEFT JOIN  dbo.Person sp on sp.PersonId = p.SalesPersonId 
 	LEFT JOIN dbo.ProjectGroup PG	ON PG.GroupId = p.GroupId
