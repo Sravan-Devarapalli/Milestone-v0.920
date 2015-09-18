@@ -35,6 +35,7 @@ AS
 	       manager.LastName AS 'ManagerLastName',
 		   manager.EmployeeNumber AS 'ManagerEmployeeNumber',
 		   manager.PaychexID AS 'ManagerADPID',
+		   MGCP.Timescale AS 'ManagerCurrentPayType',
 	       -1 AS 'PracticeOwnedId', -- Obsolete, never used
 	       '' AS 'PracticeOwnedName', -- Obsolete, never used
 		   (SELECT  practice.PracticeId AS '@Id', 
@@ -61,7 +62,8 @@ AS
 			p.IsMBO,
 			p.PracticeLeadershipId,
 			PLeadrsh.EmployeeNumber as PracticeLeadershipEmployeeNumber,
-			PLeadrsh.PaychexID as PracticeLeadershipADPID
+			PLeadrsh.PaychexID as PracticeLeadershipADPID,
+			PGCP.Timescale as PracticeLeadershipCurrentyPayType
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
@@ -72,4 +74,6 @@ AS
 		   LEFT JOIN dbo.CohortAssignment AS CA ON CA.CohortAssignmentId = p.CohortAssignmentId 
 		   LEFT JOIN dbo.Location L ON L.LocationId = p.LocationId
 		   LEFT JOIN dbo.Person AS PLeadrsh ON PLeadrsh.PersonId = p.PracticeLeadershipId
+		   LEFT JOIN dbo.GetCurrentPayTypeTable() MGCP ON MGCP.PersonId = manager.PersonId
+		   LEFT JOIN dbo.GetCurrentPayTypeTable() PGCP ON PGCP.PersonId = PLeadrsh.PersonId
 
