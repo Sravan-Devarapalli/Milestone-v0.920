@@ -77,7 +77,7 @@ AS
 		FROM Practice P
 		JOIN PracticeList PL ON PL.PracticeId = P.PracticeId
 		LEFT JOIN Person Pers ON Pers.PersonId = P.PracticeManagerId
-		INNER JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
+		LEFT JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
 
 	END
 	ELSE
@@ -153,7 +153,7 @@ AS
 			END AS 'IsActiveCapabilitiesExists'		
 		  FROM dbo.Practice AS p
 		  LEFT JOIN dbo.Person AS pers ON p.PracticeManagerId = pers.PersonId
-		  INNER JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
+		  LEFT JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
 		  WHERE (
 				@PersonId IS NULL 
 				OR  
