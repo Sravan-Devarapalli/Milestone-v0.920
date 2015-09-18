@@ -7,6 +7,9 @@
 	PTOAccrual		INT NOT NULL CONSTRAINT DF_Title_PTOAccrual DEFAULT(0),
 	MinimumSalary	INT NULL,
 	MaximumSalary	INT NULL,
+	ParentId		INT	NULL,
+	PositionId		INT NULL,
+	Active			BIT NULL DEFAULT 1,
 	CONSTRAINT PK_Title_TitleId     PRIMARY KEY CLUSTERED(TitleId),
 	CONSTRAINT [UQ_Title_Title] UNIQUE NONCLUSTERED(Title)
 )
