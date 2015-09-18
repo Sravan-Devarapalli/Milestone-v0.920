@@ -69,7 +69,7 @@ AS
 	  FROM dbo.v_Project AS p
 	  INNER JOIN dbo.ProjectGroup AS pg ON p.GroupId = pg.GroupId
 	  LEFT JOIN dbo.Opportunity AS O ON O.OpportunityId = P.OpportunityId
-	  INNER JOIN dbo.Person AS person ON p.PracticeManagerId = person.PersonId
+	  LEFT JOIN dbo.Person AS person ON p.PracticeManagerId = person.PersonId
 	  LEFT JOIN dbo.Person AS sm ON p.EngagementManagerId = sm.PersonId
 	  LEFT JOIN dbo.Person owner ON owner.PersonId = p.ProjectManagerId
 	  LEFT JOIN dbo.Person AS re ON p.ReviewerId = re.PersonId
