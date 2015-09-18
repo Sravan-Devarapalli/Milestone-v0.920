@@ -16,8 +16,11 @@ BEGIN
 			THEN CAST(1 AS BIT)				   	 
 			ELSE CAST(0 AS BIT)
 	   END AS [TitleInUse]
+	 , T.ParentId
+	 , T.PositionId
 	FROM dbo.Title T
-		INNER JOIN dbo.TitleType TT ON T.TitleTypeId = TT.TitleTypeId
+	INNER JOIN dbo.TitleType TT ON T.TitleTypeId = TT.TitleTypeId
+	WHERE T.Active = 1 
 	ORDER BY TT.SortOrder,T.SortOrder
 END
 
