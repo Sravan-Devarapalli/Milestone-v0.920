@@ -280,8 +280,11 @@ namespace DataAccess
                         Name = reader.GetString(nameIndex),
                         IsActive = reader.GetBoolean(isActiveIndex),
                         InUse = reader.GetBoolean(inUseIndex),
-                        IsCompanyInternal = reader.GetBoolean(isCompanyInternalIndex),
-                        PracticeOwner =
+                        IsCompanyInternal = reader.GetBoolean(isCompanyInternalIndex)
+                    };
+                if (!reader.IsDBNull(personIdIndex))
+                {
+                    practice.PracticeOwner =
                              new Person
                              {
                                  Id = reader.GetInt32(personIdIndex),
@@ -292,9 +295,8 @@ namespace DataAccess
                                      Id = reader.GetInt32(statusIdIndex),
                                      Name = reader.GetString(statusNameIndex)
                                  }
-                             }
-                    };
-
+                             };
+                }
                 if (isNotesRequiredIndex > -1)
                 {
                     practice.IsNotesRequiredForTimeEnry = reader.GetBoolean(isNotesRequiredIndex);
@@ -390,3 +392,4 @@ namespace DataAccess
         }
     }
 }
+
