@@ -4759,6 +4759,255 @@ namespace DataAccess
 
         #endregion
 
+        public static List<Person> GetUsersForCF()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                return GetUsersForCF(connection);
+            }
+        }
+
+        public static List<Person> GetUsersForCF(SqlConnection connection)
+        {
+            var result = new List<Person>();
+
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetUsersForCF, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadUsersForCF(reader, result);
+                    reader.NextResult();
+                    ReadUsersFeedbacksForCF(reader, result);
+                    reader.NextResult();
+                    ReadUsersErrorFeedbacksForCF(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadUsersForCF(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
+                int firstnameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int preferdFirstnameIndex = reader.GetOrdinal(Constants.ColumnNames.PreferredFirstName);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int paychexIDIndex = reader.GetOrdinal(Constants.ColumnNames.PaychexID);
+                int aliasIndex = reader.GetOrdinal(Constants.ColumnNames.Alias);
+                int locationCodeIndex = reader.GetOrdinal(Constants.ColumnNames.LocationCode);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int positionIdIndex = reader.GetOrdinal(Constants.ColumnNames.PositionId);
+                //int timeScaleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeScaleId);
+                int timescaleCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleCode);
+                int hireDateColumnIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                int managerEmployeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ManagerEmployeeNumber);
+                int cFDivisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.CFDivisionId);
+                int divisionCodeIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionCode);
+                int practiceLeadershipEmployeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeLeadershipEmployeeNumber);
+                int practiceLeadershipIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeLeadershipId);
+                int isMBOIndex = reader.GetOrdinal(Constants.ColumnNames.IsMBO);
+                int practiceDirectorIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeDirector);
+                int practiceDirectorIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeDirectorId);
+                
+                while (reader.Read())
+                {
+                    Person person = new Person()
+                    {
+                        Id = reader.GetInt32(personIdIndex),
+                        FirstName = reader.GetString(firstnameIndex),
+                        PrefferedFirstName = reader.IsDBNull(preferdFirstnameIndex) ? string.Empty : reader.GetString(preferdFirstnameIndex),
+                        LastName = reader.GetString(lastNameIndex),
+                        PaychexID = reader.IsDBNull(paychexIDIndex) ? string.Empty : reader.GetString(paychexIDIndex),
+                        Alias = reader.GetString(aliasIndex),
+                        Location = new Location() { LocationCode = reader.IsDBNull(locationCodeIndex) ? string.Empty : reader.GetString(locationCodeIndex) },
+                        Title = new Title() { TitleId = reader.GetInt32(titleIdIndex), PositionId = reader.IsDBNull(positionIdIndex) ? -1 : reader.GetInt32(positionIdIndex) },
+                        CurrentPay = new Pay() { TimescaleCode = reader.GetString(timescaleCodeIndex) },
+                        HireDate = reader.GetDateTime(hireDateColumnIndex),
+                        Manager = new Person()
+                        {
+                            EmployeeNumber = reader.IsDBNull(managerEmployeeNumberIndex) ? string.Empty : reader.GetString(managerEmployeeNumberIndex)
+                        },
+                        EmployeeNumber = reader.GetString(employeeNumberIndex),
+                        PracticeLeadership = new Person()
+                        {
+                            Id = reader.IsDBNull(practiceLeadershipIdIndex) ? -1 : reader.GetInt32(practiceLeadershipIdIndex),
+                            EmployeeNumber = reader.IsDBNull(practiceLeadershipEmployeeNumberIndex) ? string.Empty : reader.GetString(practiceLeadershipEmployeeNumberIndex)
+                        },
+                        PracticeDirectorEmployeeNumber = reader.IsDBNull(practiceDirectorIndex) ? string.Empty : reader.GetString(practiceDirectorIndex),
+                        PracticeDirectorId = reader.IsDBNull(practiceDirectorIdIndex) ? -1 : reader.GetInt32(practiceDirectorIdIndex),
+
+                        IsMBO = reader.GetBoolean(isMBOIndex)
+                    };
+                    if (!reader.IsDBNull(cFDivisionIdIndex))
+                    {
+                        person.CFDivision = new DataTransferObjects.CornerStone.DivisionCF()
+                        {
+                            DivisionId = reader.GetInt32(cFDivisionIdIndex),
+                            DivisionCode = reader.GetString(divisionCodeIndex)
+                        };
+                    }
+                    person.ErrorFeedbacks = new List<ProjectFeedback>();
+                    result.Add(person);
+                }
+            }
+        }
+
+        private static void ReadUsersFeedbacksForCF(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int reviewStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewStartDate);
+                int reviewEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewEndDate);
+                int projectManagerUserIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerUserId);
+                int engagementManagerUserIdIndex = reader.GetOrdinal(Constants.ColumnNames.EngagementManagerUserId);
+                int executiveInChargeUserIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExecutiveInChargeUserId);
+                int projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                int engagementManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.EngagementManagerId);
+                int executiveInChargeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExecutiveInChargeId);
+                int countIndex = reader.GetOrdinal(Constants.ColumnNames.Count);
+
+                while (reader.Read())
+                {
+                    var personId = reader.GetInt32(personIdIndex);
+                    var person = result.FirstOrDefault(p => p.Id.Value == personId);
+                    var feedback = new ProjectFeedback()
+                    {
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            EngagementManagerID = reader.IsDBNull(engagementManagerIdIndex) ? -1 : reader.GetInt32(engagementManagerIdIndex),
+                            ProjectManagerId = reader.IsDBNull(projectManagerIdIndex) ? -1 : reader.GetInt32(projectManagerIdIndex),
+                            ExecutiveInChargeId = reader.IsDBNull(executiveInChargeIdIndex) ? -1 : reader.GetInt32(executiveInChargeIdIndex),
+                            EngagementManagerUserID = reader.IsDBNull(engagementManagerUserIdIndex) ? string.Empty : reader.GetString(engagementManagerUserIdIndex),
+                            ProjectManagerUserId = reader.IsDBNull(projectManagerUserIdIndex) ? string.Empty : reader.GetString(projectManagerUserIdIndex),
+                            ExecutiveInChargeUserId = reader.IsDBNull(executiveInChargeUserIdIndex) ? string.Empty : reader.GetString(executiveInChargeUserIdIndex),
+                        },
+                        ReviewStartDate = reader.GetDateTime(reviewStartDateIndex),
+                        ReviewEndDate = reader.GetDateTime(reviewEndDateIndex),
+                        Count = reader.GetInt32(countIndex)
+                    };
+                    if (person.ProjectFeedbacks != null)
+                    {
+                        person.ProjectFeedbacks.Add(feedback);
+                    }
+                    else
+                    {
+                        person.ProjectFeedbacks = new List<ProjectFeedback>() { feedback };
+                    }
+                }
+            }
+        }
+
+        private static void ReadUsersErrorFeedbacksForCF(SqlDataReader reader, List<Person> result)
+        {
+            if (reader.HasRows)
+            {
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int reviewStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewStartDate);
+                int reviewEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.ReviewEndDate);
+                //int projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                int projectManagerIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManager);
+
+                while (reader.Read())
+                {
+                    var personId = reader.GetInt32(personIdIndex);
+                    var person = result.FirstOrDefault(p => p.Id.Value == personId);
+                    var feedback = new ProjectFeedback()
+                    {
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectManagerNames = reader.GetString(projectManagerIndex)
+                        },
+                        ReviewStartDate = reader.GetDateTime(reviewStartDateIndex),
+                        ReviewEndDate = reader.GetDateTime(reviewEndDateIndex)
+                    };
+                    feedback.Person = new Person()
+                    {
+                        Id = person.Id,
+                        FirstName = person.FirstName,
+                        LastName = person.LastName
+                    };
+                    if (person.ErrorFeedbacks != null)
+                    {
+                        person.ErrorFeedbacks.Add(feedback);
+                    }
+                    else
+                    {
+                        person.ErrorFeedbacks = new List<ProjectFeedback>() { feedback };
+                    }
+                }
+            }
+        }
+
+        public static List<Timescale> GetSalaryPayTypes()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                return GetSalaryPayTypes(connection);
+            }
+        }
+
+        public static List<Timescale> GetSalaryPayTypes(SqlConnection connection)
+        {
+            var result = new List<Timescale>();
+
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetSalaryPayTypes, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadSalaryPayTypes(reader, result);
+                }
+            }
+            return result;
+        }
+
+        private static void ReadSalaryPayTypes(SqlDataReader reader, List<Timescale> result)
+        {
+            if (reader.HasRows)
+            {
+                int timeScaleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TimeScaleId);
+                int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleColumn);
+                int timescaleCodeIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleCode);
+
+                while (reader.Read())
+                {
+                    var timescale = new Timescale()
+                    {
+                        Id = reader.GetInt32(timeScaleIdIndex),
+                        Name = reader.GetString(timescaleIndex),
+                        TimescaleCode = reader.IsDBNull(timescaleCodeIndex) ? string.Empty : reader.GetString(timescaleCodeIndex)
+                    };
+                    result.Add(timescale);
+                }
+            }
+        }
+
         public static List<Person> GetPracticeLeaderships(int? divisionId)
         {
             var result = new List<Person>();
