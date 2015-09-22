@@ -112,6 +112,13 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public string TimescaleCode
+        {
+            get;
+            set;
+        }
+
         private PracticeManagementCurrency _amountHourly;
 
         /// <summary>
@@ -276,3 +283,4 @@ namespace DataTransferObjects
         #endregion Properties
     }
 }
+
