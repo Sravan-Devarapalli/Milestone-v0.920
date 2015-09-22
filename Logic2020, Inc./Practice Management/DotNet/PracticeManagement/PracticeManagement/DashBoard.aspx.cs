@@ -147,7 +147,7 @@ namespace PraticeManagement
                 SiteMapDataSource smdsMain = new SiteMapDataSource();
 
                 Dictionary<string, string> dicQuickLinks = new Dictionary<string, string>();
-
+                dicQuickLinks.Add("Career Management Portal", "https://logic2020.csod.com/client/logic2020/default.aspx");
                 dicQuickLinks.Add("Request Time Off", "mailto:{0}?subject=Time Off Request");
 
                 foreach (SiteMapNode childNode in ((System.Web.SiteMapNodeCollection)(smdsMain.Provider.RootNode.ChildNodes)))
@@ -435,6 +435,14 @@ namespace PraticeManagement
             {
                 var imgDelete = e.Item.FindControl("imgDeleteQuickLink") as ImageButton;
                 imgDelete.Visible = false;
+            }
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var hlnkPage = e.Item.FindControl("hlnkPage") as HyperLink;
+                if (hlnkPage.Text == "Career Management Portal") //'Career Management Portal' quick link should be opened in new tab as per nick comment on 20150918.
+                {
+                    hlnkPage.Target = "_blank";
+                }
             }
         }
 
