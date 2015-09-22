@@ -191,7 +191,7 @@ namespace PraticeManagement.Config
                 var lblPracticeManager = e.Row.FindControl("lblPracticeManager") as Label;
                 if (lblPracticeManager != null)
                 {
-                    lblPracticeManager.Text = item.PracticeOwner.Status.Id != (int)PersonStatusType.Terminated ? String.Format(PracticeMangagerNameFormat, item.PracticeOwner.PersonLastFirstName, item.PracticeOwner.Status.Name) : "Unassigned";
+                    lblPracticeManager.Text = item.PracticeOwner == null ? "Unassigned" : String.Format(PracticeMangagerNameFormat, item.PracticeOwner.PersonLastFirstName, item.PracticeOwner.Status.Name); //||  item.PracticeOwner.Status.Id != (int)PersonStatusType.Terminated ? String.Format(PracticeMangagerNameFormat, item.PracticeOwner.PersonLastFirstName, item.PracticeOwner.Status.Name) : "Unassigned";
                 }
                 if (imgDelete != null)
                 {
