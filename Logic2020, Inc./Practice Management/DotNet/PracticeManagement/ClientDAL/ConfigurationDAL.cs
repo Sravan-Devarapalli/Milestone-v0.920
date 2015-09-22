@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using DataAccess.Other;
 using DataTransferObjects;
+using DataTransferObjects.CornerStone;
 
 namespace DataAccess
 {
@@ -611,6 +612,62 @@ namespace DataAccess
 
         #endregion
 
+        public static List<DivisionCF> GetCFDivisions()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                return GetCFDivisions(connection);
+            }
+        }
+
+        public static List<DivisionCF> GetCFDivisions(SqlConnection connection)
+        {
+            var cFDivisions = new List<DivisionCF>();
+
+            using (var command = new SqlCommand(Constants.ProcedureNames.Configuration.GetCFDivisions, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadCFDivisions(reader, cFDivisions);
+                }
+            }
+            return cFDivisions;
+        }
+
+        private static void ReadCFDivisions(SqlDataReader reader, List<DivisionCF> cFDivisions)
+        {
+            if (!reader.HasRows) return;
+            int divisionIdndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+            int divisionCodeIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionCode);
+            int divisionNameIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionName);
+            int parentIdIndex = reader.GetOrdinal(Constants.ColumnNames.ParentId);
+            int parentDivisionCodeIndex = reader.GetOrdinal(Constants.ColumnNames.ParentDivisionCode);
+            int parentDivisionNameIndex = reader.GetOrdinal(Constants.ColumnNames.ParentDivisionName);
+
+            while (reader.Read())
+            {
+                var division = new DivisionCF()
+                {
+                    DivisionId = reader.GetInt32(divisionIdndex),
+                    DivisionName = reader.GetString(divisionNameIndex),
+                    DivisionCode = reader.GetString(divisionCodeIndex)
+                };
+                if (!reader.IsDBNull(parentIdIndex))
+                {
+                    division.Parent = new DivisionCF()
+                    {
+                        DivisionId = reader.GetInt32(parentIdIndex),
+                        DivisionName = reader.GetString(parentDivisionNameIndex),
+                        DivisionCode = reader.GetString(parentDivisionCodeIndex)
+                    };
+                }
+                cFDivisions.Add(division);
+            }
+        }
 
         public static List<Location> GetLocations()
         {
