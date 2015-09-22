@@ -37,7 +37,7 @@ namespace PraticeManagement.Controls.Clients
         {
             if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
             var proj = (Project)e.Item.DataItem;
-            if (proj.ProjectManagers.Count <= 1)
+            if (proj.ProjectManagers == null || proj.ProjectManagers.Count <= 1)
             {
                 var cpe = e.Item.FindControl("cpe") as CollapsiblePanelExtender;
                 var btnExpandCollapseFilter = e.Item.FindControl("btnExpandCollapseFilter") as Image;
