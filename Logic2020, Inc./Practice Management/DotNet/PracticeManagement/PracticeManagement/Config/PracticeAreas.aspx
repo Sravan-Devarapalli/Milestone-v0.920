@@ -195,7 +195,7 @@
                             <asp:CustomValidator ID="custEditPracticeManager" runat="server" ValidationGroup="EditPractice"
                                 Display="Dynamic" Text="*" ErrorMessage="Please add a person as Practice area owner."
                                 ToolTip="Please add a person as Practice area owner." />
-                            <asp:HiddenField ID="hfPracticeOwner" runat="server" Value='<%#Bind("PracticeManagerId")%>' />
+                            <%--<asp:HiddenField ID="hfPracticeOwner" runat="server" Value='<%#Bind("PracticeManagerId")%>' />--%>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
