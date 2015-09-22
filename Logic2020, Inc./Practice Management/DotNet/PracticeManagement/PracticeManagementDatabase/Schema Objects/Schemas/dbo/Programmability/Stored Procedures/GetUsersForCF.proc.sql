@@ -22,8 +22,10 @@ BEGIN
 		   CASE WHEN GCP.Timescale IN (3,4) THEN (SELECT DivisionId FROM dbo.Division_CF WHERE DivisionCode = 'CO3-1099') ELSE CF.CFDivisionId END AS CFDivisionId,
 		   CASE WHEN GCP.Timescale IN (3,4) THEN (SELECT DivisionCode FROM dbo.Division_CF WHERE DivisionCode = 'CO3-1099') ELSE DCF.DivisionCode END AS DivisionCode,
 		   P.PracticeLeadershipADPID AS PracticeLeadershipEmployeeNumber,
+		   p.PracticeLeadershipId,
 		   P.IsMBO,
-		   Drctr.PaychexID AS PracticeDirector
+		   Drctr.PaychexID AS PracticeDirector,
+		   pd.PracticeDirectorId
 	FROM v_Person P
 	JOIN dbo.GetCurrentPayTypeTable() GCP ON GCP.PersonId = P.PersonId
 	JOIN dbo.Timescale T ON T.TimescaleId = GCP.Timescale
@@ -61,6 +63,7 @@ BEGIN
 				AND Pro.ProjectStatusId IN (3,4)
 				AND PFCF.PersonId IS NULL
 				AND title.PositionId IS NOT NULL
+				AND @Today >= '20151001'
 ) 
     INSERT INTO dbo.PersonFeedbacksInCSFeed(PersonId,ProjectId,ReviewStartDate,ReviewEndDate,Count)
     SELECT P.PersonId, 
@@ -69,6 +72,7 @@ BEGIN
 		   p.ReviewPeriodEndDate,
 		   (SELECT COUNT(1)+p.RNo FROM PersonFeedbacksInCSFeed F WHERE F.PersonId = P.PersonId) 
 	FROM Temp P
+	WHERE @Today >= '20151001'
 
     SELECT P.PersonId,
 		  pf.ProjectId,
@@ -76,14 +80,25 @@ BEGIN
 		  Pro.Name as ProjectName,
 		  pf.ReviewPeriodStartDate as ReviewStartDate,
 		  pf.ReviewPeriodEndDate as ReviewEndDate,
-		  dbo.GetProjectAccessesEmpNumbers(Pro.ProjectId) AS ProjectAccessesEmpNumbers,
-		  F.Count
+		  PM.PersonId AS ProjectManagerId,
+		  EM.PersonId AS EngagementManagerId,
+		  EC.PersonId AS ExecutiveInChargeId,
+		  CASE WHEN PMGCP.Timescale IN (3,4) THEN PM.EmployeeNumber ELSE PM.PaychexID END AS ProjectManagerUserId,
+		  CASE WHEN EMGCP.Timescale IN (3,4) THEN EM.EmployeeNumber ELSE EM.PaychexID END AS EngagementManagerUserId,
+		  CASE WHEN ECGCP.Timescale IN (3,4) THEN EC.EmployeeNumber ELSE EC.PaychexID END AS ExecutiveInChargeUserId,
+		  F.Count 
    FROM dbo.ProjectFeedback PF
    JOIN v_Person P ON P.PersonId = PF.PersonId
    JOIN dbo.Project Pro ON Pro.ProjectId = PF.ProjectId
    JOIN dbo.GetCurrentPayTypeTable() GCP ON GCP.PersonId = P.PersonId
    JOIN dbo.PersonFeedbacksInCSFeed F ON F.PersonId = P.PersonId
    JOIN dbo.Title title ON title.TitleId = P.TitleId
+   LEFT JOIN dbo.Person PM ON PM.PersonId = Pro.ProjectManagerId
+   LEFT JOIN dbo.GetCurrentPayTypeTable() PMGCP ON PMGCP.PersonId = PM.PersonId
+   LEFT JOIN dbo.Person EM ON EM.PersonId = Pro.EngagementManagerId
+   LEFT JOIN dbo.GetCurrentPayTypeTable() EMGCP ON EMGCP.PersonId = EM.PersonId
+   LEFT JOIN dbo.Person EC ON EC.PersonId = Pro.ExecutiveInChargeId
+   LEFT JOIN dbo.GetCurrentPayTypeTable() ECGCP ON ECGCP.PersonId = EC.PersonId
    WHERE GCP.Timescale IN (1,2) -- W2-Hourly, W2-Salary
 		  AND P.PersonStatusId = 1 -- Active
 		  AND P.IsStrawman = 0
@@ -93,6 +108,7 @@ BEGIN
 		  AND F.ProjectId = PF.ProjectId AND F.ReviewEndDate = PF.ReviewPeriodEndDate AND F.ReviewStartDate = PF.ReviewPeriodStartDate
 		  AND F.Count <= 8
 		  AND title.PositionId IS NOT NULL
+		  AND @Today >= '20151001'
 
     SELECT	F.PersonId,
 			Pr.ProjectId,
@@ -111,5 +127,7 @@ BEGIN
 	      CONVERT(NVARCHAR(10), @Today, 111) = CONVERT(NVARCHAR(10), F.ReviewEndDate, 111) AND 
 		  GCP.Timescale IN (1,2) -- W2-Hourly, W2-Salary	
 		  AND title.PositionId IS NOT NULL 
+		  AND @Today >= '20151001'
 
 END
+
