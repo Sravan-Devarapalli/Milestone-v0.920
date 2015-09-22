@@ -29,5 +29,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public string TimescaleCode
+        {
+            get;
+            set;
+        }
     }
 }
+
