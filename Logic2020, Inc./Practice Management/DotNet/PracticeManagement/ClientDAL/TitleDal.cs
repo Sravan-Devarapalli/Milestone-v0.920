@@ -9,21 +9,29 @@ namespace DataAccess
 {
     public static class TitleDAL
     {
-        public static List<Title> GetAllTitles()
+        public static List<Title> GetAllTitles(SqlConnection connection)
         {
-            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Title.GetAllTitles, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
-
-                connection.Open();
-
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var result = new List<Title>();
                     ReadTitles(reader, result);
                     return result;
                 }
+            }
+        }
+
+        public static List<Title> GetAllTitles()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                return GetAllTitles(connection);
             }
         }
 
@@ -73,11 +81,29 @@ namespace DataAccess
             int minimumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MinimumSalary);
             int maximumSalaryIndex = reader.GetOrdinal(Constants.ColumnNames.MaximumSalary);
             int inUseIndex = reader.GetOrdinal(Constants.ColumnNames.TitleInUse);
+            int parentIdIndex;
+            int positionIdIndex;
+
+            try
+            {
+                parentIdIndex = reader.GetOrdinal(Constants.ColumnNames.ParentId);
+            }
+            catch
+            {
+                parentIdIndex = -1;
+            }
+            try
+            {
+                positionIdIndex = reader.GetOrdinal(Constants.ColumnNames.PositionId);
+            }
+            catch
+            {
+                positionIdIndex = -1;
+            }
 
             while (reader.Read())
             {
-                result.Add(
-                    new Title()
+                var title = new Title()
                         {
                             TitleId = reader.GetInt32(titleIdIndex),
                             TitleName = reader.GetString(titleIndex),
@@ -91,7 +117,19 @@ namespace DataAccess
                             MinimumSalary = !reader.IsDBNull(minimumSalaryIndex) ? reader.GetInt32(minimumSalaryIndex) : (int?)null,
                             MaximumSalary = !reader.IsDBNull(maximumSalaryIndex) ? reader.GetInt32(maximumSalaryIndex) : (int?)null,
                             InUse = reader.GetBoolean(inUseIndex)
-                        });
+                        };
+                if (parentIdIndex > -1)
+                {
+                    title.Parent = new Title()
+                    {
+                        TitleId = !reader.IsDBNull(parentIdIndex) ? reader.GetInt32(parentIdIndex) : -1
+                    };
+                }
+                if (positionIdIndex > -1)
+                {
+                    title.PositionId = !reader.IsDBNull(positionIdIndex) ? reader.GetInt32(positionIdIndex) : 0;
+                }
+                result.Add(title);
             }
         }
 
@@ -200,3 +238,4 @@ namespace DataAccess
         }
     }
 }
+
