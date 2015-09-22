@@ -93,6 +93,13 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public int Count
+        {
+            get;
+            set;
+        }
     }
 }
 
