@@ -589,11 +589,11 @@ namespace DataAccess
                                 new Practice
                                     {
                                         Id = reader.GetInt32(practiceIdIndex),
-                                        Name = reader.GetString(practiceNameIndex),
-                                        PracticeOwner = new Person
-                                            {
-                                                Id = reader.GetInt32(practManagerIdIndex)
-                                            }
+                                        Name = reader.GetString(practiceNameIndex)
+                                        //PracticeOwner = new Person
+                                        //    {
+                                        //        Id = reader.GetInt32(practManagerIdIndex)
+                                        //    }
                                     },
                             LastUpdate = reader.GetDateTime(lastUpdateIndex),
                             Project =
@@ -625,7 +625,10 @@ namespace DataAccess
                                             }
                                         : null
                         };
-
+                if(!reader.IsDBNull(practManagerIdIndex))
+                {
+                    opportunity.Practice.PracticeOwner = new Person() { Id = reader.GetInt32(practManagerIdIndex) };
+                }
                 if (opportunityBusinessTypesIndex > -1)
                 {
                     opportunity.BusinessType = reader.IsDBNull(opportunityBusinessTypesIndex) ? (BusinessType)Enum.Parse(typeof(BusinessType), "0") : (BusinessType)Enum.Parse(typeof(BusinessType), reader.GetInt32(opportunityBusinessTypesIndex).ToString());
