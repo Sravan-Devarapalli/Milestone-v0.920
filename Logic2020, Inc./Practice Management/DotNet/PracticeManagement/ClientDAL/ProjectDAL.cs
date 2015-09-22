@@ -678,13 +678,15 @@ namespace DataAccess
                         LastName = reader.GetString(directorLastNameIndex)
                     };
                 }
-                project.Practice.PracticeOwner = new Person
+                if (!reader.IsDBNull(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn)))
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn)),
-                    FirstName = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerFirstNameColumn)),
-                    LastName = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerLastNameColumn))
-                };
-
+                    project.Practice.PracticeOwner = new Person
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerIdColumn)),
+                        FirstName = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerFirstNameColumn)),
+                        LastName = reader.GetString(reader.GetOrdinal(Constants.ColumnNames.PracticeManagerLastNameColumn))
+                    };
+                }
                 project.Group = new ProjectGroup
                 {
                     Id = reader.GetInt32(reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn)),
