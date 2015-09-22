@@ -20,6 +20,12 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
 using PraticeManagement.Utils;
 using DataTransferObjects.Reports;
+using PraticeManagement.Utils.Excel;
+using DataTransferObjects.CornerStone;
+using Tamir.SharpSsh;
+using System.Reflection;
+using Tamir.SharpSsh.jsch;
+using System.Collections;
 
 namespace UpdatePracticeAndSeniority
 {
@@ -51,6 +57,11 @@ namespace UpdatePracticeAndSeniority
         public const string WelcomeMailScheduleTime_ConfigKey = "WelcomeMailScheduleTime";
         public const string UATTestingMail_ConfigKey = "UATTestingMail";
         public const string FeedbackMailsScheduleTime_ConfigKey = "FeedbackMailsScheduleTime";
+        public const string FTPHostname_ConfigKey = "FTPHostName";
+        public const string FTPUserName_ConfigKey = "FTPUserName";
+        public const string FTPPassword_ConfigKey = "FTPPassword";
+        public const string FTPUploadTime_ConfigKey = "FTPUploadTime";
+
 
         //Formats
         public const string UpdatedProfileLinkFormat = "<a href='{0}?Id={1}'>{2}</a><br/>";
@@ -66,6 +77,7 @@ namespace UpdatePracticeAndSeniority
         public const string SuccessRunningProcedureFormat = "Successfully completed running the procedure {0}";
         public const string FailedRunningDalMethodFormat = "Failed DAL Method {0} due to: {1}";
         public const string SuccessRunningDalMethodFormat = "Successfully completed DAL Method {0}";
+        public const string StartedDalMethodFormat = "Started DAL Method {0}";
         public const string ExportExcelCellFormat = "&nbsp; {0}";
         public const string WelcomeEmailFailedFormat = "Failed to send the WelCome Emails due to: {0}";
         public const string ActivateDeactivateEmailsFailedFormat = "Failed to send Activate and DeActivate Account Emails due to: {0}";
@@ -114,6 +126,22 @@ namespace UpdatePracticeAndSeniority
         public const string M_FinishedFeedbackRemainderEmails = "Finished to send the feedback remainder Emails.";
         public const string FeedbackRemainderMailFailedFormat = "Failed to send the feedback remainder Emails due to: {0}";
 
+        public const string M_FTPConnectionStarted = "Started to connect the FTP Server";
+        public const string M_FTPConnectionCompleted = "Connection to the FTP Server Completed";
+        public const string M_FTPUploadingStarted = "Uploading the files to the FTP server started";
+        public const string M_FTPUploaded = "Uploaded the files to the FTP server successfully";
+        public const string M_FTPFailed = "Failed in FTP server operations due to: {0}";
+        public const string M_FTPReplaced = "The files are going to be replaced in FTP server";
+        public const string M_FTPPlaced = "The files are going to be placed in FTP server";
+        public const string M_FTPThresholdExceeded_Started = "Checking for feedback threshold exceeded started";
+        public const string M_FTPThresholdExceeded_Completed = "Checking for feedback threshold exceeded completed";
+        public const string M_FTPThresholdExceeded_MailStarted = "Started to send mails for feedback threshold exceeded";
+        public const string M_FTPThresholdExceeded_Failed = "Failed in sending the feedback threshold exceeded mail due to: {0}";
+        public const string M_FeedFileErrorStarted = "Started sending Feed file error mail.";
+        public const string M_FeedFileErrorCompleted = "Completed sending Feed file error mail.";
+        public const string M_PlaceInLoadErrorStart = "Started to upload feed file in load_error directory.";
+        public const string M_PlaceInLoadErrorComplete = "Completed to upload feed file in load_error directory.";
+
         //Stored Procedures
         public const string SP_AutoUpdateObjects = "dbo.AutoUpdateObjects";
 
@@ -139,6 +167,8 @@ namespace UpdatePracticeAndSeniority
         public const string AdministratorAddedTemplate = "AdministratorAddedTemplate";
         public const string IntialProjectFeedbackNotification = "IntialProjectFeedbackNotification";
         public const string RemainderProjectFeedbackNotification = "RemainderProjectFeedbackNotification";
+        public const string FeedbackRequestThresholdExceededTemplate = "FeedbackRequestThresholdExceeded";
+        public const string FeedfileErrorTemplate = "FeedfileError";
 
         #endregion Constants
 
@@ -291,7 +321,15 @@ namespace UpdatePracticeAndSeniority
             }
         }
 
-        public static int MailsCount=0;
+        public static TimeSpan FTPUploadTime
+        {
+            get
+            {
+                return TimeSpan.Parse(GetConfigValue(FTPUploadTime_ConfigKey));
+            }
+        }
+
+        public static int MailsCount = 0;
 
         #endregion Properties
 
@@ -319,14 +357,14 @@ namespace UpdatePracticeAndSeniority
                 WorkerRole.SaveSchedularLog(currentDateTimeWithTimeZone, SuccessStatus, M_SchedularStarted, currentDateTimeWithTimeZone);
                 if (currentDateTimeWithTimeZone.TimeOfDay > FirstSchedularTime)
                 {
-
-
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 02:00:00, then we need to run Project Summary Cache Task.
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 06:00:00 every day.
                     //RunFeedbackMails(currentDateTimeWithTimeZone); //Commented out as per 'Nick' statement in a cal on 20150805
+                    //Runs at 04:30:00 every day.
+                    UploadDataFeedToFTP(currentDateTimeWithTimeZone);
                     //For the starting of the schedular if we update schedular binaries between 00:01:00 and 07:00:00, then we need to run Pay roll distribution report and Welcome Email Task for new hires.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on every monday.
@@ -349,22 +387,23 @@ namespace UpdatePracticeAndSeniority
                         currentDateTimeWithTimeZone - nextRun;
                     Thread.Sleep(sleepTimeSpan);
                     currentDateTimeWithTimeZone = currentDateTimeWithTimeZone.Add(sleepTimeSpan);
-                    //Runs at 00:01:00 every day.
+                    //Runs at 02:00:00 every day.
                     RunTasks(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     RunProjectSummaryCacheTask(currentDateTimeWithTimeZone);
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 06:00:00 every day.
                     //RunFeedbackMails(currentDateTimeWithTimeZone); //Commented out as per 'Nick' statement in a cal on 20150805
+                    //Runs at 04:30:00 on every monday.
+                    UploadDataFeedToFTP(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on 3rd and 18th of every month.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
-                    //Runs at 07:00:00 on every monday.
+                    //Runs at 07:00:00 on every day.
                     RunResourceExceptionReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on 1st of every month.
                     RunRecruitingMetricsReport(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 every day.
                     RunWelcomeEmailTaskForNewHires(currentDateTimeWithTimeZone);
-                   
                 }
             }
             catch (Exception ex)
@@ -1251,7 +1290,7 @@ namespace UpdatePracticeAndSeniority
                         message.Attachments.Add(item);
                     }
                 }
-                if(IsUATEnvironment)
+                if (IsUATEnvironment)
                 {
                     message.To.Clear();
                     message.CC.Clear();
@@ -1511,7 +1550,7 @@ namespace UpdatePracticeAndSeniority
             {
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedFeedbackInitialEmails, nextRun);
                 var feedbackMailTemplate = GetEmailTemplate(IntialProjectFeedbackNotification);
-                
+
                 foreach (var feedback in feedbacks)
                 {
                     foreach (var resource in feedback.Resources)
@@ -1533,7 +1572,7 @@ namespace UpdatePracticeAndSeniority
                         {
                             ccAddressList += feedback.ClientDirectorAlias + ",";
                         }
-                        Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, ccAddressList==""?"": ccAddressList.Substring(0, ccAddressList.Length - 1), null);
+                        Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, ccAddressList == "" ? "" : ccAddressList.Substring(0, ccAddressList.Length - 1), null);
                         if (WorkerRole.MailsCount % 12 == 0)
                         {
                             Thread.Sleep(65 * 1000);
@@ -1555,7 +1594,7 @@ namespace UpdatePracticeAndSeniority
             {
                 WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_StartedFeedbackRemainderEmails, nextRun);
                 var feedbackMailTemplate = GetEmailTemplate(RemainderProjectFeedbackNotification);
-               
+
                 foreach (var feedback in feedbacks)
                 {
                     foreach (var resource in feedback.Resources)
@@ -1575,7 +1614,7 @@ namespace UpdatePracticeAndSeniority
                         }
                         if (!string.IsNullOrEmpty(feedback.ClientDirectorAlias) && !feedback.ProjectManagersAliasList.Contains(feedback.ClientDirectorAlias))
                         {
-                            ccAddressList += feedback.ClientDirectorAlias+",";
+                            ccAddressList += feedback.ClientDirectorAlias + ",";
                         }
                         Email(subject, emailBody, true, feedback.ProjectManagersAliasList.Substring(0, feedback.ProjectManagersAliasList.Length - 1), string.Empty, ccAddressList == "" ? "" : ccAddressList.Substring(0, ccAddressList.Length - 1), null);
                         if (WorkerRole.MailsCount % 12 == 0)
@@ -2070,7 +2109,7 @@ namespace UpdatePracticeAndSeniority
             char[] seperator = { ',' };
             string[] allowedCharacters = allowedChars.Split(seperator);
             string[] specialCharacters = specialChars.Split(seperator);
-            Random rand = new Random();
+            var rand = new System.Random();
             for (int i = 0; i < Convert.ToInt32(PasswordLength); i++)
             {
                 randomPassword += allowedCharacters[rand.Next(0, allowedCharacters.Length)];
@@ -2084,6 +2123,300 @@ namespace UpdatePracticeAndSeniority
         }
 
         #endregion Private Methods
+
+        public static void SendFeedbackCountExceeded(DateTime currentDate)
+        {
+            var nextRunTime = currentDate.AddDays(1);
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    //Read the data.
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_FTPThresholdExceeded_Started, nextRunTime);
+                    var users = PersonDAL.GetUsersForCF(connection);
+                    var feedbacks = users.SelectMany(p => p.ErrorFeedbacks).ToList();
+                    if (feedbacks != null && feedbacks.Count > 0)
+                    {
+                        EmailFeedbackCountExceeded(feedbacks, connection, currentDate);
+                    }
+                    WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_FTPThresholdExceeded_Completed, nextRunTime);
+                }
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentDate, FailedStatus, string.Format(M_FTPThresholdExceeded_Failed, ex.Message + (ex.InnerException != null ? ": " + ex.InnerException.Message : string.Empty)), currentDate);
+            }
+        }
+
+        private static void EmailFeedbackCountExceeded(List<ProjectFeedback> feedbacks, SqlConnection connection, DateTime currentDate)
+        {
+            WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_FTPThresholdExceeded_MailStarted, currentDate);
+            foreach (var feedback in feedbacks)
+            {
+                var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(FeedbackRequestThresholdExceededTemplate, connection);
+                var body = string.Format(emailTemplate.Body, feedback.Person.Name, feedback.Project.ProjectNumber, feedback.Project.Name, feedback.Project.ProjectManagerNames, feedback.ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat), feedback.ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat));
+                WorkerRole.Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, string.Empty, null);
+            }
+        }
+
+        private static void EmailFeedfileError(DateTime currentDate)
+        {
+            WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_FeedFileErrorStarted, currentDate);
+            var emailTemplate = GetEmailTemplate(FeedfileErrorTemplate);
+            WorkerRole.Email(emailTemplate.Subject, emailTemplate.Body, true, emailTemplate.EmailTemplateTo, string.Empty, string.Empty, null);
+            WorkerRole.SaveSchedularLog(currentDate, SuccessStatus, M_FeedFileErrorCompleted, currentDate);
+        }
+
+        private static StringBuilder PrepareDivisionTab(DateTime currentWithTimeZone)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(StartedDalMethodFormat, "GetCFDivisions"), currentWithTimeZone);
+                var data_Division = ConfigurationDAL.GetCFDivisions(connection);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "GetCFDivisions"), currentWithTimeZone);
+                var sb = new StringBuilder();
+                //Write columns
+                sb.Append("#Division ID\tDivision Name\tParent ID\tOwner ID\tActive");
+                sb.AppendLine();
+                foreach (var division in data_Division)
+                {
+                    sb.Append(division.DivisionCode + "\t" + division.DivisionName + "\t" + (division.Parent != null ? division.Parent.DivisionCode : string.Empty) + "\t" + string.Empty + "\t" + string.Empty);
+                    sb.AppendLine();
+                }
+                return sb;
+            }
+        }
+
+        private static StringBuilder PrepareLocationTab(DateTime currentWithTimeZone)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(StartedDalMethodFormat, "GetLocations"), currentWithTimeZone);
+                var data_Location = ConfigurationDAL.GetLocations(connection);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "GetLocations"), currentWithTimeZone);
+                var sb = new StringBuilder();
+                //Write columns
+                sb.Append("#Location ID\tLocation Name\tParent ID\tActive\tCountry Code\tLine1\tLine2\tCity\tState\tPostal Code\tTime Zone");
+                sb.AppendLine();
+
+                foreach (var location in data_Location)
+                {
+                    sb.Append(location.LocationCode + "\t" + location.LocationName + "\t" + (location.Parent != null ? location.Parent.LocationCode : string.Empty) + "\t" + string.Empty + "\t" + location.Country + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + location.TimeZone);
+                    sb.AppendLine();
+                }
+                return sb;
+            }
+        }
+
+        private static StringBuilder PrepareLevelTab(DateTime currentWithTimeZone)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(StartedDalMethodFormat, "GetAllTitles"), currentWithTimeZone);
+                var data_Level = TitleDAL.GetAllTitles(connection);
+                data_Level = data_Level.Where(t => t.PositionId != 0).ToList();
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "GetAllTitles"), currentWithTimeZone);
+                var sb = new StringBuilder();
+                //Write columns
+                sb.Append("#Position ID\tPosition Name\tParent ID\tActive");
+                sb.AppendLine();
+
+                foreach (var title in data_Level)
+                {
+                    sb.Append(title.PositionId + "\t" + title.TitleName + "\t" + (title.Parent != null && title.Parent.TitleId != -1 ? title.Parent.TitleId.ToString() : string.Empty) + "\t" + string.Empty);
+                    sb.AppendLine();
+                }
+                return sb;
+            }
+        }
+
+        private static StringBuilder PrepareCostCentreTab()
+        {
+            var sb = new StringBuilder();
+            //Write columns
+            sb.Append("#Cost Center ID\tCost Center Name\tParent ID\tOwner ID\tActive");
+            sb.AppendLine();
+            sb.Append(string.Empty + "\t" + string.Empty + "\t" + string.Empty + string.Empty + "\t" + string.Empty);
+            return sb;
+        }
+
+        private static StringBuilder PrepareTypeTab(DateTime currentWithTimeZone)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(StartedDalMethodFormat, "GetSalaryPayTypes"), currentWithTimeZone);
+                var data_Type = PersonDAL.GetSalaryPayTypes(connection);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "GetSalaryPayTypes"), currentWithTimeZone);
+                var sb = new StringBuilder();
+                //Write columns
+                sb.Append("#Pay ID\tPay Type\tParent ID\tActive");
+                sb.AppendLine();
+
+                foreach (var type in data_Type)
+                {
+                    sb.Append(type.TimescaleCode + "\t" + type.Name + "\t" + string.Empty + "\t" + string.Empty);
+                    sb.AppendLine();
+                }
+                return sb;
+            }
+        }
+
+        private static StringBuilder PrepareUsersTab(DateTime currentWithTimeZone)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(StartedDalMethodFormat, "GetUsersForCF"), currentWithTimeZone);
+                var data_Users = PersonDAL.GetUsersForCF(connection);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, string.Format(SuccessRunningDalMethodFormat, "GetUsersForCF"), currentWithTimeZone);
+                var sb = new StringBuilder();
+                //Write columns
+                sb.Append("#User ID\tUsername\tActive\tAbsent\tAllow Reconcile\tPrefix\tFirst Name\tMiddle Name\tLast Name\tSuffix\tEmail\tPhone\tFax\tCountry Code\tLine1\tLine2\tCity\tState\tPostal Code\tDivision ID\tLocation ID\tPosition ID\tCost Center ID\tPay ID\tStatus\tLast Hire Date\tOriginal Hire Date\tRequired Approvals\tApprover ID\tManager ID\tGender\tEthnicity\t");
+                for (int i = 1; i <= 8; i++)
+                {
+                    sb.Append(string.Format("Project{0} ID-NAME\t", i));
+                    sb.Append(string.Format("Project Manager {0}\t", i));
+                    sb.Append(string.Format("Review Start {0}\t", i));
+                    sb.Append(string.Format("Review End {0}\t", i));
+                    sb.Append(string.Format("Review Needed {0}\t", i));
+                }
+                sb.Append("MBO\tPractice Director\tPractice Leadership");
+                sb.AppendLine();
+
+                foreach (var person in data_Users)
+                {
+                    var firstName = string.IsNullOrEmpty(person.PrefferedFirstName) ? person.FirstName : person.PrefferedFirstName;
+                    var userId = person.CurrentPay.TimescaleCode == "1099" ? person.EmployeeNumber : person.PaychexID;
+                    var personId = person.Id.Value;
+                    sb.Append(userId + "\t" + person.Alias + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + firstName + "\t" + string.Empty + "\t" + person.LastName + "\t" + string.Empty + "\t" + person.Alias + "\t" + string.Empty + "\t" + string.Empty + "\tUSA" + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + (person.CFDivision != null ? person.CFDivision.DivisionCode : string.Empty) + "\t" + person.Location.LocationCode + "\t" + person.Title.PositionId + "\t" + string.Empty + "\t" + person.CurrentPay.TimescaleCode + "\t" + string.Empty + "\t" + string.Empty + "\t" + person.HireDate.ToString(Constants.Formatting.EntryDateFormat) + "\t1\t" + string.Empty + "\t" + person.Manager.EmployeeNumber + "\t" + string.Empty + "\t" + string.Empty + "\t");
+                    for (int i = 1; i <= 8; i++)
+                    {
+                        if (person.ProjectFeedbacks != null && person.ProjectFeedbacks.Count >= 1 && person.ProjectFeedbacks.Any(p => p.Count == i))
+                        {
+                            var feedback = person.ProjectFeedbacks.FirstOrDefault(p => p.Count == i);
+                            var projectManager = feedback.Project.ProjectManagerUserId;
+                            var engagementManger = feedback.Project.EngagementManagerUserID;
+                            var executiveInCharge = feedback.Project.ExecutiveInChargeUserId;
+
+                            var realFeedbackManager = personId == feedback.Project.ExecutiveInChargeId ? string.Empty : ((personId != feedback.Project.ProjectManagerId && feedback.Project.ProjectManagerId != -1) ? projectManager : ((personId != feedback.Project.EngagementManagerID && feedback.Project.EngagementManagerID != -1) ? engagementManger : executiveInCharge));
+
+                            sb.Append(feedback.Project.ProjectNumberName + "\t");
+                            sb.Append(realFeedbackManager + "\t"); // Should replace with Employee Numbers of project accesses of the feedback project
+                            sb.Append(feedback.ReviewStartDate.ToString(Constants.Formatting.EntryDateFormat) + "\t");
+                            sb.Append(feedback.ReviewEndDate.ToString(Constants.Formatting.EntryDateFormat) + "\t");
+                            sb.Append("Yes\t");
+                        }
+                        else
+                        {
+                            sb.Append(string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t" + string.Empty + "\t");
+                        }
+                    }
+                    sb.Append((person.IsMBO ? "Yes" : "No") + "\t");
+                    sb.Append(personId == person.PracticeDirectorId ? string.Empty : person.PracticeDirectorEmployeeNumber + "\t");
+                    sb.Append(personId == person.PracticeLeadership.Id ? string.Empty : person.PracticeLeadership.EmployeeNumber);
+                    sb.AppendLine();
+                }
+                return sb;
+            }
+        }
+
+        private static void UploadDataFeedToFTP(DateTime currentWithTimeZone)
+        {
+            try
+            {
+                if (currentWithTimeZone.TimeOfDay < FTPUploadTime)
+                {
+                    var sleeptime = FTPUploadTime - currentWithTimeZone.TimeOfDay;
+                    Thread.Sleep(sleeptime);
+                    Sftp sftp = new Sftp(GetConfigValue(FTPHostname_ConfigKey), GetConfigValue(FTPUserName_ConfigKey), GetConfigValue(FTPPassword_ConfigKey));
+                    currentWithTimeZone = CurrentPMTime;
+                    WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FTPConnectionStarted, currentWithTimeZone);
+                    sftp.Connect();
+                    WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FTPConnectionCompleted, currentWithTimeZone);
+                    var currentFolder = Directory.GetCurrentDirectory();
+                    string pathString = System.IO.Path.Combine(currentFolder, "FTP_Files");
+                    if (!Directory.Exists(pathString))
+                    {
+                        System.IO.Directory.CreateDirectory(pathString);
+                    }
+                    currentWithTimeZone = CurrentPMTime;
+                    using (var sw = new StreamWriter(System.IO.Path.Combine(currentFolder, "FTP_Files/Division.txt")))
+                    {
+                        var sb = PrepareDivisionTab(currentWithTimeZone);
+                        sw.Write(sb.ToString());
+                    }
+                    using (var sw = new StreamWriter(System.IO.Path.Combine(currentFolder, "FTP_Files/Location.txt")))
+                    {
+                        var sb = PrepareLocationTab(currentWithTimeZone);
+                        sw.Write(sb.ToString());
+                    }
+                    using (var sw = new StreamWriter(System.IO.Path.Combine(currentFolder, "FTP_Files/Level.txt")))
+                    {
+                        var sb = PrepareLevelTab(currentWithTimeZone);
+                        sw.Write(sb.ToString());
+                    }
+                    using (var sw = new StreamWriter(System.IO.Path.Combine(currentFolder, "FTP_Files/Cost Center.txt")))
+                    {
+                        var sb = PrepareCostCentreTab();
+                        sw.Write(sb.ToString());
+                    }
+                    using (var sw = new StreamWriter(System.IO.Path.Combine(currentFolder, "FTP_Files/Paytype.txt")))
+                    {
+                        var sb = PrepareTypeTab(currentWithTimeZone);
+                        sw.Write(sb.ToString());
+                    }
+                    using (var sw = new StreamWriter(System.IO.Path.Combine(currentFolder, "FTP_Files/User.txt")))
+                    {
+                        var sb = PrepareUsersTab(currentWithTimeZone);
+                        sw.Write(sb.ToString());
+                    }
+                    ArrayList fileList = sftp.GetFileList("Datafeed");
+                    int count = 0;
+                    foreach (var item in fileList)
+                    {
+                        if (item.ToString().Contains(".txt"))
+                        {
+                            count++;
+                        }
+                    }
+                    if (count > 0) //If file exists 
+                    {
+                        var today = CurrentPMTime.ToString("yyyyMMdd");
+                        var todayDirectory = "Datafeed/load_error/" + today;
+                        sftp.Mkdir(todayDirectory);
+                        WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_PlaceInLoadErrorStart, currentWithTimeZone);
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Division.txt"), todayDirectory + "/Division.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Location.txt"), todayDirectory + "/Location.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Level.txt"), todayDirectory + "/Level.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Cost Center.txt"), todayDirectory + "/Cost Center.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Paytype.txt"), todayDirectory + "/Paytype.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "User.txt"), todayDirectory + "/User.txt");
+                        WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_PlaceInLoadErrorComplete, currentWithTimeZone);
+                        EmailFeedfileError(currentWithTimeZone);
+                    }
+                    else
+                    {
+                        WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FTPPlaced, currentWithTimeZone);
+                        WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FTPUploadingStarted, currentWithTimeZone);
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Division.txt"), "Datafeed/" + "Division.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Location.txt"), "Datafeed/" + "Location.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Level.txt"), "Datafeed/" + "Level.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Cost Center.txt"), "Datafeed/" + "Cost Center.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "Paytype.txt"), "Datafeed/" + "Paytype.txt");
+                        sftp.Put(Path.Combine(Path.Combine(currentFolder, "FTP_Files"), "User.txt"), "Datafeed/" + "User.txt");
+                        WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, M_FTPUploaded, currentWithTimeZone);
+                    }
+                    sftp.Close();
+                    currentWithTimeZone = CurrentPMTime;
+                    SendFeedbackCountExceeded(currentWithTimeZone);
+                }
+            }
+            catch (Exception ex)
+            {
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, FailedStatus, string.Format(M_FTPFailed, ex.Message + (ex.InnerException != null ? ": " + ex.InnerException.Message : string.Empty)), currentWithTimeZone);
+            }
+        }
+
     }
 }
 
