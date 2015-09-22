@@ -480,6 +480,27 @@ namespace DataTransferObjects
         [DataMember]
         public string Capabilities { get; set; }
 
+        [DataMember]
+        public string ProjectAccessesEmpNumbers { get; set; }
+
+        [DataMember]
+        public string EngagementManagerUserID { get; set; }
+
+        [DataMember]
+        public string ProjectManagerUserId { get; set; }
+
+        [DataMember]
+        public string ExecutiveInChargeUserId { get; set; }
+
+        [DataMember]
+        public int EngagementManagerID { get; set; }
+
+        [DataMember]
+        public int ProjectManagerId { get; set; }
+
+        [DataMember]
+        public int ExecutiveInChargeId { get; set; }
+
         #endregion Properties
 
         #region Formatting
