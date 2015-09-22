@@ -64,6 +64,20 @@ namespace DataTransferObjects
             set;
         }
 
+        [DataMember]
+        public Title Parent
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public int PositionId
+        {
+            get;
+            set;
+        }
+
         public string HtmlEncodedTitleName
         {
             get
