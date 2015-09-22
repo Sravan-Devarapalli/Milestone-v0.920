@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Web;
 using DataTransferObjects.Skills;
+using DataTransferObjects.CornerStone;
 
 namespace DataTransferObjects
 {
@@ -554,6 +555,9 @@ namespace DataTransferObjects
         public Location Location { get; set; }
 
         [DataMember]
+        public DivisionCF CFDivision { get; set; }
+
+        [DataMember]
         public List<ProjectFeedback> ProjectFeedbacks { get; set; }
 
         [DataMember]
@@ -564,6 +568,9 @@ namespace DataTransferObjects
 
         [DataMember]
         public Person PracticeLeadership { get; set; }
+
+        [DataMember]
+        public int PracticeDirectorId { get; set; }
 
         [DataMember]
         public string PracticeDirectorEmployeeNumber { get; set; }
