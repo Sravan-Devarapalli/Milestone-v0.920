@@ -134,6 +134,7 @@
     <Compile Include="ContextObjects\TimeEntryPersonReportContext.cs" />
     <Compile Include="ContextObjects\TimeEntryProjectReportContext.cs" />
     <Compile Include="ContextObjects\TimeEntrySelectContext.cs" />
+    <Compile Include="CornerStone\DivisionCF.cs" />
     <Compile Include="DataAccessFault.cs" />
     <Compile Include="DatePoint.cs" />
     <Compile Include="DefaultMilestone.cs" />
@@ -298,6 +299,7 @@
     <Compile Include="WeekPaidOption.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CornerStone\.MySCMServerInfo" />
     <None Include="DTOClasses.cd" />
     <None Include="PracticeManagementStrongNameKey.snk" />
   </ItemGroup>
@@ -328,4 +330,3 @@
   </Target>
   -->
 </Project>
-
