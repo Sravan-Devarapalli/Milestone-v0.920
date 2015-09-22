@@ -9,6 +9,12 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string PracticeDirectorId = "PracticeDirectorId";
+            public const string ExecutiveInChargeId = "ExecutiveInChargeId";
+            public const string EngagementManagerId = "EngagementManagerId";
+            public const string ExecutiveInChargeUserId = "ExecutiveInChargeUserId";
+            public const string ProjectManagerUserId = "ProjectManagerUserId";
+            public const string EngagementManagerUserId = "EngagementManagerUserId";
             public const string OrganicBreakDuration = "OrganicBreakDuration";
             public const string PositionId = "PositionId";
             public const string MilestoneEndDate = "MilestoneEndDate";
