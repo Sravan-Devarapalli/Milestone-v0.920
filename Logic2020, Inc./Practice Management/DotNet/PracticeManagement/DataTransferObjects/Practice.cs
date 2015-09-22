@@ -148,7 +148,7 @@ namespace DataTransferObjects
 
         public int PracticeManagerId
         {
-            get { return PracticeOwner.Id.HasValue ? PracticeOwner.Id.Value : -1; }
+            get { return PracticeOwner != null && PracticeOwner.Id.HasValue ? PracticeOwner.Id.Value : -1; }
         }
 
         #endregion Properties
@@ -177,3 +177,4 @@ namespace DataTransferObjects
         }
     }
 }
+
