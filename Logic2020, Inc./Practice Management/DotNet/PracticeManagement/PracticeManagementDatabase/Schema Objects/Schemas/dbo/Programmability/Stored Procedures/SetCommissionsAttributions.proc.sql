@@ -5,18 +5,12 @@ CREATE PROCEDURE [dbo].[SetCommissionsAttributions]
 )
 AS
 BEGIN
-	DECLARE @PersonStatusId		INT,
-	  		@W2SalaryId			INT,
-			@W2HourlyId			INT
-			
-	  SELECT	@W2SalaryId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
-	  SELECT	@W2HourlyId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Hourly'
-
+	
 	  --Deleting Attribution Records based on pay/division/employment history		
 		DELETE A 
 		FROM	dbo.Attribution A
-		LEFT JOIN dbo.[v_PersonValidAttributionRange] PH ON PH.PersonId = A.TargetId AND (A.StartDate <= PH.Enddate) AND (PH.Startdate <= A.EndDate)
-		WHERE A.AttributionRecordTypeId = 1 AND PH.PersonId IS NULL AND A.TargetId = @PersonId
+		LEFT JOIN dbo.[v_PersonValidAttributionRange] PH ON PH.PersonId = A.TargetId 
+		WHERE A.AttributionRecordTypeId = 1 AND (A.StartDate <= PH.Enddate) AND (PH.Startdate <= A.EndDate) AND PH.PersonId IS NULL AND A.TargetId = @PersonId
 		
 		--Updating Attribution Records based on pay/division/employment history. 
 		;WITH UpdatableAttributions
@@ -44,6 +38,6 @@ BEGIN
 								OR 
 								 A.EndDate <> CASE WHEN A.EndDate < UA.Enddate  THEN A.EndDate ELSE UA.Enddate END
 							 )
-
+		OPTION (RECOMPILE);
 END
 
