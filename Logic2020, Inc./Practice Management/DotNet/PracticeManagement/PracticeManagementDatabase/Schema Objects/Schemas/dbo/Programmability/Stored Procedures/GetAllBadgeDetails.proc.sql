@@ -23,7 +23,7 @@ BEGIN
 	FROM dbo.ConvertStringListIntoTable(@PersonStatusIdsLocal)
 
 	SELECT	P.PersonId,
-			P.FirstName,
+			ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 			P.LastName,
 			M.BadgeStartDate,
 			M.BadgeEndDate,
@@ -46,7 +46,7 @@ BEGIN
 	AND P.IsStrawman = 0
 	AND (@PayTypeIds IS NULL OR CP.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	AND P.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable)
-	ORDER BY P.LastName,P.FirstName
+	ORDER BY P.LastName,ISNULL(P.PreferredFirstName,P.FirstName)
 
 END
 
