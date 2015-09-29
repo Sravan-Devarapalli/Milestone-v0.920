@@ -960,7 +960,7 @@ namespace DataAccess
             var lastNameIndex = reader.GetOrdinal(LastNameColumn);
             var projectIdIndex = reader.GetOrdinal(ProjectIdColumn);
             var seniorityIdIndex = reader.GetOrdinal(PersonSeniorityIdColumn);
-
+            int preferredFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.PreferredFirstName);
             while (reader.Read())
             {
                 var project = new Project { Id = reader.GetInt32(projectIdIndex) };
@@ -974,6 +974,7 @@ namespace DataAccess
                                     Id = reader.GetInt32(personIdIndex),
                                     FirstName = reader.GetString(firstNameIndex),
                                     LastName = reader.GetString(lastNameIndex),
+                                    PrefferedFirstName = reader.IsDBNull(preferredFirstNameIndex) ? string.Empty : reader.GetString(preferredFirstNameIndex),
                                     Seniority = !reader.IsDBNull(seniorityIdIndex) ?
                                                     new Seniority
                                                         {
