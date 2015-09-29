@@ -30,7 +30,7 @@ BEGIN
 
 	SELECT  pers.PersonId AS 'Id',
 	        pers.EmployeeNumber AS 'Employee Id',
-			pers.FirstName + ' ' + pers.LastName AS 'Person name',
+			ISNULL(pers.PreferredFirstName,pers.FirstName) + ' ' + pers.LastName AS 'Person name',
 			stat.[Name] AS 'Status',
 			pers.Alias,
 			pers.HireDate,
@@ -59,8 +59,8 @@ BEGIN
 			END AS 'Hourly Bonus, hours',
 			T.Title,
 			pay.VacationDays AS 'PTO Accrual',
-			manager.FirstName + ' ' + manager.LastName AS 'Career Manager Name',
-			rcd.LastName + ' ' + rcd.FirstName AS 'RecruiterName'
+			ISNULL(manager.PreferredFirstName,manager.FirstName) + ' ' + manager.LastName AS 'Career Manager Name',
+			rcd.LastName + ' ' + ISNULL(rcd.PreferredFirstName,rcd.FirstName) AS 'RecruiterName'
 	FROM    dbo.Person AS pers
 			LEFT OUTER JOIN dbo.v_Pay AS pay ON pers.PersonId = pay.PersonId
 			INNER JOIN CurrentElseLastPay AS lp ON lp.PersonId = pay.PersonId AND (lp.EndDate = ISNULL(pay.EndDate, @FutureDate))
