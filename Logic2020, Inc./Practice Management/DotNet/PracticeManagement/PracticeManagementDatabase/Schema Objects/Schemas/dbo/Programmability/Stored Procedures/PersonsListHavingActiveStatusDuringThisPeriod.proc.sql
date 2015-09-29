@@ -14,7 +14,8 @@ BEGIN
 
 		SELECT DISTINCT p.PersonId ,
 				per.FirstName ,
-				per.LastName 
+				per.LastName ,
+				per.PreferredFirstName
 		FROM    dbo.v_PersonHistory AS p
 				INNER JOIN dbo.PersonStatusHistory PSH ON PSH.PersonId = p.PersonId
 				INNER JOIN dbo.Person per ON per.PersonId = P.PersonId
