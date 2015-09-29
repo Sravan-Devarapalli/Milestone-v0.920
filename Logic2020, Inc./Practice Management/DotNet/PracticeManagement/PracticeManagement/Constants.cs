@@ -36,6 +36,8 @@ namespace PraticeManagement
             public const string SortDirectionKey = "SortDirectionKey";
             public const string AvgUtilKey = "AvgUtilKey";
             public const string EndDateKey = "EndDateKey";
+            public const string DivisionIdListKey = "DivisionIdListKey";
+            public const string ExcludeInvestmentResourceKey = "ExcludeInvestmentResourceKey";
 
             # endregion Report
 
