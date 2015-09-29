@@ -404,6 +404,12 @@ namespace DataTransferObjects
         public Person Manager { get; set; }
 
         [DataMember]
+        public string ManagerName { get; set; }
+
+        [DataMember]
+        public bool IsInvestmentResource { get; set; }
+
+        [DataMember]
         public List<PersonIndustry> Industries
         {
             get;
@@ -671,6 +677,13 @@ namespace DataTransferObjects
             }
         }
 
+        public string PreferredOrFirstName
+        {
+            get
+            {
+                return string.IsNullOrEmpty(PrefferedFirstName) ? Name : LastName + ", " + PrefferedFirstName;
+            }
+        }
         public JobSeekersStatus JobSeekersStatus
         {
             get
