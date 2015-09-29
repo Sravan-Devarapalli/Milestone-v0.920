@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string IsInvestmentResource = "IsInvestmentResource";
             public const string PracticeDirectorId = "PracticeDirectorId";
             public const string ExecutiveInChargeId = "ExecutiveInChargeId";
             public const string EngagementManagerId = "EngagementManagerId";
@@ -617,6 +618,9 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string DivisionIds = "@DivisionIds";
+            public const string ExcludeInvestmentResource = "@ExcludeInvestmentResource";
+            public const string IsInvestmentResource = "@IsInvestmentResource";
             public const string ChargeDate = "@ChargeDate";
             public const string PersonStatusIds = "@PersonStatusIds";
             public const string PracticeLeadershipId = "@PracticeLeadershipId";
