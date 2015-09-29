@@ -14,7 +14,7 @@ BEGIN
   
 	DECLARE @Temp NVARCHAR(MAX) = ''
   
-	SELECT @Temp = @Temp + Pers.LastName + ', ' +Pers.FirstName +'; '
+	SELECT @Temp = @Temp + Pers.LastName + ', ' +ISNULL(Pers.PreferredFirstName,Pers.FirstName) +'; '
 	FROM Project P
 	JOIN ProjectAccess PM ON PM.ProjectId = P.ProjectId
 	JOIN Person Pers ON Pers.Personid = PM.ProjectAccessId
