@@ -40,7 +40,7 @@ AS
             SELECT  P.PersonId ,
 			        P.EmployeeNumber,
                     P.LastName ,
-                    P.FirstName ,
+                    ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
                     P.PersonStatusId ,
                     PS.Name AS PersonStatusName,
                     TSC.TimescaleId AS Timescale ,
