@@ -12,6 +12,7 @@ AS
 	       p.FirstName,
 	       p.LastName,
 		   p.PreferredFirstName,
+		   ISNULL(p.PreferredFirstName,p.FirstName) AS First,
 		   P.IsOffshore,
 		   p.PaychexID,
 	       p.HireDate,
@@ -32,6 +33,7 @@ AS
 		   p.IsStrawman,
 	       manager.Alias AS 'ManagerAlias',
 	       manager.FirstName AS 'ManagerFirstName',
+		   manager.PreferredFirstName AS 'ManagerPrfFirstName',
 	       manager.LastName AS 'ManagerLastName',
 		   manager.EmployeeNumber AS 'ManagerEmployeeNumber',
 		   manager.PaychexID AS 'ManagerADPID',
@@ -63,7 +65,8 @@ AS
 			p.PracticeLeadershipId,
 			PLeadrsh.EmployeeNumber as PracticeLeadershipEmployeeNumber,
 			PLeadrsh.PaychexID as PracticeLeadershipADPID,
-			PGCP.Timescale as PracticeLeadershipCurrentyPayType
+			PGCP.Timescale as PracticeLeadershipCurrentyPayType,
+			p.IsInvestmentResource
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
