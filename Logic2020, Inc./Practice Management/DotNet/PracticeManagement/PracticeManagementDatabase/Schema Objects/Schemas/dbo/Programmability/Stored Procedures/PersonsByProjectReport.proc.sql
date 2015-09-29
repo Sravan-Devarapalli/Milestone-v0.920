@@ -40,7 +40,7 @@ BEGIN
 			M.ProjectedDeliveryDate AS MilestoneEndDate,
 			M.Description,
 			Per.PersonId,
-			Per.FirstName,
+			ISNULL(Per.PreferredFirstName,Per.FirstName) AS FirstName,
 			Per.LastName,
 			Per.TitleId,
 			Per.Title,
@@ -67,5 +67,5 @@ BEGIN
 		  AND (@ExcludeInternalPractices = 0 OR (@ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0))
 		  AND (@ProjectStatusIds IS NULL OR P.ProjectStatusId IN (SELECT Ids FROM @ProjectStatusTable))
 		  AND Per.IsStrawman = 0
-	ORDER BY P.ProjectNumber,M.StartDate,m.Description,Per.LastName,Per.FirstName
+	ORDER BY P.ProjectNumber,M.StartDate,m.Description,Per.LastName,ISNULL(Per.PreferredFirstName,Per.FirstName)
 END
