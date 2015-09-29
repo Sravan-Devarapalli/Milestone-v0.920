@@ -57,7 +57,7 @@ namespace PraticeManagement.Controls.Reports
             bool activePersons, bool projectedPersons, bool activeProjects,
             bool projectedProjects, bool experimentalProjects, bool internalProjects,bool proposedProjects,bool completedProjects,
             string timescaleIds, string practiceIdList, int sortId, string sortDirection,
-            bool excludeInternalPractices, int utilizationType,bool includeBadgeStatus,bool isSampleReport)
+            bool excludeInternalPractices, int utilizationType,bool includeBadgeStatus,bool isSampleReport,bool excludeInvestmentResource,string divisionIds)
         {
             var context = new ConsultantTimelineReportContext
                               {
@@ -79,7 +79,9 @@ namespace PraticeManagement.Controls.Reports
                                   SortDirection = sortDirection,
                                   IsSampleReport = isSampleReport,
                                   UtilizationType = utilizationType,
-                                  IncludeBadgeStatus = includeBadgeStatus
+                                  IncludeBadgeStatus = includeBadgeStatus,
+                                  ExcludeInvestmentResource = excludeInvestmentResource,
+                                  DivisionIdList = divisionIds
                               };
 
             var consultants = ServiceCallers.Custom.Person(
