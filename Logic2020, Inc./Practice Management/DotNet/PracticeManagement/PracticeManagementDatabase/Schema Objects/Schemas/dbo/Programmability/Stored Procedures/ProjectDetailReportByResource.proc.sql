@@ -127,7 +127,7 @@ AS
 
 						SELECT	P.PersonId ,
 								P.LastName ,
-								P.FirstName ,
+								ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 								P.IsOffshore ,
 								TEP.TimeTypeName AS TimeTypeName ,
 								TEP.TimeTypeCode AS TimeTypeCode ,
@@ -181,7 +181,7 @@ AS
 								)
 						GROUP BY	P.personid,
 									P.LastName ,
-									P.FirstName ,
+									ISNULL(P.PreferredFirstName,P.FirstName) ,
 									P.IsOffshore ,
 									P.EmployeeNumber,
 									TEP.TimeTypeName,
@@ -195,7 +195,7 @@ AS
 									PFR.BillRate,
 									PR.Name
 						ORDER BY  P.LastName ,
-								  P.FirstName ,
+								  ISNULL(P.PreferredFirstName,P.FirstName) ,
 								  TEP.ChargeCodeDate,
 								  TEP.TimeTypeName
 
@@ -293,7 +293,7 @@ AS
 
 						SELECT	P.PersonId ,
 								P.LastName ,
-								P.FirstName ,
+								ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 								P.IsOffshore ,
 								TEP.TimeTypeName AS TimeTypeName ,
 								TEP.TimeTypeCode AS TimeTypeCode ,
@@ -353,7 +353,7 @@ AS
 								)
 						GROUP BY	P.personid,
 									P.LastName ,
-									P.FirstName ,
+									ISNULL(P.PreferredFirstName,P.FirstName) ,
 									P.IsOffshore ,
 									P.EmployeeNumber,
 									TEP.TimeTypeName,
@@ -367,7 +367,7 @@ AS
 									PFR.BillRate,
 									PR.Name
 						ORDER BY  P.LastName ,
-								  P.FirstName ,
+								  ISNULL(P.PreferredFirstName,P.FirstName) ,
 								  isnull(TEP.ChargeCodeDate,PFR.Date) ,
 								  TEP.TimeTypeName
 			END
