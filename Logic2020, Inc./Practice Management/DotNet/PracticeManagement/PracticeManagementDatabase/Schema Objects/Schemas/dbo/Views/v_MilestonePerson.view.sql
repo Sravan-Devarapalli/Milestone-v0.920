@@ -10,6 +10,7 @@ AS
 	       mpe.Location,
 	       p.FirstName,
 	       p.LastName,
+		   p.PreferredFirstName,
 	       p.SeniorityId,
 	       m.ProjectId,
 	       m.ProjectName,
