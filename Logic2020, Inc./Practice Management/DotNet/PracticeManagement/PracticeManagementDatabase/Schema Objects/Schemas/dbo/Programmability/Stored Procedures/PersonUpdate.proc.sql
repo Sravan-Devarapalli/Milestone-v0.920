@@ -37,6 +37,7 @@ CREATE PROCEDURE [dbo].[PersonUpdate]
 	@CohortAssignmentId INT,
 	@LocationId			INT,
 	@IsMBO				BIT,
+	@IsInvestmentResource BIT,
 	@PracticeLeadershipId	INT
 )
 AS
@@ -182,6 +183,7 @@ BEGIN TRY
 			CohortAssignmentId = @CohortAssignmentId,
 			LocationId	= @LocationId,
 			IsMBO = @IsMBO,
+			IsInvestmentResource=@IsInvestmentResource,
 			PracticeLeadershipId = @PracticeLeadershipId
 		WHERE PersonId = @PersonId
 
