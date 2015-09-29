@@ -394,7 +394,7 @@ namespace UpdatePracticeAndSeniority
                     currentDateTimeWithTimeZone = CurrentPMTime;
                     //Runs at 06:00:00 every day.
                     //RunFeedbackMails(currentDateTimeWithTimeZone); //Commented out as per 'Nick' statement in a cal on 20150805
-                    //Runs at 04:30:00 on every monday.
+                    //Runs at 04:30:00 on every day.
                     UploadDataFeedToFTP(currentDateTimeWithTimeZone);
                     //Runs at 07:00:00 on 3rd and 18th of every month.
                     RunPayrollDistributionReport(currentDateTimeWithTimeZone);
@@ -1686,7 +1686,7 @@ namespace UpdatePracticeAndSeniority
 
                     if (person.IsTerminatedDueToPay)//rehire due to compensation change from contract to employee
                     {
-                        var activeAccountEmailBody = string.Format(activeAccountEmailTemplate.Body, person.FirstName, person.LastName, person.HireDate.ToString(DateFormat), person.Alias, person.Title.TitleName, person.CurrentPay.TimescaleName, person.TelephoneNumber);
+                        var activeAccountEmailBody = string.Format(activeAccountEmailTemplate.Body, person.FirstName, person.LastName, person.HireDate.ToString(DateFormat), person.Alias, person.Title.TitleName, person.CurrentPay.TimescaleName, person.TelephoneNumber, person.IsOffshore ? "Yes" : "No", person.Manager!=null?person.Manager.FirstName:string.Empty,person.DivisionType.ToString());
                         Email(activeAccountEmailTemplate.Subject, activeAccountEmailBody, true, activeAccountEmailTemplate.EmailTemplateTo, string.Empty, string.Empty, null);
                         if (person.IsAdmin || person.Seniority.Name == Constants.SeniorityNames.AdminiSeniorityName)
                         {
@@ -1773,6 +1773,43 @@ namespace UpdatePracticeAndSeniority
                 int personTitleNameIndex;
                 int isAdministratorIndex;
                 int seniorityNameIndex;
+                int isOffShoreIndex;
+                int managerIdIndex;
+                int managerNameIndex;
+                int divisionIdIndex;
+
+                try
+                {
+                    isOffShoreIndex = reader.GetOrdinal("IsOffshore");
+                }
+                catch
+                {
+                    isOffShoreIndex = -1;
+                }
+                try
+                {
+                    managerIdIndex = reader.GetOrdinal("ManagerId");
+                }
+                catch
+                {
+                    managerIdIndex = -1;
+                }
+                try
+                {
+                    managerNameIndex = reader.GetOrdinal("ManagerName");
+                }
+                catch
+                {
+                    managerNameIndex = -1;
+                }
+                try
+                {
+                    divisionIdIndex = reader.GetOrdinal("DivisionId");
+                }
+                catch
+                {
+                    divisionIdIndex = -1;
+                }
 
                 try
                 {
@@ -1925,6 +1962,22 @@ namespace UpdatePracticeAndSeniority
                         {
                             Name = reader.IsDBNull(seniorityNameIndex) ? null : reader.GetString(seniorityNameIndex)
                         };
+                    }
+                    if (isOffShoreIndex != -1)
+                    {
+                        person.IsOffshore = reader.GetInt32(isOffShoreIndex) == 1;
+                    }
+                    if (managerIdIndex != -1 && !reader.IsDBNull(managerIdIndex))
+                    {
+                        person.Manager = new Person()
+                        {
+                            Id = reader.GetInt32(managerIdIndex),
+                            FirstName = reader.GetString(managerNameIndex)
+                        };
+                    }
+                    if (divisionIdIndex != -1)
+                    {
+                        person.DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex);
                     }
                     persons.Add(person);
                 }
