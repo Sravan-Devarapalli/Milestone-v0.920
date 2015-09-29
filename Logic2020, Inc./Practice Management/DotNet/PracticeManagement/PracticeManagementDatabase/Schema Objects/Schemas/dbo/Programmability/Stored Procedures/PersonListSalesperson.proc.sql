@@ -36,6 +36,7 @@ BEGIN
 
 		SELECT DISTINCT SP.PersonId ,
 				SP.FirstName ,
+				SP.PreferredFirstName,
 				SP.LastName ,
 				SP.HireDate ,
 				SP.TerminationDate ,
@@ -111,6 +112,7 @@ BEGIN
 			;WITH    Salespersons
 					  AS ( SELECT   p.PersonId ,
 									p.FirstName ,
+									P.PreferredFirstName,
 									p.LastName ,
 									p.HireDate ,
 									p.TerminationDate ,
