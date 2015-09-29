@@ -856,7 +856,25 @@
                                     &nbsp;
                                 </td>
                                 <td>
-                                    <asp:CheckBox ID="chbMBO" runat="server" Text="MBO"/>
+                                    <table>
+                                        <tr>
+                                            <td class="padRight0">
+                                                <asp:CheckBox ID="chbMBO" runat="server" />
+                                            </td>
+                                            <td>
+                                                <label for="ctl00_body_chbMBO"> MBO</label>
+                                            </td>
+                                            <td>
+                                                &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
+                                            </td>
+                                            <td class="padRight0">
+                                                <asp:CheckBox ID="chbInvestmentResouce" runat="server" Style="padding-right: 0px" />
+                                            </td>
+                                            <td>
+                                                <label for="ctl00_body_chbInvestmentResouce">Investment Resource</label>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                                 <td>
                                     &nbsp;
@@ -866,12 +884,20 @@
                                 <td colspan="3">
                                     &nbsp;
                                 </td>
-                                 <td>
+                                <td>
                                     &nbsp;
                                 </td>
                                 <td>
-                                    <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();"
-                                        Text="Locked-Out" />
+                                    <table>
+                                        <tr>
+                                            <td class="padRight0">
+                                                <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();" />
+                                            </td>
+                                            <td >
+                                                <label for="ctl00_body_chbLockedOut">Locked-Out</label>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                                 <td>
                                     &nbsp;
