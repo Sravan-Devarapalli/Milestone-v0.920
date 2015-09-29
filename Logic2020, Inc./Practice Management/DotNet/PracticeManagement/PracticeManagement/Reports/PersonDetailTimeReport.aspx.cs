@@ -358,13 +358,14 @@ namespace PraticeManagement.Reporting
                 if (userIsAdministrator || userIsDirector || userIsBusinessUnitManager)
                 {
                     string statusIds = (int)PersonStatusType.Active + "," + (int)PersonStatusType.TerminationPending;
-                    DataHelper.FillPersonList(ddlPerson, null, statusIds, false);
+                    //DataHelper.FillPersonList(ddlPerson, null, statusIds, false);
+                    DataHelper.FillPersonListWithPreferrdFirstName(ddlPerson, null, statusIds);
                 }
                 else
                 {
                     ddlPerson.Items.Clear();
                     var logInPerson = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(currentPerson.Id.Value));
-                    ddlPerson.Items.Add(new ListItem(logInPerson.PersonLastFirstName, currentPerson.Id.Value.ToString()));
+                    ddlPerson.Items.Add(new ListItem(logInPerson.PreferredOrFirstName, currentPerson.Id.Value.ToString()));
                     imgSearch.Visible = false;
                 }
                 ddlPerson.SelectedValue = currentPerson.Id.Value.ToString();
@@ -618,7 +619,7 @@ namespace PraticeManagement.Reporting
             else
             {
                 Person person = ServiceCallers.Custom.Person(p => p.GetStrawmanDetailsById(personId));
-                ddlPerson.Items.Add(new ListItem(person.PersonLastFirstName, personId.ToString()));
+                ddlPerson.Items.Add(new ListItem(person.PreferredOrFirstName, personId.ToString()));
                 ddlPerson.SelectedValue = personId.ToString();
             }
 
