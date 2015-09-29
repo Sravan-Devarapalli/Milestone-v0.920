@@ -35,10 +35,10 @@ namespace PraticeManagement.Controls.Reports
         private const int DEFAULT_STEP = 7;
         private const string NAME_FORMAT = "{0}, {1} ({2})";
         private const string NAME_FORMAT_WITH_DATES = "{0}, {1} ({2}): {3}-{4}";
-        private const string TITLE_FORMAT_ForPdf = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
-        private const string TITLE_FORMAT_WITHOUT_REPORT_ForPdf = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.";
-        private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
-        private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
+        private const string TITLE_FORMAT_ForPdf = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.";
+        private const string TITLE_FORMAT_WITHOUT_REPORT_ForPdf = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.";
+        private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
+        private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
         private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}";
         private const char DELIMITER = '+';
         private const string TOOLTIP_FORMAT = "{0}-{1} {2},{3}";
@@ -62,7 +62,7 @@ namespace PraticeManagement.Controls.Reports
         private const string ConsultantUtilizationReport = "Consulting Utilization Report";
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
-        private const string ConsultingHeader = "For {0} Persons; For {1} Projects\n{2}\n* Utilization reflects person vacation time during this period.";
+        private const string ConsultingHeader = "For {0} Persons; For {1} Projects\n{2}\n{3}\n{4}\n* Utilization reflects person vacation time during this period.";
         private const int maxWidth = 15;
 
         private SheetStyles HeaderSheetStyle
@@ -218,6 +218,14 @@ namespace PraticeManagement.Controls.Reports
             get
             {
                 return utf.PracticesSelected;
+            }
+        }
+
+        private string DivisionIdList
+        {
+            get
+            {
+                return utf.DivisionsSelected;
             }
         }
 
@@ -443,7 +451,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0, utf.IncludeBadgeStatus);
+                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0, utf.IncludeBadgeStatus, utf.ExcludeInvestmentResources, DivisionIdList);
             ConsultantUtilizationPerson = report;
             foreach (var quadruple in report)
                 AddPerson(quadruple);
@@ -736,8 +744,9 @@ namespace PraticeManagement.Controls.Reports
                     IsCapacityMode ? Capacity : Utilization,
                     BegPeriod.ToString("MM/dd/yyyy"),
                     EndPeriod.ToString("MM/dd/yyyy"),
-                    personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
+                    personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(),utf.DivisionsFilterText()));
                 title_top.Font = new System.Drawing.Font("Candara", 9f);
+                
                 chartPdf.Titles.Add(title_top);
 
                 System.Web.UI.DataVisualization.Charting.Title title_bottom = new System.Web.UI.DataVisualization.Charting.Title(string.Format(PageCount, pageNumber + 1, Math.Ceiling((double)ConsultantUtilizationPerson.Count / reportSize)));
@@ -754,7 +763,7 @@ namespace PraticeManagement.Controls.Reports
                         IsCapacityMode ? Capacity : Utilization,
                         BegPeriod.ToString("MM/dd/yyyy"),
                         EndPeriod.ToString("MM/dd/yyyy"),
-                        personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
+                        personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(), utf.DivisionsFilterText()));
             }
         }
 
@@ -787,7 +796,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber, false);
+                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber, false, utf.ExcludeInvestmentResources, DivisionIdList);
             report.Reverse();
             string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
             if (utf.ProjectedPersons && utf.ActivePersons)
@@ -884,7 +893,7 @@ namespace PraticeManagement.Controls.Reports
                 header1.Columns.Add(string.Format("Period: {0}-{1}", BegPeriod.ToString("MM/dd/yyyy"), EndPeriod.ToString("MM/dd/yyyy")));
 
                 List<object> row1 = new List<object>();
-                row1.Add(string.Format(ConsultingHeader, personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText()));
+                row1.Add(string.Format(ConsultingHeader, personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(),utf.InvestmentResourceFilterText(),utf.DivisionsFilterText()));
                 header1.Rows.Add(row1.ToArray());
                 headerRowsCount = header1.Rows.Count + 3;
 
