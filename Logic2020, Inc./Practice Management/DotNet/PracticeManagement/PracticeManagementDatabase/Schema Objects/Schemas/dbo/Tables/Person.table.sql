@@ -34,6 +34,7 @@
 	CohortAssignmentId	INT						NULL,
 	LocationId			INT						NULL,
 	IsMBO				BIT						NOT NULL CONSTRAINT DF_Person_IsMBO DEFAULT(0),
-	PracticeLeadershipId	INT					NULL
+	PracticeLeadershipId	INT					NULL,
+	IsInvestmentResource BIT NOT NULL CONSTRAINT DF_Person_IsInvestmentResource DEFAULT(0)
 );
 
