@@ -214,7 +214,7 @@ namespace PraticeManagement.Reports
 
         private void FillInitDirectorsList()
         {
-            DataHelper.FillDirectorsList(cblDirector, "All Executives in Charge", null);
+            DataHelper.FillDirectorsList(cblDirector, "All Executives in Charge", null,true);
             cblDirector.SelectAll();
         }
 
