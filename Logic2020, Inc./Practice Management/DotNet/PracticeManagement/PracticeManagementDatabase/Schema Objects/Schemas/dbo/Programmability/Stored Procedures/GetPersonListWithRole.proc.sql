@@ -6,7 +6,7 @@ AS
 BEGIN
 
 	 SELECT p.PersonId ,
-            p.FirstName ,
+            ISNULL(p.PreferredFirstName,p.FirstName) AS FirstName,
             p.LastName ,
             p.IsDefaultManager
     FROM    dbo.Person AS p
