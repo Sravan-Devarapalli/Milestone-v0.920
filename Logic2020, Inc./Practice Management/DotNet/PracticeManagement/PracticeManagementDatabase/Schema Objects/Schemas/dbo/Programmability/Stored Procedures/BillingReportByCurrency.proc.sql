@@ -209,15 +209,15 @@ FROM ActualTimeEntries AS AE --ActualEntriesByPerson
 		CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenue,0)) ActualRevenue,
 		CONVERT(DECIMAL(18,6), ISNULL(APV.ActualRevenueInRange,0)) ActualRevenueInRange,
 		sales.PersonId AS SalesPersonId,
-		sales.LastName+', '+ sales.FirstName as SalesPersonName,
+		sales.LastName+', '+ ISNULL(sales.PreferredFirstName,sales.FirstName) as SalesPersonName,
 		P.ExecutiveInChargeId AS DirectorId,
 	     director.LastName AS DirectorLastName,
-		director.FirstName AS DirectorFirstName,
+		ISNULL(director.PreferredFirstName,director.FirstName) AS DirectorFirstName,
 		P.PONumber,
 		P.EngagementManagerId AS SeniorManagerId,
-		senior.LastName+', '+senior.FirstName AS SeniorManagerName,
+		senior.LastName+', '+ISNULL(senior.PreferredFirstName,senior.FirstName) AS SeniorManagerName,
 		PM.ProjectAccessId AS ProjectManagerId,
-		manager.FirstName AS ProjectManagerFirstName,
+		ISNULL(manager.PreferredFirstName,manager.FirstName) AS ProjectManagerFirstName,
 		manager.LastName AS ProjectManagerLastName
 	FROM ActualAndProjectedValuesMonthly APV
 	INNER JOIN dbo.Project P ON P.ProjectId = APV.ProjectId
