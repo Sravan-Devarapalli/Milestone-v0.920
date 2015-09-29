@@ -26,6 +26,7 @@ BEGIN
 	     SELECT P.PersonId,
 				P.LastName,
 				P.FirstName,
+				p.PreferredFirstName,
 				P.IsDefaultManager	
 		 FROM	dbo.aspnet_Users U 
 				INNER JOIN dbo.Person P ON P.Alias = U.UserName 
@@ -49,6 +50,7 @@ BEGIN
 	     SELECT P.PersonId,
 				P.LastName,
 				P.FirstName,
+				p.PreferredFirstName,
 				P.IsDefaultManager
 		 FROM dbo.Person AS P 
 		 INNER JOIN dbo.Project Proj ON P.PersonId = Proj.SalesPersonId AND 
@@ -62,12 +64,14 @@ BEGIN
 	     SELECT P.PersonId,
 				P.LastName,
 				P.FirstName,
+				P.PreferredFirstName,
 				P.IsDefaultManager				
 		 FROM PersonCTE P
 		 UNION 
 		  SELECT P.PersonId,
 				P.LastName,
 				P.FirstName,
+				P.PreferredFirstName,
 				P.IsDefaultManager				
 		 FROM ProjectSalesPerson P	
 		 ORDER BY 2,3
