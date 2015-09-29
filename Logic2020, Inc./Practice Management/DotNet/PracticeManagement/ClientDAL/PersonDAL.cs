@@ -116,6 +116,7 @@ namespace DataAccess
         private const string PasswordColumn = "Password";
         private const string PasswordSaltColumn = "PasswordSalt";
         private const string FirstNameColumn = "FirstName";
+        private const string PreferredFirstName = "PreferredFirstName";
         private const string LastNameColumn = "LastName";
         private const string NameColumn = "Name";
         private const string MonthColumn = "Month";
@@ -252,6 +253,8 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.SortDirection, context.SortDirection);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, context.ExcludeInternalPractices);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsSampleReport, context.IsSampleReport);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInvestmentResource, context.ExcludeInvestmentResource);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIds, context.DivisionIdList);
 
                     connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -881,7 +884,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.LocationId, person.Location.LocationId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsMBO, person.IsMBO);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeLeadershipId, person.PracticeLeadership != null ? (object)person.PracticeLeadership.Id.Value : DBNull.Value);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsInvestmentResource, person.IsInvestmentResource);
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
 
@@ -997,6 +1000,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.CohortAssignmentId, person.CohortAssignment.Id);
                 command.Parameters.AddWithValue(Constants.ParameterNames.LocationId, person.Location.LocationId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsMBO, person.IsMBO);
+                command.Parameters.AddWithValue(Constants.ParameterNames.IsInvestmentResource, person.IsInvestmentResource);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeLeadershipId, person.PracticeLeadership != null ? (object)person.PracticeLeadership.Id.Value : DBNull.Value);
                 try
                 {
@@ -1897,6 +1901,13 @@ namespace DataAccess
                 int locationNameIndex = -1;
                 int practiceLeadershipIdIndex = -1;
                 int isMbo = -1;
+                int isInvestmentResourceIndex = -1;
+                try
+                {
+                    isInvestmentResourceIndex = reader.GetOrdinal(Constants.ColumnNames.IsInvestmentResource);
+                }
+                catch
+                { }
                 try
                 {
                     practiceLeadershipIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeLeadershipId);
@@ -2076,6 +2087,10 @@ namespace DataAccess
                     if (IsWelcomeEmailSentIndex > -1)
                     {
                         person.IsWelcomeEmailSent = reader.GetBoolean(IsWelcomeEmailSentIndex);
+                    }
+                    if (isInvestmentResourceIndex > -1)
+                    {
+                        person.IsInvestmentResource = reader.GetBoolean(isInvestmentResourceIndex);
                     }
 
                     if (isDefManagerIndex > -1)
@@ -2400,6 +2415,15 @@ namespace DataAccess
             int aliasIndex = -1;
             int seniorityIdColumnIndex = -1;
             int seniorityNameColumnIndex = -1;
+            int preferredFirstNameIndex = -1;
+            try
+            {
+                preferredFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.PreferredFirstName);
+            }
+            catch
+            {
+
+            }
             try
             {
                 isDefManagerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDefaultManager);
@@ -2467,6 +2491,10 @@ namespace DataAccess
                     LastName = reader.GetString(lastNameIndex),
                     HireDate = (hireDateIndex > -1) ? reader.GetDateTime(hireDateIndex) : DateTime.MinValue
                 };
+                if (preferredFirstNameIndex > -1)
+                {
+                    person.PrefferedFirstName = !reader.IsDBNull(preferredFirstNameIndex) ? reader.GetString(preferredFirstNameIndex) : string.Empty;
+                }
                 if (aliasIndex > -1 && !reader.IsDBNull(aliasIndex))
                 {
                     person.Alias = reader.GetString(aliasIndex);
@@ -3381,7 +3409,15 @@ namespace DataAccess
             int employeeNumberIndex = reader.GetOrdinal(Constants.ColumnNames.EmployeeNumber);
             int seniorityIdIndex = reader.GetOrdinal(Constants.ColumnNames.SeniorityIdColumn);
             int seniorityIndex = reader.GetOrdinal(Constants.ColumnNames.Seniority);
+            int preferredFirstNameIndex = -1;
+            try
+            {
+                preferredFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.PreferredFirstName);
+            }
+            catch
+            {
 
+            }
             while (reader.Read())
             {
                 person.FirstName = reader.GetString(firstNameIndex);
@@ -3404,6 +3440,10 @@ namespace DataAccess
                     Id = reader.IsDBNull(seniorityIdIndex) ? -1 : reader.GetInt32(seniorityIdIndex),
                     Name = reader.IsDBNull(seniorityIndex) ? string.Empty : reader.GetString(seniorityIndex)
                 };
+                if (preferredFirstNameIndex > -1)
+                {
+                    person.PrefferedFirstName = reader.IsDBNull(preferredFirstNameIndex) ? string.Empty : reader.GetString(preferredFirstNameIndex);
+                }
                 if (!string.IsNullOrEmpty(person.FirstName) && !string.IsNullOrEmpty(person.LastName))
                 {
                     break;
@@ -4417,7 +4457,7 @@ namespace DataAccess
             return result;
         }
 
-        public static bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId,DateTime chargeDate)
+        public static bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId, DateTime chargeDate)
         {
             bool result;
             try
@@ -4816,7 +4856,7 @@ namespace DataAccess
                 int isMBOIndex = reader.GetOrdinal(Constants.ColumnNames.IsMBO);
                 int practiceDirectorIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeDirector);
                 int practiceDirectorIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeDirectorId);
-                
+
                 while (reader.Read())
                 {
                     Person person = new Person()
