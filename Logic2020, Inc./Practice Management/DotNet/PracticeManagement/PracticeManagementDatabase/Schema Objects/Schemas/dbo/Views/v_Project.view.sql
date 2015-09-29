@@ -26,6 +26,7 @@ AS
 		   p.ExecutiveInChargeId,
 		   d.LastName as 'DirectorLastName',
 		   d.FirstName as 'DirectorFirstName',
+		   d.PreferredFirstName as 'DirectorPreferredFirstName',
 		   p.Description,
 		   p.CanCreateCustomWorkTypes,
 		   p.IsAllowedToShow,
