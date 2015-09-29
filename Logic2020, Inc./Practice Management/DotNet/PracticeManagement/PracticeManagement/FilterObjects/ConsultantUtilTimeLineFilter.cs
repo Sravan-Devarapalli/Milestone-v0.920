@@ -18,6 +18,8 @@ namespace PraticeManagement.FilterObjects
 
         public string PracticesSelected { get; set; }
 
+        public string DivisionsSelected { get; set; }
+
         public bool ActiveProjects { get; set; }
 
         public bool ProjectedProjects { get; set; }
