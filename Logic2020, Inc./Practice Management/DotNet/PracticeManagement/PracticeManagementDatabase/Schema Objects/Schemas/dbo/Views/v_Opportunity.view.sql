@@ -37,6 +37,7 @@ AS
 	       c.DefaultTerms AS Terms,
 	       p.FirstName AS SalespersonFirstName,
 	       p.LastName AS SalespersonLastName,
+		   p.PreferredFirstName AS SalespersonPreferredFirstName,
 		   p.PersonStatusId AS SalespersonStatusId,
 	       s.Name AS OpportunityStatusName,
 	       r.Name AS PracticeName,
