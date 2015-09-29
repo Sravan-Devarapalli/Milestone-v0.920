@@ -91,11 +91,11 @@ BEGIN
 			p.ProjectNumber,
 			p.GroupId,
 			PG.Name GroupName,
-		   pm.FirstName PracticeManagerFirstName,
+		   ISNULL(pm.PreferredFirstName,pm.FirstName) PracticeManagerFirstName,
 		   pm.LastName PracticeManagerLastName,
 		   p.ExecutiveInChargeId,
 		   p.DirectorLastName,
-		   p.DirectorFirstName,
+		   ISNULL(p.DirectorPreferredFirstName,p.DirectorFirstName),
 		   p.[Discount]
 	FROM	dbo.v_Project AS p
 	JOIN dbo.Person pm ON pm.PersonId = p.PracticeManagerId
@@ -136,7 +136,7 @@ BEGIN
 		   PH.PracticeId,
 		   PH.PracticeManagerId,
 		   P.LastName PracticeManagerLastName,
-		   P.FirstName PracticeManagerFirstName
+		   ISNULL(P.PreferredFirstName,P.FirstName) PracticeManagerFirstName
 		   --PH.StartDate,
 		   --PH.EndDate
 	FROM dbo.PracticeManagerHistory PH
@@ -336,11 +336,11 @@ BEGIN
 			   f.PracticeId,
 			   pra.Name PracticeName,
 			   PM.LastName PracticeManagerLastName,
-			   PM.FirstName PracticeManagerFirstName,
+			   ISNULL(PM.PreferredFirstName,PM.FirstName) PracticeManagerFirstName,
 			   pra.PracticeManagerId,
 			   f.MilestoneId,
 			   mile.Description MilestoneName,
-			   per.FirstName MilestonePersonFirstName,
+			   ISNULL(per.PreferredFirstName,per.FirstName) MilestonePersonFirstName,
 			   per.LastName MilestonePersonLastName,
 			   cal.MonthStartDate AS MonthStartDate,
 			   cal.MonthEndDate AS MonthEndDate,
@@ -380,8 +380,8 @@ BEGIN
 			AND ( @PracticeIds IS NULL 
 					OR f.PracticeId IN (SELECT Id FROM @PracticesList)) 
 		  GROUP BY f.ProjectId,f.MilestonePersonId, f.PersonId,f.PracticeId, pra.Name,
-					PM.LastName,PM.FirstName,pra.PracticeManagerId,f.MilestoneId,mile.Description,
-					per.FirstName,per.LastName,cal.MonthStartDate,cal.MonthEndDate
+					PM.LastName,ISNULL(PM.PreferredFirstName,PM.FirstName),pra.PracticeManagerId,f.MilestoneId,mile.Description,
+					ISNULL(per.PreferredFirstName,per.FirstName),per.LastName,cal.MonthStartDate,cal.MonthEndDate
 	  ) Temp
 	  LEFT JOIN ProjectExpensesMonthly  PEM 
 	ON PEM.ProjectId = Temp.ProjectId AND Temp.MonthStartDate = PEM.FinancialDate  AND Temp.MonthEndDate = PEM.MonthEnd
