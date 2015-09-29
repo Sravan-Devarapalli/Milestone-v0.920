@@ -33,7 +33,8 @@ CREATE PROCEDURE [dbo].[PersonInsert]
 	@CohortAssignmentId INT,
 	@LocationId			INT,
 	@IsMBO				BIT,
-	@PracticeLeadershipId	INT
+	@PracticeLeadershipId	INT,
+	@IsInvestmentResource   BIT
 )
 AS
 	SET NOCOUNT ON
@@ -85,10 +86,10 @@ AS
 		-- Inserting Person
 		INSERT dbo.Person
 			(FirstName, LastName,PreferredFirstName, HireDate,  Alias, DefaultPractice, 
-		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId, TerminationReasonId,TitleId,RecruiterId,JobSeekerStatusId,SourceId,TargetedCompanyId,EmployeeReferralId,CohortAssignmentId,LocationId,IsMBO,PracticeLeadershipId)
+		     PersonStatusId, EmployeeNumber, TerminationDate, SeniorityId, ManagerId, PracticeOwnedId, TelephoneNumber,IsStrawman,IsOffshore,PaychexID, DivisionId, TerminationReasonId,TitleId,RecruiterId,JobSeekerStatusId,SourceId,TargetedCompanyId,EmployeeReferralId,CohortAssignmentId,LocationId,IsMBO,PracticeLeadershipId,IsInvestmentResource)
 		VALUES
 			(@FirstName, @LastName,@PreferredFirstName, @HireDate, @Alias, @DefaultPractice, 
-		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId, @TerminationReasonId,@TitleId,@RecruiterId,@JobSeekerStatusId,@SourceRecruitingMetricsId,@TargetRecruitingMetricsId,@EmployeeReferralId,@CohortAssignmentId,@LocationId,@IsMBO,@PracticeLeadershipId)
+		     @PersonStatusId, @EmployeeNumber, @TerminationDate, @SeniorityId, @ManagerId, @PracticeOwnedId, @TelephoneNumber,0,@IsOffshore,@PaychexID, @PersonDivisionId, @TerminationReasonId,@TitleId,@RecruiterId,@JobSeekerStatusId,@SourceRecruitingMetricsId,@TargetRecruitingMetricsId,@EmployeeReferralId,@CohortAssignmentId,@LocationId,@IsMBO,@PracticeLeadershipId,@IsInvestmentResource)
 
 		-- End logging session
 		EXEC dbo.SessionLogUnprepare
