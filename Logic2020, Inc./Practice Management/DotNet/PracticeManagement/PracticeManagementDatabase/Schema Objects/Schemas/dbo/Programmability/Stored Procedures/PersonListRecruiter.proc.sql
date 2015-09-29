@@ -2,6 +2,7 @@
 AS 
     SELECT  p.PersonId ,
             p.FirstName ,
+			p.PreferredFirstName ,
             p.LastName ,
             p.HireDate ,
             p.TerminationDate ,
