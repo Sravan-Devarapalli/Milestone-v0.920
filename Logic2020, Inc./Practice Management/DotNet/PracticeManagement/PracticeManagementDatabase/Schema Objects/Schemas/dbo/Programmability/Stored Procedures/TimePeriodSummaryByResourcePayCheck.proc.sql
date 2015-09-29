@@ -123,7 +123,7 @@ AS
 					END AS DeptID ,
 					P.PersonId ,
 					P.LastName ,
-					P.FirstName ,
+					ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 					P.EmployeeNumber ,
 					P.PaychexID ,
 					ISNULL(Data.TotalHours, 0) AS TotalHours ,
@@ -229,6 +229,6 @@ AS
 							  )
 						)
 			ORDER BY P.LastName ,
-					P.FirstName
+					ISNULL(P.PreferredFirstName,P.FirstName)
 END
 
