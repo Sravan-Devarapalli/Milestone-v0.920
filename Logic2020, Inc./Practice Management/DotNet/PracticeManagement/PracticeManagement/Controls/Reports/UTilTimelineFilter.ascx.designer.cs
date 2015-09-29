@@ -193,6 +193,33 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.WebControls.CheckBox chbShowMSBadge;
         
         /// <summary>
+        /// lblShowMSBadge control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblShowMSBadge;
+        
+        /// <summary>
+        /// chbExcludeInvestmentResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbExcludeInvestmentResources;
+        
+        /// <summary>
+        /// lblExcludeInvestmentResource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblExcludeInvestmentResource;
+        
+        /// <summary>
         /// btnUpdateView control.
         /// </summary>
         /// <remarks>
@@ -362,6 +389,24 @@ namespace PraticeManagement.Controls.Reports {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chbProposedProjects;
+        
+        /// <summary>
+        /// cblDivisions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblDivisions;
+        
+        /// <summary>
+        /// sdeDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeDivision;
         
         /// <summary>
         /// cblPractices control.
