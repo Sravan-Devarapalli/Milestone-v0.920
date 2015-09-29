@@ -3600,6 +3600,7 @@ namespace PraticeManagement
                 }
             }
             chbMBO.Checked = person.IsMBO;
+            chbInvestmentResouce.Checked = person.IsInvestmentResource;
         }
 
         private void PopulatePracticeDropDown(Person person)
@@ -3729,7 +3730,7 @@ namespace PraticeManagement
             person.RoleNames = roleNames.ToArray();
 
             person.Manager = defaultManager.SelectedManager.Id == -1 ? null : defaultManager.SelectedManager;
-
+            person.ManagerName = defaultManager.ManagerDdl.SelectedItem.Text;
             if (ddlDivision.SelectedIndex != 0)
             {
                 person.DivisionType = (PersonDivisionType)Enum.Parse(typeof(PersonDivisionType), ddlDivision.SelectedValue);
@@ -3776,6 +3777,7 @@ namespace PraticeManagement
                 };
             }
             person.IsMBO = chbMBO.Checked;
+            person.IsInvestmentResource = chbInvestmentResouce.Checked;
         }
 
         private List<string> GetSelectedRoles()
