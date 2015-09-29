@@ -481,7 +481,8 @@ namespace PracticeManagementService
             bool isOldPersonContingentOrTerminated = (oldPerson == null) || (oldPerson.Status.Id == (int)PersonStatusType.Contingent || oldPerson.Status.Id == (int)PersonStatusType.Terminated);
             if (!isOldPersonContingentOrTerminated) return;
             MailUtil.SendActivateAccountEmail(person.FirstName, person.LastName, person.HireDate.ToString(Constants.Formatting.EntryDateFormat),
-                                              person.Alias, (person.Title != null) ? person.Title.TitleName : null, (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber);
+                                              person.Alias, (person.Title != null) ? person.Title.TitleName : null, (person.CurrentPay != null) ? Generic.GetDescription(person.CurrentPay.Timescale) : null, person.TelephoneNumber,
+                                              person.IsOffshore ? "Yes" : "No", person.ManagerName, person.DivisionType.ToString());
 
             DateTime currentPmTime = SettingsHelper.GetCurrentPMTime();
             TimeSpan welcomeEmailTimeStamp = new TimeSpan(7, 0, 0);
