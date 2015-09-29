@@ -25,6 +25,8 @@ namespace PraticeManagement.Controls.Reports
 
         public string PracticesSelected { get { return cblPractices.SelectedItems; } }
 
+        public string DivisionsSelected { get { return cblDivisions.SelectedItems; } }
+
         public bool ActiveProjects { get { return chbActiveProjects.Checked; } }
 
         public bool ProjectedProjects { get { return chbProjectedProjects.Checked; } }
@@ -40,6 +42,8 @@ namespace PraticeManagement.Controls.Reports
         public string TimescalesSelected { get { return cblTimeScales.SelectedItems; } }
 
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
+
+        public bool ExcludeInvestmentResources { get { return chbExcludeInvestmentResources.Checked; } }
 
         public bool IncludeBadgeStatus { get { return chbShowMSBadge.Checked; } }
 
@@ -69,6 +73,7 @@ namespace PraticeManagement.Controls.Reports
                     rbSortbyDesc.Checked = false;
                     hdnIsCapacityMode.Value = "1";
                     chbShowMSBadge.Visible = false;
+                    lblShowMSBadge.Visible = false;
                 }
             }
         }
@@ -261,6 +266,10 @@ namespace PraticeManagement.Controls.Reports
                 {
                     DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
                 }
+                if (this.cblDivisions != null && this.cblDivisions.Items.Count == 0)
+                {
+                    DataHelper.FillPersonDivisionList(this.cblDivisions,"All Divisions");
+                }
                 if (this.cblTimeScales != null && this.cblTimeScales.Items.Count == 0)
                 {
                     DataHelper.FillTimescaleList(this.cblTimeScales, Resources.Controls.AllTypes);
@@ -273,12 +282,14 @@ namespace PraticeManagement.Controls.Reports
                 else if (!(Request.QueryString.AllKeys.Contains(Constants.FilterKeys.ApplyFilterFromCookieKey) && Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true"))
                 {
                     SelectAllItems(this.cblPractices);
+                    SelectAllItems(this.cblDivisions);
                     SelectDefaultTimeScaleItems(this.cblTimeScales);
                 }
             }
             lblMessage.Text = string.Empty;
             AddAttributesToCheckBoxes(this.cblPractices);
             AddAttributesToCheckBoxes(this.cblTimeScales);
+            AddAttributesToCheckBoxes(this.cblDivisions);
 
             if (hdnFiltersChanged.Value == "false")
             {
@@ -296,7 +307,10 @@ namespace PraticeManagement.Controls.Reports
             {
                 DataHelper.FillPracticeList(cblPractices, Resources.Controls.AllPracticesText);
             }
-
+            if (this.cblDivisions != null && this.cblDivisions.Items.Count == 0)
+            {
+                DataHelper.FillPersonDivisionList(this.cblDivisions, "All Divisions");
+            }
             if (cblTimeScales != null && cblTimeScales.Items.Count == 0)
             {
                 DataHelper.FillTimescaleList(cblTimeScales, Resources.Controls.AllTypes);
@@ -323,10 +337,13 @@ namespace PraticeManagement.Controls.Reports
                 chbInternalProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.InternalProjectsKey]);
                 chbCompletedProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.CompletedProjectsKey]);
                 chkExcludeInternalPractices.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExcludeInternalPracticesKey]);
+                chbExcludeInvestmentResources.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExcludeInvestmentResourceKey]);
+                
                 rbSortbyAsc.Checked = resoureDictionary[Constants.ResourceKeys.SortDirectionKey] == "Desc" ? true : false;
 
                 SelectItems(this.cblPractices, resoureDictionary[Constants.ResourceKeys.PracticeIdListKey]);
                 SelectItems(this.cblTimeScales, resoureDictionary[Constants.ResourceKeys.TimescaleIdListKey]);
+                SelectItems(this.cblDivisions, resoureDictionary[Constants.ResourceKeys.DivisionIdListKey]);
             }
 
         }
@@ -364,6 +381,7 @@ namespace PraticeManagement.Controls.Reports
             rbSortbyDesc.Checked = cookie.SortDirection == "Desc" ? true : false;
 
             cblPractices.SelectedItems = cookie.PracticesSelected;
+            cblDivisions.SelectedItems = cookie.DivisionsSelected;
             cblTimeScales.SelectedItems = cookie.TimescalesSelected;
 
             hdnFiltersChanged.Value = cookie.FiltersChanged.ToString().ToLower();
@@ -433,6 +451,7 @@ namespace PraticeManagement.Controls.Reports
             this.chbCompletedProjects.Checked = true;
             this.chkExcludeInternalPractices.Checked = true;
             SelectAllItems(this.cblPractices);
+            SelectAllItems(this.cblDivisions);
             SelectDefaultTimeScaleItems(this.cblTimeScales);            
         }
 
@@ -458,6 +477,34 @@ namespace PraticeManagement.Controls.Reports
                 }
             }
             return PracticesFilterText + (this.chkExcludeInternalPractices.Checked ? ";Excluding Internal Practice Areas" : string.Empty);
+        }
+
+        public string DivisionsFilterText()
+        {
+            string includeAllText = "Including All Divisions";
+            string includeText = "Not Including All Divisions";
+            if (cblDivisions.Items.Count > 0)
+            {
+                if (cblDivisions.Items[0].Selected)
+                {
+                    return includeAllText;
+                }
+                else
+                {
+                    return includeText;
+                }
+            }
+            else
+            {
+                return includeText;
+            }
+        }
+
+        public string InvestmentResourceFilterText()
+        {
+            string includeText = "Including Investment Resources";
+            string excludeText = "Excluding Investment Resources";
+            return chbExcludeInvestmentResources.Checked ? excludeText : includeText;
         }
 
         protected void btnUpdateView_OnClick(object sender, EventArgs e)
@@ -557,12 +604,14 @@ namespace PraticeManagement.Controls.Reports
             reportFilterDictionary.Add(Constants.ResourceKeys.TimescaleIdListKey, TimescalesSelected.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.PracticeIdListKey, PracticesSelected.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.ExcludeInternalPracticesKey, ExcludeInternalPractices.ToString());
+            reportFilterDictionary.Add(Constants.ResourceKeys.ExcludeInvestmentResourceKey, ExcludeInvestmentResources.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.InternalProjectsKey, InternalProjects.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.SortIdKey, SortId.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.SortDirectionKey, SortDirection.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.AvgUtilKey, AvgUtil.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.EndDateKey, EndPeriod.ToString());
             reportFilterDictionary.Add(Constants.ResourceKeys.PeriodKey, ddlPeriod.SelectedValue);
+            reportFilterDictionary.Add(Constants.ResourceKeys.DivisionIdListKey, DivisionsSelected.ToString());
             DataHelper.SaveResourceKeyValuePairs(SettingsType.Reports, reportFilterDictionary);
         }
 
@@ -582,6 +631,7 @@ namespace PraticeManagement.Controls.Reports
                 InternalProjects = InternalProjects,
                 Period = ddlPeriod.SelectedItem.Value,
                 PracticesSelected = cblPractices.Items[0].Selected ? null : PracticesSelected,
+                DivisionsSelected = cblDivisions.Items[0].Selected ? null : DivisionsSelected,
                 ProjectedPersons = ProjectedPersons,
                 ProjectedProjects = ProjectedProjects,
                 SortDirection = rbSortbyAsc.Checked ? "Asc" : "Desc",
