@@ -131,10 +131,10 @@ namespace PracticeManagementService
             Email(emailTemplate.Subject, string.Format(emailTemplate.Body, firstName, lastName), true, emailTemplate.EmailTemplateTo, string.Empty, null, true);
         }
 
-        internal static void SendActivateAccountEmail(string firstName, string lastName, string startDate, string emailAddress, string title, string payType, string telephoneNumber)
+        internal static void SendActivateAccountEmail(string firstName, string lastName, string startDate, string emailAddress, string title, string payType, string telephoneNumber,string isOffshore,string manager,string division)
         {
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.ActivateAccountTemplateName);
-            var body = string.Format(emailTemplate.Body, firstName, lastName, startDate, emailAddress, title, payType, telephoneNumber);
+            var body = string.Format(emailTemplate.Body, firstName, lastName, startDate, emailAddress, title, payType, telephoneNumber,isOffshore,manager,division);
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
         }
 
