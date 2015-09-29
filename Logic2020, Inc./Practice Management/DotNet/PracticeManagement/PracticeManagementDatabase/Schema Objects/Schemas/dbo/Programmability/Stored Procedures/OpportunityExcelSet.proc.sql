@@ -14,8 +14,8 @@ SELECT O.OpportunityNumber AS 'Opportunity'
 	 , CONVERT(NVARCHAR(10),CONVERT(DATE,O.ProjectedStartDate)) AS 'Project Start Date'
 	 , CONVERT(NVARCHAR(10),CONVERT(DATE,O.ProjectedEndDate)) AS 'Project End Date'
 	 , CONVERT(NVARCHAR(50), CONVERT(money,O.EstimatedRevenue),1)  AS 'Estimated Revenue'
-	 , O.SalespersonLastName + ',' + O.SalespersonFirstName AS 'Salesperson'
-	 , p.LastName + ',' + p.FirstName AS 'Owner'
+	 , O.SalespersonLastName + ',' + ISNULL(O.SalespersonPreferredFirstName,O.SalespersonFirstName) AS 'Salesperson'
+	 , p.LastName + ',' + ISNULL(p.PreferredFirstName,p.FirstName) AS 'Owner'
 	 , O.PracticeName AS 'Practice Area'
 	 , CASE WHEN proj.ProjectId IS NULL 
 	        THEN
