@@ -9,6 +9,7 @@ BEGIN
 	SELECT mp.MilestonePersonId,
 	       mp.PersonId,
 	       mp.FirstName,
+		   mp.PreferredFirstName,
 	       mp.LastName,
 	       mp.ProjectId,
 		   mp.SeniorityId
