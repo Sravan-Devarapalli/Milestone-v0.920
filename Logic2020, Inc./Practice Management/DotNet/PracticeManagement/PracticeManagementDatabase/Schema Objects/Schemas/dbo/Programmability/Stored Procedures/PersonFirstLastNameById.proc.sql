@@ -10,6 +10,7 @@ BEGIN
 	SELECT @NOW = dbo.GettingPMTime(GETUTCDATE()), @FutureDate = dbo.GetFutureDate()
 
 	SELECT	P.FirstName,
+			P.PreferredFirstName,
 			P.LastName,
 			P.IsStrawman,
 			P.HireDate,
