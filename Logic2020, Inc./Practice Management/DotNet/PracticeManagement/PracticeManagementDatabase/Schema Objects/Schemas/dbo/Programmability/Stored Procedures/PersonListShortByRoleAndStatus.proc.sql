@@ -10,6 +10,7 @@ BEGIN
 
 	SELECT DISTINCT p.PersonId,
 					p.FirstName,
+					p.PreferredFirstName,
 					p.LastName,
 					p.IsDefaultManager
 	FROM dbo.Person p
