@@ -125,13 +125,13 @@ BEGIN
 			p.GroupId,
 			PG.Name GroupName,
 			p.SalesPersonId,
-			sp.FirstName AS SalespersonFirstName,
+			ISNULL(sp.PreferredFirstName,sp.FirstName) AS SalespersonFirstName,
 			sp.LastName AS SalespersonLastName,
-			pm.FirstName PracticeManagerFirstName,
+			ISNULL(pm.PreferredFirstName,pm.FirstName) PracticeManagerFirstName,
 			pm.LastName PracticeManagerLastName,
 			p.ExecutiveInChargeId,
 			p.DirectorLastName,
-			p.DirectorFirstName,
+			ISNULL(p.DirectorPreferredFirstName,p.DirectorFirstName),
 			p.[Discount]
 	FROM	dbo.v_Project AS p
 	LEFT JOIN dbo.Person pm ON pm.PersonId = p.PracticeManagerId AND P.IsAdministrative = 0 AND P.ProjectId != 174 
