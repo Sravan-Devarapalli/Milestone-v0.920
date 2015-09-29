@@ -242,13 +242,13 @@ namespace PraticeManagement.Controls
             int avgUtil,
             int sortId,
             string sortDirection,
-            bool excludeInternalPractices, int utilizationType, bool includeBadgeStatus ,bool isSampleReport = false)
+            bool excludeInternalPractices, int utilizationType, bool includeBadgeStatus, bool excludeInvestmentResource, string divisionIds, bool isSampleReport = false)
         {
             var consultants =
                 ReportsHelper.GetConsultantsTimelineReport(
                     startDate, duration, step, activePersons, projectedPersons,
                     activeProjects, projectedProjects, experimentalProjects, internalProjects, proposedProjects, completedProjects,
-                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, utilizationType,includeBadgeStatus, isSampleReport);
+                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, utilizationType, includeBadgeStatus, isSampleReport, excludeInvestmentResource, divisionIds);
 
             return consultants.FindAll(Q => Q.AverageUtilization < avgUtil);
         }
@@ -436,7 +436,7 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                   return serviceClient.MilestoneMove(selectedIdValue, shiftDays, moveFutureMilestones).ToList();
+                    return serviceClient.MilestoneMove(selectedIdValue, shiftDays, moveFutureMilestones).ToList();
                 }
                 catch (CommunicationException)
                 {
@@ -665,7 +665,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
-        public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate, DateTime endDate, string statusIds, bool fillWithPersonFirstLastName = false)
+        public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate, DateTime endDate, string statusIds, bool fillWithPersonFirstLastName = false,bool fillWithPersonPreferrdFirstName=false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -675,7 +675,7 @@ namespace PraticeManagement.Controls
 
                     Array.Sort(persons);
 
-                    FillPersonList(control, firstItemText, persons, String.Empty, fillWithPersonFirstLastName);
+                    FillPersonList(control, firstItemText, persons, String.Empty, fillWithPersonFirstLastName,fillWithPersonPreferrdFirstName);
                 }
                 catch (CommunicationException)
                 {
@@ -794,7 +794,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="personId">An ID of the <see cref="Person"/> to fill the list for.</param>
         /// <param name="hireDate">A Hire Date of the person.</param>
-        public static void FillRecruiterList(ListControl control, string firstItemText)
+        public static void FillRecruiterList(ListControl control, string firstItemText,bool fillPreferredFirstName=false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -802,7 +802,7 @@ namespace PraticeManagement.Controls
                 {
                     Person[] persons = serviceClient.GetRecruiterList();
 
-                    FillPersonList(control, firstItemText, persons, String.Empty);
+                    FillPersonList(control, firstItemText, persons, String.Empty, false, fillPreferredFirstName);
                 }
                 catch (CommunicationException)
                 {
@@ -842,7 +842,7 @@ namespace PraticeManagement.Controls
         /// <param name="control"></param>
         /// <param name="firstItemText"></param>
 
-        public static void FillDirectorsList(ListControl control, string firstItemText, List<int> excludedPersons = null)
+        public static void FillDirectorsList(ListControl control, string firstItemText, List<int> excludedPersons = null,bool fillPreferredFirstName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -851,7 +851,7 @@ namespace PraticeManagement.Controls
                     string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
                     Person[] persons = serviceClient.PersonListShortByRoleAndStatus(statusids, DataTransferObjects.Constants.RoleNames.DirectorRoleName);
                     persons = excludedPersons != null ? persons.Where(p => !excludedPersons.Any(g => g == p.Id)).ToArray() : persons;
-                    FillPersonList(control, firstItemText, persons, String.Empty);
+                    FillPersonList(control, firstItemText, persons, String.Empty,false,fillPreferredFirstName);
                 }
                 catch (CommunicationException)
                 {
@@ -913,8 +913,8 @@ namespace PraticeManagement.Controls
                 {
                     string statusIds = ((int)DataTransferObjects.PersonStatusType.Active).ToString();
                     string paytypeIds = ((int)TimescaleType.Salary).ToString();
-                    
-                    var persons = ServiceCallers.Custom.Person(p => p.GetPersonsByPayTypesAndByStatusIds(statusIds, paytypeIds)).OrderBy(p=>p.LastName).ThenBy(p=>p.FirstName).ToArray();
+
+                    var persons = ServiceCallers.Custom.Person(p => p.GetPersonsByPayTypesAndByStatusIds(statusIds, paytypeIds)).OrderBy(p => p.LastName).ThenBy(p => p.FirstName).ToArray();
 
                     FillListDefault(control, firstItemText, persons, noFirstItem, "Id", "PersonLastFirstName");
                     ListItem unasigned = new ListItem("Unassigned", "-1");
@@ -990,7 +990,7 @@ namespace PraticeManagement.Controls
                 {
                     Person[] persons = serviceClient.PersonListSalesperson(person, includeInactive);
 
-                    FillPersonList(control, firstItemText, persons, String.Empty);
+                    FillPersonList(control, firstItemText, persons, String.Empty,false,true);
                 }
                 catch (CommunicationException)
                 {
@@ -1020,7 +1020,7 @@ namespace PraticeManagement.Controls
         /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <param name="person">Person who requests the info</param>
-        public static void FillProjectOwnerList(ListControl control, string firstItemText, bool includeInactive, Person person)
+        public static void FillProjectOwnerList(ListControl control, string firstItemText, bool includeInactive, Person person,bool fillPreferredFirstName=false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -1028,7 +1028,7 @@ namespace PraticeManagement.Controls
                 {
                     var persons = serviceClient.PersonListProjectOwner(includeInactive, person);
 
-                    FillPersonList(control, firstItemText, persons, String.Empty);
+                    FillPersonList(control, firstItemText, persons, String.Empty,false,fillPreferredFirstName);
                 }
                 catch (CommunicationException)
                 {
@@ -1075,7 +1075,7 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillPersonList(ListControl control, string firstItemText, Person[] persons, string firstItemValue, bool fillWithPersonFirstLastName = false)
+        public static void FillPersonList(ListControl control, string firstItemText, Person[] persons, string firstItemValue, bool fillWithPersonFirstLastName = false, bool fillWithPersonPreferrdFirstName = false)
         {
             control.Items.Clear();
 
@@ -1088,26 +1088,39 @@ namespace PraticeManagement.Controls
 
             if (persons.Length > 0)
             {
-                if (fillWithPersonFirstLastName)
+                if (fillWithPersonPreferrdFirstName)
                 {
-                    persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonFirstLastName).ToArray();
+                    persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PreferredOrFirstName).ToArray();
                 }
                 else
                 {
-                    persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonLastFirstName).ToArray();
+                    if (fillWithPersonFirstLastName)
+                    {
+                        persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonFirstLastName).ToArray();
+                    }
+                    else
+                    {
+                        persons = persons.OrderBy(p => p.IsStrawMan).ThenBy(p => p.PersonLastFirstName).ToArray();
+                    }
                 }
-
                 foreach (Person person in persons)
                 {
                     var personitem = new ListItem();
                     personitem.Value = person.Id.Value.ToString();
-                    if (fillWithPersonFirstLastName)
+                    if (fillWithPersonPreferrdFirstName)
                     {
-                        personitem.Text = person.PersonFirstLastName;
+                        personitem.Text = person.PreferredOrFirstName;
                     }
                     else
                     {
-                        personitem.Text = person.PersonLastFirstName;
+                        if (fillWithPersonFirstLastName)
+                        {
+                            personitem.Text = person.PersonFirstLastName;
+                        }
+                        else
+                        {
+                            personitem.Text = person.PersonLastFirstName;
+                        }
                     }
 
                     personitem.Attributes[Constants.Variables.IsStrawMan] = person.IsStrawMan.ToString().ToLowerInvariant();
@@ -2162,7 +2175,8 @@ namespace PraticeManagement.Controls
                                                                                         startDate,
                                                                                         endDate);
 
-                    FillListDefault(control, firstItemText, persons, false);
+                    //FillListDefault(control, firstItemText, persons, false);
+                    FillPersonList(control, firstItemText, persons, string.Empty, false, true);
                 }
                 catch (CommunicationException)
                 {
@@ -2450,6 +2464,43 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillPersonDivisionList(ListControl control, string firstItemText)
+        {
+            using (var serviceClient = new PersonServiceClient())
+            {
+                try
+                {
+                    var divisions = Enum.GetValues(typeof(PersonDivisionType));
+
+                    control.AppendDataBoundItems = true;
+                    control.Items.Clear();
+
+                    control.DataTextField = "Key";
+                    control.DataValueField = "Value";
+
+                    Dictionary<string, string> list = new Dictionary<string, string>();
+                    list.Add(firstItemText, String.Empty);
+                    foreach (PersonDivisionType item in divisions)
+                    {
+                        if ((int)item == 0)
+                            continue;
+                        string key = GetDescription(item);
+                        string value = ((int)item).ToString();
+                        if (value == "0") value = "";
+                        list.Add(key, value);
+                    }
+
+                    control.DataSource = list;
+                    control.DataBind();
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         public static void FillPersonDivisionList(ListControl control)
         {
             using (var serviceClient = new PersonServiceClient())
@@ -2622,6 +2673,11 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
+        }
+
+        public static void FillPersonListWithPreferrdFirstName(ListControl control, string firstItemText, string statusIds)
+        {
+            FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue, statusIds, false, true);
         }
     }
 }
