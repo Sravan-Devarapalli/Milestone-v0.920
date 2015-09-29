@@ -269,13 +269,13 @@
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="TimelineGeneralHeaderHeigth" type="System.Int32, mscorlib">
-    <value>130</value>
+    <value>140</value>
   </data>
   <data name="TimelineGeneralFooterHeigth" type="System.Int32, mscorlib">
     <value>110</value>
   </data>
   <data name="TimelineGeneralItemHeigth" type="System.Int32, mscorlib">
-    <value>25</value>
+    <value>30</value>
   </data>
   <data name="TimelineDetailedHeaderFooterHeigth" type="System.Int32, mscorlib">
     <value>30</value>
