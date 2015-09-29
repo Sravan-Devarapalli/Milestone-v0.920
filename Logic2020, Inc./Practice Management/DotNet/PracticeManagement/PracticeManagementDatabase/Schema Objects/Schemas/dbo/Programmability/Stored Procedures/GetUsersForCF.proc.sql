@@ -36,7 +36,7 @@ BEGIN
 	LEFT JOIN dbo.Person Drctr ON Drctr.PersonId = PD.PracticeDirectorId
 	LEFT JOIN dbo.GetCurrentPayTypeTable() DGCP ON DGCP.PersonId = Drctr.PersonId
 	WHERE GCP.Timescale IN (1,2,3,4) -- W2-Hourly, W2-Salary
-		  AND P.PersonStatusId = 1 -- Active
+		  AND P.PersonStatusId IN (1,5) -- Active, Termination Pending
 		  AND P.IsStrawman = 0
 		  AND title.PositionId IS NOT NULL
    ORDER BY P.LastName,P.FirstName
@@ -56,7 +56,7 @@ BEGIN
 		JOIN dbo.Title title ON title.TitleId = P.TitleId
 		LEFT JOIN dbo.PersonFeedbacksInCSFeed PFCF ON PFCF.PersonId = P.PersonId AND PFCF.ProjectId = PF.ProjectId AND PFCF.ReviewStartDate = pf.ReviewPeriodStartDate AND PFCF.ReviewEndDate = pf.ReviewPeriodEndDate 
 		WHERE GCP.Timescale IN (1,2) -- W2-Hourly, W2-Salary
-				AND P.PersonStatusId = 1 -- Active
+				AND P.PersonStatusId IN (1,5) -- Active, Termination Pending
 				AND P.IsStrawman = 0
 				AND PF.ReviewPeriodEndDate >= '20140701'
 				AND CONVERT(NVARCHAR(10), @Today, 111) = CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111)
@@ -100,7 +100,7 @@ BEGIN
    LEFT JOIN dbo.Person EC ON EC.PersonId = Pro.ExecutiveInChargeId
    LEFT JOIN dbo.GetCurrentPayTypeTable() ECGCP ON ECGCP.PersonId = EC.PersonId
    WHERE GCP.Timescale IN (1,2) -- W2-Hourly, W2-Salary
-		  AND P.PersonStatusId = 1 -- Active
+		  AND P.PersonStatusId IN (1,5) -- Active, Termination Pending
 		  AND P.IsStrawman = 0
 		  AND PF.ReviewPeriodEndDate >= '20140701'
 		  AND CONVERT(NVARCHAR(10), @Today, 111) = CONVERT(NVARCHAR(10), PF.ReviewPeriodEndDate, 111)
