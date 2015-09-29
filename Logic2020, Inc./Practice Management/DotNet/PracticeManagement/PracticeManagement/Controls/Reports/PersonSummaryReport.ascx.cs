@@ -190,13 +190,13 @@ namespace PraticeManagement.Controls.Reports
                                                                                  string.IsNullOrEmpty(payType) ? personType :
                                                                                  string.IsNullOrEmpty(personType) ? payType :
                                                                                                                      payType + ", " + personType;
-                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, person.FirstName, "Summary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
+                var filename = string.Format("{0}_{1}_{2}_{3}_{4}.xls", person.LastName, (string.IsNullOrEmpty(person.PrefferedFirstName) ? person.FirstName : person.PrefferedFirstName), "Summary", HostingPage.StartDate.Value.ToString("MM.dd.yyyy"), HostingPage.EndDate.Value.ToString("MM.dd.yyyy"));
 
                 if (timeEntriesGroupByClientAndProjectList.Count > 0)
                 {
 
                     DataTable header1 = new DataTable();
-                    header1.Columns.Add(person.EmployeeNumber + " - " + person.FirstName + " " + person.LastName);
+                    header1.Columns.Add(person.EmployeeNumber + " - " + (string.IsNullOrEmpty(person.PrefferedFirstName) ? person.FirstName : person.PrefferedFirstName) + " " + person.LastName);
 
                     header1.Rows.Add(personStatusAndType);
                     header1.Rows.Add(HostingPage.RangeForExcel);
