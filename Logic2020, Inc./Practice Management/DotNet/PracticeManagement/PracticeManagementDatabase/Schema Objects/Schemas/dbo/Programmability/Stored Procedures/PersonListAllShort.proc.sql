@@ -26,6 +26,7 @@ AS
 	SELECT p.PersonId,
 	       p.FirstName,
 	       p.LastName,
+		   p.PreferredFirstName,
 		   p.IsDefaultManager
 	  FROM dbo.Person AS p
 	 WHERE 
