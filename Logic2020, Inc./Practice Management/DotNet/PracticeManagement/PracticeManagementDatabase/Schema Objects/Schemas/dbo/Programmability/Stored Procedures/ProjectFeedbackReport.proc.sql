@@ -102,7 +102,7 @@ BEGIN
 	)
 	SELECT DISTINCT FeedbackId,
 		   PF.PersonId,
-		   P.FirstName,
+		   ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 		   P.LastName,
 		   P.EmployeeNumber,
 		   P.TitleId,
@@ -119,20 +119,20 @@ BEGIN
 		   BG.BusinessGroupId,
 		   BG.Name AS BusinessGroup,
 		   director.PersonId AS DirectorId,
-		   director.FirstName AS DirectorFirstName,
+		   ISNULL(director.PreferredFirstName,director.FirstName) AS DirectorFirstName,
 		   director.LastName AS DirectorLastName,
-		   SM.LastName+', '+SM.FirstName AS SeniorManagerName,
+		   SM.LastName+', '+ISNULL(SM.PreferredFirstName,SM.FirstName) AS SeniorManagerName,
 		   Manager.PersonId AS ProjectManagerId,
 		   Manager.LastName AS ProjectManagerLastName,
-		   Manager.FirstName AS ProjectManagerFirstName,
+		   ISNULL(Manager.PreferredFirstName,Manager.FirstName) AS ProjectManagerFirstName,
 		   Pro.ProjectManagerId AS ProjectOwnerId,
 		   owner.LastName ProjectOwnerLastName,
-		   owner.FirstName ProjectOwnerFirstName,
+		   ISNULL(owner.PreferredFirstName,owner.FirstName) ProjectOwnerFirstName,
 		   PF.ReviewPeriodStartDate AS ReviewStartDate,
 		   PF.ReviewPeriodEndDate AS ReviewEndDate,
 		   PFS.FeedbackStatusId,
 		   PFS.Name AS FeedbackStatus,
-		   StatusUpdatedBy.LastName+', '+StatusUpdatedBy.FirstName AS CompletionCertificateBy,
+		   StatusUpdatedBy.LastName+', '+ISNULL(StatusUpdatedBy.PreferredFirstName,StatusUpdatedBy.FirstName) AS CompletionCertificateBy,
 		   PF.CompletionCertificateDate,
 		   PF.CancelationReason
 	FROM dbo.ProjectFeedback PF
@@ -171,7 +171,7 @@ BEGIN
 		  AND PF.ReviewPeriodEndDate BETWEEN @StartDate AND @EndDate
 		  AND Pro.ProjectStatusId IN (3,4)
     ORDER BY  P.LastName,
-			  P.FirstName,
+			  ISNULL(P.PreferredFirstName,P.FirstName),
 			  Pro.Name,
 			  PF.ReviewPeriodStartDate,
 			  PF.ReviewPeriodEndDate
