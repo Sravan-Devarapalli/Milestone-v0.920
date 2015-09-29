@@ -99,23 +99,23 @@ AS
 			Clnt.IsChargeable AS [ClientIsChargeable],
 	        P.IsChargeable AS [ProjectIsChargeable],
 			P.SalesPersonId AS 'SalespersonId',
-		   sperson.LastName+', ' +sperson.FirstName AS 'SalespersonName' ,
+		   sperson.LastName+', ' +ISNULL(sperson.PreferredFirstName,sperson.FirstName) AS 'SalespersonName' ,
 		   P.ExecutiveInChargeId AS DirectorId,
 		   d.LastName AS 'DirectorLastName',
-		   d.FirstName AS 'DirectorFirstName',
+		   ISNULL(d.PreferredFirstName,d.FirstName) AS 'DirectorFirstName',
 		   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 					ELSE 0 END AS HasAttachments,
 		   M.MilestoneId,
 		   M.Description AS MilestoneName,
 		   P.ProjectManagerId AS ProjectOwnerId,
 		   Powner.LastName AS [ProjectOwnerLastName],
-		   Powner.FirstName AS [ProjectOwnerFirstName],
+		   ISNULL(Powner.PreferredFirstName,Powner.FirstName) AS [ProjectOwnerFirstName],
 		   dbo.GetProjectManagerList(P.ProjectId) AS ProjectManagersIdFirstNameLastName,
 		   P.SowBudget,
 			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN -1 ELSE  sm.PersonId  END AS 'SeniorManagerId',
-			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE  sm.LastName+', ' +sm.FirstName END AS 'SeniorManagerName',
+			CASE WHEN p.IsSeniorManagerUnassigned = 1 THEN 'Unassigned' ELSE  sm.LastName+', ' +ISNULL(sm.PreferredFirstName,sm.FirstName) END AS 'SeniorManagerName',
 			re.PersonId AS 'ReviewerId',
-			re.LastName+', ' +re.FirstName AS 'ReviewerName',
+			re.LastName+', ' + ISNULL(re.PreferredFirstName,re.FirstName) AS 'ReviewerName',
 			P.PONumber
 	FROM	dbo.Project AS P
 	INNER JOIN dbo.Practice pr ON pr.PracticeId = P.PracticeId
