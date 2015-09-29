@@ -302,7 +302,7 @@ namespace PraticeManagement.Config
                 // Recruiters should see a complete list their recruits
                 //practiceFilter.ActiveOnly = userIsAdministrator || userIsHR; //#2817: userIsHR is added as per  requirement.
 
-                DataHelper.FillRecruiterList(cblRecruiters, AllRecruiters);//#2817: userIsHR is added as per  requirement.
+                DataHelper.FillRecruiterList(cblRecruiters, AllRecruiters,true);//#2817: userIsHR is added as per  requirement.
 
                 if (!userIsAdministrator && !userIsHR)//#2817: userIsHR is added as per  requirement.
                 {
