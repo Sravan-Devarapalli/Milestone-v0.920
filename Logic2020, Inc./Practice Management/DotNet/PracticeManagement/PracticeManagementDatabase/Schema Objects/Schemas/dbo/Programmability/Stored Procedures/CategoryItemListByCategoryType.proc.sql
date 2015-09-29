@@ -12,7 +12,7 @@ BEGIN
 	BEGIN
 		SELECT  P.PersonId,
 				P.LastName,
-				P.FirstName,
+				ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 				C.MonthStartDate MonthStartDate,
 				CIB.Amount
 		FROM dbo.Person P
@@ -37,11 +37,11 @@ BEGIN
 			  AND (PSH.PersonStatusId = 1 OR (PSH.PersonId IS NULL AND Proj.ProjectId IS NOT NULL ))
 		GROUP BY P.PersonId,
 				 P.LastName,
-				 P.FirstName,
+				 ISNULL(P.PreferredFirstName,P.FirstName),
 				 CIB.Amount,
 				 C.MonthStartDate
 		ORDER BY  P.LastName ,
-					P.FirstName,
+					ISNULL(P.PreferredFirstName,P.FirstName),
 					c.MonthStartDate
 
 	END
@@ -51,7 +51,7 @@ BEGIN
 		SELECT 
 				P.PersonId,
 				P.LastName,
-				P.FirstName,
+				ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 				C.MonthStartDate MonthStartDate,
 				CIB.Amount
 		FROM dbo.Person P
@@ -76,11 +76,11 @@ BEGIN
 			  AND (PSH.PersonStatusId IS NOT NULL OR(Proj.SalesPersonId IS NOT NULL AND Proj.ProjectId IS NOT NULL))
 		GROUP BY P.PersonId,
 				 P.LastName,
-				 P.FirstName,
+				 ISNULL(P.PreferredFirstName,P.FirstName),
 				 CIB.Amount,
 				 C.MonthStartDate
 		ORDER BY  P.LastName ,
-					P.FirstName,
+					ISNULL(P.PreferredFirstName,P.FirstName),
 					c.MonthStartDate
 
 	END
