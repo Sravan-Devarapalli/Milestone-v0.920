@@ -510,10 +510,10 @@ namespace PraticeManagement.Reports
             string names = string.Empty;
             foreach (var person in list)
             {
-                names += person.Name + "\n";
+                names += person.Name + "; ";
             }
 
-            names = names.Remove(names.LastIndexOf("\n"));
+            names = names.Remove(names.LastIndexOf("; "));
             return names;
         }
 
