@@ -155,7 +155,7 @@ AS
 					)
 					SELECT  P.PersonId ,
 							P.LastName ,
-							P.FirstName ,
+							ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 							P.IsOffshore ,
 							ISNULL(PR.Name, '') AS ProjectRoleName ,
 							( 
@@ -186,7 +186,7 @@ AS
 							)
 					GROUP BY P.PersonId ,
 							P.LastName ,
-							P.FirstName ,
+							ISNULL(P.PreferredFirstName,P.FirstName) ,
 							P.IsOffshore ,
 							PR.Name ,
 							GPD.MinimumValue ,
