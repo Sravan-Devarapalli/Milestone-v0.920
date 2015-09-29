@@ -123,7 +123,7 @@ AS
 					 
 			SELECT  P.PersonId ,
 					P.LastName ,
-					P.FirstName ,
+					ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 					S.TitleId ,
 					S.Title,
 					P.IsOffshore ,
