@@ -1105,7 +1105,7 @@ namespace PraticeManagement
                 PraticeManagement.Controls.DataHelper.FillProjectOwnerList(cblProjectOwner,
                     "All People with Project Access",
                     true,
-                    person);
+                    person,true);
 
                 PraticeManagement.Controls.DataHelper.FillPracticeList(
                     person,
@@ -1213,7 +1213,7 @@ namespace PraticeManagement
                 resources.AppendFormat(AppendPersonFormat,
                                      "<br/>",
                                      HttpUtility.HtmlEncode(t.Person.LastName),
-                                     HttpUtility.HtmlEncode(t.Person.FirstName)
+                                     HttpUtility.HtmlEncode(string.IsNullOrEmpty(t.Person.PrefferedFirstName) ? t.Person.FirstName : t.Person.PrefferedFirstName)
                                      );
             }
 
