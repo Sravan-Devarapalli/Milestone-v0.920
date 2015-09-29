@@ -317,7 +317,7 @@
     <div class="filter-section-color">
         <table class="WholeWidth">
             <tr>
-                <td align="left" class="Width98Percent">
+                <td align="left" class="width30P">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                         ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                         ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -373,9 +373,27 @@
                         <asp:ListItem Value="90">&gt; 10</asp:ListItem>
                         <asp:ListItem Value="50">&gt; 50</asp:ListItem>
                     </asp:DropDownList>
-                    &nbsp;
-                    <asp:CheckBox ID="chbShowMSBadge" runat="server" Text="Show MS Badge Status"/>
-                    &nbsp;
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td class="padRight0">
+                                <asp:CheckBox ID="chbShowMSBadge" runat="server" />
+                            </td>
+                            <td>
+                                <asp:Label for="ctl00_body_repWeekly_utf_chbShowMSBadge" ID="lblShowMSBadge" runat="server"
+                                    Text="Show MS Badge Status" />
+                                &nbsp;
+                            </td>
+                            <td class="padRight0">
+                                <asp:CheckBox ID="chbExcludeInvestmentResources" runat="server" />
+                            </td>
+                            <td>
+                                <asp:Label for="ctl00_body_repWeekly_utf_chbExcludeInvestmentResources" ID="lblExcludeInvestmentResource"
+                                    runat="server" Text="Exclude Investment Resources" />
+                            </td>
+                        </tr>
+                    </table>
                 </td>
                 <td align="right">
                     <table>
@@ -460,6 +478,11 @@
                             </td>
                             <td class="Width30Px">
                             </td>
+                            <td class="Width150px BorderBottom1px vTop">
+                                Person Division
+                            </td>
+                            <td class="Width30Px">
+                            </td>
                             <td class="Width250Px BorderBottom1px">
                                 Practice Area
                             </td>
@@ -489,8 +512,20 @@
                                 <asp:CheckBox ID="chbInternalProjects" runat="server" AutoPostBack="false" Checked="True"
                                     onclick="EnableResetButton();" Text="Internal" ToolTip="Include internal projects into report" />
                             </td>
-                            <td><asp:CheckBox ID="chbProposedProjects" runat="server" AutoPostBack="false" Checked="True" onclick="EnableResetButton();"
-                                    Text="Proposed" ToolTip="Include proposed projects into report" /></td>
+                            <td>
+                                <asp:CheckBox ID="chbProposedProjects" runat="server" AutoPostBack="false" Checked="True"
+                                    onclick="EnableResetButton();" Text="Proposed" ToolTip="Include proposed projects into report" />
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <cc2:ScrollingDropDown ID="cblDivisions" runat="server" AllSelectedReturnType="AllItems"
+                                    onclick="scrollingDropdown_onclick('cblDivisions','Division')" CellPadding="3"
+                                    NoItemsType="All" SetDirty="False" DropDownListType="Division" CssClass="UTilTimeLineFilterCblPractices" />
+                                <ext:ScrollableDropdownExtender ID="sdeDivision" runat="server" TargetControlID="cblDivisions"
+                                    UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                                </ext:ScrollableDropdownExtender>
+                            </td>
                             <td>
                             </td>
                             <td class="floatRight PaddingTop5 padLeft3">
@@ -520,8 +555,12 @@
                                     ToolTip="Include experimental projects into report" onclick="EnableResetButton();" />
                             </td>
                             <td>
-                                <asp:CheckBox ID="chbCompletedProjects" runat="server" AutoPostBack="false" Text="Completed" Checked="True"
-                                    ToolTip="Include completed projects into report" onclick="EnableResetButton();" />
+                                <asp:CheckBox ID="chbCompletedProjects" runat="server" AutoPostBack="false" Text="Completed"
+                                    Checked="True" ToolTip="Include completed projects into report" onclick="EnableResetButton();" />
+                            </td>
+                            <td>
+                            </td>
+                            <td>
                             </td>
                             <td>
                             </td>
