@@ -24,7 +24,13 @@ namespace DataTransferObjects.ContextObjects
         public string PracticeIdList { get; set; }
 
         [DataMember]
+        public string DivisionIdList { get; set; }
+
+        [DataMember]
         public bool ExcludeInternalPractices { get; set; }
+
+        [DataMember]
+        public bool ExcludeInvestmentResource { get; set; }
 
         [DataMember]
         public int SortId { get; set; }
