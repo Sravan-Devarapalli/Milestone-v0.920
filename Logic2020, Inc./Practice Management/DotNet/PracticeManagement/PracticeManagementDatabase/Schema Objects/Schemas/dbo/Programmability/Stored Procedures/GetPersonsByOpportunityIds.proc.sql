@@ -19,7 +19,7 @@ BEGIN
 	FROM [dbo].[ConvertStringListIntoTable] (@OpportunityIdsLocal)
 	
 	SELECT   op.PersonId
-				,p.FirstName
+				,ISNULL(p.PreferredFirstName,p.FirstName) AS FirstName
 				,p.LastName,
 				op.OpportunityId,
 				op.OpportunityPersonTypeId,
