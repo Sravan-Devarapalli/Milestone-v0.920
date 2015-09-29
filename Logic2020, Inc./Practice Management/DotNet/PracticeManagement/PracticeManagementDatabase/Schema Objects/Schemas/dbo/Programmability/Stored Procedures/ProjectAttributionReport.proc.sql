@@ -14,7 +14,7 @@ BEGIN
 				ISNULL(A.StartDate,P.StartDate) AS StartDate,
 				ISNULL(A.EndDate,P.EndDate) AS EndDate,
 				A.TargetId,
-				ISNULL(Per.LastName+', '+Per.FirstName,Pr.Name) AS TargetName,
+				ISNULL(Per.LastName+', '+ISNULL(Per.PreferredFirstName,Per.FirstName),Pr.Name) AS TargetName,
 				A.Percentage,
 				A.AttributionId,
 				pay.TitleId,
