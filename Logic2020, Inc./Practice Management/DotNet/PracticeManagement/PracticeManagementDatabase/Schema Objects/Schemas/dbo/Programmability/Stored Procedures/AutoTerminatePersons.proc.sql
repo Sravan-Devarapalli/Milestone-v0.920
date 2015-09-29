@@ -24,7 +24,11 @@ BEGIN
 	TimeScaleName NVARCHAR(50),
 	TitleName NVARCHAR(100),
 	TelephoneNumber NCHAR(100),
-	SeniorityName NVARCHAR(50)
+	SeniorityName NVARCHAR(50),
+	IsOffshore			BIT,
+	ManagerId	INT,
+	ManagerName	NVARCHAR(100),
+	DivisionId			INT
 	)
 	
 	INSERT INTO @TerminatedPersons
@@ -39,7 +43,8 @@ BEGIN
 			NULL AS TimeScaleName,
 			NULL AS TitleName,
 			NULL AS TelephoneNumber,
-			NULL AS SeniorityName
+			NULL AS SeniorityName,
+			null,null,null,null
 	FROM dbo.Person AS P
 	WHERE   P.PersonStatusId <> 2
 			AND P.TerminationDate = (@Today-1)
@@ -57,7 +62,11 @@ BEGIN
 			AT.Name AS TimeScaleName,
 			TT.Title AS TitleName,
 			P.TelephoneNumber,
-			S.Name AS SeniorityName
+			S.Name AS SeniorityName,
+			p.IsOffshore,
+			p.ManagerId,
+			manager.LastName+', '+manager.FirstName AS Manager,
+			P.DivisionId
 	FROM dbo.Person P  
 	INNER JOIN dbo.Pay Bpay  ON Bpay.Person = P.PersonId AND (P.TerminationDate IS NULL OR P.TerminationDate > (@Today-1))  AND Bpay.EndDate = @Today
 	INNER JOIN dbo.Timescale BT ON BT.TimescaleId = Bpay.Timescale AND BT.IsContractType = 1 
@@ -65,12 +74,18 @@ BEGIN
 	INNER JOIN dbo.Timescale AT ON AT.TimescaleId = Apay.Timescale AND AT.IsContractType = 0
 	INNER JOIN dbo.Title TT ON TT.TitleId = P.TitleId
 	INNER JOIN dbo.Seniority S ON S.SeniorityId = P.SeniorityId
+	LEFT JOIN dbo.Person manager ON manager.PersonId = P.ManagerId
 	GROUP BY p.PersonId,
 			p.FirstName,
 			p.LastName,
+			p.IsOffshore,
+			p.ManagerId,
 			P.Alias,
 			P.DefaultPractice,
+			manager.LastName,
 			AT.Name,
+			manager.FirstName,
+			P.DivisionId,
 			P.TelephoneNumber,
 			TT.Title,
 			S.Name
@@ -180,7 +195,11 @@ BEGIN
 		Alias,
 		TelephoneNumber,
 		TimeScaleName,
-		TitleName,		
+		TitleName,	
+		IsOffshore,	
+		ManagerId,
+		ManagerName,
+		DivisionId,
 		CASE WHEN EXISTS(SELECT 1 FROM  @TerminatedPersons AS P 
 									 INNER JOIN aspnet_Users AS a ON LOWER(p.Alias) = a.LoweredUserName
 									 INNER JOIN aspnet_UsersInRoles AS ur ON a.UserId = ur.UserId
