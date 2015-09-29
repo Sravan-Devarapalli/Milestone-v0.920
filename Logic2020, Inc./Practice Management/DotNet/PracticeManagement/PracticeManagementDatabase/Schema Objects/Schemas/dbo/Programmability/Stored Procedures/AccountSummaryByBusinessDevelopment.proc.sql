@@ -28,7 +28,7 @@ BEGIN
 		 , TT.Code AS [TimeTypeCode]
 		 , P.PersonId
 		 , P.EmployeeNumber
-		 , P.FirstName
+		 , ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName
 		 , P.LastName
 		 , TE.ChargeCodeDate
 		 , TEH.ActualHours AS NonBillableHours
