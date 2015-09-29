@@ -652,6 +652,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CheckBox chbMBO;
         
         /// <summary>
+        /// chbInvestmentResouce control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chbInvestmentResouce;
+        
+        /// <summary>
         /// chbLockedOut control.
         /// </summary>
         /// <remarks>
