@@ -230,7 +230,7 @@ AS
 (
 	SELECT FLHRD.PersonId,
 			P.LastName,
-			P.FirstName,
+			ISNULL(P.PreferredFirstName,P.FirstName) AS FirstName,
 			ISNULL(pr.Name,'') PracticeName,
 			ISNULL(pr.IsCompanyInternal,0) IsCompanyInternal,
 			P.HireDate,
@@ -262,7 +262,7 @@ AS
 				C.MonthStartDate,
 				C.MonthEndDate,
 				P.LastName,
-				P.FirstName,
+				ISNULL(P.PreferredFirstName,P.FirstName),
 				pr.Name ,
 				pr.IsCompanyInternal,
 				p.HireDate,
