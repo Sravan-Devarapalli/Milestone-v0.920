@@ -3,7 +3,7 @@ AS
 BEGIN
 
 	SELECT	Per.LastName,
-			Per.FirstName,
+			ISNULL(Per.PreferredFirstName,Per.FirstName) AS FirstName,
 			P.ProjectId,
 			P.Name AS ProjectName,
 			P.ProjectNumber,
@@ -13,7 +13,7 @@ BEGIN
 			P.ProjectStatusId,
 			MB.BadgeEndDate AS ClockEndDate,
 			MPE.Requester AS RequesterId,
-			R.LastName+', '+R.FirstName AS Requester,
+			R.LastName+', '+ISNULL(R.PreferredFirstName,R.FirstName) AS Requester,
 			Per.TitleId,
 			Per.Title
 	FROM dbo.MilestonePersonEntry MPE 
@@ -24,7 +24,7 @@ BEGIN
 	INNER JOIN v_CurrentMSBadge MB ON MB.PersonId = MP.PersonId
 	LEFT JOIN dbo.Person R ON R.PersonId = MPE.Requester
 	WHERE ISNULL(MB.ExcludeInReports,0) = 0 AND MPE.IsBadgeRequired = 1 AND MPE.IsApproved = 0 AND P.ProjectStatusId IN (2,3)
-	ORDER BY Per.LastName,Per.FirstName
+	ORDER BY Per.LastName,ISNULL(Per.PreferredFirstName,Per.FirstName)
 
 END
 
