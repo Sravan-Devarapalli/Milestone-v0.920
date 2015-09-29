@@ -58,7 +58,7 @@ BEGIN
 		  FROM (
 				SELECT TOP (@LastRecord)
 					   p.PersonId,
-					   p.FirstName,
+					   ISNULL(p.PreferredFirstName,p.FirstName) AS FirstName,
 					   p.LastName,
 					   p.HireDate,
 					   p.TerminationDate,
@@ -74,7 +74,7 @@ BEGIN
 		               p.Title,
 					   p.ManagerId,
 					   p.ManagerAlias,
-					   p.ManagerFirstName,
+					   ISNULL(p.ManagerPrfFirstName,p.ManagerFirstName) AS ManagerFirstName,
 					   p.ManagerLastName,
 					   p.PracticeOwnedId,
 					   p.PracticeOwnedName,
