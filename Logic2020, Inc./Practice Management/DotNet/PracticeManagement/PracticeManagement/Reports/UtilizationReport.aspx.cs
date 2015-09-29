@@ -59,7 +59,7 @@ namespace PraticeManagement.Reports
             if (userIsAdministrator)
             {
                 var persons = ServiceCallers.Custom.Person(p => p.PersonsListHavingActiveStatusDuringThisPeriod(WeekStartDate, WeekEndDate));
-                DataHelper.FillPersonList(ddlPerson, null, persons, null);
+                DataHelper.FillPersonList(ddlPerson, null, persons, null,false,true);
                 ListItem selectedPerson = ddlPerson.Items.FindByValue(currentPerson.Id.Value.ToString()); //ddlPerson.SelectedValue = currentPerson.Id.Value.ToString();
                 if (selectedPerson != null)
                 {
