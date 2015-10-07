@@ -581,6 +581,9 @@ namespace DataTransferObjects
         [DataMember]
         public string PracticeDirectorEmployeeNumber { get; set; }
 
+        [DataMember]
+        public List<Project> Projects { get; set; }
+
         public string FormattedName
         {
             get
