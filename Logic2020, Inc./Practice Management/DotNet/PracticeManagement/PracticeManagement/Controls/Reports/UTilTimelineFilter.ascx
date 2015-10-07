@@ -308,7 +308,12 @@
                 }
             }
 
-
+            if (ddlPeriod.value == '0') {
+                document.getElementById("tdFirst").className = "Width40P";
+            }
+            else {
+                document.getElementById("tdFirst").className = "width30P";
+            }
         }
     }
 
@@ -317,7 +322,7 @@
     <div class="filter-section-color">
         <table class="WholeWidth">
             <tr>
-                <td align="left" class="width30P">
+                <td align="left" class="width30P" id="tdFirst">
                     <AjaxControlToolkit:CollapsiblePanelExtender ID="cpe" runat="Server" TargetControlID="pnlFilters"
                         ImageControlID="btnExpandCollapseFilter" CollapsedImage="~/Images/expand.jpg"
                         ExpandedImage="~/Images/collapse.jpg" CollapseControlID="btnExpandCollapseFilter"
@@ -375,22 +380,22 @@
                     </asp:DropDownList>
                 </td>
                 <td>
-                    <table>
+                 <table>
                         <tr>
                             <td class="padRight0">
                                 <asp:CheckBox ID="chbShowMSBadge" runat="server" />
                             </td>
                             <td>
-                                <asp:Label for="ctl00_body_repWeekly_utf_chbShowMSBadge" ID="lblShowMSBadge" runat="server"
-                                    Text="Show MS Badge Status" />
+                                <label for="ctl00_body_repWeekly_utf_chbShowMSBadge" id="lblShowMSBadge" runat="server">
+                                    Show MS Badge Status</label>
                                 &nbsp;
                             </td>
                             <td class="padRight0">
                                 <asp:CheckBox ID="chbExcludeInvestmentResources" runat="server" />
                             </td>
                             <td>
-                                <asp:Label for="ctl00_body_repWeekly_utf_chbExcludeInvestmentResources" ID="lblExcludeInvestmentResource"
-                                    runat="server" Text="Exclude Investment Resources" />
+                                <label for="ctl00_body_repWeekly_utf_chbExcludeInvestmentResources" id="lblExcludeInvestmentResource" runat="server">
+                                    Exclude Investment Resources</label>
                             </td>
                         </tr>
                     </table>
