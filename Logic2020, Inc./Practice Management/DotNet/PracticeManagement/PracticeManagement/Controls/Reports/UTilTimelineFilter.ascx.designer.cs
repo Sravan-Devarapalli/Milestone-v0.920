@@ -199,7 +199,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblShowMSBadge;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblShowMSBadge;
         
         /// <summary>
         /// chbExcludeInvestmentResources control.
@@ -217,7 +217,7 @@ namespace PraticeManagement.Controls.Reports {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblExcludeInvestmentResource;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lblExcludeInvestmentResource;
         
         /// <summary>
         /// btnUpdateView control.
