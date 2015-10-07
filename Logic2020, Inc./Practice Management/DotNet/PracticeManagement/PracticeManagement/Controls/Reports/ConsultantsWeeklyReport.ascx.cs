@@ -37,8 +37,8 @@ namespace PraticeManagement.Controls.Reports
         private const string NAME_FORMAT_WITH_DATES = "{0}, {1} ({2}): {3}-{4}";
         private const string TITLE_FORMAT_ForPdf = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.";
         private const string TITLE_FORMAT_WITHOUT_REPORT_ForPdf = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.";
-        private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
-        private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.\n\nClick on a colored bar to load the individual's detail report";
+        private const string TITLE_FORMAT = "Consulting {0} Report \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.\nClick on a colored bar to load the individual's detail report";
+        private const string TITLE_FORMAT_WITHOUT_REPORT = "Consulting {0} \n{1} to {2}\nFor {3} Persons; For {4} Projects\n{5}\n{6}\n{7}\n*{0} reflects person vacation time during this period.\nClick on a colored bar to load the individual's detail report";
         private const string POSTBACK_FORMAT = "{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}";
         private const char DELIMITER = '+';
         private const string TOOLTIP_FORMAT = "{0}-{1} {2},{3}";
@@ -744,9 +744,9 @@ namespace PraticeManagement.Controls.Reports
                     IsCapacityMode ? Capacity : Utilization,
                     BegPeriod.ToString("MM/dd/yyyy"),
                     EndPeriod.ToString("MM/dd/yyyy"),
-                    personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(),utf.DivisionsFilterText()));
+                    personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(), utf.DivisionsFilterText()));
                 title_top.Font = new System.Drawing.Font("Candara", 9f);
-                
+
                 chartPdf.Titles.Add(title_top);
 
                 System.Web.UI.DataVisualization.Charting.Title title_bottom = new System.Web.UI.DataVisualization.Charting.Title(string.Format(PageCount, pageNumber + 1, Math.Ceiling((double)ConsultantUtilizationPerson.Count / reportSize)));
@@ -893,7 +893,7 @@ namespace PraticeManagement.Controls.Reports
                 header1.Columns.Add(string.Format("Period: {0}-{1}", BegPeriod.ToString("MM/dd/yyyy"), EndPeriod.ToString("MM/dd/yyyy")));
 
                 List<object> row1 = new List<object>();
-                row1.Add(string.Format(ConsultingHeader, personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(),utf.InvestmentResourceFilterText(),utf.DivisionsFilterText()));
+                row1.Add(string.Format(ConsultingHeader, personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(), utf.DivisionsFilterText()));
                 header1.Rows.Add(row1.ToArray());
                 headerRowsCount = header1.Rows.Count + 3;
 
@@ -1306,7 +1306,7 @@ namespace PraticeManagement.Controls.Reports
                     quadruple.Person, //  Person
                      w, //  Range index
                      IsCapacityMode ? 100 - quadruple.WeeklyUtilization[w] : quadruple.WeeklyUtilization[w], csv,
-                     payType == TimescaleType.Undefined ? "No Pay Type" : DataHelper.GetDescription(payType), quadruple.WeeklyVacationDays[w], quadruple.TimeOffDates, quadruple.CompanyHolidayDates, isPdf
+                     payType == TimescaleType.Undefined ? "No Pay Type" : DataHelper.GetDescription(payType), quadruple.WeeklyVacationDays[w], quadruple.TimeOffDates, quadruple.CompanyHolidayDates, isPdf, quadruple.Person.Projects
                      ); //  U% or C% for the period
             }
 
@@ -1385,7 +1385,7 @@ namespace PraticeManagement.Controls.Reports
             return Urls.GetSkillsProfileUrl(p);
         }
 
-        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, Dictionary<DateTime, double> timeoffDates, Dictionary<DateTime, string> companyHolidayDates, bool isPdf)
+        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, Dictionary<DateTime, double> timeoffDates, Dictionary<DateTime, string> companyHolidayDates, bool isPdf, List<Project> projects)
         {
             if (companyHolidayDates == null)
                 companyHolidayDates = new Dictionary<DateTime, string>();
@@ -1523,7 +1523,7 @@ namespace PraticeManagement.Controls.Reports
                     {
                         var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
                         innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third.DayType, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third.DayType, isHiredIntheEmployeementRange);
-                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth);
+                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth, GetProjectsHoverText(projects, tripleR.First, tripleR.Second));
                         innerRange.BackHatchStyle = GetAppropriateHatchStyle(tripleR.Third.BadgedType);
                         innerRange.BackSecondaryColor = Color.Black;
                         innerRangeList.Add(innerRange);
@@ -1554,7 +1554,7 @@ namespace PraticeManagement.Controls.Reports
                     {
                         var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
                         innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange);
-                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, null, false, tripleR.Fourth);
+                        innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, null, false, tripleR.Fourth, GetProjectsHoverText(projects, tripleR.First, tripleR.Second));
                         innerRange.BackHatchStyle = GetAppropriateHatchStyle(tripleR.Third.BadgedType);
                         innerRange.BackSecondaryColor = Color.Black;
                         innerRangeList.Add(innerRange);
@@ -1578,6 +1578,25 @@ namespace PraticeManagement.Controls.Reports
                     }
                 }
             }
+        }
+
+        public string GetProjectsHoverText(List<Project> projects, DateTime startDate, DateTime endDate)
+        {
+            var text = "";
+            if (projects == null)
+                return text;
+            foreach (var project in projects)
+            {
+                foreach (var milestone in project.Milestones)
+                {
+                    if (milestone.StartDate.Date <= endDate.Date && startDate.Date <= milestone.EndDate.Date)
+                    {
+                        text += string.Format("; {0} - {1}",project.ProjectNumber,project.HtmlEncodedName);
+                        break;
+                    }
+                }
+            }
+            return text;
         }
 
         public ChartHatchStyle GetAppropriateHatchStyle(int badgeType)
@@ -1791,7 +1810,7 @@ namespace PraticeManagement.Controls.Reports
                 );
         }
 
-        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate, BadgeType dayType, string payType = null, bool IsCapacityMode = false, string holidayDescription = null)
+        private static string FormatRangeTooltip(int load, DateTime pointStartDate, DateTime pointEndDate, BadgeType dayType, string payType = null, bool IsCapacityMode = false, string holidayDescription = null, string projects = "")
         {
             //dayType = '0' for utilization '1' for timeoffs '2' for companyholiday
             string tooltip = "";
@@ -1804,7 +1823,7 @@ namespace PraticeManagement.Controls.Reports
                            string.Format(TOOLTIP_FORMAT_FOR_SINGLEDAY,
                                  pointStartDate.ToString("MMM, d"), string.Format(
                                      IsCapacityMode ? CAPACITY_TOOLTIP_FORMAT : UTILIZATION_TOOLTIP_FORMAT,
-                                         load), payType) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "");
+                                         load), payType) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "") + projects;
             }
             else
             {
@@ -1816,7 +1835,7 @@ namespace PraticeManagement.Controls.Reports
                                      pointEndDate.ToString("MMM, d"),
                                       string.Format(
                                          IsCapacityMode ? CAPACITY_TOOLTIP_FORMAT : UTILIZATION_TOOLTIP_FORMAT,
-                                             load), payType) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "");
+                                             load), payType) + (BadgeTooltip(dayType.BadgedType) != "" ? ", " + BadgeTooltip(dayType.BadgedType) : "") + projects;
             }
 
             return tooltip;
