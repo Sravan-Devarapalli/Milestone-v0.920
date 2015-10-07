@@ -1591,7 +1591,7 @@ namespace PraticeManagement.Controls.Reports
                 {
                     if (milestone.StartDate.Date <= endDate.Date && startDate.Date <= milestone.EndDate.Date)
                     {
-                        text += string.Format("; {0} - {1}",project.ProjectNumber,project.HtmlEncodedName);
+                        text += string.Format("; {0} - {1}",project.ProjectNumber,project.Name);
                         break;
                     }
                 }
