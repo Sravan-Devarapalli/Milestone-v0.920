@@ -4,8 +4,9 @@
 	PersonId	INT		NOT NULL,
 	ReviewStartDate	DATETIME NOT NULL,
 	ReviewEndDate	DATETIME NOT NULL,
-	ProjectId	INT		NOT NULL,
-	Count		INT		NOT NULL
+	ProjectId	INT		NULL,
+	Count		INT		NOT NULL,
+	IsDummy		BIT		NULL
 	CONSTRAINT PK_PersonFeedbacksInCSFeed PRIMARY KEY (Id)
 )
 
