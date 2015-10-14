@@ -128,6 +128,8 @@ namespace PraticeManagement.Controls
 
         public void SetSliderDefaultValue()
         {
+            txtBillRateSlider_BoundControl.Text = BillRateDefaultValue;
+            txtHorsPerWeekSlider_BoundControl.Text = HorsPerWeekDefaultValue;
             txtHorsPerWeekSlider.Text = HorsPerWeekDefaultValue;
             txtBillRateSlider.Text = BillRateDefaultValue;
             dtpEffectiveDate.DateValue = DateTime.Now.Date;
@@ -211,7 +213,6 @@ namespace PraticeManagement.Controls
             decimal billRate =
                 !string.IsNullOrEmpty(txtBillRateSlider_BoundControl.Text) ?
                 decimal.Parse(txtBillRateSlider_BoundControl.Text) : (decimal)sldBillRate.Minimum;
-
             pnlWhatIf.Visible = true;
 
             using (PersonServiceClient serviceClient = new PersonServiceClient())
@@ -355,3 +356,4 @@ namespace PraticeManagement.Controls
         }
     }
 }
+
