@@ -11,9 +11,12 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-	DECLARE @MilestonePersonId   INT,
-			@PersonId INT,
-			@UpdatedBy INT
+	BEGIN TRY
+	BEGIN TRAN  MilestoneEntryDelete
+
+		DECLARE @MilestonePersonId   INT,
+				@PersonId INT,
+				@UpdatedBy INT
 
 	SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
 
@@ -29,10 +32,25 @@ BEGIN
 	FROM dbo.MilestonePersonEntry
 	WHERE Id = @Id
 
-	EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=@MilestonePersonId,@MilestoneId = NULL
+	IF @MilestonePersonId IS NOT NULL
+	BEGIN	
+		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=@MilestonePersonId,@MilestoneId = NULL
+	END
+		
 	EXEC [dbo].[UpdateMSBadgeDetailsByPersonId] @PersonId = @PersonId, @UpdatedBy = @UpdatedBy
 	
-	-- End logging session
+		-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
+	COMMIT TRAN MilestoneEntryDelete
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN MilestoneEntryDelete
+		
+		DECLARE @ErrorMessage NVARCHAR(MAX)
+		SET @ErrorMessage = ERROR_MESSAGE()
+
+		RAISERROR(@ErrorMessage, 16, 1)
+	END CATCH
 END
+
