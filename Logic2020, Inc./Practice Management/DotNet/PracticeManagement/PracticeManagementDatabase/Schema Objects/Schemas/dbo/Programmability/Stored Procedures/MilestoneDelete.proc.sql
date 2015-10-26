@@ -31,27 +31,42 @@ AS
 	--END
 	--ELSE
 	BEGIN
+	    
+		BEGIN TRY
+		BEGIN TRAN  Tran_MilestoneDelete
 
-		-- Start logging session
-		EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
+			-- Start logging session
+			EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
-		DELETE FROM dbo.Note
-			  WHERE TargetId = @MilestoneId 
-						AND NoteTargetId = 1
+			DELETE FROM dbo.Note
+				  WHERE TargetId = @MilestoneId 
+							AND NoteTargetId = 1
 
-		DELETE MPE
-	    FROM dbo.MilestonePersonEntry AS MPE
-		INNER JOIN  dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
-		INNER JOIN  dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
-		WHERE M.MilestoneId = @MilestoneId
+			DELETE MPE
+			FROM dbo.MilestonePersonEntry AS MPE
+			INNER JOIN  dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+			INNER JOIN  dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+			WHERE M.MilestoneId = @MilestoneId
 
-		DELETE FROM dbo.Milestone
-			  WHERE MilestoneId = @MilestoneId
+			DELETE FROM dbo.Milestone
+			WHERE MilestoneId = @MilestoneId
 
-		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = NULL,@ProjectId = @ProjectId
+			IF @ProjectId IS NOT NULL
+			BEGIN
+				EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = NULL,@ProjectId = @ProjectId
+			END
 
-		-- End logging session
-		EXEC dbo.SessionLogUnprepare
+			-- End logging session
+			EXEC dbo.SessionLogUnprepare
+
+		COMMIT TRAN Tran_MilestoneDelete
+		END TRY
+		BEGIN CATCH
+			ROLLBACK TRAN Tran_MilestoneDelete
+			DECLARE @ErrorMessage_1 NVARCHAR(MAX)
+			SET @ErrorMessage_1 = ERROR_MESSAGE()
+			RAISERROR(@ErrorMessage_1, 16, 1)
+	    END CATCH
 
 	END
 
