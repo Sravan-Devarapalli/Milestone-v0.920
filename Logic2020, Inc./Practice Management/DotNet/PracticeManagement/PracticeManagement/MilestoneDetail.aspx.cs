@@ -17,6 +17,8 @@ using PraticeManagement.ProjectService;
 using PraticeManagement.Security;
 using PraticeManagement.Utils;
 using Resources;
+using System.Web;
+using System.Threading;
 
 namespace PraticeManagement
 {
@@ -967,7 +969,7 @@ namespace PraticeManagement
             {
                 try
                 {
-                    e.IsValid = !serviceClient.CheckIfFeedbackExists(null, MilestoneId.Value,null,null);
+                    e.IsValid = !serviceClient.CheckIfFeedbackExists(null, MilestoneId.Value, null, null);
                 }
                 catch (CommunicationException)
                 {
@@ -983,28 +985,42 @@ namespace PraticeManagement
             Page.Validate(vsumShiftDays.ValidationGroup);
             if (Page.IsValid)
             {
-                var shiftDays = int.Parse(txtShiftDays.Text);
-                var newStartDate = Milestone.StartDate.AddDays(shiftDays);
-                var newEndDate = Milestone.EndDate.AddDays(shiftDays);
-
-                var badges = DataHelper.ShiftMilestone(
-                    shiftDays,
-                    MilestoneId.Value,
-                    chbMoveFutureMilestones.Checked);
-                var loggedInPerson = DataHelper.CurrentPerson;
-                foreach (var badge in badges)
+                try
                 {
-                    var project = new Project()
+                    var shiftDays = int.Parse(txtShiftDays.Text);
+                    var newStartDate = Milestone.StartDate.AddDays(shiftDays);
+                    var newEndDate = Milestone.EndDate.AddDays(shiftDays);
+
+                    var badges = DataHelper.ShiftMilestone(
+                        shiftDays,
+                        MilestoneId.Value,
+                        chbMoveFutureMilestones.Checked);
+                    var loggedInPerson = DataHelper.CurrentPerson;
+                    foreach (var badge in badges)
                     {
-                        Id = badge.Project.Id
-                    };
-                    project.MailBody = badge.IsException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
-                                                         "{0}", badge.Project.ProjectNumber, badge.Project.Name) :
-                                                                                     string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
-                                                                                     "{0}", badge.Project.ProjectNumber, badge.Project.Name);
-                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                        var project = new Project()
+                        {
+                            Id = badge.Project.Id
+                        };
+                        project.MailBody = badge.IsException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
+                                                             "{0}", badge.Project.ProjectNumber, badge.Project.Name) :
+                                                                                         string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
+                                                                                         "{0}", badge.Project.ProjectNumber, badge.Project.Name);
+                        ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                    }
+                    ReturnToPreviousPage();
                 }
-                ReturnToPreviousPage();
+                catch (Exception ex)
+                {
+                    Logging.LogErrorMessage(
+                           ex.Message,
+                           ex.Source,
+                           ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                           string.Empty,
+                           HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                           string.Empty,
+                           Thread.CurrentPrincipal.Identity.Name);
+                }
             }
         }
 
@@ -1138,114 +1154,127 @@ namespace PraticeManagement
 
         private bool ValidateandSaveData(MilestoneUpdateObject milestoneUpdateObj = null)
         {
+
             bool result = false;
             var showApprovedByOpsPopup = false;
             Person currentPerson = DataHelper.CurrentPerson;
             Page.Validate(vsumMilestone.ValidationGroup);
             if (Page.IsValid)
             {
-                Page.Validate(vsumPopup.ValidationGroup);
-                if (Page.IsValid)
+                try
                 {
-                    hdnIsUpdate.Value = true.ToString();
-                    Page.Validate("AttributionPopup");
-                }
-                if (Page.IsValid)
-                {
-                    Page.Validate("MilestoneDatesConflict");
-                }
-                if (Page.IsValid)
-                {
-                    if (!MilestonePersonEntryListControl.isInsertedRowsAreNotsaved)
+                    Page.Validate(vsumPopup.ValidationGroup);
+                    if (Page.IsValid)
                     {
-                        result = SaveData(milestoneUpdateObj) > 0;
-
-                        if (result)
-                        {
-                            ServiceCallers.Custom.MilestonePerson(mp => mp.MilestoneResourceUpdate(MilestoneObject, MilestoneUpdateObject, Context.User.Identity.Name));
-
-                            foreach (var person in Milestone.MilestonePersons)
-                            {
-                                if (person.Person.IsStrawMan)
-                                    continue;
-                                ServiceCallers.Custom.Person(p => p.UpdateMSBadgeDetailsByPersonId(person.Person.Id.Value, currentPerson.Id.Value));
-                            }
-                            if (milestoneUpdateObj != null)
-                            {
-                                var newMilestonePersons = ServiceCallers.Custom.MilestonePerson(m => m.GetMilestonePersonListByMilestone(Milestone.Id.Value)).ToList();
-                                foreach (var person in newMilestonePersons)
-                                {
-                                    //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(SelectedProjectId.Value, User.Identity.Name));
-                                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(SelectedProjectId.Value));
-                                    var loggedInPerson = DataHelper.CurrentPerson;
-                                    var oldPerson = new MilestonePerson();
-                                    if (Milestone.MilestonePersons.Any(m => m.Person.Id == person.Person.Id))
-                                        oldPerson = Milestone.MilestonePersons.First(m => m.Person.Id == person.Person.Id);
-                                    else
-                                        continue;
-                                    if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && person.Entries[0].MSBadgeRequired && person.Entries[0].BadgeStartDate.HasValue && oldPerson.Entries[0].BadgeStartDate.HasValue && (oldPerson.Entries[0].BadgeStartDate.Value > person.Entries[0].BadgeStartDate.Value || oldPerson.Entries[0].BadgeEndDate.Value < person.Entries[0].BadgeEndDate.Value || !(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value)))
-                                    {
-                                        project.MailBody = person.Entries[0].BadgeException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
-                                                     "{0}", project.ProjectNumber, project.Name) :
-                                                                                 string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
-                                                                                 "{0}", project.ProjectNumber, project.Name);
-                                        ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
-                                        if (!(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value))
-                                            showApprovedByOpsPopup = true;
-                                    }
-                                }
-                            }
-                            if (showApprovedByOpsPopup)
-                            {
-                                mpeApprovedByOpsWhenCompleteOut.Show();
-                            }
-                        }
+                        hdnIsUpdate.Value = true.ToString();
+                        Page.Validate("AttributionPopup");
                     }
-                    else
+                    if (Page.IsValid)
                     {
-                        var index = mvMilestoneDetailTab.ActiveViewIndex;
-                        var control = rowSwitcher.Cells[index].Controls[0];
-
-                        SelectView(btnResources, 2, true);
-
-                        IsSaveAllClicked = true;
-                        ValidateNewEntry = true;
-                        result = MilestonePersonEntryListControl.ValidateAll();
-
-                        if (result)
+                        Page.Validate("MilestoneDatesConflict");
+                    }
+                    if (Page.IsValid)
+                    {
+                        if (!MilestonePersonEntryListControl.isInsertedRowsAreNotsaved)
                         {
                             result = SaveData(milestoneUpdateObj) > 0;
-                            if (result)
-                            {
-                                result = MilestonePersonEntryListControl.SaveAll();
-                            }
 
                             if (result)
                             {
                                 ServiceCallers.Custom.MilestonePerson(mp => mp.MilestoneResourceUpdate(MilestoneObject, MilestoneUpdateObject, Context.User.Identity.Name));
+
                                 foreach (var person in Milestone.MilestonePersons)
                                 {
                                     if (person.Person.IsStrawMan)
                                         continue;
                                     ServiceCallers.Custom.Person(p => p.UpdateMSBadgeDetailsByPersonId(person.Person.Id.Value, currentPerson.Id.Value));
                                 }
-                                if (index != 2)
+                                if (milestoneUpdateObj != null)
                                 {
-                                    SelectView(control, index, true);
+                                    var newMilestonePersons = ServiceCallers.Custom.MilestonePerson(m => m.GetMilestonePersonListByMilestone(Milestone.Id.Value)).ToList();
+                                    foreach (var person in newMilestonePersons)
+                                    {
+                                        //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(SelectedProjectId.Value, User.Identity.Name));
+                                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(SelectedProjectId.Value));
+                                        var loggedInPerson = DataHelper.CurrentPerson;
+                                        var oldPerson = new MilestonePerson();
+                                        if (Milestone.MilestonePersons.Any(m => m.Person.Id == person.Person.Id))
+                                            oldPerson = Milestone.MilestonePersons.First(m => m.Person.Id == person.Person.Id);
+                                        else
+                                            continue;
+                                        if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && person.Entries[0].MSBadgeRequired && person.Entries[0].BadgeStartDate.HasValue && oldPerson.Entries[0].BadgeStartDate.HasValue && (oldPerson.Entries[0].BadgeStartDate.Value > person.Entries[0].BadgeStartDate.Value || oldPerson.Entries[0].BadgeEndDate.Value < person.Entries[0].BadgeEndDate.Value || !(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value)))
+                                        {
+                                            project.MailBody = person.Entries[0].BadgeException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
+                                                         "{0}", project.ProjectNumber, project.Name) :
+                                                                                     string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
+                                                                                     "{0}", project.ProjectNumber, project.Name);
+                                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                            if (!(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value))
+                                                showApprovedByOpsPopup = true;
+                                        }
+                                    }
+                                }
+                                if (showApprovedByOpsPopup)
+                                {
+                                    mpeApprovedByOpsWhenCompleteOut.Show();
                                 }
                             }
                         }
                         else
                         {
-                            //lblResult.ShowErrorMessage("Error occured while saving resources.");
-                        }
+                            var index = mvMilestoneDetailTab.ActiveViewIndex;
+                            var control = rowSwitcher.Cells[index].Controls[0];
 
-                        ValidateNewEntry = false;
-                        IsSaveAllClicked = false;
+                            SelectView(btnResources, 2, true);
+
+                            IsSaveAllClicked = true;
+                            ValidateNewEntry = true;
+                            result = MilestonePersonEntryListControl.ValidateAll();
+
+                            if (result)
+                            {
+                                result = SaveData(milestoneUpdateObj) > 0;
+                                if (result)
+                                {
+                                    result = MilestonePersonEntryListControl.SaveAll();
+                                }
+
+                                if (result)
+                                {
+                                    ServiceCallers.Custom.MilestonePerson(mp => mp.MilestoneResourceUpdate(MilestoneObject, MilestoneUpdateObject, Context.User.Identity.Name));
+                                    foreach (var person in Milestone.MilestonePersons)
+                                    {
+                                        if (person.Person.IsStrawMan)
+                                            continue;
+                                        ServiceCallers.Custom.Person(p => p.UpdateMSBadgeDetailsByPersonId(person.Person.Id.Value, currentPerson.Id.Value));
+                                    }
+                                    if (index != 2)
+                                    {
+                                        SelectView(control, index, true);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //lblResult.ShowErrorMessage("Error occured while saving resources.");
+                            }
+
+                            ValidateNewEntry = false;
+                            IsSaveAllClicked = false;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Logging.LogErrorMessage(ex.Message,
+                                               ex.Source,
+                                               ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                                               string.Empty,
+                                               HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                                               string.Empty,
+                                               Thread.CurrentPrincipal.Identity.Name);
+                }
             }
-
             return result;
         }
 
