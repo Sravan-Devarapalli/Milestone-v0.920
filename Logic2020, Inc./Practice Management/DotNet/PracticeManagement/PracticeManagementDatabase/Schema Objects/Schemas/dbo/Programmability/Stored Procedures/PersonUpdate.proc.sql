@@ -46,10 +46,12 @@ SET ARITHABORT ON
 BEGIN TRY
 	DECLARE @ErrorMessage NVARCHAR(2048),
 			@Today			DATETIME,
-			@CurrentPayEndDate DATETIME
+			@CurrentPayEndDate DATETIME,
+			@PreviousPersonStatusId	INT
 
 	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
 	SELECT @PersonStatusId = CASE WHEN @TerminationDate < @Today THEN 2 ELSE @PersonStatusId END
+	SELECT @PreviousPersonStatusId = PersonStatusId FROM dbo.Person WHERE PersonId = @PersonId
 
 	EXEC [dbo].[PersonValidations] @FirstName = @FirstName, @LastName = @LastName, @Alias = @Alias,@PersonId = @PersonId,@EmployeeNumber = @EmployeeNumber
 
@@ -198,8 +200,16 @@ BEGIN TRY
 		SELECT @ModifiedBy = PersonId
 		FROM dbo.Person p
 		WHERE P.Alias = @UserLogin
-
+ 
 		EXEC dbo.OnPersonHireDateChange	@PersonId = @PersonId , @NewHireDate = @HireDate, @ModifiedBy = @ModifiedBy
+	END
+
+	IF(@PersonStatusId <> 2 AND (@PreviousPersonStatusId <> @PersonStatusId))
+	BEGIN
+	     DELETE PF
+		 FROM dbo.ProjectFeedback PF
+		 WHERE PF.PersonId = @PersonId AND 
+				PF.IsCanceled = 1
 	END
 
 	--to update milestoneperson entries as per #3184
@@ -259,6 +269,14 @@ BEGIN TRY
 		
 	EXEC [dbo].[AdjustTimeEntriesForTerminationDateChanged] @PersonId = @PersonId, @TerminationDate = @TerminationDate, @PreviousTerminationDate = @PreviousTerminationDate,@UserLogin = @UserLogin		
 	EXEC [dbo].[SetCommissionsAttributions] @PersonId = @PersonId
+
+	IF((ISNULL(@ExistingTitleId,0) <> ISNULL(@TitleId,0)) OR (@PreviousHireDate <> @HireDate))
+	BEGIN
+	   IF @PersonId IS NOT NULL
+	   BEGIN
+			EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = NULL,@ProjectId = NULL, @PersonId = @PersonId
+	   END
+	END
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END TRY
