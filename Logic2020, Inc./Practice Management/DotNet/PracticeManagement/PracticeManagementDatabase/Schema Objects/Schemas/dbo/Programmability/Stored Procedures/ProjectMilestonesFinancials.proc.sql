@@ -45,34 +45,40 @@ BEGIN
 	  LEFT JOIN v_MilestoneExpenses as pe on f.ProjectId = pe.ProjectId AND f.MilestoneId = pe.MilestoneId 
 	 WHERE f.ProjectId = @ProjectIdLocal
 	GROUP BY f.ProjectId,f.MilestoneId
+	),
+	Financials 
+	AS
+	(
+		SELECT
+			m.MilestoneId,
+			m.Description as 'MilestoneName',
+			m.IsChargeable,
+			m.StartDate,
+			m.ProjectedDeliveryDate,
+			0 as 'ExpectedHours',
+			fin.FinancialDate,
+			fin.MonthEnd,
+			ISNULL(Revenue,0) as 'Revenue',
+			ISNULL(RevenueNet,0)+ISNULL(Me.ReimbursedExpense,0) as 'RevenueNet',
+			ISNULL(Cogs,0) Cogs,
+			ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))  as 'GrossMargin',
+			fin.Hours,
+			ISNULL(me.Expense,0) Expense,
+			ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense,
+			case 
+				when ISNULL(Revenue,0)  <> 0
+					then (ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0)))  * 100 / 
+					(ISNULL(RevenueNet,0)+ISNULL(Me.ReimbursedExpense,0))
+				else
+					0
+			end as 'TargetMargin'
+		from dbo.Milestone as m
+		left join MilestoneFinancials as fin on m.MilestoneId = fin.MilestoneId
+		left Join v_MilestoneExpenses ME ON Me.MilestoneId = m.MilestoneId
+		left Join Project p on P.ProjectId = m.ProjectId
+		where m.ProjectId = @ProjectIdLocal
 	)
-	SELECT
-		m.MilestoneId,
-		m.Description as 'MilestoneName',
-		m.IsChargeable,
-		m.StartDate,
-		m.ProjectedDeliveryDate,
-		0 as 'ExpectedHours',
-		fin.FinancialDate,
-		fin.MonthEnd,
-		ISNULL(Revenue,0) as 'Revenue',
-		ISNULL(RevenueNet,0)+ISNULL(Me.ReimbursedExpense,0) as 'RevenueNet',
-		ISNULL(Cogs,0) Cogs,
-		ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0))  as 'GrossMargin',
-		fin.Hours,
-		ISNULL(me.Expense,0) Expense,
-		ISNULL(Me.ReimbursedExpense,0) ReimbursedExpense,
-		case 
-			when ISNULL(Revenue,0)  <> 0
-				then (ISNULL(GrossMargin,0)+(ISNULL(Me.ReimbursedExpense,0) -ISNULL(me.Expense,0)))  * 100 / 
-				(ISNULL(RevenueNet,0)+ISNULL(Me.ReimbursedExpense,0))
-			else
-				0
-		end as 'TargetMargin'
-	from dbo.Milestone as m
-	left join MilestoneFinancials as fin on m.MilestoneId = fin.MilestoneId
-	left Join v_MilestoneExpenses ME ON Me.MilestoneId = m.MilestoneId
-	left Join Project p on P.ProjectId = m.ProjectId
-	where m.ProjectId = @ProjectIdLocal
+	SELECT *
+    FROM Financials
 END
 
