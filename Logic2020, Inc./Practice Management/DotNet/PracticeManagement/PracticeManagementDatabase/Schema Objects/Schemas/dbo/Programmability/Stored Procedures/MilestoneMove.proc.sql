@@ -13,6 +13,10 @@ CREATE PROCEDURE [dbo].[MilestoneMove]
 )
 AS
 	SET NOCOUNT ON
+
+	BEGIN TRY
+	BEGIN TRAN  Tran_MilestoneMove
+
 	DECLARE @ProjectNewStartDate	DATETIME,
 			@ProjectNewEndDate		DATETIME,
 			@ProjectId	INT
@@ -100,5 +104,16 @@ AS
 	 WHERE StartDate > @ProjectNewEndDate OR @ProjectNewStartDate > EndDate
 	 AND ProjectId = @ProjectId
 
-	 EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneId
+	 IF @MilestoneId IS NOT NULL
+	 BEGIN
+		EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneId
+	 END
 
+	COMMIT TRAN Tran_MilestoneMove
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN Tran_MilestoneMove
+		DECLARE @ErrorMessage NVARCHAR(MAX)
+		SET @ErrorMessage = ERROR_MESSAGE()
+		RAISERROR(@ErrorMessage, 16, 1)
+	END CATCH
