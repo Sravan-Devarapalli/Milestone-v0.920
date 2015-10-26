@@ -12,6 +12,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 		SET ANSI_WARNINGS OFF
+		
+		BEGIN TRY
+		BEGIN TRAN  Tran_MilestoneResourceUpdate
+		
 		DECLARE @FutureDate DATETIME
 		SET @FutureDate = dbo.GetFutureDate()
 		DECLARE @DefaultStartDate DATETIME = '20140701'
@@ -192,7 +196,17 @@ BEGIN
 				   INNER JOIN dbo.Person AS p ON p.PersonId = mp.PersonId
 			 WHERE mp.MilestoneId = @MilestoneId AND (@IsStartDateChangeReflectedForMilestoneAndPersons = 1 OR @IsEndDateChangeReflectedForMilestoneAndPersons = 1 )
 
+	IF @MilestoneId IS NOT NULL
+	BEGIN
 		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = @MilestoneId
-		
+	END
+	COMMIT TRAN Tran_MilestoneResourceUpdate
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN Tran_MilestoneResourceUpdate
+		DECLARE @ErrorMessage NVARCHAR(MAX)
+		SET @ErrorMessage = ERROR_MESSAGE()
+		RAISERROR(@ErrorMessage, 16, 1)
+	END CATCH
  END
 
