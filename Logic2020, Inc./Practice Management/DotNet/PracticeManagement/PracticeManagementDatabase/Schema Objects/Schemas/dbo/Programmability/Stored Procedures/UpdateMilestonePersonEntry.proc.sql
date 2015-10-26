@@ -20,6 +20,9 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	BEGIN TRY
+	BEGIN TRAN  Tran_UpdateMilestonePersonEntry
+
 	-- Start logging session
 	EXEC dbo.SessionLogPrepare @UserLogin = @UserLogin
 
@@ -70,7 +73,10 @@ BEGIN
 
 	END 
 
-	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneId
+	IF @MilestoneId IS NOT NULL
+	BEGIN
+		EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneId
+	END
 
 	EXEC UpdateMSBadgeDetailsByPersonId @PersonId = @PersonId,@UpdatedBy=@UpdatedBy
 
@@ -79,6 +85,15 @@ BEGIN
 	
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
+
+	COMMIT TRAN Tran_UpdateMilestonePersonEntry
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN Tran_UpdateMilestonePersonEntry
+		DECLARE @ErrorMessage NVARCHAR(MAX)
+		SET @ErrorMessage = ERROR_MESSAGE()
+		RAISERROR(@ErrorMessage, 16, 1)
+	END CATCH
 
 END
 
