@@ -264,8 +264,6 @@ namespace DataAccess
                         ReadPersonsEmploymentHistory(reader, result);
                         reader.NextResult();
                         ReadPersonTimeOffDates(reader, result);
-                        reader.NextResult();
-                        ReadPersonAssignedDates(reader, result);
                     }
                 }
                 if (result != null)
@@ -701,72 +699,6 @@ namespace DataAccess
                             else
                             {
                                 record.CompanyHolidayDates.Add(timeOffDate, holidayDescription);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private static void ReadPersonAssignedDates(SqlDataReader reader, List<ConsultantUtilizationPerson> result)
-        {
-            if (result != null)
-            {
-                if (reader.HasRows)
-                {
-                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
-                    int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
-                    int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
-                    int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
-                    int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
-
-                    while (reader.Read())
-                    {
-                        var personId = reader.GetInt32(personIdIndex);
-                        var projectNumber = reader.GetString(projectNumberIndex);
-                        var milestonePerson = new Milestone()
-                        {
-                            StartDate = reader.GetDateTime(startDateIndex),
-                            ProjectedDeliveryDate = reader.GetDateTime(endDateIndex)
-                        };
-                        if (result.Any(p => p.Person.Id == personId))
-                        {
-                            var record = result.First(p => p.Person.Id == personId);
-                            if (record.Person.Projects == null)
-                            {
-                                record.Person.Projects = new List<Project>();
-                                var project = new Project()
-                                {
-                                    Name = reader.GetString(projectNameIndex),
-                                    ProjectNumber = reader.GetString(projectNumberIndex),
-                                    Milestones = new List<Milestone>() { milestonePerson }
-                                };
-                                record.Person.Projects.Add(project);
-                            }
-                            else
-                            {
-                                if (record.Person.Projects.Any(p => p.ProjectNumber == projectNumber))
-                                {
-                                    var project = record.Person.Projects.First(p => p.ProjectNumber == projectNumber);
-                                    if (project.Milestones == null)
-                                    {
-                                        project.Milestones = new List<Milestone>() { milestonePerson };
-                                    }
-                                    else
-                                    {
-                                        project.Milestones.Add(milestonePerson);
-                                    }
-                                }
-                                else
-                                {
-                                    var project = new Project()
-                                    {
-                                        Name = reader.GetString(projectNameIndex),
-                                        ProjectNumber = reader.GetString(projectNumberIndex),
-                                        Milestones = new List<Milestone>() { milestonePerson }
-                                    };
-                                    record.Person.Projects.Add(project);
-                                }
                             }
                         }
                     }
