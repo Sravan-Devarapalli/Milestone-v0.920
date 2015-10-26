@@ -1267,6 +1267,7 @@ namespace DataAccess
         {
             if (!reader.NextResult() || !reader.HasRows) return;
             int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
             int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
             var milestonePersonEntryIdIndex = reader.GetOrdinal(Constants.ColumnNames.EntryId);
             var personIdIndex = reader.GetOrdinal(PersonIdColumn);
@@ -1281,6 +1282,7 @@ namespace DataAccess
                         {
                             Revenue = reader.GetDecimal(revenueIndex),
                             GrossMargin = reader.GetDecimal(grossMarginIndex),
+                            RevenueNet = reader.GetDecimal(revenueNetIndex)
                         };
             }
         }
@@ -1370,6 +1372,7 @@ namespace DataAccess
         {
             if (!reader.NextResult() || !reader.HasRows) return;
             int revenueIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueColumn);
+            int revenueNetIndex = reader.GetOrdinal(Constants.ColumnNames.RevenueNetColumn);
             int grossMarginIndex = reader.GetOrdinal(Constants.ColumnNames.GrossMarginColumn);
 
             while (reader.Read())
@@ -1378,6 +1381,7 @@ namespace DataAccess
                     = new ComputedFinancials
                         {
                             Revenue = reader.GetDecimal(revenueIndex),
+                            RevenueNet = reader.GetDecimal(revenueNetIndex),
                             GrossMargin = reader.GetDecimal(grossMarginIndex),
                         };
             }
