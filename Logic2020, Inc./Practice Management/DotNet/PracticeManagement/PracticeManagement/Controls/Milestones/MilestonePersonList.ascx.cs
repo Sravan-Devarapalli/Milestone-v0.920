@@ -20,6 +20,8 @@ using PraticeManagement.Controls.Milestones;
 using System.Data;
 using PraticeManagement.ProjectService;
 using AjaxControlToolkit;
+using System.Web;
+using System.Threading;
 
 
 namespace PraticeManagement.Controls.Milestones
@@ -1621,7 +1623,7 @@ namespace PraticeManagement.Controls.Milestones
                     if (entry.ThisPerson.IsStrawMan)
                     {
                         dpBadgeEnd.EnabledTextBox = dpBadgeStart.EnabledTextBox = chbBadgeException.Enabled = chbOpsApproved.Enabled = chbBadgeRequired.Enabled = lblConsultantsEnd.Visible =
-                        custBadgeAfterJuly.Enabled =   custBadgeNotInEmpHistory.Enabled = custExceptionNotMoreThan18moEndDate.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = false;
+                        custBadgeAfterJuly.Enabled = custBadgeNotInEmpHistory.Enabled = custExceptionNotMoreThan18moEndDate.Enabled = custBadgeHasMoredays.Enabled = compBadgeEndWithPersonEnd.Enabled = compBadgeStartWithPersonStart.Enabled = reqBadgeStart.Enabled = compBadgeStartType.Enabled = custBadgeStart.Enabled = reqBadgeEnd.Enabled = compBadgeEndType.Enabled = custBlocked.Enabled = custBadgeInBreakPeriod.Enabled = compBadgeEnd.Enabled = custBadgeEnd.Enabled = false;
                         dpBadgeStart.ReadOnly = dpBadgeEnd.ReadOnly = true;
                         dpBadgeStart.TextValue = dpBadgeEnd.TextValue = string.Empty;
                     }
@@ -1638,7 +1640,7 @@ namespace PraticeManagement.Controls.Milestones
                                 dpBadgeStart.TextValue = entry.BadgeStartDate.HasValue ? entry.BadgeStartDate.Value.ToShortDateString() : string.Empty;
                                 dpBadgeEnd.TextValue = entry.BadgeEndDate.HasValue ? entry.BadgeEndDate.Value.ToShortDateString() : string.Empty;
                             }
-                            
+
                         }
                         if (!chbBadgeRequired.Checked)
                         {
@@ -1743,8 +1745,8 @@ namespace PraticeManagement.Controls.Milestones
             var custBlocked = gvRow.FindControl("custBlocked") as CustomValidator;
             var custBadgeHasMoredays = gvRow.FindControl("custBadgeHasMoredays") as CustomValidator;
             var custExceptionNotMoreThan18moEndDate = gvRow.FindControl("custExceptionNotMoreThan18moEndDate") as CustomValidator;
-            var custBadgeNotInEmpHistory = gvRow.FindControl("custBadgeNotInEmpHistory") as CustomValidator; 
-            var custBadgeAfterJuly = gvRow.FindControl("custBadgeAfterJuly") as CustomValidator; 
+            var custBadgeNotInEmpHistory = gvRow.FindControl("custBadgeNotInEmpHistory") as CustomValidator;
+            var custBadgeAfterJuly = gvRow.FindControl("custBadgeAfterJuly") as CustomValidator;
             var custBadgeInBreakPeriod = gvRow.FindControl("custBadgeInBreakPeriod") as CustomValidator;
             var compBadgeEndWithPersonEnd = gvRow.FindControl("compBadgeEndWithPersonEnd") as CompareValidator;
             var compBadgeStartWithPersonStart = gvRow.FindControl("compBadgeStartWithPersonStart") as CompareValidator;
@@ -2169,167 +2171,116 @@ namespace PraticeManagement.Controls.Milestones
 
         public void AddAndBindRow(RepeaterItem repItem, bool isSaveCommit, bool iSDatBindRows = true)
         {
-            var bar = repItem.FindControl(mpbar) as MilestonePersonBar;
-            var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
-            var ddlRole = bar.FindControl(DDLROLE_KEY) as DropDownList;
-            var dpPersonStart = bar.FindControl(dpPersonStartInsert) as DatePicker;
-            var dpPersonEnd = bar.FindControl(dpPersonEndInsert) as DatePicker;
-            var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
-            var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
-            var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
-            var hdnIsFromAddBtn = bar.FindControl("hdnIsFromAddBtn") as HiddenField;
-            var dpBadgeStartInsert = bar.FindControl("dpBadgeStartInsert") as DatePicker;
-            var dpBadgeEndInsert = bar.FindControl("dpBadgeEndInsert") as DatePicker;
-            var chbBadgeRequiredInsert = bar.FindControl("chbBadgeRequiredInsert") as CheckBox;
-            var chbBadgeExceptionInsert = bar.FindControl("chbBadgeExceptionInsert") as CheckBox;
-            var chbOpsApprovedInsert = bar.FindControl("chbOpsApprovedInsert") as CheckBox;
-
-            var entry = new MilestonePersonEntry();
-            entry.StartDate = dpPersonStart.DateValue;
-            entry.EndDate = dpPersonEnd.DateValue != DateTime.MinValue ? (DateTime?)dpPersonEnd.DateValue : null;
-
-            // Badge Details
-            entry.BadgeStartDate = dpBadgeStartInsert.DateValue != DateTime.MinValue ? (DateTime?)dpBadgeStartInsert.DateValue : null;
-            entry.BadgeEndDate = dpBadgeEndInsert.DateValue != DateTime.MinValue ? (DateTime?)dpBadgeEndInsert.DateValue : null;
-            entry.MSBadgeRequired = chbBadgeRequiredInsert.Checked;
-            entry.BadgeException = chbBadgeExceptionInsert.Checked;
-            entry.IsApproved = chbOpsApprovedInsert.Checked;
-
-            Person person = null;
-
-            if (!string.IsNullOrEmpty(hdnIsFromAddBtn.Value))
+            try
             {
-                entry.IsAddButtonEntry = hdnIsFromAddBtn.Value == true.ToString();
-            }
-            if (!string.IsNullOrEmpty(ddlPerson.SelectedValue))
-            {
-                person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
+                var bar = repItem.FindControl(mpbar) as MilestonePersonBar;
+                var ddlPerson = bar.FindControl(DDLPERSON_KEY) as DropDownList;
+                var ddlRole = bar.FindControl(DDLROLE_KEY) as DropDownList;
+                var dpPersonStart = bar.FindControl(dpPersonStartInsert) as DatePicker;
+                var dpPersonEnd = bar.FindControl(dpPersonEndInsert) as DatePicker;
+                var txtAmount = bar.FindControl(txtAmountInsert) as TextBox;
+                var txtHoursPerDay = bar.FindControl(txtHoursPerDayInsert) as TextBox;
+                var txtHoursInPeriod = bar.FindControl(txtHoursInPeriodInsert) as TextBox;
+                var hdnIsFromAddBtn = bar.FindControl("hdnIsFromAddBtn") as HiddenField;
+                var dpBadgeStartInsert = bar.FindControl("dpBadgeStartInsert") as DatePicker;
+                var dpBadgeEndInsert = bar.FindControl("dpBadgeEndInsert") as DatePicker;
+                var chbBadgeRequiredInsert = bar.FindControl("chbBadgeRequiredInsert") as CheckBox;
+                var chbBadgeExceptionInsert = bar.FindControl("chbBadgeExceptionInsert") as CheckBox;
+                var chbOpsApprovedInsert = bar.FindControl("chbOpsApprovedInsert") as CheckBox;
 
-                entry.ThisPerson = person;
-            }
+                var entry = new MilestonePersonEntry();
+                entry.StartDate = dpPersonStart.DateValue;
+                entry.EndDate = dpPersonEnd.DateValue != DateTime.MinValue ? (DateTime?)dpPersonEnd.DateValue : null;
 
-            // Role
-            if (!string.IsNullOrEmpty(ddlRole.SelectedValue))
-            {
-                entry.Role =
-                    new PersonRole
-                    {
-                        Id = int.Parse(ddlRole.SelectedValue),
-                        Name = ddlRole.SelectedItem.Text
-                    };
-            }
-            else
-                entry.Role = null;
+                // Badge Details
+                entry.BadgeStartDate = dpBadgeStartInsert.DateValue != DateTime.MinValue ? (DateTime?)dpBadgeStartInsert.DateValue : null;
+                entry.BadgeEndDate = dpBadgeEndInsert.DateValue != DateTime.MinValue ? (DateTime?)dpBadgeEndInsert.DateValue : null;
+                entry.MSBadgeRequired = chbBadgeRequiredInsert.Checked;
+                entry.BadgeException = chbBadgeExceptionInsert.Checked;
+                entry.IsApproved = chbOpsApprovedInsert.Checked;
 
-            // Amount
-            if (!string.IsNullOrEmpty(txtAmount.Text))
-            {
-                entry.HourlyAmount = decimal.Parse(txtAmount.Text);
-            }
+                Person person = null;
 
-            if (String.IsNullOrEmpty(txtHoursPerDay.Text) && String.IsNullOrEmpty(txtHoursInPeriod.Text))
-            {
-                txtHoursPerDay.Text = DEFAULT_NUMBER_HOURS_PER_DAY;
-            }
-
-
-            // Flags
-
-            bool isHoursInPeriodChanged = !String.IsNullOrEmpty(txtHoursInPeriod.Text) &&
-                                          (entry.ProjectedWorkloadWithVacation != decimal.Parse(txtHoursInPeriod.Text));
-
-            // Check if need to recalculate Hours per day value
-            // Get working days person on Milestone for current person
-            DateTime endDate = entry.EndDate.HasValue ? entry.EndDate.Value : Milestone.ProjectedDeliveryDate;
-            PersonWorkingHoursDetailsWithinThePeriod personWorkingHoursDetailsWithinThePeriod = GetPersonWorkingHoursDetailsWithinThePeriod(entry.StartDate, endDate, ddlPerson);
-            decimal hoursPerDay;
-
-            if (isHoursInPeriodChanged)
-            {
-                // Recalculate hours per day according to HoursInPerod 
-                hoursPerDay = (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays != 0) ? decimal.Round(decimal.Parse(txtHoursInPeriod.Text) / personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays, 2) : 0;
-                // If calculated value more then 24 hours set 24 hours as maximum value for working day
-                entry.HoursPerDay = (hoursPerDay > 24M) ? 24M : hoursPerDay;
-                // Recalculate Hours In Period
-                entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
-            }
-            else
-            {
-                // If Hours Per Day is ommited set 8 hours as default value for working day
-                entry.HoursPerDay = !String.IsNullOrEmpty(txtHoursPerDay.Text)
-                                        ? decimal.Parse(txtHoursPerDay.Text)
-                                        : 8M;
-                // Recalculate Hours In Period
-                entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
-            }
-
-
-
-            if (MilestonePersonsEntries.Any(entr => entr.ThisPerson.Id == entry.ThisPerson.Id && entr.IsNewEntry == false))
-            {
-                var index = MilestonePersonsEntries.FindIndex(entr => entr.ThisPerson.Id == entry.ThisPerson.Id && entr.IsNewEntry == false);
-                var mpersonEntry = MilestonePersonsEntries[index];
-
-
-
-                entry.MilestonePersonId = mpersonEntry.MilestonePersonId;
-
-                if (isSaveCommit)
+                if (!string.IsNullOrEmpty(hdnIsFromAddBtn.Value))
                 {
-                    var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(entry, Context.User.Identity.Name));
-                    var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
-                    if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
-                    {
-                        var loggedInPerson = DataHelper.CurrentPerson;
-                        project.MailBody = chbBadgeExceptionInsert.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
-                                                                             "{0}", project.ProjectNumber, project.Name) :
-                                                                             string.Format(BadgeRequestMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
-                                                                             "{0}", project.ProjectNumber, project.Name);
-                        ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
-                        mlConfirmation.ShowInfoMessage(badgeRequest);
-                        mpeBadgePanel.Show();
-                    }
-                    if (iSDatBindRows)
-                    {
-                        MilestonePersonEntry mpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(entryId));
-                        MilestonePersonsEntries.Add(mpentry);
-                        MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
-                        BindEntriesGrid(MilestonePersonsEntries);
-                        HostingPage.Milestone = null;
-                        HostingPage.Project = HostingPage.Milestone.Project;
-                        HostingPage.FillComputedFinancials(HostingPage.Milestone);
-                    }
+                    entry.IsAddButtonEntry = hdnIsFromAddBtn.Value == true.ToString();
+                }
+                if (!string.IsNullOrEmpty(ddlPerson.SelectedValue))
+                {
+                    person = GetPersonBySelectedValue(ddlPerson.SelectedValue);
+
+                    entry.ThisPerson = person;
                 }
 
-            }
-            else
-            {
-                if (isSaveCommit)
+                // Role
+                if (!string.IsNullOrEmpty(ddlRole.SelectedValue))
                 {
-                    var mPerson = new MilestonePerson()
-                    {
-                        Milestone = new Milestone()
+                    entry.Role =
+                        new PersonRole
                         {
-                            Id = HostingPage.Milestone.Id
-                        },
-                        Person = new Person
-                        {
-                            Id = entry.ThisPerson.Id
-                        },
-                        Entries = new List<MilestonePersonEntry>()
-                        {
-                            entry
-                        }
-                    };
+                            Id = int.Parse(ddlRole.SelectedValue),
+                            Name = ddlRole.SelectedItem.Text
+                        };
+                }
+                else
+                    entry.Role = null;
 
-                    MilestonePersonEntry mpentry = null;
+                // Amount
+                if (!string.IsNullOrEmpty(txtAmount.Text))
+                {
+                    entry.HourlyAmount = decimal.Parse(txtAmount.Text);
+                }
 
-                    using (var serviceClient = new MilestonePersonService.MilestonePersonServiceClient())
+                if (String.IsNullOrEmpty(txtHoursPerDay.Text) && String.IsNullOrEmpty(txtHoursInPeriod.Text))
+                {
+                    txtHoursPerDay.Text = DEFAULT_NUMBER_HOURS_PER_DAY;
+                }
+
+
+                // Flags
+
+                bool isHoursInPeriodChanged = !String.IsNullOrEmpty(txtHoursInPeriod.Text) &&
+                                              (entry.ProjectedWorkloadWithVacation != decimal.Parse(txtHoursInPeriod.Text));
+
+                // Check if need to recalculate Hours per day value
+                // Get working days person on Milestone for current person
+                DateTime endDate = entry.EndDate.HasValue ? entry.EndDate.Value : Milestone.ProjectedDeliveryDate;
+                PersonWorkingHoursDetailsWithinThePeriod personWorkingHoursDetailsWithinThePeriod = GetPersonWorkingHoursDetailsWithinThePeriod(entry.StartDate, endDate, ddlPerson);
+                decimal hoursPerDay;
+
+                if (isHoursInPeriodChanged)
+                {
+                    // Recalculate hours per day according to HoursInPerod 
+                    hoursPerDay = (personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays != 0) ? decimal.Round(decimal.Parse(txtHoursInPeriod.Text) / personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays, 2) : 0;
+                    // If calculated value more then 24 hours set 24 hours as maximum value for working day
+                    entry.HoursPerDay = (hoursPerDay > 24M) ? 24M : hoursPerDay;
+                    // Recalculate Hours In Period
+                    entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
+                }
+                else
+                {
+                    // If Hours Per Day is ommited set 8 hours as default value for working day
+                    entry.HoursPerDay = !String.IsNullOrEmpty(txtHoursPerDay.Text)
+                                            ? decimal.Parse(txtHoursPerDay.Text)
+                                            : 8M;
+                    // Recalculate Hours In Period
+                    entry.ProjectedWorkloadWithVacation = entry.HoursPerDay * personWorkingHoursDetailsWithinThePeriod.TotalWorkDaysIncludingVacationDays;
+                }
+
+
+
+                if (MilestonePersonsEntries.Any(entr => entr.ThisPerson.Id == entry.ThisPerson.Id && entr.IsNewEntry == false))
+                {
+                    var index = MilestonePersonsEntries.FindIndex(entr => entr.ThisPerson.Id == entry.ThisPerson.Id && entr.IsNewEntry == false);
+                    var mpersonEntry = MilestonePersonsEntries[index];
+
+
+
+                    entry.MilestonePersonId = mpersonEntry.MilestonePersonId;
+
+                    if (isSaveCommit)
                     {
-                        var id = serviceClient.MilestonePersonAndEntryInsert(mPerson, Context.User.Identity.Name);
-                        mpentry = serviceClient.GetMilestonePersonEntry(id);
-                        mpentry.IsShowPlusButton = true;
-                        entry = mpentry;
+                        var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(entry, Context.User.Identity.Name));
                         var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
                         if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
                         {
@@ -2342,27 +2293,91 @@ namespace PraticeManagement.Controls.Milestones
                             mlConfirmation.ShowInfoMessage(badgeRequest);
                             mpeBadgePanel.Show();
                         }
+                        if (iSDatBindRows)
+                        {
+                            MilestonePersonEntry mpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(entryId));
+                            MilestonePersonsEntries.Add(mpentry);
+                            MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
+                            BindEntriesGrid(MilestonePersonsEntries);
+                            HostingPage.Milestone = null;
+                            HostingPage.Project = HostingPage.Milestone.Project;
+                            HostingPage.FillComputedFinancials(HostingPage.Milestone);
+                        }
                     }
 
-                    if (iSDatBindRows)
+                }
+                else
+                {
+                    if (isSaveCommit)
                     {
-                        MilestonePersonsEntries.Add(mpentry);
-                        MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
-                        BindEntriesGrid(MilestonePersonsEntries);
-                        HostingPage.Milestone = null;
-                        HostingPage.Project = HostingPage.Milestone.Project;
-                        HostingPage.FillComputedFinancials(HostingPage.Milestone);
+                        var mPerson = new MilestonePerson()
+                        {
+                            Milestone = new Milestone()
+                            {
+                                Id = HostingPage.Milestone.Id
+                            },
+                            Person = new Person
+                            {
+                                Id = entry.ThisPerson.Id
+                            },
+                            Entries = new List<MilestonePersonEntry>()
+                        {
+                            entry
+                        }
+                        };
+
+                        MilestonePersonEntry mpentry = null;
+
+                        using (var serviceClient = new MilestonePersonService.MilestonePersonServiceClient())
+                        {
+                            var id = serviceClient.MilestonePersonAndEntryInsert(mPerson, Context.User.Identity.Name);
+                            mpentry = serviceClient.GetMilestonePersonEntry(id);
+                            mpentry.IsShowPlusButton = true;
+                            entry = mpentry;
+                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                            if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
+                            {
+                                var loggedInPerson = DataHelper.CurrentPerson;
+                                project.MailBody = chbBadgeExceptionInsert.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
+                                                                                     "{0}", project.ProjectNumber, project.Name) :
+                                                                                     string.Format(BadgeRequestMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
+                                                                                     "{0}", project.ProjectNumber, project.Name);
+                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                mlConfirmation.ShowInfoMessage(badgeRequest);
+                                mpeBadgePanel.Show();
+                            }
+                        }
+
+                        if (iSDatBindRows)
+                        {
+                            MilestonePersonsEntries.Add(mpentry);
+                            MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
+                            BindEntriesGrid(MilestonePersonsEntries);
+                            HostingPage.Milestone = null;
+                            HostingPage.Project = HostingPage.Milestone.Project;
+                            HostingPage.FillComputedFinancials(HostingPage.Milestone);
+                        }
                     }
                 }
-            }
 
-            if (HostingPage.ValidateNewEntry)
+                if (HostingPage.ValidateNewEntry)
+                {
+                    entry.IsRepeaterEntry = true;
+                    MilestonePersonsEntries.Add(entry);
+                    MilestonePersonsEntries = MilestonePersonsEntries;
+                }
+            }
+            catch(Exception ex)
             {
-                entry.IsRepeaterEntry = true;
-                MilestonePersonsEntries.Add(entry);
-                MilestonePersonsEntries = MilestonePersonsEntries;
+                Logging.LogErrorMessage(
+                           ex.Message,
+                           ex.Source,
+                           ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                           string.Empty,
+                           HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                           string.Empty,
+                           Thread.CurrentPrincipal.Identity.Name);
             }
-
         }
 
         protected void imgMilestonePersonEntryEdit_OnClick(object sender, EventArgs e)
@@ -2374,84 +2389,110 @@ namespace PraticeManagement.Controls.Milestones
 
         protected void btnDeletePersonEntry_OnClick(object sender, EventArgs e)
         {
-            var milestonePersonEntryId = Convert.ToInt32(hdMilestonePersonEntryId.Value);
-            var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == milestonePersonEntryId);
-            var entry = MilestonePersonsEntries[index];
-
-            if (!entry.ThisPerson.IsStrawMan)
+            try
             {
-                //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
-                if (CheckTimeEntriesExist(entry.MilestonePersonId, entry.StartDate, entry.EndDate, true, true))
+                var milestonePersonEntryId = Convert.ToInt32(hdMilestonePersonEntryId.Value);
+                var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == milestonePersonEntryId);
+                var entry = MilestonePersonsEntries[index];
+
+                if (!entry.ThisPerson.IsStrawMan)
                 {
-                    lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
-                    tblValidation.Visible = true;
-                    return;
+                    //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
+                    if (CheckTimeEntriesExist(entry.MilestonePersonId, entry.StartDate, entry.EndDate, true, true))
+                    {
+                        lblResultMessage.ShowErrorMessage(milestoneHasTimeEntries);
+                        tblValidation.Visible = true;
+                        return;
+                    }
+                    //if there are any project feedback records
+                    if (CheckFeedbackExists(entry.MilestonePersonId, entry.StartDate, entry.EndDate))
+                    {
+                        lblResultMessage.ShowErrorMessage(milestoneHasFeedbackEntries);
+                        tblValidation.Visible = true;
+                        return;
+                    }
                 }
-                //if there are any project feedback records
-                if (CheckFeedbackExists(entry.MilestonePersonId, entry.StartDate, entry.EndDate))
-                {
-                    lblResultMessage.ShowErrorMessage(milestoneHasFeedbackEntries);
-                    tblValidation.Visible = true;
-                    return;
-                }
+
+                // Delete mPersonEntry 
+
+                ServiceCallers.Custom.MilestonePerson(mp => mp.DeleteMilestonePersonEntry(milestonePersonEntryId, Context.User.Identity.Name));
+                MilestonePersonsEntries.RemoveAt(index);
+                MilestonePersonsEntries = MilestonePersonsEntries;
+                MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
+                BindEntriesGrid(MilestonePersonsEntries);
+
+                // Get latest data in detail tab
+
+                HostingPage.Milestone = null;
+                HostingPage.FillComputedFinancials(HostingPage.Milestone);
             }
-
-            // Delete mPersonEntry 
-
-            ServiceCallers.Custom.MilestonePerson(mp => mp.DeleteMilestonePersonEntry(milestonePersonEntryId, Context.User.Identity.Name));
-            MilestonePersonsEntries.RemoveAt(index);
-            MilestonePersonsEntries = MilestonePersonsEntries;
-            MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
-            BindEntriesGrid(MilestonePersonsEntries);
-
-            // Get latest data in detail tab
-
-            HostingPage.Milestone = null;
-            HostingPage.FillComputedFinancials(HostingPage.Milestone);
+            catch (Exception ex)
+            {
+                Logging.LogErrorMessage(
+                           ex.Message,
+                           ex.Source,
+                           ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                           string.Empty,
+                           HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                           string.Empty,
+                           Thread.CurrentPrincipal.Identity.Name);
+            }
         }
 
         protected void btnDeleteAllPersonEntries_OnClick(object sender, EventArgs e)
         {
-            var milestonePersonEntryId = Convert.ToInt32(hdMilestonePersonEntryId.Value);
-
-            var deleteEntry = MilestonePersonsEntries.First(m => m.Id == milestonePersonEntryId);
-
-            lblResultMessage.ClearMessage();
-
-            var PersonEntries = MilestonePersonsEntries.FindAll(m => m.MilestonePersonId == deleteEntry.MilestonePersonId);
-
-            int? milestonePersonEntryRoleId = deleteEntry.Role != null ? (int?)deleteEntry.Role.Id : null;
-
-            //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
-            if (CheckTimeEntriesForMilestonePersonWithGivenRoleId(deleteEntry.MilestonePersonId, milestonePersonEntryRoleId))
+            try
             {
-                lblResultMessage.ShowErrorMessage(allMilestoneHasTimeEntries);
-                tblValidation.Visible = true;
-                return;
-            }
+                var milestonePersonEntryId = Convert.ToInt32(hdMilestonePersonEntryId.Value);
 
-            //delete all mPersonEntries
-            foreach (MilestonePersonEntry entry in PersonEntries)
-            {
-                if ((entry.Role == null && milestonePersonEntryRoleId == null) || (entry.Role != null && milestonePersonEntryRoleId != null && entry.Role.Id == milestonePersonEntryRoleId))
+                var deleteEntry = MilestonePersonsEntries.First(m => m.Id == milestonePersonEntryId);
+
+                lblResultMessage.ClearMessage();
+
+                var PersonEntries = MilestonePersonsEntries.FindAll(m => m.MilestonePersonId == deleteEntry.MilestonePersonId);
+
+                int? milestonePersonEntryRoleId = deleteEntry.Role != null ? (int?)deleteEntry.Role.Id : null;
+
+                //if two entries are there with overlapping periods then we are allowing to delete entry as per #2925 Jason mail.
+                if (CheckTimeEntriesForMilestonePersonWithGivenRoleId(deleteEntry.MilestonePersonId, milestonePersonEntryRoleId))
                 {
-                    // Delete mPersonEntry 
-                    ServiceCallers.Custom.MilestonePerson(mp => mp.DeleteMilestonePersonEntry(entry.Id, Context.User.Identity.Name));
-                    var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == entry.Id);
-                    MilestonePersonsEntries.RemoveAt(index);
-                    //MilestonePersonsEntries.Remove(entry);//need to check
+                    lblResultMessage.ShowErrorMessage(allMilestoneHasTimeEntries);
+                    tblValidation.Visible = true;
+                    return;
                 }
+
+                //delete all mPersonEntries
+                foreach (MilestonePersonEntry entry in PersonEntries)
+                {
+                    if ((entry.Role == null && milestonePersonEntryRoleId == null) || (entry.Role != null && milestonePersonEntryRoleId != null && entry.Role.Id == milestonePersonEntryRoleId))
+                    {
+                        // Delete mPersonEntry 
+                        ServiceCallers.Custom.MilestonePerson(mp => mp.DeleteMilestonePersonEntry(entry.Id, Context.User.Identity.Name));
+                        var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == entry.Id);
+                        MilestonePersonsEntries.RemoveAt(index);
+                        //MilestonePersonsEntries.Remove(entry);//need to check
+                    }
+                }
+                MilestonePersonsEntries = MilestonePersonsEntries;
+                MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
+                BindEntriesGrid(MilestonePersonsEntries);
+
+                // Get latest data in detail tab
+
+                HostingPage.Milestone = null;
+                HostingPage.FillComputedFinancials(HostingPage.Milestone);
             }
-            MilestonePersonsEntries = MilestonePersonsEntries;
-            MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
-            BindEntriesGrid(MilestonePersonsEntries);
-
-            // Get latest data in detail tab
-
-            HostingPage.Milestone = null;
-            HostingPage.FillComputedFinancials(HostingPage.Milestone);
-
-
+            catch (Exception ex)
+            {
+                Logging.LogErrorMessage(
+                           ex.Message,
+                           ex.Source,
+                           ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                           string.Empty,
+                           HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                           string.Empty,
+                           Thread.CurrentPrincipal.Identity.Name);
+            }
         }
 
         protected void imgMilestonePersonDelete_OnClick(object sender, EventArgs e)
@@ -2594,143 +2635,89 @@ namespace PraticeManagement.Controls.Milestones
 
         private void milestonePersonEntryUpdate(int mpeIndex, GridViewRow gvRow = null, bool isValidating = true)
         {
-            if (gvRow == null)
+            try
             {
-                gvRow = gvMilestonePersonEntries.Rows[mpeIndex];
-            }
-
-            vsumMilestonePersonEntry.ValidationGroup = milestonePersonEntry + gvRow.DataItemIndex.ToString();
-
-            bool result = true;
-            if (isValidating)
-            {
-                Page.Validate(vsumMilestonePersonEntry.ValidationGroup);
-                result = Page.IsValid;
-            }
-
-            if (result)
-            {
-
-                HiddenField hdnPersonId = gvRow.FindControl("hdnPersonId") as HiddenField;
-                HiddenField hdnPersonIsStrawMan = gvRow.FindControl("hdnPersonIsStrawMan") as HiddenField;
-                var ddl = gvRow.FindControl("ddlPersonName") as DropDownList;
-                var ddlRole = gvRow.FindControl("ddlRole") as DropDownList;
-                var lblRole = gvRow.FindControl("lblRole") as Label;
-                var dpBadgeStart = gvRow.FindControl("dpBadgeStart") as DatePicker;
-                var dpBadgeEnd = gvRow.FindControl("dpBadgeEnd") as DatePicker;
-                var chbOpsApproved = gvRow.FindControl("chbOpsApproved") as CheckBox;
-                var chbBadgeException = gvRow.FindControl("chbBadgeException") as CheckBox;
-                var chbBadgeRequired = gvRow.FindControl("chbBadgeRequired") as CheckBox;
-                var oldRoleId = lblRole.Attributes["RoleId"];
-                var badgeStart = Convert.ToDateTime(dpBadgeStart.Attributes["Date"]);
-                var badgeEnd = Convert.ToDateTime(dpBadgeEnd.Attributes["Date"]);
-                var previouslyChecked = Convert.ToBoolean(chbOpsApproved.Attributes["PreviousChecked"]);
-                var previouslyBadgeRequired = Convert.ToBoolean(chbBadgeRequired.Attributes["PreviouslyChecked"]);
-                var entries = MilestonePersonsEntries;
-                var entry = entries[gvRow.DataItemIndex];
-
-                var isEntryInEditmode = entry.IsEditMode;
-
-                if (IsSaveCommit)
+                if (gvRow == null)
                 {
-                    entry.IsEditMode = false;
+                    gvRow = gvMilestonePersonEntries.Rows[mpeIndex];
                 }
 
-                var milestonePersonentry = new MilestonePersonEntry()
-                {
-                    Id = entry.Id,
-                    StartDate = entry.StartDate,
-                    EndDate = entry.EndDate,
-                    MilestonePersonId = entry.MilestonePersonId,
-                    IsEditMode = entry.IsEditMode,
-                    ProjectedWorkloadWithVacation = entry.ProjectedWorkloadWithVacation,
-                    PersonTimeOffList = entry.PersonTimeOffList,
-                    VacationDays = entry.VacationDays,
-                    HoursPerDay = entry.HoursPerDay
-                };
+                vsumMilestonePersonEntry.ValidationGroup = milestonePersonEntry + gvRow.DataItemIndex.ToString();
 
-                if (entry.IsNewEntry)
+                bool result = true;
+                if (isValidating)
                 {
-                    if (!UpdateMilestonePersonEntry(milestonePersonentry, gvMilestonePersonEntries.Rows[gvRow.DataItemIndex], false))
-                    {
-                        IsErrorOccuredWhileUpdatingRow = true;
-                        //HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
-                        return;
-                    }
+                    Page.Validate(vsumMilestonePersonEntry.ValidationGroup);
+                    result = Page.IsValid;
+                }
+
+                if (result)
+                {
+
+                    HiddenField hdnPersonId = gvRow.FindControl("hdnPersonId") as HiddenField;
+                    HiddenField hdnPersonIsStrawMan = gvRow.FindControl("hdnPersonIsStrawMan") as HiddenField;
+                    var ddl = gvRow.FindControl("ddlPersonName") as DropDownList;
+                    var ddlRole = gvRow.FindControl("ddlRole") as DropDownList;
+                    var lblRole = gvRow.FindControl("lblRole") as Label;
+                    var dpBadgeStart = gvRow.FindControl("dpBadgeStart") as DatePicker;
+                    var dpBadgeEnd = gvRow.FindControl("dpBadgeEnd") as DatePicker;
+                    var chbOpsApproved = gvRow.FindControl("chbOpsApproved") as CheckBox;
+                    var chbBadgeException = gvRow.FindControl("chbBadgeException") as CheckBox;
+                    var chbBadgeRequired = gvRow.FindControl("chbBadgeRequired") as CheckBox;
+                    var oldRoleId = lblRole.Attributes["RoleId"];
+                    var badgeStart = Convert.ToDateTime(dpBadgeStart.Attributes["Date"]);
+                    var badgeEnd = Convert.ToDateTime(dpBadgeEnd.Attributes["Date"]);
+                    var previouslyChecked = Convert.ToBoolean(chbOpsApproved.Attributes["PreviousChecked"]);
+                    var previouslyBadgeRequired = Convert.ToBoolean(chbBadgeRequired.Attributes["PreviouslyChecked"]);
+                    var entries = MilestonePersonsEntries;
+                    var entry = entries[gvRow.DataItemIndex];
+
+                    var isEntryInEditmode = entry.IsEditMode;
+
                     if (IsSaveCommit)
                     {
-                        var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(milestonePersonentry, Context.User.Identity.Name));
-                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
-                        if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired)
-                        {   
-                            var loggedInPerson = DataHelper.CurrentPerson;
-                            project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                "{0}", project.ProjectNumber, project.Name) :
-                                                                            string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                                            "{0}", project.ProjectNumber, project.Name);
-                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
-                            mlConfirmation.ShowInfoMessage(badgeRequest);
-                            mpeBadgePanel.Show();
-                        }
-                        if (!HostingPage.IsSaveAllClicked)
+                        entry.IsEditMode = false;
+                    }
+
+                    var milestonePersonentry = new MilestonePersonEntry()
+                    {
+                        Id = entry.Id,
+                        StartDate = entry.StartDate,
+                        EndDate = entry.EndDate,
+                        MilestonePersonId = entry.MilestonePersonId,
+                        IsEditMode = entry.IsEditMode,
+                        ProjectedWorkloadWithVacation = entry.ProjectedWorkloadWithVacation,
+                        PersonTimeOffList = entry.PersonTimeOffList,
+                        VacationDays = entry.VacationDays,
+                        HoursPerDay = entry.HoursPerDay
+                    };
+
+                    if (entry.IsNewEntry)
+                    {
+                        if (!UpdateMilestonePersonEntry(milestonePersonentry, gvMilestonePersonEntries.Rows[gvRow.DataItemIndex], false))
                         {
-                            MilestonePersonEntry mpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(entryId));
-                            milestonePersonentry = mpentry;
+                            IsErrorOccuredWhileUpdatingRow = true;
+                            //HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
+                            return;
                         }
-                        MilestonePersonsEntries[gvRow.DataItemIndex] = milestonePersonentry;
-                    }
-                }
-                else
-                {
-                    if (!UpdateMilestonePersonEntry(milestonePersonentry, gvMilestonePersonEntries.Rows[gvRow.DataItemIndex], true))
-                    {
-                        IsErrorOccuredWhileUpdatingRow = true;
-                        //HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
-                        return;
-                    }
-                    if (hdnPersonId.Value == ddl.SelectedValue && oldRoleId == ddlRole.SelectedValue)
-                    {
-                        IsErrorOccuredWhileUpdatingRow = false;
                         if (IsSaveCommit)
                         {
-                            var loggedInPerson = DataHelper.CurrentPerson;
-                            //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(HostingPage.SelectedProjectId.Value, HostingPage.User.Identity.Name));
-                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value)); //ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
-                            DateTime? badgeDate = null;
-                            if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (previouslyBadgeRequired != milestonePersonentry.MSBadgeRequired))
+                            var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(milestonePersonentry, Context.User.Identity.Name));
+                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                            if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired)
                             {
+                                var loggedInPerson = DataHelper.CurrentPerson;
                                 project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                               "{0}", project.ProjectNumber, project.Name) :
-                                                                           string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                                           "{0}", project.ProjectNumber, project.Name);
+                                                    "{0}", project.ProjectNumber, project.Name) :
+                                                                                string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
+                                                                                "{0}", project.ProjectNumber, project.Name);
                                 ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
                                 mlConfirmation.ShowInfoMessage(badgeRequest);
                                 mpeBadgePanel.Show();
-                                badgeDate = SettingsHelper.GetCurrentPMTime();
-                            }
-                            else if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (badgeStart.Date > milestonePersonentry.BadgeStartDate || badgeEnd.Date < milestonePersonentry.BadgeEndDate))
-                            {
-                                project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, entry.ThisPerson.Name, badgeStart.ToShortDateString(), badgeEnd.ToShortDateString(), milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                             "{0}", project.ProjectNumber, project.Name) :
-                                                                         string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, badgeStart.ToShortDateString(), badgeEnd.ToShortDateString(), milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                                         "{0}", project.ProjectNumber, project.Name);
-                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
-                                mlConfirmation.ShowInfoMessage(badgeRequest);
-                                mpeBadgePanel.Show();
-                                badgeDate = SettingsHelper.GetCurrentPMTime();
-                            }
-                            milestonePersonentry.RequestDate = badgeDate;
-                            ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(milestonePersonentry, Context.User.Identity.Name));
-                            if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.IsApproved && !previouslyChecked)
-                            {
-                                var toAddress = string.IsNullOrEmpty(project.ToAddressList) ? string.Empty : project.ToAddressList.Substring(0, project.ToAddressList.Length - 1);
-                                toAddress = string.IsNullOrEmpty(toAddress) ? HostingPage.Project.OwnerAlias : toAddress + "," + HostingPage.Project.OwnerAlias;
-                                toAddress = toAddress.Substring(project.ToAddressList.Length - 1, 1) == "," ? toAddress.Substring(0, toAddress.Length - 1) : toAddress;
-                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestApprovedMail(ddl.SelectedItem.Text, toAddress));
                             }
                             if (!HostingPage.IsSaveAllClicked)
                             {
-                                MilestonePersonEntry mpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(entry.Id));
+                                MilestonePersonEntry mpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(entryId));
                                 milestonePersonentry = mpentry;
                             }
                             MilestonePersonsEntries[gvRow.DataItemIndex] = milestonePersonentry;
@@ -2738,145 +2725,213 @@ namespace PraticeManagement.Controls.Milestones
                     }
                     else
                     {
-                        IsErrorOccuredWhileUpdatingRow = false;
-                        if (IsSaveCommit)
+                        if (!UpdateMilestonePersonEntry(milestonePersonentry, gvMilestonePersonEntries.Rows[gvRow.DataItemIndex], true))
                         {
-                            List<MilestonePersonEntry> similarEntryList = new List<MilestonePersonEntry>();
-
-
-                            similarEntryList.Add(milestonePersonentry);
-
-                            if (hdnPersonIsStrawMan.Value.ToLowerInvariant() == "false")
+                            IsErrorOccuredWhileUpdatingRow = true;
+                            //HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
+                            return;
+                        }
+                        if (hdnPersonId.Value == ddl.SelectedValue && oldRoleId == ddlRole.SelectedValue)
+                        {
+                            IsErrorOccuredWhileUpdatingRow = false;
+                            if (IsSaveCommit)
                             {
-                                //Find Similar Entries Indexes
-                                var entryList = MilestonePersonsEntries.Where(mpe =>
-                                                                                    entry.IsShowPlusButton && mpe.ShowingPlusButtonEntryId == entry.Id
-                                                                                     && mpe.Id != entry.Id)
-                                                                                     .ToList();
-
-                                similarEntryList.AddRange(entryList);
-                            }
-
-                            int mpId = milestonePersonentry.MilestonePersonId;
-
-
-                            foreach (var mPEntry in similarEntryList)
-                            {
-                                mPEntry.Role = milestonePersonentry.Role;
-                                mPEntry.ThisPerson = milestonePersonentry.ThisPerson;
-
-                                if (HostingPage.IsSaveAllClicked)
+                                var loggedInPerson = DataHelper.CurrentPerson;
+                                //var project = ServiceCallers.Custom.Project(p => p.GetProjectDetailWithoutMilestones(HostingPage.SelectedProjectId.Value, HostingPage.User.Identity.Name));
+                                var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value)); //ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                                DateTime? badgeDate = null;
+                                if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (previouslyBadgeRequired != milestonePersonentry.MSBadgeRequired))
                                 {
-                                    if (!mPEntry.IsNewEntry)
-                                    {
-                                        if (!(mPEntry.Id == milestonePersonentry.Id))
-                                        {
-                                            if (mPEntry.IsEditMode)
-                                            {
-                                                var index = MilestonePersonsEntries.FindIndex(mp => mp.IsNewEntry == false && mp.Id == mPEntry.Id);
-                                                UpdateMilestonePersonEntry(mPEntry, gvMilestonePersonEntries.Rows[index], true);
-                                                mPEntry.Role = milestonePersonentry.Role;
-                                                mPEntry.ThisPerson = milestonePersonentry.ThisPerson;
-                                                mPEntry.IsEditMode = false;
-
-                                            }
-                                        }
-
-                                        mpId = ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(mPEntry, Context.User.Identity.Name));
-
-                                        var indexVal = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mPEntry.Id);
-                                        MilestonePersonsEntries[indexVal] = mPEntry;
-
-                                    }
-                                    else
-                                    {
-                                        var index = MilestonePersonsEntries.FindIndex(mp => mp == mPEntry);
-                                        var ddlPersonName = gvMilestonePersonEntries.Rows[index].FindControl("ddlPersonName") as DropDownList;
-                                        var ddlRoleName = gvMilestonePersonEntries.Rows[index].FindControl("ddlRole") as DropDownList;
-                                        ddlPersonName.SelectedValue = mPEntry.ThisPerson.Id.ToString();
-                                        ddlRoleName.SelectedValue = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
-                                    }
+                                    project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
+                                                   "{0}", project.ProjectNumber, project.Name) :
+                                                                               string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
+                                                                               "{0}", project.ProjectNumber, project.Name);
+                                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                    mlConfirmation.ShowInfoMessage(badgeRequest);
+                                    mpeBadgePanel.Show();
+                                    badgeDate = SettingsHelper.GetCurrentPMTime();
                                 }
-                                else
+                                else if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (badgeStart.Date > milestonePersonentry.BadgeStartDate || badgeEnd.Date < milestonePersonentry.BadgeEndDate))
                                 {
-                                    if (!mPEntry.IsNewEntry)
+                                    project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, entry.ThisPerson.Name, badgeStart.ToShortDateString(), badgeEnd.ToShortDateString(), milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
+                                                 "{0}", project.ProjectNumber, project.Name) :
+                                                                             string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, badgeStart.ToShortDateString(), badgeEnd.ToShortDateString(), milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
+                                                                             "{0}", project.ProjectNumber, project.Name);
+                                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                    mlConfirmation.ShowInfoMessage(badgeRequest);
+                                    mpeBadgePanel.Show();
+                                    badgeDate = SettingsHelper.GetCurrentPMTime();
+                                }
+                                milestonePersonentry.RequestDate = badgeDate;
+                                ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(milestonePersonentry, Context.User.Identity.Name));
+                                if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.IsApproved && !previouslyChecked)
+                                {
+                                    var toAddress = string.IsNullOrEmpty(project.ToAddressList) ? string.Empty : project.ToAddressList.Substring(0, project.ToAddressList.Length - 1);
+                                    toAddress = string.IsNullOrEmpty(toAddress) ? HostingPage.Project.OwnerAlias : toAddress + "," + HostingPage.Project.OwnerAlias;
+                                    toAddress = toAddress.Substring(project.ToAddressList.Length - 1, 1) == "," ? toAddress.Substring(0, toAddress.Length - 1) : toAddress;
+                                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestApprovedMail(ddl.SelectedItem.Text, toAddress));
+                                }
+                                if (!HostingPage.IsSaveAllClicked)
+                                {
+                                    MilestonePersonEntry mpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(entry.Id));
+                                    milestonePersonentry = mpentry;
+                                }
+                                MilestonePersonsEntries[gvRow.DataItemIndex] = milestonePersonentry;
+                            }
+                        }
+                        else
+                        {
+                            IsErrorOccuredWhileUpdatingRow = false;
+                            if (IsSaveCommit)
+                            {
+                                List<MilestonePersonEntry> similarEntryList = new List<MilestonePersonEntry>();
+
+
+                                similarEntryList.Add(milestonePersonentry);
+
+                                if (hdnPersonIsStrawMan.Value.ToLowerInvariant() == "false")
+                                {
+                                    //Find Similar Entries Indexes
+                                    var entryList = MilestonePersonsEntries.Where(mpe =>
+                                                                                        entry.IsShowPlusButton && mpe.ShowingPlusButtonEntryId == entry.Id
+                                                                                         && mpe.Id != entry.Id)
+                                                                                         .ToList();
+
+                                    similarEntryList.AddRange(entryList);
+                                }
+
+                                int mpId = milestonePersonentry.MilestonePersonId;
+
+
+                                foreach (var mPEntry in similarEntryList)
+                                {
+                                    mPEntry.Role = milestonePersonentry.Role;
+                                    mPEntry.ThisPerson = milestonePersonentry.ThisPerson;
+
+                                    if (HostingPage.IsSaveAllClicked)
                                     {
-                                        DateTime? badgeDate = null;
-                                        var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
-                                        if ((project.Status.StatusType == ProjectStatusType.Active || project.Status.StatusType == ProjectStatusType.Projected) && mPEntry.MSBadgeRequired)
+                                        if (!mPEntry.IsNewEntry)
                                         {
-                                            var loggedInPerson = DataHelper.CurrentPerson;
-                                            project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, mPEntry.ThisPerson.Name, mPEntry.BadgeStartDate.Value.ToShortDateString(), mPEntry.BadgeEndDate.Value.ToShortDateString(),
-                                                                "{0}", project.ProjectNumber, project.Name) :
-                                                                                            string.Format(BadgeRequestMailBody, loggedInPerson.Name, mPEntry.ThisPerson.Name, mPEntry.BadgeStartDate.Value.ToShortDateString(), mPEntry.BadgeEndDate.Value.ToShortDateString(),
-                                                                                            "{0}", project.ProjectNumber, project.Name);
-                                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
-                                            mlConfirmation.ShowInfoMessage(badgeRequest);
-                                            mpeBadgePanel.Show();
-                                            badgeDate = SettingsHelper.GetCurrentPMTime();
-                                        }
-                                        mPEntry.RequestDate = badgeDate;
-                                        mpId = ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(mPEntry, Context.User.Identity.Name));
-                                        if (mPEntry.Id == milestonePersonentry.Id)
-                                        {
-                                            MilestonePersonEntry latestMpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(mPEntry.Id));
-                                            var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == latestMpentry.Id);
-                                            MilestonePersonsEntries[index] = latestMpentry;
+                                            if (!(mPEntry.Id == milestonePersonentry.Id))
+                                            {
+                                                if (mPEntry.IsEditMode)
+                                                {
+                                                    var index = MilestonePersonsEntries.FindIndex(mp => mp.IsNewEntry == false && mp.Id == mPEntry.Id);
+                                                    UpdateMilestonePersonEntry(mPEntry, gvMilestonePersonEntries.Rows[index], true);
+                                                    mPEntry.Role = milestonePersonentry.Role;
+                                                    mPEntry.ThisPerson = milestonePersonentry.ThisPerson;
+                                                    mPEntry.IsEditMode = false;
+
+                                                }
+                                            }
+
+                                            mpId = ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(mPEntry, Context.User.Identity.Name));
+
+                                            var indexVal = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mPEntry.Id);
+                                            MilestonePersonsEntries[indexVal] = mPEntry;
+
                                         }
                                         else
                                         {
-                                            var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mPEntry.Id);
-                                            MilestonePersonsEntries[index] = mPEntry;
-                                            if (mPEntry.IsEditMode)
-                                            {
-                                                MilestonePersonsEntries[index].EditedEntryValues["ddlPersonName"] = mPEntry.ThisPerson.Id.ToString();
-                                                MilestonePersonsEntries[index].EditedEntryValues["ddlRole"] = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
-                                            }
+                                            var index = MilestonePersonsEntries.FindIndex(mp => mp == mPEntry);
+                                            var ddlPersonName = gvMilestonePersonEntries.Rows[index].FindControl("ddlPersonName") as DropDownList;
+                                            var ddlRoleName = gvMilestonePersonEntries.Rows[index].FindControl("ddlRole") as DropDownList;
+                                            ddlPersonName.SelectedValue = mPEntry.ThisPerson.Id.ToString();
+                                            ddlRoleName.SelectedValue = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
                                         }
                                     }
                                     else
                                     {
-                                        var index = MilestonePersonsEntries.FindIndex(mp => mp == mPEntry);
+                                        if (!mPEntry.IsNewEntry)
+                                        {
+                                            DateTime? badgeDate = null;
+                                            var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                                            if ((project.Status.StatusType == ProjectStatusType.Active || project.Status.StatusType == ProjectStatusType.Projected) && mPEntry.MSBadgeRequired)
+                                            {
+                                                var loggedInPerson = DataHelper.CurrentPerson;
+                                                project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, mPEntry.ThisPerson.Name, mPEntry.BadgeStartDate.Value.ToShortDateString(), mPEntry.BadgeEndDate.Value.ToShortDateString(),
+                                                                    "{0}", project.ProjectNumber, project.Name) :
+                                                                                                string.Format(BadgeRequestMailBody, loggedInPerson.Name, mPEntry.ThisPerson.Name, mPEntry.BadgeStartDate.Value.ToShortDateString(), mPEntry.BadgeEndDate.Value.ToShortDateString(),
+                                                                                                "{0}", project.ProjectNumber, project.Name);
+                                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                mlConfirmation.ShowInfoMessage(badgeRequest);
+                                                mpeBadgePanel.Show();
+                                                badgeDate = SettingsHelper.GetCurrentPMTime();
+                                            }
+                                            mPEntry.RequestDate = badgeDate;
+                                            mpId = ServiceCallers.Custom.MilestonePerson(mp => mp.UpdateMilestonePersonEntry(mPEntry, Context.User.Identity.Name));
+                                            if (mPEntry.Id == milestonePersonentry.Id)
+                                            {
+                                                MilestonePersonEntry latestMpentry = ServiceCallers.Custom.MilestonePerson(mp => mp.GetMilestonePersonEntry(mPEntry.Id));
+                                                var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == latestMpentry.Id);
+                                                MilestonePersonsEntries[index] = latestMpentry;
+                                            }
+                                            else
+                                            {
+                                                var index = MilestonePersonsEntries.FindIndex(mpe => mpe.Id == mPEntry.Id);
+                                                MilestonePersonsEntries[index] = mPEntry;
+                                                if (mPEntry.IsEditMode)
+                                                {
+                                                    MilestonePersonsEntries[index].EditedEntryValues["ddlPersonName"] = mPEntry.ThisPerson.Id.ToString();
+                                                    MilestonePersonsEntries[index].EditedEntryValues["ddlRole"] = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var index = MilestonePersonsEntries.FindIndex(mp => mp == mPEntry);
 
-                                        MilestonePersonsEntries[index].EditedEntryValues["ddlPersonName"] = mPEntry.ThisPerson.Id.ToString();
-                                        MilestonePersonsEntries[index].EditedEntryValues["ddlRole"] = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
+                                            MilestonePersonsEntries[index].EditedEntryValues["ddlPersonName"] = mPEntry.ThisPerson.Id.ToString();
+                                            MilestonePersonsEntries[index].EditedEntryValues["ddlRole"] = mPEntry.Role != null ? mPEntry.Role.Id.ToString() : string.Empty;
+                                        }
                                     }
                                 }
-                            }
 
-                            foreach (var mentry in similarEntryList)
-                            {
-                                mentry.MilestonePersonId = mpId;
+                                foreach (var mentry in similarEntryList)
+                                {
+                                    mentry.MilestonePersonId = mpId;
+                                }
                             }
                         }
                     }
-                }
 
-                if (IsSaveCommit)
+                    if (IsSaveCommit)
+                    {
+                        MilestonePersonsEntries = !HostingPage.IsSaveAllClicked ? GetFormattedEntries(MilestonePersonsEntries) : MilestonePersonsEntries;
+                    }
+
+
+                    if (ISDatBindRows)
+                    {
+                        MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
+                        BindEntriesGrid(MilestonePersonsEntries);
+                        HostingPage.Milestone = null;
+                        HostingPage.Project = HostingPage.Milestone.Project;
+                        HostingPage.FillComputedFinancials(HostingPage.Milestone);
+                    }
+
+
+                    tblValidation.Visible = false;
+                }
+                else
                 {
-                    MilestonePersonsEntries = !HostingPage.IsSaveAllClicked ? GetFormattedEntries(MilestonePersonsEntries) : MilestonePersonsEntries;
+                    IsErrorOccuredWhileUpdatingRow = true;
+                    //HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
+                    tblValidation.Visible = true;
+                    if (ShowExceptionPopup)
+                        mpeExceptionValidation.Show();
                 }
-
-
-                if (ISDatBindRows)
-                {
-                    MilestonePersonsEntries = GetSortedEntries(MilestonePersonsEntries);
-                    BindEntriesGrid(MilestonePersonsEntries);
-                    HostingPage.Milestone = null;
-                    HostingPage.Project = HostingPage.Milestone.Project;
-                    HostingPage.FillComputedFinancials(HostingPage.Milestone);
-                }
-
-
-                tblValidation.Visible = false;
             }
-            else
+            catch(Exception ex)
             {
-                IsErrorOccuredWhileUpdatingRow = true;
-                //HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
-                tblValidation.Visible = true;
-                if (ShowExceptionPopup)
-                    mpeExceptionValidation.Show();
+                Logging.LogErrorMessage(
+                           ex.Message,
+                           ex.Source,
+                           ex.InnerException != null ? ex.InnerException.Message : string.Empty,
+                           string.Empty,
+                           HttpContext.Current.Request.Url.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped),
+                           string.Empty,
+                           Thread.CurrentPrincipal.Identity.Name);
             }
         }
 
@@ -3038,13 +3093,13 @@ namespace PraticeManagement.Controls.Milestones
             }
         }
 
-        private bool CheckFeedbackExists(int MilestonePersonId,DateTime startDate,DateTime? endDate)
+        private bool CheckFeedbackExists(int MilestonePersonId, DateTime startDate, DateTime? endDate)
         {
             using (var serviceClient = new ProjectServiceClient())
             {
                 try
                 {
-                    return serviceClient.CheckIfFeedbackExists(MilestonePersonId, null,startDate,endDate);
+                    return serviceClient.CheckIfFeedbackExists(MilestonePersonId, null, startDate, endDate);
                 }
                 catch (CommunicationException)
                 {
