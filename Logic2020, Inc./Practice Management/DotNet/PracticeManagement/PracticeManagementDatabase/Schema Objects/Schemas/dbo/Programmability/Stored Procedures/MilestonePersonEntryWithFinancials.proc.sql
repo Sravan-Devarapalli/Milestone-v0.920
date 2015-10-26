@@ -86,6 +86,7 @@ BEGIN
 
 	SELECT  f.EntryId,
 			ISNULL(SUM(f.PersonMilestoneDailyAmount), 0) AS Revenue,
+			ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount),0) AS RevenueNet,
 			ISNULL(SUM(f.PersonMilestoneDailyAmount - f.PersonDiscountDailyAmount -
 						(CASE WHEN f.SLHR >= f.PayRate + f.MLFOverheadRate 
 							  THEN f.SLHR 
