@@ -50,7 +50,7 @@ namespace DataTransferObjects.Reports
                         if (project.Utilization == -1)
                             return "-1";
                         else if (project.Project.Id.HasValue)
-                            stringBuilder.Append(project.Project.ProjectNumber + " - " + project.Project.Name + " - " + Math.Round((100)*project.ProjectedHours/AvailableHours,2) + "%\n");
+                            stringBuilder.Append(project.Project.ProjectNumber + " - " + project.Project.Name + " - " + (AvailableHours != 0 ? Math.Round((100) * project.ProjectedHours / AvailableHours, 2) : 0) + "%\n");
                         else
                             return "0";
                     }
