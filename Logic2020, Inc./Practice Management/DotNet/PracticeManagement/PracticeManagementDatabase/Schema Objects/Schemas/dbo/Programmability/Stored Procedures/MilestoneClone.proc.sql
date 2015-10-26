@@ -16,7 +16,8 @@ CREATE PROCEDURE [dbo].[MilestoneClone]
 AS
 	SET NOCOUNT ON
 
-begin transaction
+	BEGIN TRY
+	BEGIN TRAN  Tran_MilestoneClone
 
 	-- Create a milestone record
 	INSERT INTO dbo.Milestone
@@ -115,7 +116,19 @@ begin transaction
 	
 	exec dbo.NotesClone @OldTargetId = @MilestoneId, @NewTargetId = @MilestoneCloneId
 
-	EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneCloneId
-	
-commit transaction
+	IF @MilestoneCloneId IS NOT NULL
+	BEGIN
+		EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneCloneId
+	END
+
+    COMMIT TRAN Tran_MilestoneClone
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN Tran_MilestoneClone
+		
+		DECLARE @ErrorMessage NVARCHAR(MAX)
+		SET @ErrorMessage = ERROR_MESSAGE()
+
+		RAISERROR(@ErrorMessage, 16, 1)
+	END CATCH
 
