@@ -83,6 +83,7 @@ BEGIN
 						AND (TR.TerminationReasonId IS NULL OR TR.IsPersonWorkedRule = 1)
                         AND ((@ActivePersons = 1 AND p.PersonStatusId IN (1,5)) OR (@ProjectedPersons = 1 AND p.PersonStatusId = 3))
 						AND (p.DefaultPractice IN (SELECT ResultId FROM dbo.ConvertStringListIntoTable(@PracticeIds)) AND (pr.IsCompanyInternal = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0))
+						AND pr.ShowInUtilizationReport = 1 AND p.IsOffshore=0
 						AND (p.DivisionId IN (SELECT ResultId FROM dbo.ConvertStringListIntoTable(@DivisionIds))) '
 	-- @CurrentConsultants now contains ids of consultants
 	---------------------------------------------------------
@@ -224,6 +225,8 @@ BEGIN
 				AND @ExcludeInternalPractices = 1
 				OR @ExcludeInternalPractices = 0
 				)
+				AND pr.ShowInUtilizationReport = 1 
+				AND p.IsOffshore=0
 			)
 		AND (
 			p.DivisionId IN (
@@ -237,4 +240,12 @@ BEGIN
 			)
 		AND Prj.ProjectNumber != 'P031000'
 		AND Prj.IsAllowedToShow = 1
+		AND ((@ActiveProjects=1 AND prj.ProjectStatusId=3) OR
+			(@ProjectedProjects=1 AND  Prj.ProjectStatusId=2 ) OR
+			(@ProposedProjects=1 AND Prj.ProjectStatusId=7)  OR
+			(@CompletedProjects=1 AND  Prj.ProjectStatusId=4 ) OR
+			(@ExperimentalProjects=1 AND  Prj.ProjectStatusId=5 ) OR
+			(@InternalProjects=1 AND Prj.ProjectStatusId=6))
+
 END
+
