@@ -61,6 +61,8 @@ AS
                     (@ProjectedPersons = 1 AND p.PersonStatusId = 3) -- projected status
 				)
 			AND (p.IsStrawman = 0)
+			AND pr.ShowInUtilizationReport = 1 
+			AND p.IsOffshore=0
 ),
 CurrentConsultantsWithRanges2
 AS
