@@ -73,13 +73,15 @@ AS
     LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
     WHERE   (					
 					EXISTS (SELECT ResultId FROM [dbo].[ConvertStringListIntoTable](@PracticeIds) WHERE p.DefaultPractice = ResultId)
-					AND (pr.IsCompanyInternal = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)
+					AND (pr.IsCompanyInternal = 0  AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0)
 				)
             AND ( (@ActivePersons = 1 AND p.PersonStatusId IN (1,5)) -- active and termination pending statues
 					OR
                     (@ProjectedPersons = 1 AND p.PersonStatusId = 3) -- projected status
 				)
 			AND (p.IsStrawman = 0)
+			AND pr.ShowInUtilizationReport = 1 
+			AND p.IsOffshore=0
 ),
 CurrentConsultantsWithRanges2
 AS
