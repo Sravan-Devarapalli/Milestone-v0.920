@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string Inactive = "Inactive";
             public const string IsInvestmentResource = "IsInvestmentResource";
             public const string PracticeDirectorId = "PracticeDirectorId";
             public const string ExecutiveInChargeId = "ExecutiveInChargeId";
@@ -1134,6 +1135,7 @@
 
             public class Person
             {
+                public const string GetPersonDivisions = "dbo.GetPersonDivisions";
                 public const string GetPracticeLeaderships = "dbo.GetPracticeLeaderships";
                 public const string GetSalaryPayTypes = "dbo.GetSalaryPayTypes";
                 public const string GetUsersForCF = "dbo.GetUsersForCF";
