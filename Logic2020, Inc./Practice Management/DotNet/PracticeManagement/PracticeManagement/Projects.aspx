@@ -317,7 +317,7 @@
                                 <asp:Label ID="lblCustomDateRange" runat="server" Text=""></asp:Label>
                                 <asp:Image ID="imgCalender" runat="server" ImageUrl="~/Images/calendar.gif" />
                             </td>
-                            <td class="alignRight">
+                            <td class="alignRight" colspan="2">
                                 <asp:DropDownList ID="ddlView" runat="server">
                                     <asp:ListItem Text="View 10" Value="10"></asp:ListItem>
                                     <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
@@ -325,7 +325,7 @@
                                     <asp:ListItem Text="View ALL" Value="1"></asp:ListItem>
                                 </asp:DropDownList>
                                 &nbsp; &nbsp;
-                                <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn padRight10"
+                                <asp:ShadowedHyperlink runat="server" Text="Add Project" ID="lnkAddProject" CssClass="add-btn"
                                     NavigateUrl="~/ProjectDetail.aspx?from=sub_toolbar&returnTo=Projects.aspx" />
                             </td>
                         </tr>
@@ -344,6 +344,30 @@
                             <td class="PaddingTop5">
                                 <asp:Button ID="btnUpdateFilters" runat="server" Text="Refresh Report" OnClick="btnUpdateView_Click"
                                     ValidationGroup="Filter" EnableViewState="False" CssClass="Width100Px" />
+                            </td>
+                            <td align="right" style="width: 2px">
+                                <table>
+                                    <tr class="PaddingTop5 padRight5">
+                                        <td class="PaddingTop5">
+                                            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
+                                                Text="Export" CssClass="WholeWidth" Width="80px" Style="margin-right: 0px;" />
+                                        </td>
+                                        <td class="PaddingTop5">
+                                            <asp:Image ID="imgExportAllToExcel" runat="server" ImageUrl="~/Images/Dropdown_Arrow_22.png"
+                                                onclick="imgArrow_click();" onmouseover="imgArrow_mouseOver();" onmouseout="imgArrow_mouseOut();" />
+                                        </td>
+                                    </tr>
+                                    <tr onmouseover="Exportall_click_mouseOver();" onmouseout="imgArrow_mouseOut();">
+                                        <td colspan="2" class="ExportAndExportAll">
+                                            <ul id="popupmenu" class="pmenu" width="80px">
+                                                <li>
+                                                    <asp:LinkButton ID="btnExportAllToExcel" runat="server" OnClick="btnExportAllToExcel_Click"
+                                                        Text="Export All" CssClass="bgcolor_CCCCCC" OnClientClick="this.parentNode.parentNode.style.display='none';return true;" />
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                     </table>
@@ -701,7 +725,7 @@
                             </div>
                         </td>
                         <td align="right">
-                            <table>
+                            <%-- <table>
                                 <tr>
                                     <td>
                                         <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
@@ -722,7 +746,7 @@
                                         </ul>
                                     </td>
                                 </tr>
-                            </table>
+                            </table>--%>
                         </td>
                     </tr>
                 </table>
