@@ -149,6 +149,7 @@
     <Compile Include="MSBadge.cs" />
     <Compile Include="OpurtunityPerson.cs" />
     <Compile Include="PersonBadgeHistories.cs" />
+    <Compile Include="PersonDivision.cs" />
     <Compile Include="PersonPassword.cs" />
     <Compile Include="PersonTimeOff.cs" />
     <Compile Include="PersonWorkingHoursDetailsWithinThePeriod.cs" />
@@ -330,3 +331,4 @@
   </Target>
   -->
 </Project>
+
