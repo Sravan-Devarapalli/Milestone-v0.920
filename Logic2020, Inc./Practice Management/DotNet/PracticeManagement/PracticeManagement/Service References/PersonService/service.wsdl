@@ -184,6 +184,12 @@
   <wsdl:message name="IPersonService_GetPracticeLeaderships_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPracticeLeadershipsResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDivisions_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDivisions" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDivisions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDivisionsResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -732,6 +738,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPracticeLeaderships" message="tns:IPersonService_GetPracticeLeaderships_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPracticeLeadershipsResponse" message="tns:IPersonService_GetPracticeLeaderships_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonDivisions">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisions" message="tns:IPersonService_GetPersonDivisions_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisionsResponse" message="tns:IPersonService_GetPersonDivisions_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -1269,6 +1279,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPracticeLeaderships">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPracticeLeaderships" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonDivisions">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDivisions" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
