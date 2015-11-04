@@ -1039,6 +1039,13 @@
                                 CssClass="add-btn" NavigateUrl="~/OpportunityDetail.aspx?returnTo=DiscussionReview2.aspx" />
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td class="PaddingTop5">
+                            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click" Text="Export" />
+                        </td>
+                    </tr>
                 </table>
             </div>
             <asp:Panel CssClass="summary WhiteSpaceNoWrap OverflowxAuto" ID="pnlSummary" runat="server">
@@ -1351,8 +1358,8 @@
             </asp:ListView>
         </div>
         <div class="textRightImp">
-            <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
-                Text="Export" />
+          <%--  <asp:Button ID="btnExportToExcel" runat="server" OnClick="btnExportToExcel_Click"
+                Text="Export" />--%>
         </div>
         <asp:HiddenField ID="hdnRedirectOpportunityId" runat="server" />
         <asp:HiddenField ID="hdnClickedRowIndex" runat="server" />
