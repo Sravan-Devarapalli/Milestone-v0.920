@@ -505,6 +505,9 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<Person> GetPracticeLeaderships(int? divisionId);
+
+        [OperationContract]
+        List<PersonDivision> GetPersonDivisions();
     }
 }
 
