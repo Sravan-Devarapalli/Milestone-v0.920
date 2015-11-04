@@ -3307,6 +3307,9 @@ namespace PraticeManagement
                 IsErrorPanelDisplay = true;
             }
 
+            DataHelper.FillPersonDivisionList(ddlDivision);
+           
+            
             if (!PersonId.HasValue)
             {
                 var status = new List<PersonStatus>();
@@ -3319,6 +3322,7 @@ namespace PraticeManagement
                 ddlPersonStatus.Visible = true;
                 lblPersonStatus.Visible = false;
                 btnChangeEmployeeStatus.Visible = false;
+                ddlDivision.SelectedValue = "";//Division default value is '--Select Division--'
             }
             else
             {
@@ -3330,9 +3334,7 @@ namespace PraticeManagement
             DataHelper.FillLocationList(ddlLocation, "--Select Location--");
             var removableLocation = ddlLocation.Items.FindByValue("1");
             ddlLocation.Items.Remove(removableLocation);
-            DataHelper.FillPersonDivisionList(ddlDivision);
             ddlLocation.SelectedValue = "2"; //Location default value is 'Seattle'
-            ddlDivision.SelectedValue = "2";//Division default value is 'Consulting'
             DataHelper.FillTitleList(ddlPersonTitle, "-- Select Title --");
             DataHelper.FillCohortAssignments(ddlCohortAssignment);
             DataHelper.FillDomainsList(ddlDomain);
@@ -3560,6 +3562,13 @@ namespace PraticeManagement
             txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
             if ((int)person.DivisionType != 0)
             {
+               
+                if ((int)person.DivisionType == 2)
+                {
+                    ListItem addItem = new ListItem() { Text = person.DivisionType.ToString(), Value = ((int)person.DivisionType).ToString() };
+                    ddlDivision.Items.Add(addItem);
+
+                }
                 ddlDivision.SelectedValue = ((int)person.DivisionType).ToString();
             }
             else
