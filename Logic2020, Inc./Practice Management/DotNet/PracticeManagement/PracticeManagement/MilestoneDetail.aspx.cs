@@ -1403,6 +1403,7 @@ namespace PraticeManagement
                                         tmpFinancials.Key.Year == dtTemp.Year)
                                     {
                                         financials.Revenue += tmpFinancials.Value.Revenue;
+                                        financials.RevenueNet += tmpFinancials.Value.RevenueNet;
                                         financials.GrossMargin += tmpFinancials.Value.GrossMargin;
                                         financials.HoursBilled += tmpFinancials.Value.HoursBilled;
                                         break;
