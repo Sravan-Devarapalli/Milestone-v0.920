@@ -103,6 +103,15 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.Button btnClearResults;
         
         /// <summary>
+        /// ddlView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlView;
+        
+        /// <summary>
         /// lnkAddPerson control.
         /// </summary>
         /// <remarks>
@@ -121,13 +130,13 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.ValidationSummary valsumSearch;
         
         /// <summary>
-        /// ddlView control.
+        /// btnExportToExcel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlView;
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
         
         /// <summary>
         /// pnlFilters control.
@@ -335,15 +344,6 @@ namespace PraticeManagement.Config {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblRecords;
-        
-        /// <summary>
-        /// btnExportToExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
         
         /// <summary>
         /// PreviousPage property.
