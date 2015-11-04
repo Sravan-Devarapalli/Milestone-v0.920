@@ -4,7 +4,9 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ConsultantReportContextBase">
         <xs:sequence>
+          <xs:element minOccurs="0" name="DivisionIdList" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="ExcludeInternalPractices" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ExcludeInvestmentResource" type="xs:boolean" />
           <xs:element minOccurs="0" name="Granularity" type="xs:int" />
           <xs:element minOccurs="0" name="IncludeBadgeStatus" type="xs:boolean" />
           <xs:element minOccurs="0" name="IsSampleReport" type="xs:boolean" />
