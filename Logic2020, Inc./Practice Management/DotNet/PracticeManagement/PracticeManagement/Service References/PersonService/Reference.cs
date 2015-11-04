@@ -105,6 +105,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPracticeLeaderships", ReplyAction="http://tempuri.org/IPersonService/GetPracticeLeadershipsResponse")]
         DataTransferObjects.Person[] GetPracticeLeaderships(System.Nullable<int> divisionId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDivisions", ReplyAction="http://tempuri.org/IPersonService/GetPersonDivisionsResponse")]
+        DataTransferObjects.PersonDivision[] GetPersonDivisions();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -486,6 +489,10 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person[] GetPracticeLeaderships(System.Nullable<int> divisionId) {
             return base.Channel.GetPracticeLeaderships(divisionId);
+        }
+        
+        public DataTransferObjects.PersonDivision[] GetPersonDivisions() {
+            return base.Channel.GetPersonDivisions();
         }
         
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
