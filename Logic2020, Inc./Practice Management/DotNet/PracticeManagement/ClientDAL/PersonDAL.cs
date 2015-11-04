@@ -264,6 +264,8 @@ namespace DataAccess
                         ReadPersonsEmploymentHistory(reader, result);
                         reader.NextResult();
                         ReadPersonTimeOffDates(reader, result);
+                        reader.NextResult();
+                        ReadPersonAssignedDates(reader, result);
                     }
                 }
                 if (result != null)
@@ -699,6 +701,72 @@ namespace DataAccess
                             else
                             {
                                 record.CompanyHolidayDates.Add(timeOffDate, holidayDescription);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void ReadPersonAssignedDates(SqlDataReader reader, List<ConsultantUtilizationPerson> result)
+        {
+            if (result != null)
+            {
+                if (reader.HasRows)
+                {
+                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                    int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                    int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                    int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                    int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+
+                    while (reader.Read())
+                    {
+                        var personId = reader.GetInt32(personIdIndex);
+                        var projectNumber = reader.GetString(projectNumberIndex);
+                        var milestonePerson = new Milestone()
+                        {
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            ProjectedDeliveryDate = reader.GetDateTime(endDateIndex)
+                        };
+                        if (result.Any(p => p.Person.Id == personId))
+                        {
+                            var record = result.First(p => p.Person.Id == personId);
+                            if (record.Person.Projects == null)
+                            {
+                                record.Person.Projects = new List<Project>();
+                                var project = new Project()
+                                {
+                                    Name = reader.GetString(projectNameIndex),
+                                    ProjectNumber = reader.GetString(projectNumberIndex),
+                                    Milestones = new List<Milestone>() { milestonePerson }
+                                };
+                                record.Person.Projects.Add(project);
+                            }
+                            else
+                            {
+                                if (record.Person.Projects.Any(p => p.ProjectNumber == projectNumber))
+                                {
+                                    var project = record.Person.Projects.First(p => p.ProjectNumber == projectNumber);
+                                    if (project.Milestones == null)
+                                    {
+                                        project.Milestones = new List<Milestone>() { milestonePerson };
+                                    }
+                                    else
+                                    {
+                                        project.Milestones.Add(milestonePerson);
+                                    }
+                                }
+                                else
+                                {
+                                    var project = new Project()
+                                    {
+                                        Name = reader.GetString(projectNameIndex),
+                                        ProjectNumber = reader.GetString(projectNumberIndex),
+                                        Milestones = new List<Milestone>() { milestonePerson }
+                                    };
+                                    record.Person.Projects.Add(project);
+                                }
                             }
                         }
                     }
@@ -5089,6 +5157,50 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<PersonDivision> GetPersonDivisions()
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonDivisions, connection))
+            {
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.CommandType = CommandType.StoredProcedure;
+                connection.Open();
+                var result = new List<PersonDivision>();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.HasRows)
+                    {
+                        result = null;
+                    }
+                    else
+                    {
+                        ReadPersonDivisions(reader, result);
+                    }
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadPersonDivisions(SqlDataReader reader, List<PersonDivision> result)
+        {
+            if (reader.HasRows)
+            {
+                int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+                int divisionNameIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionName);
+                int InactiveIndex = reader.GetOrdinal(Constants.ColumnNames.Inactive);
+                while (reader.Read())
+                {
+                    var division = new PersonDivision();
+                    division.DivisionId = reader.GetInt32(divisionIdIndex);
+                    division.DivisionName = reader.GetString(divisionNameIndex);
+                    division.Inactive = reader.GetBoolean(InactiveIndex);
+                    result.Add(division);
+                }
+            }
+        }
+
     }
 }
 
