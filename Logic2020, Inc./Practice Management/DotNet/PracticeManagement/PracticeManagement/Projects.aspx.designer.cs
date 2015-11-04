@@ -157,6 +157,33 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Button btnUpdateFilters;
         
         /// <summary>
+        /// btnExportToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
+        
+        /// <summary>
+        /// imgExportAllToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgExportAllToExcel;
+        
+        /// <summary>
+        /// btnExportAllToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnExportAllToExcel;
+        
+        /// <summary>
         /// pnlFilters control.
         /// </summary>
         /// <remarks>
@@ -488,33 +515,6 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblPageCount;
-        
-        /// <summary>
-        /// btnExportToExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportToExcel;
-        
-        /// <summary>
-        /// imgExportAllToExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgExportAllToExcel;
-        
-        /// <summary>
-        /// btnExportAllToExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnExportAllToExcel;
         
         /// <summary>
         /// pnlCustomDates control.
