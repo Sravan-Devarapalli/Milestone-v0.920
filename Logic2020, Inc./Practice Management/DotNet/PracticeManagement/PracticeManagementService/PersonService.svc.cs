@@ -1217,6 +1217,11 @@ namespace PracticeManagementService
             return PersonDAL.GetPracticeLeaderships(divisionId);
         }
 
+        public List<PersonDivision> GetPersonDivisions()
+        {
+            return PersonDAL.GetPersonDivisions();
+        }
+
         #endregion IPersonService Members
     }
 }
