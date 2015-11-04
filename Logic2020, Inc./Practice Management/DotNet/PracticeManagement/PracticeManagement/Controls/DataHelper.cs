@@ -2507,26 +2507,8 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    var divisions = Enum.GetValues(typeof(PersonDivisionType));
-
-                    control.AppendDataBoundItems = true;
-                    control.Items.Clear();
-
-                    control.DataTextField = "Key";
-                    control.DataValueField = "Value";
-
-                    Dictionary<string, string> list = new Dictionary<string, string>();
-
-                    foreach (PersonDivisionType item in divisions)
-                    {
-                        string key = GetDescription(item);
-                        string value = ((int)item).ToString();
-                        if (value == "0") value = "";
-                        list.Add(key, value);
-                    }
-
-                    control.DataSource = list;
-                    control.DataBind();
+                    var divisions = serviceClient.GetPersonDivisions();
+                    FillListDefault(control, "- - Select Division - -", divisions, false,"DivisionId","DivisionName");
                 }
                 catch (CommunicationException)
                 {
