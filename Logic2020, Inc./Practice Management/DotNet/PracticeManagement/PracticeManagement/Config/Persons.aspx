@@ -90,14 +90,23 @@
                                     </td>
                                     <td class="TdSpace">
                                     </td>
-                                    <td class="Width26Per" align="right">
-                                        <table >
+                                    <td class="Width26Per PaddingRight10Px" align="right">
+                                        <table>
                                             <tr>
                                                 <td>
+                                                    <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
+                                                        AutoPostBack="true">
+                                                        <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
+                                                        <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
+                                                        <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
+                                                        <asp:ListItem Text="View All" Value="-1" Selected="True"></asp:ListItem>
+                                                    </asp:DropDownList>
+                                                &nbsp; &nbsp;
                                                     <asp:ShadowedHyperlink runat="server" Text="Add Person" ID="lnkAddPerson" CssClass="add-btn"
                                                         NavigateUrl="~/PersonDetail.aspx?returnTo=Config/Persons.aspx?ApplyFilterFromCookie=true" />
                                                 </td>
                                             </tr>
+                                          
                                         </table>
                                     </td>
                                 </tr>
@@ -108,16 +117,20 @@
                         <td colspan="2" class="ValSumSearch">
                             <asp:ValidationSummary ID="valsumSearch" runat="server" ValidationGroup="ValSearch" />
                         </td>
-                        <td class="Width10Per TextAlignRight">
-                            <asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
+                        <td align="right" >
+                            <%--<asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
                                 AutoPostBack="true">
                                 <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
                                 <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
                                 <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
                                 <asp:ListItem Text="View All" Value="-1" Selected="True"></asp:ListItem>
-                            </asp:DropDownList>
+                            </asp:DropDownList>--%>
+                            <%--<asp:Button ID="btnExportToExcel"  runat="server" OnClick="btnExportToExcel_Click"
+                                Text="Export" />--%>
+                            <asp:Button ID="btnExportToExcel" runat="server" Text="Export" OnClick="btnExportToExcel_Click"
+                                Enabled="true" UseSubmitBehavior="false" ToolTip="Export To Excel" Width="100px"/>
                         </td>
-                    </tr>     
+                    </tr>
                 </table>
             </div>
             <asp:Panel CssClass="filters" ID="pnlFilters" runat="server">
@@ -160,12 +173,14 @@
                                         <table class="WholeWidth">
                                             <tr>
                                                 <td class="FilterBtnsTd">
-                                                    <asp:Button ID="btnUpdateView" CssClass="Width100Per" runat="server" Text="Update" OnClick="UpdateView_Clicked" />
+                                                    <asp:Button ID="btnUpdateView" CssClass="Width100Per" runat="server" Text="Update"
+                                                        OnClick="UpdateView_Clicked" />
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="FilterBtnsTd">
-                                                    <asp:Button ID="btnResetFilter" CssClass="Width100Per" runat="server" Text="Reset" OnClick="ResetFilter_Clicked" />
+                                                    <asp:Button ID="btnResetFilter" CssClass="Width100Per" runat="server" Text="Reset"
+                                                        OnClick="ResetFilter_Clicked" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -360,8 +375,8 @@
                                         <asp:Label ID="lblRecords" runat="server" CssClass="fontBold ColorBlack"></asp:Label>
                                     </td>
                                     <td class="Width15Per PaddingRight10Px WhiteSpaceNoWrap TextAlignRight">
-                                     <asp:Button ID="btnExportToExcel" CssClass="Width100Per" runat="server" OnClick="btnExportToExcel_Click"
-                                            Text="Export" />
+                                        <%-- <asp:Button ID="btnExportToExcel" CssClass="Width100Per" runat="server" OnClick="btnExportToExcel_Click"
+                                            Text="Export" />--%>
                                     </td>
                                 </tr>
                             </table>
