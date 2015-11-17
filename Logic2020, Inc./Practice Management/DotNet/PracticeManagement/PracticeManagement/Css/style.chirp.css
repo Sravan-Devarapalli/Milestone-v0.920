@@ -1336,6 +1336,11 @@ tr.al-row
 {
     cursor: default;
 }
+
+.DefaultCursorImp
+{
+    cursor: default !important;
+}
 .cssPager td a, .cssPager td span
 {
     padding-left: 2px;
@@ -3140,7 +3145,7 @@ TABLE.PaddingTenPx td
     background-color: #BEBEBE;
     border: 1px solid Gray;
 }
-TABLE.PersonSummaryReport TD, TABLE.TerminationReport TD
+TABLE.PersonSummaryReport TD, TABLE.TerminationReport TD, .MSReportTD
 {
     border-bottom: 1px solid #000;
     text-align: center;
@@ -3148,7 +3153,7 @@ TABLE.PersonSummaryReport TD, TABLE.TerminationReport TD
     vertical-align: middle;
     padding: 2px;
 }
-TABLE.PersonSummaryReport TH, TABLE.TerminationReport TH, CSATReportHeader
+TABLE.PersonSummaryReport TH, TABLE.TerminationReport TH, CSATReportHeader, .MSReportTH
 {
     border-bottom: 1px solid #000;
     border-top: 1px solid #000;
@@ -3645,10 +3650,14 @@ TD.CompanyDayOff, TH.CompanyDayOff, TD.WeekEndDayOn, TH.WeekEndDayOn
 {
     display: block;
 }
-TABLE.PersonSummaryReport, TABLE.TimePeriodByproject, TABLE.TerminationReport
+TABLE.PersonSummaryReport, TABLE.TimePeriodByproject, TABLE.TerminationReport, .MSReportBorder
 {
     border-left: 1px solid #000;
     border-right: 1px solid #000;
+}
+.PersonSummaryReport .InnerTableBorderNone
+{
+    border-left: none !important;
 }
 li.l1 a:hover, .l2 dd div.flyout a:hover
 {
@@ -4113,7 +4122,7 @@ div.scrollextLabel Label
     display: inline;
 }
 
-.DatePickerTable tr, .DatePickerTable th, .DatePickerTable td
+.DatePickerTable tr, .DatePickerTable th, .DatePickerTable td, .tblPersonProjects td
 {
     height: 17px !important;
 }
@@ -5501,11 +5510,11 @@ HyplinkConsultantDetailReport
 {
     background-color: #d4dff8;
 }
-.BenchCostFooter
+.BenchCostFooter, .MSMeetingReportFooter
 {
     padding-left: 15px !important;
 }
-.BenchCostFooter td
+.BenchCostFooter td, .MSMeetingReportFooter td
 {
     padding-bottom: 5px;
 }
@@ -7296,6 +7305,11 @@ image:hover:after
 {
     border-bottom: none !important;
 }
+
+.BorderTopNone
+{
+    border-top: none !important;
+}
 /*Login.aspx*/
 
 input#ctl00_body_login_Password, input#ctl00_body_login_UserName
@@ -8343,3 +8357,8 @@ table#ctl00_body_login tr td label
 {
     width: 200px !important;
 }
+.BorderRightC5C5C5
+{
+    border-right: #c5c5c5 1px solid;
+}
+
