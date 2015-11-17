@@ -1065,6 +1065,8 @@
     <None Include="Service References\ActivityLogService\ActivityLogService1.disco" />
     <None Include="Service References\MilestonePersonService\MilestonePersonService1.disco" />
     <None Include="Service References\TimeEntryService\TimeEntryService5.disco" />
+    <Content Include="Scripts\jquery.tablesorter_2.min.js" />
+    <Content Include="Scripts\jquery.tablesorter_2.yui.js" />
     <Content Include="Scripts\jquery.uploadify.min.js">
       <DependentUpon>jquery.uploadify.yui.js</DependentUpon>
     </Content>
