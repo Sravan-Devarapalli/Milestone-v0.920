@@ -25,61 +25,30 @@
     Person Details
 </asp:Content>
 <asp:Content ID="cntBody" ContentPlaceHolderID="body" runat="server">
+    <script src="Scripts/jquery.tablesorter_2.min.js" type="text/javascript"></script>
     <script src="../../Scripts/date.yui.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
-//       function dpBadgeStart_Changed(dtp) {
-//       debugger;
-//            var index = dtp.id.indexOf('dpBadge');
-//            var row = dtp.id.substring(0, index);
-//            var dpBadgeStart = document.getElementById(row + 'dpBadgeStart_txtDate');
-//            var dpBadgeEnd = document.getElementById(row + 'dpBadgeEnd_txtDate');
-//            var txtBreakStart = document.getElementById(row + 'txtBreakStart');
-//            var txtBreakEnd = document.getElementById(row + 'txtBreakEnd');
-//            var lblBadgeEndDateSource = document.getElementById(row + 'lblBadgeEndDateSource');  
-//            var lblBadgeStartDateSource = document.getElementById(row + 'lblBadgeStartDateSource');  
-//            lblBadgeStartDateSource.innerHTML = 'Manual Entry';
-//            lblBadgeEndDateSource.innerHTML = 'Manual Entry';
-//            var newBadgeStartdate = new Date(dpBadgeStart.value);
-//            var newBadgeEnddate = newBadgeStartdate; 
-//           newBadgeEnddate.addMonths(18);
-//            alert(newBadgeEnddate.format("MM/dd/yyyy"));
-//            newBadgeEnddate.addMonths(1);
-//            newBadgeEnddate.setDate(newBadgeEnddate.getDate() - 1);
-//            dpBadgeEnd.value = newBadgeEnddate.format("MM/dd/yyyy");
-
-//            newBadgeEnddate.setMonth(newBadgeStartdate.getMonth() + 18);
-//            txtBreakStart.value = newBadgeEnddate.format("MM/dd/yyyy");//break start date
-//            newBadgeEnddate.setDate(newBadgeEnddate.getDate() - 1);
-//            dpBadgeEnd.value = newBadgeEnddate.format("MM/dd/yyyy");
-//            newBadgeEnddate.setMonth(newBadgeEnddate.getMonth() + 6);
-//            txtBreakEnd.value = newBadgeEnddate.format("MM/dd/yyyy");//break end date
-//        }
-        
-//        function dpDeactivatedDate_Change(dtp){
-//        debugger;
-//             var index = dtp.id.indexOf('dpDeactivatedDate');
-//             var row = dtp.id.substring(0, index);
-//             var txtBreakStart = document.getElementById(row + 'txtOrganicStart');
-//             var txtBreakEnd = document.getElementById(row + 'txtOrganicEnd');
-//             var deactivationDate = document.getElementById(row + 'dpDeactivatedDate_txtDate');
-//             var deactivateDate = new Date(deactivationDate.value);
-//             var organicStart = deactivateDate;
-//             var organicEnd = deactivateDate;
-//             organicStart.setDate(organicStart.getDate() + 1);
-//             var startdate = organicStart.format("MM/dd/yyyy");
-//            
-//             if(startdate == 'NaN/NaN/NaN')
-//             {
-//                txtBreakStart.value = '';
-//                txtBreakEnd.value ='';
-//             } 
-//             else{
-//                txtBreakStart.value = startdate;
-//                organicEnd.setMonth(organicEnd.getMonth() + 6);
-//                organicEnd.setDate(organicEnd.getDate() - 1);
-//                txtBreakEnd.value = organicEnd.format("MM/dd/yyyy");
-//             }
-//        }
+     var currentSort = [[1, 0]];
+                $(document).ready(function () {
+                    $("#tblPersonProjects").tablesorter({
+                        headers: {
+                            0: {
+                                sorter: false
+                            }
+                        },
+                        sortList: currentSort,
+                        sortForce: [[1, 0]]
+                    }).bind("sortEnd", function (sorter) {
+                        currentSort = sorter.target.config.sortList;
+                        var spanName = $("#tblPersonProjects #name");
+                        if (currentSort != '1,0' && currentSort != '1,1') {
+                            spanName[0].setAttribute('class', 'backGroundNone');
+                        }
+                        else {
+                            spanName[0].setAttribute('class', '');
+                        }
+                    });
+                });
 
         /*
         This script is needed to initialize select all/none behavior for checkbox lists
@@ -203,6 +172,24 @@
                 }
             }
             SetTooltipsForallDropDowns();
+            $("#tblPersonProjects").tablesorter({
+                        headers: {
+                            0: {
+                                sorter: false
+                            }
+                        },
+                        sortList: currentSort,
+                        sortForce: [[1, 0]]
+                    }).bind("sortEnd", function (sorter) {
+                        currentSort = sorter.target.config.sortList;
+                        var spanName = $("#tblPersonProjects #name")[0];
+                        if (currentSort != '1,0' && currentSort != '1,1') {
+                            spanName[0].setAttribute('class', 'backGroundNone');
+                        }
+                        else {
+                            spanName[0].setAttribute('class', '');
+                        }
+                    });
         }
 
         function CheckIfDatesValid() {
@@ -763,7 +750,8 @@
                                     Division
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width256Px" AutoPostBack="true" OnSelectedIndexChanged="ddlDivision_SelectIndexChanged">
+                                    <asp:DropDownList ID="ddlDivision" runat="server" CssClass="Width256Px" AutoPostBack="true"
+                                        OnSelectedIndexChanged="ddlDivision_SelectIndexChanged">
                                     </asp:DropDownList>
                                 </td>
                                 <td>
@@ -829,7 +817,7 @@
                                         ControlToValidate="ddlPracticeLeadership" ToolTip="The Practice Leadership is required."
                                         ValidationGroup="Person" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                         Display="Dynamic"></asp:RequiredFieldValidator>--%>
-                                        &nbsp;
+                                    &nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -862,7 +850,8 @@
                                                 <asp:CheckBox ID="chbMBO" runat="server" />
                                             </td>
                                             <td>
-                                                <label for="ctl00_body_chbMBO"> MBO</label>
+                                                <label for="ctl00_body_chbMBO">
+                                                    MBO</label>
                                             </td>
                                             <td>
                                                 &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
@@ -871,7 +860,8 @@
                                                 <asp:CheckBox ID="chbInvestmentResouce" runat="server" Style="padding-right: 0px" />
                                             </td>
                                             <td>
-                                                <label for="ctl00_body_chbInvestmentResouce">Investment Resource</label>
+                                                <label for="ctl00_body_chbInvestmentResouce">
+                                                    Investment Resource</label>
                                             </td>
                                         </tr>
                                     </table>
@@ -893,8 +883,9 @@
                                             <td class="padRight0">
                                                 <asp:CheckBox ID="chbLockedOut" runat="server" Checked="false" onclick="setDirty();" />
                                             </td>
-                                            <td >
-                                                <label for="ctl00_body_chbLockedOut">Locked-Out</label>
+                                            <td>
+                                                <label for="ctl00_body_chbLockedOut">
+                                                    Locked-Out</label>
                                             </td>
                                         </tr>
                                     </table>
