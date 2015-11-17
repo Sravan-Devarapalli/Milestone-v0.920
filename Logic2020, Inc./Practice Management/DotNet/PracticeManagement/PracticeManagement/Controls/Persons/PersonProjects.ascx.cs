@@ -4,6 +4,7 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using System.Drawing;
 using PraticeManagement.Utils;
+using System.Web.UI.HtmlControls;
 
 namespace PraticeManagement.Controls.Persons
 {
@@ -11,14 +12,8 @@ namespace PraticeManagement.Controls.Persons
     {
         #region Constants
 
-        private const string TOTAL_MARGIN_CELL_ID = "lblTotalProjectsMargin";
-        private const string TOTAL_REVENUE_CELL_ID = "lblTotalProjectsRevenue";
-        private const string OVERALL_MARGIN_CELL_ID = "lblOverallMargin";
         protected const string MILESTONE_TARGET = "milestone";
         protected const string PROJECT_TARGET = "project";
-
-        private static readonly Color REAL_PROJECT_COLOR = Color.FromArgb(242, 255, 229);
-        private static readonly Color NOT_REAL_PROJECT_COLOR = Color.FromArgb(255, 242, 229);
 
         #endregion
 
@@ -42,6 +37,54 @@ namespace PraticeManagement.Controls.Persons
         {
             if (PersonId.HasValue && !IsPostBack)
                 InitTotals();
+            if (!IsPostBack)
+            {
+                PopulateData();
+            }
+        }
+
+        protected void repProjects_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var projectStatus = (ProjectStatusType)DataBinder.Eval(e.Item.DataItem, "ProjectStatusId");
+                var tr = e.Item.FindControl("trItem") as HtmlTableRow;
+                // See issue #1360 (In Person.projects, please dim (disable) rows where the project is Inactive)
+                //  If it's not a real project, skip it, otherwise calculate totals
+                if (projectStatus == ProjectStatusType.Experimental
+                        || projectStatus == ProjectStatusType.Inactive)
+                {
+                    tr.Style[HtmlTextWriterStyle.FontStyle] = "italic";
+                }
+                else
+                    if (projectStatus == ProjectStatusType.Completed)
+                    {
+                        tr.Style["background-color"] = "rgb(255, 242, 229)";
+                    }
+                    else
+                    {
+                        projectRevenueTotal += (decimal)DataBinder.Eval(e.Item.DataItem, "Revenue");
+                        projectMarginTotal += (decimal)DataBinder.Eval(e.Item.DataItem, "GrossMargin");
+
+                        tr.Style["background-color"] = "rgb(242, 255, 229)";
+                    }
+            }
+            else if (e.Item.ItemType == ListItemType.Footer)
+            {
+                projectMarginTotal.FormatStyle = NumberFormatStyle.Margin;
+                projectRevenueTotal.FormatStyle = NumberFormatStyle.Revenue;
+
+                var lblTotalProjectsMargin = e.Item.FindControl("lblTotalProjectsMargin") as Label;
+                var lblTotalProjectsRevenue = e.Item.FindControl("lblTotalProjectsRevenue") as Label;
+                var lblOverallMargin = e.Item.FindControl("lblOverallMargin") as Label;
+                lblTotalProjectsMargin.Text = projectMarginTotal.ToString();
+                lblTotalProjectsRevenue.Text = projectRevenueTotal.ToString();
+
+                if (projectRevenueTotal.Value > 0)
+                {
+                    lblOverallMargin.Text = (Math.Round(100.0M * projectMarginTotal.Value / projectRevenueTotal.Value)).ToString("F1") + "%";
+                }
+            }
         }
 
         private void InitTotals()
@@ -52,56 +95,6 @@ namespace PraticeManagement.Controls.Persons
                 new PracticeManagementCurrency { Value = 0.0M, FormatStyle = NumberFormatStyle.Revenue };
         }
 
-        private static void SetCellValue(GridViewRowEventArgs e, string lblId, string cellValue)
-        {
-            ((Label)e.Row.FindControl(lblId)).Text = cellValue;
-        }
-
-        protected void gvProjects_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            switch (e.Row.RowType)
-            {
-                case DataControlRowType.DataRow:
-                    var projectStatus = (ProjectStatusType)DataBinder.Eval(e.Row.DataItem, "ProjectStatusId");
-
-                    // See issue #1360 (In Person.projects, please dim (disable) rows where the project is Inactive)
-                    //  If it's not a real project, skip it, otherwise calculate totals
-                    if (projectStatus == ProjectStatusType.Experimental
-                            || projectStatus == ProjectStatusType.Inactive)
-                    {
-                        e.Row.Style[HtmlTextWriterStyle.FontStyle] = "italic";
-                    }
-                    else
-                        if (projectStatus == ProjectStatusType.Completed)
-                        {
-                            e.Row.BackColor = NOT_REAL_PROJECT_COLOR;
-                        }
-                        else
-                        {
-                            projectRevenueTotal += (decimal)DataBinder.Eval(e.Row.DataItem, "Revenue");
-                            projectMarginTotal += (decimal)DataBinder.Eval(e.Row.DataItem, "GrossMargin");
-
-                            e.Row.BackColor = REAL_PROJECT_COLOR;
-                        }
-                    break;
-
-                case DataControlRowType.Footer:
-                    projectMarginTotal.FormatStyle = NumberFormatStyle.Margin;
-                    projectRevenueTotal.FormatStyle = NumberFormatStyle.Revenue;
-
-                    SetCellValue(e, TOTAL_MARGIN_CELL_ID, projectMarginTotal.ToString());
-                    SetCellValue(e, TOTAL_REVENUE_CELL_ID, projectRevenueTotal.ToString());
-
-                    if (projectRevenueTotal.Value > 0)
-                    {
-                        SetCellValue(e,
-                            OVERALL_MARGIN_CELL_ID,
-                            (Math.Round(100.0M * projectMarginTotal.Value / projectRevenueTotal.Value)).ToString("F1") + "%");
-                    }
-                    break;
-            }
-        }
-
         protected string GetMilestoneRedirectUrl(object milestoneId, object projectId)
         {
             return Urls.GetMilestoneRedirectUrl(milestoneId, Request.Url.AbsoluteUri, Convert.ToInt32(projectId));
@@ -110,6 +103,23 @@ namespace PraticeManagement.Controls.Persons
         protected string GetProjectRedirectUrl(object projectId)
         {
             return Urls.GetProjectDetailsUrl(projectId, Request.Url.AbsoluteUri);
+        }
+
+        public void PopulateData()
+        {
+            if (!PersonId.HasValue)
+                return;
+            var data = ServiceCallers.Custom.Person(p => p.GetPersonMilestoneWithFinancials(PersonId.Value));
+            if (data.Tables[0].Rows.Count > 0)
+            {
+                repProjects.DataSource = data;
+                repProjects.DataBind();
+                divEmptyMessage.Style["display"] = "none";
+            }
+            else
+            {
+                divEmptyMessage.Style["display"] = "";
+            }
         }
 
         #endregion
@@ -141,7 +151,7 @@ namespace PraticeManagement.Controls.Persons
 
         #endregion
 
-        protected string GetProjectNameCellToolTip(int projectStatusId, int hasAttachments,string statusName)
+        protected string GetProjectNameCellToolTip(int projectStatusId, int hasAttachments, string statusName)
         {
             string cssClass = ProjectHelper.GetIndicatorClassByStatusId(projectStatusId);
             if (projectStatusId == 3 && hasAttachments == 0)
