@@ -223,6 +223,7 @@ tr.al-row{border-bottom:1px dotted #D3D3D3}
 .time-entry-bar-total-hours{width:5%;text-align:center}
 .NoHyperlink{color:#0898e6;cursor:default}
 .DefaultCursor{cursor:default}
+.DefaultCursorImp{cursor:default !important}
 .cssPager td a,.cssPager td span{padding-left:2px;padding-right:2px;text-decoration:none}
 .darkadd-btn-project{background-color:#FFF;cursor:default;filter:alpha(opacity=50);opacity:.5;-moz-opacity:.50;display:block;float:right;cssfloat:right}
 .add-btn-project{float:right;cssfloat:right}
@@ -237,6 +238,7 @@ TR.CompPerfHeaderGroupBy td .ie-bg{height:26px;vertical-align:middle;position:re
 .ConfirmBoxClass{min-width:450px;min-height:60px;max-width:700px}
 .DatePickerPadding td{padding:2px 0!important}
 .position_top{position:static}
+.PersonSummaryReport .InnerTableBorderNone{border-left:none !important;}
 .WordWrap{word-wrap:break-word!important;word-break:break-all;white-space:normal}
 .OpportunitySummaryWordWrap{word-wrap:break-word!important;word-break:break-all;white-space:normal!important}
 .ApplyStyleForDashBoardLists P{margin:8px 0 8px 8px}
@@ -635,8 +637,8 @@ TABLE.PaddingTenPx td{padding:0 5px}
 .ReportHeaderBandNBGraph .NotCompletedStatusGraph{background-color:#A09A9B;border:1px solid Gray}
 .ReportHeaderBandNBGraph .billingGraph{background-color:#7FD13B;border:1px solid Gray}
 .ReportHeaderBandNBGraph .nonBillingGraph{background-color:#BEBEBE;border:1px solid Gray}
-TABLE.PersonSummaryReport TD,TABLE.TerminationReport TD{border-bottom:1px solid #000;text-align:center;height:24px;vertical-align:middle;padding:2px}
-TABLE.PersonSummaryReport TH,TABLE.TerminationReport TH,CSATReportHeader{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
+TABLE.PersonSummaryReport TD,TABLE.TerminationReport TD,.MSReportTD{border-bottom:1px solid #000;text-align:center;height:24px;vertical-align:middle;padding:2px}
+TABLE.PersonSummaryReport TH,TABLE.TerminationReport TH,CSATReportHeader,.MSReportTH{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
 .PersonSummaryReport .ResourceColum{text-align:left!important;width:210px!important}
 .PersonSummaryReport .ProjectColum{text-align:left!important;width:220px!important;background-color:White;padding-left:5px}
 .PersonSummaryReport .ResourceColum img{padding-left:2px}
@@ -726,7 +728,7 @@ TD.DayOn,TH.DayOn,TD.WeekEndDayOff,TH.WeekEndDayOff{background-color:Transparent
 TD.CompanyDayOff,TH.CompanyDayOff,TD.WeekEndDayOn,TH.WeekEndDayOn{background-color:#C7FFD1}
 .time-entry-bar-time-typesNew-select-Normal,.time-entry-bar-time-typesNew-select-Extended{width:85%!important}
 .DisplayBlock,.tab-visible,.displayBlock{display:block}
-TABLE.PersonSummaryReport,TABLE.TimePeriodByproject,TABLE.TerminationReport{border-left:1px solid #000;border-right:1px solid #000}
+TABLE.PersonSummaryReport,TABLE.TimePeriodByproject,TABLE.TerminationReport,.MSReportBorder{border-left:1px solid #000;border-right:1px solid #000}
 li.l1 a:hover,.l2 dd div.flyout a:hover{color:#2a4753}
 .BorderNone{border:0}
 .BorderNoneImp{border:none!important}
@@ -805,7 +807,7 @@ div.scrollextLabel Label{padding-left:4px}
 .PermissionDiffenrece{background-color:White;border-collapse:collapse;border-style:none;border-width:0;width:100%}
 .Border0{border-width:0}
 .DatePickerTable{border:medium none;display:inline}
-.DatePickerTable tr,.DatePickerTable th,.DatePickerTable td{height:17px!important}
+.DatePickerTable tr,.DatePickerTable th,.DatePickerTable td,.tblPersonProjects td{height:17px!important}
 .WhatIfControlIcon{background-color:#D8EFF3;border-color:#000;border-style:solid;border-width:1px}
 .WhatIfControlStyle{padding-right:242px;padding-bottom:3px;text-align:right}
 .WhatIfGrossMarginComputing{vertical-align:top;width:340px;padding-left:10px;padding-top:10px;background-color:#DBEEF3}
@@ -1045,8 +1047,8 @@ HyplinkConsultantDetailReport{color:Black!important;text-decoration:none!importa
 .UTilTimeLineFilterCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
 .UTilTimeLineFilterCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
 .bgColor_d4dff8{background-color:#d4dff8}
-.BenchCostFooter{padding-left:15px!important}
-.BenchCostFooter td{padding-bottom:5px}
+.BenchCostFooter,.MSMeetingReportFooter{padding-left:15px!important}
+.BenchCostFooter td,.MSMeetingReportFooter td{padding-bottom:5px}
 .SupFont sup{font-size:11px}
 .TimeperiodSummaryReportTr th{width:100px}
 .FilterImg{position:absolute;padding-left:2px}
@@ -1369,6 +1371,7 @@ image:hover:after{content:attr(title)}
 .scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table{width:100%!important}
 .DisplayInline{display:inline-block}
 .BorderBottomNone td{border-bottom:none!important}
+.BorderTopNone{ border-top: none !important;}
 input#ctl00_body_login_Password,input#ctl00_body_login_UserName{width:180px}
 table#ctl00_body_login td,tr{padding:3px}
 table#ctl00_body_login tr td label{float:left}
@@ -1607,7 +1610,4 @@ table#ctl00_body_login tr td label{float:left}
     width: 700px;
     padding: 10px;
 }
-.Width200PxImp
-{
-    width: 200px !important;
-}
+.Width200PxImp{width:200px !important;}.BorderRightC5C5C5{border-right:#c5c5c5 1px solid;}
