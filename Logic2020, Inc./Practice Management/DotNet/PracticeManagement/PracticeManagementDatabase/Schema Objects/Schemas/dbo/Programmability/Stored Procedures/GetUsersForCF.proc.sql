@@ -63,6 +63,7 @@ BEGIN
 				AND Pro.ProjectStatusId IN (3,4)
 				AND PFCF.PersonId IS NULL
 				AND title.PositionId IS NOT NULL
+				AND 1=2
 ) 
     INSERT INTO dbo.PersonFeedbacksInCSFeed(PersonId,ProjectId,ReviewStartDate,ReviewEndDate,Count,IsDummy)
     SELECT P.PersonId, 
@@ -72,6 +73,7 @@ BEGIN
 		   (SELECT COUNT(1)+p.RNo FROM PersonFeedbacksInCSFeed F WHERE F.PersonId = P.PersonId),
 		   0 
 	FROM Temp P
+	WHERE 1=2
 
     SELECT P.PersonId,
 		  pf.ProjectId,
@@ -107,6 +109,7 @@ BEGIN
 		  AND F.ProjectId = PF.ProjectId AND F.ReviewEndDate = PF.ReviewPeriodEndDate AND F.ReviewStartDate = PF.ReviewPeriodStartDate
 		  AND F.Count <= 8
 		  AND title.PositionId IS NOT NULL
+		  AND 1=2
 
     SELECT	F.PersonId,
 			Pr.ProjectId,
@@ -125,6 +128,6 @@ BEGIN
 	      CONVERT(NVARCHAR(10), @Today, 111) = CONVERT(NVARCHAR(10), F.ReviewEndDate, 111) AND 
 		  GCP.Timescale IN (1,2) -- W2-Hourly, W2-Salary	
 		  AND title.PositionId IS NOT NULL 
-
+		  AND 1=2
 END
 
