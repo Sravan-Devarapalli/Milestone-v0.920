@@ -13,22 +13,22 @@ namespace PraticeManagement.Controls.Persons {
     public partial class PersonProjects {
         
         /// <summary>
-        /// gvProjects control.
+        /// repProjects control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvProjects;
+        protected global::System.Web.UI.WebControls.Repeater repProjects;
         
         /// <summary>
-        /// odsProjects control.
+        /// divEmptyMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource odsProjects;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divEmptyMessage;
     }
 }
 
