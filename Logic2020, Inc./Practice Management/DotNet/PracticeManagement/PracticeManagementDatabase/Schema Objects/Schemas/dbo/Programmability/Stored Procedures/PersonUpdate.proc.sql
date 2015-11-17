@@ -204,13 +204,14 @@ BEGIN TRY
 		EXEC dbo.OnPersonHireDateChange	@PersonId = @PersonId , @NewHireDate = @HireDate, @ModifiedBy = @ModifiedBy
 	END
 
-	IF(@PersonStatusId <> 2 AND (@PreviousPersonStatusId <> @PersonStatusId))
-	BEGIN
-	     DELETE PF
-		 FROM dbo.ProjectFeedback PF
-		 WHERE PF.PersonId = @PersonId AND 
-				PF.IsCanceled = 1
-	END
+	--STOP FEEDBACK TRIGGERING LOGIC AS PER NICK STATEMENT
+	--IF(@PersonStatusId <> 2 AND (@PreviousPersonStatusId <> @PersonStatusId))
+	--BEGIN
+	--     DELETE PF
+	--	 FROM dbo.ProjectFeedback PF
+	--	 WHERE PF.PersonId = @PersonId AND 
+	--			PF.IsCanceled = 1
+	--END
 
 	--to update milestoneperson entries as per #3184
 
