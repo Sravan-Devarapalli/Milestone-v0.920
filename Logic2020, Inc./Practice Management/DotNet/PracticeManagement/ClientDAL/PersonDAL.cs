@@ -4348,7 +4348,8 @@ namespace DataAccess
                 int deactivatedDateIndex = reader.GetOrdinal(Constants.ColumnNames.DeactivatedDate);
                 int organicBreakStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakStartDate);
                 int organicBreakEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.OrganicBreakEndDate);
-                int ExcludeInReportsIndex = reader.GetOrdinal(Constants.ColumnNames.ExcludeInReports);
+                int excludeInReportsIndex = reader.GetOrdinal(Constants.ColumnNames.ExcludeInReports);
+                int manageServiceContractIndex = reader.GetOrdinal(Constants.ColumnNames.ManageServiceContract);
                 while (reader.Read())
                 {
                     var badge = new MSBadge()
@@ -4380,7 +4381,8 @@ namespace DataAccess
                         DeactivatedDate = reader.IsDBNull(deactivatedDateIndex) ? null : (DateTime?)reader.GetDateTime(deactivatedDateIndex),
                         OrganicBreakStartDate = reader.IsDBNull(organicBreakStartDateIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakStartDateIndex),
                         OrganicBreakEndDate = reader.IsDBNull(organicBreakEndDateIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakEndDateIndex),
-                        ExcludeInReports = reader.GetBoolean(ExcludeInReportsIndex)
+                        ExcludeInReports = reader.GetBoolean(excludeInReportsIndex),
+                        IsMSManagedService = reader.GetBoolean(manageServiceContractIndex)
                     };
                     result.Add(badge);
                 }
@@ -4477,7 +4479,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeFromReports, msBadge.ExcludeInReports);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UpdatedBy, msBadge.ModifiedById);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.ManageServiceContract, msBadge.IsMSManagedService);
                 connection.Open();
 
                 command.ExecuteNonQuery();
@@ -4812,6 +4814,8 @@ namespace DataAccess
                 int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
                 int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
                 int IsBadgeExceptionIndex = reader.GetOrdinal(Constants.ColumnNames.IsBadgeException);
+                int MilestoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+                int MilestoneDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
 
                 while (reader.Read())
                 {
@@ -4831,7 +4835,11 @@ namespace DataAccess
                         },
                         BadgeStartDate = reader.IsDBNull(badgeStartDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeStartDateIndex),
                         BadgeEndDate = reader.IsDBNull(badgeEndDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEndDateIndex),
-                        IsException = reader.GetBoolean(IsBadgeExceptionIndex)
+                        IsException = reader.GetBoolean(IsBadgeExceptionIndex),
+                        Milestone = new Milestone() { 
+                        Id=reader.GetInt32(MilestoneIdIndex),
+                        Description = reader.GetString(MilestoneDescriptionIndex)
+                        }
                     };
                     result.Add(badge);
                 }
