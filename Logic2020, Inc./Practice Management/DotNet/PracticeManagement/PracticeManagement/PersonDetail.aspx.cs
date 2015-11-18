@@ -571,7 +571,7 @@ namespace PraticeManagement
                 activityLog.Update();
             }
             cellOpportunities.Visible = UserIsAdministrator || UserIsOperations;
-            cellCompensation.Visible = UserIsAdministrator || UserIsHR || UserIsRecruiter;
+            cellCompensation.Visible = UserIsAdministrator || UserIsHR || UserIsRecruiter || UserIsOperations;
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
