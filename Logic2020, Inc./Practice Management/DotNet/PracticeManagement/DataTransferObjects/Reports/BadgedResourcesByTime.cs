@@ -32,6 +32,13 @@ namespace DataTransferObjects.Reports
         }
 
         [DataMember]
+        public int ResourceCount
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
         public int BadgedNotOnProjectCount //1
         {
             get;
@@ -88,6 +95,12 @@ namespace DataTransferObjects.Reports
         }
 
         public int Count
+        {
+            get;
+            set;
+        }
+
+        public decimal Percentage
         {
             get;
             set;
