@@ -418,6 +418,7 @@ namespace PraticeManagement.Controls.Persons
 
             ddlPreviousAtMS.SelectedValue = badge.IsPreviousBadge ? "1" : "0";
             chbExcludeInReports.Checked = badge.ExcludeInReports;
+            chbManageServiceContract.Checked = badge.IsMSManagedService;
             chbException.Checked = badge.IsException;
             chbBlockFromMS.Checked = badge.IsBlocked;
             chbBlockFromMS_CheckedChanged(chbBlockFromMS, new EventArgs());
@@ -551,7 +552,8 @@ namespace PraticeManagement.Controls.Persons
                 DeactivatedDate = dpDeactivatedDate.TextValue == string.Empty ? null : (DateTime?)dpDeactivatedDate.DateValue,
                 OrganicBreakStartDate = dpDeactivatedDate.TextValue == string.Empty ? null : (DateTime?)Convert.ToDateTime(txtOrganicStart.Text),
                 OrganicBreakEndDate = dpDeactivatedDate.TextValue == string.Empty ? null : (DateTime?)Convert.ToDateTime(txtOrganicEnd.Text),
-                ExcludeInReports = chbExcludeInReports.Checked
+                ExcludeInReports = chbExcludeInReports.Checked,
+                IsMSManagedService = chbManageServiceContract.Checked
             };
         }
 
