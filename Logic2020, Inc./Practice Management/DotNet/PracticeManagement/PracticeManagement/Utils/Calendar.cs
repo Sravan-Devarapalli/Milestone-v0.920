@@ -211,5 +211,18 @@ namespace PraticeManagement.Utils
             }
             return result;
         }
+
+        public static int GetMonths(DateTime startDate, DateTime endDate)
+        {
+            int months = ((endDate.Year * 12) + endDate.Month) - ((startDate.Year * 12) + startDate.Month);
+
+            if (endDate.Day < startDate.Day)
+            {
+                months--;
+            }
+
+            return months;
+        }
     }
 }
+
