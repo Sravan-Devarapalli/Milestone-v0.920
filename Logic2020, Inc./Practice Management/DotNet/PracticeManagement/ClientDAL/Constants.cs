@@ -10,6 +10,15 @@
         public class ColumnNames
         {
             public const string Inactive = "Inactive";
+            public const string TotalCount = "TotalCount";
+            public const string ActualRevenuePerHour = "ActualRevenuePerHour";
+            public const string TargetRevenuePerHour = "TargetRevenuePerHour";
+            public const string HoursUtilization = "HoursUtilization";
+            public const string TargetRevenuePerAnnum = "TargetRevenuePerAnnum";
+            public const string IsPersonActive = "IsPersonActive";
+            public const string IsAvailable = "IsAvailable";
+            public const string ManageServiceContract = "ManageServiceContract";
+            public const string RestartDate = "RestartDate";
             public const string IsInvestmentResource = "IsInvestmentResource";
             public const string PracticeDirectorId = "PracticeDirectorId";
             public const string ExecutiveInChargeId = "ExecutiveInChargeId";
@@ -619,9 +628,14 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string ActualRevenuePerHourParam = "@ActualRevenuePerHour";
+            public const string TargetRevenuePerHourParam = "@TargetRevenuePerHour";
+            public const string HoursUtilizationParam = "@HoursUtilization";
+            public const string TargetRevenuePerAnnumParam = "@TargetRevenuePerAnnum";
             public const string DivisionIds = "@DivisionIds";
             public const string ExcludeInvestmentResource = "@ExcludeInvestmentResource";
             public const string IsInvestmentResource = "@IsInvestmentResource";
+            public const string ManageServiceContract = "@ManageServiceContract";
             public const string ChargeDate = "@ChargeDate";
             public const string PersonStatusIds = "@PersonStatusIds";
             public const string PracticeLeadershipId = "@PracticeLeadershipId";
@@ -1136,6 +1150,7 @@
             public class Person
             {
                 public const string GetPersonDivisions = "dbo.GetPersonDivisions";
+                public const string SaveManagedParametersByPerson = "dbo.SaveManagedParametersByPerson";
                 public const string GetPracticeLeaderships = "dbo.GetPracticeLeaderships";
                 public const string GetSalaryPayTypes = "dbo.GetSalaryPayTypes";
                 public const string GetUsersForCF = "dbo.GetUsersForCF";
@@ -1357,6 +1372,9 @@
 
             public class Reports
             {
+                public const string GetAveragePercentagesByTitles = "dbo.GetAveragePercentagesByTitles";
+                public const string GetManagedParametersByPerson = "dbo.GetManagedParametersByPerson";
+                public const string ManagedServiceReportByPerson = "dbo.ManagedServiceReportByPerson";
                 public const string UtilizationReport = "dbo.UtilizationReport";
                 public const string GetAllBadgeDetails = "dbo.GetAllBadgeDetails";
                 public const string GetBadgeRequestNotApprovedList = "dbo.GetBadgeRequestNotApprovedList";
