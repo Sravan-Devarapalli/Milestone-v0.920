@@ -261,6 +261,20 @@ namespace DataTransferObjects
             get;
             set;
         }
+
+        [DataMember]
+        public bool IsMSManagedService
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public Milestone Milestone
+        {
+            get;
+            set;
+        }
     }
 }
 
