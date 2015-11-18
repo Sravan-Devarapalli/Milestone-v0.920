@@ -192,7 +192,9 @@ namespace PraticeManagement.Reports.Badge
                     }
                     else
                     {
-                        timeLeft = reportItem.BadgeDuration > 0 ? (reportItem.BadgeDuration == 1 ? reportItem.BadgeDuration + " month" : reportItem.BadgeDuration + " months") : "";
+                        var duration = Utils.Calendar.GetMonths(now, reportItem.BadgeEndDate.Value);
+                        timeLeft = duration > 0 ? (duration == 1 ? duration + " month" : duration + " months") : "";
+                        //timeLeft = reportItem.BadgeDuration > 0 ? (reportItem.BadgeDuration == 1 ? reportItem.BadgeDuration + " month" : reportItem.BadgeDuration + " months") : "";
                     }
                 }
                 else
@@ -263,7 +265,9 @@ namespace PraticeManagement.Reports.Badge
                         lblDuration.Text = "On 6-month break";
                         return;
                     }
-                    lblDuration.Text = dataItem.BadgeDuration > 0 ? (dataItem.BadgeDuration == 1 ? dataItem.BadgeDuration + " month" : dataItem.BadgeDuration + " months") : "";
+                    var duration = Utils.Calendar.GetMonths(now, dataItem.BadgeEndDate.Value);
+                    lblDuration.Text = duration > 0 ? (duration == 1 ? duration + " month" : duration + " months") : "";
+                    //lblDuration.Text = dataItem.BadgeDuration > 0 ? (dataItem.BadgeDuration == 1 ? dataItem.BadgeDuration + " month" : dataItem.BadgeDuration + " months") : "";
                 }
                 else
                 {
