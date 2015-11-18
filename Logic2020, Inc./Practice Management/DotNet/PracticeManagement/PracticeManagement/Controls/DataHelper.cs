@@ -537,6 +537,25 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public static void FillTimescaleList(ListControl control, string firstItemText, bool fillWithDescription)
+        {
+            using (var serviceClient = new TimescaleServiceClient())
+            {
+                try
+                {
+                    Timescale[] Timescales = serviceClient.GetAll();
+                    var hourlyType = Timescales.First(t => t.Id == 3);
+                    hourlyType.Name = "1099-Hourly";
+                    FillListDefault(control, firstItemText, Timescales, false);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
         public static void FillTerminationReasonsList(ListControl control, string firstItemText)
         {
             var terminationReasons = Utils.SettingsHelper.GetTerminationReasonsList().Where(tr => tr.IsVisible == true).ToArray();
