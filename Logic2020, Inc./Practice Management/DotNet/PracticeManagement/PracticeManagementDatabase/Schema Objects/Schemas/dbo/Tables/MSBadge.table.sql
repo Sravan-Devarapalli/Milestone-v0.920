@@ -26,6 +26,7 @@
 	ManualStartDate		DATETIME	NULL,
 	ManualEndDate		DATETIME	NULL,
 	ManualBreakStart	DATETIME	NULL,
-	ManualBreakEnd		DATETIME	NULL
+	ManualBreakEnd		DATETIME	NULL,
+	ManageServiceContract 	BIT		NOT NULL CONSTRAINT DF_MSBadge_ManageServiceContract DEFAULT(0)
 )
 
