@@ -64,10 +64,10 @@ namespace PraticeManagement.Controls.Milestones
         private string OnMouseOut = "onmouseout";
         private const string BadgeInBreakPeriodError = "This resource assignment conflicts with the person’s 6mos break period of {0}-{1}.";
         private const string badgeRequest = "Operations has been notified & will review your request to badge this resource. Until resource is approved, resource cannot start on the project.";
-        private const string BadgeRequestMailBody = "<html><body>{0} is requesting a MS badge for {1} for the dates {2} to {3} on <a href=\"{4}\">{5}</a>-{6}, please review & approve or decline.</body></html>";
-        private const string BadgeRequestExceptionMailBody = "<html><body>{0} is requesting a MS badge exception for {1} for the dates {2} to {3} on <a href=\"{4}\">{5}</a>-{6}, please review & approve or decline.</body></html>";
-        private const string BadgeRequestRevisedDatesMailBody = "<html><body>{0} is requesting to change MS badge dates for {1}  from {2}-{3} to {4}-{5} on <a href=\"{6}\">{7}</a>-{8}, please review & approve or decline.</body></html>";
-        private const string BadgeRequestRevisedDatesExcpMailBody = "<html><body>{0} is requesting to change MS badge exception dates for {1}  from {2}-{3} to {4}-{5} on <a href=\"{6}\">{7}</a>-{8}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestMailBody = "<html><body>{0} is requesting a MS badge for {1} for the dates {2} to {3} for the milestone - <a href=\"{4}\">{5}</a> in {6}-{7}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestExceptionMailBody = "<html><body>{0} is requesting a MS badge exception for {1} for the dates {2} to {3} for the milestone - <a href=\"{4}\">{5}</a> in {6}-{7}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestRevisedDatesMailBody = "<html><body>{0} is requesting to change MS badge dates for {1}  from {2}-{3} to {4}-{5} for the milestone - <a href=\"{6}\">{7}</a> in {8}-{9}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestRevisedDatesExcpMailBody = "<html><body>{0} is requesting to change MS badge exception dates for {1}  from {2}-{3} to {4}-{5} for the milestone - <a href=\"{6}\">{7}</a> in {8}-{9}, please review & approve or decline.</body></html>";
 
         #endregion
 
@@ -2282,14 +2282,15 @@ namespace PraticeManagement.Controls.Milestones
                     {
                         var entryId = ServiceCallers.Custom.MilestonePerson(mp => mp.MilestonePersonEntryInsert(entry, Context.User.Identity.Name));
                         var project = ServiceCallers.Custom.Project(pro => pro.ProjectGetShortById(HostingPage.SelectedProjectId.Value));//ServiceCallers.Custom.Project(pro => pro.ProjectGetById(HostingPage.SelectedProjectId.Value));
+                       
                         if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && entry.MSBadgeRequired)
                         {
                             var loggedInPerson = DataHelper.CurrentPerson;
                             project.MailBody = chbBadgeExceptionInsert.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
-                                                                                 "{0}", project.ProjectNumber, project.Name) :
+                                                                                 "{0}", Milestone.Description, project.ProjectNumber, project.Name) :
                                                                                  string.Format(BadgeRequestMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
-                                                                                 "{0}", project.ProjectNumber, project.Name);
-                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                                 "{0}",Milestone.Description, project.ProjectNumber, project.Name);
+                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project, Milestone.Id.Value)); 
                             mlConfirmation.ShowInfoMessage(badgeRequest);
                             mpeBadgePanel.Show();
                         }
@@ -2339,10 +2340,10 @@ namespace PraticeManagement.Controls.Milestones
                             {
                                 var loggedInPerson = DataHelper.CurrentPerson;
                                 project.MailBody = chbBadgeExceptionInsert.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
-                                                                                     "{0}", project.ProjectNumber, project.Name) :
+                                                                                     "{0}", Milestone.Description, project.ProjectNumber, project.Name) :
                                                                                      string.Format(BadgeRequestMailBody, loggedInPerson.Name, entry.ThisPerson.Name, entry.BadgeStartDate.Value.ToShortDateString(), entry.BadgeEndDate.Value.ToShortDateString(),
-                                                                                     "{0}", project.ProjectNumber, project.Name);
-                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                                     "{0}",Milestone.Description, project.ProjectNumber, project.Name);
+                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project, Milestone.Id.Value));
                                 mlConfirmation.ShowInfoMessage(badgeRequest);
                                 mpeBadgePanel.Show();
                             }
@@ -2708,10 +2709,10 @@ namespace PraticeManagement.Controls.Milestones
                             {
                                 var loggedInPerson = DataHelper.CurrentPerson;
                                 project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                    "{0}", project.ProjectNumber, project.Name) :
+                                                    "{0}", Milestone.Description, project.ProjectNumber, project.Name) :
                                                                                 string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                                                "{0}", project.ProjectNumber, project.Name);
-                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                                "{0}",Milestone.Description, project.ProjectNumber, project.Name);
+                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project, Milestone.Id.Value));
                                 mlConfirmation.ShowInfoMessage(badgeRequest);
                                 mpeBadgePanel.Show();
                             }
@@ -2743,10 +2744,10 @@ namespace PraticeManagement.Controls.Milestones
                                 if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (previouslyBadgeRequired != milestonePersonentry.MSBadgeRequired))
                                 {
                                     project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, entry.ThisPerson.Name, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                   "{0}", project.ProjectNumber, project.Name) :
+                                                   "{0}", Milestone.Description, project.ProjectNumber, project.Name) :
                                                                                string.Format(BadgeRequestMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                                               "{0}", project.ProjectNumber, project.Name);
-                                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                               "{0}",Milestone.Description, project.ProjectNumber, project.Name);
+                                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project,Milestone.Id.Value));
                                     mlConfirmation.ShowInfoMessage(badgeRequest);
                                     mpeBadgePanel.Show();
                                     badgeDate = SettingsHelper.GetCurrentPMTime();
@@ -2754,10 +2755,10 @@ namespace PraticeManagement.Controls.Milestones
                                 else if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && milestonePersonentry.MSBadgeRequired && (badgeStart.Date > milestonePersonentry.BadgeStartDate || badgeEnd.Date < milestonePersonentry.BadgeEndDate))
                                 {
                                     project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, entry.ThisPerson.Name, badgeStart.ToShortDateString(), badgeEnd.ToShortDateString(), milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                 "{0}", project.ProjectNumber, project.Name) :
+                                                 "{0}", Milestone.Description, project.ProjectNumber, project.Name) :
                                                                              string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, ddl.SelectedItem.Text, badgeStart.ToShortDateString(), badgeEnd.ToShortDateString(), milestonePersonentry.BadgeStartDate.Value.ToShortDateString(), milestonePersonentry.BadgeEndDate.Value.ToShortDateString(),
-                                                                             "{0}", project.ProjectNumber, project.Name);
-                                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                             "{0}",Milestone.Description, project.ProjectNumber, project.Name);
+                                    ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project,Milestone.Id.Value));
                                     mlConfirmation.ShowInfoMessage(badgeRequest);
                                     mpeBadgePanel.Show();
                                     badgeDate = SettingsHelper.GetCurrentPMTime();
@@ -2850,10 +2851,10 @@ namespace PraticeManagement.Controls.Milestones
                                             {
                                                 var loggedInPerson = DataHelper.CurrentPerson;
                                                 project.MailBody = chbBadgeException.Checked ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, mPEntry.ThisPerson.Name, mPEntry.BadgeStartDate.Value.ToShortDateString(), mPEntry.BadgeEndDate.Value.ToShortDateString(),
-                                                                    "{0}", project.ProjectNumber, project.Name) :
+                                                                    "{0}", Milestone.Description, project.ProjectNumber, project.Name) :
                                                                                                 string.Format(BadgeRequestMailBody, loggedInPerson.Name, mPEntry.ThisPerson.Name, mPEntry.BadgeStartDate.Value.ToShortDateString(), mPEntry.BadgeEndDate.Value.ToShortDateString(),
-                                                                                                "{0}", project.ProjectNumber, project.Name);
-                                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                                                "{0}",Milestone.Description, project.ProjectNumber, project.Name);
+                                                ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project, Milestone.Id.Value));
                                                 mlConfirmation.ShowInfoMessage(badgeRequest);
                                                 mpeBadgePanel.Show();
                                                 badgeDate = SettingsHelper.GetCurrentPMTime();
