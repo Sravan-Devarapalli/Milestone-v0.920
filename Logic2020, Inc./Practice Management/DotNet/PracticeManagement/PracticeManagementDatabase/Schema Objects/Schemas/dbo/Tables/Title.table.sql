@@ -10,6 +10,7 @@
 	ParentId		INT	NULL,
 	PositionId		INT NULL,
 	Active			BIT NULL DEFAULT 1,
+	ShowInMeetingReport	BIT NOT NULL CONSTRAINT DF_Title_ShowInMeetingReport DEFAULT(0)
 	CONSTRAINT PK_Title_TitleId     PRIMARY KEY CLUSTERED(TitleId),
 	CONSTRAINT [UQ_Title_Title] UNIQUE NONCLUSTERED(Title)
 )
