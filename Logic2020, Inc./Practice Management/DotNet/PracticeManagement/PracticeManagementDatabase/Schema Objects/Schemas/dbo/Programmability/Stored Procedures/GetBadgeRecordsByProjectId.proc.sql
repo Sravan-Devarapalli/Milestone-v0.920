@@ -13,7 +13,9 @@ BEGIN
 			Per.LastName,
 			MPE.BadgeStartDate,
 			MPE.BadgeEndDate,
-			MPE.IsBadgeException
+			MPE.IsBadgeException,
+			M.MilestoneId,
+			M.Description
 	FROM dbo.MilestonePersonEntry MPE
 	JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 	JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
@@ -22,3 +24,4 @@ BEGIN
 	WHERE	P.ProjectId = @ProjectId AND MPE.IsBadgeRequired = 1 AND MPE.IsApproved = 0 AND MPE.BadgeStartDate IS NOT NULL AND MPE.BadgeEndDate IS NOT NULL
 			
 END
+
