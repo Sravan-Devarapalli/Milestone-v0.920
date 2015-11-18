@@ -96,8 +96,8 @@ AS
 
 		SET @PersonId = SCOPE_IDENTITY()
 
-		INSERT INTO dbo.MSBadge(PersonId,IsBlocked,IsPreviousBadge,IsException,ExcludeInReports)
-		SELECT @PersonId,0,0,0,0
+		INSERT INTO dbo.MSBadge(PersonId,IsBlocked,IsPreviousBadge,IsException,ExcludeInReports,ManageServiceContract)
+		SELECT @PersonId,0,0,0,0,0
 
 		DECLARE @Date DATETIME 
 
