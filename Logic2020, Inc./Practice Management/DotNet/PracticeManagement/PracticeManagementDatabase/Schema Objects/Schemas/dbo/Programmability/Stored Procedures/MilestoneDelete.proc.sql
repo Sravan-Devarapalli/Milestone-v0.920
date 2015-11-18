@@ -47,6 +47,9 @@ AS
 			INNER JOIN  dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 			INNER JOIN  dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
 			WHERE M.MilestoneId = @MilestoneId
+		    
+			DELETE ProjectExpense
+			WHERE MilestoneId = @MilestoneId
 
 			DELETE FROM dbo.Milestone
 			WHERE MilestoneId = @MilestoneId
