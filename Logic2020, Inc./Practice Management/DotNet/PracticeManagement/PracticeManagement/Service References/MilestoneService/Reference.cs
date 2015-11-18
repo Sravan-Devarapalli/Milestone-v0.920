@@ -106,7 +106,7 @@ namespace PraticeManagement.MilestoneService {
         DataTransferObjects.Milestone[] GetPersonMilestonesOnPreviousHireDate(int personId, System.DateTime previousHireDate);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/SendBadgeRequestMail", ReplyAction="http://tempuri.org/IMilestoneService/SendBadgeRequestMailResponse")]
-        void SendBadgeRequestMail(DataTransferObjects.Project project);
+        void SendBadgeRequestMail(DataTransferObjects.Project project, int milestoneId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMilestoneService/SendBadgeRequestApprovedMail", ReplyAction="http://tempuri.org/IMilestoneService/SendBadgeRequestApprovedMailResponse")]
         void SendBadgeRequestApprovedMail(string personName, string toAddress);
@@ -254,8 +254,8 @@ namespace PraticeManagement.MilestoneService {
             return base.Channel.GetPersonMilestonesOnPreviousHireDate(personId, previousHireDate);
         }
         
-        public void SendBadgeRequestMail(DataTransferObjects.Project project) {
-            base.Channel.SendBadgeRequestMail(project);
+        public void SendBadgeRequestMail(DataTransferObjects.Project project, int milestoneId) {
+            base.Channel.SendBadgeRequestMail(project, milestoneId);
         }
         
         public void SendBadgeRequestApprovedMail(string personName, string toAddress) {
