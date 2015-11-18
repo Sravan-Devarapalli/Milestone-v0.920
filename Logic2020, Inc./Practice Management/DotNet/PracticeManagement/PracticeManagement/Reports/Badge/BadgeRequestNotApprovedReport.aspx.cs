@@ -121,7 +121,7 @@ namespace PraticeManagement.Reports.Badge
             var report = ServiceCallers.Custom.Report(r => r.GetBadgeRequestNotApprovedList()).ToList();
             if (report.Count > 0)
             {
-                var dateRangeTitle = "Badge Request Not Approved Report";
+                var dateRangeTitle = "Badge Requests Not Approved Report";
                 var header = new DataTable();
                 header.Columns.Add(dateRangeTitle);
                 headerRowsCount = header.Rows.Count + 3;
