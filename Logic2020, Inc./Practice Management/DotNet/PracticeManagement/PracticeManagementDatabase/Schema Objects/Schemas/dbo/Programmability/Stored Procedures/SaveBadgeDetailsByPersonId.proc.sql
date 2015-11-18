@@ -21,7 +21,8 @@
 	@DeactivatedDate	DATETIME,
 	@OrganicBreakStart	DATETIME,
 	@OrganicBreakEnd	DATETIME,
-	@ExcludeFromReports	BIT
+	@ExcludeFromReports	BIT,
+	@ManageServiceContract	BIT
 )
 AS
 BEGIN
@@ -51,7 +52,8 @@ BEGIN
 		DeactivatedDate = @DeactivatedDate,
 		OrganicBreakStartDate = @OrganicBreakStart,
 		OrganicBreakEndDate = @OrganicBreakEnd,
-		ExcludeInReports = @ExcludeFromReports
+		ExcludeInReports = @ExcludeFromReports,
+		ManageServiceContract = @ManageServiceContract
 	WHERE PersonId = @PersonId
 
 	IF(@StartDateSource = 'Manual Entry' OR @EndDateSource = 'Manual Entry')
