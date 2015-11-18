@@ -189,7 +189,7 @@ namespace PracticeManagementService
         List<Milestone> GetPersonMilestonesOnPreviousHireDate(int personId, DateTime previousHireDate);
 
         [OperationContract]
-        void SendBadgeRequestMail(Project project);
+        void SendBadgeRequestMail(Project project,int milestoneId);
 
         [OperationContract]
         void SendBadgeRequestApprovedMail(string personName, string toAddress);
