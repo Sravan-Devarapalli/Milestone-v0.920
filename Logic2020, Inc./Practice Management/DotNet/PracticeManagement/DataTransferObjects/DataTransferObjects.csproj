@@ -161,6 +161,7 @@
     <Compile Include="ProjectFeedbackStatus.cs" />
     <Compile Include="RecruitingMetrics.cs" />
     <Compile Include="Reports\AttainmentBillableutlizationReport.cs" />
+    <Compile Include="Reports\AvailableRange.cs" />
     <Compile Include="Reports\BadgedResourcesByTime.cs" />
     <Compile Include="Reports\BillableUtlizationByRange.cs" />
     <Compile Include="Reports\BillingReport.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Reports\GroupbyTitle.cs" />
     <Compile Include="Reports\GroupedHours.cs" />
     <Compile Include="Reports\HumanCapital\TerminationPersonsInRange.cs" />
+    <Compile Include="Reports\ManagementMeetingReport.cs" />
     <Compile Include="Reports\PersonLevelGroupedHours.cs" />
     <Compile Include="Reports\PersonLevelPayCheck.cs" />
     <Compile Include="Reports\PersonTimeEntriesTotals.cs">
@@ -194,11 +196,13 @@
     <Compile Include="Reports\GroupByClientAndProject.cs" />
     <Compile Include="Reports\ProjectLevelTimeEntriesHistory.cs" />
     <Compile Include="Reports\ResourceExceptionReport.cs" />
+    <Compile Include="Reports\RevenueReport.cs" />
     <Compile Include="Reports\TimeEntriesGroupByDate.cs" />
     <Compile Include="Reports\GroupByDate.cs" />
     <Compile Include="Reports\PersonLevelTimeEntriesHistory.cs" />
     <Compile Include="Reports\TimeEntryByWorkType.cs" />
     <Compile Include="Reports\TimeEntriesGroupByClientAndProject.cs" />
+    <Compile Include="Reports\TotalByRange.cs" />
     <Compile Include="Reports\UtilizationByProject.cs" />
     <Compile Include="Reports\WorkTypeLevelGroupedHours.cs" />
     <Compile Include="SeniorityCategory.cs" />
@@ -331,4 +335,3 @@
   </Target>
   -->
 </Project>
-
