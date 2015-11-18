@@ -296,6 +296,26 @@ namespace PracticeManagementService
         {
             return ReportDAL.UtilizationReport(personId, startDate, endDate);
         }
+
+        public List<ManagementMeetingReport> ManagedServiceReportByPerson(string paytypes, string personStatuses, DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.ManagedServiceReportByPerson(paytypes, personStatuses, startDate, endDate);
+        }
+
+        public void SaveManagedParametersByPerson(string userLogin, decimal actualRevenuePerHour, decimal targetRevenuePerHour, decimal hoursUtilization, decimal targetRevenuePerAnnum)
+        {
+            ReportDAL.SaveManagedParametersByPerson(userLogin, actualRevenuePerHour, targetRevenuePerHour, hoursUtilization, targetRevenuePerAnnum);
+        }
+
+        public RevenueReport GetManagedParametersByPerson(string userLogin)
+        {
+            return ReportDAL.GetManagedParametersByPerson(userLogin);
+        }
+
+        public List<GroupbyTitle> GetAveragePercentagesByTitles(string paytypes, string personStatuses, string titles, DateTime startDate, DateTime endDate)
+        {
+            return ReportDAL.GetAveragePercentagesByTitles(paytypes, personStatuses, titles, startDate, endDate);
+        }
     }
 }
 
