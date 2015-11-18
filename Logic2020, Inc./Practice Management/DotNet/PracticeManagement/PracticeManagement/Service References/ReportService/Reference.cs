@@ -73,6 +73,21 @@ namespace PraticeManagement.ReportService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/UtilizationReport", ReplyAction="http://tempuri.org/IReportService/UtilizationReportResponse")]
         DataTransferObjects.Reports.PersonTimeEntriesTotals UtilizationReport(int personId, System.DateTime startDate, System.DateTime endDate);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ManagedServiceReportByPerson", ReplyAction="http://tempuri.org/IReportService/ManagedServiceReportByPersonResponse")]
+        DataTransferObjects.Reports.ManagementMeetingReport[] ManagedServiceReportByPerson(string paytypes, string personStatuses, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/SaveManagedParametersByPerson", ReplyAction="http://tempuri.org/IReportService/SaveManagedParametersByPersonResponse")]
+        void SaveManagedParametersByPerson(string userLogin, decimal actualRevenuePerHour, decimal targetRevenuePerHour, decimal hoursUtilization, decimal targetRevenuePerAnnum);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetManagedParametersByPerson", ReplyAction="http://tempuri.org/IReportService/GetManagedParametersByPersonResponse")]
+        DataTransferObjects.Reports.RevenueReport GetManagedParametersByPerson(string userLogin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetAveragePercentagesByTitles", ReplyAction="http://tempuri.org/IReportService/GetAveragePercentagesByTitlesResponse")]
+        DataTransferObjects.Reports.GroupbyTitle[] GetAveragePercentagesByTitles(string paytypes, string personStatuses, string titles, System.DateTime startDate, System.DateTime endDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectsListWithMultiParameters", ReplyAction="http://tempuri.org/IReportService/ProjectsListWithMultiParametersResponse")]
+        DataTransferObjects.Project[] ProjectsListWithMultiParameters(string clientIdsList, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string ProjectOwnerIdsList, string practiceIdsList, string projectGroupIdsList);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
         
@@ -213,7 +228,7 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-        
+       
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -297,6 +312,26 @@ namespace PraticeManagement.ReportService {
         
         public DataTransferObjects.Reports.PersonTimeEntriesTotals UtilizationReport(int personId, System.DateTime startDate, System.DateTime endDate) {
             return base.Channel.UtilizationReport(personId, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Reports.ManagementMeetingReport[] ManagedServiceReportByPerson(string paytypes, string personStatuses, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.ManagedServiceReportByPerson(paytypes, personStatuses, startDate, endDate);
+        }
+        
+        public void SaveManagedParametersByPerson(string userLogin, decimal actualRevenuePerHour, decimal targetRevenuePerHour, decimal hoursUtilization, decimal targetRevenuePerAnnum) {
+            base.Channel.SaveManagedParametersByPerson(userLogin, actualRevenuePerHour, targetRevenuePerHour, hoursUtilization, targetRevenuePerAnnum);
+        }
+        
+        public DataTransferObjects.Reports.RevenueReport GetManagedParametersByPerson(string userLogin) {
+            return base.Channel.GetManagedParametersByPerson(userLogin);
+        }
+        
+        public DataTransferObjects.Reports.GroupbyTitle[] GetAveragePercentagesByTitles(string paytypes, string personStatuses, string titles, System.DateTime startDate, System.DateTime endDate) {
+            return base.Channel.GetAveragePercentagesByTitles(paytypes, personStatuses, titles, startDate, endDate);
+        }
+        
+        public DataTransferObjects.Project[] ProjectsListWithMultiParameters(string clientIdsList, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string ProjectOwnerIdsList, string practiceIdsList, string projectGroupIdsList) {
+            return base.Channel.ProjectsListWithMultiParameters(clientIdsList, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, ProjectOwnerIdsList, practiceIdsList, projectGroupIdsList);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
