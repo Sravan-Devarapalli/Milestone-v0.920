@@ -180,6 +180,18 @@ namespace PracticeManagementService
 
         [OperationContract]
         PersonTimeEntriesTotals UtilizationReport(int personId, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<ManagementMeetingReport> ManagedServiceReportByPerson(string paytypes, string personStatuses, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        void SaveManagedParametersByPerson(string userLogin, decimal actualRevenuePerHour, decimal targetRevenuePerHour, decimal hoursUtilization, decimal targetRevenuePerAnnum);
+
+        [OperationContract]
+        RevenueReport GetManagedParametersByPerson(string userLogin);
+
+        [OperationContract]
+        List<GroupbyTitle> GetAveragePercentagesByTitles(string paytypes, string personStatuses, string titles, DateTime startDate, DateTime endDate);
     }
 }
 
