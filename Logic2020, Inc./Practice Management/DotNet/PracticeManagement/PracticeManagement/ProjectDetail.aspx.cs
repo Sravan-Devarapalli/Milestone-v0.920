@@ -38,8 +38,8 @@ namespace PraticeManagement
         public const string IsInternalChangeErrorMessage = "Can not change project status as some work types are already in use.";
         public const string OpportunityLinkedTextFormat = "This project is linked to Opportunity {0}.";
         public const string ViewStateLoggedInPerson = "ViewStateLoggedInPerson";
-        private const string BadgeRequestMailBody = "<html><body>{0} is requesting a MS badge for {1} for the dates {2} to {3} on <a href=\"{4}\">{5}</a>-{6}, please review & approve or decline.</body></html>";
-        private const string BadgeRequestExceptionMailBody = "<html><body>{0} is requesting a MS badge exception for {1} for the dates {2} to {3} on <a href=\"{4}\">{5}</a>-{6}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestMailBody = "<html><body>{0} is requesting a MS badge for {1} for the dates {2} to {3} for the milestone - <a href=\"{4}\">{5}</a> in {6}-{7}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestExceptionMailBody = "<html><body>{0} is requesting a MS badge exception for {1} for the dates {2} to {3} for the milestone - <a href=\"{4}\">{5}</a> in {6}-{7}, please review & approve or decline.</body></html>";
 
         #endregion Constants
 
@@ -1481,10 +1481,10 @@ namespace PraticeManagement
                         {
                             var proj = record.Project;
                             proj.MailBody = record.IsException ? string.Format(BadgeRequestExceptionMailBody, loggedInPerson.Name, record.Person.Name, record.BadgeStartDate.Value.ToShortDateString(), record.BadgeEndDate.Value.ToShortDateString(),
-                                                                            "{0}", proj.ProjectNumber, proj.Name) :
+                                                                            "{0}",record.Milestone.Description, proj.ProjectNumber, proj.Name) :
                                                                             string.Format(BadgeRequestMailBody, loggedInPerson.Name, record.Person.Name, record.BadgeStartDate.Value.ToShortDateString(), record.BadgeEndDate.Value.ToShortDateString(),
-                                                                            "{0}", proj.ProjectNumber, proj.Name);
-                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(proj));
+                                                                            "{0}",record.Milestone.Description, proj.ProjectNumber, proj.Name);
+                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(proj, record.Milestone.Id.Value)); 
                             //if (mailCount % 12 == 0)
                             //{
                             //    Thread.Sleep(65 * 1000);
