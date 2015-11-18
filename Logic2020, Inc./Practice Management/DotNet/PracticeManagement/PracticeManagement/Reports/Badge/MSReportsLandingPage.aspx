@@ -105,6 +105,19 @@
                             View all resources by project
                         </td>
                     </tr>
+                     <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td class="PaddingTop10">
+                            <asp:HyperLink ID="hlManagementMeetingReport" runat="server" Text="18-Month Management Meeting Report" ToolTip="18-Month Management Meeting Report"
+                                Target="_blank" NavigateUrl="~/Reports/Badge/MSManagementMeetingReport.aspx">
+                            </asp:HyperLink>
+                        </td>
+                        <td class="PaddingTop10">
+                            View all resources by level
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <br />
