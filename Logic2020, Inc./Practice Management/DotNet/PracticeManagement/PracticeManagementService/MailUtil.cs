@@ -160,9 +160,9 @@ namespace PracticeManagementService
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
         }
 
-        internal static void SendMSBadgeRequestEmail(Project project)
+        internal static void SendMSBadgeRequestEmail(Project project,int milestoneId)
         {
-            string url = IsUAT ? "http://65.52.17.100/ProjectDetail.aspx?id=" + project.Id.Value.ToString() : "https://practice.logic2020.com/ProjectDetail.aspx?id=" + project.Id.Value.ToString();
+            string url = IsUAT ? string.Format("http://65.52.17.100/MilestoneDetail.aspx?id={0}&projectId={1}" ,milestoneId, project.Id.Value): string.Format("https://practice.logic2020.com/MilestoneDetail.aspx?id={0}&projectId={1}" ,milestoneId, project.Id.Value);
             var emailTemplate = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.MSBadgeRequestTemplateName);
             var body = string.Format(project.MailBody, url);
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
