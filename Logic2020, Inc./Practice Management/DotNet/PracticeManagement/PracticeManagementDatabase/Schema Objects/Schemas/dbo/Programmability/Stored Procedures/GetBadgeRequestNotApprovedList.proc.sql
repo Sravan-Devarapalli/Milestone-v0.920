@@ -15,7 +15,9 @@ BEGIN
 			MPE.Requester AS RequesterId,
 			R.LastName+', '+ISNULL(R.PreferredFirstName,R.FirstName) AS Requester,
 			Per.TitleId,
-			Per.Title
+			Per.Title,
+			M.MilestoneId,
+			M.Description
 	FROM dbo.MilestonePersonEntry MPE 
 	INNER JOIN dbo.MilestonePerson MP ON MP.MilestonePersonId = MPE.MilestonePersonId
 	INNER JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
