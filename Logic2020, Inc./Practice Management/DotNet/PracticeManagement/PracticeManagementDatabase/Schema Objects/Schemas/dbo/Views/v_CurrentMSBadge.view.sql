@@ -1,10 +1,17 @@
 ﻿CREATE VIEW [dbo].[v_CurrentMSBadge]
 	AS 
-	With HistoryCTE
+	With ByPerson
+	AS
+	(
+		SELECT MAX(Id) Id, PersonId,BadgeStartDate 
+		FROM dbo.BadgeHistoryForReports
+		GROUP BY PersonId,BadgeStartDate
+	),
+	HistoryCTE
 	AS
 	(
 		SELECT Id,PersonId,BadgeStartDate,ROW_NUMBER() OVER (PARTITION BY PersonId ORDER BY BadgeStartDate) RNum
-		FROM dbo.BadgeHistoryForReports 
+		FROM ByPerson 
 	),
 	H1
 	AS
