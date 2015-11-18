@@ -1965,9 +1965,9 @@ namespace UpdatePracticeAndSeniority
                     }
                     if (isOffShoreIndex != -1)
                     {
-                        person.IsOffshore = reader.GetInt32(isOffShoreIndex) == 1;
+                        person.IsOffshore = reader.IsDBNull(isOffShoreIndex) ? false : reader.GetInt32(isOffShoreIndex) == 1;
                     }
-                    if (managerIdIndex != -1 && !reader.IsDBNull(managerIdIndex))
+                    if (managerIdIndex != -1 && !reader.IsDBNull(managerIdIndex) && !reader.IsDBNull(managerNameIndex))
                     {
                         person.Manager = new Person()
                         {
@@ -1975,7 +1975,7 @@ namespace UpdatePracticeAndSeniority
                             FirstName = reader.GetString(managerNameIndex)
                         };
                     }
-                    if (divisionIdIndex != -1)
+                    if (divisionIdIndex != -1 && !reader.IsDBNull(divisionIdIndex))
                     {
                         person.DivisionType = (PersonDivisionType)reader.GetInt32(divisionIdIndex);
                     }
