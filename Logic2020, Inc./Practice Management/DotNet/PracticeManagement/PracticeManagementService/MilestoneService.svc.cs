@@ -286,9 +286,9 @@ namespace PracticeManagementService
             return MilestoneDAL.GetPersonMilestonesOnPreviousHireDate(personId, previousHireDate);
         }
 
-        public void SendBadgeRequestMail(Project project)
+        public void SendBadgeRequestMail(Project project,int milestoneId)
         {
-            MailUtil.SendMSBadgeRequestEmail(project);
+            MailUtil.SendMSBadgeRequestEmail(project,milestoneId);
         }
 
         public void SendBadgeRequestApprovedMail(string personName, string toAddress)
