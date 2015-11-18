@@ -5029,6 +5029,8 @@ namespace DataAccess
                 int requesterIndex = reader.GetOrdinal(Constants.ColumnNames.Requester);
                 int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
                 int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int MilestoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+                int MilestoneDescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
 
                 while (reader.Read())
                 {
@@ -5059,7 +5061,12 @@ namespace DataAccess
                         PlannedEndDate = reader.IsDBNull(badgeRequestDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeRequestDateIndex),
                         ProjectBadgeEndDate = reader.IsDBNull(clockEndDateIndex) ? null : (DateTime?)reader.GetDateTime(clockEndDateIndex),
                         RequesterId = reader.IsDBNull(requesterIdIndex) ? null : (int?)reader.GetInt32(requesterIdIndex),
-                        Requester = reader.IsDBNull(requesterIndex) ? string.Empty : reader.GetString(requesterIndex)
+                        Requester = reader.IsDBNull(requesterIndex) ? string.Empty : reader.GetString(requesterIndex),
+                        Milestone = new Milestone()
+                        {
+                            Id = reader.GetInt32(MilestoneIdIndex),
+                            Description = reader.GetString(MilestoneDescriptionIndex)
+                        }
                     };
                     result.Add(badgeResource);
                 }
@@ -5071,7 +5078,7 @@ namespace DataAccess
             }
         }
 
-        public static List<MSBadge> GetAllBadgeDetails(string payTypes,string personStatuses)
+        public static List<MSBadge> GetAllBadgeDetails(string payTypes, string personStatuses)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetAllBadgeDetails, connection))
@@ -5182,6 +5189,260 @@ namespace DataAccess
                     }
                     return result;
                 }
+            }
+        }
+
+        public static List<ManagementMeetingReport> ManagedServiceReportByPerson(string paytypes, string personStatuses, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ManagedServiceReportByPerson, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, paytypes);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatuses);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<ManagementMeetingReport>();
+                    ReadManagedServiceReportByPerson(reader, result);
+                    reader.NextResult();
+                    ReadManagedServiceReportByPersonRange(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadManagedServiceReportByPerson(SqlDataReader reader, List<ManagementMeetingReport> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                int timescaleIndex = reader.GetOrdinal(Constants.ColumnNames.TimescaleName);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int badgeStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeStartDate);
+                int badgeEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeEndDate);
+                int breakStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BreakStartDate);
+                int breakEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BreakEndDate);
+                int blockStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockStartDate);
+                int blockEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockEndDate);
+                int restartDateIndex = reader.GetOrdinal(Constants.ColumnNames.RestartDate);
+                int badgeDurationIndex = reader.GetOrdinal(Constants.ColumnNames.BadgeDuration);
+                int manageServiceContractIndex = reader.GetOrdinal(Constants.ColumnNames.ManageServiceContract);
+
+                while (reader.Read())
+                {
+                    var title = new Title()
+                            {
+                                TitleId = !reader.IsDBNull(titleIdIndex) ? reader.GetInt32(titleIdIndex) : -1,
+                                TitleName = !reader.IsDBNull(titleIndex) ? reader.GetString(titleIndex) : string.Empty
+                            };
+                    var person = new Person()
+                        {
+                            Id = reader.GetInt32(personIdIndex),
+                            LastName = reader.GetString(lastNameIndex),
+                            FirstName = reader.GetString(firstNameIndex),
+                            CurrentPay = new Pay()
+                            {
+                                TimescaleName = reader.GetString(timescaleIndex)
+                            },
+                            Title = title,
+                            Badge = new MSBadge()
+                            {
+                                BadgeStartDate = !reader.IsDBNull(badgeStartDateIndex) ? (DateTime?)reader.GetDateTime(badgeStartDateIndex) : null,
+                                BadgeEndDate = !reader.IsDBNull(badgeEndDateIndex) ? (DateTime?)reader.GetDateTime(badgeEndDateIndex) : null,
+                                BlockStartDate = !reader.IsDBNull(blockStartDateIndex) ? (DateTime?)reader.GetDateTime(blockStartDateIndex) : null,
+                                BlockEndDate = !reader.IsDBNull(blockEndDateIndex) ? (DateTime?)reader.GetDateTime(blockEndDateIndex) : null,
+                                PlannedEndDate = !reader.IsDBNull(restartDateIndex) ? (DateTime?)reader.GetDateTime(restartDateIndex) : null,
+                                BadgeDuration = reader.IsDBNull(badgeDurationIndex) ? 0 : reader.GetInt32(badgeDurationIndex),
+                                IsMSManagedService = reader.GetBoolean(manageServiceContractIndex),
+                                BreakStartDate = !reader.IsDBNull(breakStartDateIndex) ? (DateTime?)reader.GetDateTime(breakStartDateIndex) : null,
+                                BreakEndDate = !reader.IsDBNull(breakEndDateIndex) ? (DateTime?)reader.GetDateTime(breakEndDateIndex) : null
+                            }
+                        };
+                    var managementMeetingReport = new ManagementMeetingReport()
+                    {
+                        Person = person,
+                        Title = title
+                    };
+                    result.Add(managementMeetingReport);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void ReadManagedServiceReportByPersonRange(SqlDataReader reader, List<ManagementMeetingReport> result)
+        {
+            if (!reader.HasRows) return;
+            int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+            int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+            int isAvailableIndex = reader.GetOrdinal(Constants.ColumnNames.IsAvailable);
+            while (reader.Read())
+            {
+                var personId = reader.GetInt32(personIdIndex);
+                if (result.Any(p => p.Person.Id == personId))
+                {
+                    var person = result.FirstOrDefault(p => p.Person.Id == personId);
+                    if (person.Range == null)
+                        person.Range = new List<AvailableRange>();
+                    var range = new AvailableRange()
+                    {
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = reader.GetDateTime(endDateIndex),
+                        IsAvailable = reader.GetInt32(isAvailableIndex) == 1
+                    };
+                    person.Range.Add(range);
+                }
+            }
+        }
+
+        public static void SaveManagedParametersByPerson(string userLogin, decimal actualRevenuePerHour, decimal targetRevenuePerHour, decimal hoursUtilization, decimal targetRevenuePerAnnum)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.SaveManagedParametersByPerson, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ActualRevenuePerHourParam, actualRevenuePerHour);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TargetRevenuePerHourParam, targetRevenuePerHour);
+                command.Parameters.AddWithValue(Constants.ParameterNames.HoursUtilizationParam, hoursUtilization);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TargetRevenuePerAnnumParam, targetRevenuePerAnnum);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static RevenueReport GetManagedParametersByPerson(string userLogin)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetManagedParametersByPerson, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new RevenueReport();
+                    if (!reader.HasRows)
+                    {
+                        result = null;
+                    }
+                    else
+                    {
+                        ReadManagedParametersByPerson(reader, result);
+                    }
+                    return result;
+                }
+            }
+        }
+
+        public static void ReadManagedParametersByPerson(SqlDataReader reader, RevenueReport result)
+        {
+            try
+            {
+                int ActualRevenuePerHourIndex = reader.GetOrdinal(Constants.ColumnNames.ActualRevenuePerHour);
+                int TargetRevenuePerHourIndex = reader.GetOrdinal(Constants.ColumnNames.TargetRevenuePerHour);
+                int HoursUtilizationIndex = reader.GetOrdinal(Constants.ColumnNames.HoursUtilization);
+                int TargetRevenuePerAnnumIndex = reader.GetOrdinal(Constants.ColumnNames.TargetRevenuePerAnnum);
+
+                while (reader.Read())
+                {
+
+                    result.ActualRevenuePerHour = reader.GetDecimal(ActualRevenuePerHourIndex);
+                    result.TargetRevenuePerHour = reader.GetDecimal(TargetRevenuePerHourIndex);
+                    result.HoursUtilization = reader.GetDecimal(HoursUtilizationIndex);
+                    result.TotalRevenuePerAnnual = reader.GetDecimal(TargetRevenuePerAnnumIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<GroupbyTitle> GetAveragePercentagesByTitles(string paytypes, string personStatuses, string titles, DateTime startDate, DateTime endDate)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.GetAveragePercentagesByTitles, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, paytypes);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIdsParam, personStatuses);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TitleIds, titles);
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, endDate);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<GroupbyTitle>();
+                    GetAveragePercentageByTiles(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static void GetAveragePercentageByTiles(SqlDataReader reader, List<GroupbyTitle> result)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int totalCountIndex = reader.GetOrdinal(Constants.ColumnNames.TotalCount);
+                
+
+                while (reader.Read())
+                {
+                    var titleId = reader.GetInt32(titleIdIndex);
+                    var badgeResource = new BadgedResourcesByTime()
+                    {
+                        StartDate = reader.GetDateTime(startDateIndex),
+                        EndDate = reader.GetDateTime(endDateIndex),
+                      ResourceCount=reader.GetInt32(totalCountIndex)
+                    };
+
+                    if (result.Any(p => p.Title.TitleId == titleId))
+                    {
+                        var first = result.FirstOrDefault(p => p.Title.TitleId == titleId);
+                        first.ResourcesCount.Add(badgeResource);
+                    }
+                    else
+                    {
+                        var groupedTitle = new GroupbyTitle()
+                        {
+                            Title = new Title()
+                            {
+                                TitleId = titleId,
+                                TitleName = reader.GetString(titleIndex)
+                            },
+                            ResourcesCount = new List<BadgedResourcesByTime>() { badgeResource }
+                        };
+                        result.Add(groupedTitle);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
