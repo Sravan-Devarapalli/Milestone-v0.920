@@ -51,11 +51,11 @@ BEGIN
 	 ActiveConsultantsRange
 	 AS
 	 (
-		SELECT R.StartDate,R.EndDate,COUNT(*) as Count
+		SELECT R.StartDate,R.EndDate,COUNT(DISTINCT P.PersonId) as Count
 		FROM Ranges R
 		CROSS JOIN v_PersonHistory P 
 		INNER JOIN dbo.MSBadge M ON M.PersonId = P.PersonId
-		INNER JOIN v_Pay pay ON pay.PersonId = P.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate <= pay.EndDateOrig
+		INNER JOIN v_Pay pay ON pay.PersonId = P.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate < pay.EndDateOrig
 		WHERE   ISNULL(M.ExcludeInReports,0) = 0 AND
 				P.HireDate <= R.EndDate AND 
 				(P.TerminationDate IS NULL OR R.StartDate <= p.TerminationDate) AND 
@@ -69,7 +69,7 @@ BEGIN
 	   SELECT DISTINCT M.PersonId,R.StartDate,R.EndDate
 	   FROM dbo.MSBadge M 
 	   JOIN Ranges R ON R.StartDate <= M.OrganicBreakEndDate AND M.OrganicBreakStartDate <= R.EndDate
-	   INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate <= pay.EndDateOrig
+	   INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate < pay.EndDateOrig
 	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR pay.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,R.StartDate,R.EndDate
 	 ),
@@ -85,7 +85,7 @@ BEGIN
 		INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
 		INNER JOIN Ranges R ON MPE.BadgeStartDate <= R.EndDate AND R.StartDate <= MPE.BadgeEndDate
 		INNER JOIN dbo.MSBadge MB ON MB.PersonId = MP.PersonId
-		INNER JOIN v_Pay pay ON pay.PersonId = MB.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate <= pay.EndDateOrig
+		INNER JOIN v_Pay pay ON pay.PersonId = MB.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate < pay.EndDateOrig
 		WHERE MB.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR pay.Timescale IN (SELECT Ids FROM @PayTypeIdsTable)) AND mpe.IsbadgeRequired = 1 AND P.ProjectStatusId IN (1,2,3,4) 
 
 		UNION ALL
@@ -93,7 +93,7 @@ BEGIN
 		FROM dbo.MSBadge M
 		INNER JOIN v_CurrentMSBadge MB ON MB.PersonId = M.PersonId
 		INNER JOIN Ranges R ON M.LastBadgeStartDate <= R.EndDate AND R.StartDate <= M.LastBadgeEndDate
-		INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate <= pay.EndDateOrig
+		INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate < pay.EndDateOrig
 		WHERE M.ExcludeInReports = 0 AND M.IsPreviousBadge = 1 AND (@PayTypeIds IS NULL OR pay.Timescale IN (SELECT Ids FROM @PayTypeIdsTable)) 
 			AND (M.LastBadgeStartDate <= MB.BadgeEndDate AND MB.BadgeStartDate <= M.LastBadgeEndDate)
 		) R
@@ -108,7 +108,7 @@ BEGIN
 		FROM v_CurrentMSBadge M 
 		INNER JOIN Ranges R ON R.StartDate <= M.BadgeEndDate AND M.BadgeStartDate <= R.EndDate
 		INNER JOIN dbo.MSBadge MB ON MB.PersonId = M.PersonId
-		INNER JOIN v_Pay pay ON pay.PersonId = MB.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate <= pay.EndDateOrig
+		INNER JOIN v_Pay pay ON pay.PersonId = MB.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate < pay.EndDateOrig
 		LEFT JOIN BadgedOnProject BP ON BP.StartDate = R.StartDate AND BP.PersonId = M.PersonId
 		LEFT JOIN OrganicBreakPeople OB ON OB.StartDate = R.StartDate AND OB.PersonId = M.PersonId
 		WHERE M.ExcludeInReports = 0 AND BP.PersonId IS NULL AND OB.PersonId IS NULL AND
@@ -149,7 +149,7 @@ BEGIN
 	   SELECT M.PersonId,R.StartDate,R.EndDate
 	   FROM dbo.MSBadge M 
 	   JOIN Ranges R ON R.StartDate <= M.BlockEndDate AND M.BlockStartDate <= R.EndDate
-	   INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate <= pay.EndDateOrig
+	   INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate < pay.EndDateOrig
 	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR pay.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,R.StartDate,R.EndDate
 	 ),
@@ -159,7 +159,7 @@ BEGIN
 	   SELECT M.PersonId,R.StartDate,R.EndDate
 	   FROM v_CurrentMSBadge M 
 	   JOIN Ranges R ON R.StartDate <= M.BreakEndDate AND M.BreakStartDate <= R.EndDate
-	   INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate <= pay.EndDateOrig
+	   INNER JOIN v_Pay pay ON pay.PersonId = M.PersonId AND pay.StartDate <= R.EndDate AND R.StartDate < pay.EndDateOrig
 	   WHERE M.ExcludeInReports = 0 AND (@PayTypeIds IS NULL OR Pay.Timescale IN (SELECT Ids FROM @PayTypeIdsTable))
 	   GROUP BY M.PersonId,R.StartDate,R.EndDate
 	 ),
