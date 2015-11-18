@@ -17,6 +17,7 @@ namespace PraticeManagement.Utils.Excel
         public VerticalAlignment VerticalAlignment = VerticalAlignment.Top;
         public bool ShrinkToFit = false;
         public string DataFormat = "";
+        public string CellFormula = "";
         public bool WrapText = false;
         public short BackGroundColorIndex = HSSFColor.White.Index;
         public bool IsBold = false;
