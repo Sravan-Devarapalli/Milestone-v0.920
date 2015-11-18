@@ -107,6 +107,12 @@ namespace PraticeManagement.Reports.Badge
                                                         Constants.ApplicationPages.PersonsPage);
         }
 
+        protected string GetMilestoneDetailsLink(int? milestoneId, int? projectId)
+        {
+            return Utils.Generic.GetTargetUrlWithReturn(String.Format(Constants.ApplicationPages.RedirectProjectIdFormat, Constants.ApplicationPages.MilestoneDetail, milestoneId.Value, projectId.Value),
+                                                            Constants.ApplicationPages.PersonsPage);
+        }
+
         protected void btnExportToExcel_OnClick(object sender, EventArgs e)
         {
             var filename = "BadgeRequestNotApprovedReport.xls";
@@ -151,6 +157,7 @@ namespace PraticeManagement.Reports.Badge
             data.Columns.Add("Current Badge Requests Not Yet Approved");
             data.Columns.Add("Resource Level");
             data.Columns.Add("Project #");
+            data.Columns.Add("Milestone");
             data.Columns.Add("Project Stage");
             data.Columns.Add("Request Date");
             data.Columns.Add("Requester");
@@ -163,6 +170,7 @@ namespace PraticeManagement.Reports.Badge
                 row.Add(reportItem.Person.Name);
                 row.Add(reportItem.Person.Title.TitleName);
                 row.Add(reportItem.Project.ProjectNumber);
+                row.Add(reportItem.Milestone.Description);
                 row.Add(reportItem.Project.Status.StatusType.ToString());
                 row.Add(reportItem.PlannedEndDate.HasValue ? reportItem.PlannedEndDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.Requester);
