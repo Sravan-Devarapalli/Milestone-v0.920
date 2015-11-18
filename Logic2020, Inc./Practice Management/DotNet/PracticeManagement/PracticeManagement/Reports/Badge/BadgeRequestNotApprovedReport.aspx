@@ -65,6 +65,9 @@
                                             Project #
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
+                                            Milestone
+                                        </th>
+                                        <th class="DayTotalHoursBorderLeft Padding5Imp">
                                             Project Stage
                                         </th>
                                         <th class="DayTotalHoursBorderLeft Padding5Imp">
@@ -95,8 +98,11 @@
                                  <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
-                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
-                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Project.Id"))) %>'>
+                                <%# Eval("Project.ProjectNumber")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:HyperLink ID="hlMilestoneName" runat="server" Text=' <%# Eval("Milestone.Description")%> '
+                                    Target="_blank" NavigateUrl='<%# GetMilestoneDetailsLink((int?)(Eval("Milestone.Id")),(int?)(Eval("Project.Id"))) %>'>
                                 </asp:HyperLink>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
@@ -128,8 +134,11 @@
                                  <%# Eval("Person.Title.HtmlEncodedTitleName")%>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
-                                <asp:HyperLink ID="hlProjectNumber" runat="server" Text=' <%# Eval("Project.ProjectNumber")%> '
-                                    Target="_blank" NavigateUrl='<%# GetProjectDetailsLink((int?)(Eval("Project.Id"))) %>'>
+                                <%# Eval("Project.ProjectNumber")%>
+                            </td>
+                            <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                <asp:HyperLink ID="hlMilestoneName" runat="server" Text=' <%# Eval("Milestone.Description")%> '
+                                    Target="_blank" NavigateUrl='<%# GetMilestoneDetailsLink((int?)(Eval("Milestone.Id")),(int?)(Eval("Project.Id"))) %>'>
                                 </asp:HyperLink>
                             </td>
                             <td class="DayTotalHoursBorderLeft Padding5Imp">
