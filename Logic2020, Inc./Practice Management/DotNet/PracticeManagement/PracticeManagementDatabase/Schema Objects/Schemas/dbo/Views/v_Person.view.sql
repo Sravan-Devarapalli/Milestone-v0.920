@@ -50,6 +50,7 @@ AS
 			p.RecruiterId,
 			p.TitleId,
 			T.Title,
+			T.ShowInMeetingReport,
 			p.JobSeekerStatusId,
 			p.SourceId,
 			p.TargetedCompanyId,
