@@ -304,7 +304,7 @@ namespace PraticeManagement.Config
 
                 DataHelper.FillRecruiterList(cblRecruiters, AllRecruiters,true);//#2817: userIsHR is added as per  requirement.
 
-                if (!userIsAdministrator && !userIsHR)//#2817: userIsHR is added as per  requirement.
+                if (!userIsAdministrator && !userIsHR && !UserIsOperations)//#2817: userIsHR is added as per  requirement.
                 {
                     Person current = DataHelper.CurrentPerson;
 
@@ -372,7 +372,6 @@ namespace PraticeManagement.Config
                     gvPersons.Sort("LastName", SortDirection.Ascending);
                     SetFilterValues();
                 }
-                lnkAddPerson.Visible = UserIsAdministrator || userIsHR || UserIsRecruiter;
             }
 
 
