@@ -59,8 +59,8 @@ namespace PraticeManagement
 
         private const string format = "{0} {1} ({2})";
         private const string lblCommissionsMessage = "Attribution {0} date will change from {1} to {2} based on the change to the project milestone.";
-        private const string BadgeRequestRevisedDatesMailBody = "<html><body>{0} is requesting to change MS badge dates for {1}  from {2}-{3} to {4}-{5} on <a href=\"{6}\">{7}</a>-{8}, please review & approve or decline.</body></html>";
-        private const string BadgeRequestRevisedDatesExcpMailBody = "<html><body>{0} is requesting to change MS badge exception dates for {1}  from {2}-{3} to {4}-{5} on <a href=\"{6}\">{7}</a>-{8}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestRevisedDatesMailBody = "<html><body>{0} is requesting to change MS badge dates for {1}  from {2}-{3} to {4}-{5} for the milestone - <a href=\"{6}\">{7}</a> in {8}-{9}, please review & approve or decline.</body></html>";
+        private const string BadgeRequestRevisedDatesExcpMailBody = "<html><body>{0} is requesting to change MS badge exception dates for {1}  from {2}-{3} to {4}-{5} for the milestone - <a href=\"{6}\">{7}</a> in {8}-{9}, please review & approve or decline.</body></html>";
 
         #endregion Constants
 
@@ -1003,10 +1003,10 @@ namespace PraticeManagement
                             Id = badge.Project.Id
                         };
                         project.MailBody = badge.IsException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
-                                                             "{0}", badge.Project.ProjectNumber, badge.Project.Name) :
+                                                             "{0}",Milestone.Description, badge.Project.ProjectNumber, badge.Project.Name) :
                                                                                          string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, badge.Person.Name, badge.LastBadgeStartDate.Value.ToShortDateString(), badge.LastBadgeEndDate.Value.ToShortDateString(), badge.BadgeStartDate.Value.ToShortDateString(), badge.BadgeEndDate.Value.ToShortDateString(),
-                                                                                         "{0}", badge.Project.ProjectNumber, badge.Project.Name);
-                        ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                                         "{0}", Milestone.Description, badge.Project.ProjectNumber, badge.Project.Name);
+                        ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project,Milestone.Id.Value)); 
                     }
                     ReturnToPreviousPage();
                 }
@@ -1205,10 +1205,10 @@ namespace PraticeManagement
                                         if ((project.Status.StatusType == ProjectStatusType.Projected || project.Status.StatusType == ProjectStatusType.Active) && person.Entries[0].MSBadgeRequired && person.Entries[0].BadgeStartDate.HasValue && oldPerson.Entries[0].BadgeStartDate.HasValue && (oldPerson.Entries[0].BadgeStartDate.Value > person.Entries[0].BadgeStartDate.Value || oldPerson.Entries[0].BadgeEndDate.Value < person.Entries[0].BadgeEndDate.Value || !(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value)))
                                         {
                                             project.MailBody = person.Entries[0].BadgeException ? string.Format(BadgeRequestRevisedDatesExcpMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
-                                                         "{0}", project.ProjectNumber, project.Name) :
+                                                         "{0}",Milestone.Description, project.ProjectNumber, project.Name) :
                                                                                      string.Format(BadgeRequestRevisedDatesMailBody, loggedInPerson.Name, person.Entries[0].ThisPerson.Name, oldPerson.Entries[0].BadgeStartDate.Value.ToShortDateString(), oldPerson.Entries[0].BadgeEndDate.Value.ToShortDateString(), person.Entries[0].BadgeStartDate.Value.ToShortDateString(), person.Entries[0].BadgeEndDate.Value.ToShortDateString(),
-                                                                                     "{0}", project.ProjectNumber, project.Name);
-                                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project));
+                                                                                     "{0}",Milestone.Description, project.ProjectNumber, project.Name);
+                                            ServiceCallers.Custom.Milestone(m => m.SendBadgeRequestMail(project, Milestone.Id.Value));
                                             if (!(oldPerson.Entries[0].BadgeStartDate.Value <= person.Entries[0].BadgeEndDate.Value && person.Entries[0].BadgeStartDate.Value <= oldPerson.Entries[0].BadgeEndDate.Value))
                                                 showApprovedByOpsPopup = true;
                                         }
