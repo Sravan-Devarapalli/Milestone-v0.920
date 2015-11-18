@@ -99,14 +99,27 @@ namespace PraticeManagement.Utils
                                     bool boolvalue = false;
                                     double doubleValue;
                                     DateTime dateTimeValue;
-                                    if (Boolean.TryParse(value, out boolvalue))
-                                        cell.SetCellValue(boolvalue);
-                                    else if (double.TryParse(value, out doubleValue))
-                                        cell.SetCellValue(doubleValue);
-                                    else if (DateTime.TryParse(value, out dateTimeValue))
-                                        cell.SetCellValue(dateTimeValue);
+
+                                    var sheetNumber = GetLowerNumber(k, sheetStylesList.Count - 1);
+                                    var rowNumber = GetLowerNumber(i - tableStartRow, sheetStylesList[sheetNumber].rowStyles.Length - 1);
+                                    var cellNumber = GetLowerNumber(j, sheetStylesList[sheetNumber].rowStyles[rowNumber].cellStyles.Length - 1);
+                                    var style = sheetStylesList[sheetNumber].rowStyles[rowNumber].cellStyles[cellNumber];
+                                    if (style.DataFormat != string.Empty)
+                                    {
+                                        if (Boolean.TryParse(value, out boolvalue))
+                                            cell.SetCellValue(boolvalue);
+                                        else if (double.TryParse(value, out doubleValue))
+                                            cell.SetCellValue(doubleValue);
+                                        else if (DateTime.TryParse(value, out dateTimeValue))
+                                            cell.SetCellValue(dateTimeValue);
+                                        else
+                                            cell.SetCellValue(value);
+                                    }
                                     else
+                                    {
                                         cell.SetCellValue(value);
+                                    }
+                                    
                                 }
                                 else
                                 {
@@ -138,6 +151,10 @@ namespace PraticeManagement.Utils
                                             cell.SetCellValue(doubleValue);
                                         else
                                         cell.SetCellValue(value);
+                                    }
+                                    if (style.CellFormula != string.Empty)
+                                    {
+                                        cell.SetCellFormula(style.CellFormula);
                                     }
                                 }
                                 j++;
