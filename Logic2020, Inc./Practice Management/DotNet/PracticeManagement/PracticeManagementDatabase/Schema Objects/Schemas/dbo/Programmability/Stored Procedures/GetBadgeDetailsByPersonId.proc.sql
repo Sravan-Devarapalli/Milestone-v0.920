@@ -28,7 +28,8 @@ BEGIN
 			M.DeactivatedDate,
 			M.OrganicBreakStartDate,
 			M.OrganicBreakEndDate,
-			M.ExcludeInReports
+			M.ExcludeInReports,
+			M.ManageServiceContract
 	FROM dbo.MSBadge M
 	INNER JOIN dbo.Person P ON P.PersonId = M.PersonId
 	LEFT JOIN v_CurrentMSBadge V ON V.PersonId = M.PersonId
