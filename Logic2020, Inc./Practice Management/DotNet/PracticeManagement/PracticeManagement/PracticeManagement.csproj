@@ -562,6 +562,7 @@
     <Content Include="Reports\Badge\BadgeRequestNotApprovedReport.aspx" />
     <Content Include="Reports\Badge\BadgeResourceByTime.aspx" />
     <Content Include="Reports\Badge\ClockNotStartedReport.aspx" />
+    <Content Include="Reports\Badge\MSManagementMeetingReport.aspx" />
     <Content Include="Reports\Badge\MSReportsLandingPage.aspx" />
     <Content Include="Reports\Badge\PersonsByProject.aspx" />
     <Content Include="Reports\Badge\ResourceByBusinessConsultants.aspx" />
@@ -630,6 +631,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.GroupByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.GroupbyTitle.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ManagementMeetingReport6.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.PersonLevelPayCheck1.datasource" />
@@ -638,6 +640,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ProjectLevelTimeEntriesHistory.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ResourceExceptionReport.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.RevenueReport4.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.WorkTypeLevelGroupedHours2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.SeniorityCategory.datasource" />
@@ -777,6 +780,9 @@
     </None>
     <None Include="Service References\MilestoneService\MilestoneService1.wsdl" />
     <None Include="Service References\MilestoneService\MilestoneService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MilestoneService\MilestoneService14.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MilestoneService\MilestoneService4.xsd">
@@ -2342,6 +2348,13 @@
     </Compile>
     <Compile Include="Reports\Badge\ClockNotStartedReport.aspx.designer.cs">
       <DependentUpon>ClockNotStartedReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Badge\MSManagementMeetingReport.aspx.cs">
+      <DependentUpon>MSManagementMeetingReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Badge\MSManagementMeetingReport.aspx.designer.cs">
+      <DependentUpon>MSManagementMeetingReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Badge\MSReportsLandingPage.aspx.cs">
       <DependentUpon>MSReportsLandingPage.aspx</DependentUpon>
