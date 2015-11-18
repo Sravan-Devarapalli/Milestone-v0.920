@@ -229,14 +229,13 @@
                 Operator="DataTypeCheck" SetFocusOnError="True" ToolTip="Please enter block start date in the correct format: MM/DD/YYYY."
                 Type="Date" EnableClientScript="false">*</asp:CompareValidator>
             <asp:CustomValidator ID="custBlockStartAfterJuly" runat="server" ErrorMessage="Block start date should not be before 7/1/2014."
-                ToolTip="Block start date should not be before 7/1/2014." Display="Dynamic"
-                OnServerValidate="custBlockStartAfterJuly_ServerValidate" Text="*" EnableClientScript="false"
-                SetFocusOnError="true"></asp:CustomValidator>
+                ToolTip="Block start date should not be before 7/1/2014." Display="Dynamic" OnServerValidate="custBlockStartAfterJuly_ServerValidate"
+                Text="*" EnableClientScript="false" SetFocusOnError="true"></asp:CustomValidator>
         </td>
         <td class="MsBadgeTd1">
             Exception Start
         </td>
-        <td colspan="3">
+        <td colspan="2">
             <uc:DatePicker ID="dtpExceptionStart" runat="server" />
             <asp:RequiredFieldValidator ID="reqExceptionStart" runat="server" ControlToValidate="dtpExceptionStart"
                 ErrorMessage="Exception start date is required." ToolTip="Exception start date is required."
@@ -249,6 +248,9 @@
                 ToolTip="Exception start date should not be before 7/1/2014." Display="Dynamic"
                 OnServerValidate="cvExceptionStartAfterJuly_ServerValidate" Text="*" EnableClientScript="false"
                 SetFocusOnError="true"></asp:CustomValidator>
+        </td>
+        <td colspan="2">
+            <asp:CheckBox ID="chbManageServiceContract" runat="server" Checked="false" Text="Microsoft Managed Services Contract" />
         </td>
     </tr>
     <tr>
