@@ -36,9 +36,12 @@ BEGIN
 	BEGIN	
 		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=@MilestonePersonId,@MilestoneId = NULL
 	END
-		
-	EXEC [dbo].[UpdateMSBadgeDetailsByPersonId] @PersonId = @PersonId, @UpdatedBy = @UpdatedBy
 	
+	IF @PersonId IS NOT NULL
+	BEGIN
+		EXEC [dbo].[UpdateMSBadgeDetailsByPersonId] @PersonId = @PersonId, @UpdatedBy = @UpdatedBy
+	END
+
 		-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
