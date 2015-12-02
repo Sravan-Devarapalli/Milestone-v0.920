@@ -39,6 +39,9 @@ BEGIN
 
 	SET NOCOUNT ON;
 	
+	DECLARE @Today	DATETIME
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+
 	BEGIN TRY
 	BEGIN TRAN  T1;
 
@@ -63,9 +66,9 @@ BEGIN
 	-- Inserting Project
 	INSERT INTO dbo.Project
 	            (ClientId, Terms, Name, PracticeId,
-	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, ExecutiveInChargeId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectManagerId, SowBudget, POAmount, Discount,PricingListId,BusinessTypeId,EngagementManagerId,IsSeniorManagerUnassigned,ReviewerId,PONumber,SalesPersonId)
+	             ProjectStatusId, ProjectNumber, BuyerName, GroupId, ExecutiveInChargeId, OpportunityId, Description, CanCreateCustomWorkTypes, IsInternal, IsNoteRequired, ProjectManagerId, SowBudget, POAmount, Discount,PricingListId,BusinessTypeId,EngagementManagerId,IsSeniorManagerUnassigned,ReviewerId,PONumber,SalesPersonId,CreatedDate)
 	     VALUES (@ClientId, @Terms, @Name, @PracticeId,
-	             @ProjectStatusId, @ProjectNumberLocal, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget, @POAmount, @Discount,@PricingListId,@BusinessTypeId,@SeniorManagerId,@IsSeniorManagerUnassigned,@CSATOwnerId,@PONumber,@SalesPersonId)
+	             @ProjectStatusId, @ProjectNumberLocal, @BuyerName, @GroupId, @DirectorId, @OpportunityId, @Description, @CanCreateCustomWorkTypes, @IsInternal, @IsNoteRequired, @ProjectOwner, @SowBudget, @POAmount, @Discount,@PricingListId,@BusinessTypeId,@SeniorManagerId,@IsSeniorManagerUnassigned,@CSATOwnerId,@PONumber,@SalesPersonId,@Today)
 	
 	IF(@OpportunityId IS NOT NULL)
 	BEGIN
