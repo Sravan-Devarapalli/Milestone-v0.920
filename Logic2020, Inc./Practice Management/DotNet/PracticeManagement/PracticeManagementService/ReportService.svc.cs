@@ -316,6 +316,42 @@ namespace PracticeManagementService
         {
             return ReportDAL.GetAveragePercentagesByTitles(paytypes, personStatuses, titles, startDate, endDate);
         }
+
+        public List<Project> ProjectsListWithFilters(
+            string clientIdsList,
+            bool showProjected,
+            bool showCompleted,
+            bool showActive,
+            bool showInternal,
+            bool showExperimental,
+            bool showProposed,
+            bool showInactive,
+            DateTime periodStart,
+            DateTime periodEnd,
+            string salespersonIdsList,
+            string ProjectOwnerIdsList,
+            string practiceIdsList,
+            string projectGroupIdsList,
+            string userLogin)
+        {
+            return ReportDAL.ProjectsListWithFilters(
+                 clientIdsList,
+                 showProjected,
+                 showCompleted,
+                 showActive,
+                 showInternal,
+                 showExperimental,
+                 showProposed,
+                 showInactive,
+                 periodStart,
+                 periodEnd,
+                 salespersonIdsList,
+                 ProjectOwnerIdsList,
+                 practiceIdsList,
+                 projectGroupIdsList,
+                 userLogin
+                 );
+        }
     }
 }
 
