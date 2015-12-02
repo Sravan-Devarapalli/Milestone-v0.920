@@ -9,7 +9,7 @@
 AS
 BEGIN
 	DECLARE @InsertingTime DATETIME
-	SELECT	@InsertingTime = CONVERT(DATE, dbo.GettingPMTime(GETUTCDATE()))
+	SELECT	@InsertingTime = MAX(CacheDate) FROM ProjectSummaryCache
 	DECLARE @ProjectIDs TABLE
 	(
 		ResultId INT
