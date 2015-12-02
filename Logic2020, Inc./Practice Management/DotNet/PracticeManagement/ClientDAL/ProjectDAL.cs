@@ -3908,10 +3908,6 @@ namespace DataAccess
                     if (projects.Any(p => p.Id == projectId))
                     {
                         var project = projects.FirstOrDefault(p=>p.Id == projectId);
-                        //if (project.Milestones == null)
-                        //{
-                        //    project.Milestones = new List<Milestone>();
-                        //}
                         if (project.Milestones.Any(m => m.Id == milestoneId))
                         {
                             var projectMilestone = project.Milestones.FirstOrDefault(m => m.Id == milestoneId);
@@ -3936,6 +3932,19 @@ namespace DataAccess
                         projects.Add(project);
                     }
                 }
+            }
+        }
+
+        public static void InsertTodayProjectsIntoCache()
+        {
+            var connection = new SqlConnection(DataSourceHelper.DataConnection);
+
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.InsertTodayProjectsIntoCache, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                connection.Open();
+                command.ExecuteNonQuery();
             }
         }
     }
