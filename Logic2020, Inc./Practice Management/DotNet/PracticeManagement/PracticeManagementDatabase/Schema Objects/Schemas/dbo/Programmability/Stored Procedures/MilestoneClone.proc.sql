@@ -19,6 +19,8 @@ AS
 	BEGIN TRY
 	BEGIN TRAN  Tran_MilestoneClone
 
+	DECLARE @Today DATETIME
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
 	-- Create a milestone record
 	INSERT INTO dbo.Milestone
 	            (ProjectId, Description, Amount, StartDate, ProjectedDeliveryDate, IsHourlyAmount)
@@ -120,6 +122,10 @@ AS
 	BEGIN
 		EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneCloneId
 	END
+
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
 
     COMMIT TRAN Tran_MilestoneClone
 	END TRY
