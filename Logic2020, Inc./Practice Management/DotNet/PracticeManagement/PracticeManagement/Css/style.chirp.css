@@ -8382,3 +8382,9 @@ table#ctl00_body_login tr td label
     white-space: nowrap;
     border-left: 1px solid #000;
 }
+.ProjectsListExport
+{
+    text-align: right; 
+    padding-right: 10px; 
+    font-size: 12x;
+}
