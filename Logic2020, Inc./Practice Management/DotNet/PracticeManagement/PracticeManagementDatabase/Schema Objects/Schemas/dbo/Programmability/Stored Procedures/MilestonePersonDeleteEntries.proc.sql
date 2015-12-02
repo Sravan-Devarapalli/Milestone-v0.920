@@ -16,6 +16,19 @@ AS
 	BEGIN TRY
 	BEGIN TRAN  Tran_MilestonePersonDelete
 
+	DECLARE @Today		DATETIME,
+			@ProjectId	INT
+
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+	SELECT @ProjectId=M.ProjectId 
+	FROM dbo.MilestonePerson MP 
+	JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+	WHERE MP.MilestonePersonId = @MilestonePersonId
+
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
+
 	DELETE
 	FROM dbo.MilestonePersonEntry
 	WHERE MilestonePersonId = @MilestonePersonId
