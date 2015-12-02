@@ -16,16 +16,20 @@ BEGIN
 
 		DECLARE @MilestonePersonId   INT,
 				@PersonId INT,
-				@UpdatedBy INT
+				@UpdatedBy INT,
+				@ProjectId INT
 
 	SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
+	DECLARE @Today DATETIME
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
 
 	SELECT @MilestonePersonId = MilestonePersonId
 	FROM dbo.MilestonePersonEntry
 	WHERE Id = @Id
 	
-	SELECT @PersonId= PersonId
-	FROM dbo.MilestonePerson 
+	SELECT @PersonId= MP.PersonId, @ProjectId = M.ProjectId
+	FROM dbo.MilestonePerson MP
+	JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
 	WHERE MilestonePersonId = @MilestonePersonId
 
 	DELETE 
@@ -41,6 +45,10 @@ BEGIN
 	BEGIN
 		EXEC [dbo].[UpdateMSBadgeDetailsByPersonId] @PersonId = @PersonId, @UpdatedBy = @UpdatedBy
 	END
+
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
 
 		-- End logging session
 	EXEC dbo.SessionLogUnprepare
