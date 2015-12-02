@@ -147,22 +147,22 @@
                 <td>
                     <%# Eval("Project.Practice.HtmlEncodedName")%>
                 </td>
-                <td class="bgcolorE2EBFFImp">
+                <td class="bgcolorE2EBFFImp" sorttable_customkey='<%# IsHoursData()?Eval("ForecastedHours"): Eval("SOWBudget.Value") %>'>
                     <asp:Label ID="lblLifetoDateProjectedValue" runat="server"></asp:Label>
                 </td>
-                <td class="bgcolorE2EBFFImp">
+                <td class="bgcolorE2EBFFImp" sorttable_customkey='<%# IsHoursData() ? Eval("ActualHours"): Eval("ActualToDate.Value") %>'>
                     <asp:Label ID="lblLifetoDateActualValue" runat="server"></asp:Label>
                 </td>
-                <td class="bgcolorE2EBFFImp">
+                <td class="bgcolorE2EBFFImp" sorttable_customkey='<%# IsHoursData() ? Eval("RemainingHours"):Eval("Remaining.Value") %>'>
                     <asp:Label ID="lblLifetoDateRemainingValue" runat="server"></asp:Label>
                 </td>
-                <td class="bgColorE0DAECImp">
+                <td class="bgColorE0DAECImp" sorttable_customkey='<%# IsHoursData() ?Eval("ForecastedHoursInRange"):Eval("RangeProjected.Value")  %>'>
                     <asp:Label ID="lblRangeProjectedValue" runat="server"></asp:Label>
                 </td>
-                <td class="bgColorE0DAECImp">
+                <td class="bgColorE0DAECImp" sorttable_customkey='<%# IsHoursData() ?Eval("ActualHoursInRange") :Eval("RangeActual.Value")%>'>
                     <asp:Label ID="lblRangeActual" runat="server"></asp:Label>
                 </td>
-                <td class="bgColorE0DAECImp">
+                <td class="bgColorE0DAECImp" sorttable_customkey='<%# IsHoursData() ?Eval("DifferenceInHours") : Eval("DifferenceInCurrency.Value")%>'>
                     <asp:Label ID="lblRangeDifference" runat="server"></asp:Label>
                 </td>
                 <td>
@@ -175,7 +175,7 @@
                     <%# Eval("Project.SeniorManagerName")%>
                 </td>
                 <td>
-                    <%# Eval("Project.Director.HtmlEncodedName")%>
+                    <asp:Label ID="lblDirector" runat="server"></asp:Label>
                 </td>
                 <td>
                     <%# Eval("Project.PONumber")%>
@@ -183,33 +183,35 @@
             </tr>
         </ItemTemplate>
         <FooterTemplate>
-            <tr>
-                <th class="TextAlignLeftImp fontBold">
-                    Total
-                </th>
-                <th colspan="3">
-                </th>
-                <th class="bgcolorE2EBFFImp">
-                    <asp:Label ID="lblTotalLifetoDateProjectedValue" runat="server"></asp:Label>
-                </th>
-                <th class="bgcolorE2EBFFImp">
-                    <asp:Label ID="lblTotalLifetoDateActualValue" runat="server"></asp:Label>
-                </th>
-                <th class="bgcolorE2EBFFImp">
-                    <asp:Label ID="lblTotalLifetoDateRemainingValue" runat="server"></asp:Label>
-                </th>
-                <th class="bgColorE0DAECImp">
-                    <asp:Label ID="lblTotalRangeProjectedValue" runat="server"></asp:Label>
-                </th>
-                <th class="bgColorE0DAECImp">
-                    <asp:Label ID="lblTotalRangeActual" runat="server"></asp:Label>
-                </th>
-                <th class="bgColorE0DAECImp">
-                    <asp:Label ID="lblTotalRangeDifference" runat="server"></asp:Label>
-                </th>
-                <th colspan="5">
-                </th>
-            </tr>
+            <thead>
+                <tr>
+                    <th class="TextAlignLeftImp fontBold">
+                        Total
+                    </th>
+                    <th colspan="3">
+                    </th>
+                    <th class="bgcolorE2EBFFImp">
+                        <asp:Label ID="lblTotalLifetoDateProjectedValue" runat="server"></asp:Label>
+                    </th>
+                    <th class="bgcolorE2EBFFImp">
+                        <asp:Label ID="lblTotalLifetoDateActualValue" runat="server"></asp:Label>
+                    </th>
+                    <th class="bgcolorE2EBFFImp">
+                        <asp:Label ID="lblTotalLifetoDateRemainingValue" runat="server"></asp:Label>
+                    </th>
+                    <th class="bgColorE0DAECImp">
+                        <asp:Label ID="lblTotalRangeProjectedValue" runat="server"></asp:Label>
+                    </th>
+                    <th class="bgColorE0DAECImp">
+                        <asp:Label ID="lblTotalRangeActual" runat="server"></asp:Label>
+                    </th>
+                    <th class="bgColorE0DAECImp">
+                        <asp:Label ID="lblTotalRangeDifference" runat="server"></asp:Label>
+                    </th>
+                    <th colspan="5">
+                    </th>
+                </tr>
+            </thead>
             </tbody></table></div>
         </FooterTemplate>
     </asp:Repeater>
