@@ -501,6 +501,9 @@ namespace DataTransferObjects
         [DataMember]
         public int ExecutiveInChargeId { get; set; }
 
+        [DataMember]
+        public string ExecutiveInChargeName { get; set; }
+
         #endregion Properties
 
         #region Formatting
