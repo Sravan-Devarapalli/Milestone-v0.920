@@ -4,6 +4,7 @@
 	@PersonStatusIds	NVARCHAR(MAX)=NULL,
 	@Practices			NVARCHAR(MAX)=NULL,
 	@ProjectStatusIds	NVARCHAR(MAX)=NULL,
+	@AccountIds			NVARCHAR(MAX)=NULL,
 	@ExcludeInternalPractices	BIT
 )
 AS
@@ -13,6 +14,7 @@ BEGIN
 	DECLARE	@PersonStatusIdsTable TABLE ( Ids INT )
 	DECLARE	@PracticesTable TABLE ( Ids INT )
 	DECLARE	@ProjectStatusTable TABLE ( Ids INT )
+	DECLARE	@AccountIdsTable TABLE ( Ids INT )
 
 	INSERT INTO @PayIdsTable( Ids)
 	SELECT ResultId
@@ -30,6 +32,10 @@ BEGIN
 	SELECT ResultId
 	FROM dbo.ConvertStringListIntoTable(@ProjectStatusIds)
 
+	INSERT INTO @AccountIdsTable( Ids)
+	SELECT ResultId
+	FROM dbo.ConvertStringListIntoTable(@AccountIds)
+
 	SELECT	DISTINCT P.ProjectId,
 			P.ProjectNumber,
 			P.Name AS ProjectName,
@@ -39,6 +45,8 @@ BEGIN
 			M.StartDate AS MilestoneStartDate,
 			M.ProjectedDeliveryDate AS MilestoneEndDate,
 			M.Description,
+			MPE.StartDate AS MilestoneResourceStartDate,
+			MPE.EndDate AS MilestoneResourceEndDate,
 			Per.PersonId,
 			ISNULL(Per.PreferredFirstName,Per.FirstName) AS FirstName,
 			Per.LastName,
@@ -61,11 +69,13 @@ BEGIN
 	JOIN dbo.v_CurrentMSBadge CMB ON CMB.PersonId = MP.PersonId
 	JOIN dbo.MSBadge MB ON MB.PersonId = MP.PersonId
 	JOIN dbo.Practice Pra ON Pra.PracticeId = P.PracticeId
-	WHERE (@PayTypeIds IS NULL OR (pay.Timescale IN (SELECT Ids FROM @PayIdsTable)))
+	WHERE (@ProjectStatusIds IS NULL OR P.ProjectStatusId IN (SELECT Ids FROM @ProjectStatusTable))
+		  AND (@AccountIds IS NULL OR P.ClientId IN (SELECT Ids FROM @AccountIdsTable))
+		  AND (@PayTypeIds IS NULL OR (pay.Timescale IN (SELECT Ids FROM @PayIdsTable)))
 		  AND (@PersonStatusIds IS NULL OR Per.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable))
 		  AND P.PracticeId IN (SELECT Ids FROM @PracticesTable)
 		  AND (@ExcludeInternalPractices = 0 OR (@ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0))
-		  AND (@ProjectStatusIds IS NULL OR P.ProjectStatusId IN (SELECT Ids FROM @ProjectStatusTable))
 		  AND Per.IsStrawman = 0
 	ORDER BY P.ProjectNumber,M.StartDate,m.Description,Per.LastName,ISNULL(Per.PreferredFirstName,Per.FirstName)
 END
+
