@@ -49,22 +49,22 @@ namespace PraticeManagement.Reports.Badge {
         protected global::System.Web.UI.WebControls.HiddenField hdncpeMilestoneExtIds;
         
         /// <summary>
-        /// cblPayTypes control.
+        /// cblClient control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ScrollingDropDown cblPayTypes;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblClient;
         
         /// <summary>
-        /// sdePayTypes control.
+        /// sdeCblClient control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePayTypes;
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblClient;
         
         /// <summary>
         /// cblProjectTypes control.
@@ -85,22 +85,22 @@ namespace PraticeManagement.Reports.Badge {
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeProjectTypes;
         
         /// <summary>
-        /// cblPersonStatus control.
+        /// cblPayTypes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.ScrollingDropDown cblPersonStatus;
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblPayTypes;
         
         /// <summary>
-        /// sdePersonStatus control.
+        /// sdePayTypes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePersonStatus;
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePayTypes;
         
         /// <summary>
         /// cblPractices control.
@@ -119,6 +119,24 @@ namespace PraticeManagement.Reports.Badge {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePractices;
+        
+        /// <summary>
+        /// cblPersonStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblPersonStatus;
+        
+        /// <summary>
+        /// sdePersonStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdePersonStatus;
         
         /// <summary>
         /// chkExcludeInternalPractices control.
