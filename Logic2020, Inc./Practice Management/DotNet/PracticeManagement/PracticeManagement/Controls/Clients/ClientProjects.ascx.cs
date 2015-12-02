@@ -18,12 +18,25 @@ namespace PraticeManagement.Controls.Clients
 
         }
 
-        protected void btnProjectName_Command(object sender, CommandEventArgs e)
+        public string GetProjectLinkURL(object sender)
         {
-            ((PracticeManagementPageBase)Page).Redirect(
-                string.Format(Constants.ApplicationPages.DetailRedirectFormat,
+            int projectId;
+            if (sender is Project)
+            {
+                var project = sender as Project;
+                projectId = project.Id.Value;
+            }
+            else if (sender == null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                projectId = (int)sender;
+            }
+            return PraticeManagement.Utils.Generic.GetTargetUrlWithReturn(string.Format(Constants.ApplicationPages.DetailRedirectFormat,
                     Constants.ApplicationPages.ProjectDetail,
-                    e.CommandArgument));
+                    projectId), Request.Url.AbsoluteUri + (Request.Url.Query.Length > 0 ? string.Empty : Constants.FilterKeys.QueryStringOfApplyFilterFromCookie));
         }
 
         public bool CheckIfDefaultProject(object projectIdObj)
