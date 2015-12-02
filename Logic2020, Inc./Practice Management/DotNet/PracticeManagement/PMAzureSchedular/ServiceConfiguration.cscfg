@@ -8,7 +8,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="DBConnection" value="Server=tcp:gdl05wmfhe.database.windows.net;Database=PracticeManagement;User ID=pracadmin@gdl05wmfhe;Password=Meatballs#;Trusted_Connection=False;Encrypt=True;" />
       <Setting name="LogEnabled" value="true" />
-      <Setting name="RunSchedularDailyAtTime" value="02:00:00" />
+      <Setting name="RunSchedularDailyAtTime" value="01:50:00" />
       <!--HH:mm:ss and 24 hour time format-->
       <Setting name="SkillsProfilePagePath" value="https://practice.logic2020.com/SkillsProfile.aspx" />
       <!--https://practice.logic2020.com/SkillsProfile.aspx-->
