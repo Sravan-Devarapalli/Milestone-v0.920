@@ -584,6 +584,12 @@ namespace DataTransferObjects
         [DataMember]
         public List<Project> Projects { get; set; }
 
+        [DataMember]
+        public DateTime ResourceStartDate { get; set; }
+
+        [DataMember]
+        public DateTime ResourceEndDate { get; set; }
+
         public string FormattedName
         {
             get
