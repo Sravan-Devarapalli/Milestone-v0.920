@@ -243,19 +243,19 @@ namespace PraticeManagement.Objects
                     string milestoneLabel = "";
                     for (int j = 0; j < _Lables.Length; j++)
                     {
-                        if (count < 6 && j + 1 < _Lables.Length && _Lables[j + 1] == "!!!")
+                        if (count < 8 && j + 1 < _Lables.Length && _Lables[j + 1] == "!!!")
                         {
                             count++;
                             if (count == 1)
                             {
                                 milestoneLabel = _Lables[j];
                             }
-                            if (count == 6)
+                            if (count == 8)
                             {
                                 PdfPCell ContentLable = new PdfPCell(new Phrase(milestoneLabel));
                                 ContentLable.MinimumHeight = 20;
                                 //ContentLable.FixedHeight = 25;
-                                ContentLable.Colspan = 6;
+                                ContentLable.Colspan = 8;
                                 _Pdftable.AddCell(ContentLable);
                             }
                         }
