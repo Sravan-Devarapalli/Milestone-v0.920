@@ -22,6 +22,9 @@ BEGIN
 	DECLARE @MilestoneCount INT
 	SELECT @MilestoneCount = COUNT(*) FROM dbo.Milestone WHERE ProjectId = @ProjectId
 
+	DECLARE @Today DATETIME
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+
 	DECLARE	@W2SalaryTimescaleId INT,
 			@W2HourlyTimescaleId INT 
 	SELECT	@W2SalaryTimescaleId = TimescaleId FROM dbo.Timescale WHERE Name = 'W2-Salary'
@@ -71,6 +74,11 @@ BEGIN
 		
 
 	END
+
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
+
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 END
