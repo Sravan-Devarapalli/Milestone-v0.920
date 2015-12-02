@@ -711,6 +711,11 @@ namespace PraticeManagement.Controls
 
             }
             UpdateCompensationState();
+            if (IsMarginTestPage)
+            {
+                txtVacationDays.MaxLength = 3;
+                compVacationDays.Enabled = true;
+            }
         }
 
         public void SaveAllLockdownViewStates()
