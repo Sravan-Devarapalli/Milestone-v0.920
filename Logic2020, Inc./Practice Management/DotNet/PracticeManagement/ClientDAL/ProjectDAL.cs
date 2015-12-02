@@ -3817,13 +3817,14 @@ namespace DataAccess
             return project;
         }
 
-        public static List<Project> PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal)
+        public static List<Project> PersonsByProjectReport(string accountIds, string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Project.PersonsByProjectReport, connection))
             {
                 command.CommandType = CommandType.StoredProcedure;
                 command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.AccountIdsParam, accountIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PayTypeIds, payTypeIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonStatusIds, personStatusIds);
                 command.Parameters.AddWithValue(Constants.ParameterNames.Practices, practices);
@@ -3853,6 +3854,8 @@ namespace DataAccess
                 int milestoneStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneStartDate);
                 int milestoneEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneEndDate);
                 int descriptionColumnIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+                int milestoneResourceStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneResourceStartDate);
+                int milestoneResourceEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneResourceEndDate);
                 int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
                 int firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
                 int lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
@@ -3895,7 +3898,9 @@ namespace DataAccess
                         {
                             Id = reader.GetInt32(personStatusIdIndex),
                             Name = reader.GetString(personStatusNameIndex)
-                        }
+                        },
+                        ResourceStartDate = reader.GetDateTime(milestoneResourceStartDateIndex),
+                        ResourceEndDate = reader.GetDateTime(milestoneResourceEndDateIndex)
                     };
                     var milestone = new Milestone()
                     {
