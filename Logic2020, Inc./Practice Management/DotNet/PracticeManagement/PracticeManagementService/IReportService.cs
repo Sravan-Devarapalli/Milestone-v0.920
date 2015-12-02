@@ -192,6 +192,26 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<GroupbyTitle> GetAveragePercentagesByTitles(string paytypes, string personStatuses, string titles, DateTime startDate, DateTime endDate);
+
+        [OperationContract]
+        List<Project> ProjectsListWithFilters(
+           string clientIdsList,
+           bool showProjected,
+           bool showCompleted,
+           bool showActive,
+           bool showInternal,
+           bool showExperimental,
+           bool showProposed,
+           bool showInactive,
+           DateTime periodStart,
+           DateTime periodEnd,
+           string salespersonIdsList,
+           string ProjectOwnerIdsList,
+           string practiceIdsList,
+           string projectGroupIdsList,
+           string userLogin
+           );
+    
     }
 }
 
