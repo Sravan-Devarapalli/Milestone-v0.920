@@ -15,8 +15,15 @@ AS
 	DECLARE @ErrorMessage NVARCHAR(2048),
 			@ProjectId	  INT
 
+	DECLARE @Today DATETIME
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+
 	SELECT @ProjectId = ProjectId
 	FROM dbo.Milestone WHERE MilestoneId = @MilestoneId
+
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
 
 	IF EXISTS (SELECT TOP 1 1 FROM dbo.v_TimeUnrestrictedEntriesUnrestricted AS te WHERE te.MilestoneId = @MilestoneId)
 	BEGIN
