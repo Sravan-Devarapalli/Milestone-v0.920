@@ -9,6 +9,10 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string MilestoneResourceEndDate = "MilestoneResourceEndDate";
+            public const string MilestoneResourceStartDate = "MilestoneResourceStartDate";
+            public const string ProjectManagerNameColumn = "ProjectManagerName";
+            public const string ExecutiveInChargeNameColumn = "ExecutiveInCharge";
             public const string Inactive = "Inactive";
             public const string TotalCount = "TotalCount";
             public const string ActualRevenuePerHour = "ActualRevenuePerHour";
@@ -1372,6 +1376,7 @@
 
             public class Reports
             {
+                public const string ProjectsListWithFilters = "dbo.GetProjectsListWithFilters";
                 public const string GetAveragePercentagesByTitles = "dbo.GetAveragePercentagesByTitles";
                 public const string GetManagedParametersByPerson = "dbo.GetManagedParametersByPerson";
                 public const string ManagedServiceReportByPerson = "dbo.ManagedServiceReportByPerson";
@@ -1477,6 +1482,7 @@
 
             public class Project
             {
+                public const string InsertTodayProjectsIntoCache = "dbo.InsertTodayProjectsIntoCache";
                 public const string PersonsByProjectReport = "dbo.PersonsByProjectReport";
                 public const string GetBaseLineValues = "dbo.GetBaseLineValues";
                 public const string CreateBaseLine = "dbo.CreateBaseLine";
