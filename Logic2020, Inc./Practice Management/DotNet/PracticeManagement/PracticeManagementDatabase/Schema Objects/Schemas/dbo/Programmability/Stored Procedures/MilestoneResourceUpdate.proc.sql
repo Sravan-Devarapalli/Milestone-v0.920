@@ -23,6 +23,15 @@ BEGIN
 		SELECT	@MilestoneIdLocal =@MilestoneId,
 				@StartDateLocal = @StartDate,
 				@ProjectedDeliveryDateLocal = @ProjectedDeliveryDate
+
+		DECLARE @Today		DATETIME,
+				@ProjectId	INT
+
+		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+		SELECT @ProjectId=ProjectId 
+		FROM dbo.Milestone 
+		WHERE MilestoneId = @MilestoneId
+
 		 
 		DECLARE @DefaultStartDate DATETIME = '20140701'
 		DECLARE @MinDate DATETIME = '19000101'
@@ -251,6 +260,11 @@ BEGIN
 	BEGIN
 		EXEC [dbo].[InsertProjectFeedbackByMilestonePersonId] @MilestonePersonId=NULL,@MilestoneId = @MilestoneIdLocal
 	END
+	
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
+
 	COMMIT TRAN Tran_MilestoneResourceUpdate
 	END TRY
 	BEGIN CATCH
