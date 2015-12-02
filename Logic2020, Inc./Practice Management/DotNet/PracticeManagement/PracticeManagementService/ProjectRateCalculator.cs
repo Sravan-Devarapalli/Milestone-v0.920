@@ -121,11 +121,11 @@ namespace PracticeManagementService
                     break;
 
                 case ProjectCalculateRangeType.TotalProjectValue:
-                    ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(
+                    ProjectDAL.InsertTodayProjectsIntoCache();
+                    ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjectsFromCache(
                         result,
                         null,
-                        null,
-                        useActuals);
+                        null);
                     break;
 
                 case ProjectCalculateRangeType.CurrentFiscalYear:
@@ -450,3 +450,4 @@ namespace PracticeManagementService
         #endregion Methods
     }
 }
+
