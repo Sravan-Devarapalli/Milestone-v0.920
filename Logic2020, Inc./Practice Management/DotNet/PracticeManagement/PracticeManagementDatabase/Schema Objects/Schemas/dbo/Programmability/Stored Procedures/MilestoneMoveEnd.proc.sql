@@ -11,6 +11,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @Today		DATETIME,
+			@ProjectId	INT
+
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+	SELECT @ProjectId=ProjectId FROM dbo.Milestone WHERE MilestoneId = @MilestoneId
 	-- Update milestone end date
 	UPDATE dbo.Milestone
 	   SET ProjectedDeliveryDate = DATEADD(dd, @ShiftDays, ProjectedDeliveryDate)
@@ -30,5 +35,9 @@ BEGIN
 	       INNER JOIN dbo.MilestonePerson AS mp ON mpe.MilestonePersonId = mp.MilestonePersonId
 	       INNER JOIN dbo.Milestone AS sh ON mp.MilestoneId = sh.MilestoneId
 	 WHERE sh.MilestoneId = @MilestoneId AND mpe.MilestonePersonId = @MilestonePersonId
+
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
 END
 
