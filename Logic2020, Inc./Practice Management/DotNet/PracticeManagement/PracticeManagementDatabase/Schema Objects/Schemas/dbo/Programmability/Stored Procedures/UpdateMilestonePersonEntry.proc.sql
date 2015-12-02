@@ -28,12 +28,22 @@ BEGIN
 
 	DECLARE @MilestoneId INT , @OldPersonId INT, @UpdatedBy INT, @CurrentPMTime DATETIME,@OldRequestDate DATETIME
 
+	DECLARE @Today		DATETIME,
+				@ProjectId	INT
+
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+
+
 	SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
 	SELECT @CurrentPMTime = dbo.GettingPMTime(GETUTCDATE())
 
 	SELECT @MilestoneId = mp.MilestoneId,@OldPersonId = mp.PersonId,@OldRequestDate = BadgeRequestDate FROM dbo.MilestonePerson AS mp
 	INNER JOIN dbo.MilestonePersonEntry AS mpe ON mpe.MilestonePersonId = mp.MilestonePersonId
 	WHERE mp.MilestonePersonId = @MilestonePersonId AND mpe.Id = @Id
+
+	SELECT @ProjectId=ProjectId 
+	FROM dbo.Milestone 
+	WHERE MilestoneId = @MilestoneId
 
 	SELECT @RequestDate = ISNULL(@RequestDate,@OldRequestDate)	
 
@@ -83,6 +93,10 @@ BEGIN
 	IF @OldPersonId IS NOT NULL
 		EXEC UpdateMSBadgeDetailsByPersonId @PersonId = @OldPersonId,@UpdatedBy = @UpdatedBy
 	
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
+
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
 
