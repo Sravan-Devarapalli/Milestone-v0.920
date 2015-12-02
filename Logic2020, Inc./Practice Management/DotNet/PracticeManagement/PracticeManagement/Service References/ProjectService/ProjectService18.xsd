@@ -2,7 +2,7 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
   <xs:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
-  <xs:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
   <xs:element name="GetProjectsListByProjectGroupId">
     <xs:complexType>
@@ -368,6 +368,7 @@
   <xs:element name="PersonsByProjectReport">
     <xs:complexType>
       <xs:sequence>
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="payTypeIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="practices" nillable="true" type="xs:string" />
