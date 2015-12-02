@@ -263,6 +263,7 @@ namespace PraticeManagement.Controls.Reports
                 var lblRangeProjectedValue = e.Item.FindControl("lblRangeProjectedValue") as Label;
                 var lblRangeActual = e.Item.FindControl("lblRangeActual") as Label;
                 var lblRangeDifference = e.Item.FindControl("lblRangeDifference") as Label;
+                var lblDirector = e.Item.FindControl("lblDirector") as Label;
                 var dataitem = (BillingReport)e.Item.DataItem;
                 if (HostingPage.IsHoursUnitOfMeasure)
                 {
@@ -283,6 +284,7 @@ namespace PraticeManagement.Controls.Reports
                     lblRangeDifference.Text = dataitem.DifferenceInCurrency.ToString();
                 }
                 lblProjectManagers.Text = (dataitem.Project.ProjectManagers == null || dataitem.Project.ProjectManagers.Count == 0) ? string.Empty : dataitem.ProjectMangers;
+                lblDirector.Text = dataitem.Project.Director.Id.HasValue ? dataitem.Project.Director.HtmlEncodedName : string.Empty;
             }
             if (e.Item.ItemType == ListItemType.Footer)
             {
@@ -326,6 +328,11 @@ namespace PraticeManagement.Controls.Reports
             HostingPage.DirectorFilteredIds = cblDirectorFilter.SelectedItems;
             HostingPage.AccountFilteredIds = cblAccountFilter.SelectedItems;
             PopulateData(false);
+        }
+
+        public bool IsHoursData()
+        {
+            return HostingPage.IsHoursUnitOfMeasure;
         }
 
         public void PopulateData(bool isPopulateFilters = true)
@@ -485,8 +492,6 @@ namespace PraticeManagement.Controls.Reports
                   cblSeniorManager.SelectedIndexes, cblSeniorManager.CheckBoxListObject.ClientID, cblSeniorManager.WaterMarkTextBoxBehaviorID);
                 ImgDirectorFilter.Attributes["onclick"] = string.Format("Filter_Click(\'{0}\',\'{1}\',\'{2}\',\'{3}\');", cblDirectorFilter.FilterPopupClientID,
                   cblDirectorFilter.SelectedIndexes, cblDirectorFilter.CheckBoxListObject.ClientID, cblDirectorFilter.WaterMarkTextBoxBehaviorID);
-
-
             }
             else
             {
@@ -513,7 +518,7 @@ namespace PraticeManagement.Controls.Reports
             PopulateSalespersonFilter(salespersons.Distinct().ToArray());
             PopulateProjectManagerFilter(projectManagersList.Distinct().Where(p => p.Id != null).ToArray());
             PopulateSeniorManagerFilter(seniorManagers.Distinct().Where(p => p.Id != -1).ToArray());
-            PopulateDirectorFilter(directors.Distinct().ToArray());
+            PopulateDirectorFilter(directors.Where(d=>d.Id.HasValue).Distinct().ToArray());
 
             cblAccountFilter.SaveSelectedIndexesInViewState();
             cblPracticeFilter.SaveSelectedIndexesInViewState();
@@ -596,7 +601,7 @@ namespace PraticeManagement.Controls.Reports
                                     report.Project.SalesPersonName,
                                     report.ProjectMangers,
                                     report.Project.SeniorManagerName,
-                                    report.Project.Director,
+                                    report.Project.Director.Id.HasValue?report.Project.Director.Name:string.Empty,
                                     report.Project.PONumber
                                      };
                 }
@@ -617,7 +622,7 @@ namespace PraticeManagement.Controls.Reports
                                         report.Project.SalesPersonName,
                                         report.ProjectMangers,
                                         report.Project.SeniorManagerName,
-                                        report.Project.Director,
+                                        report.Project.Director.Id.HasValue?report.Project.Director.Name:string.Empty,
                                         report.Project.PONumber
                                         };
 
