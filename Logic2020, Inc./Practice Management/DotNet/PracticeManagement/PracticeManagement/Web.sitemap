@@ -52,6 +52,9 @@
         <siteMapNode url="~/Reports/Badge/BadgeRequestNotApprovedReport.aspx" title="Badge Requests Not Yet Approved"  VirtualPath="~/Reports/Badge/BadgeRequestNotApprovedReport.aspx" QuickLinkTitle="Badge Requests Not Yet Approved"  description="Badge Requests Not Yet Approved" ShowURL="true"/>
         <siteMapNode url="~/Reports/Badge/AllEmployees18MoClockReport.aspx" title="All Employees' 18-Month Clock Dates"  VirtualPath="~/Reports/Badge/AllEmployees18MoClockReport.aspx" QuickLinkTitle="All Employees' 18-Month Clock Dates"  description="All Employees' 18-Month Clock Dates" ShowURL="true"/>
       </siteMapNode>-->
+      <siteMapNode url="Temp.aspx?from=Projects" title="Projects">
+        <siteMapNode url="~/Reports/ProjectsList.aspx" title="Projects List"  VirtualPath="~/Reports/ProjectsList.aspx" QuickLinkTitle="Projects List"  description="Projects List" ShowURL="true"/>
+      </siteMapNode>
     </siteMapNode>
     <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
       <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
