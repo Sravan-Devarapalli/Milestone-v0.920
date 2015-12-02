@@ -579,6 +579,7 @@
     <Content Include="Reports\NonBillableReport.aspx" />
     <Content Include="Reports\PersonDetailTimeReport.aspx" />
     <Content Include="Reports\ProjectFeedbackReport.aspx" />
+    <Content Include="Reports\ProjectsList.aspx" />
     <Content Include="Reports\ProjectSummaryReport.aspx" />
     <Content Include="Reports\TerminationReport.aspx" />
     <Content Include="Reports\TimeEntryReport_new.aspx" />
@@ -2467,6 +2468,13 @@
     </Compile>
     <Compile Include="Reports\ProjectFeedbackReport.aspx.designer.cs">
       <DependentUpon>ProjectFeedbackReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ProjectsList.aspx.cs">
+      <DependentUpon>ProjectsList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ProjectsList.aspx.designer.cs">
+      <DependentUpon>ProjectsList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\ProjectSummaryReport.aspx.cs">
       <DependentUpon>ProjectSummaryReport.aspx</DependentUpon>
