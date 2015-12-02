@@ -5,10 +5,10 @@
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
+      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd8" />
       <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
