@@ -27,7 +27,13 @@ AS
 
 	DECLARE @UpdatedBy  INT,
 			@RequestDate DATETIME=NULL,
-			@CurrentPMTime DATETIME
+			@CurrentPMTime DATETIME,
+			@ProjectId INT
+
+	SELECT @ProjectId = M.ProjectId
+	FROM dbo.MilestonePerson MP
+	JOIN dbo.Milestone M ON M.MilestoneId = MP.MilestoneId
+	WHERE MP.MilestonePersonId = @MilestonePersonId
 
 	SELECT @UpdatedBy = PersonId FROM dbo.Person WHERE Alias = @UserLogin
 
@@ -56,6 +62,10 @@ AS
 	END
 
 	EXEC dbo.UpdateMSBadgeDetailsByPersonId @PersonId = @PersonId, @UpdatedBy = @UpdatedBy
+
+	UPDATE dbo.Project
+	SET CreatedDate = @CurrentPMTime
+	WHERE ProjectId = @ProjectId
 
 	-- End logging session
 	EXEC dbo.SessionLogUnprepare
