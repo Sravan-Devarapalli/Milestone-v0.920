@@ -852,9 +852,11 @@ namespace PracticeManagementService
         {
             try
             {
+                ProjectDAL.InsertTodayProjectsIntoCache();
+
                 var projectsList = ProjectDAL.ProjectsAll();
 
-                ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjects(projectsList, null, null, true);
+                ComputedFinancialsDAL.LoadTotalFinancialsPeriodForProjectsFromCache(projectsList, null, null);
 
                 MilestonePersonDAL.LoadMilestonePersonListForProject(projectsList);
 
