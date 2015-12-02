@@ -1,0 +1,10 @@
+﻿CREATE FUNCTION [dbo].[GetDefaultPTOProject]()
+RETURNS INT
+WITH SCHEMABINDING
+AS
+BEGIN
+	 DECLARE @Id INT
+	 SELECT @Id= ProjectId FROM dbo.Project WHERE ProjectNumber = 'P031000'
+
+	 RETURN @Id
+END
