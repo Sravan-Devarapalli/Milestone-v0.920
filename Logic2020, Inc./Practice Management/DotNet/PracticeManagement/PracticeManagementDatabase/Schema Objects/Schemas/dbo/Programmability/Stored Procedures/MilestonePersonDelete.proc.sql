@@ -18,6 +18,9 @@ AS
 			@EndDate	DATETIME,
 			@ProjectId  INT
 
+	DECLARE @Today DATETIME
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+	
 	SELECT @PersonId = MP.PersonId, @StartDate = MIN(MPE.StartDate), @EndDate = MAX(MPE.EndDate),@ProjectId = m.ProjectId
 	FROM dbo.MilestonePerson MP
 	JOIN dbo.MilestonePersonEntry MPE ON MP.MilestonePersonId = MPE.MilestonePersonId
@@ -42,6 +45,10 @@ AS
 
 		EXEC dbo.MilestonePersonDeleteEntries @MilestonePersonId = @MilestonePersonId
 		
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
+
 		DELETE
 		  FROM dbo.MilestonePerson
 		 WHERE MilestonePersonId = @MilestonePersonId
