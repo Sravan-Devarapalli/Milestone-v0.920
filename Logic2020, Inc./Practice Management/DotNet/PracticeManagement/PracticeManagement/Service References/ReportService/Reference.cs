@@ -85,8 +85,8 @@ namespace PraticeManagement.ReportService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/GetAveragePercentagesByTitles", ReplyAction="http://tempuri.org/IReportService/GetAveragePercentagesByTitlesResponse")]
         DataTransferObjects.Reports.GroupbyTitle[] GetAveragePercentagesByTitles(string paytypes, string personStatuses, string titles, System.DateTime startDate, System.DateTime endDate);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectsListWithMultiParameters", ReplyAction="http://tempuri.org/IReportService/ProjectsListWithMultiParametersResponse")]
-        DataTransferObjects.Project[] ProjectsListWithMultiParameters(string clientIdsList, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string ProjectOwnerIdsList, string practiceIdsList, string projectGroupIdsList);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/ProjectsListWithFilters", ReplyAction="http://tempuri.org/IReportService/ProjectsListWithFiltersResponse")]
+        DataTransferObjects.Project[] ProjectsListWithFilters(string clientIdsList, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string ProjectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, string userLogin);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails", ReplyAction="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse")]
         DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate);
@@ -228,7 +228,7 @@ namespace PraticeManagement.ReportService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ReportServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ReportService.IReportService>, PraticeManagement.ReportService.IReportService {
-       
+        
         public ReportServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -330,8 +330,8 @@ namespace PraticeManagement.ReportService {
             return base.Channel.GetAveragePercentagesByTitles(paytypes, personStatuses, titles, startDate, endDate);
         }
         
-        public DataTransferObjects.Project[] ProjectsListWithMultiParameters(string clientIdsList, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string ProjectOwnerIdsList, string practiceIdsList, string projectGroupIdsList) {
-            return base.Channel.ProjectsListWithMultiParameters(clientIdsList, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, ProjectOwnerIdsList, practiceIdsList, projectGroupIdsList);
+        public DataTransferObjects.Project[] ProjectsListWithFilters(string clientIdsList, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, System.DateTime periodStart, System.DateTime periodEnd, string salespersonIdsList, string ProjectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, string userLogin) {
+            return base.Channel.ProjectsListWithFilters(clientIdsList, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, periodStart, periodEnd, salespersonIdsList, ProjectOwnerIdsList, practiceIdsList, projectGroupIdsList, userLogin);
         }
         
         public DataTransferObjects.Reports.TimeEntriesGroupByClientAndProject[] PersonTimeEntriesDetails(int personId, System.DateTime startDate, System.DateTime endDate) {
