@@ -1053,9 +1053,9 @@ namespace PracticeManagementService
             return ProjectDAL.ProjectGetShortById(projectId);
         }
 
-        public List<Project> PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal)
+        public List<Project> PersonsByProjectReport(string accountIds,string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal)
         {
-            return ProjectDAL.PersonsByProjectReport(payTypeIds, personStatusIds, practices, projectStatusIds, excludeInternal);
+            return ProjectDAL.PersonsByProjectReport(accountIds, payTypeIds, personStatusIds, practices, projectStatusIds, excludeInternal);
         }
 
         #endregion IProjectService Members
