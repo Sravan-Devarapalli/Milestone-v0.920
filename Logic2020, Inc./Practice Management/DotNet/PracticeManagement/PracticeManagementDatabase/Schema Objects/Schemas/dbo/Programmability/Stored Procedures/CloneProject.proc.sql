@@ -15,6 +15,9 @@ AS
 	    SELECT @IsInternal = IsInternal FROM dbo.Project WHERE ProjectId = @ProjectId
 		EXEC dbo.GenerateNewProjectNumber @IsInternal, @ProjectNumber OUTPUT ;
 
+		DECLARE @Today DATETIME
+		SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+
         INSERT INTO dbo.Project
 	            (ClientId, 
 				 Discount, 
@@ -124,6 +127,10 @@ AS
 			WHERE	A.ProjectId = @projectId
          	
             END
+
+		UPDATE dbo.Project
+		SET CreatedDate = @Today
+		WHERE ProjectId = @ClonedProjectId
 
         COMMIT TRANSACTION TR_CloneProject
 
