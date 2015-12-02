@@ -527,6 +527,28 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public string SelectedItemsText
+        {
+            get
+            {
+                // Check if nothing is displayed and what type should we return
+                if (Items.Count == 0 && NoItemsType == NoItemsBehaviour.All)
+                    return null;
+
+                // Check if All checkbox is checked
+                if (Items.Count > 0 && Items[0].Selected && AllSelectedReturnType == AllSelectedType.Null)
+                    return null;
+
+                // If not, build comma separated list of values
+                var clientList = new StringBuilder();
+                foreach (ListItem item in Items)
+                    if (item.Selected)
+                        clientList.Append(item.Text).Append(',');
+
+                return clientList.ToString();
+            }
+        }
+
         public void SelectItems(List<int> toSelectList)
         {
             if (toSelectList == null)
