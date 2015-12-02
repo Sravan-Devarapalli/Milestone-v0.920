@@ -74,7 +74,8 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compStartDate;
-        
+
+        protected global::System.Web.UI.WebControls.CompareValidator compVacationDays;
         /// <summary>
         /// dpEndDate control.
         /// </summary>
