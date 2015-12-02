@@ -26,7 +26,7 @@ BEGIN
 	SELECT ResultId 
 	FROM [dbo].[ConvertStringListIntoTable] (@PayTypeIds)
 
-	SELECT P.PersonId,P.FirstName,P.LastName
+	SELECT P.PersonId,P.FirstName,P.LastName,P.IsDefaultManager
 	FROM dbo.Person P
 	INNER JOIN Pay pay ON pay.Person = P.PersonId
 	WHERE P.PersonStatusId IN (SELECT StatusId FROM @StatusIdTable)
@@ -35,3 +35,4 @@ BEGIN
 	AND P.IsStrawman = 0
 
 END
+
