@@ -1227,18 +1227,18 @@ namespace DataAccess
                         NonBillableHours = !reader.IsDBNull(nonBillableHoursIndex) ? reader.GetDouble(nonBillableHoursIndex) : 0d,
                         TimeType = new TimeTypeRecord()
                         {
-                            Name =!reader.IsDBNull(timeTypeNameIndex) ?  reader.GetString(timeTypeNameIndex):string.Empty,
+                            Name = !reader.IsDBNull(timeTypeNameIndex) ? reader.GetString(timeTypeNameIndex) : string.Empty,
                             Code = !reader.IsDBNull(timeTypeCodeIndex) ? reader.GetString(timeTypeCodeIndex) : string.Empty
                         },
                         BillRate = !reader.IsDBNull(billRateIndex) ? Convert.ToDouble(reader.GetDecimal(billRateIndex)) : 0d
                     };
                     if (forecastedHoursDailyIndex > -1)
                     {
-                        dayTotalHoursbyWorkType.ForecastedHoursDaily = !reader.IsDBNull(forecastedHoursDailyIndex) ?  Convert.ToDouble(reader.GetDecimal(forecastedHoursDailyIndex)) : 0d;
+                        dayTotalHoursbyWorkType.ForecastedHoursDaily = !reader.IsDBNull(forecastedHoursDailyIndex) ? Convert.ToDouble(reader.GetDecimal(forecastedHoursDailyIndex)) : 0d;
                     }
                     if (billingTypeIndex > -1)
                     {
-                        dayTotalHoursbyWorkType.BillingType = !reader.IsDBNull(billingTypeIndex) ? reader.GetString(billingTypeIndex):string.Empty;
+                        dayTotalHoursbyWorkType.BillingType = !reader.IsDBNull(billingTypeIndex) ? reader.GetString(billingTypeIndex) : string.Empty;
                     }
                     dt = new TimeEntriesGroupByDate()
                     {
@@ -4530,7 +4530,7 @@ namespace DataAccess
             }
         }
 
-        public static List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes,string personStatusIds, DateTime startDate, DateTime endDate, int step)
+        public static List<BadgedResourcesByTime> BadgedResourcesByTimeReport(string payTypes, string personStatusIds, DateTime startDate, DateTime endDate, int step)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.BadgedResourcesByTimeReport, connection))
@@ -4804,9 +4804,9 @@ namespace DataAccess
                         badgeResource.OrganicBreakStartDate = reader.IsDBNull(organicBreakStartIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakStartIndex);
                     if (organicBreakEndIndex != -1)
                         badgeResource.OrganicBreakEndDate = reader.IsDBNull(organicBreakEndIndex) ? null : (DateTime?)reader.GetDateTime(organicBreakEndIndex);
-                    if (clockStartDateIndex !=-1)
+                    if (clockStartDateIndex != -1)
                         badgeResource.ProjectBadgeStartDate = reader.IsDBNull(clockStartDateIndex) ? null : (DateTime?)reader.GetDateTime(clockStartDateIndex);
-                    if(clockEnddateIndex!=-1)
+                    if (clockEnddateIndex != -1)
                         badgeResource.ProjectBadgeEndDate = reader.IsDBNull(clockEnddateIndex) ? null : (DateTime?)reader.GetDateTime(clockEnddateIndex);
                     if (clientIdIndex != -1)
                     {
@@ -4817,7 +4817,7 @@ namespace DataAccess
                             ProjectNumber = reader.GetString(projectNumberIndex),
                             Client = new Client()
                             {
-                                Id= reader.GetInt32(clientIdIndex),
+                                Id = reader.GetInt32(clientIdIndex),
                                 Name = reader.GetString(clientNameIndex)
                             },
                             StartDate = reader.GetDateTime(startDateIndex),
@@ -4826,7 +4826,7 @@ namespace DataAccess
                     }
                     if (isApprovedByOpsIndex != -1)
                         badgeResource.IsApproved = reader.GetInt32(isApprovedByOpsIndex) == 1;
-                    if(deactivatedDateIndex != -1)
+                    if (deactivatedDateIndex != -1)
                         badgeResource.DeactivatedDate = reader.IsDBNull(deactivatedDateIndex) ? null : (DateTime?)reader.GetDateTime(deactivatedDateIndex);
                     result.Add(badgeResource);
                 }
@@ -4838,7 +4838,7 @@ namespace DataAccess
             }
         }
 
-        public static List<GroupByPractice> ResourcesByPracticeReport(string paytypes,string PersonStatuses,string practices,DateTime startDate, DateTime endDate, int step)
+        public static List<GroupByPractice> ResourcesByPracticeReport(string paytypes, string PersonStatuses, string practices, DateTime startDate, DateTime endDate, int step)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ResourcesByPracticeReport, connection))
@@ -5407,7 +5407,7 @@ namespace DataAccess
                 int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
                 int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
                 int totalCountIndex = reader.GetOrdinal(Constants.ColumnNames.TotalCount);
-                
+
 
                 while (reader.Read())
                 {
@@ -5416,7 +5416,7 @@ namespace DataAccess
                     {
                         StartDate = reader.GetDateTime(startDateIndex),
                         EndDate = reader.GetDateTime(endDateIndex),
-                      ResourceCount=reader.GetInt32(totalCountIndex)
+                        ResourceCount = reader.GetInt32(totalCountIndex)
                     };
 
                     if (result.Any(p => p.Title.TitleId == titleId))
@@ -5440,6 +5440,111 @@ namespace DataAccess
                 }
             }
 
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<Project> ProjectsListWithFilters(string clientIdsList, bool showProjected, bool showCompleted, bool showActive, bool showInternal, bool showExperimental, bool showProposed, bool showInactive, DateTime periodStart, DateTime periodEnd, string salespersonIdsList, string ProjectOwnerIdsList, string practiceIdsList, string projectGroupIdsList, string userLogin)
+        {
+            var projectList = new List<Project>();
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ProjectsListWithFilters, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowProjectedParam, showProjected);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowCompletedParam, showCompleted);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowInternalParam, showInternal);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowProposedParam, showProposed);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdsParam, salespersonIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdsParam, ProjectOwnerIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdsParam, projectGroupIdsList);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, periodStart);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDate, periodEnd);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    ReadProjects(reader, projectList);
+                }
+            }
+            return projectList;
+        }
+
+        private static void ReadProjects(SqlDataReader reader, List<Project> resultList)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumberColumn);
+                int nameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDateColumn);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDateColumn);
+                int clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                int clientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientNameColumn);
+                int practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                int practiceNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                int projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+                int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                int projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                int projectManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerNameColumn);
+                int executiveInChargeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExecutiveInChargeId);
+                int executiveInChargeNameIndex = reader.GetOrdinal(Constants.ColumnNames.ExecutiveInChargeNameColumn);
+                int businessGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupIdColumn);
+                int businessGroupNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessGroupName);
+                int businessUnitIDIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitId);
+                int businessUnitNameIndex = reader.GetOrdinal(Constants.ColumnNames.BusinessUnitName);
+                int projectCapabilitiesIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectCapabilities);
+                int projectCapabilityIdsIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectCapabilityIds);
+
+                while (reader.Read())
+                {
+                    var project = new Project
+                      {
+                          Id = reader.GetInt32(projectIdIndex),
+                          Name = reader.GetString(nameIndex),
+                          StartDate = !reader.IsDBNull(startDateIndex) ? (DateTime?)reader.GetDateTime(startDateIndex) : null,
+                          EndDate = !reader.IsDBNull(endDateIndex) ? (DateTime?)reader.GetDateTime(endDateIndex) : null,
+                          ProjectNumber = reader.GetString(projectNumberIndex),
+                          Practice = new Practice() { Id = reader.GetInt32(practiceIdIndex), Name = reader.GetString(practiceNameIndex) },
+                          Capabilities = !reader.IsDBNull(projectCapabilitiesIndex) ? reader.GetString(projectCapabilitiesIndex).Replace(";", ", ").TrimEnd(new char[] { ',', ' ' }) : string.Empty,
+                          Group = new ProjectGroup()
+                          {
+                              Id = !reader.IsDBNull(businessUnitIDIndex) ? reader.GetInt32(businessUnitIDIndex) : -1,
+                              Name = !reader.IsDBNull(businessUnitNameIndex) ? reader.GetString(businessUnitNameIndex) : string.Empty
+                          },
+                          BusinessGroup = new BusinessGroup()
+                          {
+                              Id = !reader.IsDBNull(businessGroupIdIndex) ? reader.GetInt32(businessGroupIdIndex) : -1,
+                              Name = !reader.IsDBNull(businessGroupNameIndex) ? reader.GetString(businessGroupNameIndex) : string.Empty
+                          },
+                          Client = new Client()
+                          {
+                              Id = reader.GetInt32(clientIdIndex),
+                              Name = reader.GetString(clientNameIndex)
+                          },
+                          Status = new ProjectStatus()
+                          {
+                              Id = reader.GetInt32(projectStatusIdIndex),
+                              Name = reader.GetString(projectStatusNameIndex)
+                          },
+                          ProjectManagerId = !reader.IsDBNull(projectManagerIdIndex) ? reader.GetInt32(projectManagerIdIndex) : -1,
+                          ProjectManagerNames = !reader.IsDBNull(projectManagerNameIndex) ? reader.GetString(projectManagerNameIndex) : string.Empty,
+                          ExecutiveInChargeId = !reader.IsDBNull(executiveInChargeIdIndex) ? reader.GetInt32(executiveInChargeIdIndex) : -1,
+                          ExecutiveInChargeName = !reader.IsDBNull(executiveInChargeNameIndex) ? reader.GetString(executiveInChargeNameIndex) : string.Empty,
+                          ProjectCapabilityIds =!reader.IsDBNull(projectCapabilityIdsIndex) ?   reader.GetString(projectCapabilityIdsIndex).Replace(";", ", ").TrimEnd(new char[] { ',', ' ' }) : string.Empty
+                      };
+                    resultList.Add(project);
+                }
+            }
             catch (Exception ex)
             {
                 throw ex;
