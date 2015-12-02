@@ -22,6 +22,9 @@ AS
 			@ProjectId	INT
     SELECT @ProjectId=ProjectId FROM dbo.Milestone WHERE MilestoneId = @MilestoneId
 
+	DECLARE @Today DATETIME
+	SELECT @Today = CONVERT(DATETIME,CONVERT(DATE,[dbo].[GettingPMTime](GETUTCDATE())))
+
 	SELECT P.ProjectId,P.Name AS ProjectName,P.ProjectNumber,mpe.BadgeStartDate,MPE.BadgeEndDate,DATEADD(dd, @ShiftDays, mpe.BadgeStartDate) AS NewBadgeStartDate, DATEADD(dd, @ShiftDays, mpe.BadgeEndDate) AS NewBadgeEndDate,
 		   MP.PersonId,Per.LastName,Per.FirstName,mpe.IsBadgeException
 	FROM dbo.MilestonePersonEntry AS mpe
@@ -109,6 +112,10 @@ AS
 		EXEC dbo.InsertProjectFeedbackByMilestonePersonId @MilestonePersonId = NULL,@MilestoneId = @MilestoneId
 	 END
 
+	UPDATE dbo.Project
+	SET CreatedDate = @Today
+	WHERE ProjectId = @ProjectId
+
 	COMMIT TRAN Tran_MilestoneMove
 	END TRY
 	BEGIN CATCH
@@ -117,3 +124,4 @@ AS
 		SET @ErrorMessage = ERROR_MESSAGE()
 		RAISERROR(@ErrorMessage, 16, 1)
 	END CATCH
+
