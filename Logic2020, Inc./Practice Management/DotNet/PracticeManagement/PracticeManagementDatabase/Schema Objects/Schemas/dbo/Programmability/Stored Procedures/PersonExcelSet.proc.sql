@@ -2,7 +2,7 @@
 AS
 BEGIN
 
-	 DECLARE @Today DATETIME,
+	  DECLARE @Today DATETIME,
 		 @FutureDate DATETIME 
 
 	 SET @Today = dbo.GettingPMTime(GETUTCDATE())
@@ -25,10 +25,14 @@ BEGIN
 		LEFT JOIN CurrentPay CP ON CP.PersonId = p.PersonId
 		WHERE CP.PersonId IS NULL
 		GROUP BY p.PersonId
+
+		UNION
+		SELECT P.PersonId, dbo.GetFutureDate()
+		FROM person P
+		LEFT JOIN v_pay pay on pay.PersonId = p.PersonId
+		WHERE pay.PersonId IS NULL
 	)
-
-
-	SELECT  pers.PersonId AS 'Id',
+		SELECT  pers.PersonId AS 'Id',
 	        pers.EmployeeNumber AS 'Employee Id',
 			ISNULL(pers.PreferredFirstName,pers.FirstName) + ' ' + pers.LastName AS 'Person name',
 			stat.[Name] AS 'Status',
@@ -62,8 +66,8 @@ BEGIN
 			ISNULL(manager.PreferredFirstName,manager.FirstName) + ' ' + manager.LastName AS 'Career Manager Name',
 			rcd.LastName + ' ' + ISNULL(rcd.PreferredFirstName,rcd.FirstName) AS 'RecruiterName'
 	FROM    dbo.Person AS pers
-			LEFT OUTER JOIN dbo.v_Pay AS pay ON pers.PersonId = pay.PersonId
-			INNER JOIN CurrentElseLastPay AS lp ON lp.PersonId = pay.PersonId AND (lp.EndDate = ISNULL(pay.EndDate, @FutureDate))
+			INNER JOIN CurrentElseLastPay AS lp ON lp.PersonId = pers.PersonId 
+			LEFT OUTER JOIN dbo.v_Pay AS pay ON pers.PersonId = pay.PersonId and (lp.EndDate = ISNULL(pay.EndDate, @FutureDate))
 			LEFT OUTER JOIN dbo.Timescale AS paytype ON paytype.TimescaleId = pay.Timescale
 			LEFT OUTER JOIN dbo.Title AS T ON pers.TitleId = T.TitleId
 			LEFT OUTER JOIN dbo.PersonStatus AS stat ON stat.PersonStatusId = pers.PersonStatusId
@@ -71,6 +75,7 @@ BEGIN
 			LEFT OUTER JOIN dbo.Practice AS prct ON pers.DefaultPractice = prct.PracticeId
 			LEFT JOIN dbo.Person AS manager ON manager.PersonId = pers.ManagerId
 			LEFT JOIN V_WorkinHoursByYear HY ON HY.[Year] = YEAR(@Today)
+			WHERE pers.IsStrawman=0 
 	ORDER BY pers.PersonId
 END
 
