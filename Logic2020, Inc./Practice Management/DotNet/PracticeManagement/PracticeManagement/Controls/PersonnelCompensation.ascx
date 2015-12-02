@@ -287,6 +287,10 @@
         <td class="Left12">
             <asp:TextBox ID="txtVacationDays" runat="server" CssClass="Width120Px" onchange="setDirty();"
                 MaxLength="2" OnTextChanged="Compensation_TextChanged" Text="0"></asp:TextBox>
+            <asp:CompareValidator ID="compVacationDays" runat="server" ControlToValidate="txtVacationDays"
+                ErrorMessage="PTO Accrual greater than 200 is not allowed." ToolTip="PTO Accrual greater than 200 is not allowed."
+                Text="*" EnableClientScript="false" SetFocusOnError="true" Operator="LessThanEqual"
+                Type="Integer" ValueToCompare="200" Display="Dynamic"></asp:CompareValidator>
         </td>
         <td class="Left5">
             per Year
