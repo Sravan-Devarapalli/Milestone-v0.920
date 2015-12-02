@@ -94,7 +94,7 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project ProjectGetShortById(int projectId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/PersonsByProjectReport", ReplyAction="http://tempuri.org/IProjectService/PersonsByProjectReportResponse")]
-        DataTransferObjects.Project[] PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal);
+        DataTransferObjects.Project[] PersonsByProjectReport(string accountIds, string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectGetById", ReplyAction="http://tempuri.org/IProjectService/ProjectGetByIdResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
@@ -244,7 +244,8 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
-       
+        
+        
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -357,8 +358,8 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.ProjectGetShortById(projectId);
         }
         
-        public DataTransferObjects.Project[] PersonsByProjectReport(string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal) {
-            return base.Channel.PersonsByProjectReport(payTypeIds, personStatusIds, practices, projectStatusIds, excludeInternal);
+        public DataTransferObjects.Project[] PersonsByProjectReport(string accountIds, string payTypeIds, string personStatusIds, string practices, string projectStatusIds, bool excludeInternal) {
+            return base.Channel.PersonsByProjectReport(accountIds, payTypeIds, personStatusIds, practices, projectStatusIds, excludeInternal);
         }
         
         public DataTransferObjects.Project ProjectGetById(int projectId) {
