@@ -13,36 +13,6 @@
         type="text/javascript"></script>
     <script src="../../Scripts/jquery-1.4.1.yui.js" type="text/javascript"></script>
     <script type="text/javascript">
-        //        $(document).ready(function () {
-        //            $('#ctl00_body_btnExpandOrCollapseAll').click(function () {
-        //                debugger;
-        //                alert('Hi');
-        //            });
-        //        });
-        function Name() {
-            var cntrl = $('#ctl00_body_btnExpandOrCollapseAll').val();
-            if (cntrl == 'Expand All') {
-                //                alert('expand');
-                //                $find("cpe")._doOpen();
-                //                $("cpe").each(function () {
-                //                    alert('Hi');
-                //                    $(this)._doOpen();
-                //                });
-                //                $("*[id*='cpeResources_ClientState']").each(function () {
-                //                    alert($(this).Id);
-                //                    //$(this)._doOpen();
-                //                });
-                //                $('#ctl00_body_repProjects_ctl01_repMilestones_ctl00_cpeResources_ClientState')._doOpen();
-            }
-            else {
-                //                alert('collapse');
-                //                $find("cpe")._doClose();
-                //                $("cpe").each(function () {
-                //                    alert('Hi');
-                //                    $(this)._doClose();
-                //                });
-            }
-        }
     </script>
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
@@ -61,26 +31,58 @@
                     <td class="width60P">
                     </td>
                 </tr>
-                <tr style="white-space: nowrap">
+                <tr class="no-wrap">
                     <td class="ReportFilterLabels">
-                        Pay Type:&nbsp;
+                        Account:&nbsp;
                     </td>
-                    <td colspan="2" style="padding-top: 5px;">
-                        <pmc:ScrollingDropDown ID="cblPayTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All"
-                            DropDownListType="Pay Type" CellPadding="3" CssClass="NewHireReportCblTimeScales" />
-                        <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
-                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                    <td colspan="2" class="PaddingTop5">
+                        <pmc:ScrollingDropDown ID="cblClient" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblClient','Account')" NoItemsType="All" PluralForm="s"
+                            DropDownListType="Account" CellPadding="3" CssClass="NewHireReportCblTimeScales" />
+                        <ext:ScrollableDropdownExtender ID="sdeCblClient" runat="server" TargetControlID="cblClient"
+                            UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="250px">
                         </ext:ScrollableDropdownExtender>
+
+                       
                     </td>
                     <td class="ReportFilterLabels">
                         &nbsp&nbsp&nbsp&nbsp&nbsp Project Status:&nbsp;
                     </td>
                     <td>
                         <pmc:ScrollingDropDown ID="cblProjectTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            onclick="scrollingDropdown_onclick('cblProjectTypes','Project Status','es')" PluralForm="es" 
-                            NoItemsType="All" DropDownListType="Project Status" CellPadding="3" CssClass="NewHireReportCblTimeScales" />
+                            onclick="scrollingDropdown_onclick('cblProjectTypes','Project Status','es')"
+                            PluralForm="es" NoItemsType="All" DropDownListType="Project Status" CellPadding="3"
+                            CssClass="NewHireReportCblTimeScales" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectTypes" runat="server" TargetControlID="cblProjectTypes"
+                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td class="textLeft Width90Percent">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <tr style="white-space: nowrap">
+                    <td class="ReportFilterLabels">
+                        Pay Type:&nbsp;
+                    </td>
+                    <td colspan="2" style="padding-top: 5px;">
+                         <pmc:ScrollingDropDown ID="cblPayTypes" runat="server" SetDirty="false" AllSelectedReturnType="Null"
+                            onclick="scrollingDropdown_onclick('cblPayTypes','Pay Type')" NoItemsType="All" PluralForm="s"
+                            DropDownListType="Pay Type" CellPadding="3" CssClass="NewHireReportCblTimeScales" />
+                        <ext:ScrollableDropdownExtender ID="sdePayTypes" runat="server" TargetControlID="cblPayTypes"
+                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                        </ext:ScrollableDropdownExtender>
+                    </td>
+                    <td class="ReportFilterLabels">
+                        &nbsp&nbsp&nbsp&nbsp&nbsp Practice Area:&nbsp;
+                    </td>
+                    <td>
+                        <pmc:ScrollingDropDown ID="cblPractices" runat="server" AllSelectedReturnType="AllItems"
+                            onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" CellPadding="3" PluralForm="s"
+                            NoItemsType="All" SetDirty="False" DropDownListType="Practice Area" CssClass="NewHireReportCblTimeScales" />
+                        <%--UTilTimeLineFilterCblPractices--%>
+                        <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
                             UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
@@ -101,27 +103,6 @@
                         <ext:ScrollableDropdownExtender ID="sdePersonStatus" runat="server" TargetControlID="cblPersonStatus"
                             UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
-                    </td>
-                    <td class="ReportFilterLabels">
-                        &nbsp&nbsp&nbsp&nbsp&nbsp Practice Area:&nbsp;
-                    </td>
-                    <td>
-                        <pmc:ScrollingDropDown ID="cblPractices" runat="server" AllSelectedReturnType="AllItems"
-                            onclick="scrollingDropdown_onclick('cblPractices','Practice Area')" CellPadding="3"
-                            NoItemsType="All" SetDirty="False" DropDownListType="Practice Area" CssClass="NewHireReportCblTimeScales" /> <%--UTilTimeLineFilterCblPractices--%>
-                        <ext:ScrollableDropdownExtender ID="sdePractices" runat="server" TargetControlID="cblPractices"
-                            UseAdvanceFeature="true" Width="250px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                        </ext:ScrollableDropdownExtender>
-                    </td>
-                    <td class="textLeft Width90Percent">
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-                <tr style="white-space: nowrap">
-                    <td class="ReportFilterLabels">
-                    </td>
-                    <td colspan="2" style="padding-top: 5px;">
                     </td>
                     <td>
                     </td>
@@ -152,8 +133,8 @@
                         <td style="font-weight: bold; font-size: 16px;">
                             <asp:Button ID="btnExpandOrCollapseAll" runat="server" Text="Collapse All" CssClass="Width100Px"
                                 UseSubmitBehavior="false" ToolTip="Collapse All" />
-                            <asp:Button ID="btnHiddenExpandAll" runat="server" Text="Expand All" CssClass="Width100Px" Style="display:none"
-                                UseSubmitBehavior="false" ToolTip="Collapse All" />
+                            <asp:Button ID="btnHiddenExpandAll" runat="server" Text="Expand All" CssClass="Width100Px hidden"
+                                 UseSubmitBehavior="false" ToolTip="Collapse All" />
                         </td>
                         <td class="Width10Percent padRight5">
                             <table class="WholeWidth">
@@ -167,7 +148,7 @@
                                     </td>
                                     <td>
                                         <asp:Button ID="btnExportToPDF" runat="server" Text="PDF" OnClick="btnExportToPDF_OnClick"
-                                             UseSubmitBehavior="false" ToolTip="Export To PDF" />
+                                            UseSubmitBehavior="false" ToolTip="Export To PDF" />
                                     </td>
                                 </tr>
                             </table>
@@ -205,13 +186,6 @@
                                         <table class="WholeWidthWithHeight">
                                             <tr>
                                                 <td>
-                                                   <%-- <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeResources" runat="Server" CollapsedText="Expand Resource Details"
-                                                        ExpandedText="Collapse Resource Details" EnableViewState="true" BehaviorID="cpeResources"
-                                                        Collapsed="true" TargetControlID="pnlResources" ImageControlID="imgMilestone"
-                                                        TextLabelID="lblMilestone" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
-                                                        CollapseControlID="imgMilestone" ExpandControlID="imgMilestone" />
-                                                    <asp:Image ID="imgMilestone" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Resource Details" />
-                                                    <asp:Label ID="lblMilestone" CssClass="displayNone" runat="server"></asp:Label>--%>
                                                     <%# Eval("HtmlEncodedDescription")%>
                                                     (
                                                     <%# GetDateFormat((DateTime)Eval("StartDate"))%>
@@ -223,34 +197,40 @@
                                         <asp:Panel ID="pnlResources" runat="server" Style="padding-bottom: 5px; padding-left: 25px;">
                                             <asp:Repeater ID="repResources" runat="server" OnItemDataBound="repResources_ItemDataBound">
                                                 <HeaderTemplate>
-                                                    <table class="width70P PersonSummaryReport zebra">
+                                                    <table class="Width80Percent PersonSummaryReport zebra">
                                                         <thead>
                                                             <tr>
-                                                                <th class="Width15Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width12Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Name
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Level
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Person Status
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource Start Date
+                                                                </th>
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource End Date
+                                                                </th>
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge End Date
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break Start
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break End
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block End Date
                                                                 </th>
                                                             </tr>
@@ -267,6 +247,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -298,6 +284,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -329,13 +321,6 @@
                                         <table class="WholeWidthWithHeight">
                                             <tr class="bgColor_F5FAFF">
                                                 <td>
-                                                   <%-- <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeResources" runat="Server" CollapsedText="Expand Resource Details"
-                                                        ExpandedText="Collapse Resource Details" EnableViewState="true" BehaviorID="cpeResources"
-                                                        Collapsed="true" TargetControlID="pnlResources" ImageControlID="imgMilestone"
-                                                        TextLabelID="lblMilestone" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
-                                                        CollapseControlID="imgMilestone" ExpandControlID="imgMilestone" />
-                                                    <asp:Image ID="imgMilestone" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Resource Details" />
-                                                    <asp:Label ID="lblMilestone" CssClass="displayNone" runat="server"></asp:Label>--%>
                                                     <%# Eval("HtmlEncodedDescription")%>
                                                     (
                                                     <%# GetDateFormat((DateTime)Eval("StartDate"))%>
@@ -347,34 +332,40 @@
                                         <asp:Panel ID="pnlResources" runat="server" Style="padding-bottom: 5px; padding-left: 25px;">
                                             <asp:Repeater ID="repResources" runat="server" OnItemDataBound="repResources_ItemDataBound">
                                                 <HeaderTemplate>
-                                                    <table class="width70P PersonSummaryReport zebra">
+                                                    <table class="Width80Percent PersonSummaryReport zebra">
                                                         <thead>
                                                             <tr>
-                                                                <th class="Width15Per DayTotalHoursBorderLeft Padding5Imp">
+                                                               <th class="Width12Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Name
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Level
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Person Status
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource Start Date
+                                                                </th>
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource End Date
+                                                                </th>
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge End Date
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break Start
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break End
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block End Date
                                                                 </th>
                                                             </tr>
@@ -391,6 +382,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -422,6 +419,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -479,13 +482,6 @@
                                         <table class="WholeWidthWithHeight">
                                             <tr>
                                                 <td>
-                                                   <%-- <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeResources" runat="Server" CollapsedText="Expand Resource Details"
-                                                        ExpandedText="Collapse Resource Details" EnableViewState="true" BehaviorID="cpeResources"
-                                                        Collapsed="true" TargetControlID="pnlResources" ImageControlID="imgMilestone"
-                                                        TextLabelID="lblMilestone" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
-                                                        CollapseControlID="imgMilestone" ExpandControlID="imgMilestone" />
-                                                    <asp:Image ID="imgMilestone" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Resource Details" />
-                                                    <asp:Label ID="lblMilestone" CssClass="displayNone" runat="server"></asp:Label>--%>
                                                     <%# Eval("HtmlEncodedDescription")%>
                                                     (
                                                     <%# GetDateFormat((DateTime)Eval("StartDate"))%>
@@ -497,34 +493,40 @@
                                         <asp:Panel ID="pnlResources" runat="server" Style="padding-bottom: 5px; padding-left: 25px;">
                                             <asp:Repeater ID="repResources" runat="server" OnItemDataBound="repResources_ItemDataBound">
                                                 <HeaderTemplate>
-                                                    <table class="width70P PersonSummaryReport zebra">
+                                                    <table class="Width80Percent PersonSummaryReport zebra">
                                                         <thead>
                                                             <tr>
-                                                              <th class="Width15Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width12Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Name
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Level
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Person Status
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource Start Date
+                                                                </th>
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource End Date
+                                                                </th>
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge End Date
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break Start
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break End
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block End Date
                                                                 </th>
                                                             </tr>
@@ -541,6 +543,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -572,6 +580,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -603,13 +617,6 @@
                                         <table class="WholeWidthWithHeight">
                                             <tr class="bgColor_F5FAFF">
                                                 <td>
-                                                   <%-- <AjaxControlToolkit:CollapsiblePanelExtender ID="cpeResources" runat="Server" CollapsedText="Expand Resource Details"
-                                                        ExpandedText="Collapse Resource Details" EnableViewState="true" BehaviorID="cpeResources"
-                                                        Collapsed="true" TargetControlID="pnlResources" ImageControlID="imgMilestone"
-                                                        TextLabelID="lblMilestone" CollapsedImage="~/Images/expand.jpg" ExpandedImage="~/Images/collapse.jpg"
-                                                        CollapseControlID="imgMilestone" ExpandControlID="imgMilestone" />
-                                                    <asp:Image ID="imgMilestone" runat="server" ImageUrl="~/Images/collapse.jpg" ToolTip="Expand Resource Details" />
-                                                    <asp:Label ID="lblMilestone" CssClass="displayNone" runat="server"></asp:Label>--%>
                                                     <%# Eval("HtmlEncodedDescription")%>
                                                     (
                                                     <%# GetDateFormat((DateTime)Eval("StartDate"))%>
@@ -621,34 +628,40 @@
                                         <asp:Panel ID="pnlResources" runat="server" Style="padding-bottom: 5px; padding-left: 25px;">
                                             <asp:Repeater ID="repResources" runat="server" OnItemDataBound="repResources_ItemDataBound">
                                                 <HeaderTemplate>
-                                                    <table class="width70P PersonSummaryReport zebra">
+                                                    <table class="Width80Percent PersonSummaryReport zebra">
                                                         <thead>
                                                             <tr>
-                                                                <th class="Width15Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width12Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Name
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Resource Level
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Person Status
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource Start Date
+                                                                </th>
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                    Milestone Resource End Date
+                                                                </th>
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Badge End Date
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break Start
                                                                 </th>
-                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width8Percent DayTotalHoursBorderLeft Padding5Imp">
                                                                     Organic Break End
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block Start Date
                                                                 </th>
-                                                                <th class="Width11Percent DayTotalHoursBorderLeft Padding5Imp">
+                                                                <th class="Width10Per DayTotalHoursBorderLeft Padding5Imp">
                                                                     MSFT Block End Date
                                                                 </th>
                                                             </tr>
@@ -665,6 +678,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -696,6 +715,12 @@
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <%# Eval("Status.Name")%>
+                                                        </td>
+                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceStartDate" runat="server"></asp:Label>
+                                                        </td>
+                                                        <td class="DayTotalHoursBorderLeft Padding5Imp">
+                                                            <asp:Label ID="lblResourceEndDate" runat="server"></asp:Label>
                                                         </td>
                                                         <td class="DayTotalHoursBorderLeft Padding5Imp">
                                                             <asp:Label ID="lblBadgeStart" runat="server"></asp:Label>
@@ -731,7 +756,7 @@
                         </FooterTemplate>
                     </asp:Repeater>
                 </div>
-                <div id="divEmptyMessage" class="EmptyMessagediv" style="display: none;" runat="server">
+                <div id="divEmptyMessage" class="EmptyMessagediv hidden" runat="server">
                     There are no resources for the selected filters.
                 </div>
             </div>
