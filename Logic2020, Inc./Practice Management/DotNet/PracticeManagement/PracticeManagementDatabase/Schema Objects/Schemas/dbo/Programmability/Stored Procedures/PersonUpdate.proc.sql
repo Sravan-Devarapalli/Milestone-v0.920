@@ -205,7 +205,7 @@ BEGIN TRY
 	END
 
 	--STOP FEEDBACK TRIGGERING LOGIC AS PER NICK STATEMENT
-	--IF(@PersonStatusId <> 2 AND (@PreviousPersonStatusId <> @PersonStatusId))
+	--IF(@PersonStatusId <> 2 =(1,3) AND (@PreviousPersonStatusId <> @PersonStatusId))
 	--BEGIN
 	--     DELETE PF
 	--	 FROM dbo.ProjectFeedback PF
@@ -214,6 +214,26 @@ BEGIN TRY
 	--END
 
 	--to update milestoneperson entries as per #3184
+	UPDATE P
+	SET CreatedDate = @Today
+	FROM dbo.MilestonePersonEntry AS MPE 
+	INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+	INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+	INNER JOIN v_PersonHistory AS PH ON PH.PersonId = MP.PersonId AND (PH.TerminationDate IS NULL OR MPE.StartDate <= PH.TerminationDate) AND PH.HireDate <= MPE.EndDate
+	INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
+	WHERE MP.PersonId = @PersonId AND
+	(
+		(
+		MPE.StartDate <> CASE WHEN MPE.StartDate > PH.HireDate THEN MPE.StartDate
+						ELSE PH.HireDate END
+		)
+		OR
+		(
+		MPE.EndDate <> CASE WHEN (MPE.EndDate < PH.TerminationDate) OR PH.TerminationDate IS NULL THEN MPE.EndDate
+						ELSE PH.TerminationDate END
+		)
+	)
+	---
 
 	UPDATE	MPE
 	SET MPE.StartDate = CASE WHEN MPE.StartDate > PH.HireDate THEN MPE.StartDate
@@ -237,6 +257,16 @@ BEGIN TRY
 		)
 	)
 	---to delete milestoneperson entries as per #3184
+	UPDATE P
+	SET CreatedDate = @Today
+	FROM dbo.MilestonePersonEntry AS MPE 
+	INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
+	INNER JOIN dbo.Milestone AS M ON M.MilestoneId = MP.MilestoneId
+	INNER JOIN dbo.Project P ON P.ProjectId = M.ProjectId
+	LEFT JOIN v_PersonHistory AS PH ON PH.PersonId = MP.PersonId AND (PH.TerminationDate IS NULL OR MPE.StartDate <= PH.TerminationDate) AND PH.HireDate <= MPE.EndDate
+	WHERE MP.PersonId = @PersonId AND PH.PersonId IS NULL
+
+	-----------------
 	DELETE MPE
 	FROM dbo.MilestonePersonEntry AS MPE 
 	INNER JOIN dbo.MilestonePerson AS MP ON MP.MilestonePersonId = MPE.MilestonePersonId
