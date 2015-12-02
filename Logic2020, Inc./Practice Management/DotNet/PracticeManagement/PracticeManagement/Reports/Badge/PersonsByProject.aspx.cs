@@ -23,6 +23,8 @@ namespace PraticeManagement.Reports.Badge
 {
     public partial class PersonsByProject : System.Web.UI.Page
     {
+        private int coloumnsCount = 1;
+        private int headerRowsCount = 1;
 
         private string RowSpliter = Guid.NewGuid().ToString();
 
@@ -38,19 +40,17 @@ namespace PraticeManagement.Reports.Badge
                 {
                     TdStyles headerStyle1 = new TdStyles("left", true, false, 10, 1);
                     TdStyles headerStyle2 = new TdStyles("center", true, false, 10, 1);
-                    //headerStyle1.BackgroundColor = headerStyle2.BackgroundColor = "light-gray";
                     TdStyles contentStyle1 = new TdStyles("left", false, false, 10, 1);
                     TdStyles contentStyle2 = new TdStyles("center", false, false, 10, 1);
-                    
+
                     TdStyles[] headerStyleArray = { headerStyle1, headerStyle2 };
                     TdStyles[] contentStyleArray = { contentStyle1, contentStyle2 };
 
                     TrStyles headerRowStyle = new TrStyles(headerStyleArray);
                     TrStyles contentRowStyle = new TrStyles(contentStyleArray);
 
-                    TrStyles[] rowStyleArray = { }; //headerRowStyle, headerRowStyle, headerRowStyle, contentRowStyle
-                    //List<TrStyles> styles = new List<TrStyles>();
-                    float[] widths = { .25f, .12f, .1f, .15f, .1f, .28f };
+                    TrStyles[] rowStyleArray = { }; 
+                    float[] widths = { 0.125f, 0.1f, 0.075f, 0.1f, 0.1f, 0.1f, 0.1f, 0.075f, 0.075f, 0.075f, 0.075f };
                     _PdfProjectPersonsSummaryTableStyle = new TableStyles(widths, rowStyleArray, 100);
                     _PdfProjectPersonsSummaryTableStyle.IsColoumBorders = false;
                 }
@@ -63,9 +63,6 @@ namespace PraticeManagement.Reports.Badge
             get
             {
                 TdStyles headerStyle1 = new TdStyles("left", true, false, 10, 1);
-                //headerStyle1.BackgroundColor = "custom";
-                //headerStyle1.BackgroundColorRGB = new int[] { 212, 208, 201 };
-                //TdStyles headerStyle2 = new TdStyles("center", true, false, 10, 1);
                 TdStyles[] headerStyleArray = { headerStyle1 };
                 return new TrStyles(headerStyleArray, "custom", new int[] { 212, 208, 201 });
             }
@@ -76,8 +73,7 @@ namespace PraticeManagement.Reports.Badge
             get
             {
                 TdStyles headerStyle1 = new TdStyles("left", true, false, 10, 1);
-                //TdStyles headerStyle2 = new TdStyles("center", true, false, 10, 1);
-                TdStyles[] headerStyleArray = { headerStyle1};
+                TdStyles[] headerStyleArray = { headerStyle1 };
                 return new TrStyles(headerStyleArray, "custom", new int[] { 236, 233, 217 });
             }
         }
@@ -87,8 +83,7 @@ namespace PraticeManagement.Reports.Badge
             get
             {
                 TdStyles headerStyle1 = new TdStyles("left", true, false, 10, 1);
-                //TdStyles headerStyle2 = new TdStyles("center", true, false, 10, 1);
-                TdStyles[] headerStyleArray = { headerStyle1};
+                TdStyles[] headerStyleArray = { headerStyle1 };
                 return new TrStyles(headerStyleArray);
             }
         }
@@ -98,9 +93,16 @@ namespace PraticeManagement.Reports.Badge
             get
             {
                 TdStyles contentStyle1 = new TdStyles("left", false, false, 10, 1);
-                TdStyles contentStyle2 = new TdStyles("center", false, false, 10, 1);
-                TdStyles[] contentStyleArray = { contentStyle1, contentStyle2 };
+                TdStyles[] contentStyleArray = { contentStyle1 };
                 return new TrStyles(contentStyleArray);
+            }
+        }
+
+        public string Accounts
+        {
+            get
+            {
+                return cblClient.SelectedItems;
             }
         }
 
@@ -156,9 +158,6 @@ namespace PraticeManagement.Reports.Badge
             set;
         }
 
-        private int coloumnsCount = 1;
-        private int headerRowsCount = 1;
-
         private SheetStyles HeaderSheetStyle
         {
             get
@@ -194,7 +193,7 @@ namespace PraticeManagement.Reports.Badge
                 headerCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 CellStyles dataDateCellStyle = new CellStyles();
-                dataDateCellStyle.DataFormat = "mm/dd/yy;@";
+                dataDateCellStyle.DataFormat = "mm/dd/yyyy;@";
                 dataDateCellStyle.HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
                 List<CellStyles> headerCellStyleList = new List<CellStyles>() { headerCellStyle };
@@ -202,9 +201,7 @@ namespace PraticeManagement.Reports.Badge
                 RowStyles headerrowStyle = new RowStyles(headerCellStyleList.ToArray());
 
                 CellStyles dataCellStyle = new CellStyles();
-                //dataCellStyle.DataFormat = "text";
-                //var format = HSSFDataFormat.GetBuiltinFormat;
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -222,13 +219,8 @@ namespace PraticeManagement.Reports.Badge
             btnExpandOrCollapseAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnExpandOrCollapseAll.ClientID +
                                                           ", " + hdnCollapsed.ClientID +
                                                           ", " + hdncpeExtendersIds.ClientID +
-                                                          //", " + btnHiddenExpandAll.ClientID +
+                
                                                           ");";
-            //btnHiddenExpandAll.Attributes["onclick"] = "return CollapseOrExpandAll(" + btnHiddenExpandAll.ClientID +
-            //                                              ", " + hdnCollapsed.ClientID +
-            //                                              ", " + hdncpeExtendersIds.ClientID +
-            //                                              ");";
-
             btnExpandOrCollapseAll.Text = btnExpandOrCollapseAll.ToolTip = (hdnCollapsed.Value.ToLower() == "true") ? "Expand All" : "Collapse All";
 
             if (!IsPostBack)
@@ -238,9 +230,13 @@ namespace PraticeManagement.Reports.Badge
                 FillPersonStatusList();
                 cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
                 DataHelper.FillProjectStatusList(cblProjectTypes, Resources.Controls.AllTypes);
-                cblProjectTypes.SelectItems(new List<int>() { 1, 2, 3, 4});
+                cblProjectTypes.SelectItems(new List<int>() { 1, 2, 3, 4 });
                 DataHelper.FillPracticeList(cblPractices, Resources.Controls.AllPracticesText);
                 cblPractices.SelectAll();
+                var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
+                DataHelper.FillListDefaultWithEncodedName(cblClient, "All Accounts", allClients,
+                                                 false);
+                cblClient.SelectAll();
             }
         }
 
@@ -262,6 +258,25 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        private string GetFilterText(ScrollingDropDown dropDownObject)
+        {
+            if (dropDownObject.areAllSelected)
+            {
+                return "All " + dropDownObject.DropDownListType + dropDownObject.PluralForm;
+            }
+            else
+            {
+                if (dropDownObject.SelectedValues.Count > 1)
+                {
+                    return "Multiple " + dropDownObject.DropDownListType + dropDownObject.PluralForm;
+                }
+                else
+                {
+                    return !string.IsNullOrEmpty(dropDownObject.SelectedItemsText) ? dropDownObject.SelectedItemsText.TrimEnd(',') : string.Empty;
+                }
+            }
+        }
+
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
             divWholePage.Style["display"] = "";
@@ -273,7 +288,7 @@ namespace PraticeManagement.Reports.Badge
             var dataSetList = new List<DataSet>();
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
 
-            var data = ServiceCallers.Custom.Project(p => p.PersonsByProjectReport(PayTypes, PersonStatuses, Practices, ProjectStatuses, ExcludeInternals)).ToList();
+            var data = ServiceCallers.Custom.Project(p => p.PersonsByProjectReport(Accounts, PayTypes, PersonStatuses, Practices, ProjectStatuses, ExcludeInternals)).ToList();
 
             var filename = "PersonByProject.xls";
 
@@ -282,6 +297,13 @@ namespace PraticeManagement.Reports.Badge
                 string dateRangeTitle = "Persons By Project";
                 DataTable header = new DataTable();
                 header.Columns.Add(dateRangeTitle);
+
+                header.Rows.Add("Account: " + GetFilterText(cblClient));
+                header.Rows.Add("Project Status: " + GetFilterText(cblProjectTypes));
+                header.Rows.Add("Pay Type: " + GetFilterText(cblPayTypes));
+                header.Rows.Add("Person Status: " + GetFilterText(cblPersonStatus));
+                header.Rows.Add("Practice Area: " + GetFilterText(cblPractices));
+
                 headerRowsCount = header.Rows.Count + 3;
                 var dataTbl = PrepareDataTable(data);
                 coloumnsCount = dataTbl.Columns.Count;
@@ -322,11 +344,11 @@ namespace PraticeManagement.Reports.Badge
             data.Columns.Add("Start Date");
             data.Columns.Add("End Date");
             data.Columns.Add("Milestone Name");
-            data.Columns.Add("Milestone Start Date");
-            data.Columns.Add("Milestone End Date");
             data.Columns.Add("Resource Name");
             data.Columns.Add("Resource Level");
             data.Columns.Add("Person Status");
+            data.Columns.Add("Milestone Resource Start Date");
+            data.Columns.Add("Milestone Resource End Date");
             data.Columns.Add("Badge Start Date");
             data.Columns.Add("Badge End Date");
             data.Columns.Add("Organic Break Start Date");
@@ -346,11 +368,11 @@ namespace PraticeManagement.Reports.Badge
                         row.Add(project.StartDate);
                         row.Add(project.EndDate);
                         row.Add(milestone.Description.ToString());
-                        row.Add(milestone.StartDate);
-                        row.Add(milestone.ProjectedDeliveryDate);
                         row.Add(person.Name);
                         row.Add(person.Title.TitleName);
                         row.Add(person.Status.Name);
+                        row.Add(person.ResourceStartDate);
+                        row.Add(person.ResourceEndDate);
                         row.Add(person.Badge.BadgeStartDate.HasValue ? person.Badge.BadgeStartDate.Value.ToShortDateString() : "Clock not yet started");
                         row.Add(person.Badge.BadgeEndDate.HasValue ? person.Badge.BadgeEndDate.Value.ToShortDateString() : "Clock not yet started");
                         row.Add(person.Badge.OrganicBreakStartDate.HasValue ? person.Badge.OrganicBreakStartDate.Value.ToShortDateString() : string.Empty);
@@ -371,7 +393,7 @@ namespace PraticeManagement.Reports.Badge
 
         public void PopulateData()
         {
-            var data = ServiceCallers.Custom.Project(p => p.PersonsByProjectReport(PayTypes, PersonStatuses, Practices, ProjectStatuses, ExcludeInternals)).ToList();
+            var data = ServiceCallers.Custom.Project(p => p.PersonsByProjectReport(Accounts, PayTypes, PersonStatuses, Practices, ProjectStatuses, ExcludeInternals)).ToList();
             if (data.Count > 0)
             {
                 repProjects.Visible = true;
@@ -393,7 +415,6 @@ namespace PraticeManagement.Reports.Badge
             if (e.Item.ItemType == ListItemType.Header)
             {
                 CollapsiblePanelExtenderProjectClientIds = new List<string>();
-                //CollapsiblePanelExtenderMilestoneClientIds = new List<string>();
             }
             else if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
@@ -426,9 +447,6 @@ namespace PraticeManagement.Reports.Badge
                 var dataitem = (Milestone)e.Item.DataItem;
                 repResources.DataSource = dataitem.People;
                 repResources.DataBind();
-                //var cpeResources = e.Item.FindControl("cpeResources") as CollapsiblePanelExtender;
-                //cpeResources.BehaviorID = "R_" + Guid.NewGuid().ToString();
-                //CollapsiblePanelExtenderMilestoneClientIds.Add(cpeResources.BehaviorID);
             }
         }
 
@@ -436,6 +454,8 @@ namespace PraticeManagement.Reports.Badge
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                var lblResourceStart = e.Item.FindControl("lblResourceStartDate") as Label;
+                var lblResourceEnd = e.Item.FindControl("lblResourceEndDate") as Label;
                 var lblBadgeStart = e.Item.FindControl("lblBadgeStart") as Label;
                 var lblBadgeEnd = e.Item.FindControl("lblBadgeEnd") as Label;
                 var lblOrganicStart = e.Item.FindControl("lblOrganicStart") as Label;
@@ -443,6 +463,8 @@ namespace PraticeManagement.Reports.Badge
                 var lblBlockStart = e.Item.FindControl("lblBlockStart") as Label;
                 var lblBlockEnd = e.Item.FindControl("lblBlockEnd") as Label;
                 var dataitem = (Person)e.Item.DataItem;
+                lblResourceStart.Text = dataitem.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat);
+                lblResourceEnd.Text = dataitem.ResourceEndDate.ToString(Constants.Formatting.EntryDateFormat);
                 lblBadgeStart.Text = dataitem.Badge.BadgeStartDate.HasValue ? dataitem.Badge.BadgeStartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "Clock not yet started";
                 lblBadgeEnd.Text = dataitem.Badge.BadgeEndDate.HasValue ? dataitem.Badge.BadgeEndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "Clock not yet started";
                 lblOrganicStart.Text = dataitem.Badge.OrganicBreakStartDate.HasValue ? dataitem.Badge.OrganicBreakStartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty;
@@ -471,24 +493,22 @@ namespace PraticeManagement.Reports.Badge
                 string reportDataInPdfString = string.Empty;
                 foreach (var project in projects)
                 {
-                    reportDataInPdfString = String.Format("{0} - {1} ({2} - {3}){5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}{5}{4}", project.ProjectNumber, project.Name, project.StartDate.Value.ToString("MM/dd/yyyy"), project.EndDate.Value.ToString("MM/dd/yyyy"), RowSpliter, ColoumSpliter);
+                    reportDataInPdfString = String.Format("{0} - {1} ({2} - {3}){5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}{5}{4}", project.ProjectNumber, project.Name, project.StartDate.Value.ToString("MM/dd/yyyy"), project.EndDate.Value.ToString("MM/dd/yyyy"), RowSpliter, ColoumSpliter);
                     styles.Add(PdfProjectHeaderRowStyle);
                     foreach (var milestone in project.Milestones)
                     {
-                        //_pdfProjectPersonsSummary += String.Format("{0} ({1} to {2}){3}",
-                        //    milestone.Description, milestone.StartDate.ToString("MM/dd/yyyy"), milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"), RowSpliter);
+                        reportDataInPdfString += String.Format("{0} ({1} to {2}){4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}{4}{3}",
+                            milestone.Description, milestone.StartDate.ToString("MM/dd/yyyy"), milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"), RowSpliter, ColoumSpliter);
 
-                        reportDataInPdfString += String.Format("{0} ({1} to {2}){4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}{4}{3}",
-                            milestone.Description, milestone.StartDate.ToString("MM/dd/yyyy"), milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"), RowSpliter,ColoumSpliter);
-
-                        //var milestoneTable = builder.GetPdftable(milestoneDataString, PdfMilestoneTableStyle, RowSpliter, ColoumSpliter);
-                        //document.Add((IElement)milestoneTable);
                         styles.Add(PdfMilestoneHeaderRowStyle);
-                        reportDataInPdfString += string.Format("Resource Name{0}Resource Level{0}Person Status{0}Badge Start{0}Badge End{0}Organic Break Start{0}Organic Break End{0}MSFT Block Start{0}MSFT Block End{1}", ColoumSpliter, RowSpliter);
+                        reportDataInPdfString += string.Format("Resource Name{0}Resource Level{0}Person Status{0}Milestone Resource Start Date{0}Milestone Resource End Date{0}Badge Start{0}Badge End{0}Organic Break Start{0}Organic Break End{0}MSFT Block Start{0}MSFT Block End{1}", ColoumSpliter, RowSpliter);
                         styles.Add(PdfResourceHeaderRowStyle);
                         foreach (var resource in milestone.People)
                         {
-                            reportDataInPdfString += String.Format("{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{1}", ColoumSpliter, RowSpliter, resource.Name, resource.Title.TitleName, resource.Status.Name,
+                            reportDataInPdfString += String.Format("{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}{12}{1}",
+                            ColoumSpliter, RowSpliter, resource.Name, resource.Title.TitleName, resource.Status.Name,
+                            resource.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat),
+                            resource.ResourceEndDate.ToString(Constants.Formatting.EntryDateFormat),
                             resource.Badge.BadgeStartDate.HasValue ? resource.Badge.BadgeStartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "Clock not yet started",
                             resource.Badge.BadgeEndDate.HasValue ? resource.Badge.BadgeEndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "Clock not yet started",
                             resource.Badge.OrganicBreakStartDate.HasValue ? resource.Badge.OrganicBreakStartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
@@ -500,6 +520,8 @@ namespace PraticeManagement.Reports.Badge
                         }
                     }
                     PdfProjectPersonsSummaryTableStyle.trStyles = styles.ToArray();
+                    float[] widths = { 0.125f, 0.1f, 0.075f, 0.1f, 0.1f, 0.1f, 0.1f, 0.075f, 0.075f, 0.075f, 0.075f };
+                    PdfProjectPersonsSummaryTableStyle.widths = widths;
                     var table = builder.GetPdftablePersonsByProject(reportDataInPdfString, PdfProjectPersonsSummaryTableStyle, RowSpliter, ColoumSpliter);
                     document.Add((IElement)table);
                 }
@@ -532,25 +554,23 @@ namespace PraticeManagement.Reports.Badge
                 string reportDataInPdfString = string.Empty;
                 foreach (var project in projects)
                 {
-                    reportDataInPdfString = String.Format("{0} - {1} ({2} - {3}){5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}{5}{4}", project.ProjectNumber, project.Name, project.StartDate.Value.ToString("MM/dd/yyyy"), project.EndDate.Value.ToString("MM/dd/yyyy"), RowSpliter, ColoumSpliter);
+                    reportDataInPdfString = String.Format("{0} - {1} ({2} - {3}){5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}!!!{5}{5}{4}", project.ProjectNumber, project.Name, project.StartDate.Value.ToString("MM/dd/yyyy"), project.EndDate.Value.ToString("MM/dd/yyyy"), RowSpliter, ColoumSpliter);
                     styles.Clear();
                     styles.Add(PdfProjectHeaderRowStyle);
                     foreach (var milestone in project.Milestones)
                     {
-                        //_pdfProjectPersonsSummary += String.Format("{0} ({1} to {2}){3}",
-                        //    milestone.Description, milestone.StartDate.ToString("MM/dd/yyyy"), milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"), RowSpliter);
-
-                        reportDataInPdfString += String.Format("{0} ({1} to {2}){4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}{4}{3}",
+                        reportDataInPdfString += String.Format("{0} ({1} to {2}){4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}!!!{4}{4}{3}",
                             milestone.Description, milestone.StartDate.ToString("MM/dd/yyyy"), milestone.ProjectedDeliveryDate.ToString("MM/dd/yyyy"), RowSpliter, ColoumSpliter);
 
-                        //var milestoneTable = builder.GetPdftable(milestoneDataString, PdfMilestoneTableStyle, RowSpliter, ColoumSpliter);
-                        //document.Add((IElement)milestoneTable);
                         styles.Add(PdfMilestoneHeaderRowStyle);
-                        reportDataInPdfString += string.Format("Resource Name{0}Resource Level{0}Person Status{0}Badge Start{0}Badge End{0}Organic Break Start{0}Organic Break End{0}MSFT Block Start{0}MSFT Block End{1}", ColoumSpliter, RowSpliter);
+                        reportDataInPdfString += string.Format("Resource Name{0}Resource Level{0}Person Status{0}Milestone Resource Start Date{0}Milestone Resource End Date{0}Badge Start{0}Badge End{0}Organic Break Start{0}Organic Break End{0}MSFT Block Start{0}MSFT Block End{1}", ColoumSpliter, RowSpliter);
                         styles.Add(PdfResourceHeaderRowStyle);
                         foreach (var resource in milestone.People)
                         {
-                            reportDataInPdfString += String.Format("{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{1}", ColoumSpliter, RowSpliter, resource.Name, resource.Title.TitleName, resource.Status.Name,
+                            reportDataInPdfString += String.Format("{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}{12}{1}",
+                            ColoumSpliter, RowSpliter, resource.Name, resource.Title.TitleName, resource.Status.Name,
+                            resource.ResourceStartDate.ToString(Constants.Formatting.EntryDateFormat),
+                            resource.ResourceEndDate.ToString(Constants.Formatting.EntryDateFormat),
                             resource.Badge.BadgeStartDate.HasValue ? resource.Badge.BadgeStartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "Clock not yet started",
                             resource.Badge.BadgeEndDate.HasValue ? resource.Badge.BadgeEndDate.Value.ToString(Constants.Formatting.EntryDateFormat) : "Clock not yet started",
                             resource.Badge.OrganicBreakStartDate.HasValue ? resource.Badge.OrganicBreakStartDate.Value.ToString(Constants.Formatting.EntryDateFormat) : string.Empty,
@@ -562,6 +582,8 @@ namespace PraticeManagement.Reports.Badge
                         }
                     }
                     PdfProjectPersonsSummaryTableStyle.trStyles = styles.ToArray();
+                    float[] widths = { 0.125f, 0.1f, 0.075f, 0.1f, 0.1f, 0.1f, 0.1f, 0.075f, 0.075f, 0.075f, 0.075f };
+                    PdfProjectPersonsSummaryTableStyle.widths = widths;
                     var table = builder.GetPdftablePersonsByProject(reportDataInPdfString, PdfProjectPersonsSummaryTableStyle, RowSpliter, ColoumSpliter);
                     document.Add((IElement)table);
                 }
@@ -576,7 +598,7 @@ namespace PraticeManagement.Reports.Badge
 
         public void PDFExport()
         {
-            var data = ServiceCallers.Custom.Project(p => p.PersonsByProjectReport(PayTypes, PersonStatuses, Practices, ProjectStatuses, ExcludeInternals)).ToList();
+            var data = ServiceCallers.Custom.Project(p => p.PersonsByProjectReport(Accounts, PayTypes, PersonStatuses, Practices, ProjectStatuses, ExcludeInternals)).ToList();
 
             HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
             string filename = "PersonByProject.pdf";
@@ -602,3 +624,4 @@ namespace PraticeManagement.Reports.Badge
         }
     }
 }
+
