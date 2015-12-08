@@ -906,7 +906,8 @@ namespace PraticeManagement.Controls
                 try
                 {
                     string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
-                    var persons = serviceClient.PersonListShortByTitleAndStatus(statusids, DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName);
+                    string titles = DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName + "," + DataTransferObjects.Constants.TitleNames.DirectorTitleName;
+                    var persons = serviceClient.PersonListShortByTitleAndStatus(statusids, titles);
                     persons = persons.Any() ? persons.OrderBy(p => p.PersonLastFirstName).ToArray() : persons;
                     List<Person> personlist = new List<Person>();
                     personlist.Add(new Person() { Id = -1, LastName = "Unassigned" });
