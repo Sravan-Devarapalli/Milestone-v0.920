@@ -4787,6 +4787,9 @@
     <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\GetDefaultPTOProject.function.sql">
       <SubType>Code</SubType>
     </Build>
+    <Build Include="Schema Objects\Schemas\dbo\Programmability\Functions\ConvertStringListIntoStringTable.function.sql">
+      <SubType>Code</SubType>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <NotInBuild Include="How to create dbschema file.txt">
