@@ -28,6 +28,7 @@
         public static class TitleNames
         {
             public const string SeniorManagerTitleName = "Senior Manager";
+            public const string DirectorTitleName = "Director";
         }
 
         public class Formatting
@@ -114,3 +115,4 @@
         }
     }
 }
+
