@@ -42,7 +42,7 @@ namespace DataAccess
         private const string EndDateParam = "@EndDate";
         private const string PersonStatusIdParam = "@PersonStatusId";
         private const string RoleNameParam = "@RoleName";
-        private const string TitleNameParam = "@TitleName";
+        private const string TitleNameParam = "@TitleNames";
         private const string PersonStatusIdsListParam = "@PersonStatusIdsList";
         private const string LookedParam = "@Looked";
         private const string EmployeeNumberParam = "@EmployeeNumber";
@@ -2678,7 +2678,7 @@ namespace DataAccess
             }
         }
 
-        public static List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleName)
+        public static List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleNames)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.PersonListShortByTitleAndStatusProcedure, connection))
@@ -2688,7 +2688,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(PersonStatusIdsListParam,
                                                 !string.IsNullOrEmpty(statusIds) ? (object)statusIds : DBNull.Value);
                 command.Parameters.AddWithValue(TitleNameParam,
-                                                !string.IsNullOrEmpty(titleName) ? (object)titleName : DBNull.Value);
+                                                !string.IsNullOrEmpty(titleNames) ? (object)titleNames : DBNull.Value);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
