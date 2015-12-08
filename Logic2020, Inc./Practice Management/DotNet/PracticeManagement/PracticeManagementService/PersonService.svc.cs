@@ -130,10 +130,10 @@ namespace PracticeManagementService
                 .ToList();
         }
 
-        public List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleName)
+        public List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleNames)
         {
             return PersonDAL
-                .PersonListShortByTitleAndStatus(statusIds, titleName)
+                .PersonListShortByTitleAndStatus(statusIds, titleNames)
                 .OrderBy(p => p.LastName + p.FirstName)
                 .ToList();
         }
