@@ -111,7 +111,7 @@ namespace PracticeManagementService
         List<Person> PersonListShortByRoleAndStatus(string statusIds, string roleName);
 
         [OperationContract]
-        List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleName);
+        List<Person> PersonListShortByTitleAndStatus(string statusIds, string titleNames);
 
         /// <summary>
         /// Retrieves a short info on persons who are not in the Administration practice.
