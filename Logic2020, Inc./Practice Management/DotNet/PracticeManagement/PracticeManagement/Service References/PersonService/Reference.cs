@@ -270,7 +270,7 @@ namespace PraticeManagement.PersonService {
         DataTransferObjects.Person[] PersonListShortByRoleAndStatus(string statusIds, string roleName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListShortByTitleAndStatus", ReplyAction="http://tempuri.org/IPersonService/PersonListShortByTitleAndStatusResponse")]
-        DataTransferObjects.Person[] PersonListShortByTitleAndStatus(string statusIds, string titleName);
+        DataTransferObjects.Person[] PersonListShortByTitleAndStatus(string statusIds, string titleNames);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/PersonListAllForMilestone", ReplyAction="http://tempuri.org/IPersonService/PersonListAllForMilestoneResponse")]
         DataTransferObjects.Person[] PersonListAllForMilestone(System.Nullable<int> milestonePersonId, System.DateTime startDate, System.DateTime endDate);
@@ -362,7 +362,6 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-       
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -687,8 +686,8 @@ namespace PraticeManagement.PersonService {
             return base.Channel.PersonListShortByRoleAndStatus(statusIds, roleName);
         }
         
-        public DataTransferObjects.Person[] PersonListShortByTitleAndStatus(string statusIds, string titleName) {
-            return base.Channel.PersonListShortByTitleAndStatus(statusIds, titleName);
+        public DataTransferObjects.Person[] PersonListShortByTitleAndStatus(string statusIds, string titleNames) {
+            return base.Channel.PersonListShortByTitleAndStatus(statusIds, titleNames);
         }
         
         public DataTransferObjects.Person[] PersonListAllForMilestone(System.Nullable<int> milestonePersonId, System.DateTime startDate, System.DateTime endDate) {
