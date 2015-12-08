@@ -1161,7 +1161,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="statusIds" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="titleName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleNames" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
