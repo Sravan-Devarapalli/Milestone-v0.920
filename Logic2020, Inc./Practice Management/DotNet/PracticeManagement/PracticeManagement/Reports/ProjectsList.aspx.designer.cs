@@ -220,49 +220,22 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.WebControls.Panel pnlFilters;
         
         /// <summary>
-        /// tblFilterViewSwitch control.
+        /// tcFilters control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblFilterViewSwitch;
+        protected global::AjaxControlToolkit.TabContainer tcFilters;
         
         /// <summary>
-        /// rowSwitcher control.
+        /// tpSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TableRow rowSwitcher;
-        
-        /// <summary>
-        /// cellSecurity control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableCell cellSecurity;
-        
-        /// <summary>
-        /// mvFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.MultiView mvFilter;
-        
-        /// <summary>
-        /// vwFilter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View vwFilter;
+        protected global::AjaxControlToolkit.TabPanel tpSearch;
         
         /// <summary>
         /// divProjectFilter control.
