@@ -546,6 +546,7 @@
       <xsl:when test="$attrName = 'ExecutiveInCharge'">Executive in Charge</xsl:when>
       <xsl:when test="$attrName = 'ProjectManager'">Project Manager</xsl:when>
       <xsl:when test="$attrName = 'EngagementManager'">Engagement Manager</xsl:when>
+      <xsl:when test="$attrName = 'PayChexID'">ADP ID</xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$attrName" />
       </xsl:otherwise>
