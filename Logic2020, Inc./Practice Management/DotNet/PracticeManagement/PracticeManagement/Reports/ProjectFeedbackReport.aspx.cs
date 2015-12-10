@@ -15,6 +15,13 @@ namespace PraticeManagement.Reports
 {
     public partial class ProjectFeedbackReport : System.Web.UI.Page
     {
+        #region Constants
+
+        private const string QuarterRangeFormat = "Quarter {2} ({0} - {1})";
+        private const string YTDRangeFormat = "Year To Date ({0} - {1})";
+        private const string CustomRangeFormat = "{0} - {1}";
+
+        #endregion
         public string AccountIds
         {
             get
@@ -203,28 +210,44 @@ namespace PraticeManagement.Reports
                 string range = string.Empty;
                 if (StartDate.HasValue && EndDate.HasValue)
                 {
-                    if (StartDate.Value == Utils.Calendar.MonthStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.MonthEndDate(StartDate.Value))
+                    switch (RangeValueSelected)
                     {
-                        range = StartDate.Value.ToString("MMMM yyyy");
-                    }
-                    else if (StartDate.Value == Utils.Calendar.YearStartDate(StartDate.Value) && EndDate.Value == Utils.Calendar.YearEndDate(StartDate.Value))
-                    {
-                        range = StartDate.Value.ToString("yyyy");
-                    }
-                    else
-                    {
-                        range = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                        case 30:
+                        case -30: range = StartDate.Value.ToString(Constants.Formatting.FullMonthYearFormat);
+                                  break;
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4: range = string.Format(QuarterRangeFormat, StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), 
+                                                      EndDate.Value.ToString(Constants.Formatting.EntryDateFormat), RangeValueSelected); 
+                                break;
+                        case -1: range = string.Format(YTDRangeFormat, StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), 
+                                                       EndDate.Value.ToString(Constants.Formatting.EntryDateFormat)); 
+                                 break;
+                        default: range = string.Format(CustomRangeFormat, StartDate.Value.ToString(Constants.Formatting.EntryDateFormat), 
+                                                       EndDate.Value.ToString(Constants.Formatting.EntryDateFormat)); 
+                                 break;
                     }
                 }
                 return range;
             }
         }
 
-        public String RangeSelected
+        public int RangeValueSelected
         {
             get
             {
-                return ddlPeriod.SelectedValue;
+                int selectedValue = -1;
+                int.TryParse(ddlPeriod.SelectedValue, out selectedValue);
+                return selectedValue;
+            }
+        }
+
+        public bool IsDefaultPeriodSelected
+        {
+            get
+            {
+                return ddlPeriod.SelectedValue == "Please Select";
             }
         }
 
@@ -408,7 +431,7 @@ namespace PraticeManagement.Reports
 
         private void SelectView()
         {
-            if (StartDate.HasValue && EndDate.HasValue && AccountIds != "" && BusinessGroupIds != "" && PayTypes != "" && DirectorIds != "" && PracticeIds != "" && RangeSelected != "Please Select")
+            if (StartDate.HasValue && EndDate.HasValue && AccountIds != "" && BusinessGroupIds != "" && PayTypes != "" && DirectorIds != "" && PracticeIds != "" && !IsDefaultPeriodSelected)
             {
                 divWholePage.Style.Remove("display");
                 LoadActiveView();
@@ -523,6 +546,7 @@ namespace PraticeManagement.Reports
 
         public void PopulateHeaderSection()
         {
+            lbRange.Text = Range;
             int totalStatusCount = CanceledCount + NotCompletedCount + CompletedCount;
             ltrlCanceledCount.Text = ltrlCanceled.Text = CanceledCount.ToString();
             ltrlNotCompletedCount.Text = ltrlNotCompleted.Text = NotCompletedCount.ToString();
