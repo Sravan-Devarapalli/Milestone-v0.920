@@ -265,7 +265,7 @@
 
                     for (var i = 0; i < optionList.length; ++i) {
 
-                        optionList[i].title = optionList[i].innerHTML;
+                        optionList[i].title = optionList[i].text;
                     }
 
                 }
