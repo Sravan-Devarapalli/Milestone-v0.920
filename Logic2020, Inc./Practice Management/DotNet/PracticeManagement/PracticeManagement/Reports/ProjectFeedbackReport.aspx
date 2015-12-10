@@ -221,7 +221,8 @@
             <div id="divWholePage" runat="server">
                 <table class="PaddingTenPx AccountSummaryReportHeader">
                     <tr>
-                        <td style="width: 80%">
+                        <td class="vTopImp font16Px fontBold" style="width: 80%">
+                        <asp:Literal ID="lbRange" runat="server"></asp:Literal>
                         </td>
                         <td style="width: 20%">
                             <table class="ReportHeaderTotals">
