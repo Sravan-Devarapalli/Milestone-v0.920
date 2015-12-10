@@ -238,6 +238,15 @@ namespace PraticeManagement.Reports {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divWholePage;
         
         /// <summary>
+        /// lbRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal lbRange;
+        
+        /// <summary>
         /// ltrlCompleted control.
         /// </summary>
         /// <remarks>
