@@ -257,7 +257,7 @@
                 </tr>
             </table>
         </div>
-        <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp hidden">
+        <asp:Panel ID="pnlCustomDates" runat="server" CssClass="ConfirmBoxClass CustomDatesPopUp" Style="display: none;">
             <table class="WholeWidth">
                 <tr>
                     <td align="center" class="no-wrap">
@@ -288,22 +288,15 @@
                 </tr>
             </table>
         </asp:Panel>
-        <asp:Panel ID="pnlFilters" runat="server">
-            <table class="WholeWidth CustomTabStyle">
-                <tr>
-                    <td>
-                        <asp:Table ID="tblFilterViewSwitch" runat="server" CssClass="CommonCustomTabStyle">
-                            <asp:TableRow ID="rowSwitcher" runat="server">
-                                <asp:TableCell ID="cellSecurity" runat="server" CssClass="SelectedSwitch">
-                                    <span class="bg">
-                                        <a id="btnFilters" class="Width80Px">Filters</a>
-                                    </span>
-                                </asp:TableCell>
-                            </asp:TableRow>
-                        </asp:Table>
-                        <asp:MultiView ID="mvFilter" runat="server" ActiveViewIndex="0">
-                            <asp:View ID="vwFilter" runat="server">
-                                <div id="divProjectFilter" class="filter-section-color" runat="server">
+        <asp:Panel ID="pnlFilters" runat="server"> 
+            <AjaxControlToolkit:TabContainer ID="tcFilters" runat="server" ActiveTabIndex="0" 
+                        CssClass="CustomTabStyle">
+                        <AjaxControlToolkit:TabPanel ID="tpSearch" runat="server" BackColor="#e2ebff">
+                            <HeaderTemplate>
+                                <span class="bg"><a href="#"><span>Filters</span></a> </span>
+                            </HeaderTemplate>
+                            <ContentTemplate>
+                                <div id="divProjectFilter" class="Padding10Px" runat="server">
                                     <table class="WholeWidth Height80Px">
                                         <tr class="tb-header ProjectSummaryAdvancedFiltersHeader">
                                             <th class="Width10PerImp">
@@ -426,11 +419,9 @@
                                         </tr>
                                     </table>
                                 </div>
-                            </asp:View>
-                        </asp:MultiView>
-                    </td>
-                </tr>
-            </table>
+                            </ContentTemplate>
+                        </AjaxControlToolkit:TabPanel>
+                        </AjaxControlToolkit:TabContainer>
         </asp:Panel>
         <asp:HiddenField ID="hdnFiltersChanged" runat="server" Value="false" />
         <asp:Label ID="lblMessage" runat="server"></asp:Label>
