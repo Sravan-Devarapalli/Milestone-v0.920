@@ -6,7 +6,8 @@
 	ReviewEndDate	DATETIME NOT NULL,
 	ProjectId	INT		NULL,
 	Count		INT		NOT NULL,
-	IsDummy		BIT		NULL
+	IsDummy		BIT		NULL,
+	ManagerPaychexID INT NULL
 	CONSTRAINT PK_PersonFeedbacksInCSFeed PRIMARY KEY (Id)
 )
 
