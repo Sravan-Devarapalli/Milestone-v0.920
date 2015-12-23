@@ -60,10 +60,6 @@
             var previousApproved = hdnApproved.value == 'Yes';
             if (chbBadgeRequired.checked) {
                 if (oldPersonStartDate != newPersonStartdate || oldPersonEnddate != newPersonEnddate) {
-                    if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate)
-                        chbOpsApproved.checked = false;
-                    else
-                        chbOpsApproved.checked = previousApproved;
                     dpBadgeStart.value = dpPersonStart.value;
                     dpBadgeEnd.value = dpPersonEnd.value;
                     dtpBadgeStartDate_OnClientChange(dpBadgeStart);
@@ -84,6 +80,7 @@
             var hdnStartDateValue = document.getElementById(row + 'hdnBadgeStartDateValue');
             var hdnEndDateValue = document.getElementById(row + 'hdnBadgeEndDateValue');
             var hdnApproved = document.getElementById(row + 'hdnApproved');
+            var hdnApprovedChange = document.getElementById(row + 'hdnApprovedChange');
             var hdnPersonId = document.getElementById(row + 'hdnPersonId');
             var ddlPersonName = document.getElementById(row + 'ddlPersonName');
             if (hdnPersonId.value != ddlPersonName.value)
@@ -95,10 +92,14 @@
             var previousApproved = hdnApproved.value == 'Yes';
             if (chbBadgeRequired.checked) {
                 if (oldPersonStartDate != newPersonStartdate || oldPersonEnddate != newPersonEnddate) {
-                    if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate)
+                    if (oldPersonStartDate > newPersonStartdate || oldPersonEnddate < newPersonEnddate) {
+                        hdnApprovedChange.value = 'false';
                         chbOpsApproved.checked = false;
-                    else
+                    }
+                    else {
+                        hdnApprovedChange.value = 'true';
                         chbOpsApproved.checked = previousApproved;
+                    }
                 }
                 else {
                     chbOpsApproved.checked = previousApproved;
