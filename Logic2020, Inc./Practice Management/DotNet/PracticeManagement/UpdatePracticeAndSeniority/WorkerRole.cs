@@ -1217,7 +1217,7 @@ namespace UpdatePracticeAndSeniority
         /// <param name="nextRun"></param>
         public static void EmailUpdatedProfilesList(DateTime currentWithTimeZone, DateTime nextRun)
         {
-            WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Started emailing updated profiles list.", nextRun);
+            WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Started verifying the updated profiles list.", nextRun);
 
             try
             {
@@ -1228,7 +1228,7 @@ namespace UpdatePracticeAndSeniority
                     Email(EmailSubjectForProfilesUpdatedList, body, true, UpdatedProfilesListEmailReciever, string.Empty, string.Empty, null);
                     WorkerRole.SaveSchedularLog(currentWithTimeZone, "Emailed", "Emailed the updated profiles list.", nextRun);
                 }
-                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Finished emailing updated profiles list.", nextRun);
+                WorkerRole.SaveSchedularLog(currentWithTimeZone, SuccessStatus, "Finished verifying the updated profiles list.", nextRun);
             }
             catch (Exception ex)
             {
