@@ -502,6 +502,7 @@
             <ItemTemplate>
                 <asp:Label ID="lblApproved" runat="server" Text='<%# (bool)Eval("IsApproved") ? "Yes" : "No" %>'></asp:Label>
                 <asp:HiddenField ID="hdnApproved" runat="server" Value='<%# (bool)Eval("IsApproved") ? "Yes" : "No" %>'/>
+                <asp:HiddenField ID="hdnApprovedChange" runat="server"/>
                 <asp:CheckBox ID="chbOpsApproved" runat="server" Visible="false" Checked='<%# Eval("IsApproved") %>'
                     PreviousChecked='<%# Eval("IsApproved") %>' />
             </ItemTemplate>
