@@ -41,7 +41,7 @@ BEGIN
 	END
 	ELSE IF (@SortId = 2) --Alphabetical  Pay Type
 	BEGIN
-		SET @OrderBy = @OrderBy + ' paytp.[Name] DESC' + ', wutilAvg  ASC'
+		SET @OrderBy = @OrderBy + ' c.[TimeScaleName] DESC' + ', wutilAvg  ASC'
 	END
 	ELSE IF (@SortId = 3) --Alphabetical  Practice
 	BEGIN
