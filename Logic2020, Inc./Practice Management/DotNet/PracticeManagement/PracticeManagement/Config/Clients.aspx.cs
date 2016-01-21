@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.ClientService;
 using PraticeManagement.Controls;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Config
 {
@@ -76,6 +78,26 @@ namespace PraticeManagement.Config
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            SetPageSize();
+            AddAlphabetButtons();
+            if (!IsPostBack)
+            {
+                IsShowActive = true;
+                ViewState.Remove(CLIENTS_LIST_KEY);
+                bool isSearch = GetFilterValuesForSession();
+                DataBindClients(ClientsList);
+                previousAlphabetLnkButtonId = lnkbtnAll.ID;
+                if (isSearch)
+                {
+                    SearchClients();
+                }
+            }
+
+            gvClients.EmptyDataText = "No results found.";
+        }
+
+        private void SetPageSize()
+        {
             int pagesize = Convert.ToInt32(ddlView.SelectedValue);
             gvClients.PageSize = pagesize == -1 ? ClientsList.Count() : pagesize;
 
@@ -87,17 +109,6 @@ namespace PraticeManagement.Config
             {
                 gvClients.AllowPaging = true;
             }
-
-            AddAlphabetButtons();
-            if (!IsPostBack)
-            {
-                IsShowActive = true;
-                ViewState.Remove(CLIENTS_LIST_KEY);
-                DataBindClients(ClientsList);
-                previousAlphabetLnkButtonId = lnkbtnAll.ID;
-            }
-
-            gvClients.EmptyDataText = "No results found.";
         }
 
         protected void DataBindClients(Client[] clientsList)
@@ -126,6 +137,7 @@ namespace PraticeManagement.Config
             }
 
             DataBindClients(FilteredClientList);
+            SaveFilterValuesForSession();
         }
 
         protected void chbInactive_CheckedChanged(object sender, EventArgs e)
@@ -375,6 +387,7 @@ namespace PraticeManagement.Config
 
             lnkbtnAll.CssClass =
             lnkbtnAll1.CssClass = FontBold;
+            SaveFilterValuesForSession();
         }
 
         protected void Next_Clicked(object sender, EventArgs e)
@@ -404,7 +417,7 @@ namespace PraticeManagement.Config
             }
 
             DataBindClients(FilteredClientList);
-
+            SaveFilterValuesForSession();
             SetEmptyDataText();
         }
 
@@ -450,6 +463,7 @@ namespace PraticeManagement.Config
         protected void btnSearchAll_OnClick(object sender, EventArgs e)
         {
             SearchClients();
+            SaveFilterValuesForSession();
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -465,5 +479,30 @@ namespace PraticeManagement.Config
             int startIndex = currentRecords == 0 ? 0 : (gvClients.PageIndex == 0 ? 1 : (gvClients.PageIndex * Convert.ToInt32(ddlView.SelectedValue)) + 1);
             lblPageNumbering.Text = String.Format(ViewingRecords, startIndex, currentRecords == 0 ? 0 : (startIndex + currentRecords - 1), totalRecords);
         }
+
+        private void SaveFilterValuesForSession()
+        {
+            ClientFilters filter = new ClientFilters();
+            filter.SearchText = txtSearch.Text;
+            filter.View = ddlView.SelectedValue;
+            filter.ShowActiveOnly = chbShowActive.Checked;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ClientReport, filter);
+        }
+
+        private bool GetFilterValuesForSession()
+        {
+            bool IsSearch = false;
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ClientReport) as ClientFilters;
+            if (filters != null)
+            {
+                txtSearch.Text = filters.SearchText;
+                ddlView.SelectedValue = filters.View;
+                IsShowActive = chbShowActive.Checked = filters.ShowActiveOnly;
+                IsSearch = !string.IsNullOrEmpty(filters.SearchText);
+                SetPageSize();
+            }
+            return IsSearch;
+        }
     }
 }
+
