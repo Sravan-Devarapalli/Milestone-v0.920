@@ -8,6 +8,8 @@ using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Opportunities;
 using PraticeManagement.ProjectStatusService;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Reports
 {
@@ -211,6 +213,7 @@ namespace PraticeManagement.Reports
                 DataHelper.FillListDefault(cblSalesStages, "All Sales Stages", salesStages.Select(p => new { salesStage = p }).ToArray(), false, "salesStage", "salesStage");
                 tdSkills.Visible = false;
                 tdTitles.Visible = true;
+                GetFilterValuesForSession();
             }
         }
 
@@ -238,17 +241,14 @@ namespace PraticeManagement.Reports
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
             ResetFilter();
+            upnlTabCell.Visible = false;
         }
 
         protected void btnUpdateView_OnClick(object sender, EventArgs e)
         {
-            hdnGraphType.Value = ddlGraphsTypes.SelectedValue;
-            hdnPeriodValue.Value = ddlPeriod.SelectedValue;
-            if (hdnPeriodValue.Value == "0")
-            {
-                hdnCustomOk.Value = "false";
-            }
+           
             LoadActiveView();
+            SaveFilterValuesForSession();
         }
 
         protected void btnCustDatesOK_Click(object sender, EventArgs e)
@@ -401,6 +401,12 @@ namespace PraticeManagement.Reports
 
         private void LoadActiveView()
         {
+            hdnGraphType.Value = ddlGraphsTypes.SelectedValue;
+            hdnPeriodValue.Value = ddlPeriod.SelectedValue;
+            if (hdnPeriodValue.Value == "0")
+            {
+                hdnCustomOk.Value = "false";
+            }
             upnlTabCell.Visible = true;
             if (mvConsultingDemandReport.ActiveViewIndex == 0)
             {
@@ -489,6 +495,29 @@ namespace PraticeManagement.Reports
                     );
             hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            RangeFilters filter = new RangeFilters();
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ConsultingDemandReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ConsultingDemandReport) as RangeFilters;
+            if (filters != null)
+            {
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                hdnStartDate.Value = diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                hdnEndDate.Value = diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                LoadActiveView();
+            }
         }
 
         #endregion
