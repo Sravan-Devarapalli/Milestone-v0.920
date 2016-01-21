@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DataTransferObjects.Reports;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reporting
 {
@@ -108,7 +111,10 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                GetFilterValuesForSession();
+            }
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
@@ -140,6 +146,7 @@ namespace PraticeManagement.Reporting
         {
             SelectView(1);
             btnUpdate.Enabled = false;
+            SaveFilterValuesForSession();
         }
 
         public void SelectView(int viewIndex)
@@ -236,5 +243,27 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        private void SaveFilterValuesForSession()
+        {
+            RangeFilters filter = new RangeFilters();
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            ReportsFilterHelper.SaveFilterValues(ReportName.AuditReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.AuditReport) as RangeFilters;
+            if (filters != null)
+            {
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                SelectView(1);
+            }
+        }
+
     }
 }
+
