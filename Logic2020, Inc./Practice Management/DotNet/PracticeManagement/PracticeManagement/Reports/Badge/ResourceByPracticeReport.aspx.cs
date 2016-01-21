@@ -10,6 +10,8 @@ using DataTransferObjects.Reports;
 using PraticeManagement.Utils.Excel;
 using System.Data;
 using PraticeManagement.Utils;
+using DataTransferObjects.Filters;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -172,6 +174,7 @@ namespace PraticeManagement.Reports.Badge
             {
                 dtpEnd.DateValue = DataTransferObjects.Utils.Generic.MonthEndDate(DateTime.Now);
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
+                GetFilterValuesForSession();
             }
         }
 
@@ -192,6 +195,13 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
+            ValidateAndPrepareData();
+           
+        }
+
+        private void ValidateAndPrepareData()
+        {
             Page.Validate("BadgeReport");
             if (!Page.IsValid)
             {
@@ -199,7 +209,7 @@ namespace PraticeManagement.Reports.Badge
                 return;
             }
             divWholePage.Style.Remove("display");
-            var data = ServiceCallers.Custom.Report(r => r.ResourcesByPracticeReport(SelectedPayTypes,SelectedPersonStatuses,SelectedPractices, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
+            var data = ServiceCallers.Custom.Report(r => r.ResourcesByPracticeReport(SelectedPayTypes, SelectedPersonStatuses, SelectedPractices, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
             PracticeList = data;
             if (PracticeList.Count > 0)
             {
@@ -506,6 +516,39 @@ namespace PraticeManagement.Reports.Badge
                 data.Rows.Add(row.ToArray());
             }
             return data;
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            BadgeResourceFilters filters = new BadgeResourceFilters();
+            filters.PayTypeIds = SelectedPayTypes;
+            filters.PersonStatusIds = SelectedPersonStatuses;
+            filters.PracticeIds = SelectedPractices;
+            filters.SelectedView = SelectedView;
+            filters.IsBadgedNotOnProject = filter.IsBadgedNotOnProject;
+            filters.IsBadgedOnProject = filter.IsBadgedOnProject;
+            filters.IsClockNotStarted = filter.IsClockNotStarted;
+            filters.ReportStartDate=dtpStart.DateValue;
+            filters.ReportEndDate = dtpEnd.DateValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ResourceByPracticeReport, filters);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ResourceByPracticeReport) as BadgeResourceFilters;
+            if (filters != null)
+            {
+                filter.PayTypes = filters.PayTypeIds;
+                filter.PersonStatus = filters.PersonStatusIds;
+                filter.Practices = filters.PracticeIds;
+                ddlView.SelectedValue = filters.SelectedView.ToString();
+                filter.IsBadgedNotOnProject = filters.IsBadgedNotOnProject;
+                filter.IsBadgedOnProject = filters.IsBadgedOnProject;
+                filter.IsClockNotStarted = filters.IsClockNotStarted;
+                dtpStart.DateValue = filters.ReportStartDate;
+                dtpEnd.DateValue = filters.ReportEndDate;
+                ValidateAndPrepareData();
+            }
         }
     }
 }
