@@ -16,6 +16,7 @@ using PraticeManagement.Utils.Excel;
 using System.Collections.Generic;
 using PraticeManagement.Utils;
 using System.Linq;
+using DataTransferObjects.Filters;
 namespace PraticeManagement.Config
 {
     public partial class Persons : PracticeManagementPageBase
@@ -372,6 +373,7 @@ namespace PraticeManagement.Config
                     gvPersons.Sort("LastName", SortDirection.Ascending);
                     SetFilterValues();
                 }
+                GetFilterValuesForSession();
             }
 
 
@@ -411,6 +413,7 @@ namespace PraticeManagement.Config
         {
             SearchPersons();
             SaveFilterSettings();
+            SaveFilterValuesForSession();
         }
 
         private void SearchPersons()
@@ -494,6 +497,7 @@ namespace PraticeManagement.Config
             CurrentIndex = 0;
             SetFilterValues();
             SaveFilterSettings();
+            SaveFilterValuesForSession();
             gvPersons.DataBind();
         }
 
@@ -536,7 +540,8 @@ namespace PraticeManagement.Config
             gvPersons.Sort("LastName", SortDirection.Ascending);
             gvPersons.PageIndex = 0;
             CurrentIndex = 0;
-            SaveFilterSettings(); 
+            SaveFilterSettings();
+            SaveFilterValuesForSession();
         }
 
         protected void DdlView_SelectedIndexChanged(object sender, EventArgs e)
@@ -545,6 +550,7 @@ namespace PraticeManagement.Config
             CurrentIndex = 0;
             gvPersons.DataBind();
             SaveFilterSettings();
+            SaveFilterValuesForSession();
         }
 
         protected void Previous_Clicked(object sender, EventArgs e)
@@ -1094,6 +1100,55 @@ namespace PraticeManagement.Config
         }
         #endregion
 
+        private void SaveFilterValuesForSession()
+        {
+            PersonsFilters filter = new PersonsFilters();
+            filter.SearchText = txtSearch.Text;
+            filter.ReportView = ddlView.SelectedValue;
+            filter.RecruiterIds = cblRecruiters.SelectedItems;
+            filter.IsActive = personsFilter.Active;
+            filter.IsContingent = personsFilter.Projected;
+            filter.IsTerminated = personsFilter.Terminated;
+            filter.IsTeminationPending = personsFilter.TerminationPending;
+            filter.PayTypeIds = personsFilter.PayTypeIds;
+            filter.PracticeAreaIds = personsFilter.PracticeIds;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ProjectsList, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ProjectsList) as PersonsFilters;
+            if (filters != null)
+            {
+                //personsFilter.Init;
+                hdnLooked.Value = txtSearch.Text = filters.SearchText;
+                ddlView.SelectedValue = filters.ReportView;
+                RecruiterIdsSelectedKey = cblRecruiters.SelectedItems = filters.RecruiterIds;
+                personsFilter.Active = filters.IsActive;
+                hdnActive.Value = filters.IsActive.ToString();
+                personsFilter.Projected = filters.IsContingent;
+                hdnProjected.Value = filters.IsContingent.ToString();
+                personsFilter.Terminated = filters.IsTerminated;
+                hdnTerminated.Value = filters.IsTerminated.ToString();
+                personsFilter.TerminationPending = filters.IsTeminationPending;
+                hdnTerminatedPending.Value = filters.IsTeminationPending.ToString();
+                PayTypeIdsSelectedKey = personsFilter.PayTypeIds = filters.PayTypeIds;
+                PracticeIdsSelectedKey = personsFilter.PracticeIds = filters.PracticeAreaIds;
+                if (!string.IsNullOrEmpty(txtSearch.Text))
+                {
+                    SearchPersons();
+                }
+                else
+                {
+                    btnClearResults.Enabled = false;
+                    hdnCleartoDefaultView.Value = "false";
+                    txtSearch.Text = string.Empty;
+                    CurrentIndex = 0;
+                    SetFilterValues();
+                    gvPersons.DataBind();
+                }
+            }
+        }
         #endregion
     }
 }
