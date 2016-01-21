@@ -9,6 +9,8 @@ using DataTransferObjects;
 using DataTransferObjects.Reports.HumanCapital;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Reports.HumanCapital;
+using PraticeManagement.Utils;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reporting
 {
@@ -232,6 +234,7 @@ namespace PraticeManagement.Reporting
                     DataHelper.FillPracticeList(this.cblPractices, Resources.Controls.AllPracticesText);
                 }
                 SetDefalultfilter();
+                GetFilterValuesForSession();
                 LoadActiveView();
 
                 lblAttrition.Attributes[OnMouseOver] = string.Format(ShowPanel, lblAttrition.ClientID, pnlAtrritionCalculation.ClientID, 0);
@@ -396,6 +399,7 @@ namespace PraticeManagement.Reporting
         protected void Filters_Changed(object sender, EventArgs e)
         {
             LoadActiveView();
+            SaveFilterValuesForSession();
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -409,6 +413,7 @@ namespace PraticeManagement.Reporting
             if (ddlPeriod.SelectedValue != "0")
             {
                 LoadActiveView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -424,6 +429,7 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -437,6 +443,40 @@ namespace PraticeManagement.Reporting
             diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
         }
         #endregion
+
+        public void SaveFilterValuesForSession()
+        {
+            TerminationReportFilters filter = new TerminationReportFilters();
+            filter.PracticeIds = cblPractices.SelectedItems;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            filter.ExcludeInternalPractices = chbInternalProjects.Checked;
+            filter.PayTypeIds = cblTimeScales.SelectedItems;
+            filter.TitleIds = cblTitles.SelectedItems;
+            filter.TerminationReasonIds = cblTerminationReasons.SelectedItems;
+            ReportsFilterHelper.SaveFilterValues(ReportName.TerminationReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.TerminationReport) as TerminationReportFilters;
+            if (filters != null)
+            {
+                cblPractices.UnSelectAll();
+                cblPractices.SelectedItems = filters.PracticeIds;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                chbInternalProjects.Checked = filters.ExcludeInternalPractices;
+                cblTimeScales.UnSelectAll();
+                cblTimeScales.SelectedItems = filters.PayTypeIds;
+                cblTitles.UnSelectAll();
+                cblTitles.SelectedItems = filters.TitleIds;
+                cblTerminationReasons.UnSelectAll();
+                cblTerminationReasons.SelectedItems = filters.TerminationReasonIds;
+            }
+        }
     }
 }
 
