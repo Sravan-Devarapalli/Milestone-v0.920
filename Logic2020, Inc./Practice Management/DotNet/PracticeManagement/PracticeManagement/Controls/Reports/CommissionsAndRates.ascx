@@ -2,6 +2,7 @@
     Inherits="PraticeManagement.Controls.Reports.CommissionsAndRates" %>
 <%@ Register Src="~/Controls/MonthPicker.ascx" TagName="MonthPicker" TagPrefix="uc2" %>
 <div class="buttons-block marginBT10Px">
+    <asp:HiddenField ID="hdnReset" runat="server" />
     <table>
         <tr>
             <td class="Width90Px">
@@ -27,8 +28,8 @@
             </td>
             <td align="right" class="Width360Px">
                 <asp:Button ID="btnReset" runat="server" Text="Reset Filter" CssClass="Width100PxImp"
-                    CausesValidation="false" OnClientClick="this.disabled=true;Delete_Cookie('CompanyPerformanceFilterKey', '/', '');window.location.href=window.location.href;return false;"
-                    EnableViewState="False" />
+                    OnClientClick="Delete_Cookie('CompanyPerformanceFilterKey', '/', '');"
+                    OnClick="btnReset_Click" EnableViewState="False" />
             </td>
             <td align="right" class="Width110Px">
                 <asp:Button ID="btnUpdateView" runat="server" Text="Update View" CssClass="Width100PxImp"
@@ -45,7 +46,8 @@
         <Columns>
             <asp:TemplateField>
                 <HeaderTemplate>
-                    <div class="ie-bg no-wrap">Commissions &amp; Rates</div>
+                    <div class="ie-bg no-wrap">
+                        Commissions &amp; Rates</div>
                 </HeaderTemplate>
                 <EditItemTemplate>
                     <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
