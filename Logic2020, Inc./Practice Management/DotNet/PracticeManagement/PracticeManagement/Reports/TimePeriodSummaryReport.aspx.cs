@@ -6,6 +6,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using PraticeManagement.Controls;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reporting
 {
@@ -325,6 +328,7 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            GetFilterValuesForSession();
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -376,6 +380,7 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 SelectView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -393,6 +398,7 @@ namespace PraticeManagement.Reporting
             {
                 mpeCustomDates.Show();
             }
+            SaveFilterValuesForSession();
         }
 
         protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
@@ -412,11 +418,13 @@ namespace PraticeManagement.Reporting
                 chkIncludePersons.Checked = chkIncludePersons.Enabled = false;
             }
             SelectView();
+            SaveFilterValuesForSession();
         }
 
         protected void chkIncludePersons_CheckedChanged(object sender, EventArgs e)
         {
             SelectView();
+            SaveFilterValuesForSession();
         }
 
         private void LoadActiveView()
@@ -444,6 +452,31 @@ namespace PraticeManagement.Reporting
             //ucByWorktype.DataBindResource(data, DatesList);
             //ucBillableAndNonBillable.BillablValue = (data.Count() > 0) ? data.Sum(d => d.BillabileTotal).ToString() : "0";
             //ucBillableAndNonBillable.NonBillablValue = (data.Count() > 0) ? data.Sum(d => d.NonBillableTotal).ToString() : "0";
+        }
+
+
+        private void SaveFilterValuesForSession()
+        {
+            TimeReports filter = new TimeReports();
+            filter.IncludePersonsWithNoTime = chkIncludePersons.Checked;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.SelectedView = ddlView.SelectedValue;
+            filter.StartDate = diRange.FromDate.Value;
+            filter.EndDate = diRange.ToDate.Value;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ByTimePeriodReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ByTimePeriodReport) as TimeReports;
+             if (filters != null)
+             {
+                 chkIncludePersons.Checked = filters.IncludePersonsWithNoTime;
+                 ddlPeriod.SelectedValue = filters.ReportPeriod;
+                 ddlView.SelectedValue = filters.SelectedView;
+                 diRange.FromDate = filters.StartDate;
+                 diRange.ToDate = filters.EndDate;
+             }
         }
 
     }
