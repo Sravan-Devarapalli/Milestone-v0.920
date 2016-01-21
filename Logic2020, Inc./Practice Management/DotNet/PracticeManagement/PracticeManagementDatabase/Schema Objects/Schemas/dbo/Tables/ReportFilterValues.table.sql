@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[ReportFilterValues]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[CurrentUserId] INT NOT NULL CONSTRAINT RFV_UserId UNIQUE(CurrentUserId,ReportId,PreviousUserId),
+	[ReportId]		INT NOT NULL,
+	[ReportFilters] NVARCHAR (MAX) NOT NULL,
+	[PreviousUserId]INT NOT NULL,
+	PRIMARY KEY CLUSTERED ([Id] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF)
+)
+
