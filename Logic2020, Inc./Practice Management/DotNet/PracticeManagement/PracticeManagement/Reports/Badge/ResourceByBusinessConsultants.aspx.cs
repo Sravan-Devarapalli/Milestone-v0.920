@@ -10,6 +10,8 @@ using System.Web.UI.DataVisualization.Charting;
 using System.Drawing;
 using System.Data;
 using PraticeManagement.Utils;
+using DataTransferObjects.Filters;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -173,6 +175,7 @@ namespace PraticeManagement.Reports.Badge
             {
                 dtpEnd.DateValue = DataTransferObjects.Utils.Generic.MonthEndDate(DateTime.Now);
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
+                GetFilterValuesForSession();
             }
         }
 
@@ -193,6 +196,12 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
+            ValidateAndPrepareData();
+        }
+
+        private void ValidateAndPrepareData()
+        {
             Page.Validate("BadgeReport");
             if (!Page.IsValid)
             {
@@ -200,14 +209,14 @@ namespace PraticeManagement.Reports.Badge
                 return;
             }
             divWholePage.Style.Remove("display");
-            var data = ServiceCallers.Custom.Report(r => r.ResourcesByTitleReport(SelectedPayTypes, SelectedPersonStatuses,SelectedTitles, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
+            var data = ServiceCallers.Custom.Report(r => r.ResourcesByTitleReport(SelectedPayTypes, SelectedPersonStatuses, SelectedTitles, dtpStart.DateValue, dtpEnd.DateValue, SelectedView)).ToList();
             TitleList = data;
             if (TitleList.Count > 0)
             {
                 divWholePage.Style.Remove("display");
                 divEmptyMessage.Style.Add("display", "none");
                 PopulateChart();
-                TitleList.Add(new GroupbyTitle() { Title = new DataTransferObjects.Title() { TitleName ="Total",TitleId =-1}});
+                TitleList.Add(new GroupbyTitle() { Title = new DataTransferObjects.Title() { TitleName = "Total", TitleId = -1 } });
                 PopulateTable();
             }
             else
@@ -319,7 +328,7 @@ namespace PraticeManagement.Reports.Badge
                 repCount.DataBind();
             }
         }
-
+        
         public List<BadgedResourcesByTime> MakeTotalList()
         {
             var rangesList = new List<BadgedResourcesByTime>();
@@ -507,6 +516,39 @@ namespace PraticeManagement.Reports.Badge
                 data.Rows.Add(row.ToArray());
             }
             return data;
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            BadgeResourceFilters filters = new BadgeResourceFilters();
+            filters.PayTypeIds = SelectedPayTypes;
+            filters.PersonStatusIds = SelectedPersonStatuses;
+            filters.TitleIds = SelectedTitles;
+            filters.SelectedView = SelectedView;
+            filters.IsBadgedNotOnProject = filter.IsBadgedNotOnProject;
+            filters.IsBadgedOnProject = filter.IsBadgedOnProject;
+            filters.IsClockNotStarted = filter.IsClockNotStarted;
+            filters.ReportStartDate = dtpStart.DateValue;
+            filters.ReportEndDate = dtpEnd.DateValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ResourceByBusinessConsultantReport, filters);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ResourceByBusinessConsultantReport) as BadgeResourceFilters;
+            if (filters != null)
+            {
+                filter.PayTypes = filters.PayTypeIds;
+                filter.PersonStatus = filters.PersonStatusIds;
+                filter.TitleIds = filters.TitleIds;
+                ddlView.SelectedValue = filters.SelectedView.ToString();
+                filter.IsBadgedNotOnProject = filters.IsBadgedNotOnProject;
+                filter.IsBadgedOnProject = filters.IsBadgedOnProject;
+                filter.IsClockNotStarted = filters.IsClockNotStarted;
+                dtpStart.DateValue = filters.ReportStartDate;
+                dtpEnd.DateValue = filters.ReportEndDate;
+                ValidateAndPrepareData();
+            }
         }
     }
 }
