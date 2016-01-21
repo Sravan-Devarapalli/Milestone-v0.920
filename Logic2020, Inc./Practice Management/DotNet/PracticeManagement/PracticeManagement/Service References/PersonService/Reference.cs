@@ -108,6 +108,15 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonDivisions", ReplyAction="http://tempuri.org/IPersonService/GetPersonDivisionsResponse")]
         DataTransferObjects.PersonDivision[] GetPersonDivisions();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/SaveReportFilterValuesResponse")]
+        void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/GetReportFilterValuesResponse")]
+        string GetReportFilterValues(int currentUserId, int reportId, int previousUserId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse")]
+        void DeleteReportFilterValues(int currentUserId, int previousUserId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -361,7 +370,7 @@ namespace PraticeManagement.PersonService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
-        
+      
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -492,6 +501,18 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.PersonDivision[] GetPersonDivisions() {
             return base.Channel.GetPersonDivisions();
+        }
+        
+        public void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId) {
+            base.Channel.SaveReportFilterValues(currentUserId, reportId, data, previousUserId);
+        }
+        
+        public string GetReportFilterValues(int currentUserId, int reportId, int previousUserId) {
+            return base.Channel.GetReportFilterValues(currentUserId, reportId, previousUserId);
+        }
+        
+        public void DeleteReportFilterValues(int currentUserId, int previousUserId) {
+            base.Channel.DeleteReportFilterValues(currentUserId, previousUserId);
         }
         
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
