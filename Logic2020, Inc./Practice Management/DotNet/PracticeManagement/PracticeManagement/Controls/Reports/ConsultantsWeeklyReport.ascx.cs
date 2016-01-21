@@ -20,6 +20,7 @@ using iTextSharp.text.pdf;
 using System.Drawing.Imaging;
 using PraticeManagement.Utils.Excel;
 using System.Data;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -420,6 +421,7 @@ namespace PraticeManagement.Controls.Reports
                     {
                         chart.CssClass = "hide";
                     }
+                    GetFilterValuesForSession();
                 }
             }
         }
@@ -459,6 +461,7 @@ namespace PraticeManagement.Controls.Reports
             chart.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
                            Resources.Controls.TimelineGeneralItemHeigth * report.Count +
                            Resources.Controls.TimelineGeneralFooterHeigth;
+            SaveFilterValuesForSession();
         }
 
         /// <summary>
@@ -1221,7 +1224,7 @@ namespace PraticeManagement.Controls.Reports
 
                     var range = chartDetails.Series["Milestones"].Points[ind];
                     range.Color = Coloring.GetColorByUtilization(load, load == -1 ? 2 : (load == -2 ? 1 : 0));
-                    string holidayDescription = CompanyHolidays.Keys.Any(t => t == pointStartDate) ? CompanyHolidays[pointStartDate] : utilizationDaily.First().TimeOffDates.Keys.Any(t => t == pointStartDate) ? utilizationDaily.First().TimeOffDates[pointStartDate].ToString() : string.Empty;
+                    string holidayDescription = CompanyHolidays == null ? string.Empty : CompanyHolidays.Keys.Any(t => t == pointStartDate) ? CompanyHolidays[pointStartDate] : utilizationDaily.First().TimeOffDates.Keys.Any(t => t == pointStartDate) ? utilizationDaily.First().TimeOffDates[pointStartDate].ToString() : string.Empty;
                     range.ToolTip = FormatRangeTooltip(load, pointStartDate, pointEndDate.AddDays(-1), new BadgeType() { DayType = load == -1 ? 2 : (load == -2 ? 1 : 0) }, null, false, holidayDescription);
                 }
             }
@@ -1591,7 +1594,7 @@ namespace PraticeManagement.Controls.Reports
                 {
                     if (milestone.StartDate.Date <= endDate.Date && startDate.Date <= milestone.EndDate.Date)
                     {
-                        text += string.Format("; {0} - {1}",project.ProjectNumber,project.Name);
+                        text += string.Format("; {0} - {1}", project.ProjectNumber, project.Name);
                         break;
                     }
                 }
@@ -1869,20 +1872,61 @@ namespace PraticeManagement.Controls.Reports
             SaveFilters(null, null);
         }
 
+        public void UpdateReportFromFilters()
+        {
+            this.UpdateReport();
+            chart.CssClass = "ConsultantsWeeklyReportAlignCenter";
+            tblExport.Visible = true;
+            uaeDetails.EnableClientState = true;
+        }
+
         protected void btnResetFilter_OnClick(object sender, EventArgs e)
         {
-            if (!(hdnIsChartRenderedFirst.Value == "true"))
-            {
-                chart.CssClass = "hide";
-            }
+            //if (!(hdnIsChartRenderedFirst.Value == "true"))
+            //{
+            //    chart.CssClass = "hide";
+            //}
             if (IsCapacityMode)
             {
                 utf.ResetSortDirectionForCapacityMode();
             }
+            this.UpdateReport();
+            updConsReport.Update();
             SaveFilters(null, null);
         }
 
         #endregion Formatting
+
+        private void SaveFilterValuesForSession()
+        {
+            ConsultingUtilizationReportFilters filter = new ConsultingUtilizationReportFilters();
+            utf.SaveFiltersFromControls(filter);
+            if (IsCapacityMode)
+            {
+                ReportsFilterHelper.SaveFilterValues(ReportName.ConsultingCapacityReport, filter);
+            }
+            else
+            {
+                ReportsFilterHelper.SaveFilterValues(ReportName.ConsultingUtilizationReport, filter);
+            }
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            ConsultingUtilizationReportFilters filters;
+            if (IsCapacityMode)
+            {
+                filters = ReportsFilterHelper.GetFilterValues(ReportName.ConsultingCapacityReport) as ConsultingUtilizationReportFilters;
+            }
+            else
+            {
+                filters = ReportsFilterHelper.GetFilterValues(ReportName.ConsultingUtilizationReport) as ConsultingUtilizationReportFilters;
+            }
+            if (filters != null)
+            {
+                utf.Filters = filters;
+            }
+        }
 
     }
 
