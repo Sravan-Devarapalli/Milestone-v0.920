@@ -3411,6 +3411,7 @@
     <Compile Include="Utils\Logging.cs" />
     <Compile Include="Utils\ProjectHelper.cs" />
     <Compile Include="Utils\RecruitingMetricsReportExcelUtil.cs" />
+    <Compile Include="Utils\ReportsFilterHelper.cs" />
     <Compile Include="Utils\ResourceExceptionReportExcelUtil.cs" />
     <Compile Include="Utils\SettingsHelper.cs" />
     <Compile Include="Utils\TimeEntryHelper.cs" />
@@ -4060,4 +4061,3 @@
     <PreBuildEvent>if exist ..\..\..\Binary\AjaxControlToolkit.dll xcopy ..\..\..\Binary\AjaxControlToolkit.dll "c:\Program Files\Reference Assemblies\Microsoft\Framework\v3.5\" /Y /C</PreBuildEvent>
   </PropertyGroup>
 </Project>
-
