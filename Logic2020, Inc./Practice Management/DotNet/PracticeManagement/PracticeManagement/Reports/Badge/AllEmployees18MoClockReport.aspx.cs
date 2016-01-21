@@ -12,6 +12,7 @@ using System.Data;
 using PraticeManagement.PersonStatusService;
 using System.ServiceModel;
 using System.Text;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -96,6 +97,14 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PayTypes
+        {
+            get
+            {
+                return cblPayTypes.SelectedItems;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -104,7 +113,8 @@ namespace PraticeManagement.Reports.Badge
                 cblPayTypes.SelectItems(new List<int>() { 2 });
                 FillPersonStatusList();
                 cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
-                PopulateData(true);
+                //PopulateData(true);
+                GetFilterValuesForSession();
             }
         }
 
@@ -131,7 +141,7 @@ namespace PraticeManagement.Reports.Badge
             var filename = "AllEmployees18MoClockReport.xls";
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var report = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(cblPayTypes.SelectedItems,PersonStatus)).ToList();
+            var report = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(PayTypes, PersonStatus)).ToList();
             if (report.Count > 0)
             {
                 string dateRangeTitle = "All Employees' 18-Month Clock Dates";
@@ -225,12 +235,13 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             PopulateData(true);
         }
 
         public void PopulateData(bool isFromUpdateBtn)
         {
-            var badgeList = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(isFromUpdateBtn ? cblPayTypes.SelectedItems : null,PersonStatus));
+            var badgeList = ServiceCallers.Custom.Report(r => r.GetAllBadgeDetails(isFromUpdateBtn ? PayTypes : null, PersonStatus));
             if (badgeList.Length > 0)
             {
                 divEmptyMessage.Style.Add("display", "none");
@@ -282,6 +293,29 @@ namespace PraticeManagement.Reports.Badge
                     lblOrganicDuration.Text = string.Empty;
                 }
             }
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            MsManagementReportFilters filter = new MsManagementReportFilters();
+            
+            filter.PayTypeIds = PayTypes;
+            filter.PersonStatusIds = PersonStatus;
+
+            ReportsFilterHelper.SaveFilterValues(ReportName.AllEmployees18MoClockReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.AllEmployees18MoClockReport) as MsManagementReportFilters;
+            if (filters != null)
+            {
+                cblPayTypes.UnSelectAll();
+                cblPayTypes.SelectedItems = filters.PayTypeIds;
+                cblPersonStatus.UnSelectAll();
+                cblPersonStatus.SelectedItems = filters.PersonStatusIds;
+            }
+            PopulateData(true);
         }
     }
 }
