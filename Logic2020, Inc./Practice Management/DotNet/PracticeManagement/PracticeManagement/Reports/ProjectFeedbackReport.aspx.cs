@@ -10,6 +10,8 @@ using PraticeManagement.PracticeService;
 using PraticeManagement.Controls;
 using System.Text;
 using PraticeManagement.PersonService;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Reports
 {
@@ -300,11 +302,13 @@ namespace PraticeManagement.Reports
                 FillInitDirectorsList();
                 DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
                 cblPayTypes.SelectAll();
+               
             }
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
+            GetFilterValuesForSession();
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -346,6 +350,7 @@ namespace PraticeManagement.Reports
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 SelectView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -460,6 +465,7 @@ namespace PraticeManagement.Reports
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             if (ddlPeriod.SelectedValue != "0")
             {
                 SelectView();
@@ -468,10 +474,12 @@ namespace PraticeManagement.Reports
             {
                 mpeCustomDates.Show();
             }
+            
         }
 
         protected void cblAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             using (var serviceClient = new ProjectGroupServiceClient())
             {
                 BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(AccountIds, null);
@@ -487,31 +495,41 @@ namespace PraticeManagement.Reports
                 //}
                 SelectView();
             }
+            
         }
 
         protected void cblBusinessGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             SelectView();
+            
         }
 
         protected void chbExcludeInternal_CheckedChanged(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             SelectView();
         }
 
         protected void cblDirector_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             SelectView();
+           
         }
 
         protected void cblPractice_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             SelectView();
+            
         }
 
         protected void cblPayTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             SelectView();
+            
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -574,6 +592,39 @@ namespace PraticeManagement.Reports
             {
                 int barHeight = (int)Math.Round((float)80 * CompletedCount / totalStatusCount);
                 trCompleted.Height = barHeight.ToString() + "px";
+            }
+        }
+
+        public void SaveFilterValuesForSession()
+        {
+            ProjectFeedbackReportFilter filter = new ProjectFeedbackReportFilter();
+            filter.PayTypeIds = cblPayTypes.SelectedItems;
+            filter.ClientIds = cblAccount.SelectedItems;
+            filter.BusinessUnitIds = cblBusinessGroup.SelectedItems;
+            filter.ExecutiveInChargeIds = cblDirector.SelectedItems;
+            filter.PracticeIds = cblPractices.SelectedItems;
+            filter.ExcludeInternalPractices = chbExcludeInternal.Checked;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ProjectFeedbackReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ProjectFeedbackReport) as ProjectFeedbackReportFilter;
+            if (filters != null)
+            {
+                cblPayTypes.SelectedItems = filters.PayTypeIds;
+                cblAccount.SelectedItems = filters.ClientIds;
+                cblBusinessGroup.SelectedItems = filters.BusinessUnitIds;
+                cblDirector.SelectedItems = filters.ExecutiveInChargeIds;
+                cblPractices.SelectedItems = filters.PracticeIds;
+                chbExcludeInternal.Checked = filters.ExcludeInternalPractices;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                SelectView();
             }
         }
     }
