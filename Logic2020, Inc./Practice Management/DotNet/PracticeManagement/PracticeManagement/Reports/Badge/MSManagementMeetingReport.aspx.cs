@@ -20,6 +20,7 @@ using System.ServiceModel;
 using System.Text.RegularExpressions;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -145,6 +146,14 @@ namespace PraticeManagement.Reports.Badge
             set;
         }
 
+        public string Paytypes
+        {
+            get
+            {
+                return cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -154,7 +163,7 @@ namespace PraticeManagement.Reports.Badge
                 FillPersonStatusList();
                 cblPersonStatus.SelectItems(new List<int>() { 1 });
                 divWholePage.Visible = true;
-                PopulateData();
+                GetFilterValuesForSession();
             }
         }
 
@@ -184,6 +193,7 @@ namespace PraticeManagement.Reports.Badge
                 divWholePage.Visible = false;
                 return;
             }
+            SaveFilterValuesForSession();
             PopulateData();
         }
 
@@ -192,9 +202,8 @@ namespace PraticeManagement.Reports.Badge
             var filename = string.Format("ManagementMeetingReport_{0}-{1}.xls", StartDate.ToString("MM_dd_yyyy"), EndDate.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             var statuses = PersonStatus;
-            var report = ServiceCallers.Custom.Report(r => r.ManagedServiceReportByPerson(paytypes, PersonStatus, StartDate, EndDate)).ToList();
+            var report = ServiceCallers.Custom.Report(r => r.ManagedServiceReportByPerson(Paytypes, PersonStatus, StartDate, EndDate)).ToList();
             PersonsList = report.OrderBy(p => p.Person.Name).ToList();
             if (PersonsList.Count > 0)
             {
@@ -1124,12 +1133,13 @@ namespace PraticeManagement.Reports.Badge
                 {
                     lblTotalResources.ForeColor = Color.Black;
                 }
-                else {
+                else
+                {
                     var total = Math.Round(dataItem.TotalRequiredResources, MidpointRounding.AwayFromZero);
                     lblTotalResources.Text = "(" + total + ")";
-                    lblTotalResources.ForeColor = Color.Red;   
+                    lblTotalResources.ForeColor = Color.Red;
                 }
-                
+
             }
         }
 
@@ -1258,8 +1268,7 @@ namespace PraticeManagement.Reports.Badge
 
         public void PopulateData()
         {
-            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
-            PersonsList = ServiceCallers.Custom.Report(r => r.ManagedServiceReportByPerson(paytypes, PersonStatus, StartDate, EndDate)).ToList();
+            PersonsList = ServiceCallers.Custom.Report(r => r.ManagedServiceReportByPerson(Paytypes, PersonStatus, StartDate, EndDate)).ToList();
             if (PersonsList.Any())
             {
                 divWholePage.Visible = true;
@@ -1321,16 +1330,15 @@ namespace PraticeManagement.Reports.Badge
             var fTE = report.FTE;
             if (!isExcel)
             {
-                report.FTE = Math.Round(report.FTE,MidpointRounding.AwayFromZero);
+                report.FTE = Math.Round(report.FTE, MidpointRounding.AwayFromZero);
             }
             lblFTE.Text = report.FTE.ToString();
             lblManagedServiceCount.Text = report.ManagedServiceResources.ToString();
             decimal requiredResources = (fTE - report.ManagedServiceResources);
             lblRequiredResources.Text = Math.Round((fTE - report.ManagedServiceResources), MidpointRounding.AwayFromZero).ToString(); //requiredResources.ToString();
-            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             if (PersonsList == null)
             {
-                PersonsList = ServiceCallers.Custom.Report(r => r.ManagedServiceReportByPerson(paytypes, PersonStatus, StartDate, EndDate)).ToList();
+                PersonsList = ServiceCallers.Custom.Report(r => r.ManagedServiceReportByPerson(Paytypes, PersonStatus, StartDate, EndDate)).ToList();
                 AvailableResources = GetAvailableResourcesByTitle();
             }
             string titles = string.Empty;
@@ -1338,7 +1346,7 @@ namespace PraticeManagement.Reports.Badge
             {
                 titles += resource.Title.TitleId + ",";
             }
-            var resourceCountForAverage = ServiceCallers.Custom.Report(r => r.GetAveragePercentagesByTitles(paytypes, PersonStatus, titles, StartDate, AverageEndDate));
+            var resourceCountForAverage = ServiceCallers.Custom.Report(r => r.GetAveragePercentagesByTitles(Paytypes, PersonStatus, titles, StartDate, AverageEndDate));
             //Calculte totals
             GroupbyTitle totalCountByRange = new GroupbyTitle() { ResourcesCount = new List<BadgedResourcesByTime>() };
             foreach (var resourceByTitle in resourceCountForAverage)
@@ -1417,6 +1425,27 @@ namespace PraticeManagement.Reports.Badge
                 ServiceCallers.Custom.Report(r => r.SaveManagedParametersByPerson(userLogin, report.ActualRevenuePerHour, report.TargetRevenuePerHour, report.HoursUtilization, report.TotalRevenuePerAnnual));
                 CalculateDeficit(report, false);
             }
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            MsManagementReportFilters filter = new MsManagementReportFilters();
+            filter.PersonStatusIds = cblPersonStatus.SelectedItems;
+            filter.PayTypeIds = cblPayTypes.SelectedItems;
+            ReportsFilterHelper.SaveFilterValues(ReportName.MSManagementMeetingReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.MSManagementMeetingReport) as MsManagementReportFilters;
+            if (filters != null)
+            {
+                cblPayTypes.UnSelectAll();
+                cblPayTypes.SelectedItems=filters.PayTypeIds;
+                cblPersonStatus.UnSelectAll();
+                cblPersonStatus.SelectedItems=filters.PersonStatusIds;
+            }
+            PopulateData();
         }
     }
 }
