@@ -12,6 +12,7 @@ using PraticeManagement.Controls;
 using PraticeManagement.PersonStatusService;
 using System.ServiceModel;
 using System.Text;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -133,6 +134,14 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PayTypes
+        {
+            get
+            {
+                return cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -149,7 +158,10 @@ namespace PraticeManagement.Reports.Badge
                     dtpEnd.DateValue = Convert.ToDateTime(EndDateFromQueryString);
                     cblPayTypes.SelectedItems = PayTypesFromQueryString == "null" ? null : PayTypesFromQueryString;
                     cblPersonStatus.SelectedItems = PersonStatusFromQueryString;
-                    btnUpdateView_Click(btnUpdateView, new EventArgs());
+                    PopulateData();
+                }
+                else {
+                    GetFilterValuesForSession();
                 }
             }
         }
@@ -189,6 +201,12 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
+            PopulateData();
+        }
+
+        public void PopulateData()
+        {
             Page.Validate("BadgeReport");
             if (!Page.IsValid)
             {
@@ -196,13 +214,8 @@ namespace PraticeManagement.Reports.Badge
                 return;
             }
             divWholePage.Style.Remove("display");
-            PopulateData();
-        }
-
-        public void PopulateData()
-        {
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
-            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var paytypes = PayTypes;
             var statuses = PersonStatus;
             var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, true, false, false, false, false, false).ToList());
             repclocknotStarted.DataSource = resources;
@@ -236,7 +249,7 @@ namespace PraticeManagement.Reports.Badge
             var filename = string.Format("ClockNotStartedReport_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var paytypes = PayTypes;
             var statuses = PersonStatus;
             var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, false, true, false, false, false, false, false).ToList());
             if (report.Count > 0)
@@ -288,6 +301,31 @@ namespace PraticeManagement.Reports.Badge
                 data.Rows.Add(row.ToArray());
             }
             return data;
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            ResourceFilters filter = new ResourceFilters();
+            filter.PersonStatusIds = PersonStatus;
+            filter.PayTypeIds = PayTypes;
+            filter.ReportStartDate = dtpStart.DateValue;
+            filter.ReportEndDate = dtpEnd.DateValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ClockNotStartedReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ClockNotStartedReport) as ResourceFilters;
+            if (filters != null)
+            {
+                cblPayTypes.UnSelectAll();
+                cblPayTypes.SelectedItems = filters.PayTypeIds;
+                cblPersonStatus.UnSelectAll();
+                cblPersonStatus.SelectedItems = filters.PersonStatusIds;
+                dtpStart.DateValue = (DateTime)filters.ReportStartDate;
+                dtpEnd.DateValue = (DateTime)filters.ReportEndDate;
+                PopulateData();
+            }
         }
     }
 }
