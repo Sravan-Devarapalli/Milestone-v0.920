@@ -17,6 +17,7 @@ using System.Text;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonStatusService;
 using System.ServiceModel;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -142,6 +143,14 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PayTypes
+        {
+            get
+            {
+                return cblPayTypes.SelectedItems;
+            }
+        }
+
         public List<DataTransferObjects.Reports.BadgedResourcesByTime> BadgedResources
         {
             get;
@@ -155,9 +164,10 @@ namespace PraticeManagement.Reports.Badge
                 dtpEnd.DateValue = DataTransferObjects.Utils.Generic.MonthEndDate(DateTime.Now);
                 dtpStart.DateValue = DataTransferObjects.Utils.Generic.MonthStartDate(DateTime.Now);
                 DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
-                cblPayTypes.SelectItems(new List<int>() { 1,2 });
+                cblPayTypes.SelectItems(new List<int>() { 1, 2 });
                 FillPersonStatusList();
-                cblPersonStatus.SelectItems(new List<int>() { 1,5 });
+                cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
+                GetFilterValuesForSession();
             }
         }
 
@@ -169,7 +179,7 @@ namespace PraticeManagement.Reports.Badge
                 {
                     var statuses = serviceClient.GetPersonStatuses();
                     statuses = statuses.Where(p => p.Id != 2 && p.Id != 5).ToArray();
-                    DataHelper.FillListDefault(cblPersonStatus, Resources.Controls.AllTypes,statuses, false);
+                    DataHelper.FillListDefault(cblPersonStatus, Resources.Controls.AllTypes, statuses, false);
                 }
                 catch (CommunicationException)
                 {
@@ -208,13 +218,14 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
-            Page.Validate("BadgeReport");
-            if (!Page.IsValid)
-            {
-                divWholePage.Style.Add("display", "none");
-                return;
-            }
-            divWholePage.Style.Remove("display");
+            //Page.Validate("BadgeReport");
+            //if (!Page.IsValid)
+            //{
+            //    divWholePage.Style.Add("display", "none");
+            //    return;
+            //}
+            //divWholePage.Style.Remove("display");
+            SaveFilterValuesForSession();
             PopulateChart();
             PopulateTable();
         }
@@ -245,12 +256,19 @@ namespace PraticeManagement.Reports.Badge
 
         public void PopulateChart()
         {
+            Page.Validate("BadgeReport");
+            if (!Page.IsValid)
+            {
+                divWholePage.Style.Add("display", "none");
+                return;
+            }
+            divWholePage.Style.Remove("display");
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
             var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             var statuses = PersonStatus;
             var data = ServiceCallers.Custom.Report(r => r.BadgedResourcesByTimeReport(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, Convert.ToInt32(ddlView.SelectedValue)).ToList());
             BadgedResources = data;
-            chartReport.DataSource = data.Select(p => new { month = p.StartDate.ToString(FormattedDate), badgedOnProjectcount = p.BadgedOnProjectCount, badgedProjectExceptioncount = p.BadgedOnProjectExceptionCount , badgedNotOnProjectExceptioncount = p.BadgedNotOnProjectExceptionCount, badgedNotOnProjectcount = p.BadgedNotOnProjectCount, clockNotStartedCount = p.ClockNotStartedCount, blockedCount = p.BlockedCount, breakCount = p.InBreakPeriodCount }).ToList();
+            chartReport.DataSource = data.Select(p => new { month = p.StartDate.ToString(FormattedDate), badgedOnProjectcount = p.BadgedOnProjectCount, badgedProjectExceptioncount = p.BadgedOnProjectExceptionCount, badgedNotOnProjectExceptioncount = p.BadgedNotOnProjectExceptionCount, badgedNotOnProjectcount = p.BadgedNotOnProjectCount, clockNotStartedCount = p.ClockNotStartedCount, blockedCount = p.BlockedCount, breakCount = p.InBreakPeriodCount }).ToList();
             chartReport.DataBind();
             InitChart(data.Count);
         }
@@ -442,7 +460,7 @@ namespace PraticeManagement.Reports.Badge
                 row.Add(reportItem.Category);
                 foreach (var item in reportItem.Count)
                     row.Add(item.BadgedOnProjectCount);
-                row.Add(reportItem.Count.Sum(p=>p.BadgedOnProjectCount));
+                row.Add(reportItem.Count.Sum(p => p.BadgedOnProjectCount));
                 data.Rows.Add(row.ToArray());
             }
             return data;
@@ -489,8 +507,8 @@ namespace PraticeManagement.Reports.Badge
             var legend = new Legend("Legend2");
 
             AddLegendItems(legend);
-            
-          
+
+
             chartReport.Legends.Add(legend);
             chartReport.Legends["Legend2"].DockedToChartArea = MAIN_CHART_AREA_NAME;
             chartReport.Legends["Legend2"].Docking = Docking.Right;
@@ -499,7 +517,7 @@ namespace PraticeManagement.Reports.Badge
             chartReport.Legends["Legend2"].ItemColumnSpacing = 70;
 
             chartReport.Legends["Legend2"].Font = new System.Drawing.Font("Arial", 10, FontStyle.Regular);
-           
+
             chartReport.Legends["Legend2"].IsDockedInsideChartArea = false;
             chartReport.Legends["Legend2"].Position.Auto = true;
             chartReport.ChartAreas[0].AxisX.LabelStyle.Angle = -90;
@@ -527,7 +545,7 @@ namespace PraticeManagement.Reports.Badge
             ltBadgedNotOnProjectException.SeparatorColor = Color.White;
             ltBadgedNotOnProjectException.MarkerColor = Color.Black;
             ltBadgedNotOnProjectException.Color = Color.Brown;
-            
+
             legend.CustomItems.Add(ltBadgedNotOnProjectException);
 
             var ltClockNotStarted = new LegendItem();
@@ -595,7 +613,7 @@ namespace PraticeManagement.Reports.Badge
             ltBadgedProject.MarkerColor = Color.Black;
             ltBadgedProject.Color = Color.Red;
             legend.CustomItems.Add(ltBadgedProject);
-            
+
         }
 
         private void UpdateChartTitle()
@@ -635,6 +653,34 @@ namespace PraticeManagement.Reports.Badge
             if (!reqBadgeStart.IsValid || !cvLastBadgeStart.IsValid || !reqbadgeEnd.IsValid || !cvbadgeEnd.IsValid)
                 return;
             args.IsValid = dtpStart.DateValue >= new DateTime(2014, 7, 1);
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            ResourceFilters filter = new ResourceFilters();
+            filter.PersonStatusIds = PersonStatus;
+            filter.PayTypeIds = PayTypes;
+            filter.SelectedView = SelectedView;
+            filter.ReportStartDate = dtpStart.DateValue;
+            filter.ReportEndDate = dtpEnd.DateValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.BadgeResourceByTime, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.BadgeResourceByTime) as ResourceFilters;
+            if (filters != null)
+            {
+                cblPayTypes.UnSelectAll();
+                cblPayTypes.SelectedItems=filters.PayTypeIds;
+                cblPersonStatus.UnSelectAll();
+                cblPersonStatus.SelectedItems=filters.PersonStatusIds;
+                ddlView.SelectedValue = (filters.SelectedView).ToString();
+                dtpStart.DateValue = (DateTime)filters.ReportStartDate;
+                dtpEnd.DateValue = (DateTime)filters.ReportEndDate;
+                PopulateChart();
+                PopulateTable();
+            }
         }
     }
 
