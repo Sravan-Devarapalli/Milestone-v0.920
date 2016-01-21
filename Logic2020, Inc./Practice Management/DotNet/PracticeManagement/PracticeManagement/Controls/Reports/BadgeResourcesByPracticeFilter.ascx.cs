@@ -22,6 +22,10 @@ namespace PraticeManagement.Controls.Reports
                         clientList.Append(item.Value).Append(',');
                 return clientList.ToString();
             }
+            set {
+                DataHelper.FillPracticeListOnlyActive(cblPractices, Resources.Controls.AllPracticesText);
+                cblPractices.SelectedItems = value;
+            }
         }
 
         public string PayTypes
@@ -30,6 +34,11 @@ namespace PraticeManagement.Controls.Reports
             {
                 return cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
             }
+            set {
+                DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
+                cblPayTypes.SelectedItems = value;
+            }
+
         }
 
         public string PersonStatus
@@ -49,6 +58,11 @@ namespace PraticeManagement.Controls.Reports
                 }
                 return clientList.ToString();
             }
+
+            set {
+                FillPersonStatusList();
+                cblPersonStatus.SelectedItems = value;
+            }
         }
 
         public string TitleIds
@@ -60,6 +74,10 @@ namespace PraticeManagement.Controls.Reports
                     if (item.Selected)
                         clientList.Append(item.Value).Append(',');
                 return clientList.ToString();
+            }
+            set {
+                DataHelper.FillTitleList(cblTitles, "All Titles", true, ddlType - 1);
+                cblTitles.SelectedItems = value;
             }
         }
 
@@ -75,6 +93,9 @@ namespace PraticeManagement.Controls.Reports
             {
                 return chbBadgedNotOnProject.Checked;
             }
+            set {
+                chbBadgedNotOnProject.Checked = value; 
+            }
         }
 
         public bool IsBadgedOnProject
@@ -82,6 +103,9 @@ namespace PraticeManagement.Controls.Reports
             get
             {
                 return chbBadgedOnProject.Checked;
+            }
+            set {
+                chbBadgedOnProject.Checked = value;
             }
         }
 
@@ -91,35 +115,48 @@ namespace PraticeManagement.Controls.Reports
             {
                 return chbClockNotStarted.Checked;
             }
+            set {
+                chbClockNotStarted.Checked = value;
+            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                
                 if (ddlType == 1)
                 {
-                    DataHelper.FillPracticeListOnlyActive(cblPractices, Resources.Controls.AllPracticesText);
-                    cblPractices.SelectAll();
+                    if (cblPractices.Items.Count <= 0)
+                    {
+                        DataHelper.FillPracticeListOnlyActive(cblPractices, Resources.Controls.AllPracticesText);
+                        cblPractices.SelectAll();
+                    }
                     tdPractices.Visible = true;
                     tdTitles.Visible = false;
                     lblCategory.Text = "Practice Area";
                 }
-                else
+                else 
                 {
-                    var titles = ServiceCallers.Custom.Title(t => t.GetAllTitles());
-                    titles = titles.Where(t => t.TitleType.TitleTypeId == ddlType - 1).ToArray();
-                    DataHelper.FillTitleList(cblTitles, "All Titles",true,ddlType-1);
-                    cblTitles.SelectAll();
+                    if (cblTitles.Items.Count <= 0)
+                    {
+                        DataHelper.FillTitleList(cblTitles, "All Titles", true, ddlType - 1);
+                        cblTitles.SelectAll();
+                    }
                     tdTitles.Visible = true;
                     tdPractices.Visible = false;
                     lblCategory.Text = "Title";
                 }
-
-                DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
-                cblPayTypes.SelectItems(new List<int>() { 1, 2 });
-                FillPersonStatusList();
-                cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
+                if (cblPayTypes.Items.Count <= 0)
+                {
+                    DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
+                    cblPayTypes.SelectItems(new List<int>() { 1, 2 });
+                }
+                if (cblPersonStatus.Items.Count <= 0)
+                {
+                    FillPersonStatusList();
+                    cblPersonStatus.SelectItems(new List<int>() { 1, 5 });
+                }
             }
         }
 
