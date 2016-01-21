@@ -1222,6 +1222,21 @@ namespace PracticeManagementService
             return PersonDAL.GetPersonDivisions();
         }
 
+        public void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId)
+        {
+            PersonDAL.SaveReportFilterValues(currentUserId, reportId, data, previousUserId);
+        }
+
+        public string GetReportFilterValues(int currentUserId, int reportId, int previousUserId)
+        {
+            return PersonDAL.GetReportFilterValues(currentUserId, reportId, previousUserId);
+        }
+
+        public void DeleteReportFilterValues(int currentUserId, int previousUserId)
+        {
+            PersonDAL.DeleteReportFilterValues(currentUserId, previousUserId);
+        }
+
         #endregion IPersonService Members
     }
 }
