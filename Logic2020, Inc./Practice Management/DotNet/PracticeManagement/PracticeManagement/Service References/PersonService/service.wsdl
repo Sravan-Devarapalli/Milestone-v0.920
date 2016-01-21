@@ -190,6 +190,24 @@
   <wsdl:message name="IPersonService_GetPersonDivisions_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonDivisionsResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_SaveReportFilterValues_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveReportFilterValues" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SaveReportFilterValues_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveReportFilterValuesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetReportFilterValues_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetReportFilterValues" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetReportFilterValues_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetReportFilterValuesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_DeleteReportFilterValues_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteReportFilterValues" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_DeleteReportFilterValues_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteReportFilterValuesResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveUserTemporaryCredentials_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveUserTemporaryCredentials" />
   </wsdl:message>
@@ -742,6 +760,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisions" message="tns:IPersonService_GetPersonDivisions_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisionsResponse" message="tns:IPersonService_GetPersonDivisions_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SaveReportFilterValues">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveReportFilterValues" message="tns:IPersonService_SaveReportFilterValues_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveReportFilterValuesResponse" message="tns:IPersonService_SaveReportFilterValues_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetReportFilterValues">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetReportFilterValues" message="tns:IPersonService_GetReportFilterValues_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetReportFilterValuesResponse" message="tns:IPersonService_GetReportFilterValues_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteReportFilterValues">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/DeleteReportFilterValues" message="tns:IPersonService_DeleteReportFilterValues_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse" message="tns:IPersonService_DeleteReportFilterValues_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveUserTemporaryCredentials">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials" message="tns:IPersonService_SaveUserTemporaryCredentials_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse" message="tns:IPersonService_SaveUserTemporaryCredentials_OutputMessage" />
@@ -1288,6 +1318,33 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonDivisions">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDivisions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveReportFilterValues">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SaveReportFilterValues" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetReportFilterValues">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetReportFilterValues" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteReportFilterValues">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/DeleteReportFilterValues" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
