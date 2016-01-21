@@ -66,6 +66,10 @@ namespace PraticeManagement.Controls
         private const string DefaultNameFieldName = "Name";
         private const string DefaultNameFieldEndodedName = "HtmlEncodedName";
         private const string CurrentPersonKey = "CurrentPerson";
+        private const string CommaSeperatedFormat = "{0},{1}";
+        private const string UnassignedText = "Unassigned";
+        private const string PersonLastFirstNameText = "PersonLastFirstName";
+        private const string ItalicStyleText = "font-style: italic";
 
         #endregion Constants
 
@@ -168,6 +172,18 @@ namespace PraticeManagement.Controls
                     return HttpContext.Current.Items[CurrentPersonKey] as Person;
                 }
                 return null;
+            }
+        }
+
+        public static int GetPersonID(string personAlias)
+        {
+            if (string.IsNullOrEmpty(personAlias))
+            {
+                return 0;
+            }
+            else {
+                Person person = ServiceCallers.Custom.Person(p => p.GetPersonByAlias(personAlias));
+                return (int)person.Id;
             }
         }
 
@@ -684,7 +700,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="startDate">mileStone start date</param>
         /// <param name="endDate">mileStone end date</param>
-        public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate, DateTime endDate, string statusIds, bool fillWithPersonFirstLastName = false,bool fillWithPersonPreferrdFirstName=false)
+        public static void FillPersonList(ListControl control, string firstItemText, DateTime startDate, DateTime endDate, string statusIds, bool fillWithPersonFirstLastName = false, bool fillWithPersonPreferrdFirstName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -694,7 +710,7 @@ namespace PraticeManagement.Controls
 
                     Array.Sort(persons);
 
-                    FillPersonList(control, firstItemText, persons, String.Empty, fillWithPersonFirstLastName,fillWithPersonPreferrdFirstName);
+                    FillPersonList(control, firstItemText, persons, String.Empty, fillWithPersonFirstLastName, fillWithPersonPreferrdFirstName);
                 }
                 catch (CommunicationException)
                 {
@@ -813,7 +829,7 @@ namespace PraticeManagement.Controls
         /// <param name="firstItemText">The text to be displayed by default.</param>
         /// <param name="personId">An ID of the <see cref="Person"/> to fill the list for.</param>
         /// <param name="hireDate">A Hire Date of the person.</param>
-        public static void FillRecruiterList(ListControl control, string firstItemText,bool fillPreferredFirstName=false)
+        public static void FillRecruiterList(ListControl control, string firstItemText, bool fillPreferredFirstName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -861,7 +877,7 @@ namespace PraticeManagement.Controls
         /// <param name="control"></param>
         /// <param name="firstItemText"></param>
 
-        public static void FillDirectorsList(ListControl control, string firstItemText, List<int> excludedPersons = null,bool fillPreferredFirstName = false)
+        public static void FillDirectorsList(ListControl control, string firstItemText, List<int> excludedPersons = null, bool fillPreferredFirstName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -870,7 +886,7 @@ namespace PraticeManagement.Controls
                     string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
                     Person[] persons = serviceClient.PersonListShortByRoleAndStatus(statusids, DataTransferObjects.Constants.RoleNames.DirectorRoleName);
                     persons = excludedPersons != null ? persons.Where(p => !excludedPersons.Any(g => g == p.Id)).ToArray() : persons;
-                    FillPersonList(control, firstItemText, persons, String.Empty,false,fillPreferredFirstName);
+                    FillPersonList(control, firstItemText, persons, String.Empty, false, fillPreferredFirstName);
                 }
                 catch (CommunicationException)
                 {
@@ -905,17 +921,17 @@ namespace PraticeManagement.Controls
             {
                 try
                 {
-                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
-                    string titles = DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName + "," + DataTransferObjects.Constants.TitleNames.DirectorTitleName;
+                    string statusids = string.Format(CommaSeperatedFormat, (int)DataTransferObjects.PersonStatusType.Active, (int)DataTransferObjects.PersonStatusType.TerminationPending);
+                    string titles = string.Format(CommaSeperatedFormat, DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName, DataTransferObjects.Constants.TitleNames.DirectorTitleName);
                     var persons = serviceClient.PersonListShortByTitleAndStatus(statusids, titles);
                     persons = persons.Any() ? persons.OrderBy(p => p.PersonLastFirstName).ToArray() : persons;
                     List<Person> personlist = new List<Person>();
-                    personlist.Add(new Person() { Id = -1, LastName = "Unassigned" });
+                    personlist.Add(new Person() { Id = -1, LastName = UnassignedText });
                     personlist.AddRange(persons);
-                    FillListDefault(control, firstItemText, personlist.ToArray(), false, "Id", "PersonLastFirstName");
+                    FillListDefault(control, firstItemText, personlist.ToArray(), false, DefaultIdFieldName, PersonLastFirstNameText);
                     ListItem unasigned = control.Items.FindByValue("-1");
-                    unasigned.Text = "Unassigned";
-                    unasigned.Attributes["style"] = "font-style: italic";
+                    unasigned.Text = UnassignedText;
+                    unasigned.Attributes["style"] = ItalicStyleText;
                 }
                 catch (CommunicationException)
                 {
@@ -1010,7 +1026,7 @@ namespace PraticeManagement.Controls
                 {
                     Person[] persons = serviceClient.PersonListSalesperson(person, includeInactive);
 
-                    FillPersonList(control, firstItemText, persons, String.Empty,false,true);
+                    FillPersonList(control, firstItemText, persons, String.Empty, false, true);
                 }
                 catch (CommunicationException)
                 {
@@ -1040,7 +1056,7 @@ namespace PraticeManagement.Controls
         /// <param name="endDate">An End Date of the project to the Practice Maneger be selected for.</param>
         /// <param name="includeInactive">Determines whether inactive persons will are included into the results.</param>
         /// <param name="person">Person who requests the info</param>
-        public static void FillProjectOwnerList(ListControl control, string firstItemText, bool includeInactive, Person person,bool fillPreferredFirstName=false)
+        public static void FillProjectOwnerList(ListControl control, string firstItemText, bool includeInactive, Person person, bool fillPreferredFirstName = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
@@ -1048,7 +1064,7 @@ namespace PraticeManagement.Controls
                 {
                     var persons = serviceClient.PersonListProjectOwner(includeInactive, person);
 
-                    FillPersonList(control, firstItemText, persons, String.Empty,false,fillPreferredFirstName);
+                    FillPersonList(control, firstItemText, persons, String.Empty, false, fillPreferredFirstName);
                 }
                 catch (CommunicationException)
                 {
@@ -2528,7 +2544,7 @@ namespace PraticeManagement.Controls
                 try
                 {
                     var divisions = serviceClient.GetPersonDivisions();
-                    FillListDefault(control, "- - Select Division - -", divisions, false,"DivisionId","DivisionName");
+                    FillListDefault(control, "- - Select Division - -", divisions, false, "DivisionId", "DivisionName");
                 }
                 catch (CommunicationException)
                 {
