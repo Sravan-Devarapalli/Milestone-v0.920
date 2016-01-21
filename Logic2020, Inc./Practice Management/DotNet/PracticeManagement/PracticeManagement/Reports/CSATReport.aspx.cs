@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
+using PraticeManagement.Utils;
+using DataTransferObjects;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports
 {
@@ -187,6 +190,7 @@ namespace PraticeManagement.Reports
                 }
                 cblPractices.SelectAll();
                 cblAccount.SelectAll();
+                GetFilterValuesForSession();
             }
         }
 
@@ -204,6 +208,7 @@ namespace PraticeManagement.Reports
             {
                 lblCustomDateRange.Attributes.Add("class", "fontBold");
                 imgCalender.Attributes.Add("class", "");
+                divCustomDates.Visible = true;
             }
             else
             {
@@ -217,6 +222,7 @@ namespace PraticeManagement.Reports
             if (!IsPostBack)
             {
                 SelectView();
+                SaveFilterValuesForSession();
             }
 
 
@@ -232,6 +238,7 @@ namespace PraticeManagement.Reports
                 }
                 divCustomDates.Visible = false;
                 SelectView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -249,6 +256,7 @@ namespace PraticeManagement.Reports
             else
             {
                 LoadActiveView();
+                SaveFilterValuesForSession();
             }
         }
 
@@ -333,6 +341,7 @@ namespace PraticeManagement.Reports
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 SelectView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -355,6 +364,33 @@ namespace PraticeManagement.Reports
             int viewIndex = int.Parse((string)e.CommandArgument);
 
             SwitchView((Control)sender, viewIndex);
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            CSATReportFilters filter = new CSATReportFilters();
+            filter.PracticeIds = cblPractices.SelectedItems;
+            filter.ClientIds = cblAccount.SelectedItems;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            ReportsFilterHelper.SaveFilterValues(ReportName.CSATReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.CSATReport) as CSATReportFilters;
+            if (filters != null)
+            {
+                cblPractices.UnSelectAll();
+                cblPractices.SelectedItems = filters.PracticeIds;
+                cblAccount.UnSelectAll();
+                cblAccount.SelectedItems = filters.ClientIds;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                SelectView();
+            }
         }
     }
 
