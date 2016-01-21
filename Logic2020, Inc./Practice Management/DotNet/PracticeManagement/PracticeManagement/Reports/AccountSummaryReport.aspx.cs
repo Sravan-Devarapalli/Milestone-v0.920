@@ -343,13 +343,17 @@ namespace PraticeManagement.Reporting
                 //}
                 //else
                 //{
-                    FillInitProjectGroupList();
-                //}               
+                FillInitProjectGroupList();
+                //}
 
-                ddlAccount_SelectedIndexChanged(ddlAccount, new EventArgs());
+                //ddlAccount.SelectedValue = "";
+               
+                //ddlAccount_SelectedIndexChanged(ddlAccount, new EventArgs());
+
+                ddlPeriod.SelectedValue = "30";//This Month - as per 3201 
                 DataHelper.FillProjectStatusList(cblProjectStatus, "All Project Statuses", null);
                 cblProjectStatus.SelectAll();
-               
+
             }
 
         }
@@ -374,6 +378,7 @@ namespace PraticeManagement.Reporting
         protected void Page_Prerender(object sender, EventArgs e)
         {
             GetFilterValuesForSession();
+            FillProjectGroup();
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -415,23 +420,14 @@ namespace PraticeManagement.Reporting
         {
             //Fill BusinessUnits.
             BusinessUnitsFilteredIds = null;
-            if (ddlAccount.SelectedIndex != 0)
-            {
-                DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
 
-                foreach (ListItem item in cblProjectGroup.Items)
-                {
-                    item.Selected = true;
-                }
-            }
-            else
-            {
-                DataHelper.FillListDefaultWithEncodedName(cblProjectGroup, "All Business Units", null,
-                                             false);
-            }
+            FillProjectGroup();
+           
             //ddlPeriod.SelectedValue = "Please Select";
             SelectView();
+
             SaveFilterValuesForSession();
+
         }
 
         protected void cblProjectGroup_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -546,6 +542,24 @@ namespace PraticeManagement.Reporting
             //{
             SaveFilters();
             //}
+        }
+
+        private void FillProjectGroup()
+        {
+            if (ddlAccount.SelectedIndex != 0)
+            {
+                DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+
+                foreach (ListItem item in cblProjectGroup.Items)
+                {
+                    item.Selected = true;
+                }
+            }
+            else
+            {
+                DataHelper.FillListDefaultWithEncodedName(cblProjectGroup, "All Business Units", null,
+                                             false);
+            }
         }
 
         private void SwitchView(Control control, int viewIndex)
