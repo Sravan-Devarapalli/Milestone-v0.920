@@ -9,6 +9,8 @@ using PraticeManagement.Controls;
 using DataTransferObjects;
 using System.Web.Security;
 using DataTransferObjects.Reports;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
 
 
 namespace PraticeManagement.Reporting
@@ -388,7 +390,7 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-
+            GetFilterValuesForSession();
             if (timeEntryReportHeader.Count == 2)
             {
                 tdFirst.Attributes["class"] = "Width50Percent";
@@ -496,6 +498,7 @@ namespace PraticeManagement.Reporting
             {
                 SwitchView(lnkbtnSummary, 0);
             }
+            SaveFilterValuesForSession();
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -508,6 +511,7 @@ namespace PraticeManagement.Reporting
         {
             SelectView(control, viewIndex);
             LoadActiveView();
+            SaveFilterValuesForSession();
         }
 
         private void SetCssClassEmpty()
@@ -626,6 +630,7 @@ namespace PraticeManagement.Reporting
             ddlPeriod.SelectedValue = "Please Select";
             LoadActiveView();
             txtSearch.Text = "";
+            SaveFilterValuesForSession();
         }
 
         protected String GetPersonFirstLastName(Person person)
@@ -655,6 +660,29 @@ namespace PraticeManagement.Reporting
                 btnSearch.Attributes.Remove("disabled");
             }
             mpePersonSearch.Show();
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            TimeReports filter = new TimeReports();
+            filter.Person = ddlPerson.SelectedValue;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.StartDate = diRange.FromDate.Value;
+            filter.EndDate = diRange.ToDate.Value;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ByPersonReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ByPersonReport) as TimeReports;
+            if (filters != null)
+            {
+                ddlPerson.SelectedValue = filters.Person;
+                
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                diRange.FromDate = filters.StartDate;
+                diRange.ToDate = filters.EndDate;
+            }
         }
 
     }
