@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.Web.Security;
 using PraticeManagement.Controls;
 using DataTransferObjects.Reports;
+using PraticeManagement.Utils;
+using DataTransferObjects;
 
 namespace PraticeManagement.Reports
 {
@@ -44,12 +46,14 @@ namespace PraticeManagement.Reports
                 WeekEndDate = Utils.Calendar.WeekEndDate(now);
                 PopulateDropdownValues();
                 PopulateUtilizationValues();
+                GetFilterValuesForSession();
             }
         }
 
         protected void ddlPerson_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopulateUtilizationValues();
+            SaveFilterValuesForSession();
         }
 
         public void PopulateDropdownValues()
@@ -93,6 +97,22 @@ namespace PraticeManagement.Reports
             //lblAllocatedVsTarget.Text = totalHours.BillableAllocatedVsTarget;
             //lblAllocatedVsTarget.Style["color"] = totalHours.BillableAllocatedVsTargetValue >= 0 ? "Black" : "#F00";
 
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            string filter = ddlPerson.SelectedValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.UtilizationReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filter = ReportsFilterHelper.GetFilterValues(ReportName.UtilizationReport) as string;
+            if (filter != null)
+            {
+                ddlPerson.SelectedValue = filter;
+                PopulateUtilizationValues();
+            }
         }
     }
 }
