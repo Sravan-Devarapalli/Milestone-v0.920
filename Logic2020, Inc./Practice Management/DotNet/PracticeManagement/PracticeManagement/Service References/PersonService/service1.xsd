@@ -436,6 +436,50 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SaveReportFilterValues">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="currentUserId" type="xs:int" />
+        <xs:element minOccurs="0" name="reportId" type="xs:int" />
+        <xs:element minOccurs="0" name="data" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="previousUserId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveReportFilterValuesResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReportFilterValues">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="currentUserId" type="xs:int" />
+        <xs:element minOccurs="0" name="reportId" type="xs:int" />
+        <xs:element minOccurs="0" name="previousUserId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetReportFilterValuesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetReportFilterValuesResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteReportFilterValues">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="currentUserId" type="xs:int" />
+        <xs:element minOccurs="0" name="previousUserId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteReportFilterValuesResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SaveUserTemporaryCredentials">
     <xs:complexType>
       <xs:sequence>
