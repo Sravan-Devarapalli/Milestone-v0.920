@@ -10,6 +10,7 @@ using System.Web.Security;
 using PraticeManagement.Utils.Excel;
 using System.Data;
 using PraticeManagement.Utils;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -854,6 +855,7 @@ namespace PraticeManagement.Controls.Reports
                 lblExternalPractices.Visible = false;
                 hrDirectorAndPracticeSeperator.Visible = false;
                 lblInternalPractices.Visible = false;
+                GetFilterValuesForSession();
             }
             if (hdnFiltersChanged.Value == "false")
             {
@@ -1131,6 +1133,12 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            PopulateData();
+            SaveFilterValuesForSession();
+        }
+
+        private void PopulateData()
+        {
             ReportContext = null;
             BenchList = null;
             divBenchCostsInternal.Visible = gvBenchCosts.Visible = true;
@@ -1141,7 +1149,6 @@ namespace PraticeManagement.Controls.Reports
                 hrDirectorAndPracticeSeperator.Visible = true;
                 lblInternalPractices.Visible = true;
             }
-
             gvBenchCosts.Attributes[ConsultantNameSortOrder] = Descending;
             gvBenchCosts.Attributes[PracticeSortOrder] = Ascending;
             gvBenchCosts.Attributes[StatusSortOrder] = Ascending;
@@ -1263,6 +1270,45 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        private void SaveFilterValuesForSession()
+        {
+            BenchCostReportFilters filter = new BenchCostReportFilters();
+            filter.PracticeIds = cblPractices.SelectedItems;
+            filter.IsActive = chbActiveProjects.Checked;
+            filter.IsProjected = chbProjectedProjects.Checked;
+            filter.IsProposed = chbProposed.Checked;
+            filter.IsCompleted = chbCompletedProjects.Checked;
+            filter.IsExperimental = chbExperimentalProjects.Checked;
+            filter.IncludeOverheads = chbIncludeOverHeads.Checked;
+            filter.IncludeZeroCost = chbIncludeZeroCostEmps.Checked;
+            filter.SeperateInternalExternalTables = chbSeperateInternalExternal.Checked;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            ReportsFilterHelper.SaveFilterValues(ReportName.BenchCostReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.BenchCostReport) as BenchCostReportFilters;
+            if (filters != null)
+            {
+                cblPractices.UnSelectAll();
+                cblPractices.SelectedItems = filters.PracticeIds;
+                chbActiveProjects.Checked = filters.IsActive;
+                chbCompletedProjects.Checked = filters.IsCompleted;
+                chbExperimentalProjects.Checked = filters.IsExperimental;
+                chbProjectedProjects.Checked = filters.IsProjected;
+                chbProposed.Checked = filters.IsProposed;
+                chbIncludeOverHeads.Checked = filters.IncludeOverheads;
+                chbIncludeZeroCostEmps.Checked = filters.IncludeZeroCost;
+                chbSeperateInternalExternal.Checked = filters.SeperateInternalExternalTables;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                PopulateData();
+            }
+        }
     }
 }
 
