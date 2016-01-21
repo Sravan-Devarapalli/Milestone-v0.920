@@ -1,4 +1,5 @@
-﻿namespace DataTransferObjects
+﻿using System;
+namespace DataTransferObjects
 {
     /// <summary>
     /// Determones a common constants
@@ -53,6 +54,11 @@
         {
             public const string DefaultGroupCode = "B0001";
             public const string DefaultBusinessGroupCode = "BG0001";
+        }
+
+        public class Dates
+        {
+            public static DateTime FutureDate = new DateTime(2029, 12, 31);
         }
 
         public static class ResourceKeys
