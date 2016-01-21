@@ -370,6 +370,7 @@ namespace PraticeManagement.Reports
             if (!IsPostBack)
             {
                 SetPeriodSelection(13);
+                GetFilterValuesForSession();
             }
         }
 
@@ -804,6 +805,7 @@ namespace PraticeManagement.Reports
 
         protected void btnExport_Click(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
             DataHelper.InsertExportActivityLogMessage("Attainment Export");
 
             var projectsData = (from pro in ExportProjectList
@@ -918,6 +920,22 @@ namespace PraticeManagement.Reports
             dataSetList.Add(datasetAttribution);
 
             NPOIExcel.Export("AttainmentReportingDataSource.xls", dataSetList, sheetStylesList);
+            
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            string filter = ddlPeriod.SelectedValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.AttainmentReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.AttainmentReport) as string;
+            if (filters != null)
+            {
+                ddlPeriod.SelectedValue = filters;
+            }
         }
     }
 }
