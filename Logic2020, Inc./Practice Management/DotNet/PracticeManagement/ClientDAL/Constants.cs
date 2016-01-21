@@ -9,6 +9,7 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string ReportFilters = "ReportFilters";
             public const string MilestoneResourceEndDate = "MilestoneResourceEndDate";
             public const string MilestoneResourceStartDate = "MilestoneResourceStartDate";
             public const string ProjectManagerNameColumn = "ProjectManagerName";
@@ -632,6 +633,13 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string CurrentUserId = "@CurrentUserId";
+            public const string ReportId="@ReportId";
+            public const string PreviousUserId = "@PreviousUserId";
+            public const string IsBecomeUser = "@IsBecomeUser";
+            public const string ReportFilters = "@ReportFilters";
+            public const string UserAlias = "@UserAlias";
+            public const string ReportName = "@ReportName";
             public const string ActualRevenuePerHourParam = "@ActualRevenuePerHour";
             public const string TargetRevenuePerHourParam = "@TargetRevenuePerHour";
             public const string HoursUtilizationParam = "@HoursUtilization";
@@ -1153,6 +1161,9 @@
 
             public class Person
             {
+                public const string DeleteReportFilterValues = "dbo.DeleteReportFilterValues";
+                public const string SaveReportFilterValues = "dbo.SaveReportFilterValues";
+                public const string GetReportFilterValues = "dbo.GetReportFilterValues";
                 public const string GetPersonDivisions = "dbo.GetPersonDivisions";
                 public const string SaveManagedParametersByPerson = "dbo.SaveManagedParametersByPerson";
                 public const string GetPracticeLeaderships = "dbo.GetPracticeLeaderships";
@@ -1301,7 +1312,7 @@
 
                 public const string ConsultantMilestones = "dbo.ConsultantMilestones";
                 public const string CheckPersonTimeEntriesAfterTerminationDate = "dbo.CheckPersonTimeEntriesAfterTerminationDate";
-
+                public const string CheckPersonTimeEntriesAfterHireDate = "dbo.CheckPersonTimeEntriesAfterHireDate";
                 #endregion Shared
 
                 #region Reports
