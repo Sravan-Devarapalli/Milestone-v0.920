@@ -9,6 +9,7 @@ using DataTransferObjects;
 using PraticeManagement.Configuration;
 using PraticeManagement.FilterObjects;
 using PraticeManagement.Utils;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Controls
 {
@@ -184,6 +185,8 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public bool IsReset { get; set; }
+
         public bool IsFreshRequest { get; set; }
 
         public bool IsActivityLogPage { get; set; }
@@ -198,6 +201,11 @@ namespace PraticeManagement.Controls
             {
                 valSum.Enabled = value;
             }
+        }
+
+        private PraticeManagement.Config.ActivityLog HostingPage
+        {
+            get { return ((PraticeManagement.Config.ActivityLog)Page); }
         }
 
         #endregion
@@ -339,6 +347,10 @@ namespace PraticeManagement.Controls
             {
                 ActivityLogOnChangeEvents();
                 EnableProjectsDropDown();
+                if (!IsReset)
+                {
+                    GetFilterValuesForSession();
+                }
             }
             else
             {
@@ -445,13 +457,15 @@ namespace PraticeManagement.Controls
                 btnResetFilter.Enabled = true;
             else
                 btnResetFilter.Enabled = false;
-
+            SaveFilterValuesForSession();
         }
 
         protected void btnResetFilter_Click(object sender, EventArgs e)
         {
             ResetFilters();
             Update();
+            IsReset = true;
+            SaveFilterValuesForSession();
         }
 
         private void UpdateGrid()
@@ -691,6 +705,32 @@ namespace PraticeManagement.Controls
         public string NoNeedToShowActivityType(object activityName)
         {
             return activityName.ToString().ToLower() == LoggedInActivity ? string.Empty : activityName.ToString();
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            ActivityLogFilters filter = new ActivityLogFilters();
+            filter.EventSource = ddlEventSource.SelectedValue;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.SelectedPerson = ddlPersonName.SelectedValue;
+            filter.ReportStartDate = FromDateFilterValue;
+            filter.ReportEndDate = ToDateFilterValue;
+            filter.SelectedProject = ddlProjects.SelectedValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ActivityLogReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ActivityLogReport) as ActivityLogFilters;
+            if (filters != null)
+            {
+                ddlEventSource.SelectedValue = filters.EventSource;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                ddlPersonName.SelectedValue = filters.SelectedPerson;
+                ddlProjects.SelectedValue = filters.SelectedProject;
+                FromDateFilterValue = filters.ReportStartDate;
+                ToDateFilterValue = filters.ReportEndDate;
+            }
         }
     }
 }
