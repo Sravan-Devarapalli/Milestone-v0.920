@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using DataTransferObjects;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -23,6 +25,11 @@ namespace PraticeManagement.Controls.Reports
             {
                 return new DateTime(mpPeriodStart.SelectedYear, mpPeriodStart.SelectedMonth, Constants.Dates.FirstDay);
             }
+            set
+            {
+                mpPeriodStart.SelectedYear = value.Year;
+                mpPeriodStart.SelectedMonth = value.Month;
+            }
         }
 
         /// <summary>
@@ -36,6 +43,18 @@ namespace PraticeManagement.Controls.Reports
                     new DateTime(mpPeriodEnd.SelectedYear, mpPeriodEnd.SelectedMonth,
                         DateTime.DaysInMonth(mpPeriodEnd.SelectedYear, mpPeriodEnd.SelectedMonth));
             }
+
+            set
+            {
+                mpPeriodEnd.SelectedYear = value.Year;
+                mpPeriodEnd.SelectedMonth = value.Month;
+
+            }
+        }
+
+        private PraticeManagement.CommissionsAndRates HostingPage
+        {
+            get { return ((PraticeManagement.CommissionsAndRates)Page); }
         }
 
         private static Project[] PopulateCommissionsAndRatesGrid(Project[] project)
@@ -54,10 +73,18 @@ namespace PraticeManagement.Controls.Reports
         protected void Page_Load(object sender, EventArgs e)
         {
             Page.Validate();
-            if (!IsPostBack || Page.IsValid)
+            if (!IsPostBack)
+            {
+                GetFilterValuesForSession();
+            }
+        }
+
+        public void PopulateData()
+        {
+            if (Page.IsValid)
             {
                 var periodStart =
-                    new DateTime(mpPeriodStart.SelectedYear, mpPeriodStart.SelectedMonth, Constants.Dates.FirstDay);
+                       new DateTime(mpPeriodStart.SelectedYear, mpPeriodStart.SelectedMonth, Constants.Dates.FirstDay);
                 var monthsInPeriod = GetPeriodLength();
 
                 AddMonthColumn(gvCommissionsAndRates, 1, periodStart, monthsInPeriod);
@@ -97,6 +124,18 @@ namespace PraticeManagement.Controls.Reports
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            PopulateData();
+            SaveFilterValuesForSession();
+        }
+
+        protected void btnReset_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            PeriodStart = today;
+            PeriodEnd = today;
+            PopulateData();
+            SaveFilterValuesForSession();
+            btnReset.Enabled = false;
         }
 
         protected void gvCommissionsAndRates_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -165,5 +204,25 @@ namespace PraticeManagement.Controls.Reports
                 }
             }
         }
+
+        private void SaveFilterValuesForSession()
+        {
+            RangeFilters filter = new RangeFilters();
+            filter.ReportStartDate = PeriodStart;
+            filter.ReportEndDate = PeriodEnd;
+            ReportsFilterHelper.SaveFilterValues(ReportName.CommissionsAndRatesReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.CommissionsAndRatesReport) as RangeFilters;
+            if (filters != null)
+            {
+                PeriodStart = (DateTime)filters.ReportStartDate;
+                PeriodEnd = (DateTime)filters.ReportEndDate;
+            }
+            PopulateData();
+        }
     }
 }
+
