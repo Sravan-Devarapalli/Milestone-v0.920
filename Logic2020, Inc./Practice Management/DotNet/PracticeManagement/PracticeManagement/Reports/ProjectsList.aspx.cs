@@ -17,6 +17,7 @@ using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Web.Security;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports
 {
@@ -26,7 +27,7 @@ namespace PraticeManagement.Reports
         private int headerRowsCount = 1;
         private const string projectsListExportText = "Projects List Report For the Period: {0} to {1}";
         private const string allCapabilitiesText = "All Capabilities";
-
+        private const string projectsListFilterKey = "projectsListFilterKey";
         private string RowSpliter = Guid.NewGuid().ToString();
 
         private string ColoumSpliter = Guid.NewGuid().ToString();
@@ -293,20 +294,20 @@ namespace PraticeManagement.Reports
             var filename = "ProjectsList.xls";
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            ProjectList = ServiceCallers.Custom.Report(r => r.ProjectsListWithFilters(SelectedClientIds, 
-                                                                                        ShowProjected, 
-                                                                                        ShowCompleted, 
-                                                                                        ShowActive, 
-                                                                                        ShowInternal, 
-                                                                                        ShowExperimental, 
-                                                                                        ShowProposed, 
-                                                                                        ShowInactive, 
-                                                                                        StartDate, 
-                                                                                        EndDate, 
-                                                                                        SelectedSalespersonIds, 
-                                                                                        SelectedProjectOwnerIds, 
-                                                                                        SelectedPracticeIds, 
-                                                                                        SelectedGroupIds, 
+            ProjectList = ServiceCallers.Custom.Report(r => r.ProjectsListWithFilters(SelectedClientIds,
+                                                                                        ShowProjected,
+                                                                                        ShowCompleted,
+                                                                                        ShowActive,
+                                                                                        ShowInternal,
+                                                                                        ShowExperimental,
+                                                                                        ShowProposed,
+                                                                                        ShowInactive,
+                                                                                        StartDate,
+                                                                                        EndDate,
+                                                                                        SelectedSalespersonIds,
+                                                                                        SelectedProjectOwnerIds,
+                                                                                        SelectedPracticeIds,
+                                                                                        SelectedGroupIds,
                                                                                         Page.User.Identity.Name)).ToList();
             if (ProjectList.Count > 0)
             {
@@ -345,7 +346,7 @@ namespace PraticeManagement.Reports
 
         public void PDFExport()
         {
-            var data = ServiceCallers.Custom.Report(r => r.ProjectsListWithFilters(SelectedClientIds, ShowProjected, ShowCompleted, ShowActive, ShowInternal, ShowExperimental, 
+            var data = ServiceCallers.Custom.Report(r => r.ProjectsListWithFilters(SelectedClientIds, ShowProjected, ShowCompleted, ShowActive, ShowInternal, ShowExperimental,
                 ShowProposed, ShowInactive, StartDate, EndDate, SelectedSalespersonIds, SelectedProjectOwnerIds, SelectedPracticeIds, SelectedGroupIds, Page.User.Identity.Name)).ToList();
 
             HtmlToPdfBuilder builder = new HtmlToPdfBuilder(iTextSharp.text.PageSize.A4_LANDSCAPE);
@@ -539,11 +540,16 @@ namespace PraticeManagement.Reports
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null)).ToList();
+            Capabilities = capabilities.Where(pc => pc.IsActive).ToList();
+            divWholePage.Visible = false;
             if (!IsPostBack)
             {
                 PreparePeriodView();
+                bool u = UserImpersonation.IsImpersonating;
+                GetFilterValuesForSession();
             }
-            divWholePage.Visible = false;
+
             if (hdnFiltersChanged.Value == "false")
             {
                 btnResetFilter.Attributes.Add("disabled", "true");
@@ -557,8 +563,6 @@ namespace PraticeManagement.Reports
             AddAttributesToCheckBoxes(cblPractice);
             AddAttributesToCheckBoxes(cblProjectOwner);
             AddAttributesToCheckBoxes(cblSalesperson);
-            var capabilities = ServiceCallers.Custom.Practice(p => p.GetPracticeCapabilities(null, null)).ToList();
-            Capabilities = capabilities.Where(pc => pc.IsActive).ToList();
         }
 
         private void AddAttributesToCheckBoxes(ScrollingDropDown ddlpractices)
@@ -633,7 +637,7 @@ namespace PraticeManagement.Reports
                 divWholePage.Visible = false;
                 return;
             }
-
+            SaveFilterValuesForSession();
             PopulateData();
         }
 
@@ -686,6 +690,56 @@ namespace PraticeManagement.Reports
                     }
                 }
                 lblCapabilities.Text = flag ? allCapabilitiesText : dataItem.Capabilities;
+            }
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            ProjectsListFilters filter = new ProjectsListFilters();
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.ClientIds = SelectedClientIds;
+            filter.SalesPersonIds = SelectedSalespersonIds;
+            filter.PracticeIds = SelectedPracticeIds;
+            filter.BusinessUnitIds = SelectedGroupIds;
+            filter.ProjectAccessPeopleIds = SelectedProjectOwnerIds;
+            filter.IsActive = chbActive.Checked;
+            filter.IsInactive = chbInactive.Checked;
+            filter.IsInternal = chbInternal.Checked;
+            filter.IsProjected = chbProjected.Checked;
+            filter.IsProposed = chbProposed.Checked;
+            filter.IsCompleted = chbCompleted.Checked;
+            filter.IsExperimental = chbExperimental.Checked;
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ProjectsList, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ProjectsList) as ProjectsListFilters;
+            if (filters != null)
+            {
+                cblClient.UnSelectAll();
+                cblClient.SelectedItems = filters.ClientIds;
+                cblSalesperson.UnSelectAll();
+                cblSalesperson.SelectedItems=filters.SalesPersonIds;
+                cblProjectGroup.UnSelectAll();
+                cblProjectGroup.SelectedItems=filters.BusinessUnitIds;
+                cblPractice.UnSelectAll();
+                cblPractice.SelectedItems=filters.PracticeIds;
+                cblProjectOwner.UnSelectAll();
+                cblProjectOwner.SelectedItems=filters.ProjectAccessPeopleIds;
+                chbActive.Checked = filters.IsActive;
+                chbInactive.Checked = filters.IsInactive;
+                chbInternal.Checked = filters.IsInternal;
+                chbCompleted.Checked = filters.IsCompleted;
+                chbExperimental.Checked = filters.IsExperimental;
+                chbProjected.Checked = filters.IsProjected;
+                chbProposed.Checked = filters.IsProposed;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                PopulateData();
             }
         }
     }
