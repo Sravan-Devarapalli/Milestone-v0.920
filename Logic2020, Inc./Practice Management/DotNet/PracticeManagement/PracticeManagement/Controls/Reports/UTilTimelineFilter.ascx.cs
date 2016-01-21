@@ -7,7 +7,9 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using DataTransferObjects.ContextObjects;
 using System.Drawing;
+using PraticeManagement;
 using PraticeManagement.FilterObjects;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Controls.Reports
 {
@@ -23,9 +25,9 @@ namespace PraticeManagement.Controls.Reports
 
         public bool ProjectedPersons { get { return chbProjectedPersons.Checked; } }
 
-        public string PracticesSelected { get { return cblPractices.SelectedItems; } }
+        public string PracticesSelected { get { return cblPractices.SelectedItems; } set { cblPractices.SelectedItems = value; } }
 
-        public string DivisionsSelected { get { return cblDivisions.SelectedItems; } }
+        public string DivisionsSelected { get { return cblDivisions.SelectedItems; } set { cblDivisions.SelectedItems = value; } }
 
         public bool ActiveProjects { get { return chbActiveProjects.Checked; } }
 
@@ -39,7 +41,7 @@ namespace PraticeManagement.Controls.Reports
 
         public bool CompletedProjects { get { return chbCompletedProjects.Checked; } }
 
-        public string TimescalesSelected { get { return cblTimeScales.SelectedItems; } }
+        public string TimescalesSelected { get { return cblTimeScales.SelectedItems; } set { cblTimeScales.SelectedItems = value; } }
 
         public bool ExcludeInternalPractices { get { return chkExcludeInternalPractices.Checked; } }
 
@@ -124,6 +126,10 @@ namespace PraticeManagement.Controls.Reports
                     }
                 }
             }
+            set
+            {
+
+            }
         }
 
         public bool IsshowTodayBar
@@ -166,6 +172,10 @@ namespace PraticeManagement.Controls.Reports
                         return firstDay.AddMonths(1).AddDays(-1).Date;
                     }
                 }
+            }
+            set
+            {
+
             }
         }
 
@@ -238,6 +248,51 @@ namespace PraticeManagement.Controls.Reports
             }
         }
 
+        public ConsultingUtilizationReportFilters Filters
+        {
+            get;
+            set;
+        }
+
+        private PraticeManagement.Reporting.UtilizationTimeline HostingPage_Utilization
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.UtilizationTimeline)
+                {
+                    return ((PraticeManagement.Reporting.UtilizationTimeline)Page);
+                }
+                return null;
+            }
+        }
+
+        private PraticeManagement.Reporting.ConsultingCapacity HostingPage_Capacity
+        {
+            get
+            {
+                if (Page is PraticeManagement.Reporting.ConsultingCapacity)
+                {
+                    return ((PraticeManagement.Reporting.ConsultingCapacity)Page);
+                }
+                return null;
+            }
+        }
+
+        private Controls.Reports.ConsultantsWeeklyReport HostingControl
+        {
+            get
+            {
+                if (HostingPage_Utilization != null)
+                {
+                    return HostingPage_Utilization.ConsultantsControl;
+                }
+                else if (HostingPage_Capacity != null)
+                {
+                    return HostingPage_Capacity.ConsultantsControl;
+                }
+                return null;
+            }
+        }
         private static int ParseInt(string val, int def)
         {
             try
@@ -268,7 +323,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 if (this.cblDivisions != null && this.cblDivisions.Items.Count == 0)
                 {
-                    DataHelper.FillPersonDivisionList(this.cblDivisions,"All Divisions");
+                    DataHelper.FillPersonDivisionList(this.cblDivisions, "All Divisions");
                 }
                 if (this.cblTimeScales != null && this.cblTimeScales.Items.Count == 0)
                 {
@@ -284,6 +339,10 @@ namespace PraticeManagement.Controls.Reports
                     SelectAllItems(this.cblPractices);
                     SelectAllItems(this.cblDivisions);
                     SelectDefaultTimeScaleItems(this.cblTimeScales);
+                }
+                if (Filters != null)
+                {
+                    PopulateFiltersIntoControls();
                 }
             }
             lblMessage.Text = string.Empty;
@@ -338,14 +397,13 @@ namespace PraticeManagement.Controls.Reports
                 chbCompletedProjects.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.CompletedProjectsKey]);
                 chkExcludeInternalPractices.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExcludeInternalPracticesKey]);
                 chbExcludeInvestmentResources.Checked = Convert.ToBoolean(resoureDictionary[Constants.ResourceKeys.ExcludeInvestmentResourceKey]);
-                
+
                 rbSortbyAsc.Checked = resoureDictionary[Constants.ResourceKeys.SortDirectionKey] == "Desc" ? true : false;
 
                 SelectItems(this.cblPractices, resoureDictionary[Constants.ResourceKeys.PracticeIdListKey]);
                 SelectItems(this.cblTimeScales, resoureDictionary[Constants.ResourceKeys.TimescaleIdListKey]);
                 SelectItems(this.cblDivisions, resoureDictionary[Constants.ResourceKeys.DivisionIdListKey]);
             }
-
         }
 
         public void PopulateControls(ConsultantUtilTimeLineFilter cookie)
@@ -452,7 +510,7 @@ namespace PraticeManagement.Controls.Reports
             this.chkExcludeInternalPractices.Checked = true;
             SelectAllItems(this.cblPractices);
             SelectAllItems(this.cblDivisions);
-            SelectDefaultTimeScaleItems(this.cblTimeScales);            
+            SelectDefaultTimeScaleItems(this.cblTimeScales);
         }
 
         public string PracticesFilterText()
@@ -645,6 +703,72 @@ namespace PraticeManagement.Controls.Reports
             return filter;
         }
 
+        public void PopulateFiltersIntoControls()
+        {
+            BegPeriod = Filters.ReportStartDate.Value;
+            EndPeriod = Filters.ReportEndDate.Value;
+            ddlPeriod.SelectedValue = Filters.ReportPeriod;
+            ddlDetalization.SelectedValue = Filters.Granularity.ToString();
+            chbActivePersons.Checked = Filters.IncludeActivePeople;
+            chbProjectedPersons.Checked = Filters.IncludeProjectedPeople;
+            chbActiveProjects.Checked = Filters.IncludeActiveProjects;
+            chbCompletedProjects.Checked = Filters.IncludeCompletedProjects;
+            chbExcludeInvestmentResources.Checked = Filters.ExcludeInvestmentResources;
+            chbExperimentalProjects.Checked = Filters.IncludeExperimentalProjects;
+            chbInternalProjects.Checked = Filters.IncludeInternalProjects;
+            chbProjectedProjects.Checked = Filters.IncludeProjectedProjects;
+            chbProposedProjects.Checked = Filters.IncludeProposedProjects;
+            chbShowMSBadge.Checked = Filters.IncludeBadgeStatus;
+            chkExcludeInternalPractices.Checked = Filters.ExcludeInternalPractices;
+            cblTimeScales.UnSelectAll();
+            cblTimeScales.SelectedItems = Filters.TimescaleIds;
+            cblPractices.UnSelectAll();
+            cblPractices.SelectedItems = Filters.PracticeIds;
+            cblDivisions.UnSelectAll();
+            cblDivisions.SelectedItems = Filters.DivisionIds;
+            ddlAvgUtil.SelectedValue = Filters.AverageUtilizataion.ToString();
+            ddlSortBy.SelectedValue = Filters.SortId.ToString();
+            if (Filters.SortId == 0 || Filters.SortId == 1)
+            {
+                rbSortbyAsc.Checked = Filters.SortByAscend;
+                rbSortbyDesc.Checked = !Filters.SortByAscend;
+            }
+            else
+            {
+                rbSortbyAsc.Checked = rbSortbyDesc.Checked = false;
+            }
+            if (Filters.ReportPeriod == "0")
+            {
+                diRange.FromDate = Filters.ReportStartDate;
+                diRange.ToDate = Filters.ReportEndDate;
+            }
+            HostingControl.UpdateReportFromFilters();
+        }
+
+        public void SaveFiltersFromControls(ConsultingUtilizationReportFilters filters)
+        {
+            filters.ReportStartDate = BegPeriod;
+            filters.ReportEndDate = EndPeriod;
+            filters.ReportPeriod = ddlPeriod.SelectedValue;
+            filters.Granularity = Convert.ToInt32(ddlDetalization.SelectedValue);
+            filters.IncludeActivePeople = chbActivePersons.Checked;
+            filters.IncludeProjectedPeople = chbProjectedPersons.Checked;
+            filters.IncludeActiveProjects = chbActiveProjects.Checked;
+            filters.IncludeCompletedProjects = chbCompletedProjects.Checked;
+            filters.ExcludeInvestmentResources = chbExcludeInvestmentResources.Checked;
+            filters.IncludeExperimentalProjects = chbExperimentalProjects.Checked;
+            filters.IncludeInternalProjects = chbInternalProjects.Checked;
+            filters.IncludeProjectedProjects = chbProjectedProjects.Checked;
+            filters.IncludeProposedProjects = chbProposedProjects.Checked;
+            filters.IncludeBadgeStatus = chbShowMSBadge.Checked;
+            filters.TimescaleIds = cblTimeScales.SelectedItems;
+            filters.PracticeIds = cblPractices.SelectedItems;
+            filters.DivisionIds = cblDivisions.SelectedItems;
+            filters.ExcludeInternalPractices = chkExcludeInternalPractices.Checked;
+            filters.AverageUtilizataion = Convert.ToInt32(ddlAvgUtil.SelectedValue);
+            filters.SortId = Convert.ToInt32(ddlSortBy.SelectedValue);
+            filters.SortByAscend = rbSortbyAsc.Checked;
+        }
     }
 }
 
