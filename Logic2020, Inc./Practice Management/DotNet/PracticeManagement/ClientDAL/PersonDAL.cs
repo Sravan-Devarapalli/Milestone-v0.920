@@ -5209,6 +5209,87 @@ namespace DataAccess
             }
         }
 
+        public static void SaveReportFilterValues(int currentUserId, int reportId, string reportFilters, int previousUserId)
+        { 
+             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.SaveReportFilterValues, connection))
+            {
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.CurrentUserId, currentUserId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ReportId, reportId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ReportFilters, reportFilters);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
+                connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        public static string GetReportFilterValues(int currentUserId, int reportId, int previousUserId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetReportFilterValues, connection))
+            {
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.CurrentUserId, currentUserId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ReportId, reportId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
+                connection.Open();
+                string result=null;
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.HasRows)
+                    {
+                        result = null;
+                    }
+                    else
+                    {
+                        while (reader.Read())
+                        {
+                            int reportFilterIndex = reader.GetOrdinal(Constants.ColumnNames.ReportFilters);
+                            result = reader.GetString(reportFilterIndex);
+                        }
+                    }
+                   
+                }
+                return result;
+                
+            }
+        }
+
+        public static void DeleteReportFilterValues(int currentUserId, int previousUserId)
+        { 
+        using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+        using (var command = new SqlCommand(Constants.ProcedureNames.Person.DeleteReportFilterValues, connection))
+        {
+            command.CommandTimeout = connection.ConnectionTimeout;
+
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.AddWithValue(Constants.ParameterNames.CurrentUserId, currentUserId);
+            command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
+            connection.Open();
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        }
     }
 }
 
