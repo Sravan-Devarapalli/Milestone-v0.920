@@ -13,6 +13,8 @@ using DataTransferObjects.Reports;
 using PraticeManagement.Configuration;
 using System.IO;
 using iTextSharp.text;
+using DataTransferObjects.Filters;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Reporting
 {
@@ -359,10 +361,12 @@ namespace PraticeManagement.Reporting
             else
                 ddlPeriod.SelectedValue = value.Value ;
             LoadActiveView();
+            SaveFilterValuesForSession();
         }
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            GetFilterValuesForSession();
             if (timeEntryReportHeader.Count == 2)
             {
                 tdFirst.Attributes["class"] = "Width20Percent";
@@ -423,6 +427,7 @@ namespace PraticeManagement.Reporting
             }
 
             LoadActiveView();
+            SaveFilterValuesForSession();
         }
 
         protected void ddlPeriod_SelectedIndexChanged(object sender, EventArgs e)
@@ -435,7 +440,7 @@ namespace PraticeManagement.Reporting
             {
                 mpeCustomDates.Show();
             }
-
+            SaveFilterValuesForSession();
 
         }
 
@@ -447,6 +452,7 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -535,6 +541,7 @@ namespace PraticeManagement.Reporting
             {
                 mpeProjectSearch.Show();
             }
+
         }
 
         #endregion
@@ -599,6 +606,7 @@ namespace PraticeManagement.Reporting
                 ddlPeriod.SelectedValue = value.Value;
             LoadActiveView();
             ClearFilters();
+            SaveFilterValuesForSession();
         }
 
         private void PopulateddlPeriod(string projectNumber)
@@ -664,6 +672,31 @@ namespace PraticeManagement.Reporting
         public string GetDoubleFormat(double value)
         {
             return value.ToString(Constants.Formatting.DoubleValue);
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            TimeReports filter = new TimeReports();
+            filter.ProjectNumber = txtProjectNumber.Text;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.SelectedView = ddlView.SelectedValue;
+            filter.StartDate = diRange.FromDate.Value;
+            filter.EndDate = diRange.ToDate.Value;
+            ReportsFilterHelper.SaveFilterValues(ReportName.ByProjectReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.ByProjectReport) as TimeReports;
+            if (filters != null)
+            {
+                txtProjectNumber.Text = filters.ProjectNumber;
+                PopulateddlPeriod(ProjectNumber);
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                ddlView.SelectedValue = filters.SelectedView;
+                diRange.FromDate = filters.StartDate;
+                diRange.ToDate = filters.EndDate;
+            }
         }
 
         #endregion
