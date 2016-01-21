@@ -73,7 +73,7 @@ BEGIN
 		  AND (@AccountIds IS NULL OR P.ClientId IN (SELECT Ids FROM @AccountIdsTable))
 		  AND (@PayTypeIds IS NULL OR (pay.Timescale IN (SELECT Ids FROM @PayIdsTable)))
 		  AND (@PersonStatusIds IS NULL OR Per.PersonStatusId IN (SELECT Ids FROM @PersonStatusIdsTable))
-		  AND P.PracticeId IN (SELECT Ids FROM @PracticesTable)
+		  AND (@Practices IS NULL OR P.PracticeId IN (SELECT Ids FROM @PracticesTable))
 		  AND (@ExcludeInternalPractices = 0 OR (@ExcludeInternalPractices = 1 AND Pra.IsCompanyInternal = 0))
 		  AND Per.IsStrawman = 0
 	ORDER BY P.ProjectNumber,M.StartDate,m.Description,Per.LastName,ISNULL(Per.PreferredFirstName,Per.FirstName)
