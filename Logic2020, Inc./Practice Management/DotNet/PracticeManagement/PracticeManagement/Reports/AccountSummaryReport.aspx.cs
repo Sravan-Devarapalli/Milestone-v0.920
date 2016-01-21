@@ -9,6 +9,8 @@ using PraticeManagement.Controls.Reports.ByAccount;
 using System.Text;
 using PraticeManagement.FilterObjects;
 using DataTransferObjects;
+using PraticeManagement.Utils;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reporting
 {
@@ -302,61 +304,60 @@ namespace PraticeManagement.Reporting
                 var allClients = ServiceCallers.Custom.Client(c => c.ClientListAllWithoutPermissions());
                 DataHelper.FillListDefault(ddlAccount, "- - Select Account - -", allClients, false);
 
-                var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ByAccountReportFitlerCookie) as ByAccountReportFilter;
-                if (cookie != null)
-                {
-                    var targetItem = ddlAccount.Items.FindByValue(cookie.AccountId);
-                    if (targetItem != null)
-                    {
-                        ddlAccount.SelectedValue = targetItem.Value;
+                //var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.ByAccountReportFitlerCookie) as ByAccountReportFilter;
+                //if (cookie != null)
+                //{
+                //    var targetItem = ddlAccount.Items.FindByValue(cookie.AccountId);
+                //    if (targetItem != null)
+                //    {
+                //        ddlAccount.SelectedValue = targetItem.Value;
 
-                        if (ddlAccount.SelectedIndex != 0)
-                        {
-                            DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
+                //        if (ddlAccount.SelectedIndex != 0)
+                //        {
+                //            DataHelper.FillProjectGroupListWithInactiveGroups(cblProjectGroup, Convert.ToInt32(ddlAccount.SelectedValue), null, "All Business Units", false);
 
-                            cblProjectGroup.SelectedItems = cookie.BusinessUnitIds;
-                        }
-                        else
-                        {
-                            FillInitProjectGroupList();
-                        }
+                //            cblProjectGroup.SelectedItems = cookie.BusinessUnitIds;
+                //        }
+                //        else
+                //        {
+                //            FillInitProjectGroupList();
+                //        }
 
-                    }
-                    else
-                    {
-                        FillInitProjectGroupList();
-                    }
+                //    }
+                //    else
+                //    {
+                //        FillInitProjectGroupList();
+                //    }
 
-                    var targetItems = ddlPeriod.Items.FindByValue(cookie.RangeSelected.ToString());
+                //    var targetItems = ddlPeriod.Items.FindByValue(cookie.RangeSelected.ToString());
 
-                    ddlPeriod.SelectedValue = targetItems.Value;
+                //    ddlPeriod.SelectedValue = targetItems.Value;
 
-                    if (cookie.RangeSelected.ToString() == "0")
-                    {
-                        diRange.FromDate = cookie.StartDate;
-                        diRange.ToDate = cookie.EndDate;
-                    }
+                //    if (cookie.RangeSelected.ToString() == "0")
+                //    {
+                //        diRange.FromDate = cookie.StartDate;
+                //        diRange.ToDate = cookie.EndDate;
+                //    }
 
-                    //SelectView();//Updating in Prerender
-                }
-                else
-                {
+                //    //SelectView();//Updating in Prerender
+                //}
+                //else
+                //{
                     FillInitProjectGroupList();
-                }
+                //}               
 
-                ddlAccount.SelectedValue = "";
                 ddlAccount_SelectedIndexChanged(ddlAccount, new EventArgs());
-                ddlPeriod.SelectedValue = "30";//This Month - as per 3201 
                 DataHelper.FillProjectStatusList(cblProjectStatus, "All Project Statuses", null);
                 cblProjectStatus.SelectAll();
+               
             }
 
         }
 
         protected void cblProjectStatus_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            ddlPeriod.SelectedValue = "Please Select";
             SelectView();
+            SaveFilterValuesForSession();
         }
 
         private void FillInitProjectGroupList()
@@ -372,6 +373,7 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
+            GetFilterValuesForSession();
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -429,12 +431,14 @@ namespace PraticeManagement.Reporting
             }
             //ddlPeriod.SelectedValue = "Please Select";
             SelectView();
+            SaveFilterValuesForSession();
         }
 
         protected void cblProjectGroup_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             BusinessUnitsFilteredIds = null;
             SelectView();
+            SaveFilterValuesForSession();
         }
 
         public bool SetSelectedFilters { get; set; }
@@ -463,6 +467,7 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 SelectView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -481,6 +486,7 @@ namespace PraticeManagement.Reporting
             {
                 mpeCustomDates.Show();
             }
+            SaveFilterValuesForSession();
         }
 
         protected void btnCustDatesCancel_OnClick(object sender, EventArgs e)
@@ -644,6 +650,31 @@ namespace PraticeManagement.Reporting
             }
         }
 
+        private void SaveFilterValuesForSession()
+        {
+            AccountSummaryFilters filter = new AccountSummaryFilters();
+            filter.AccountId = ddlAccount.SelectedValue;
+            filter.BusinessUnitIds = BusinessUnitIds;
+            filter.ReportPeriod = RangeSelected;
+            filter.ReportStartDate = StartDate;
+            filter.ReportEndDate = EndDate;
+            filter.ProjectStatusIds = ProjectStatusIds;
+            ReportsFilterHelper.SaveFilterValues(ReportName.AccountSummaryReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.AccountSummaryReport) as AccountSummaryFilters;
+            if (filters != null)
+            {
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                cblProjectGroup.SelectedItems = filters.BusinessUnitIds;
+                ddlAccount.SelectedValue = filters.AccountId;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                cblProjectStatus.SelectedItems = filters.ProjectStatusIds;
+            }
+        }
         #endregion
     }
 }
