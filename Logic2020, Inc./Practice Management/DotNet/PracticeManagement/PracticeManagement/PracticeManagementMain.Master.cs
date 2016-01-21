@@ -256,6 +256,22 @@ $(document).ready(function () {{
 
         public string _PageTitle { get; set; }
 
+        public static int PreviousUserId
+        {
+            get
+            {
+                return DataHelper.GetPersonID(UserImpersonation.PrevUserName);
+            }
+        }
+
+        public static int CurrentUserID
+        {
+            get
+            {
+                return DataHelper.GetPersonID(HttpContext.Current.User.Identity.Name);
+            }
+        }
+
         #endregion
 
         #region IPostBackEventHandler Members
@@ -643,7 +659,15 @@ $(document).ready(function () {{
 
             e.Cancel = ne.Cancel;
             SkipTicketRenewal = !e.Cancel;
-
+            if (PreviousUserId != 0)
+            {
+                ServiceCallers.Custom.Person(p => p.DeleteReportFilterValues(CurrentUserID, PreviousUserId));
+                ServiceCallers.Custom.Person(p => p.DeleteReportFilterValues(PreviousUserId, 0));
+            }
+            else
+            {
+                ServiceCallers.Custom.Person(p => p.DeleteReportFilterValues(CurrentUserID, 0));
+            }
         }
 
         protected void smdsSubMenu_OnMenuItemDataBound(object sender, MenuEventArgs e)
@@ -733,6 +757,13 @@ $(document).ready(function () {{
                 val = string.Empty;
             }
             return val;
+        }
+
+        protected void ClearUserSession(object sender, EventArgs e)
+        {
+            string user = HttpContext.Current.User.Identity.Name;
+            ServiceCallers.Custom.Person(p => p.DeleteReportFilterValues(CurrentUserID,PreviousUserId));
+
         }
     }
 }
