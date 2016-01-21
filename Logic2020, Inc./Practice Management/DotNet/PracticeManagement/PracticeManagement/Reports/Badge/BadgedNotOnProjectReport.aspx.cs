@@ -12,6 +12,7 @@ using PraticeManagement.Controls;
 using PraticeManagement.PersonStatusService;
 using System.ServiceModel;
 using System.Text;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -68,7 +69,7 @@ namespace PraticeManagement.Reports.Badge
 
                 CellStyles dataCellStyle = new CellStyles();
 
-                var dataCellStylearray = new List<CellStyles>() { dataCellStyle,dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
+                var dataCellStylearray = new List<CellStyles>() { dataCellStyle, dataCellStyle, dataDateCellStyle, dataDateCellStyle, dataDateCellStyle };
 
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray.ToArray());
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
@@ -132,6 +133,14 @@ namespace PraticeManagement.Reports.Badge
             }
         }
 
+        public string PayTypes
+        {
+            get
+            {
+                return cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -148,7 +157,11 @@ namespace PraticeManagement.Reports.Badge
                     dtpEnd.DateValue = Convert.ToDateTime(EndDateFromQueryString);
                     cblPayTypes.SelectedItems = PayTypesFromQueryString == "null" ? null : PayTypesFromQueryString;
                     cblPersonStatus.SelectedItems = PersonStatusFromQueryString;
-                    btnUpdateView_Click(btnUpdateView, new EventArgs());
+                    PopulateData();
+                }
+                else
+                {
+                    GetFilterValuesForSession();
                 }
             }
         }
@@ -188,6 +201,12 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
+            SaveFilterValuesForSession();
+            PopulateData();
+        }
+
+        public void PopulateData()
+        {
             Page.Validate("BadgeReport");
             if (!Page.IsValid)
             {
@@ -195,13 +214,8 @@ namespace PraticeManagement.Reports.Badge
                 return;
             }
             divWholePage.Style.Remove("display");
-            PopulateData();
-        }
-
-        public void PopulateData()
-        {
             lblRange.Text = dtpStart.DateValue.ToString(Constants.Formatting.EntryDateFormat) + " - " + dtpEnd.DateValue.ToString(Constants.Formatting.EntryDateFormat);
-            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var paytypes = PayTypes;
             var statuses = PersonStatus;
             var resources = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, true, false, false, false, false, false, false).ToList());
             repBadgedNotProject.DataSource = resources;
@@ -237,7 +251,7 @@ namespace PraticeManagement.Reports.Badge
             var filename = string.Format("ResourcesWithActiveClocksAndNotOnProjectReport_{0}-{1}.xls", dtpStart.DateValue.ToString("MM_dd_yyyy"), dtpEnd.DateValue.ToString("MM_dd_yyyy"));
             var sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
-            var paytypes = cblPayTypes.areAllSelected ? null : cblPayTypes.SelectedItems;
+            var paytypes = PayTypes;
             var statuses = PersonStatus;
             var report = ServiceCallers.Custom.Report(r => r.ListBadgeResourcesByType(paytypes, statuses, dtpStart.DateValue, dtpEnd.DateValue, true, false, false, false, false, false, false).ToList());
             if (report.Count > 0)
@@ -285,12 +299,38 @@ namespace PraticeManagement.Reports.Badge
                 row = new List<object>();
                 row.Add(reportItem.Person.Name);
                 row.Add(reportItem.Person.Title.TitleName);
-                row.Add(reportItem.BadgeStartDate.HasValue?reportItem.BadgeStartDate.Value.ToShortDateString():string.Empty);
+                row.Add(reportItem.BadgeStartDate.HasValue ? reportItem.BadgeStartDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.DeactivatedDate.HasValue ? reportItem.DeactivatedDate.Value.ToShortDateString() : string.Empty);
                 row.Add(reportItem.BadgeEndDate.HasValue ? reportItem.BadgeEndDate.Value.ToShortDateString() : string.Empty);
                 data.Rows.Add(row.ToArray());
             }
             return data;
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            ResourceFilters filter = new ResourceFilters();
+            filter.PersonStatusIds = PersonStatus;
+            filter.PayTypeIds = PayTypes;
+            filter.ReportStartDate = dtpStart.DateValue;
+            filter.ReportEndDate = dtpEnd.DateValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.BadgedNotOnProjectReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.BadgedNotOnProjectReport) as ResourceFilters;
+            if (filters != null)
+            {
+                cblPayTypes.UnSelectAll();
+                cblPayTypes.SelectedItems = filters.PayTypeIds;
+                cblPersonStatus.UnSelectAll();
+                cblPersonStatus.SelectedItems = filters.PersonStatusIds;
+                dtpStart.DateValue = (DateTime)filters.ReportStartDate;
+                dtpEnd.DateValue = (DateTime)filters.ReportEndDate;
+                PopulateData();
+            }
+           
         }
     }
 }
