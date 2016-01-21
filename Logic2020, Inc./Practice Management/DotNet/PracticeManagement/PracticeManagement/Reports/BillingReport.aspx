@@ -83,13 +83,15 @@
                         Account:&nbsp;
                     </td>
                     <td class="textLeft Width90Percent">
+                    <span>
                         <pmc:ScrollingDropDown ID="cblAccount" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             OnSelectedIndexChanged="cblAccount_SelectedIndexChanged" NoItemsType="All" onclick="scrollingDropdown_onclick('cblAccount','Account')"
                             AutoPostBack="true" DropDownListType="Account" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
                         <ext:ScrollableDropdownExtender ID="sdeAccount" runat="server" TargetControlID="cblAccount"
                             UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
-                        </ext:ScrollableDropdownExtender>
+                        </ext:ScrollableDropdownExtender></span>
                         &nbsp;&nbsp;&nbsp;&nbsp; <span class="fontBold">Business Unit:</span> &nbsp;
+                        <span>
                         <pmc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
                             onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')" AutoPostBack="true"
@@ -97,6 +99,7 @@
                         <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
                             UseAdvanceFeature="true" Width="240px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
+                        </span>
                     </td>
                 </tr>
                 <tr class="height30P">
