@@ -48,7 +48,7 @@
                 </div>
                 <div class="changePassword">
                     <b class="FontSize15PX">
-                        <uc:LoginUserImpersonation ID="loginUserImpersonation" runat="server">
+                        <uc:LoginUserImpersonation ID="loginUserImpersonation" runat="server" OnDeimpersonate="ClearUserSession">
                         </uc:LoginUserImpersonation>
                     </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <asp:HyperLink ID="hlnkChangePassword" runat="server" NavigateUrl="~/ChangePassword.aspx"
