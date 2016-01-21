@@ -8,6 +8,9 @@ using System.Text;
 using PraticeManagement.Controls;
 using PraticeManagement.ClientService;
 using System.ServiceModel;
+using DataTransferObjects.Filters;
+using DataTransferObjects;
+using PraticeManagement.Utils;
 
 namespace PraticeManagement.Reports
 {
@@ -27,6 +30,10 @@ namespace PraticeManagement.Reports
                             clientList.Append(item.Value).Append(',');
                     return clientList.ToString();
                 }
+              
+            }
+            set {
+                cblAccount.SelectedItems = value;
             }
         }
 
@@ -127,13 +134,16 @@ namespace PraticeManagement.Reports
                     return practiceList.ToString();
                 }
             }
+            set {
+                cblPractices.SelectedItems = value;
+            }
         }
 
         public string BusinessUnitIds
         {
             get
             {
-                if (cblProjectGroup.Items.Count == 0)
+             if (cblProjectGroup.Items.Count == 0)
                     return null;
                 else
                 {
@@ -144,13 +154,16 @@ namespace PraticeManagement.Reports
                     return groupList.ToString();
                 }
             }
+            set {
+                cblProjectGroup.SelectedItems = value;
+            }
         }
 
         public string DirectorIds
         {
             get
             {
-                if (cblDirector.Items[0].Selected == true)
+              if (cblDirector.Items[0].Selected == true)
                     return null;
                 else if (cblDirector.Items.Count == 0)
                     return string.Empty;
@@ -161,7 +174,9 @@ namespace PraticeManagement.Reports
                         if (item.Selected)
                             directorsList.Append(item.Value).Append(',');
                     return directorsList.ToString();
-                }
+                }            }
+            set {
+                cblDirector.SelectedItems = value;
             }
         }
 
@@ -171,6 +186,9 @@ namespace PraticeManagement.Reports
             {
                 return diRange.FromDate.HasValue ? (DateTime?)diRange.FromDate.Value : null;
             }
+            set {
+                diRange.FromDate = value;
+            }
         }
 
         public DateTime? EndDate
@@ -178,6 +196,9 @@ namespace PraticeManagement.Reports
             get
             {
                 return diRange.ToDate.HasValue ? (DateTime?)diRange.ToDate.Value : null;
+            }
+            set {
+                diRange.ToDate = value;
             }
         }
 
@@ -189,6 +210,7 @@ namespace PraticeManagement.Reports
                 FillInitProjectGroupList();
                 FillInitPracticesList();
                 FillInitDirectorsList();
+                GetFilterValuesForSession();
             }
         }
 
@@ -225,6 +247,7 @@ namespace PraticeManagement.Reports
             {
                 SelectView();
                 lblRange.Text = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
+                SaveFilterValuesForSession();
             }
         }
 
@@ -320,6 +343,36 @@ namespace PraticeManagement.Reports
                 case 0:
                     billingSummary.PopulateData(true);
                     break;
+            }
+        }
+
+        public void SaveFilterValuesForSession()
+        {
+            BillingReportFilters filter = new BillingReportFilters();
+            filter.AccountIds = AccountIds;
+            filter.PracticeIds = PracticeIds;
+            filter.BusinessUnitIds = BusinessUnitIds;
+            filter.ExecutiveInchargeIds = DirectorIds;
+            filter.StartDate = StartDate;
+            filter.EndDate = EndDate;
+            filter.UnitOfMeassure = ddlMeasureUnit.SelectedValue;
+            ReportsFilterHelper.SaveFilterValues(ReportName.BillingReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.BillingReport) as BillingReportFilters;
+            if (filters != null)
+            {
+                AccountIds = filters.AccountIds;
+                StartDate = filters.StartDate;
+                EndDate = filters.EndDate;
+                PracticeIds = filters.PracticeIds;
+                BusinessUnitIds = filters.BusinessUnitIds;
+                DirectorIds = filters.ExecutiveInchargeIds;
+                ddlMeasureUnit.SelectedValue = filters.UnitOfMeassure;
+                SelectView();
+                lblRange.Text = StartDate.Value.ToString(Constants.Formatting.EntryDateFormat) + " - " + EndDate.Value.ToString(Constants.Formatting.EntryDateFormat);
             }
         }
     }
