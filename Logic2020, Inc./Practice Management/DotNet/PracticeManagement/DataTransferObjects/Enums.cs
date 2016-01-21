@@ -314,5 +314,115 @@ namespace DataTransferObjects
         [Description("Project detail")]
         Projectdetail = 4
     }
+
+    [DataContract]
+    public enum ReportName
+    {
+        [EnumMember]
+        PesonsByProject,
+
+        [EnumMember]
+        ProjectsList,
+
+        [EnumMember]
+        MSManagementMeetingReport,
+
+        [EnumMember]
+        BadgeResourceByTime,
+
+        [EnumMember]
+        ResourceByPracticeReport,
+
+        [EnumMember]
+        ResourceByBusinessConsultantReport,
+
+        [EnumMember]
+        AllEmployees18MoClockReport,
+
+        [EnumMember]
+        BadgedOnProjectReport,
+
+        [EnumMember]
+        ClockNotStartedReport,
+
+        [EnumMember]
+        BadgedNotOnProjectReport,
+
+        [EnumMember]
+        BadgeBreakReport,
+
+        [EnumMember]
+        BadgeBlockedReport,
+
+        [EnumMember]
+        BadgedOnProjectBasedExceptionReport,
+
+        [EnumMember]
+        BadgedNotOnPersonBasedExceptionReport,
+
+        [EnumMember]
+        ResourcesByTechnicalConsultants,
+
+        [EnumMember]
+        BenchCostReport,
+
+        [EnumMember]
+        AuditReport,
+
+        [EnumMember]
+        CSATReport,
+
+        [EnumMember]
+        ProjectFeedbackReport,
+
+        [EnumMember]
+        UtilizationReport,
+
+        [EnumMember]
+        NewHireReport,
+
+        [EnumMember]
+        TerminationReport,
+
+        [EnumMember]
+        BillingReport,
+
+        [EnumMember]
+        AttainmentReport,
+
+        [EnumMember]
+        CommissionsAndRatesReport,
+
+        [EnumMember]
+        ByTimePeriodReport,
+
+        [EnumMember]
+        ByProjectReport,
+
+        [EnumMember]
+        ByPersonReport,
+
+        [EnumMember]
+        ActivityLogReport,
+
+        [EnumMember]
+        ConsultingDemandReport,
+
+        [EnumMember]
+        PersonsReport,
+
+        [EnumMember]
+        ConsultingUtilizationReport,
+
+        [EnumMember]
+        ConsultingCapacityReport,
+
+        [EnumMember]
+        ClientReport,
+
+        [EnumMember]
+        AccountSummaryReport
+
+    }
 }
 
