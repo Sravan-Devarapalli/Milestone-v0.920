@@ -508,6 +508,16 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<PersonDivision> GetPersonDivisions();
+
+        [OperationContract]
+        void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId);
+
+        [OperationContract]
+        string GetReportFilterValues(int currentUserId, int reportId, int previousUserId);
+
+        [OperationContract]
+        void DeleteReportFilterValues(int currentUserId, int previousUserId);
+
     }
 }
 
