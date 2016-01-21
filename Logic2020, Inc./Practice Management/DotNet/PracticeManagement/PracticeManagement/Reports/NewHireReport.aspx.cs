@@ -8,6 +8,8 @@ using System.Web.UI.WebControls;
 using DataTransferObjects;
 using PraticeManagement.Controls;
 using PraticeManagement.Controls.Reports.HumanCapital;
+using PraticeManagement.Utils;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reporting
 {
@@ -252,6 +254,7 @@ namespace PraticeManagement.Reporting
                     DataHelper.FillPersonStatusList(this.cblPersonStatus, Resources.Controls.AllTypes);
                 }
                 SetDefalultfilter();
+                GetFilterValuesForSession();
                 LoadActiveView();
             }
 
@@ -413,6 +416,7 @@ namespace PraticeManagement.Reporting
         protected void Filters_Changed(object sender, EventArgs e)
         {
             LoadActiveView();
+            SaveFilterValuesForSession();
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
@@ -426,11 +430,13 @@ namespace PraticeManagement.Reporting
             if (ddlPeriod.SelectedValue != "0")
             {
                 LoadActiveView();
+                SaveFilterValuesForSession();
             }
             else
             {
                 mpeCustomDates.Show();
             }
+            
         }
 
         protected void btnCustDatesOK_Click(object sender, EventArgs e)
@@ -441,6 +447,7 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -452,6 +459,37 @@ namespace PraticeManagement.Reporting
         {
             diRange.FromDate = Convert.ToDateTime(hdnStartDate.Value);
             diRange.ToDate = Convert.ToDateTime(hdnEndDate.Value);
+        }
+
+        public void SaveFilterValuesForSession()
+        {
+            NewHireReportFilters filter = new NewHireReportFilters();
+            filter.PracticeIds = cblPractices.SelectedItems;
+            filter.ReportPeriod = ddlPeriod.SelectedValue;
+            filter.ReportStartDate = diRange.FromDate;
+            filter.ReportEndDate = diRange.ToDate;
+            filter.ExcludeInternalPractices = chbInternalProjects.Checked;
+            filter.PersonStatusIds = cblPersonStatus.SelectedItems;
+            filter.PayTypeIds = cblTimeScales.SelectedItems;
+            ReportsFilterHelper.SaveFilterValues(ReportName.NewHireReport, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.NewHireReport) as NewHireReportFilters;
+            if (filters != null)
+            {
+                cblPractices.UnSelectAll();
+                cblPractices.SelectedItems = filters.PracticeIds;
+                diRange.FromDate = filters.ReportStartDate;
+                diRange.ToDate = filters.ReportEndDate;
+                ddlPeriod.SelectedValue = filters.ReportPeriod;
+                chbInternalProjects.Checked = filters.ExcludeInternalPractices;
+                cblPersonStatus.UnSelectAll();
+                cblPersonStatus.SelectedItems = filters.PersonStatusIds;
+                cblTimeScales.UnSelectAll();
+                cblTimeScales.SelectedItems = filters.PayTypeIds;
+            }
         }
 
         #endregion
