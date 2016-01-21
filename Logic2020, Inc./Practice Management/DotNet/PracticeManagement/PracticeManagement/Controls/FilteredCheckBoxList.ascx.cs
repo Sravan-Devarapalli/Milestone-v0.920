@@ -193,6 +193,33 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public void SelectItems(string value)
+        {
+            if (value == null)
+                SelectAllItems(true);
+            else
+            {
+                SelectAllItems(false);
+                foreach (var itm in StringToLEnumerable(value))
+                {
+                    var listItm = cbl.Items.FindByValue(itm);
+                    if (listItm != null)
+                        listItm.Selected = true;
+                }
+                bool allSelected = true;
+                foreach (ListItem item in cbl.Items)
+                {
+                    if (!item.Selected && item.Value != cbl.Items[0].Value)
+                    {
+                        allSelected = false;
+                        break;
+                    }
+                }
+                cbl.Items[0].Selected = allSelected;
+            }
+            SaveSelectedIndexesInViewState();
+        }
+
         public ListItemCollection Items { get { return cbl.Items; } }
 
         public ScrollingDropDown CheckBoxListObject
@@ -230,6 +257,39 @@ namespace PraticeManagement.Controls
                     cbl.Items[i].Selected = true;
                 }
             }
+        }
+
+        private static IEnumerable<string> StringToLEnumerable(string strList)
+        {
+            var selItems = strList.Split(
+                new[] { ',' },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var sItm in selItems)
+                if (sItm.Trim().Length > 0)
+                    yield return sItm;
+        }
+
+        public string GetItemsXmlFormat(string commaSeperatedValue)
+        {
+            List<string> items = StringToLEnumerable(commaSeperatedValue).ToList();
+            if (items.Count == 0)
+                return "";
+
+            // Check if All checkbox is checked
+            if (items.Count >= cbl.Items.Count)
+                return null;
+
+            // If not, build comma separated list of values
+            var sb = new StringBuilder();
+            sb.Append("<Names>");
+            for (int i = 0; i < items.Count; i++)
+            {
+                sb.Append("<Name>" + items[i] + "</Name>");
+            }
+            sb.Append("</Names>");
+
+            return sb.ToString();
         }
     }
 }
