@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using PraticeManagement.Controls;
 using PraticeManagement.PersonStatusService;
@@ -17,7 +16,7 @@ using PraticeManagement.Objects;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using NPOI.HSSF.UserModel;
+using DataTransferObjects.Filters;
 
 namespace PraticeManagement.Reports.Badge
 {
@@ -25,6 +24,8 @@ namespace PraticeManagement.Reports.Badge
     {
         private int coloumnsCount = 1;
         private int headerRowsCount = 1;
+
+        private const string PersonsByProjectFiltersKey = "PersonsByProjectFiltersKey";
 
         private string RowSpliter = Guid.NewGuid().ToString();
 
@@ -237,6 +238,7 @@ namespace PraticeManagement.Reports.Badge
                 DataHelper.FillListDefaultWithEncodedName(cblClient, "All Accounts", allClients,
                                                  false);
                 cblClient.SelectAll();
+                GetFilterValuesForSession();
             }
         }
 
@@ -279,7 +281,9 @@ namespace PraticeManagement.Reports.Badge
 
         protected void btnUpdateView_Click(object sender, EventArgs e)
         {
-            divWholePage.Style["display"] = "";
+
+
+            SaveFilterValuesForSession();
             PopulateData();
         }
 
@@ -393,6 +397,7 @@ namespace PraticeManagement.Reports.Badge
 
         public void PopulateData()
         {
+            divWholePage.Style["display"] = "";
             var data = ServiceCallers.Custom.Project(p => p.PersonsByProjectReport(Accounts, PayTypes, PersonStatuses, Practices, ProjectStatuses, ExcludeInternals)).ToList();
             if (data.Count > 0)
             {
@@ -620,6 +625,38 @@ namespace PraticeManagement.Reports.Badge
                     HttpContext.Current.Response.Flush();
                     len -= bytes;
                 }
+            }
+        }
+
+        private void SaveFilterValuesForSession()
+        {
+            PersonsByProjectFilters filter = new PersonsByProjectFilters();
+            filter.ClientIds = Accounts;
+            filter.PayTypeIds = PayTypes;
+            filter.PersonStatusIds = PersonStatuses;
+            filter.ProjectStatusIds = ProjectStatuses;
+            filter.PracticeIds = Practices;
+            filter.ExcludeInternalPractices = chkExcludeInternalPractices.Checked;
+            ReportsFilterHelper.SaveFilterValues(ReportName.PesonsByProject, filter);
+        }
+
+        private void GetFilterValuesForSession()
+        {
+            var filters = ReportsFilterHelper.GetFilterValues(ReportName.PesonsByProject) as PersonsByProjectFilters;
+            if (filters != null)
+            {
+                cblClient.UnSelectAll();
+                cblClient.SelectedItems=filters.ClientIds;
+                cblPayTypes.UnSelectAll();
+                cblPayTypes.SelectedItems=filters.PayTypeIds;
+                cblPersonStatus.UnSelectAll();
+                cblPersonStatus.SelectedItems=filters.PersonStatusIds;
+                cblProjectTypes.UnSelectAll();
+                cblProjectTypes.SelectedItems=filters.ProjectStatusIds;
+                cblPractices.UnSelectAll();
+                cblPractices.SelectedItems=filters.PracticeIds;
+                chkExcludeInternalPractices.Checked = filters.ExcludeInternalPractices;
+                PopulateData();
             }
         }
     }
