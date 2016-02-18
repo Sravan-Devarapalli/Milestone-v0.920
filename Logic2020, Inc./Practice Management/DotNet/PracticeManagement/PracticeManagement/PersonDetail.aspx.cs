@@ -60,6 +60,9 @@ namespace PraticeManagement
         public const string lockdownTitlesMessage = "Title field  in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         public const string lockdownBasisMessage = "Basis field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         public const string lockdownPracticeMessage = "Practice Area field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+        public const string lockdownDivisionMessage = "Division field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+        public const string DivisionOrPracticeAreaOwnerErrormessage = "This person is currently assigned as a Practice Area Owner or Division Owner.  Please reassign ownership and then make the change.";
+        public const string PersonIsAssignedToOneOrMoreProjects = "This Person is currently assigned to one or more projects. Please remove the person from project(s) and then make the change.";
         public const string lockdownAmountMessage = "Amount field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         public const string lockdownPTOAccrualsMessage = "PTO Accruals field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         #endregion Constants
@@ -100,6 +103,12 @@ namespace PraticeManagement
         {
             get { return (string)ViewState["PreviousPracticeId"]; }
             set { ViewState["PreviousPracticeId"] = value; }
+        }
+
+        public string PreviousDivision
+        {
+            get { return (string)ViewState["PreviousDivisionId"]; }
+            set { ViewState["PreviousDivisionId"] = value; }
         }
 
         public string PreviousTitle
@@ -594,8 +603,12 @@ namespace PraticeManagement
             if (PersonId.HasValue)
             {
                 Person person = GetPerson(PersonId.Value);
-                if (!IsWizards && person.Manager == null && hdnIsSetPracticeOwnerClicked.Value == "false")
+                if (!IsWizards && person.Manager == null && hdnIsSetPracticeOwnerClicked.Value == "false" && !IsPostBack)
+                {
+                    ListItem unasigned = new ListItem("Unassigned", "-1");
+                    defaultManager.ManagerDdl.Items.Add(unasigned);
                     defaultManager.ManagerDdl.SelectedValue = "-1";
+                }
             }
         }
 
@@ -630,6 +643,15 @@ namespace PraticeManagement
         }
 
         #endregion mpeChangeStatusEndCompensation Events
+
+        #region mpeOwnerShip Events
+
+        protected void btnOkOwnerShip_Click(object source, EventArgs args)
+        {
+            ResetToPreviousData();
+            mpeOwnerShip.Hide();
+        }
+        #endregion
 
         #region mpeEmployeePayTypeChange Events
 
@@ -790,7 +812,7 @@ namespace PraticeManagement
                 IsStatusChangeClicked = true;
                 _disableValidatecustTerminateDateTE = false;
                 custCompensationCoversMilestone.Enabled = false;
-                cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = true;
+                cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = cvIsOwnerForDivisionOrPractice.Enabled = true;
 
                 var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnTerminate.Checked ? PersonStatusType.TerminationPending : PopupStatus.Value;
 
@@ -849,6 +871,8 @@ namespace PraticeManagement
                                 mpeViewPersonChangeStatus.Show();
                             }
                         }
+                        PopulateDivisionAndPracticeDropdown();
+
                         break;
 
                     default:
@@ -921,7 +945,7 @@ namespace PraticeManagement
         protected void btnTerminationProcessOK_OnClick(object source, EventArgs args)
         {
             _disableValidatecustTerminateDateTE = true;
-            cvEndCompensation.Enabled = false;
+            cvEndCompensation.Enabled = cvIsOwnerForDivisionOrPractice.Enabled = false;
             if (!IsRehire)
             {
                 Save_Click(source, args);
@@ -993,7 +1017,7 @@ namespace PraticeManagement
         {
             var updatePersonStatusDropdown = true;
             custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = !IsStatusChangeClicked;
-            custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = true;
+            custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = cvIsOwnerForDivisionOrPractice.Enabled = true;
 
             if (PersonId.HasValue)
             {
@@ -1048,6 +1072,7 @@ namespace PraticeManagement
             PreviousTitle = null;
             PreviousPtoAccrual = null;
             PreviousPractice = null;
+            PreviousDivision = null;
             PreviousBasis = null;
             PreviousAmount = null;
             if (!PersonId.HasValue)
@@ -1129,6 +1154,24 @@ namespace PraticeManagement
             }
         }
 
+        protected void personnelCompensation_OnDivisionChanged(object sender, EventArgs e)
+        {
+            if (IsWizards)
+            {
+                if (personnelCompensation.DivisionId.HasValue)
+                {
+                    ddlDivision.SelectedValue = personnelCompensation.DivisionId.Value.ToString();
+                    DataHelper.FillPracticeListForDivsion(ddlDefaultPractice, "-- Select Practice Area --", personnelCompensation.DivisionId.Value);
+                }
+                else
+                {
+                    if (ddlDivision.Items.FindByValue("") != null)
+                        ddlDivision.SelectedValue = ddlDivision.Items.FindByValue("").Value;
+                }
+                lbSetPracticeOwner.Visible = false;
+            }
+        }
+
         protected void personnelCompensation_OnTitleChanged(object sender, EventArgs e)
         {
             if (IsWizards)
@@ -1155,7 +1198,10 @@ namespace PraticeManagement
             if (IsWizards)
             {
                 if (personnelCompensation.PracticeId.HasValue)
+                {
                     ddlDefaultPractice.SelectedValue = personnelCompensation.PracticeId.Value.ToString();
+                    lbSetPracticeOwner.Visible = ShowSetPracticeOwnerLink();
+                }
                 else
                     ddlDefaultPractice.SelectedIndex = 0;
             }
@@ -1169,11 +1215,31 @@ namespace PraticeManagement
                 int.TryParse(ddlDefaultPractice.SelectedValue, out practiceId);
                 personnelCompensation.PracticeId = practiceId == 0 ? (int?)null : practiceId;
             }
+            lbSetPracticeOwner.Visible = ShowSetPracticeOwnerLink();
         }
 
         protected void ddlDivision_SelectIndexChanged(object sender, EventArgs e)
         {
             FillPracticeLeadership();
+            if (ddlDivision.SelectedIndex != 0)
+            {
+                int divisionId;
+                Int32.TryParse(ddlDivision.SelectedValue, out divisionId);
+                ddlDefaultPractice.Enabled = true;
+                DataHelper.FillPracticeListForDivsion(ddlDefaultPractice, "-- Select Practice Area --", divisionId);
+                if (IsWizards)
+                {
+
+                    personnelCompensation.DivisionId = divisionId == 0 ? (int?)null : divisionId;
+
+                }
+            }
+            else
+            {
+                ddlDefaultPractice.SelectedIndex = 0;
+                ddlDefaultPractice.Enabled = false;
+            }
+            lbSetPracticeOwner.Visible = false;
         }
 
         protected void chblRoles_SelectedIndexChanged(object sender, EventArgs e)
@@ -1732,6 +1798,62 @@ namespace PraticeManagement
             }
         }
 
+        protected void custIsOwnerForDivisionOrPractice_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!IsWizards)
+            {
+                var ownerFor = ServiceCallers.Custom.Person(p => p.CheckIfPersonIsOwnerForDivisionAndOrPractice((int)PersonId));
+                if (ownerFor != null)
+                {
+                    bool isDivisionOwner = ownerFor.Any(o => o.IsDivisionOwner == true);
+                    bool isPracticeAreaOwner = ownerFor.Any(o => o.IsDivisionOwner == false);
+                    string divisions = string.Empty;
+                    string practiceAreas = string.Empty;
+                    foreach (var owner in ownerFor)
+                    {
+                        switch (owner.IsDivisionOwner)
+                        {
+                            case true: divisions += owner.Target + ", ";
+                                break;
+                            case false: practiceAreas += owner.Target + ", ";
+                                break;
+                        }
+                    }
+                    divisions = !string.IsNullOrEmpty(divisions) ? divisions.Remove(divisions.Length - 2, 2) : divisions;
+                    practiceAreas = !string.IsNullOrEmpty(practiceAreas) ? practiceAreas.Remove(practiceAreas.Length - 2, 2) : practiceAreas;
+                    if (TerminationDate.HasValue && isDivisionOwner)
+                    {
+                        args.IsValid = false;
+                        lblDivisionOwnerShip.Text = "This person is currently a Owner for " + divisions + " Division(s).  Please re-assign Division Ownership before terminating. Click <a href=\"Config/Divisions.aspx\" target=\"_blank\">here</a> to reassign Division Owner";
+                    }
+                    if (TerminationDate.HasValue && isPracticeAreaOwner)
+                    {
+                        args.IsValid = false;
+                        lblPracticeAreaOwnerShip.Text = "This person is currently a Area Owner for " + practiceAreas + " Practice Area(s).  Please re-assign Practice Area Ownership before terminating. Click <a href=\"Config/PracticeAreas.aspx\" target=\"_blank\">here</a> to reassign Practice Area Owner";
+                    }
+                    if (!args.IsValid)
+                    {
+                        IsOtherPanelDisplay = true;
+                        mpeOwnerShip.Show();
+                    }
+                }
+            }
+        }
+
+        protected void custIsDivisionOrPracticeOwner_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!IsWizards)
+            {
+                var ownerFor = ServiceCallers.Custom.Person(p => p.CheckIfPersonIsOwnerForDivisionAndOrPractice((int)PersonId));
+                if (ownerFor != null)
+                {
+                    args.IsValid = false;
+                }
+            }
+        }
+
+        
+
         protected void cvSLTApproval_OnServerValidate(object source, ServerValidateEventArgs args)
         {
             args.IsValid = true;
@@ -2050,6 +2172,7 @@ namespace PraticeManagement
             var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
             var ddlBasis = gvRow.FindControl("ddlBasis") as DropDownList;
             var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
+            var ddlCompDivision = gvRow.FindControl("ddlCompDivision") as DropDownList;
             var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
             var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
             var hdAmount = gvRow.FindControl("hdAmount") as HiddenField;
@@ -2059,6 +2182,8 @@ namespace PraticeManagement
             var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
 
             DataHelper.FillTitleList(ddlTitle, "-- Select Title --");
+            DataHelper.FillPersonDivisionList(ddlCompDivision);
+
             DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
 
             dpStartDate.DateValue = pay.StartDate;
@@ -2088,6 +2213,27 @@ namespace PraticeManagement
             hdAmount.Value = txtAmount.Text = pay.Amount.Value.ToString();
             hdSLTApproval.Value = pay.SLTApproval.ToString();
             hdSLTPTOApproval.Value = pay.SLTPTOApproval.ToString();
+            if (pay.DivisionId.HasValue)
+            {
+                ListItem selectedDivision = ddlCompDivision.Items.FindByValue(pay.DivisionId.Value.ToString());
+                if (selectedDivision == null)
+                {
+                    var division = (PersonDivisionType)(pay.DivisionId);
+                    if (division != 0)
+                    {
+                        selectedDivision = new ListItem(DataHelper.GetDescription(division), Convert.ToInt32(division).ToString());
+                        ddlCompDivision.Items.Add(selectedDivision);
+                        ddlCompDivision.SortByText();
+                        ddlCompDivision.SelectedValue = selectedDivision.Value;
+                    }
+                }
+                else
+                {
+                    ddlCompDivision.SelectedValue = selectedDivision.Value;
+                }
+                ddlPractice.Enabled = true;
+                DataHelper.FillPracticeListForDivsion(ddlPractice, "-- Select Practice Area --", (int)pay.DivisionId);
+            }
             if (pay.PracticeId.HasValue)
             {
                 ListItem selectedPractice = ddlPractice.Items.FindByValue(pay.PracticeId.Value.ToString());
@@ -2230,6 +2376,7 @@ namespace PraticeManagement
             var btnStartDate = gv.Rows[row.DataItemIndex].FindControl("btnStartDate") as LinkButton;
             var lblEndDate = gv.Rows[row.DataItemIndex].FindControl("lblEndDate") as Label;
             var lblpractice = gv.Rows[row.DataItemIndex].FindControl("lblpractice") as Label;
+            var lblComDivision = gv.Rows[row.DataItemIndex].FindControl("lblDivision") as Label;
             var lblTitle = gv.Rows[row.DataItemIndex].FindControl("lblTitle") as Label;
             var lblBasis = gv.Rows[row.DataItemIndex].FindControl("lblBasis") as Label;
             var lbAmount = gv.Rows[row.DataItemIndex].FindControl("lbAmount") as Label;
@@ -2242,8 +2389,36 @@ namespace PraticeManagement
             PreviousTitle = lblTitle.Text;
             PreviousPtoAccrual = lbVacationDays.Text == string.Empty ? null : (int?)Convert.ToInt32(lbVacationDays.Text);
             PreviousPractice = lblpractice.Text;
+            PreviousDivision = lblComDivision.Text;
             PreviousBasis = lblBasis.Text;
-            PreviousAmount = Convert.ToDecimal(lbAmount.Text.Remove(0, 1));
+            if (lbAmount.Text.Contains('$'))
+            {
+                PreviousAmount = Convert.ToDecimal(lbAmount.Text.Remove(0, 1));
+            }
+            else
+            {
+                PreviousAmount = Convert.ToDecimal(lbAmount.Text.Remove(lbAmount.Text.Length - 1, 1));
+            }
+        }
+
+        protected void ddlCompDivision_SelectIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList ddlCompDivision = sender as DropDownList;
+            GridViewRow row = ddlCompDivision.Parent.Parent as GridViewRow;
+
+            DropDownList ddlPractice = row.FindControl("ddlPractice") as DropDownList;
+            if (ddlCompDivision.SelectedIndex != 0)
+            {
+                int divisionId;
+                Int32.TryParse(ddlCompDivision.SelectedValue, out divisionId);
+                ddlPractice.Enabled = true;
+                DataHelper.FillPracticeListForDivsion(ddlPractice, "-- Select Practice Area --", divisionId);
+            }
+            else
+            {
+                ddlPractice.SelectedIndex = 0;
+                ddlPractice.Enabled = false;
+            }
         }
 
         private bool validateAndSave(object sender, EventArgs e)
@@ -2256,6 +2431,7 @@ namespace PraticeManagement
             var compVacationDays = gvRow.FindControl("compVacationDays") as CompareValidator;
             var rfvVacationDays = gvRow.FindControl("rfvVacationDays") as RequiredFieldValidator;
             var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
+            var cvIsDivisionOrPracticeOwner = gvRow.FindControl("cvIsDivisionOrPracticeOwner") as CustomValidator;
             if (ddlBasis.SelectedIndex != 0)
             {
                 compVacationDays.Enabled = false;
@@ -2281,6 +2457,7 @@ namespace PraticeManagement
                 custTerminateDateTE.Validate();
             }
             Pay pay = new Pay();
+            Pay oldPay = new Pay();
             pay.ValidateAttribution = ValidateAttribution;
             if (Page.IsValid)
             {
@@ -2288,6 +2465,7 @@ namespace PraticeManagement
                 DateTime startDate;
                 var dpStartDate = gvRow.FindControl("dpStartDate") as DatePicker;
                 var dpEndDate = gvRow.FindControl("dpEndDate") as DatePicker;
+                var ddlCompDivision = gvRow.FindControl("ddlCompDivision") as DropDownList;
                 var ddlPractice = gvRow.FindControl("ddlPractice") as DropDownList;
                 var ddlTitle = gvRow.FindControl("ddlTitle") as DropDownList;
                 var txtAmount = gvRow.FindControl("txtAmount") as TextBox;
@@ -2295,12 +2473,13 @@ namespace PraticeManagement
                 var hdSLTPTOApproval = gvRow.FindControl("hdSLTPTOApproval") as HiddenField;
 
                 var index = 0;
-                Pay oldPay;
+
                 if (operation == "Update")
                 {
                     startDate = Convert.ToDateTime(imgUpdate.Attributes["StartDate"]);
                     index = PayHistory.FindIndex(p => p.StartDate.Date == startDate);
                     oldPay = PayHistory[index];
+                    
                     pay.OldStartDate = oldPay.StartDate;
                     pay.OldEndDate = oldPay.EndDate;
                 }
@@ -2331,6 +2510,11 @@ namespace PraticeManagement
                 {
                     pay.Timescale = TimescaleType.PercRevenue;
                 }
+                cvIsDivisionOrPracticeOwner.Enabled = true;
+                if (oldPay.Timescale == TimescaleType.Salary && pay.Timescale != TimescaleType.Salary && cvIsDivisionOrPracticeOwner.Enabled && Page.IsValid)
+                {
+                    cvIsDivisionOrPracticeOwner.Validate();
+                }
 
                 decimal result;
                 if (decimal.TryParse(txtAmount.Text, out result))
@@ -2343,9 +2527,11 @@ namespace PraticeManagement
                 pay.TitleId = int.Parse(ddlTitle.SelectedValue);
                 pay.SLTApproval = ddlBasis.SelectedIndex == 0 && bool.Parse(hdSLTApproval.Value);
                 pay.SLTPTOApproval = ddlBasis.SelectedIndex == 0 && bool.Parse(hdSLTPTOApproval.Value);
+                pay.DivisionId = int.Parse(ddlCompDivision.SelectedValue);
                 pay.PracticeId = int.Parse(ddlPractice.SelectedValue);
                 pay.PersonId = PersonId.Value;
-
+                pay.DivisionName = ddlCompDivision.SelectedItem.Text;
+                pay.TitleName = ddlTitle.SelectedItem.Text;
                 if (cvEmployeePayTypeChangeViolation.Enabled)
                 {
                     payForcvEmployeePayTypeChangeViolation = pay;
@@ -2401,6 +2587,7 @@ namespace PraticeManagement
                     }
                 }
                 cvEmployeePayTypeChangeViolation.Enabled = true;
+
             }
             else
             {
@@ -2481,6 +2668,7 @@ namespace PraticeManagement
             PreviousTitle = null;
             PreviousPtoAccrual = null;
             PreviousPractice = null;
+            PreviousDivision = null;
             PreviousBasis = null;
             PreviousAmount = null;
             ImageButton imgCopy = sender as ImageButton;
@@ -2587,6 +2775,17 @@ namespace PraticeManagement
             e.IsValid = ddlPractice.SelectedIndex > 0;
         }
 
+        protected void custValCompDivision_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            var custValCompDivision = sender as CustomValidator;
+
+            var gvRow = custValCompDivision.NamingContainer as GridViewRow;
+
+            var ddlCompDivision = gvRow.FindControl("ddlCompDivision") as DropDownList;
+
+            e.IsValid = ddlCompDivision.SelectedIndex > 0;
+        }
+
         protected void custValLockoutDates_OnServerValidate(object sender, ServerValidateEventArgs e)
         {
             if (Lockouts.Any(p => p.Name == "Dates" && p.IsLockout == true))
@@ -2611,6 +2810,35 @@ namespace PraticeManagement
                         e.IsValid = false;
                         custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDatesMessage, LockoutDate.Value.ToShortDateString());
                     }
+                }
+            }
+        }
+
+        protected void custLockOutDivision_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (Lockouts.Any(p => p.Name == "Division" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+                GridViewRow row = custLockdown.NamingContainer as GridViewRow;
+                DropDownList ddlCompDivision = row.FindControl("ddlCompDivision") as DropDownList;
+                if (!PreviousStartDate.HasValue && !PreviousEndDate.HasValue)
+                {
+                    DatePicker dpStartDate = row.FindControl("dpStartDate") as DatePicker;
+                    DatePicker dpEndDate = row.FindControl("dpEndDate") as DatePicker;
+                    DateTime startDate;
+                    DateTime? endDate;
+                    DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                    endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                    if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDivisionMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+                else if (PreviousStartDate.HasValue && (PreviousStartDate.Value.Date <= LockoutDate.Value.Date || (PreviousEndDate.HasValue && PreviousEndDate.Value.Date <= LockoutDate.Value.Date)) && ddlCompDivision.SelectedItem.Text != PreviousDivision)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDivisionMessage, LockoutDate.Value.ToShortDateString());
                 }
             }
         }
@@ -2766,7 +2994,7 @@ namespace PraticeManagement
 
         public void RaisePostBackEvent(string eventArgument)
         {
-            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = true;
+            custCompensationCoversMilestone.Enabled = cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = custMilestonesOnPreviousHireDate.Enabled = cvIsOwnerForDivisionOrPractice.Enabled = true;
             bool result = ValidateAndSavePersonDetails();
             if (result)
             {
@@ -3154,7 +3382,11 @@ namespace PraticeManagement
                     break;
                 }
             }
-
+            if (cvIsOwnerForDivisionOrPractice.Enabled && Page.IsValid)
+            {
+                cvIsOwnerForDivisionOrPractice.Validate();
+                SelectView(rowSwitcher.Cells[activeindex].Controls[0], activeindex, true);
+            }
             if (cvEndCompensation.Enabled && Page.IsValid)
             {
                 //Page.Validate("EndCompensation");
@@ -3329,7 +3561,8 @@ namespace PraticeManagement
                 DataHelper.FillPersonStatusList(ddlPersonStatus);
             }
             DataHelper.FillSenioritiesList(ddlSeniority, "-- Select Seniority --");
-            DataHelper.FillPracticeListOnlyActive(ddlDefaultPractice, "-- Select Practice Area --");
+            PopulateDivisionAndPracticeDropdown();
+
             DataHelper.FillRecruiterList(ddlRecruiter, "--Select Recruiter--");
             DataHelper.FillLocationList(ddlLocation, "--Select Location--");
             var removableLocation = ddlLocation.Items.FindByValue("1");
@@ -3562,19 +3795,21 @@ namespace PraticeManagement
             txtPayCheckId.Text = string.IsNullOrEmpty(person.PaychexID) ? "" : person.PaychexID;
             if ((int)person.DivisionType != 0)
             {
-               
-                if ((int)person.DivisionType == 2)
+                ddlDefaultPractice.Enabled = true;
+                DataHelper.FillPracticeListForDivsion(ddlDefaultPractice, "-- Select Practice Area --", (int)person.DivisionType);
+                if (!IsPostBack && (person.DivisionType == PersonDivisionType.Recruiting || person.DivisionType == PersonDivisionType.Consulting))
                 {
                     ListItem addItem = new ListItem() { Text = person.DivisionType.ToString(), Value = ((int)person.DivisionType).ToString() };
                     ddlDivision.Items.Add(addItem);
-
                 }
                 ddlDivision.SelectedValue = ((int)person.DivisionType).ToString();
             }
             else
+            {
                 ddlDivision.SelectedValue = string.Empty;
-
+            }
             PopulatePracticeDropDown(person);
+            lbSetPracticeOwner.Visible = ShowSetPracticeOwnerLink();
             PopulateRecruiterDropDown(person);
 
             txtEmployeeNumber.Text = person.EmployeeNumber;
@@ -3994,6 +4229,39 @@ namespace PraticeManagement
                 LockoutDate = persondetailItems[0].LockoutDate;
                 Lockouts = persondetailItems;
                 IsAllLockout = !persondetailItems.Any(p => p.IsLockout == false);
+            }
+        }
+
+        private bool ShowSetPracticeOwnerLink()
+        {
+            int divisionId;
+            int.TryParse(ddlDivision.SelectedValue, out divisionId);
+            PersonDivision division = ServiceCallers.Custom.Person(p => p.GetPersonDivisionById(divisionId));
+            if (ddlDefaultPractice.SelectedIndex == 0 || division == null)
+            {
+                return false;
+            }
+            else
+            {
+                return division.ShowCareerManagerLink;
+            }
+        }
+
+        private void PopulateDivisionAndPracticeDropdown()
+        {
+            int divisionId;
+            int.TryParse(ddlDivision.SelectedValue, out divisionId);
+            if (divisionId == (int)PersonDivisionType.Consulting || divisionId == (int)PersonDivisionType.Recruiting)
+            {
+                DataHelper.FillPersonDivisionList(ddlDivision);
+            }
+            if (ddlDivision.SelectedIndex == 0)
+            {
+                ddlDefaultPractice.Items.Clear();
+                ListItem selectPractice = new ListItem("-- Select Practice Area --", "");
+                ddlDefaultPractice.Items.Add(selectPractice);
+                ddlDefaultPractice.SelectedValue = "";
+                ddlDefaultPractice.Enabled = false;
             }
         }
 
