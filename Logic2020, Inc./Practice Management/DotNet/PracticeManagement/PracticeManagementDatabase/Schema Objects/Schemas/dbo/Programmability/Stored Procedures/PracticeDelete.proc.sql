@@ -18,6 +18,9 @@ BEGIN
 	DELETE FROM dbo.PracticeManagerHistory
 	WHERE PracticeId = @PracticeId
 
+	 DELETE FROM DivisionPracticeArea
+	 WHERE PracticeId=@PracticeId
+
 	DELETE FROM Practice 
 	 WHERE PracticeId = @PracticeId
 
