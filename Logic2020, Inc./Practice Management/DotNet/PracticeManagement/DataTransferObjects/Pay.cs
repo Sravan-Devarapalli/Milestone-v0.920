@@ -217,6 +217,27 @@ namespace DataTransferObjects
             get;
         }
 
+        [DataMember]
+        public int? DivisionId
+        {
+            get;
+            set;
+        }
+
+        [DataMember]
+        public string DivisionName
+        {
+            get;
+            set;
+        }
+
+        public string HtmlEncodedDivisionName
+        {
+            get {
+                return HttpUtility.HtmlEncode(DivisionName);
+            }
+        }
+
         public string HtmlEncodedPracticeName
         {
             get
@@ -273,6 +294,7 @@ namespace DataTransferObjects
                     IsYearBonus = IsYearBonus,
                     TitleId = TitleId,
                     TitleName = TitleName,
+                    DivisionId=DivisionId,
                     PracticeId = PracticeId,
                     PracticeName = PracticeName,
                     SLTApproval = SLTApproval,
