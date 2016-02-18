@@ -10,7 +10,8 @@ CREATE PROCEDURE dbo.PracticeUpdate
 	@PracticeManagerId INT,
 	@IsActive BIT,
 	@IsCompanyInternal BIT = 0,
-	@UserLogin NVARCHAR(MAX)
+	@UserLogin NVARCHAR(MAX),
+	@DivisionIds NVARCHAR(MAX) = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -50,6 +51,10 @@ BEGIN
 	EXEC dbo.PracticeStatusHistoryUpdate
 			@PracticeId	= @PracticeId,
 			@IsActive =  @IsActive
+
+	EXEC dbo.UpdateDivisionPracticeAreaMapping
+			@PracticeId=@PracticeId,
+			@DivisionIds=@DivisionIds
 
 	IF(@PracticeManagerId <> @PreviousPracticeManager)
 	BEGIN
