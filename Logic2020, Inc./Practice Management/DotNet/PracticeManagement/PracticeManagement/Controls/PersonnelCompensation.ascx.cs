@@ -14,6 +14,7 @@ namespace PraticeManagement.Controls
         public const string lockdownTitlesMessage = "Title field  in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         public const string lockdownBasisMessage = "Basis field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         public const string lockdownPracticeMessage = "Practice Area field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
+        public const string lockdownDivisionMessage = "Division field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         public const string lockdownAmountMessage = "Amount field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
         public const string lockdownPTOAccrualsMessage = "PTO Accruals field in Compensation tab was locked down by System Administrator for dates on and before '{0}'.";
 
@@ -381,7 +382,7 @@ namespace PraticeManagement.Controls
         {
             set
             {
-                trTitleAndPractice.Visible = value;
+                trTitle.Visible = trDivisionAndPractice.Visible = value;
             }
         }
 
@@ -446,9 +447,11 @@ namespace PraticeManagement.Controls
         {
             set
             {
-                if (value.HasValue)
+                if (value.HasValue && DivisionId.HasValue)
                 {
-                    ListItem selectedPractice = ddlPractice.Items.FindByValue(value.Value.ToString());
+                    ddlPractice.Enabled = true;
+                    DataHelper.FillPracticeListForDivsion(ddlPractice, "-- Select Practice Area --", (int)DivisionId);
+                    ListItem selectedPractice = ddlPractice.Items.FindByValue(value.ToString());
                     if (selectedPractice == null)
                     {
                         var practices = DataHelper.GetPracticeById(value);
@@ -481,6 +484,44 @@ namespace PraticeManagement.Controls
             }
         }
 
+        public int? DivisionId
+        {
+            set
+            {
+                if (value.HasValue)
+                {
+                    ListItem selectedDivision = ddlDivision.Items.FindByValue(value.Value.ToString());
+                    if (selectedDivision == null)
+                    {
+                        var division = (PersonDivisionType)value;
+                        if (division != 0)
+                        {
+                            selectedDivision = new ListItem(DataHelper.GetDescription(division), Convert.ToInt32(division).ToString());
+                            ddlDivision.Items.Add(selectedDivision);
+                            ddlDivision.SortByText();
+                            ddlDivision.SelectedValue = selectedDivision.Value;
+                        }
+                    }
+                    else
+                    {
+                        ddlDivision.SelectedValue = selectedDivision.Value;
+                    }
+                }
+                else
+                {
+                    ddlDivision.SelectedIndex = 0;
+                }
+            }
+            get
+            {
+                if (ddlDivision.SelectedIndex > 0)
+                {
+                    return int.Parse(ddlDivision.SelectedValue);
+                }
+                return null;
+            }
+        }
+
         /// <summary>
         /// Gets a selected <see cref="Pay"/>.
         /// </summary>
@@ -500,8 +541,11 @@ namespace PraticeManagement.Controls
                 result.BonusHoursToCollect = BonusHoursToCollect;
                 result.OldStartDate = OldStartDate;
                 result.OldEndDate = OldEndDate;
+                result.DivisionId = DivisionId;
                 result.PracticeId = PracticeId;
                 result.TitleId = TitleId;
+                result.DivisionName = ddlDivision.SelectedItem.Text;
+                result.TitleName = ddlTitle.SelectedItem.Text;
                 result.SLTApproval = SLTApproval;
                 result.SLTPTOApproval = SLTPTOApproval;
                 return result;
@@ -590,7 +634,9 @@ namespace PraticeManagement.Controls
                 custLockoutPTO.ValidationGroup =
                 custLockoutTitle.ValidationGroup =
                 custLockOutPractice.ValidationGroup =
-                rfvPractice.ValidationGroup = value;
+                custLockOutDivision.ValidationGroup =
+                rfvPractice.ValidationGroup =
+                cvIsDivisionOrPracticeOwner.ValidationGroup = value;
             }
         }
 
@@ -613,6 +659,33 @@ namespace PraticeManagement.Controls
         public bool IsMarginTestPage { get; set; }
 
         public bool IsCompensationPage { get; set; }
+
+        public bool IsDivisionOrPracticeOwner
+        {
+            get
+            {
+                if (ViewState["IsDivisionOrPracticeOwner"] == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return (bool)ViewState["IsDivisionOrPracticeOwner"];
+                }
+            }
+            set
+            {
+                cvIsDivisionOrPracticeOwner.Enabled = !value;
+                cvIsDivisionOrPracticeOwner.IsValid = value;
+                ViewState["IsDivisionOrPracticeOwner"] = (object)value;
+            }
+        }
+
+        public string PreviousDivision
+        {
+            get { return (string)ViewState["PreviousDivisionId"]; }
+            set { ViewState["PreviousDivisionId"] = value; }
+        }
 
         public string PreviousPractice
         {
@@ -676,6 +749,7 @@ namespace PraticeManagement.Controls
         public event EventHandler PeriodChanged;
         public event EventHandler CompensationChanged;
         public event EventHandler TitleChanged;
+        public event EventHandler DivisionChanged;
         public event EventHandler PracticeChanged;
         public event EventHandler SaveDetails;
 
@@ -688,7 +762,11 @@ namespace PraticeManagement.Controls
                 if (!IsStrawmanMode)
                 {
                     DataHelper.FillTitleList(ddlTitle, "-- Select Title --");
-                    DataHelper.FillPracticeListOnlyActive(ddlPractice, "-- Select Practice Area --");
+                    DataHelper.FillPersonDivisionList(ddlDivision);
+                    ListItem practice = new ListItem("-- Select Practice Area --", "0");
+                    ddlPractice.Items.Add(practice);
+                    ddlPractice.SelectedIndex = 0;
+                    ddlPractice.Enabled = false;
                 }
             }
         }
@@ -725,6 +803,7 @@ namespace PraticeManagement.Controls
             PreviousPtoAccrual = txtVacationDays.Text;
             PreviousBasis = Timescale.ToString();
             PreviousAmount = Amount;
+            PreviousDivision = ddlDivision.SelectedItem.Text;
         }
 
         protected void Compensation_CheckedChanged(object sender, EventArgs e)
@@ -760,6 +839,28 @@ namespace PraticeManagement.Controls
             if (PracticeChanged != null)
             {
                 PracticeChanged(this, e);
+            }
+        }
+
+        protected void ddlDivision_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlDivision.SelectedIndex != 0)
+            {
+                ddlPractice.Enabled = true;
+                if (DivisionId != null)
+                {
+                    DataHelper.FillPracticeListForDivsion(ddlPractice, "-- Select Practice Area --", (int)DivisionId);
+                }
+
+            }
+            else
+            {
+                ddlPractice.SelectedIndex = 0;
+                ddlPractice.Enabled = false;
+            }
+            if (DivisionChanged != null)
+            {
+                DivisionChanged(this, e);
             }
         }
 
@@ -987,6 +1088,31 @@ namespace PraticeManagement.Controls
                         e.IsValid = false;
                         custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDatesMessage, LockoutDate.Value.ToShortDateString());
                     }
+                }
+            }
+        }
+
+        protected void custLockOutDivision_OnServerValidate(object sender, ServerValidateEventArgs e)
+        {
+            if (IsCompensationPage && Lockouts.Any(p => p.Name == "Division" && p.IsLockout == true))
+            {
+                CustomValidator custLockdown = sender as CustomValidator;
+                if (!OldStartDate.HasValue && !OldEndDate.HasValue)
+                {
+                    DateTime startDate;
+                    DateTime? endDate;
+                    DateTime.TryParse(dpStartDate.TextValue, out startDate);
+                    endDate = dpEndDate.TextValue == string.Empty ? null : (DateTime?)dpEndDate.DateValue;
+                    if ((startDate.Date <= LockoutDate.Value.Date || endDate.HasValue && endDate.Value.Date <= LockoutDate.Value.Date))
+                    {
+                        e.IsValid = false;
+                        custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDivisionMessage, LockoutDate.Value.ToShortDateString());
+                    }
+                }
+                else if (OldStartDate.HasValue && (OldStartDate.Value.Date <= LockoutDate.Value.Date || (OldEndDate.HasValue && OldEndDate.Value.Date <= LockoutDate.Value.Date)) && ddlDivision.SelectedItem.Text != PreviousDivision)
+                {
+                    e.IsValid = false;
+                    custLockdown.ErrorMessage = custLockdown.ToolTip = string.Format(lockdownDivisionMessage, LockoutDate.Value.ToShortDateString());
                 }
             }
         }
