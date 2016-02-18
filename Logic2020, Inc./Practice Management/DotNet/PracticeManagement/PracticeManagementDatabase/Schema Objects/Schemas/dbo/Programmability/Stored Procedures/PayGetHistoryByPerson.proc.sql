@@ -29,10 +29,13 @@ AS
 		   Tt.TitleId,
 		   Tt.Title,
 		   p.SLTApproval,
-		   p.SLTPTOApproval
+		   p.SLTPTOApproval,
+		   p.DivisionId,
+		   d.DivisionName
 	  FROM dbo.v_Pay AS p
 	  LEFT JOIN dbo.Title Tt ON Tt.TitleId = P.TitleId
 	  LEFT JOIN dbo.Practice pr on pr.PracticeId = p.PracticeId
+	  LEFT JOIN dbo.PersonDivision d ON d.DivisionId=p.DivisionId
 	 WHERE p.PersonId = @PersonId
 	ORDER BY p.StartDate
 
