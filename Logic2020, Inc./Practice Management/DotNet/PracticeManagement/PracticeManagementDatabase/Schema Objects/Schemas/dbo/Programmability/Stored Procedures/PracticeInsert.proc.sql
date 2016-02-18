@@ -9,7 +9,8 @@ CREATE PROCEDURE dbo.PracticeInsert
 	@PracticeManagerId INT,
 	@IsActive BIT = 1,
 	@IsCompanyInternal BIT = 0 ,
-	@UserLogin NVARCHAR(MAX)
+	@UserLogin NVARCHAR(MAX),
+	@DivisionIds NVARCHAR(MAX) =NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -77,6 +78,11 @@ BEGIN
 			@PracticeId = @PracticeId,
 			@IsActive = @IsActive
 
+		EXEC dbo.UpdateDivisionPracticeAreaMapping
+			@PracticeId=@PracticeId,
+			@DivisionIds=@DivisionIds
+
+
 	COMMIT TRAN PracticeInsert_Tran;
 	END TRY
 	BEGIN CATCH
@@ -93,3 +99,4 @@ BEGIN
 	END CATCH
 	EXEC dbo.SessionLogUnprepare
 END
+
