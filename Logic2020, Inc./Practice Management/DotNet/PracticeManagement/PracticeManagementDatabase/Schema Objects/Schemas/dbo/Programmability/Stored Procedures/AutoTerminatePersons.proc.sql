@@ -105,32 +105,10 @@ BEGIN
 	-- SET new manager for subordinates
 
 	UPDATE P
-	SET P.ManagerId = COALESCE(SamePracticedManagerOrUp.PersonId,DefalutManager.PersonId,pr.PracticeManagerId)
+	SET P.ManagerId = PD.DivisionOwnerId
 	FROM dbo.Person P
 	INNER JOIN @TerminatedPersons AS Manager ON P.ManagerId = Manager.PersonId AND (Manager.IsTerminatedDueToPay = 0 OR ReHiredate > @Today)
-	LEFT  JOIN Practice pr ON P.DefaultPractice = pr.PracticeId
-	OUTER APPLY(
-				SELECT TOP 1 PersonId
-				FROM dbo.Person P1
-				JOIN dbo.Seniority S ON P1.SeniorityId = s.SeniorityId
-				WHERE P1.DefaultPractice = Manager.DefaultPractice
-						AND P.PersonId <> P1.PersonId
-						AND S.SeniorityValue <= 65
-						AND P1.PersonStatusId IN (1,5)
-						AND P1.PersonId <> Manager.PersonID
-						AND (p1.TerminationDate > @Today OR p1.TerminationDate IS NULL)
-				ORDER BY ISNULL(p1.TerminationDate,@FutureDate) DESC
-					) SamePracticedManagerOrUp
-	OUTER APPLY(
-				SELECT TOP 1 PersonId
-				FROM dbo.Person P2
-				WHERE P2.IsDefaultManager = 1
-						AND P.PersonId <> P2.PersonId
-						AND P2.PersonId <> manager.PersonID
-						AND P2.PersonStatusId IN (1,5)
-						AND (p2.TerminationDate > @Today OR p2.TerminationDate IS NULL)
-				ORDER BY ISNULL(p2.TerminationDate,@FutureDate) DESC
-				) DefalutManager
+	INNER JOIN dbo.PersonDivision AS PD ON Pd.DivisionId=p.DivisionId
 
 	--Lock out Terminated persons
 	UPDATE m
