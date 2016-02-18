@@ -150,7 +150,8 @@ AS
 				WHEN EXISTS(SELECT TOP 1 PC.PracticeId FROM dbo.PracticeCapabilities PC WHERE PC.PracticeId = p.PracticeId AND PC.IsActive = 1)
 					THEN CAST(1 AS BIT)
 				ELSE CAST(0 AS BIT)
-			END AS 'IsActiveCapabilitiesExists'		
+			END AS 'IsActiveCapabilitiesExists',
+			dbo.GetDivisionIdsForPractice(p.PracticeId) AS DivisionId
 		  FROM dbo.Practice AS p
 		  LEFT JOIN dbo.Person AS pers ON p.PracticeManagerId = pers.PersonId
 		  LEFT JOIN dbo.PersonStatus AS stat ON pers.PersonStatusId = stat.PersonStatusId
