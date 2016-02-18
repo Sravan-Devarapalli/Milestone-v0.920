@@ -151,6 +151,9 @@ namespace DataTransferObjects
             get { return PracticeOwner != null && PracticeOwner.Id.HasValue ? PracticeOwner.Id.Value : -1; }
         }
 
+        [DataMember]
+        public string DivisionIds { get; set; }
+
         #endregion Properties
 
         #region Formatting
