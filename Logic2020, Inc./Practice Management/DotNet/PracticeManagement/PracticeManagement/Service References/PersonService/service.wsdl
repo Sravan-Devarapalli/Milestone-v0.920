@@ -190,6 +190,24 @@
   <wsdl:message name="IPersonService_GetPersonDivisions_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonDivisionsResponse" />
   </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDivisionById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDivisionById" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_GetPersonDivisionById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonDivisionByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_UpdatePersonDivision_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePersonDivision" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_UpdatePersonDivision_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePersonDivisionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonIsOwnerForDivisionAndOrPractice_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonIsOwnerForDivisionAndOrPractice" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_CheckIfPersonIsOwnerForDivisionAndOrPractice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckIfPersonIsOwnerForDivisionAndOrPracticeResponse" />
+  </wsdl:message>
   <wsdl:message name="IPersonService_SaveReportFilterValues_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveReportFilterValues" />
   </wsdl:message>
@@ -760,6 +778,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisions" message="tns:IPersonService_GetPersonDivisions_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisionsResponse" message="tns:IPersonService_GetPersonDivisions_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetPersonDivisionById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisionById" message="tns:IPersonService_GetPersonDivisionById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonDivisionByIdResponse" message="tns:IPersonService_GetPersonDivisionById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePersonDivision">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/UpdatePersonDivision" message="tns:IPersonService_UpdatePersonDivision_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/UpdatePersonDivisionResponse" message="tns:IPersonService_UpdatePersonDivision_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonIsOwnerForDivisionAndOrPractice">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonIsOwnerForDivisionAndOrPractice" message="tns:IPersonService_CheckIfPersonIsOwnerForDivisionAndOrPractice_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/CheckIfPersonIsOwnerForDivisionAndOrPracticeResponse" message="tns:IPersonService_CheckIfPersonIsOwnerForDivisionAndOrPractice_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveReportFilterValues">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SaveReportFilterValues" message="tns:IPersonService_SaveReportFilterValues_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SaveReportFilterValuesResponse" message="tns:IPersonService_SaveReportFilterValues_OutputMessage" />
@@ -1318,6 +1348,33 @@
     </wsdl:operation>
     <wsdl:operation name="GetPersonDivisions">
       <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDivisions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonDivisionById">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/GetPersonDivisionById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePersonDivision">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/UpdatePersonDivision" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckIfPersonIsOwnerForDivisionAndOrPractice">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/CheckIfPersonIsOwnerForDivisionAndOrPractice" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2006,7 +2063,7 @@
   </wsdl:binding>
   <wsdl:service name="PersonService">
     <wsdl:port name="BasicHttpBinding_IPersonService" binding="tns:BasicHttpBinding_IPersonService">
-      <soap:address location="http://ggku3sys52.ggktech.local/PracticeManagementService/PersonService.svc" />
+      <soap:address location="http://ggku3sys280.ggktech.local/PracticeManagementService/PersonService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
