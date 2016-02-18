@@ -5,11 +5,11 @@
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
       <xsd:import />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
@@ -21,6 +21,12 @@
   </wsdl:message>
   <wsdl:message name="IPersonService_DeleteReportFilterValues_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteReportFilterValuesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SendCompensationChangeEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendCompensationChangeEmail" />
+  </wsdl:message>
+  <wsdl:message name="IPersonService_SendCompensationChangeEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendCompensationChangeEmailResponse" />
   </wsdl:message>
   <wsdl:message name="IPersonService_GetPersonEmploymentHistoryById_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPersonEmploymentHistoryById" />
@@ -678,6 +684,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/DeleteReportFilterValues" message="tns:IPersonService_DeleteReportFilterValues_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse" message="tns:IPersonService_DeleteReportFilterValues_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendCompensationChangeEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/SendCompensationChangeEmail" message="tns:IPersonService_SendCompensationChangeEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/SendCompensationChangeEmailResponse" message="tns:IPersonService_SendCompensationChangeEmail_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetPersonEmploymentHistoryById">
       <wsdl:input wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById" message="tns:IPersonService_GetPersonEmploymentHistoryById_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse" message="tns:IPersonService_GetPersonEmploymentHistoryById_OutputMessage" />
@@ -1116,6 +1126,15 @@
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="DeleteReportFilterValues">
       <soap:operation soapAction="http://tempuri.org/IPersonService/DeleteReportFilterValues" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendCompensationChangeEmail">
+      <soap:operation soapAction="http://tempuri.org/IPersonService/SendCompensationChangeEmail" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
