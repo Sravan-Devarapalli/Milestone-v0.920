@@ -76,6 +76,7 @@
         <siteMapNode url="~/Config/Persons.aspx" title="Persons"  VirtualPath="~/Config/Persons.aspx" QuickLinkTitle="Persons" description="Person List"  />
         <siteMapNode url="~/Config/Strawmen.aspx" title="Strawmen"  VirtualPath="~/Config/Strawmen.aspx" QuickLinkTitle="Strawmen" description="Strawmen List"  />
         <siteMapNode url="~/Config/PracticeAreas.aspx" title="Practice Areas"  VirtualPath="~/Config/PracticeAreas.aspx" QuickLinkTitle="Practice Areas" description="Practice Areas"  />
+        <siteMapNode url="~/Config/Divisions.aspx" title="Divisions"  VirtualPath="~/Config/divisions.aspx" QuickLinkTitle="divisions" description="divisions"  />
         <siteMapNode url="~/Config/PracticeCapabilities.aspx" title="Capabilities"  VirtualPath="~/Config/PracticeCapabilities.aspx" QuickLinkTitle="Capabilities" description="Capabilities"  />
         <siteMapNode url="~/RecruitingMetrics.aspx" title="Recruting Metrics"  VirtualPath="~/RecruitingMetrics.aspx" QuickLinkTitle="Recruting Metrics" description="Recruting Metrics"  />
       </siteMapNode>
