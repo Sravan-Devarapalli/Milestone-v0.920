@@ -366,7 +366,10 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            GetFilterValuesForSession();
+            if (!IsPostBack)
+            {
+                GetFilterValuesForSession();
+            }
             if (timeEntryReportHeader.Count == 2)
             {
                 tdFirst.Attributes["class"] = "Width20Percent";
