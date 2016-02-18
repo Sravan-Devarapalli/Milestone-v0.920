@@ -369,6 +369,7 @@
     <Content Include="ckeditor\skins\v2\skin.js" />
     <Content Include="ckeditor\skins\v2\templates.css" />
     <Content Include="ckeditor\themes\default\theme.js" />
+    <Content Include="Config\Divisions.aspx" />
     <Content Include="Config\PracticeCapabilities.aspx" />
     <Content Include="Config\Strawmen.aspx" />
     <Content Include="Config\Titles.aspx" />
@@ -473,6 +474,8 @@
     <Content Include="Images\favicon.ico" />
     <Content Include="Images\hint1.png" />
     <Content Include="Images\link.png" />
+    <Content Include="Images\logic2020_New.png" />
+    <Content Include="Images\logo_logic_New.png" />
     <Content Include="Images\Non-Billable-Icon.png" />
     <Content Include="Images\notes.png" />
     <Content Include="Images\notes_optional.png" />
@@ -603,6 +606,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Lockout.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.MSBadge12.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.MSBadge3.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Owner1.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PersonBadgeHistories.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PersonDivision.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.PersonWorkingHoursDetailsWithinThePeriod.datasource" />
@@ -861,6 +865,15 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PracticeService\PracticeService1.wsdl" />
+    <None Include="Service References\PracticeService\PracticeService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PracticeService\PracticeService12.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PracticeService\PracticeService13.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\PracticeService\PracticeService3.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1088,7 +1101,6 @@
     <Content Include="Scripts\ScrollinDropDown.min.js">
       <DependentUpon>ScrollinDropDown.yui.js</DependentUpon>
     </Content>
-    <None Include="Service References\PracticeService\PracticeService1.disco" />
     <None Include="Service References\PersonSkillService\PersonSkillService1.disco" />
     <Content Include="Scripts\uploader.swf" />
     <Content Include="Scripts\uploaderRemovedFolder.swf" />
@@ -1107,6 +1119,7 @@
     <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
+    <None Include="Service References\PracticeService\PracticeService1.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
@@ -1516,6 +1529,13 @@
     </Compile>
     <Compile Include="AttachProjectToOpportunityHandler.ashx.cs">
       <DependentUpon>AttachProjectToOpportunityHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Divisions.aspx.cs">
+      <DependentUpon>Divisions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Divisions.aspx.designer.cs">
+      <DependentUpon>Divisions.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\PracticeCapabilities.aspx.cs">
       <DependentUpon>PracticeCapabilities.aspx</DependentUpon>
