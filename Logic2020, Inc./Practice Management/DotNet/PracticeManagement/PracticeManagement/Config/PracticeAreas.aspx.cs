@@ -28,7 +28,7 @@ namespace PraticeManagement.Config
                 {
                     ViewState[PracticeArea_KEY] = DataHelper.GetPractices(null).ToList();
                 }
-
+                
                 return (List<Practice>)ViewState[PracticeArea_KEY];
             }
             set { ViewState[PracticeArea_KEY] = value; }
@@ -40,8 +40,9 @@ namespace PraticeManagement.Config
             {
                 if (ViewState[PracticeAreaManagers_KEY] == null)
                 {
-                    string statusids = (int)DataTransferObjects.PersonStatusType.Active + ", " + (int)DataTransferObjects.PersonStatusType.TerminationPending;
-                    ViewState[PracticeAreaManagers_KEY] = ServiceCallers.Custom.Person(p => p.PersonListShortByRoleAndStatus(statusids, PracticeManagerRoleName)).ToList();
+                    string statusIds = ((int)DataTransferObjects.PersonStatusType.Active).ToString();
+                    string paytypeIds = ((int)TimescaleType.Salary).ToString();
+                    ViewState[PracticeAreaManagers_KEY] = ServiceCallers.Custom.Person(p => p.GetPersonsByPayTypesAndByStatusIds(statusIds, paytypeIds)).OrderBy(p => p.LastName).ThenBy(p => p.FirstName).ToList();
                 }
 
                 return (List<Person>)ViewState[PracticeAreaManagers_KEY];
@@ -59,13 +60,12 @@ namespace PraticeManagement.Config
         {
             mlInsertStatus.ClearMessage();
             var practiceMangersList = new List<ListItem>();
-            practiceMangersList.Add(new ListItem() { Text = "Unassigned", Value = "-1" });
+            //practiceMangersList.Add(new ListItem() { Text = "Unassigned", Value = "-1" });
             foreach (var item in PracticeManagers)
             {
                 practiceMangersList.Add(new ListItem() { Text = item.PersonLastFirstName, Value = item.Id.Value.ToString() });
             }
             PracticeManagersList = practiceMangersList.ToArray();
-            //ddlPracticeManagers.Items.AddRange(PracticeManagersList);
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -103,7 +103,11 @@ namespace PraticeManagement.Config
             gvPractices.EditIndex = -1;
             gvPractices.DataSource = Practices;
             gvPractices.DataBind();
+            ddlPracticeManagers.Items.Add(new ListItem() { Text = "-- Select Practice Area Owner --", Value = "-1" });
             ddlPracticeManagers.Items.AddRange(PracticeManagersList);
+            DataHelper.FillPersonDivisionList(cblDivision, true);
+            //cblDivision.Attributes.Add("style", "display:none");
+            //sdeCblDivision.Display = "none";
         }
 
         private void plusMakeVisible(bool isplusVisible)
@@ -118,6 +122,8 @@ namespace PraticeManagement.Config
                 chbPracticeActive.Visible =
                 chbIsInternalPractice.Visible =
                 ddlPracticeManagers.Visible = false;
+                cblDivision.CssClass = "PracticeAreasCblDivision hidden";
+                sdeCblDivision.Display = "none";
             }
             else
             {
@@ -133,6 +139,9 @@ namespace PraticeManagement.Config
                 chbPracticeActive.Visible =
                 chbIsInternalPractice.Visible =
                 ddlPracticeManagers.Visible = true;
+                cblDivision.Attributes.CssStyle.Add("style", "display:inline-block");
+                cblDivision.CssClass = "PracticeAreasCblDivision";
+                sdeCblDivision.Display = "inline-block;";
             }
 
         }
@@ -149,9 +158,8 @@ namespace PraticeManagement.Config
                 Page.Validate(valSummaryInsert.ValidationGroup);
                 if (Page.IsValid)
                 {
-
                     PracticesHelper.InsertPractice(tbPracticeName.Text, ddlPracticeManagers.SelectedValue,
-                                                   chbPracticeActive.Checked, chbIsInternalPractice.Checked, tbAbbreviation.Text);
+                                                   chbPracticeActive.Checked, chbIsInternalPractice.Checked, tbAbbreviation.Text, cblDivision.SelectedItems);
                     mlInsertStatus.ShowInfoMessage(Resources.Controls.PracticeAddedSuccessfully);
                     Practices = null;
                     gvPractices.DataSource = Practices;
@@ -193,6 +201,17 @@ namespace PraticeManagement.Config
                 {
                     lblPracticeManager.Text = item.PracticeOwner == null ? "Unassigned" : String.Format(PracticeMangagerNameFormat, item.PracticeOwner.PersonLastFirstName, item.PracticeOwner.Status.Name); //||  item.PracticeOwner.Status.Id != (int)PersonStatusType.Terminated ? String.Format(PracticeMangagerNameFormat, item.PracticeOwner.PersonLastFirstName, item.PracticeOwner.Status.Name) : "Unassigned";
                 }
+                var lblDivisions = e.Row.FindControl("lblDivisions") as Label;
+                if (lblDivisions != null && !string.IsNullOrEmpty(item.DivisionIds))
+                {
+                    lblDivisions.Text = string.Empty;
+                    var divisionIds = item.DivisionIds.Remove(item.DivisionIds.Length - 1).Split(',').Select(int.Parse).ToList();
+                    foreach (int id in divisionIds)
+                    {
+                        lblDivisions.Text = lblDivisions.Text+DataHelper.GetDescription((PersonDivisionType)id) + ',';
+                    }
+                    lblDivisions.Text = lblDivisions.Text.Remove(lblDivisions.Text.Length - 1);
+                }
                 if (imgDelete != null)
                 {
                     imgDelete.Visible = !item.InUse;
@@ -208,25 +227,29 @@ namespace PraticeManagement.Config
                     var imgUpdate = e.Row.FindControl("imgUpdate") as ImageButton;
                     imgUpdate.OnClientClick = string.Format("return showcapabilityActivePopup(\'{0}\',this);", chbIsActiveEd.ClientID);
                 }
-
-
-                DropDownList ddl = e.Row.FindControl("ddlActivePersons") as DropDownList;
-                if (ddl != null)
+                DropDownList ddlActivePersons = e.Row.FindControl("ddlActivePersons") as DropDownList;
+                if (ddlActivePersons != null)
                 {
-                    ddl.Items.AddRange(PracticeManagersList);
+                    ddlActivePersons.Items.AddRange(PracticeManagersList);
                     string id = item.PracticeManagerId.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    if (ddl.Items.FindByValue(id) != null)
+                    if (ddlActivePersons.Items.FindByValue(id) != null)
                     {
-                        ddl.SelectedValue = id;
+                        ddlActivePersons.SelectedValue = id;
                     }
                     else
                     {
-                        // Inactive owner.
-                        ddl.SelectedIndex = 0;
+                        ddlActivePersons.SelectedIndex = 0;
                     }
                 }
+                ScrollingDropDown cblActiveDivisions = e.Row.FindControl("cblActiveDivisions") as ScrollingDropDown;
+               // cblActiveDivisions.Attributes.Add("OnClick", "javascript:scrollingDropdown_onclick('cblActiveDivisions','Division');");
+                if (cblActiveDivisions != null)
+                {
+                    DataHelper.FillPersonDivisionList(cblActiveDivisions,true);
+                    string divisionIds = item.DivisionIds;
+                    cblActiveDivisions.SelectedItems = divisionIds;
+                }
             }
-
         }
 
         protected void imgUpdate_OnClick(object sender, EventArgs e)
@@ -252,12 +275,14 @@ namespace PraticeManagement.Config
                 var chbIsActiveEd = row.FindControl("chbIsActiveEd") as CheckBox;
                 var chbInternal = row.FindControl("chbInternal") as CheckBox;
                 var ddlActivePersons = row.FindControl("ddlActivePersons") as DropDownList;
+                var cblActiveDivisions=row.FindControl("cblActiveDivisions") as ScrollingDropDown;
                 practice.Id = PracticeId;
                 practice.Name = tbEditPractice.Text;
                 practice.Abbreviation = string.IsNullOrEmpty(tbEditAbbreviation.Text) ? null : tbEditAbbreviation.Text;
                 practice.IsActive = chbIsActiveEd.Checked;
                 practice.IsCompanyInternal = chbInternal.Checked;
                 practice.PracticeOwner = new Person() { Id = int.Parse(ddlActivePersons.SelectedValue) };
+                practice.DivisionIds = cblActiveDivisions.SelectedItems;
                 var oldPracticeObject = Practices.First(p => p.Id == practice.Id);
 
                 bool isPageValid = true;
@@ -286,12 +311,6 @@ namespace PraticeManagement.Config
                         isPageValid = false;
                     }
                 }
-                CustomValidator custEditPracticeManager = row.FindControl("custEditPracticeManager") as CustomValidator;
-                custEditPracticeManager.IsValid = ddlActivePersons.SelectedValue != "-1";
-                isPageValid = isPageValid && custEditPracticeManager.IsValid;
-                if (!isPageValid)
-                    return;
-
                 using (var serviceClient = new PracticeServiceClient())
                 {
                     try
@@ -347,13 +366,16 @@ namespace PraticeManagement.Config
 
         protected void imgEdit_OnClick(object sender, EventArgs e)
         {
-            plusMakeVisible(true);
+            //plusMakeVisible(true);
             hdCapabilitiesInactivePopUpOperation.Value = "none";
             var imgEdit = sender as ImageButton;
             var gvPracticeItem = imgEdit.NamingContainer as GridViewRow;
             gvPractices.EditIndex = gvPracticeItem.DataItemIndex;
             gvPractices.DataSource = Practices;
             gvPractices.DataBind();
+            plusMakeVisible(true);
+
+            
         }
 
         private bool IsPracticeAlreadyExisting(string newPractice)
