@@ -510,6 +510,15 @@ namespace PracticeManagementService
         List<PersonDivision> GetPersonDivisions();
 
         [OperationContract]
+        PersonDivision GetPersonDivisionById(int divisioId);
+
+        [OperationContract]
+        void UpdatePersonDivision(PersonDivision division);
+
+        [OperationContract]
+        List<Owner> CheckIfPersonIsOwnerForDivisionAndOrPractice(int personId);
+
+        [OperationContract]
         void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId);
 
         [OperationContract]
