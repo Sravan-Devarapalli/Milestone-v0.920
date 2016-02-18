@@ -2,8 +2,12 @@
     AutoEventWireup="true" CodeBehind="PracticeAreas.aspx.cs" Inherits="PraticeManagement.Config.PracticeAreas" %>
 
 <%@ Import Namespace="DataTransferObjects" %>
+<%@ Import Namespace="PraticeManagement.Utils" %>
 <%@ Import Namespace="PraticeManagement.Controls.Configuration" %>
 <%@ Register Src="~/Controls/MessageLabel.ascx" TagName="Label" TagPrefix="uc" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register TagPrefix="pmc" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls" %>
+<%@ Register TagPrefix="ext" Assembly="PraticeManagement" Namespace="PraticeManagement.Controls.Generic.ScrollableDropdown" %>
 <%@ Register Src="~/Controls/Generic/LoadingProgress.ascx" TagName="LoadingProgress"
     TagPrefix="uc" %>
 <%@ Register TagPrefix="uc" Namespace="PraticeManagement.Controls.Generic.Buttons"
@@ -11,10 +15,15 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="server">
     <title>Practice Areas | Practice Management</title>
 </asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+    <script src="<%# Generic.GetClientUrl("~/Scripts/ScrollinDropDown.min.js", this) %>"
+        type="text/javascript"></script>
+</asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="header" runat="server">
     Practice Areas
 </asp:Content>
 <asp:Content ID="Content4" ContentPlaceHolderID="body" runat="server">
+    <script src="../Scripts/jquery-1.4.1.yui.js" type="text/javascript"></script>
     <script type="text/javascript">
 
         function doConfirm(msg, yesFn, noFn) {
@@ -33,6 +42,8 @@
             confirmBoxTest_backgroundElement[0].style.height = $(window).height() + 'px';
             confirmBoxTest_backgroundElement.show();
         }
+
+
 
         function showcapabilityActivePopup(chbIsActiveEdId, updateBtn, hdCapabilitiesInactivePopUpOperationId, confirmBoxJavascriptId) {
             var chbIsActiveEd = document.getElementById(chbIsActiveEdId);
@@ -67,6 +78,18 @@
             }
             return true;
         }
+
+        $(document).ready(function () {
+            $("#cblDivision").css("display", "none");
+            $("#sdeCblDivision").css("display", "none");
+        });
+
+        $('.cblScrollingDropDown table input').live('click', function (e) {
+            var src = e.srcElement || e.target;
+            processRequest(this.id.substr(0, this.id.lastIndexOf('_')), src);
+            $(this).parent().click();
+
+        }); 
 
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
@@ -110,7 +133,7 @@
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
-                        <HeaderStyle CssClass="Width7Percent" />
+                        <HeaderStyle CssClass="Width6Percent" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgEdit" runat="server" ImageUrl="~/Images/icon-edit.png" OnClick="imgEdit_OnClick"
                                 ToolTip="Edit Practice Area" />
@@ -146,7 +169,7 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Abbreviation">
-                        <HeaderStyle CssClass="Width7Percent" />
+                        <HeaderStyle CssClass="Width6Percent" />
                         <ItemStyle CssClass="Left no-wrap padLeft20" />
                         <ItemTemplate>
                             <asp:Label ID="lblAbbreviation" runat="server" CssClass="WS-Normal" Text='<%# Bind("Abbreviation") %>' />
@@ -163,7 +186,7 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Active">
-                        <HeaderStyle CssClass="Width7Percent" />
+                        <HeaderStyle CssClass="Width6Percent" />
                         <ItemTemplate>
                             <asp:CheckBox ID="chbIsActive" runat="server" Enabled="false" Checked='<%# ((Practice)Container.DataItem).IsActive %>' />
                         </ItemTemplate>
@@ -172,7 +195,7 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Internal">
-                        <HeaderStyle CssClass="Width7Percent" />
+                        <HeaderStyle CssClass="Width6Percent" />
                         <ItemTemplate>
                             <asp:CheckBox ID="chbIsCompanyInternal" runat="server" Enabled="false" Checked='<%# ((Practice) Container.DataItem).IsCompanyInternal %>' />
                         </ItemTemplate>
@@ -181,21 +204,44 @@
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
-                        <HeaderStyle CssClass="Width40P" />
+                        <HeaderStyle CssClass="Width25Percent" />
                         <ItemStyle CssClass="Left" />
                         <HeaderTemplate>
                             Practice Area Owner (Status)
                         </HeaderTemplate>
                         <ItemTemplate>
-                        <asp:Label ID="lblPracticeManager" runat="server"></asp:Label>
+                            <asp:Label ID="lblPracticeManager" runat="server"></asp:Label>
                         </ItemTemplate>
                         <EditItemTemplate>
                             <asp:DropDownList ID="ddlActivePersons" runat="server" CssClass="Width95Percent">
                             </asp:DropDownList>
-                            <asp:CustomValidator ID="custEditPracticeManager" runat="server" ValidationGroup="EditPractice"
+                            <%--<asp:CustomValidator ID="custEditPracticeManager" runat="server" ValidationGroup="EditPractice"
                                 Display="Dynamic" Text="*" ErrorMessage="Please add a person as Practice area owner."
-                                ToolTip="Please add a person as Practice area owner." />
+                                ToolTip="Please add a person as Practice area owner." />--%>
                             <%--<asp:HiddenField ID="hfPracticeOwner" runat="server" Value='<%#Bind("PracticeManagerId")%>' />--%>
+                        </EditItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <HeaderStyle CssClass="Width20Percent" />
+                        <ItemStyle CssClass="Left" />
+                        <HeaderTemplate>
+                            Division(s)
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <asp:Label ID="lblDivisions" runat="server"></asp:Label>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <span class="Left">
+                                <pmc:ScrollingDropDown ID="cblActiveDivisions" runat="server" SetDirty="false" CssClass="PracticeAreasCblDivision cblActiveDivisionstd cblScrollingDropDown"
+                                    OnClick="scrollingDropdown_onclick('cblActiveDivisions','Division')" DropDownListType="Division" />
+                                <ext:ScrollableDropdownExtender ID="sdeCblActiveDivisions" runat="server" TargetControlID="cblActiveDivisions"
+                                    UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png" Width="240px">
+                                </ext:ScrollableDropdownExtender>
+                            </span>
+                            <%-- <asp:CustomValidator ID="cvActiveDivisions" runat="server" EnableClientScript="false"
+                                ValidationGroup="EditPractice" ErrorMessage="The Division(s) is required." ValidateEmptyText="true"
+                                OnServerValidate="cvActiveDivisions_OnServerValidate" SetFocusOnError="true" Text="*"
+                                ToolTip="The Division(s) is required."></asp:CustomValidator>--%>
                         </EditItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
@@ -204,7 +250,7 @@
                                 &nbsp;
                             </div>
                         </HeaderTemplate>
-                        <HeaderStyle CssClass="Width4Percent" />
+                        <HeaderStyle CssClass="Width3Percent" />
                         <ItemTemplate>
                             <asp:ImageButton ID="imgDelete" runat="server" ImageUrl="~/Images/icon-delete.png"
                                 OnClick="imgDelete_OnClick" ToolTip="Delete Practice Area" />
@@ -217,7 +263,7 @@
             <asp:Panel ID="pnlInsertPractice" runat="server" Wrap="False">
                 <table class="CompPerfTable gvPractices" cellspacing="0">
                     <tr id="trInsertPractice" runat="server" class="alterrow">
-                        <td class="Width7Percent PaddingTop10">
+                        <td class="Width6Percent PaddingTop10">
                             <asp:ImageButton ID="btnPlus" runat="server" ImageUrl="~/Images/add_16.png" OnClick="btnPlus_Click"
                                 ToolTip="Add Practice Area" Visible="true" />
                             <asp:ImageButton ID="btnInsert" runat="server" ImageUrl="~/Images/icon-check.png"
@@ -229,8 +275,8 @@
                             <asp:TextBox ID="tbPracticeName" ValidationGroup="InsertPractice" runat="server"
                                 CssClass="Width95Percent" Visible="false" />
                             <asp:RequiredFieldValidator ID="valPracticeName" runat="server" ValidationGroup="InsertPractice"
-                                ToolTip="Practice Area name is required." Text="*" ErrorMessage="Practice Area name is required." SetFocusOnError="true"
-                                ControlToValidate="tbPracticeName" />
+                                ToolTip="Practice Area name is required." Text="*" ErrorMessage="Practice Area name is required."
+                                SetFocusOnError="true" ControlToValidate="tbPracticeName" />
                             <asp:RegularExpressionValidator ID="regValPracticeName" ControlToValidate="tbPracticeName"
                                 Display="Dynamic" Text="*" runat="server" ValidationGroup="InsertPractice" ValidationExpression="^[\s\S]{0,100}$"
                                 ToolTip="Practice Area name should not be more than 100 characters." ErrorMessage="Practice Area name should not be more than 100 characters." />
@@ -239,7 +285,7 @@
                                 ToolTip="Practice area name already exists. Please enter a different practice area name."
                                 ValidationGroup="InsertPractice" ErrorMessage="Practice area name already exists. Please enter a different practice area name." />
                         </td>
-                        <td class="Width7Percent Left padLeft20">
+                        <td class="Width6Percent Left padLeft20">
                             <asp:TextBox ID="tbAbbreviation" ValidationGroup="InsertPractice" runat="server"
                                 CssClass="Width95Percent" Visible="false" />
                             <asp:RegularExpressionValidator ID="regValAbbreviation" ControlToValidate="tbAbbreviation"
@@ -249,19 +295,30 @@
                                 Display="Dynamic" Text="*" ErrorMessage="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name."
                                 ToolTip="Abbreviation with this name already exists for a practice area. Please enter different abbreviation name." />
                         </td>
-                        <td class="Width7Percent">
+                        <td class="Width6Percent">
                             <asp:CheckBox ID="chbPracticeActive" runat="server" Checked="true" Visible="false" />
                         </td>
-                        <td class="Width7Percent">
+                        <td class="Width6Percent">
                             <asp:CheckBox ID="chbIsInternalPractice" runat="server" Checked="false" Visible="false" />
                         </td>
-                        <td class="Width40P Left">
-                            <asp:DropDownList ID="ddlPracticeManagers" runat="server" CssClass="Width95Percent" Visible="false"  />
-                             <asp:CustomValidator ID="custPracticeManager" runat="server" ValidationGroup="InsertPractice"
-                                Display="Dynamic" Text="*" ErrorMessage="Please add a person as Practice area owner." OnServerValidate="custPracticeManager_ServerValidate" 
-                                ToolTip="Please add a person as Practice area owner." />
+                        <td class="Width25Percent Left">
+                            <asp:DropDownList ID="ddlPracticeManagers" runat="server" CssClass="Width95Percent"
+                                Visible="false" />
+                            <asp:CustomValidator ID="custPracticeManager" runat="server" ValidationGroup="InsertPractice"
+                                Display="Dynamic" Text="*" ErrorMessage="Please add a person as Practice area owner."
+                                OnServerValidate="custPracticeManager_ServerValidate" ToolTip="Please add a person as Practice area owner." />
                         </td>
-                        <td class="Width4Percent">
+                        <td class="Width20Percent Left">
+                            <span class="Left">
+                                <pmc:ScrollingDropDown ID="cblDivision" runat="server" SetDirty="false" CssClass="PracticeAreasCblDivision hidden"
+                                    onclick="scrollingDropdown_onclick('cblDivision','Division')" DropDownListType="Division"/>
+                                <ext:ScrollableDropdownExtender ID="sdeCblDivision" runat="server" TargetControlID="cblDivision"
+                                    Display="none" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
+                                    Width="240px">
+                                </ext:ScrollableDropdownExtender>
+                            </span>
+                        </td>
+                        <td class="Width3Percent">
                         </td>
                     </tr>
                 </table>
@@ -300,6 +357,34 @@
             <%--  <asp:ObjectDataSource ID="odsPractices" runat="server" SelectMethod="GetAllPractices"
                 TypeName="PraticeManagement.Controls.Configuration.PracticesHelper" DataObjectTypeName="PraticeManagement.Controls.Configuration.Practice"
                 DeleteMethod="RemovePracticeEx" ></asp:ObjectDataSource>--%>
+            <%--<asp:Repeater ID="repTest" runat="server" OnItemDataBound="repTest_DataBound">
+                <HeaderTemplate>
+                    <table>
+                        <tr>
+                            <td>
+                                Division
+                            </td>
+                        </tr>
+                </HeaderTemplate>
+                <ItemTemplate>
+                    <tr>
+                        <td>
+                            <span class="Left">
+                                <pmc:ScrollingDropDown ID="cblDivision" runat="server" SetDirty="false" CssClass="UTilTimeLineFilterCblPractices"
+                                    onclick="scrollingDropdown_onclick('cblDivision','Division')" DropDownListType="Division"
+                                    Style="display: none;" />
+                                <ext:ScrollableDropdownExtender ID="sdeCblDivision" runat="server" TargetControlID="cblDivision"
+                                    Display="none" UseAdvanceFeature="true" EditImageUrl="~/Images/Dropdown_Arrow.png"
+                                    Width="240px">
+                                </ext:ScrollableDropdownExtender>
+                            </span>
+                        </td>
+                    </tr>
+                </ItemTemplate>
+                <FooterTemplate>
+                    </table>
+                </FooterTemplate>
+            </asp:Repeater>--%>
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>
