@@ -390,7 +390,10 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            GetFilterValuesForSession();
+            if (!IsPostBack)
+            {
+                GetFilterValuesForSession();
+            }
             if (timeEntryReportHeader.Count == 2)
             {
                 tdFirst.Attributes["class"] = "Width50Percent";
@@ -467,6 +470,7 @@ namespace PraticeManagement.Reporting
                 hdnStartDate.Value = StartDate.Value.Date.ToShortDateString();
                 hdnEndDate.Value = EndDate.Value.Date.ToShortDateString();
                 LoadActiveView();
+                SaveFilterValuesForSession();
             }
             else
             {
@@ -488,6 +492,7 @@ namespace PraticeManagement.Reporting
                 if (ddlPeriod.SelectedValue != "0")
                 {
                     LoadActiveView();
+                    SaveFilterValuesForSession();
                 }
                 else
                 {
@@ -498,7 +503,6 @@ namespace PraticeManagement.Reporting
             {
                 SwitchView(lnkbtnSummary, 0);
             }
-            SaveFilterValuesForSession();
         }
 
         protected void btnView_Command(object sender, CommandEventArgs e)
