@@ -583,7 +583,8 @@
                                     <asp:Label Text="Cohort Assignment" ID="lblCohort" runat="server" Style="display: none;"></asp:Label>
                                     <asp:DropDownList ID="ddlCohortAssignment" runat="server" Style="display: none;">
                                     </asp:DropDownList>
-                                    <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click">Set Career Manager to Practice Area Owner</asp:LinkButton>
+                                    <asp:LinkButton ID="lbSetPracticeOwner" runat="server" PostBackUrl="#" OnClick="lbSetPracticeOwner_Click"
+                                        Visible="false">Set Career Manager to Practice Area Owner</asp:LinkButton>
                                     <asp:HiddenField ID="hdnIsSetPracticeOwnerClicked" Value="false" runat="server" />
                                 </td>
                             </tr>
@@ -693,18 +694,18 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap="nowrap" class="padRight10Imp">
-                                    Practice Area
+                                <td>
+                                    Location
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlDefaultPractice" runat="server" CssClass="Width256Px" onchange="setDirty();"
-                                        OnSelectedIndexChanged="ddlDefaultPractice_OnSelectedIndexChanged" AutoPostBack="true">
+                                    <asp:DropDownList ID="ddlLocation" runat="server" CssClass="Width140px">
                                     </asp:DropDownList>
+                                    &nbsp;
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="The Location is required."
+                                        ControlToValidate="ddlLocation" ToolTip="The Location is required." ValidationGroup="Person"
+                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;&nbsp;
                                 </td>
                                 <td>
-                                    <asp:RequiredFieldValidator ID="rfvPracticeArea" runat="server" ErrorMessage="The Practice Area is required."
-                                        ToolTip="The Practice Area is required." ValidationGroup="Person" Text="*" EnableClientScript="false"
-                                        SetFocusOnError="true" Display="Dynamic" ControlToValidate="ddlDefaultPractice"></asp:RequiredFieldValidator>&nbsp;
                                 </td>
                                 <td>
                                     <asp:Label ID="lbPayChexID" runat="server" Text="ADP ID" Visible="false"></asp:Label>
@@ -773,19 +774,18 @@
                                 <td>
                                     &nbsp;
                                 </td>
-                                <td>
-                                    Location
+                                <td nowrap="nowrap" class="padRight10Imp">
+                                    Practice Area
                                 </td>
                                 <td>
-                                    <asp:DropDownList ID="ddlLocation" runat="server" CssClass="Width140px">
+                                    <asp:DropDownList ID="ddlDefaultPractice" runat="server" CssClass="Width256Px" onchange="setDirty();"
+                                        OnSelectedIndexChanged="ddlDefaultPractice_OnSelectedIndexChanged" AutoPostBack="true">
                                     </asp:DropDownList>
-                                    &nbsp;
-                                    <asp:RequiredFieldValidator ID="reqLocation" runat="server" ErrorMessage="The Location is required."
-                                        ControlToValidate="ddlLocation" ToolTip="The Location is required." ValidationGroup="Person"
-                                        Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;&nbsp;
                                 </td>
                                 <td>
-                                    &nbsp;
+                                    <asp:RequiredFieldValidator ID="rfvPracticeArea" runat="server" ErrorMessage="The Practice Area is required."
+                                        ToolTip="The Practice Area is required." ValidationGroup="Person" Text="*" EnableClientScript="false"
+                                        SetFocusOnError="true" Display="Dynamic" ControlToValidate="ddlDefaultPractice"></asp:RequiredFieldValidator>&nbsp;
                                 </td>
                             </tr>
                             <tr>
@@ -1187,7 +1187,7 @@
                                                                 Type="Date"></asp:CompareValidator>
                                                         </span>
                                                     </FooterTemplate>
-                                                    <HeaderStyle CssClass="Width11Percent" />
+                                                    <HeaderStyle CssClass="Width8Percent" />
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <HeaderTemplate>
@@ -1234,7 +1234,40 @@
                                                                 Display="Dynamic" Text="*" OnServerValidate="custValLockoutDates_OnServerValidate"></asp:CustomValidator>
                                                         </span>
                                                     </FooterTemplate>
-                                                    <HeaderStyle CssClass="Width11Percent" />
+                                                    <HeaderStyle CssClass="Width8Percent" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField>
+                                                    <HeaderTemplate>
+                                                        <div class="ie-bg">
+                                                            Division</div>
+                                                    </HeaderTemplate>
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblDivision" runat="server" Text='<%# Eval("HtmlEncodedDivisionName")%>'></asp:Label></ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlCompDivision" runat="server"
+                                                            AutoPostBack="true" OnSelectedIndexChanged="ddlCompDivision_SelectIndexChanged"
+                                                            CssClass="Width85Percent">
+                                                        </asp:DropDownList>
+                                                        <asp:CustomValidator ID="custValCompDivision" runat="server" ToolTip="Please select Division"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Division"
+                                                            OnServerValidate="custValCompDivision_OnServerValidate">
+                                                        </asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockOutDivision" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockOutDivision_OnServerValidate"></asp:CustomValidator>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <asp:DropDownList ValidationGroup="CompensationUpdate" ID="ddlCompDivision" runat="server"
+                                                            AutoPostBack="true" OnSelectedIndexChanged="ddlCompDivision_SelectIndexChanged"
+                                                            CssClass="Width85Percent">
+                                                        </asp:DropDownList>
+                                                        <asp:CustomValidator ID="custValCompDivision" runat="server" ToolTip="Please select Division"
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" Text="*" ErrorMessage="Please select Division"
+                                                            OnServerValidate="custValCompDivision_OnServerValidate">
+                                                        </asp:CustomValidator>
+                                                        <asp:CustomValidator ID="custLockOutDivision" runat="server" ValidationGroup="CompensationUpdate"
+                                                            Display="Dynamic" Text="*" OnServerValidate="custLockOutDivision_OnServerValidate"></asp:CustomValidator>
+                                                    </FooterTemplate>
+                                                    <HeaderStyle CssClass="Width14Percent" HorizontalAlign="Center" />
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <HeaderTemplate>
@@ -1265,7 +1298,7 @@
                                                         <asp:CustomValidator ID="custLockOutPractice" runat="server" ValidationGroup="CompensationUpdate"
                                                             Display="Dynamic" Text="*" OnServerValidate="custLockOutPractice_OnServerValidate"></asp:CustomValidator>
                                                     </FooterTemplate>
-                                                    <HeaderStyle CssClass="Width23Percent" HorizontalAlign="Center" />
+                                                    <HeaderStyle CssClass="Width19Percent" HorizontalAlign="Center" />
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <HeaderTemplate>
@@ -1300,7 +1333,7 @@
                                                         <asp:CustomValidator ID="custLockoutTitle" runat="server" ValidationGroup="CompensationUpdate"
                                                             Display="Dynamic" Text="*" OnServerValidate="custLockoutTitle_OnServerValidate"></asp:CustomValidator>
                                                     </FooterTemplate>
-                                                    <HeaderStyle CssClass="Width20Percent" HorizontalAlign="Center" />
+                                                    <HeaderStyle CssClass="Width15Percent" HorizontalAlign="Center" />
                                                 </asp:TemplateField>
                                                 <asp:TemplateField>
                                                     <HeaderTemplate>
@@ -1321,6 +1354,9 @@
                                                             ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
                                                         <asp:CustomValidator ID="custLockoutBasis" runat="server" ValidationGroup="CompensationUpdate"
                                                             Display="Dynamic" Text="*" OnServerValidate="custLockoutBasis_OnServerValidate"></asp:CustomValidator>
+                                                        <asp:CustomValidator ID="cvIsDivisionOrPracticeOwner" runat="server" ErrorMessage="This person is currently assigned as a Practice Area Owner or Division Owner.  Please reassign ownership and then make the change."
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" ToolTip="This person is currently assigned as a Practice Area Owner or Division Owner.  Please reassign ownership and then make the change."
+                                                            Text="*" OnServerValidate="custIsDivisionOrPracticeOwner_OnServerValidate" Enabled="false"></asp:CustomValidator>
                                                     </EditItemTemplate>
                                                     <FooterTemplate>
                                                         <asp:DropDownList ID="ddlBasis" runat="server" CssClass="Width90Percent" OnSelectedIndexChanged="ddlBasis_OnSelectedIndexChanged"
@@ -1334,6 +1370,9 @@
                                                             ValidationGroup="SalaryToContractVoilation" Text="*" ToolTip="To switch employee status from W2-Hourly or W2-Salary to a status of 1099 Hourly or 1099 POR, the user will have to terminate their employment using the 'Change Employee Status' workflow, select a termination reason, and then re-activate the person's status via the 'Change Employee Status' workflow, changing their pay type to '1099 Hourly' or '1099 POR'"></asp:CustomValidator>
                                                         <asp:CustomValidator ID="custLockoutBasis" runat="server" ValidationGroup="CompensationUpdate"
                                                             Display="Dynamic" Text="*" OnServerValidate="custLockoutBasis_OnServerValidate"></asp:CustomValidator>
+                                                        <asp:CustomValidator ID="cvIsDivisionOrPracticeOwner" runat="server" ErrorMessage="This person is currently assigned as a Practice Area Owner or Division Owner.  Please reassign ownership and then make the change."
+                                                            ValidationGroup="CompensationUpdate" Display="Dynamic" ToolTip="This person is currently assigned as a Practice Area Owner or Division Owner.  Please reassign ownership and then make the change."
+                                                            Text="*" OnServerValidate="custIsDivisionOrPracticeOwner_OnServerValidate" Enabled="false"></asp:CustomValidator>
                                                     </FooterTemplate>
                                                     <HeaderStyle CssClass="Width10Percent" />
                                                 </asp:TemplateField>
@@ -1490,7 +1529,8 @@
                                     </div>
                                     <div id="divCompensation" runat="server">
                                         <uc:PersonnelCompensation ID="personnelCompensation" runat="server" ValidationGroup="Person"
-                                            OnSaveDetails="personnelCompensation_SaveDetails" StartDateReadOnly="true" OnTitleChanged="personnelCompensation_OnTitleChanged"
+                                            OnDivisionChanged="personnelCompensation_OnDivisionChanged" OnSaveDetails="personnelCompensation_SaveDetails"
+                                            StartDateReadOnly="true" OnTitleChanged="personnelCompensation_OnTitleChanged"
                                             OnPracticeChanged="personnelCompensation_OnPracticeChanged" rfvTitleValidationMessage="The Compensation Title is required."
                                             rfvPracticeValidationMessage="The Compensation Practice Area is required." />
                                         <asp:CustomValidator ID="custActiveCompensation" runat="server" ValidationGroup="Person"
@@ -1825,8 +1865,11 @@
                                     </tr>
                                 </table>
                             </div>
+                            <div>
+                            </div>
                             <asp:RadioButton ID="rbnContingent" runat="server" Text="Contingent" onclick="showDivContingent()"
                                 GroupName="rbtnsChangeStatus" />
+                            </div>
                             <div id="divContingent" runat="server">
                                 <table>
                                     <tr>
@@ -1918,6 +1961,39 @@
                                 UseSubmitBehavior="false" />
                             &nbsp;
                             <asp:Button ID="btnEndCompensationCancel" runat="server" Text="Cancel" OnClick="btnEndCompensationCancel_Click"
+                                UseSubmitBehavior="false" />
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+            <asp:HiddenField ID="hdnOwnerShip" runat="server" Value="change" />
+            <AjaxControlToolkit:ModalPopupExtender ID="mpeOwnerShip" runat="server" PopupControlID="pnlOwnerShip"
+                TargetControlID="hdnOwnerShip" BackgroundCssClass="modalBackground" DropShadow="false">
+            </AjaxControlToolkit:ModalPopupExtender>
+            <asp:Panel ID="pnlOwnerShip" runat="server" Style="display: none;" CssClass="popUpAttrition">
+                <table>
+                    <tr>
+                        <td>
+                            <asp:CustomValidator ID="cvIsOwnerForDivisionOrPractice" runat="server" Display="Dynamic"
+                                ValidationGroup="OwnerShip" EnableClientScript="false" OnServerValidate="custIsOwnerForDivisionOrPractice_ServerValidate"></asp:CustomValidator>
+                            <asp:Label ID="lblDivisionOwnerShip" runat="server"></asp:Label>
+                            <br />
+                            <asp:Label ID="lblPracticeAreaOwnerShip" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Click on "OK" to go back.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 4px;">
+                            <asp:Button ID="btnOkOwnerShip" runat="server" Text="OK" OnClick="btnOkOwnerShip_Click"
                                 UseSubmitBehavior="false" />
                         </td>
                     </tr>
