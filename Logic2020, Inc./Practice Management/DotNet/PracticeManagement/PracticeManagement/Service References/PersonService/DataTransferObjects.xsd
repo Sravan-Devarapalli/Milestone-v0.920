@@ -21,6 +21,8 @@
       <xs:element minOccurs="0" name="AmountHourly" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="BonusAmount" type="tns:PracticeManagementCurrency" />
       <xs:element minOccurs="0" name="BonusHoursToCollect" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DivisionId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DivisionName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="IsYearBonus" type="xs:boolean" />
       <xs:element minOccurs="0" name="OldEndDate" nillable="true" type="xs:dateTime" />
@@ -339,6 +341,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Abbreviation" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ComputedFinancials" nillable="true" type="tns:ComputedFinancials" />
+      <xs:element minOccurs="0" name="DivisionIds" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Id" type="xs:int" />
       <xs:element minOccurs="0" name="InUse" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
@@ -900,10 +903,26 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="DivisionId" type="xs:int" />
       <xs:element minOccurs="0" name="DivisionName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DivisionOwner" nillable="true" type="tns:Person" />
       <xs:element minOccurs="0" name="Inactive" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ShowCareerManagerLink" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonDivision" nillable="true" type="tns:PersonDivision" />
+  <xs:complexType name="ArrayOfOwner">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Owner" nillable="true" type="tns:Owner" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOwner" nillable="true" type="tns:ArrayOfOwner" />
+  <xs:complexType name="Owner">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsDivisionOwner" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Target" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="isAssignedToProjects" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Owner" nillable="true" type="tns:Owner" />
   <xs:simpleType name="BudgetCategoryType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="ClientDirector">
