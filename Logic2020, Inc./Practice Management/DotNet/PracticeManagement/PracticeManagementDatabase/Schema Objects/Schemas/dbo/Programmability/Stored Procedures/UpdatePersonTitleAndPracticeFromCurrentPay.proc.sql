@@ -6,14 +6,17 @@ BEGIN
 
 	UPDATE P
 	SET P.TitleId = Pa.TitleId,
-		P.DefaultPractice = Pa.PracticeId
+		P.DefaultPractice = Pa.PracticeId,
+		p.DivisionId=pa.DivisionId
 	FROM dbo.Person P
 	JOIN dbo.Pay Pa
 	ON P.PersonId = Pa.Person AND 
 		pa.StartDate <= @Today AND ISNULL(EndDate,@FutureDate) > @Today
 		AND (
 		P.TitleId <> Pa.TitleId OR 
-		P.DefaultPractice <> Pa.PracticeId)
+		P.DefaultPractice <> Pa.PracticeId OR
+		P.DivisionId <> Pa.DivisionId
+		)
 
 	UPDATE dbo.Pay
 	SET IsActivePay = CASE WHEN StartDate <= @Today AND  EndDate > @Today
