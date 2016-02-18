@@ -15,6 +15,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timescale" nillable="true" type="tns:Timescale" />
+  <xs:complexType name="ArrayOfEmployment">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Employment" nillable="true" type="tns:Employment" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEmployment" nillable="true" type="tns:ArrayOfEmployment" />
+  <xs:complexType name="Employment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PersonId" type="xs:int" />
+      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="TerminationReasonId" nillable="true" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Employment" nillable="true" type="tns:Employment" />
   <xs:complexType name="Pay">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="tns:PracticeManagementCurrency" />
@@ -739,21 +754,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PersonDivisionType" nillable="true" type="tns:PersonDivisionType" />
-  <xs:complexType name="ArrayOfEmployment">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Employment" nillable="true" type="tns:Employment" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfEmployment" nillable="true" type="tns:ArrayOfEmployment" />
-  <xs:complexType name="Employment">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="HireDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="PersonId" type="xs:int" />
-      <xs:element minOccurs="0" name="TerminationDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="TerminationReasonId" nillable="true" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Employment" nillable="true" type="tns:Employment" />
   <xs:complexType name="ArrayOfProjectFeedback">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectFeedback" nillable="true" type="tns:ProjectFeedback" />
