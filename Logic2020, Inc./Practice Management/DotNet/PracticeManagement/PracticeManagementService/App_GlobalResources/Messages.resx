@@ -201,4 +201,10 @@
   <data name="MSBadgeRequestTemplateName" xml:space="preserve">
     <value>MSBadgeRequest</value>
   </data>
+  <data name="CompensationChangeEmailTemplate" xml:space="preserve">
+    <value>CompensationChange</value>
+  </data>
+  <data name="CompensationChange(rehire)TemplateName" xml:space="preserve">
+    <value>Compensation Change(1099-W2) Template</value>
+  </data>
 </root>
