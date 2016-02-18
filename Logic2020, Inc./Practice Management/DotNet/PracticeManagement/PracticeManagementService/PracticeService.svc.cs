@@ -23,6 +23,11 @@ namespace PracticeManagementService
             return PracticeListAll(null);
         }
 
+        public List<Practice> GetPracticeListForDivision(int divisionId)
+        {
+            return PracticeDAL.GetPracticesForDivision(divisionId);
+        }
+
         /// <summary>
         /// Get all practices
         /// </summary>
@@ -121,3 +126,4 @@ namespace PracticeManagementService
         #endregion IPracticeService Members
     }
 }
+
