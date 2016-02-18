@@ -41,6 +41,48 @@ namespace DataAccess
             return list;
         }
 
+        public static List<Practice> GetPracticesForDivision(int divisionId)
+        {
+
+            var list = new List<Practice>();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                using (var command = new SqlCommand(Constants.ProcedureNames.Practices.GetPracticesForDivision, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, divisionId);
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        ReadPracticesForDivision(reader, list);
+                    }
+                }
+            }
+            return list;
+        }
+
+        private static void ReadPracticesForDivision(DbDataReader reader, ICollection<Practice> list)
+        {
+            if (!reader.HasRows) return;
+
+            var practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+            var nameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeAreaName);
+
+            while (reader.Read())
+            {
+                var practice =
+                    new Practice
+                    {
+                        Id = reader.GetInt32(practiceIdIndex),
+                        Name = reader.GetString(nameIndex),
+
+                    };
+                list.Add(practice);
+            }
+        }
+
         public static List<Practice> PracticeListAllWithCapabilities()
         {
             var list = new List<Practice>();
@@ -176,6 +218,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
                     practice.PracticeOwner.Id.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIds, practice.DivisionIds);
                 connection.Open();
 
                 command.ExecuteNonQuery();
@@ -199,7 +242,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeManagerIdParam,
                     practice.PracticeOwner.Id.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UserLoginParam, userLogin);
-
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIds, practice.DivisionIds);
                 connection.Open();
 
                 return command.ExecuteNonQuery();
@@ -232,15 +275,34 @@ namespace DataAccess
             var practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
             var nameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
             var isActiveIndex = reader.GetOrdinal(Constants.ColumnNames.IsActive);
-            var inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+
             var isCompanyInternalIndex = reader.GetOrdinal(Constants.ColumnNames.IsCompanyInternal);
 
             var firstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
             var lastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
-            var personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+
 
             var statusIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusId);
             var statusNameIndex = reader.GetOrdinal(Constants.ColumnNames.PersonStatusName);
+            var personIdIndex = -1;
+            try
+            {
+                personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+            }
+            catch
+            {
+                personIdIndex = -1;
+            }
+
+            var inUseIndex = -1;
+            try
+            {
+                inUseIndex = reader.GetOrdinal(Constants.ColumnNames.InUse);
+            }
+            catch
+            {
+                inUseIndex = -1;
+            }
 
             int isNotesRequiredIndex = -1;
             try
@@ -269,6 +331,16 @@ namespace DataAccess
             catch
             {
                 isActiveCapabilitiesExistsIndex = -1;
+            }
+
+            int divisionIdsIndex = -1;
+            try
+            {
+                divisionIdsIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+            }
+            catch
+            {
+                divisionIdsIndex = -1;
             }
 
             while (reader.Read())
@@ -308,6 +380,10 @@ namespace DataAccess
                 if (isActiveCapabilitiesExistsIndex > -1)
                 {
                     practice.IsActiveCapabilitiesExists = reader.GetBoolean(isActiveCapabilitiesExistsIndex);
+                }
+                if (divisionIdsIndex > -1)
+                {
+                    practice.DivisionIds = reader.GetString(divisionIdsIndex);
                 }
 
                 list.Add(practice);
