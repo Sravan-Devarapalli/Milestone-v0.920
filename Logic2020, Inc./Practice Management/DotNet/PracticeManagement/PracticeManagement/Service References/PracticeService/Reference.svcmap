@@ -21,13 +21,16 @@
     <MetadataSource Address="http://localhost/PracticeManagementService/PracticeService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="PracticeService3.xsd" MetadataType="Schema" ID="167198da-9dae-4aa9-b9ba-150283e0c223" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/PracticeService.svc?xsd=xsd4" />
-    <MetadataFile FileName="PracticeService1.disco" MetadataType="Disco" ID="a2d5a5e5-db0e-4aa1-8734-516c7eaecadd" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/PracticeService.svc?disco" />
-    <MetadataFile FileName="PracticeService4.xsd" MetadataType="Schema" ID="42d4fb54-f38c-485b-89f8-5d683d1a72ef" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/PracticeService.svc?xsd=xsd2" />
-    <MetadataFile FileName="PracticeService5.xsd" MetadataType="Schema" ID="e511ea0c-9653-456f-a1a0-95dca0138553" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/PracticeService.svc?xsd=xsd3" />
-    <MetadataFile FileName="PracticeService6.xsd" MetadataType="Schema" ID="e193724e-94ee-453a-b9c0-376fa0e2884e" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/PracticeService.svc?xsd=xsd0" />
-    <MetadataFile FileName="PracticeService7.xsd" MetadataType="Schema" ID="22b83377-ca6b-4f23-99a1-aeb010fc24d3" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/PracticeService.svc?xsd=xsd1" />
-    <MetadataFile FileName="PracticeService1.wsdl" MetadataType="Wsdl" ID="97dc6f16-6119-414e-981d-0d2890d31aa3" SourceId="1" SourceUrl="http://system64.ggk.com/PracticeManagementService/PracticeService.svc?wsdl" />
+    <MetadataFile FileName="PracticeService3.xsd" MetadataType="Schema" ID="f0f00231-ad9e-4a31-8487-46fffaba31b6" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PracticeService4.xsd" MetadataType="Schema" ID="2eb862a0-1e76-475a-88fe-7e74566f36bc" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PracticeService5.xsd" MetadataType="Schema" ID="6754ec7b-4a05-4eca-a04d-0f43c9412030" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd5" />
+    <MetadataFile FileName="PracticeService6.xsd" MetadataType="Schema" ID="460fa954-ac1e-460c-9065-a831e70343ac" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PracticeService7.xsd" MetadataType="Schema" ID="e58fc2f7-bf61-4575-a6d0-b5fed204dc62" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd7" />
+    <MetadataFile FileName="PracticeService11.xsd" MetadataType="Schema" ID="c408e834-f83d-4d63-a2b4-aa84a0e475ac" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd4" />
+    <MetadataFile FileName="PracticeService1.disco" MetadataType="Disco" ID="607ccc26-3bfc-4dcf-a6c1-5ed5c416f4a3" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?disco" />
+    <MetadataFile FileName="PracticeService1.wsdl" MetadataType="Wsdl" ID="7566113f-94dd-40c5-ad85-dd841069a233" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?wsdl" />
+    <MetadataFile FileName="PracticeService12.xsd" MetadataType="Schema" ID="415f50de-af32-4722-8a1f-9356ec8c127d" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd6" />
+    <MetadataFile FileName="PracticeService13.xsd" MetadataType="Schema" ID="b6f79efb-309f-4a73-822c-f959c7981b4d" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd0" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
