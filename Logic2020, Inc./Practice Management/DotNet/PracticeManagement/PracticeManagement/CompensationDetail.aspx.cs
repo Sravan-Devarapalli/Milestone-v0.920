@@ -71,6 +71,18 @@ namespace PraticeManagement
             }
         }
 
+        private List<Pay> PayHistory
+        {
+            get
+            {
+                return ViewState["PAY_HISTORY"] as List<Pay>;
+            }
+            set
+            {
+                ViewState["PAY_HISTORY"] = value;
+            }
+        }
+
         protected Person PersonDetailData
         {
             get
@@ -369,7 +381,7 @@ namespace PraticeManagement
             }
             else
             {
-                if (cvEmployeePayTypeChangeViolation.IsValid)
+                if (cvEmployeePayTypeChangeViolation.IsValid && personnelCompensation.IsDivisionOrPracticeOwner)
                 {
                     Page.Validate(vsumCompensation.ValidationGroup);
                     if (Page.IsValid)
@@ -459,10 +471,15 @@ namespace PraticeManagement
                             {
                                 personnelCompensation.TitleId = person.Title.TitleId;
                             }
+                            if ((int)person.DivisionType != 0)
+                            {
+                                personnelCompensation.DivisionId = (int)person.DivisionType;
+                            }
                             if (person.DefaultPractice != null)
                             {
                                 personnelCompensation.PracticeId = person.DefaultPractice.Id;
                             }
+
                             personnelCompensation.StartDateReadOnly = true;
                         }
                         else
@@ -516,6 +533,7 @@ namespace PraticeManagement
             personnelCompensation.IsYearBonus = pay.IsYearBonus;
             personnelCompensation.BonusAmount = pay.BonusAmount;
             personnelCompensation.BonusHoursToCollect = pay.BonusHoursToCollect;
+            personnelCompensation.DivisionId = pay.DivisionId;
             personnelCompensation.PracticeId = pay.PracticeId;
             personnelCompensation.TitleId = pay.TitleId;
             personnelCompensation.SLTApproval = pay.SLTApproval;
@@ -525,12 +543,35 @@ namespace PraticeManagement
         private bool SaveData()
         {
             Pay pay = personnelCompensation.Pay;
+
             pay.PersonId = SelectedId.Value;
             pay.ValidateAttribution = ValidateAttribution;
             using (PersonServiceClient serviceClient = new PersonServiceClient())
             {
                 try
                 {
+                    //Pay oldPay = null;
+                    Person oldPersonPay = serviceClient.GetPersonDetail(SelectedId.Value);
+                    PayHistory = oldPersonPay.PaymentHistory;
+                    PayHistory = PayHistory.OrderBy(p => p.StartDate.Date).ToList();
+                    if (SelectedStartDate.HasValue)
+                    {
+                        oldPersonPay.CurrentPay = PayHistory.First(p => p.StartDate.Date == SelectedStartDate.Value.Date);
+                    }
+                    else if (PayHistory.Count > 0)
+                    {
+                        oldPersonPay.CurrentPay = PayHistory.Last();
+                    }
+
+                    if (oldPersonPay.CurrentPay.Timescale == TimescaleType.Salary && pay.Timescale != TimescaleType.Salary)
+                    {
+                        personnelCompensation.IsDivisionOrPracticeOwner = serviceClient.CheckIfPersonIsOwnerForDivisionAndOrPractice(SelectedId.Value) == null;
+                    }
+
+                    if (!Page.IsValid)
+                    {
+                        return false;
+                    }
                     if (SelectedStawman.HasValue && SelectedStawman.Value)
                     {
                         var person = new Person { Id = pay.PersonId, FirstName = personInfo.FirstName, LastName = personInfo.LastName };
@@ -554,7 +595,7 @@ namespace PraticeManagement
                                     currentRoles = Roles.GetRolesForUser(oldPerson.Alias);
                                 oldPerson.RoleNames = currentRoles;
                             }
-                            int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, true,Page.User.Identity.Name);
+                            int? personId = serviceClient.SavePersonDetail(person, User.Identity.Name, LoginPageUrl, true, Page.User.Identity.Name);
 
                             PersonDetail.SaveRoles(person, currentRoles);
                             serviceClient.SendAdministratorAddedEmail(person, oldPerson);
@@ -578,11 +619,13 @@ namespace PraticeManagement
                         {
                             serviceClient.SavePay(pay, LoginPageUrl, HttpContext.Current.User.Identity.Name);
                         }
+
                         ValidateAttribution = true;
                         personnelCompensation.StartDate = personnelCompensation.StartDate;
                         personnelCompensation.EndDate = personnelCompensation.EndDate;
                     }
                     return true;
+
                 }
                 catch (FaultException<ExceptionDetail> ex)
                 {
