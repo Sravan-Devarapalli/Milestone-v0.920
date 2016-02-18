@@ -5433,6 +5433,41 @@ namespace DataAccess
                 }
             }
         }
+
+
+        public static Owner CheckIfPersonStatusCanChangeFromActiveToContingent(int personId)
+        {
+              using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+              using (var command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfPersonInProjectPracticeAreaAndDivision, connection))
+              {
+                  command.CommandTimeout = connection.ConnectionTimeout;
+
+                  command.CommandType = CommandType.StoredProcedure;
+                  command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                  connection.Open();
+                  Owner result = new Owner();
+                  using (SqlDataReader reader = command.ExecuteReader())
+                  {
+                      if (!reader.HasRows)
+                      {
+                          result = null;
+                      }
+                      else
+                      {
+                          while (reader.Read())
+                          {
+                              int IsDivisionOrPracticeOwnerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDivisionOrPracticeOwner);
+                              int IsAssignedToProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsAssignedToProject);
+                              result.IsDivisionOwner = reader.GetBoolean(IsDivisionOrPracticeOwnerIndex);
+                              result.isAssignedToProjects = reader.GetBoolean(IsAssignedToProjectIndex);
+                          }
+                      }
+
+                  }
+                  return result;
+              }
+
+        }
     }
 }
 
