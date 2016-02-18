@@ -107,6 +107,12 @@ namespace PraticeManagement
             }
         }
 
+        private bool isRehire
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets whether the current user is in the Administrator role.
         /// </summary>
@@ -271,6 +277,7 @@ namespace PraticeManagement
         protected void btnRehireConfirmationOk_Click(object sender, EventArgs e)
         {
             cvRehireConfirmation.Enabled = false;
+            isRehire = true;
             btnSave_Click(btnSave, new EventArgs());
             mpeRehireConfirmation.Hide();
             cvRehireConfirmation.Enabled = true;
@@ -623,6 +630,11 @@ namespace PraticeManagement
                         ValidateAttribution = true;
                         personnelCompensation.StartDate = personnelCompensation.StartDate;
                         personnelCompensation.EndDate = personnelCompensation.EndDate;
+                    }
+                    if (oldPersonPay.Status.ToStatusType() != PersonStatusType.Terminated)
+                    {
+                        
+                        serviceClient.SendCompensationChangeEmail(oldPersonPay, oldPersonPay.CurrentPay, pay, isRehire);
                     }
                     return true;
 
