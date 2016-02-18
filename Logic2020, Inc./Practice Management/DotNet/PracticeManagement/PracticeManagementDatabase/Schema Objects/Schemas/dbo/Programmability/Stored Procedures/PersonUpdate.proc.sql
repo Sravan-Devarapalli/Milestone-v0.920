@@ -63,35 +63,41 @@ BEGIN TRY
 		EXEC [dbo].[PersonTermination] @PersonId = @PersonId , @TerminationDate = @TerminationDate , @PersonStatusId = @PersonStatusId ,@UserLogin = @UserLogin
 	END
 
+	-- update with DivisionOwner
+
 	IF @PersonStatusId <> 1
 	BEGIN
 		-- SET new manager for subordinates as per 3212
-		DECLARE @NewManager INT
+		--DECLARE @NewManager INT
 
-		SELECT @NewManager = P.PersonId
-		FROM dbo.Person AS P
-		WHERE P.IsDefaultManager = 1 AND P.PersonId != @PersonId AND P.PersonStatusId = 1 -- ActivePerson
-
+		--SELECT @NewManager = PD.DivisionOwnerId
+		--FROM dbo.PersonDivision PD 
+		--WHERE PD.DivisionId=@PersonDivisionId
 		
-		UPDATE dbo.Person
-		SET ManagerId = @NewManager
-		WHERE ManagerId = @PersonId
+		
+		UPDATE p
+		SET p.ManagerId = PD.DivisionOwnerId
+		FROM dbo.Person p
+		INNER JOIN dbo.PersonDivision PD ON PD.DivisionId=p.DivisionId
+		WHERE p.ManagerId = @PersonId
 	END
 
 	DECLARE @ExistingTitleId INT,
 			@ExistingPracticeId  INT,
+			@ExistingDivisionId INT,
 			@PreviousTerminationDate DATETIME,
 			@PreviousHireDate DATETIME
 				
 
 	SELECT @ExistingTitleId = TitleId,
 			@ExistingPracticeId = DefaultPractice,
+			@ExistingDivisionId=DivisionId,
 			@PreviousTerminationDate = TerminationDate,
 			@PreviousHireDate = HireDate
 	FROM dbo.Person AS P
 	WHERE P.PersonId = @PersonId
 
-	IF(ISNULL(@ExistingTitleId,0) <> ISNULL(@TitleId,0) OR ISNULL(@ExistingPracticeId,0) <> ISNULL(@DefaultPractice,0))
+	IF(ISNULL(@ExistingTitleId,0) <> ISNULL(@TitleId,0) OR ISNULL(@ExistingPracticeId,0) <> ISNULL(@DefaultPractice,0) OR ISNULL(@ExistingDivisionId,0) <> ISNULL(@PersonDivisionId,0))
 	BEGIN
 		SELECT @CurrentPayEndDate = pay.EndDate FROM dbo.Pay AS pay WHERE pay.Person = @PersonId AND @Today BETWEEN pay.StartDate AND pay.EndDate-1
 			
@@ -114,7 +120,8 @@ BEGIN TRY
 							,TitleId
 							,[PracticeId]
 							,SLTApproval
-							,SLTPTOApproval)
+							,SLTPTOApproval,
+							DivisionId)
 			SELECT 
 					Person
 					,@Today
@@ -128,6 +135,7 @@ BEGIN TRY
 					,@DefaultPractice
 					,@SLTApproval
 					,@SLTPTOApproval
+					,@PersonDivisionId
 			FROM dbo.Pay
 			WHERE Person = @PersonId 
 						AND EndDate = @Today
@@ -137,6 +145,7 @@ BEGIN TRY
 			UPDATE dbo.Pay
 			SET TitleId = @TitleId,
 				PracticeId = @DefaultPractice,
+				DivisionId=@PersonDivisionId,
 				SLTApproval = @SLTApproval,
 				SLTPTOApproval = @SLTPTOApproval
 			WHERE Person = @PersonId 
