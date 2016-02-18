@@ -218,7 +218,7 @@ namespace PraticeManagement
                     //Active employee with new Hire Date. with new compensation record.
                     return PersonStatusType.Active;
                 }
-                else if ((PrevPersonStatusId == (int)PersonStatusType.Terminated && rbnContingent.Checked) || (PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnCancleTermination.Checked))
+                else if (((PrevPersonStatusId == (int)PersonStatusType.Terminated || PrevPersonStatusId == (int)PersonStatusType.Active) && rbnContingent.Checked) || (PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnCancleTermination.Checked))
                 {
                     //system automatically opens new compensation record.
                     return PersonStatusType.Contingent;
@@ -812,7 +812,7 @@ namespace PraticeManagement
                 IsStatusChangeClicked = true;
                 _disableValidatecustTerminateDateTE = false;
                 custCompensationCoversMilestone.Enabled = false;
-                cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = cvIsOwnerForDivisionOrPractice.Enabled = true;
+                cvEndCompensation.Enabled = cvHireDateChange.Enabled = cvDivisionChange.Enabled = custCancelTermination.Enabled = cvIsOwnerForDivisionOrPractice.Enabled = cvIsOwnerOrAssignedToProject.Enabled = true;
 
                 var popupStatus = PopupStatus.Value == PersonStatusType.Contingent && PrevPersonStatusId == (int)PersonStatusType.Contingent && rbnTerminate.Checked ? PersonStatusType.TerminationPending : PopupStatus.Value;
 
@@ -1852,7 +1852,26 @@ namespace PraticeManagement
             }
         }
 
-        
+        protected void custIsOwnerOrAssignedToProject_OnServerValidate(object source, ServerValidateEventArgs args)
+        {
+            if (!IsWizards)
+            {
+                var ownerFor = ServiceCallers.Custom.Person(p => p.CheckIfPersonStatusCanChangeFromActiveToContingent((int)PersonId));
+                if (ownerFor != null && (ownerFor.isAssignedToProjects||ownerFor.IsDivisionOwner))
+                {
+                    args.IsValid = false;
+                    cvIsOwnerOrAssignedToProject.ErrorMessage = cvIsOwnerOrAssignedToProject.ToolTip = string.Empty;
+                    if (ownerFor.isAssignedToProjects)
+                    {
+                        cvIsOwnerOrAssignedToProject.ErrorMessage = cvIsOwnerOrAssignedToProject.ToolTip = PersonIsAssignedToOneOrMoreProjects;
+                    }
+                    if (ownerFor.IsDivisionOwner)
+                    {
+                        cvIsOwnerOrAssignedToProject.ErrorMessage = cvIsOwnerOrAssignedToProject.ToolTip = cvIsOwnerOrAssignedToProject.ErrorMessage+"</br>" + DivisionOrPracticeAreaOwnerErrormessage;
+                    }
+                }
+            }
+        }
 
         protected void cvSLTApproval_OnServerValidate(object source, ServerValidateEventArgs args)
         {
@@ -3200,15 +3219,18 @@ namespace PraticeManagement
             if (PrevPersonStatusId == (int)PersonStatusType.Active)
             {
                 rbnCancleTermination.CssClass =
-                rbnActive.CssClass =
-                divActive.Attributes["class"] =
-                rbnContingent.CssClass =
-                divContingent.Attributes["class"] = displayNone;
-
+                rbnActive.CssClass = rbnContingent.CssClass =
+                divActive.Attributes["class"] = displayNone;
+                divContingent.Attributes["class"] = divTerminate.Attributes["class"] = displayNone;
+                bool isTimeEntriesExists = ServiceCallers.Custom.Person(p => p.CheckPersonTimeEntriesAfterHireDate((int)PersonId));
+                if (!isTimeEntriesExists)
+                {
+                    rbnContingent.CssClass = "";
+                    dtpContingentHireDate.DateValue = dtpHireDate.DateValue;
+                }
                 dtpPopUpTerminateDate.DateValue = DateTime.Now.Date;
                 rbnTerminate.CssClass = "";
-                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = !(rbnTerminate.Checked = true);
-                divTerminate.Attributes["class"] = "padLeft25 PaddingTop6";
+                rbnActive.Checked = rbnCancleTermination.Checked = rbnContingent.Checked = rbnTerminate.Checked = false;
             }
             else if (PrevPersonStatusId == (int)PersonStatusType.TerminationPending || (PrevPersonStatusId == (int)PersonStatusType.Contingent && PreviousTerminationDate.HasValue))
             {
