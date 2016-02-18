@@ -9,6 +9,8 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string IsDivisionOrPracticeOwner = "IsDivisionOrPracticeOwner";
+            public const string IsAssignedToProject = "IsAssignedToProject";
             public const string ReportFilters = "ReportFilters";
             public const string MilestoneResourceEndDate = "MilestoneResourceEndDate";
             public const string MilestoneResourceStartDate = "MilestoneResourceStartDate";
@@ -247,6 +249,7 @@
             public const string IsCorrect = "IsCorrect";
             public const string IsDefault = "IsDefault";
             public const string IsDefaultManager = "IsDefaultManager";
+            public const string IsDivisionOwner = "IsDivisionOwner";
             public const string IsHourlyAmount = "IsHourlyAmount";
             public const string IsReviewed = "IsReviewed";
             public const string ReviewStatusId = "ReviewStatusId";
@@ -502,6 +505,8 @@
             public const string ProjectOwnerLastName = "ProjectOwnerLastName";
             public const string ProjectOwnerFirstName = "ProjectOwnerFirstName";
             public const string DivisionId = "DivisionId";
+            public const string DivisionOwnerId = "DivisionOwnerId";
+            public const string ShowSetPracticeOwnerLink="ShowSetPracticeOwnerLink";
             public const string Active = "Active";
             public const string ProjectsCount = "ProjectsCount";
             public const string BusinessUnitId = "BusinessUnitId";
@@ -733,6 +738,7 @@
             public const string NewHireDate = "@NewHireDate";
             public const string IsUpdate = "@IsUpdate";
             public const string DivisionId = "@DivisionId";
+            public const string DivisionOwnerId = "@DivisionOwnerId";
             public const string AttributionXML = "@AttributionXML";
             public const string IsSummaryCache = "@IsSummaryCache";
             public const string CalculateMonthValues = "@CalculateMonthValues";
@@ -1161,10 +1167,14 @@
 
             public class Person
             {
+                public const string CheckIfPersonInProjectPracticeAreaAndDivision = "dbo.CheckIfPersonInProjectPracticeAreaAndDivision";
                 public const string DeleteReportFilterValues = "dbo.DeleteReportFilterValues";
                 public const string SaveReportFilterValues = "dbo.SaveReportFilterValues";
                 public const string GetReportFilterValues = "dbo.GetReportFilterValues";
                 public const string GetPersonDivisions = "dbo.GetPersonDivisions";
+                public const string GetPersonDivisionById = "dbo.GetPersonDivisionById";
+                public const string CheckIfPersonIsOwner = "dbo.CheckIfPersonIsOwnerForDivisionAndOrPractice";
+                public const string UpdatePersonDivision = "dbo.UpdatePersonDivision";
                 public const string SaveManagedParametersByPerson = "dbo.SaveManagedParametersByPerson";
                 public const string GetPracticeLeaderships = "dbo.GetPracticeLeaderships";
                 public const string GetSalaryPayTypes = "dbo.GetSalaryPayTypes";
@@ -1379,6 +1389,7 @@
                 public const string CapabilityDelete = "dbo.CapabilityDelete";
                 public const string CapabilityUpdate = "dbo.CapabilityUpdate";
                 public const string CapabilityInsert = "dbo.CapabilityInsert";
+                public const string GetPracticesForDivision = "dbo.GetPracticesForDivision";
             }
 
             #endregion Nested type: Practices
