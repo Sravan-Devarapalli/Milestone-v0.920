@@ -167,6 +167,7 @@
     <Compile Include="Lockout.cs" />
     <Compile Include="MSBadge.cs" />
     <Compile Include="OpurtunityPerson.cs" />
+    <Compile Include="Owner.cs" />
     <Compile Include="PersonBadgeHistories.cs" />
     <Compile Include="PersonDivision.cs" />
     <Compile Include="PersonPassword.cs" />
