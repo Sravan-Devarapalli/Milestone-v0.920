@@ -163,6 +163,7 @@ namespace DataAccess
                     pay.OldStartDate.HasValue ? (object)pay.OldStartDate.Value : DBNull.Value);
                 command.Parameters.AddWithValue(OldEndDateParam,
                     pay.OldEndDate.HasValue ? (object)pay.OldEndDate.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, pay.DivisionId.HasValue ? (object)pay.DivisionId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(PracticeIdParam,
                     pay.PracticeId.HasValue ? (object)pay.PracticeId.Value : DBNull.Value);
                 command.Parameters.AddWithValue(TitleIdParam, pay.TitleId.HasValue ? (object)pay.TitleId : DBNull.Value);
@@ -256,7 +257,8 @@ namespace DataAccess
             int titleIdColumnIndex = reader.GetOrdinal(TitleIdColumn);
             int sLTApprovalColumnIndex = reader.GetOrdinal(SLTApprovalColumn);
             int sLTPTOApprovalColumnIndex = reader.GetOrdinal(SLTPTOApprovalColumn);
-
+            int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+            int divisionNameIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionName);
             while (reader.Read())
             {
                 Pay pay = new Pay
@@ -286,6 +288,12 @@ namespace DataAccess
                 {
                     pay.TitleId = reader.GetInt32(titleIdColumnIndex);
                     pay.TitleName = reader.GetString(titleColumnIndex);
+                }
+
+                if (!reader.IsDBNull(divisionIdIndex))
+                {
+                    pay.DivisionId = reader.GetInt32(divisionIdIndex);
+                    pay.DivisionName = reader.GetString(divisionNameIndex);
                 }
                 pay.SLTApproval = reader.GetBoolean(sLTApprovalColumnIndex);
                 pay.SLTPTOApproval = reader.GetBoolean(sLTPTOApprovalColumnIndex);
@@ -335,3 +343,4 @@ namespace DataAccess
         #endregion Methods
     }
 }
+
