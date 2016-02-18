@@ -368,6 +368,7 @@ namespace PraticeManagement.Reports
                 StartDate = filters.StartDate;
                 EndDate = filters.EndDate;
                 PracticeIds = filters.PracticeIds;
+                FillInitProjectGroupList();
                 BusinessUnitIds = filters.BusinessUnitIds;
                 DirectorIds = filters.ExecutiveInchargeIds;
                 ddlMeasureUnit.SelectedValue = filters.UnitOfMeassure;
