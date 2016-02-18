@@ -81,6 +81,9 @@
                 Type="Currency" ValueToCompare="0" Display="Dynamic"></asp:CompareValidator>
             <asp:CustomValidator ID="cvSLTApprovalValidation" runat="server" OnServerValidate="cvSLTApprovalValidation_OnServerValidate"
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:CustomValidator>
+            <asp:CustomValidator ID="cvIsDivisionOrPracticeOwner" runat="server" ErrorMessage="This person is currently assigned as a Practice Area Owner or Division Owner.  Please reassign ownership and then make the change."
+                Display="Dynamic" ToolTip="This person is currently assigned as a Practice Area Owner or Division Owner.  Please reassign ownership and then make the change."
+                Text="*" Enabled="false"></asp:CustomValidator>
         </td>
         <td>
             &nbsp;
@@ -309,7 +312,7 @@
                 Text="*" EnableClientScript="false" SetFocusOnError="true" Display="Dynamic"></asp:CustomValidator>
         </td>
     </tr>
-    <tr id="trTitleAndPractice" runat="server">
+    <tr id="trTitle" runat="server">
         <td>
             Title
         </td>
@@ -327,18 +330,47 @@
             </asp:CustomValidator>
         </td>
         <td>
-            Practice Area
         </td>
         <td colspan="2">
-            <asp:DropDownList ID="ddlPractice" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPractice_OnSelectedIndexChanged">
-            </asp:DropDownList>
         </td>
         <td colspan="5" class="Left5">
-            <asp:RequiredFieldValidator ID="rfvPractice" runat="server" ToolTip="Please select Practice Area"
-                ControlToValidate="ddlPractice" EnableClientScript="false" Display="Dynamic"
-                Text="*" ErrorMessage="Please select Practice Area"></asp:RequiredFieldValidator>
-            <asp:CustomValidator ID="custLockOutPractice" runat="server" Display="Dynamic" Text="*"
-                OnServerValidate="custLockOutPractice_OnServerValidate"></asp:CustomValidator>
+        </td>
+    </tr>
+    <tr id="trDivisionAndPractice" runat="server">
+        <td>
+            Division
+        </td>
+        <td colspan="2" class="Left12">
+            <asp:DropDownList ID="ddlDivision" runat="server" Width="100%" AutoPostBack="true"
+                OnSelectedIndexChanged="ddlDivision_OnSelectedIndexChanged">
+            </asp:DropDownList>
+        </td>
+        <td class="Left5">
+            <asp:RequiredFieldValidator ID="rfvDivision" runat="server" ToolTip="Please select Division"
+                ControlToValidate="ddlDivision" EnableClientScript="false" Display="Dynamic"
+                Text="*" ErrorMessage="Please select Division"></asp:RequiredFieldValidator>
+            <asp:CustomValidator ID="custLockOutDivision" runat="server" Display="Dynamic" Text="*"
+                OnServerValidate="custLockOutDivision_OnServerValidate"></asp:CustomValidator>
+        </td>
+        <td colspan="8">
+            <table>
+                <tr>
+                    <td class="Left5">
+                        Practice Area
+                    </td>
+                    <td>
+                        <asp:DropDownList ID="ddlPractice" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPractice_OnSelectedIndexChanged">
+                        </asp:DropDownList>
+                    </td>
+                    <td class="Left5">
+                        <asp:RequiredFieldValidator ID="rfvPractice" runat="server" ToolTip="Please select Practice Area"
+                            ControlToValidate="ddlPractice" EnableClientScript="false" Display="Dynamic"
+                            Text="*" ErrorMessage="Please select Practice Area"></asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="custLockOutPractice" runat="server" Display="Dynamic" Text="*"
+                            OnServerValidate="custLockOutPractice_OnServerValidate"></asp:CustomValidator>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
