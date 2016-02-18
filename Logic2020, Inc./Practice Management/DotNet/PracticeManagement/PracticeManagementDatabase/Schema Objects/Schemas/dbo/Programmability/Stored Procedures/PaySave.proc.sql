@@ -18,6 +18,7 @@ CREATE PROCEDURE [dbo].[PaySave]
 	@EndDate             DATETIME,
 	@OLD_StartDate       DATETIME,
 	@OLD_EndDate         DATETIME,
+	@DivisionId			 INT,
 	@PracticeId			 INT,
 	@TitleId			 INT,
 	@SLTApproval		 BIT,
@@ -166,6 +167,7 @@ BEGIN
 			   BonusAmount = @BonusAmount,
 			   BonusHoursToCollect = ISNULL(@BonusHoursToCollect, @HoursPerYear),
 			   TitleId = @TitleId,
+			   DivisionId=@DivisionId,
 			   PracticeId = @PracticeId,
 		       StartDate = @StartDate,
 		       EndDate = @EndDate,
@@ -183,9 +185,9 @@ BEGIN
 	
 		INSERT INTO dbo.Pay
 					(Person, StartDate, EndDate, Amount, Timescale,
-					 VacationDays, BonusAmount, BonusHoursToCollect,PracticeId,TitleId,SLTApproval,SLTPTOApproval)
+					 VacationDays, BonusAmount, BonusHoursToCollect,PracticeId,TitleId,SLTApproval,SLTPTOApproval,DivisionId)
 			 VALUES (@PersonId, @StartDate, @EndDate, @Amount, @Timescale, 
-					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, @HoursPerYear),@PracticeId,@TitleId,@SLTApproval,@SLTPTOApproval)
+					 @VacationDays, @BonusAmount, ISNULL(@BonusHoursToCollect, @HoursPerYear),@PracticeId,@TitleId,@SLTApproval,@SLTPTOApproval,@DivisionId)
 
 	END
 
@@ -197,7 +199,8 @@ BEGIN
 		
 		UPDATE Person
 		SET TitleId = @TitleId,
-		DefaultPractice = @PracticeId
+		DefaultPractice = @PracticeId,
+		DivisionId=@DivisionId
 		WHERE PersonId = @PersonId
 
 		UPDATE Pay
@@ -210,7 +213,8 @@ BEGIN
 	BEGIN
 		UPDATE P
 			SET P.TitleId = Pa.TitleId,
-			P.DefaultPractice = Pa.PracticeId
+			P.DefaultPractice = Pa.PracticeId,
+			p.DivisionId=pa.DivisionId
 			FROM dbo.Person P
 			JOIN dbo.Pay Pa
 			ON P.PersonId = Pa.Person AND 
@@ -227,7 +231,8 @@ BEGIN
 	BEGIN
 		UPDATE P
 			SET P.TitleId = Pa.TitleId,
-			P.DefaultPractice = Pa.PracticeId
+			P.DefaultPractice = Pa.PracticeId,
+			p.DivisionId=pa.DivisionId
 			FROM dbo.Person P
 			JOIN dbo.Pay Pa
 			ON P.PersonId = Pa.Person AND 
