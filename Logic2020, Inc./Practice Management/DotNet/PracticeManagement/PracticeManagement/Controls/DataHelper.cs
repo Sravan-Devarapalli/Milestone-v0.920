@@ -181,7 +181,8 @@ namespace PraticeManagement.Controls
             {
                 return 0;
             }
-            else {
+            else
+            {
                 Person person = ServiceCallers.Custom.Person(p => p.GetPersonByAlias(personAlias));
                 return (int)person.Id;
             }
@@ -519,6 +520,24 @@ namespace PraticeManagement.Controls
                 {
                     // Add separate SP for this later.
                     Practice[] practices = GetActivePractices(serviceClient.GetPracticeList());
+
+                    FillListDefault(control, firstItemText, practices, false);
+                }
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static void FillPracticeListForDivsion(ListControl control, string firstItemText, int divisionId)
+        {
+            using (var serviceClient = new PracticeServiceClient())
+            {
+                try
+                {
+                    Practice[] practices = serviceClient.GetPracticeListForDivision(divisionId);
 
                     FillListDefault(control, firstItemText, practices, false);
                 }
@@ -953,14 +972,17 @@ namespace PraticeManagement.Controls
                     var persons = ServiceCallers.Custom.Person(p => p.GetPersonsByPayTypesAndByStatusIds(statusIds, paytypeIds)).OrderBy(p => p.LastName).ThenBy(p => p.FirstName).ToArray();
 
                     FillListDefault(control, firstItemText, persons, noFirstItem, "Id", "PersonLastFirstName");
-                    ListItem unasigned = new ListItem("Unassigned", "-1");
-                    control.Items.Add(unasigned);
+                    //ListItem unasigned = new ListItem("Unassigned", "-1");
+                    //control.Items.Add(unasigned);
                     if (selectItem)
                     {
                         if (persons.Any(p => p.Manager != null))
                             control.SelectedValue = persons.First(p => p.Manager != null).Manager.Id.ToString();
                         else
+                        {
+
                             control.SelectedValue = "-1";
+                        }
                     }
                 }
                 catch (CommunicationException)
@@ -2537,14 +2559,21 @@ namespace PraticeManagement.Controls
             }
         }
 
-        public static void FillPersonDivisionList(ListControl control)
+        public static void FillPersonDivisionList(ListControl control, bool isAllitems = false)
         {
             using (var serviceClient = new PersonServiceClient())
             {
                 try
                 {
                     var divisions = serviceClient.GetPersonDivisions();
-                    FillListDefault(control, "- - Select Division - -", divisions, false, "DivisionId", "DivisionName");
+                    if (isAllitems)
+                    {
+                        FillListDefault(control, "All Divisions", divisions, false, "DivisionId", "DivisionName");
+                    }
+                    else
+                    {
+                        FillListDefault(control, "- - Select Division - -", divisions, false, "DivisionId", "DivisionName");
+                    }
                 }
                 catch (CommunicationException)
                 {
