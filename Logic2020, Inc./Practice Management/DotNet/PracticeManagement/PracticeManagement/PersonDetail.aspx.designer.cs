@@ -94,6 +94,15 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.Label lblPersonStatus;
         
         /// <summary>
+        /// cvIsOwnerOrAssignedToProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvIsOwnerOrAssignedToProject;
+        
+        /// <summary>
         /// btnChangeEmployeeStatus control.
         /// </summary>
         /// <remarks>
@@ -418,22 +427,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CustomValidator custTerminationReason;
         
         /// <summary>
-        /// ddlDefaultPractice control.
+        /// ddlLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlDefaultPractice;
+        protected global::System.Web.UI.WebControls.DropDownList ddlLocation;
         
         /// <summary>
-        /// rfvPracticeArea control.
+        /// RequiredFieldValidator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPracticeArea;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
         
         /// <summary>
         /// lbPayChexID control.
@@ -535,22 +544,22 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.DropDownList ddlPersonType;
         
         /// <summary>
-        /// ddlLocation control.
+        /// ddlDefaultPractice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlLocation;
+        protected global::System.Web.UI.WebControls.DropDownList ddlDefaultPractice;
         
         /// <summary>
-        /// reqLocation control.
+        /// rfvPracticeArea control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator reqLocation;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPracticeArea;
         
         /// <summary>
         /// txtTelephoneNumber control.
@@ -1928,6 +1937,69 @@ namespace PraticeManagement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnEndCompensationCancel;
+        
+        /// <summary>
+        /// hdnOwnerShip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnOwnerShip;
+        
+        /// <summary>
+        /// mpeOwnerShip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender mpeOwnerShip;
+        
+        /// <summary>
+        /// pnlOwnerShip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlOwnerShip;
+        
+        /// <summary>
+        /// cvIsOwnerForDivisionOrPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvIsOwnerForDivisionOrPractice;
+        
+        /// <summary>
+        /// lblDivisionOwnerShip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDivisionOwnerShip;
+        
+        /// <summary>
+        /// lblPracticeAreaOwnerShip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPracticeAreaOwnerShip;
+        
+        /// <summary>
+        /// btnOkOwnerShip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOkOwnerShip;
         
         /// <summary>
         /// hdHireDateChange control.
