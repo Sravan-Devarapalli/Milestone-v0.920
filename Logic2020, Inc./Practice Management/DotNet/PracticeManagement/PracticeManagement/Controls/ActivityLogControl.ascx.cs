@@ -457,7 +457,10 @@ namespace PraticeManagement.Controls
                 btnResetFilter.Enabled = true;
             else
                 btnResetFilter.Enabled = false;
-            SaveFilterValuesForSession();
+            if (IsActivityLogPage)
+            {
+                SaveFilterValuesForSession();
+            }
         }
 
         protected void btnResetFilter_Click(object sender, EventArgs e)
@@ -465,7 +468,10 @@ namespace PraticeManagement.Controls
             ResetFilters();
             Update();
             IsReset = true;
-            SaveFilterValuesForSession();
+            if (IsActivityLogPage)
+            {
+                SaveFilterValuesForSession();
+            }
         }
 
         private void UpdateGrid()
