@@ -855,6 +855,15 @@ namespace PracticeManagementService
             return TimeEntryDAL.CheckPersonTimeEntriesAfterTerminationDate(personId, terminationDate);
         }
 
+        public bool CheckPersonTimeEntriesAfterHireDate(int personId)
+        {
+            return TimeEntryDAL.CheckPersonTimeEntriesAfterHireDate(personId);
+        }
+
+        public Owner CheckIfPersonStatusCanChangeFromActiveToContingent(int personId)
+        {
+            return PersonDAL.CheckIfPersonStatusCanChangeFromActiveToContingent(personId);
+        }
         public List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate)
         {
             return MilestoneDAL.GetPersonMilestonesAfterTerminationDate(personId, terminationDate);
