@@ -30,7 +30,8 @@ AS
 		   p.PracticeId,
 		   p.TitleId,
 		   p.SLTApproval,
-		   p.SLTPTOApproval
+		   p.SLTPTOApproval,
+		   p.DivisionId
 	  FROM dbo.Pay AS p
 		   INNER JOIN dbo.GetFutureDateTable() FT ON 1 = 1
 		   INNER JOIN dbo.[BonusHoursPerYearTable]() HPY ON 1 = 1
