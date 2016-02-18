@@ -70,16 +70,16 @@
                         Account:&nbsp;
                     </td>
                     <td class="textLeft">
-                        <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" CssClass="Width220Px"
+                        <asp:DropDownList ID="ddlAccount" runat="server" AutoPostBack="true" CssClass="Width232PxImp"
                             OnSelectedIndexChanged="ddlAccount_SelectedIndexChanged">
                         </asp:DropDownList>
                          <span class="fontBold">Business Unit:</span> &nbsp;
                         <pmc:ScrollingDropDown ID="cblProjectGroup" runat="server" SetDirty="false" AllSelectedReturnType="Null"
                             OnSelectedIndexChanged="cblProjectGroup_OnSelectedIndexChanged" NoItemsType="All"
                             onclick="scrollingDropdown_onclick('cblProjectGroup','Business Unit')" AutoPostBack="true"
-                            DropDownListType="Business Unit" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
+                            DropDownListType="Business Unit" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectGroup" runat="server" TargetControlID="cblProjectGroup"
-                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="232px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td>
@@ -90,12 +90,12 @@
                     Project Status:&nbsp;
                     </td>
                    <td class="textLeft Width90Percent">
-                        <pmc:ScrollingDropDown ID="cblProjectStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"
-                            OnSelectedIndexChanged="cblProjectStatus_OnSelectedIndexChanged" NoItemsType="All"
-                            onclick="scrollingDropdown_onclick('cblProjectStatus','Project Status','es')" AutoPostBack="true" PluralForm="es"
-                            DropDownListType="Project Status" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv" />
+                        <pmc:ScrollingDropDown ID="cblProjectStatus" runat="server" SetDirty="false" AllSelectedReturnType="Null"  
+                            OnSelectedIndexChanged="cblProjectStatus_OnSelectedIndexChanged"
+                            NoItemsType="All" onclick="scrollingDropdown_onclick('cblProjectStatus','Project Status','es')" AutoPostBack="true" PluralForm="es"
+                            DropDownListType="Project Status" CellPadding="3" CssClass="AccountSummaryBusinessUnitsDiv Width232PxImp" />
                         <ext:ScrollableDropdownExtender ID="sdeProjectStatus" runat="server" TargetControlID="cblProjectStatus"
-                            UseAdvanceFeature="true" Width="218px" EditImageUrl="~/Images/Dropdown_Arrow.png">
+                            UseAdvanceFeature="true" Width="232px" EditImageUrl="~/Images/Dropdown_Arrow.png">
                         </ext:ScrollableDropdownExtender>
                     </td>
                     <td>
@@ -107,7 +107,7 @@
                     </td>
                     <td class="textLeft">
                         <asp:DropDownList ID="ddlPeriod" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriod_SelectedIndexChanged"
-                            CssClass="Width220Px">
+                            CssClass="Width232PxImp">
                             <asp:ListItem Selected="True" Text="Please Select" Value="Please Select"></asp:ListItem>
                             <asp:ListItem Text="Payroll – Current" Value="15"></asp:ListItem>
                             <asp:ListItem Text="Payroll – Previous" Value="-15"></asp:ListItem>
