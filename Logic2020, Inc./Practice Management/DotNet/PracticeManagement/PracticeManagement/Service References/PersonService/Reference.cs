@@ -15,6 +15,16 @@ namespace PraticeManagement.PersonService {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PersonService.IPersonService")]
     public interface IPersonService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse")]
+        void DeleteReportFilterValues(int currentUserId, int previousUserId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById", ReplyAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse")]
+        DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonAdministrativeTimeTypesInRange", ReplyAction="http://tempuri.org/IPersonService/GetPersonAdministrativeTimeTypesInRangeResponse" +
+            "")]
+        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetPersonAdministrativeTimeTypesInRange(int personId, System.DateTime startDate, System.DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/IsPersonTimeOffExistsInSelectedRangeForOthertha" +
             "nGivenTimescale", ReplyAction="http://tempuri.org/IPersonService/IsPersonTimeOffExistsInSelectedRangeForOthertha" +
             "nGivenTimescaleResponse")]
@@ -126,9 +136,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/GetReportFilterValuesResponse")]
         string GetReportFilterValues(int currentUserId, int reportId, int previousUserId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse")]
-        void DeleteReportFilterValues(int currentUserId, int previousUserId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveUserTemporaryCredentials", ReplyAction="http://tempuri.org/IPersonService/SaveUserTemporaryCredentialsResponse")]
         bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl);
         
@@ -144,6 +151,14 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckPersonTimeEntriesAfterTerminationDate", ReplyAction="http://tempuri.org/IPersonService/CheckPersonTimeEntriesAfterTerminationDateRespo" +
             "nse")]
         bool CheckPersonTimeEntriesAfterTerminationDate(int personId, System.DateTime terminationDate);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckPersonTimeEntriesAfterHireDate", ReplyAction="http://tempuri.org/IPersonService/CheckPersonTimeEntriesAfterHireDateResponse")]
+        bool CheckPersonTimeEntriesAfterHireDate(int personId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/CheckIfPersonStatusCanChangeFromActiveToConting" +
+            "ent", ReplyAction="http://tempuri.org/IPersonService/CheckIfPersonStatusCanChangeFromActiveToConting" +
+            "entResponse")]
+        DataTransferObjects.Owner CheckIfPersonStatusCanChangeFromActiveToContingent(int personId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDate", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestonesAfterTerminationDateResponse" +
             "")]
@@ -242,13 +257,6 @@ namespace PraticeManagement.PersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithRole", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse")]
         DataTransferObjects.Person[] GetPersonListWithRole(string rolename);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById", ReplyAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse")]
-        DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonAdministrativeTimeTypesInRange", ReplyAction="http://tempuri.org/IPersonService/GetPersonAdministrativeTimeTypesInRangeResponse" +
-            "")]
-        DataTransferObjects.TimeEntry.TimeTypeRecord[] GetPersonAdministrativeTimeTypesInRange(int personId, System.DateTime startDate, System.DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancials", ReplyAction="http://tempuri.org/IPersonService/GetPersonMilestoneWithFinancialsResponse")]
         System.Data.DataSet GetPersonMilestoneWithFinancials(int personId);
@@ -399,6 +407,18 @@ namespace PraticeManagement.PersonService {
                 base(binding, remoteAddress) {
         }
         
+        public void DeleteReportFilterValues(int currentUserId, int previousUserId) {
+            base.Channel.DeleteReportFilterValues(currentUserId, previousUserId);
+        }
+        
+        public DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId) {
+            return base.Channel.GetPersonEmploymentHistoryById(personId);
+        }
+        
+        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetPersonAdministrativeTimeTypesInRange(int personId, System.DateTime startDate, System.DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave) {
+            return base.Channel.GetPersonAdministrativeTimeTypesInRange(personId, startDate, endDate, includePTO, includeHoliday, includeUnpaid, includeSickLeave);
+        }
+        
         public bool IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(int personId, System.DateTime startDate, System.DateTime endDate, int timeScaleId) {
             return base.Channel.IsPersonTimeOffExistsInSelectedRangeForOtherthanGivenTimescale(personId, startDate, endDate, timeScaleId);
         }
@@ -535,10 +555,6 @@ namespace PraticeManagement.PersonService {
             return base.Channel.GetReportFilterValues(currentUserId, reportId, previousUserId);
         }
         
-        public void DeleteReportFilterValues(int currentUserId, int previousUserId) {
-            base.Channel.DeleteReportFilterValues(currentUserId, previousUserId);
-        }
-        
         public bool SaveUserTemporaryCredentials(string userName, string PMLoginPageUrl, string PMChangePasswordPageUrl) {
             return base.Channel.SaveUserTemporaryCredentials(userName, PMLoginPageUrl, PMChangePasswordPageUrl);
         }
@@ -557,6 +573,14 @@ namespace PraticeManagement.PersonService {
         
         public bool CheckPersonTimeEntriesAfterTerminationDate(int personId, System.DateTime terminationDate) {
             return base.Channel.CheckPersonTimeEntriesAfterTerminationDate(personId, terminationDate);
+        }
+        
+        public bool CheckPersonTimeEntriesAfterHireDate(int personId) {
+            return base.Channel.CheckPersonTimeEntriesAfterHireDate(personId);
+        }
+        
+        public DataTransferObjects.Owner CheckIfPersonStatusCanChangeFromActiveToContingent(int personId) {
+            return base.Channel.CheckIfPersonStatusCanChangeFromActiveToContingent(personId);
         }
         
         public DataTransferObjects.Milestone[] GetPersonMilestonesAfterTerminationDate(int personId, System.DateTime terminationDate) {
@@ -673,14 +697,6 @@ namespace PraticeManagement.PersonService {
         
         public DataTransferObjects.Person[] GetPersonListWithRole(string rolename) {
             return base.Channel.GetPersonListWithRole(rolename);
-        }
-        
-        public DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId) {
-            return base.Channel.GetPersonEmploymentHistoryById(personId);
-        }
-        
-        public DataTransferObjects.TimeEntry.TimeTypeRecord[] GetPersonAdministrativeTimeTypesInRange(int personId, System.DateTime startDate, System.DateTime endDate, bool includePTO, bool includeHoliday, bool includeUnpaid, bool includeSickLeave) {
-            return base.Channel.GetPersonAdministrativeTimeTypesInRange(personId, startDate, endDate, includePTO, includeHoliday, includeUnpaid, includeSickLeave);
         }
         
         public System.Data.DataSet GetPersonMilestoneWithFinancials(int personId) {
