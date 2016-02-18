@@ -155,6 +155,13 @@ BEGIN
 					WHERE PersonId = @PersonId
 							AND EndDate IS NOT NULL 
 							AND StartDate >= @TempDate
+					
+					UPDATE dbo.PersonStatusHistory
+					SET EndDate = @TempDate-1
+					WHERE EndDate >= @TempDate
+						  AND PersonId = @PersonId
+						  AND EndDate IS NOT NULL 
+				   
 				END
 		 END	
 	 END
@@ -211,3 +218,4 @@ BEGIN
 			END
 	 END
 END
+
