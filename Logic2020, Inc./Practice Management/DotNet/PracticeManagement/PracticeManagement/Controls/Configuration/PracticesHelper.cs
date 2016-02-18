@@ -91,7 +91,7 @@ namespace PraticeManagement.Controls.Configuration
         /// Inserts practice
         /// </summary>
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
-        public static int InsertPractice(string name, string practiceManagerId, bool isActive, bool isInternal, string abbreviation)
+        public static int InsertPractice(string name, string practiceManagerId, bool isActive, bool isInternal, string abbreviation, string divisionIds)
         {
             return InsertPractice(
                 new Practice
@@ -100,11 +100,13 @@ namespace PraticeManagement.Controls.Configuration
                     Name = name,
                     Abbreviation = abbreviation,
                     IsCompanyInternal = isInternal,
+                    DivisionIds=divisionIds,
                     PracticeOwner =
                       new Person
                       {
                           Id = Convert.ToInt32(practiceManagerId)
-                      }
+                      },
+                      
                 });
         }
 
