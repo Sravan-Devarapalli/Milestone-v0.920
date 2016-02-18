@@ -13,5 +13,7 @@ BEGIN
 	FROM dbo.Lockout L
 	JOIN dbo.LockoutPages LP ON LP.LockoutPageId = L.LockoutPageId
 	WHERE @LockoutPageId IS NULL OR L.LockoutPageId = @LockoutPageId
+	ORDER BY L.LockoutPageId
 
 END
+
