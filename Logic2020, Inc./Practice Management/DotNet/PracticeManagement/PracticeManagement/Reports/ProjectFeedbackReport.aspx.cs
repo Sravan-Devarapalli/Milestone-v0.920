@@ -297,18 +297,22 @@ namespace PraticeManagement.Reports
             if (!IsPostBack)
             {
                 FillInitAccountsList();
-                FillInitBusinessGroupList();
+                FillInitBusinessGroupForAccount();
                 FillInitPracticesList();
                 FillInitDirectorsList();
                 DataHelper.FillTimescaleList(this.cblPayTypes, Resources.Controls.AllTypes);
                 cblPayTypes.SelectAll();
-               
+
             }
         }
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
-            GetFilterValuesForSession();
+            if (!IsPostBack)
+            {
+                GetFilterValuesForSession();
+                
+            }
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -391,11 +395,11 @@ namespace PraticeManagement.Reports
             }
         }
 
-        private void FillInitBusinessGroupList()
+        private void FillInitBusinessGroupForAccount()
         {
             using (var serviceClient = new ProjectGroupServiceClient())
             {
-                BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(null, null);
+                BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(AccountIds, null);
                 businessGroupList = businessGroupList.Where(b => b.IsActive == true).OrderBy(p => p.Client.Name).ThenBy(p => p.Name).ToArray();
                 DataHelper.FillListDefault(cblBusinessGroup, "All Business Groups", businessGroupList, false, "Id", "ClientBusinessGroupFormat");
                 foreach (ListItem item in cblBusinessGroup.Items)
@@ -480,22 +484,10 @@ namespace PraticeManagement.Reports
         protected void cblAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
             SaveFilterValuesForSession();
-            using (var serviceClient = new ProjectGroupServiceClient())
-            {
-                BusinessGroup[] businessGroupList = serviceClient.GetBusinessGroupList(AccountIds, null);
-                businessGroupList = businessGroupList.Where(b => b.IsActive == true).OrderBy(p => p.Client.Name).ThenBy(p => p.Name).ToArray();
-                DataHelper.FillListDefault(cblBusinessGroup, "All Business Groups", businessGroupList, false, "Id", "ClientBusinessGroupFormat");
-                foreach (ListItem item in cblBusinessGroup.Items)
-                {
-                    item.Selected = true;
-                }
-                //if (cblBusinessGroup.Items.Count-1 == businessGroupList.Length)
-                //{
-                //    cblBusinessGroup.Items[0].Selected = true;
-                //}
-                SelectView();
-            }
-            
+            FillInitBusinessGroupForAccount();
+            SelectView();
+
+
         }
 
         protected void cblBusinessGroup_SelectedIndexChanged(object sender, EventArgs e)
@@ -617,6 +609,7 @@ namespace PraticeManagement.Reports
             {
                 cblPayTypes.SelectedItems = filters.PayTypeIds;
                 cblAccount.SelectedItems = filters.ClientIds;
+                FillInitBusinessGroupForAccount();
                 cblBusinessGroup.SelectedItems = filters.BusinessUnitIds;
                 cblDirector.SelectedItems = filters.ExecutiveInChargeIds;
                 cblPractices.SelectedItems = filters.PracticeIds;
