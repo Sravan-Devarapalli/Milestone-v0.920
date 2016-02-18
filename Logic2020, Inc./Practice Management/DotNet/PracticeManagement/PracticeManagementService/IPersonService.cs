@@ -328,6 +328,12 @@ namespace PracticeManagementService
         bool CheckPersonTimeEntriesAfterTerminationDate(int personId, DateTime terminationDate);
 
         [OperationContract]
+        bool CheckPersonTimeEntriesAfterHireDate(int personId);
+
+        [OperationContract]
+        Owner CheckIfPersonStatusCanChangeFromActiveToContingent(int personId);
+
+        [OperationContract]
         List<Milestone> GetPersonMilestonesAfterTerminationDate(int personId, DateTime terminationDate);
 
         [OperationContract]
