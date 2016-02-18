@@ -377,8 +377,12 @@ namespace PraticeManagement.Reporting
 
         protected void Page_Prerender(object sender, EventArgs e)
         {
-            GetFilterValuesForSession();
-            FillProjectGroup();
+            if (!IsPostBack)
+            {
+                GetFilterValuesForSession();
+                
+            }
+            
             var now = Utils.Generic.GetNowWithTimeZone();
             diRange.FromDate = StartDate.HasValue ? StartDate : Utils.Calendar.WeekStartDate(now);
             diRange.ToDate = EndDate.HasValue ? EndDate : Utils.Calendar.WeekEndDate(now);
@@ -682,8 +686,9 @@ namespace PraticeManagement.Reporting
             if (filters != null)
             {
                 ddlPeriod.SelectedValue = filters.ReportPeriod;
-                cblProjectGroup.SelectedItems = filters.BusinessUnitIds;
                 ddlAccount.SelectedValue = filters.AccountId;
+                FillProjectGroup();
+                cblProjectGroup.SelectedItems = filters.BusinessUnitIds;
                 diRange.FromDate = filters.ReportStartDate;
                 diRange.ToDate = filters.ReportEndDate;
                 cblProjectStatus.SelectedItems = filters.ProjectStatusIds;
