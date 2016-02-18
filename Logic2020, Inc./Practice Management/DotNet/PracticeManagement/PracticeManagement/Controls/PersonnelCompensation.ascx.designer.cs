@@ -74,8 +74,7 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator compStartDate;
-
-        protected global::System.Web.UI.WebControls.CompareValidator compVacationDays;
+        
         /// <summary>
         /// dpEndDate control.
         /// </summary>
@@ -210,6 +209,15 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator cvSLTApprovalValidation;
+        
+        /// <summary>
+        /// cvIsDivisionOrPracticeOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvIsDivisionOrPracticeOwner;
         
         /// <summary>
         /// rbtnSalaryHourly control.
@@ -500,6 +508,15 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.TextBox txtVacationDays;
         
         /// <summary>
+        /// compVacationDays control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator compVacationDays;
+        
+        /// <summary>
         /// ftetxtVacationDays control.
         /// </summary>
         /// <remarks>
@@ -536,13 +553,13 @@ namespace PraticeManagement.Controls {
         protected global::System.Web.UI.WebControls.CustomValidator cvSLTPTOApprovalValidation;
         
         /// <summary>
-        /// trTitleAndPractice control.
+        /// trTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trTitleAndPractice;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trTitle;
         
         /// <summary>
         /// ddlTitle control.
@@ -570,6 +587,42 @@ namespace PraticeManagement.Controls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator custLockoutTitle;
+        
+        /// <summary>
+        /// trDivisionAndPractice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow trDivisionAndPractice;
+        
+        /// <summary>
+        /// ddlDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDivision;
+        
+        /// <summary>
+        /// rfvDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDivision;
+        
+        /// <summary>
+        /// custLockOutDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator custLockOutDivision;
         
         /// <summary>
         /// ddlPractice control.
