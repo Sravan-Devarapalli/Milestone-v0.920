@@ -4836,9 +4836,10 @@ namespace DataAccess
                         BadgeStartDate = reader.IsDBNull(badgeStartDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeStartDateIndex),
                         BadgeEndDate = reader.IsDBNull(badgeEndDateIndex) ? null : (DateTime?)reader.GetDateTime(badgeEndDateIndex),
                         IsException = reader.GetBoolean(IsBadgeExceptionIndex),
-                        Milestone = new Milestone() { 
-                        Id=reader.GetInt32(MilestoneIdIndex),
-                        Description = reader.GetString(MilestoneDescriptionIndex)
+                        Milestone = new Milestone()
+                        {
+                            Id = reader.GetInt32(MilestoneIdIndex),
+                            Description = reader.GetString(MilestoneDescriptionIndex)
                         }
                     };
                     result.Add(badge);
@@ -5166,6 +5167,48 @@ namespace DataAccess
             }
         }
 
+        public static void UpdatePersonDivision(PersonDivision division)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.UpdatePersonDivision, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, division.DivisionId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionOwnerId, division.DivisionOwner.Id);
+                connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static PersonDivision GetPersonDivisionById(int divisionId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetPersonDivisionById, connection))
+            {
+
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionId, divisionId);
+                connection.Open();
+                var result = new List<PersonDivision>();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.HasRows)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        ReadPersonDivisions(reader, result);
+                        return result[0];
+                    }
+
+                }
+            }
+        }
+
         public static List<PersonDivision> GetPersonDivisions()
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
@@ -5198,20 +5241,120 @@ namespace DataAccess
                 int divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
                 int divisionNameIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionName);
                 int InactiveIndex = reader.GetOrdinal(Constants.ColumnNames.Inactive);
+                int showSetPracticeOwnerLinkIndex = -1;
+                int divisionOwnerIdIndex = -1;
+                int divisionOwnerFirstNameIndex = -1;
+                int divisionOwnerLastNameIndex = -1;
+                try
+                {
+                    showSetPracticeOwnerLinkIndex = reader.GetOrdinal(Constants.ColumnNames.ShowSetPracticeOwnerLink);
+                }
+                catch
+                {
+                    showSetPracticeOwnerLinkIndex = -1;
+                }
+
+                try
+                {
+                    divisionOwnerIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                }
+                catch
+                {
+                    divisionOwnerIdIndex = -1;
+                }
+
+                try
+                {
+                    divisionOwnerFirstNameIndex = reader.GetOrdinal(Constants.ColumnNames.FirstName);
+                }
+                catch
+                {
+                    divisionOwnerFirstNameIndex = -1;
+                }
+
+                try
+                {
+                    divisionOwnerLastNameIndex = reader.GetOrdinal(Constants.ColumnNames.LastName);
+                }
+                catch
+                {
+                    divisionOwnerLastNameIndex = -1;
+                }
                 while (reader.Read())
                 {
                     var division = new PersonDivision();
                     division.DivisionId = reader.GetInt32(divisionIdIndex);
                     division.DivisionName = reader.GetString(divisionNameIndex);
                     division.Inactive = reader.GetBoolean(InactiveIndex);
+                    if (showSetPracticeOwnerLinkIndex > -1)
+                    {
+                        division.ShowCareerManagerLink = reader.GetBoolean(showSetPracticeOwnerLinkIndex);
+                    }
+                    if (divisionOwnerIdIndex > -1)
+                    {
+                        if (!reader.IsDBNull(divisionOwnerIdIndex))
+                        {
+                            division.DivisionOwner = new Person
+                            {
+                                Id = reader.GetInt32(divisionOwnerIdIndex),
+                                FirstName = reader.GetString(divisionOwnerFirstNameIndex),
+                                LastName = reader.GetString(divisionOwnerLastNameIndex)
+                            };
+                        }
+
+                    }
                     result.Add(division);
                 }
             }
         }
 
+        public static List<Owner> CheckIfPersonIsOwnerForDivisionAndOrPractice(int personId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfPersonIsOwner, connection))
+            {
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                connection.Open();
+                var result = new List<Owner>();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.HasRows)
+                    {
+                        result = null;
+                    }
+                    else
+                    {
+                        ReadDivisionOrPractice(reader, result);
+                    }
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadDivisionOrPractice(SqlDataReader reader, List<Owner> result)
+        {
+            if (reader.HasRows)
+            {
+                int targetIndex = reader.GetOrdinal(Constants.ColumnNames.TargetName);
+                int isDivisionOwnerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDivisionOwner);
+                while (reader.Read())
+                {
+                    Owner owner = new Owner()
+                    {
+                        Target = reader.GetString(targetIndex),
+                        IsDivisionOwner = reader.GetBoolean(isDivisionOwnerIndex)
+                    };
+                    result.Add(owner);
+                }
+            }
+        }
+
         public static void SaveReportFilterValues(int currentUserId, int reportId, string reportFilters, int previousUserId)
-        { 
-             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.SaveReportFilterValues, connection))
             {
                 command.CommandTimeout = connection.ConnectionTimeout;
@@ -5246,7 +5389,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ReportId, reportId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
                 connection.Open();
-                string result=null;
+                string result = null;
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     if (!reader.HasRows)
@@ -5261,34 +5404,34 @@ namespace DataAccess
                             result = reader.GetString(reportFilterIndex);
                         }
                     }
-                   
+
                 }
                 return result;
-                
+
             }
         }
 
         public static void DeleteReportFilterValues(int currentUserId, int previousUserId)
-        { 
-        using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-        using (var command = new SqlCommand(Constants.ProcedureNames.Person.DeleteReportFilterValues, connection))
         {
-            command.CommandTimeout = connection.ConnectionTimeout;
-
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.AddWithValue(Constants.ParameterNames.CurrentUserId, currentUserId);
-            command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
-            connection.Open();
-            try
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.DeleteReportFilterValues, connection))
             {
-                command.ExecuteNonQuery();
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.CurrentUserId, currentUserId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
+                connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         }
     }
 }
