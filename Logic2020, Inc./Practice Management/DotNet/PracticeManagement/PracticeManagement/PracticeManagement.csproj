@@ -472,6 +472,7 @@
     <Content Include="Images\divisions_16x16.png" />
     <Content Include="Images\email_envelope.png" />
     <Content Include="Images\favicon.ico" />
+    <Content Include="Images\favicon_new.ico" />
     <Content Include="Images\hint1.png" />
     <Content Include="Images\link.png" />
     <Content Include="Images\logic2020_New.png" />
