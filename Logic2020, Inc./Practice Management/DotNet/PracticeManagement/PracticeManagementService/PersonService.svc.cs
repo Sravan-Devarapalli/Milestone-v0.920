@@ -1172,14 +1172,14 @@ namespace PracticeManagementService
             PersonDAL.SaveBadgeDetailsByPersonId(msBadge);
         }
 
-        public void UpdateMSBadgeDetailsByPersonId(int personId,int updatedBy)
+        public void UpdateMSBadgeDetailsByPersonId(int personId, int updatedBy)
         {
-            PersonDAL.UpdateMSBadgeDetailsByPersonId(personId,updatedBy);
+            PersonDAL.UpdateMSBadgeDetailsByPersonId(personId, updatedBy);
         }
 
         public bool CheckIfPersonInProjectForDates(int personId, DateTime startDate, DateTime endDate)
         {
-            return PersonDAL.CheckIfPersonInProjectForDates(personId,  startDate,  endDate);
+            return PersonDAL.CheckIfPersonInProjectForDates(personId, startDate, endDate);
         }
 
         public bool CheckIfPersonIsRestrictedByProjectId(int personId, int projectId, DateTime chargeDate)
@@ -1220,6 +1220,21 @@ namespace PracticeManagementService
         public List<PersonDivision> GetPersonDivisions()
         {
             return PersonDAL.GetPersonDivisions();
+        }
+
+        public PersonDivision GetPersonDivisionById(int divisioId)
+        {
+            return PersonDAL.GetPersonDivisionById(divisioId);
+        }
+
+        public void UpdatePersonDivision(PersonDivision division)
+        {
+            PersonDAL.UpdatePersonDivision(division);
+        }
+
+        public List<Owner> CheckIfPersonIsOwnerForDivisionAndOrPractice(int personId)
+        {
+            return PersonDAL.CheckIfPersonIsOwnerForDivisionAndOrPractice(personId);
         }
 
         public void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId)
