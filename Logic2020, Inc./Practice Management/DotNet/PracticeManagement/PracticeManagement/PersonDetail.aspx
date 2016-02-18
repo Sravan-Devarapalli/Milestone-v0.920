@@ -382,6 +382,8 @@
             var rbn = document.getElementById('<%= rbnContingent.ClientID %>');
             var div = document.getElementById('<%= divContingent.ClientID %>');
             var divActv = document.getElementById('<%= divActive.ClientID %>');
+            var divTerm = document.getElementById('<%= divTerminate.ClientID %>');
+            var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>');
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
             var displayNoneClass = "displayNone";
@@ -390,7 +392,7 @@
             {
                 div.className = "padLeft25 PaddingTop6";
                 divActv.className = displayNoneClass;
-
+                divTerm.className=displayNoneClass;
                 if(valSumActv != null)
                 {
                     valSumActv.className = displayNoneClass;
@@ -398,6 +400,10 @@
                 if(valSumCont != null)
                 {
                     valSumCont.className = "";
+                }
+                if(valSumTerm!=null)
+                {
+                valSumTerm.className=displayNoneClass;
                 }
             }
         }
@@ -446,9 +452,12 @@
             var rbn = document.getElementById('<%= rbnTerminate.ClientID %>');
             var div = document.getElementById('<%= divTerminate.ClientID %>');
             var rbnActve = document.getElementById('<%= rbnActive.ClientID %>');
+            var rbnContgn = document.getElementById('<%= rbnContingent.ClientID %>');
             var divActv = document.getElementById('<%= divActive.ClientID %>');
+            var divContgn = document.getElementById('<%= divContingent.ClientID %>');
             var valSumActv = document.getElementById('<%= valSummaryChangePersonStatusToActive.ClientID %>');
             var valSumTerm = document.getElementById('<%= valSummaryChangePersonStatusToTerminate.ClientID %>');
+            var valSumCont = document.getElementById('<%= valSummaryChangePersonStatusToContingent.ClientID %>');
             var displayNoneClass = "displayNone";
 
             if( rbn.checked)
@@ -466,6 +475,14 @@
                 if(valSumActv != null)
                 {
                     valSumActv.className = displayNoneClass;
+                }
+                if(divContgn != null)
+                {
+                    divContgn.className = displayNoneClass;
+                }
+                 if(valSumCont != null)
+                {
+                 valSumCont.className = displayNoneClass;
                 }
             }
         }
@@ -532,6 +549,9 @@
                                         AutoPostBack="true" Visible="false">
                                     </asp:DropDownList>
                                     <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
+                                    <asp:CustomValidator ID="cvIsOwnerOrAssignedToProject" runat="server" 
+                                        ValidationGroup="ChangePersonStatusToContingent" Display="Dynamic"
+                                        Text="*" OnServerValidate="custIsOwnerOrAssignedToProject_OnServerValidate" Enabled="false"></asp:CustomValidator>
                                 </td>
                                 <td>
                                     <asp:Button ID="btnChangeEmployeeStatus" runat="server" Text="Change Employee Status"
