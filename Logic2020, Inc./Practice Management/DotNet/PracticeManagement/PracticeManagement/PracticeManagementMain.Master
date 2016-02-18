@@ -11,7 +11,7 @@
     </asp:ContentPlaceHolder>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-    <link rel="icon" href="<%# Generic.GetClientUrl("~/Images/favicon.ico", this) %>" type="image/x-icon" />
+    <link rel="icon" href="<%# Generic.GetClientUrl("~/Images/favicon_new.ico", this) %>" type="image/x-icon" />
     <script type="text/javascript" src='<%# Generic.GetClientUrl("~/Scripts/Combined.js", this) %>'></script>
 </head>
 <body>
