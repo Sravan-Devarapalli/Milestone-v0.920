@@ -212,7 +212,7 @@ select
     display: block;
     height: 26px;
     width: 90px;
-    background: url(../images/logic2020.png) no-repeat 0 0;
+    background: url(../images/logic2020_New.png) no-repeat 0 0;
     margin-top: 5px;
 }
 .top-menu
@@ -4392,16 +4392,36 @@ div.scrollextLabel Label
 {
     background-color: White;
     border-collapse: collapse;
-    width: 75%;
+    width: 80%;
 }
 .gvPractices td, .gvPractices th
 {
     text-align: center;
 }
-.gvPractices .Left
+.gvPractices .Left, .gvPractices .Left div td
 {
     text-align: left !important;
 }
+
+.gvDivisions
+{
+    background-color: White;
+    border-collapse: collapse;
+    width: 40%;
+    
+}
+.gvDivisions td, .gvDivisions th
+{
+   
+    text-align: center;
+}
+
+.gvDivisions .Left
+{
+     padding-left:10px;
+    text-align: left !important;
+}
+
 .gvOpportunityPriorities
 {
     background-color: White;
@@ -4984,6 +5004,7 @@ BenchCosts.ascx*/
     min-height: 100px !important;
     width: 400px;
 }
+
 .ProjectSearch td
 {
     padding: 5px;
@@ -5500,6 +5521,18 @@ HyplinkConsultantDetailReport
     background-color: #FFFFFF;
     border: 1px solid #AAAAAA;
     display: inline-block;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 260px;
+    z-index: 20000;
+}
+
+.PracticeAreasCblDivision
+{
+    background-color: #FFFFFF;
+    text-align: left !important;
+    border: 1px solid #AAAAAA;
     height: 250px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -7292,7 +7325,7 @@ image:hover:after
     width: 200px;
     z-index: 20000;
 }
-.scroll_cblPractice table, .scroll_cblBDMs table, .UTilTimeLineFilterCblTimeScales table, .UTilTimeLineFilterCblPractices table, .TimeEntryByperson_cblPersons table, .TimeEntryByperson_cblPractices table, .TimeEntryByperson_cblTimeScales table, .ScrollingDropDown_cblPractices TABLE, .AccountSummaryBusinessUnitsDiv table, .ProjectSummaryScrollingDropDown table, .ProjectSummaryScrollingDropDown table, .GroupBySddPractice table, .PersonPage_cblRecruiters table, .PersonPage_cblPractices table, .PersonFilterSddAllTypes table
+.scroll_cblPractice table, .scroll_cblBDMs table, .UTilTimeLineFilterCblTimeScales table, .UTilTimeLineFilterCblPractices table, .PracticeAreasCblDivision table, .TimeEntryByperson_cblPersons table, .TimeEntryByperson_cblPractices table, .TimeEntryByperson_cblTimeScales table, .ScrollingDropDown_cblPractices TABLE, .AccountSummaryBusinessUnitsDiv table, .ProjectSummaryScrollingDropDown table, .ProjectSummaryScrollingDropDown table, .GroupBySddPractice table, .PersonPage_cblRecruiters table, .PersonPage_cblPractices table, .PersonFilterSddAllTypes table
 {
     width: 100% !important;
 }
@@ -8363,28 +8396,29 @@ table#ctl00_body_login tr td label
 }
 .ManagementReportHeader
 {
-    font-weight: bold; 
-    font-size: 18px; 
+    font-weight: bold;
+    font-size: 18px;
     text-align: center;
 }
 .ManagementReportDiv
 {
-    overflow-x: auto; 
-    padding-top: 10px; 
+    overflow-x: auto;
+    padding-top: 10px;
     max-height: 600px;
     min-height: 250px;
 }
 .ManagementReportDateHeader
 {
-    padding-left: 4px; 
+    padding-left: 4px;
     padding-right: 4px;
-    width: 100px; 
+    width: 100px;
     white-space: nowrap;
     border-left: 1px solid #000;
 }
 .ProjectsListExport
 {
-    text-align: right; 
-    padding-right: 10px; 
+    text-align: right;
+    padding-right: 10px;
     font-size: 12x;
 }
+
