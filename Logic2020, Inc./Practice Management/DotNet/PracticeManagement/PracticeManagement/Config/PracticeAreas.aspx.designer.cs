@@ -202,6 +202,24 @@ namespace PraticeManagement.Config {
         protected global::System.Web.UI.WebControls.CustomValidator custPracticeManager;
         
         /// <summary>
+        /// cblDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.ScrollingDropDown cblDivision;
+        
+        /// <summary>
+        /// sdeCblDivision control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PraticeManagement.Controls.Generic.ScrollableDropdown.ScrollableDropdownExtender sdeCblDivision;
+        
+        /// <summary>
         /// hdnTargetErrorPanel control.
         /// </summary>
         /// <remarks>
