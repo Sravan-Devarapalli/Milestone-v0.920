@@ -2566,6 +2566,8 @@ namespace PraticeManagement
                     {
                         serviceClient.SavePay(pay, LoginPageUrl, HttpContext.Current.User.Identity.Name);
                         ValidateAttribution = true;
+                        var person = GetPerson(pay.PersonId);
+                        serviceClient.SendCompensationChangeEmail(person, oldPay, pay,IsRehire);
                     }
                     catch (FaultException<ExceptionDetail> ex)
                     {
