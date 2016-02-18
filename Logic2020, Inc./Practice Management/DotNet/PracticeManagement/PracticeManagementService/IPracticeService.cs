@@ -13,6 +13,12 @@ namespace PracticeManagementService
         /// <returns>A list of <see cref="Practice"/>s in the system</returns>
         [OperationContract]
         List<Practice> GetPracticeList();
+        /// <summary>
+        /// Get Practices for the selected Division
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        List<Practice> GetPracticeListForDivision(int divisionId);
 
         /// <summary>
         /// Get all practices
@@ -88,3 +94,4 @@ namespace PracticeManagementService
         void CapabilityInsert(PracticeCapability capability, string userLogin);
     }
 }
+
