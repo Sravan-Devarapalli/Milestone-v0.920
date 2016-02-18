@@ -36,7 +36,7 @@ a:hover{color:#069}
 select{border:1px solid #aaa}
 .serv-info{padding:35px 20px 0 0}
 .powered{float:right;width:90px;height:50px;margin-right:0}
-.powered a.icon{display:block;height:26px;width:90px;background:url(../images/logic2020.png) no-repeat 0 0;margin-top:5px}
+.powered a.icon{display:block;height:26px;width:90px;background:url(../images/logic2020_New.png) no-repeat 0 0;margin-top:5px}
 .top-menu{min-height:34px;background:url(../images/top-menu-bg.png) repeat-x 0 0;z-index:1000!important;position:relative;padding:10px 10px 0}
 ul.AspNet-Menu{height:34px}
 ul.AspNet-Menu li{float:left;padding-top:6px;height:28px!important}
@@ -852,9 +852,12 @@ div.scrollextLabel Label{padding-left:4px}
 .gvCompensationHistoryStrawmen td{text-align:center;height:20px}
 .gvCompensationHistoryStrawmen .width5{width:5%!important}
 .gvCompensationHistoryStrawmen .width10{width:10%!important}
-.gvPractices{background-color:White;border-collapse:collapse;width:75%}
+.gvPractices{background-color:White;border-collapse:collapse;width:80%}
 .gvPractices td,.gvPractices th{text-align:center}
-.gvPractices .Left{text-align:left!important}
+.gvPractices .Left,.gvPractices .Left div td{text-align:left!important}
+.gvDivisions{background-color: White;border-collapse: collapse;width: 40%;}
+.gvDivisions td, .gvDivisions th{text-align: center; }
+.gvDivisions .Left{text-align: left !important; padding-left:10px;}
 .gvOpportunityPriorities{background-color:White;border-collapse:collapse;width:63%}
 .gvOpportunityPriorities td{height:20px;white-space:nowrap;text-align:center}
 .gvOpportunityPriorities .Left{text-align:left!important}
@@ -1046,6 +1049,7 @@ HyplinkConsultantDetailReport{color:Black!important;text-decoration:none!importa
 .BorderBottom1px,.BorderBottom1pxTd .border{border-bottom:1px solid black}
 .UTilTimeLineFilterCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
 .UTilTimeLineFilterCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
+.PracticeAreasCblDivision{background-color: #FFF;text-align:left!important;border:1px solid #AAA;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000;}
 .bgColor_d4dff8{background-color:#d4dff8}
 .BenchCostFooter,.MSMeetingReportFooter{padding-left:15px!important}
 .BenchCostFooter td,.MSMeetingReportFooter td{padding-bottom:5px}
@@ -1368,7 +1372,7 @@ image:hover:after{content:attr(title)}
 .cblQuickLinksClearButtonDiv{text-align:right;width:356px;padding:8px 0 8px 0}
 .PersonPage_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:280px;z-index:20000}
 .PersonPage_cblRecruiters{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:200px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
-.scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table{width:100%!important}
+.scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.PracticeAreasCblDivision table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table{width:100%!important}
 .DisplayInline{display:inline-block}
 .BorderBottomNone td{border-bottom:none!important}
 .BorderTopNone{ border-top: none !important;}
@@ -1615,3 +1619,4 @@ table#ctl00_body_login tr td label{float:left}
 .ManagementReportDiv{overflow-x:auto; padding-top:10px; max-height:600px;min-height:250px;}
 .ManagementReportDateHeader{padding-left:4px;padding-right:4px;width:100px;white-space:nowrap;border-left:1px solid #000;}
 .ProjectsListExport{text-align: right; padding-right: 10px; font-size: 12x;}
+
