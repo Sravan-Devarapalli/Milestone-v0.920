@@ -217,6 +217,21 @@ namespace DataAccess
             }
         }
 
+        public static bool CheckPersonTimeEntriesAfterHireDate(int personId)
+        {
+
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.TimeEntry.CheckPersonTimeEntriesAfterHireDate, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                connection.Open();
+                return ((bool)command.ExecuteScalar());
+            }
+        }
+
         /// <summary>
         /// Get milestones by person for given time period
         /// </summary>
@@ -1312,3 +1327,4 @@ namespace DataAccess
         #endregion Filtering
     }
 }
+
