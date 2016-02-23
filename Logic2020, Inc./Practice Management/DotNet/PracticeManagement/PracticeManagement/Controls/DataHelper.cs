@@ -67,6 +67,7 @@ namespace PraticeManagement.Controls
         private const string DefaultNameFieldEndodedName = "HtmlEncodedName";
         private const string CurrentPersonKey = "CurrentPerson";
         private const string CommaSeperatedFormat = "{0},{1}";
+        private const string CommaSeperatedTitles = "{0},{1},{2}";
         private const string UnassignedText = "Unassigned";
         private const string PersonLastFirstNameText = "PersonLastFirstName";
         private const string ItalicStyleText = "font-style: italic";
@@ -941,7 +942,7 @@ namespace PraticeManagement.Controls
                 try
                 {
                     string statusids = string.Format(CommaSeperatedFormat, (int)DataTransferObjects.PersonStatusType.Active, (int)DataTransferObjects.PersonStatusType.TerminationPending);
-                    string titles = string.Format(CommaSeperatedFormat, DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName, DataTransferObjects.Constants.TitleNames.DirectorTitleName);
+                    string titles = string.Format(CommaSeperatedTitles, DataTransferObjects.Constants.TitleNames.SeniorManagerTitleName, DataTransferObjects.Constants.TitleNames.DirectorTitleName, DataTransferObjects.Constants.TitleNames.SeniorDirectorTitleName);
                     var persons = serviceClient.PersonListShortByTitleAndStatus(statusids, titles);
                     persons = persons.Any() ? persons.OrderBy(p => p.PersonLastFirstName).ToArray() : persons;
                     List<Person> personlist = new List<Person>();
