@@ -30,6 +30,7 @@ namespace DataTransferObjects
         {
             public const string SeniorManagerTitleName = "Senior Manager";
             public const string DirectorTitleName = "Director";
+            public const string SeniorDirectorTitleName = "Senior Director";
         }
 
         public class Formatting
