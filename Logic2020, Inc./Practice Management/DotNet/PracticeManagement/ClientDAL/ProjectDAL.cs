@@ -2014,7 +2014,15 @@ namespace DataAccess
             int projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
             int projectGroupIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectGroupIdColumn);
             int hasAttachmentIndex = -1;
-
+            int PONumberIndex = -1;
+            try
+            {
+                PONumberIndex = reader.GetOrdinal(Constants.ColumnNames.PONumber);
+            }
+            catch
+            {
+                PONumberIndex = -1;
+            }
             try
             {
                 hasAttachmentIndex = reader.GetOrdinal(Constants.ColumnNames.HasAttachmentsColumn);
@@ -2072,6 +2080,10 @@ namespace DataAccess
                 if (hasAttachmentIndex >= 0)
                 {
                     project.HasAttachments = (int)reader[hasAttachmentIndex] == 1;
+                }
+                if (PONumberIndex > -1)
+                {
+                    project.PONumber = reader.IsDBNull(PONumberIndex)?string.Empty:reader.GetString(PONumberIndex);
                 }
 
                 result.Add(project);
@@ -3912,7 +3924,7 @@ namespace DataAccess
                     };
                     if (projects.Any(p => p.Id == projectId))
                     {
-                        var project = projects.FirstOrDefault(p=>p.Id == projectId);
+                        var project = projects.FirstOrDefault(p => p.Id == projectId);
                         if (project.Milestones.Any(m => m.Id == milestoneId))
                         {
                             var projectMilestone = project.Milestones.FirstOrDefault(m => m.Id == milestoneId);
