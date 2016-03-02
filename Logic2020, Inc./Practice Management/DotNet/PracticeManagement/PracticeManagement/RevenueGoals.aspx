@@ -154,7 +154,7 @@
                                                 <asp:CheckBox ID="chbCompleted" runat="server" AutoPostBack="false" Checked="True"
                                                     onclick="EnableResetButton();" Text="Completed" ToolTip="Include Completed projects into report" />
                                             </td>
-                                            <td>
+                                            <td style="white-space:nowrap">
                                                 <asp:CheckBox ID="chbExperimental" runat="server" AutoPostBack="false" Checked="false"
                                                     onclick="EnableResetButton();" Text="Experimental" ToolTip="Include Experimental projects into report" />
                                             </td>
