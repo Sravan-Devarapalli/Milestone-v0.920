@@ -113,7 +113,8 @@ AS
 			   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 						ELSE 0 END AS HasAttachments,
 			   m.ProjectManagerId AS ProjectOwnerId,
-			   m.SalesPersonId
+			   m.SalesPersonId,
+			   m.PONumber
 		  FROM dbo.v_Milestone AS m
 			   INNER JOIN ProjectAccess AS projManagers ON projManagers.ProjectId = m.ProjectId AND m.IsAllowedToShow = 1
 			   INNER JOIN dbo.ProjectStatus AS s ON m.ProjectStatusId = s.ProjectStatusId
@@ -124,6 +125,7 @@ AS
 				OR m.ClientName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 				OR m.Description LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 				OR m.BuyerName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
+				OR m.PONumber LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 			   )
 			   AND (@PersonId is NULL OR m.ClientId IN (select * from @ClientsList) OR  m.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
 			   AND (@PersonId is NULL OR m.GroupId IN (select * from @ProjectGroupsList) OR  m.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
@@ -146,7 +148,8 @@ AS
 			   CASE WHEN A.ProjectId IS NOT NULL THEN 1 
 						ELSE 0 END AS HasAttachments,
 			   p.ProjectManagerId,
-			   p.SalesPersonId
+			   p.SalesPersonId,
+			   p.PONumber
 		  FROM dbo.v_Project AS p
 		  INNER JOIN ProjectAccess AS projManagers ON projManagers.ProjectId = p.ProjectId AND p.IsAllowedToShow = 1
 		  OUTER APPLY (SELECT TOP 1 ProjectId FROM ProjectAttachment as pa WHERE pa.ProjectId = p.ProjectId) A
@@ -156,6 +159,7 @@ AS
 				OR p.ProjectNumber LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 				OR p.ClientName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 				OR p.BuyerName LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
+				OR p.PONumber LIKE @SearchText COLLATE SQL_Latin1_General_CP1_CI_AS
 			   )
 		   AND (@PersonId is NULL OR p.ClientId in (SELECT * FROM @ClientsList) OR  p.ClientId IN (SELECT opc.ClientId FROM @OwnerProjectClientList AS opc))
 		   AND (@PersonId is NULL OR p.GroupId in (SELECT * FROM @ProjectGroupsList) OR  P.GroupId IN (SELECT opG.GroupId FROM @OwnerProjectGroupList AS opG))
