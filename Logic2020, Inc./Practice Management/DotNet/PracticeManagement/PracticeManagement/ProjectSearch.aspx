@@ -130,6 +130,11 @@
                                 Milestone Name
                             </div>
                         </td>--%>
+                        <td class="CompPerfProject AddLeftPadding">
+                            <div class="ie-bg">
+                                PO Number
+                            </div>
+                        </td>
                         <td class="CompPerfPeriod AddLeftPadding">
                             <div class="ie-bg">
                                 Project Start Date
@@ -185,6 +190,10 @@
                             CommandArgument='<%# string.Concat(Eval("Milestones[0].Id"), "_", Eval("Id")) %>'
                             OnCommand="btnMilestoneName_Command"></asp:LinkButton>
                     </td>--%>
+                    <td class="CompPerfProject AddLeftPadding">
+                        <asp:LinkButton ID="btnPONumber" runat="server" Text='<%# Eval("PONumber") %>' CommandArgument='<%# Eval("Id") %>'
+                            OnCommand="Project_Command"></asp:LinkButton>
+                    </td>
                     <td class="CompPerfPeriod AddLeftPadding">
                         <asp:LinkButton ID="btnProjectStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") : string.Empty %>'
                             CommandArgument='<%# Eval("Id") %>' OnCommand="Project_Command"></asp:LinkButton>
@@ -227,6 +236,10 @@
                                 </ItemTemplate>
                             </asp:DataList>
                         </asp:Panel>
+                    </td>
+                    <td class="CompPerfProject AddLeftPadding">
+                        <asp:LinkButton ID="btnPONumber" runat="server" Text='<%# Eval("PONumber") %>' CommandArgument='<%# Eval("Id") %>'
+                            OnCommand="Project_Command"></asp:LinkButton>
                     </td>
                     <td class="CompPerfPeriod AddLeftPadding">
                         <asp:LinkButton ID="btnProjectStartDate" runat="server" Text='<%# Eval("StartDate") != null ? ((DateTime)Eval("StartDate")).ToString("MM/dd/yyyy") : string.Empty %>'
