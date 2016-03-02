@@ -30,9 +30,11 @@ AS
            p.GroupId,
 		   p.IsAllowedToShow,
 		   p.ProjectManagerId,
-		   p.SalesPersonId
+		   p.SalesPersonId,
+		   p.PONumber
 	  FROM dbo.Milestone AS m
 	       INNER JOIN dbo.Project AS p ON m.ProjectId = p.ProjectId
 	       INNER JOIN dbo.Client AS c ON p.ClientId = c.ClientId
 		   INNER JOIN dbo.ProjectStatus AS ps on p.ProjectStatusId=ps.ProjectStatusId
 	       LEFT JOIN dbo.v_MilestoneHours AS h ON m.MilestoneId = h.MilestoneId
+
