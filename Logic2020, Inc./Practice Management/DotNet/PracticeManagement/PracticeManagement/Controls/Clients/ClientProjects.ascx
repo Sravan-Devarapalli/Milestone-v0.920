@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ClientProjects.ascx.cs"
-    EnableViewState="false" Inherits="PraticeManagement.Controls.Clients.ClientProjects" %>
+    EnableViewState="true" Inherits="PraticeManagement.Controls.Clients.ClientProjects" %>
 <asp:Repeater ID="repProjects" runat="server" OnItemDataBound="repProjects_ItemDataBound">
     <HeaderTemplate>
         <div class="minheight250Px">
