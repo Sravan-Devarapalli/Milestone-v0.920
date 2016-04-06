@@ -888,6 +888,7 @@
             public const string DiscountParam = "@Discount";
             public const string TermsParam = "@Terms";
             public const string NameParam = "@Name";
+            public const string ProjectNumberSeries = "@ProjectNumberSeries";
             public const string EstimatedRevenueParam = "@EstimatedRevenue";
             public const string OwnerId = ColumnNames.OwnerIdColumn;
             public const string ProjectOwnerIdsParam = "@ProjectOwnerIds";
@@ -1530,6 +1531,7 @@
                 public const string ProjectGetById = "dbo.ProjectGetById";
                 public const string ProjectInsert = "dbo.ProjectInsert";
                 public const string ProjectUpdate = "dbo.ProjectUpdate";
+                public const string InsertInternalProject = "dbo.InsertInternalProject";
                 public const string SaveProjectAttachment = "dbo.SaveProjectAttachment";
                 public const string DeleteProjectAttachmentByProjectId = "dbo.DeleteProjectAttachmentByProjectId";
                 public const string ProjectSetStatus = "dbo.ProjectSetStatus";
