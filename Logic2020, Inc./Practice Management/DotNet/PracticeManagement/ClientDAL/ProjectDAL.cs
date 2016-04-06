@@ -801,6 +801,29 @@ namespace DataAccess
             return projectList.Count > 0 ? projectList[0] : null;
         }
 
+        public static void SaveInternalProject(string projectName, string projectNumberSeries)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Project.InsertInternalProject, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.NameParam, projectName);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectNumberSeries, projectNumberSeries);
+
+                connection.Open();
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception ex){
+                    throw new Exception(ex.Message);
+                
+                }
+            }
+        }
+
         /// <summary>
         /// Inserts the <see cref="Project"/> record into the3 database.
         /// </summary>
@@ -2083,7 +2106,7 @@ namespace DataAccess
                 }
                 if (PONumberIndex > -1)
                 {
-                    project.PONumber = reader.IsDBNull(PONumberIndex)?string.Empty:reader.GetString(PONumberIndex);
+                    project.PONumber = reader.IsDBNull(PONumberIndex) ? string.Empty : reader.GetString(PONumberIndex);
                 }
 
                 result.Add(project);
