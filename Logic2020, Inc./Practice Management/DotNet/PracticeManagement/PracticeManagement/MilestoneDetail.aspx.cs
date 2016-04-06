@@ -19,6 +19,7 @@ using PraticeManagement.Utils;
 using Resources;
 using System.Web;
 using System.Threading;
+using System.IO;
 
 namespace PraticeManagement
 {
@@ -1933,6 +1934,44 @@ namespace PraticeManagement
         protected string GetDateFormat(DateTime date)
         {
             return date.ToString(Constants.Formatting.EntryDateFormat);
+        }
+
+        protected override object LoadPageStateFromPersistenceMedium()
+        {
+            System.Web.UI.PageStatePersister pageStatePersister1 = this.PageStatePersister;
+            pageStatePersister1.Load();
+            String vState = pageStatePersister1.ViewState.ToString();
+            byte[] pBytes = System.Convert.FromBase64String(vState);
+            pBytes = SettingsHelper.Decompress(pBytes);
+            LosFormatter mFormat = new LosFormatter();
+            Object ViewState = mFormat.Deserialize(System.Convert.ToBase64String(pBytes));
+            return new Pair(pageStatePersister1.ControlState, ViewState);
+        }
+
+        protected override void SavePageStateToPersistenceMedium(Object pViewState)
+        {
+            Pair pair1;
+            System.Web.UI.PageStatePersister pageStatePersister1 = this.PageStatePersister;
+            Object ViewState;
+            if (pViewState is Pair)
+            {
+                pair1 = ((Pair)pViewState);
+                pageStatePersister1.ControlState = pair1.First;
+                ViewState = pair1.Second;
+            }
+            else
+            {
+                ViewState = pViewState;
+            }
+            LosFormatter mFormat = new LosFormatter();
+            StringWriter mWriter = new StringWriter();
+            mFormat.Serialize(mWriter, ViewState);
+            String mViewStateStr = mWriter.ToString();
+            byte[] pBytes = System.Convert.FromBase64String(mViewStateStr);
+            pBytes = SettingsHelper.Compress(pBytes);
+            String vStateStr = System.Convert.ToBase64String(pBytes);
+            pageStatePersister1.ViewState = vStateStr;
+            pageStatePersister1.Save();
         }
 
         #region Implementation of IPostBackEventHandler
