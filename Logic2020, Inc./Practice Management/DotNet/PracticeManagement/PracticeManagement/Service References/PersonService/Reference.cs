@@ -18,10 +18,6 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse")]
         void DeleteReportFilterValues(int currentUserId, int previousUserId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SendCompensationChangeEmail", ReplyAction="http://tempuri.org/IPersonService/SendCompensationChangeEmailResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ComputedFinancialsEx))]
-        void SendCompensationChangeEmail(DataTransferObjects.Person person, DataTransferObjects.Pay oldPay, DataTransferObjects.Pay newPay, bool isRehire);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryById", ReplyAction="http://tempuri.org/IPersonService/GetPersonEmploymentHistoryByIdResponse")]
         DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId);
         
@@ -395,7 +391,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-    
+        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -414,10 +410,6 @@ namespace PraticeManagement.PersonService {
         
         public void DeleteReportFilterValues(int currentUserId, int previousUserId) {
             base.Channel.DeleteReportFilterValues(currentUserId, previousUserId);
-        }
-        
-        public void SendCompensationChangeEmail(DataTransferObjects.Person person, DataTransferObjects.Pay oldPay, DataTransferObjects.Pay newPay, bool isRehire) {
-            base.Channel.SendCompensationChangeEmail(person, oldPay, newPay, isRehire);
         }
         
         public DataTransferObjects.Employment[] GetPersonEmploymentHistoryById(int personId) {
