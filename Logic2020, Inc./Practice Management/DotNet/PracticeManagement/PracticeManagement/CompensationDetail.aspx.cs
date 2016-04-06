@@ -631,11 +631,11 @@ namespace PraticeManagement
                         personnelCompensation.StartDate = personnelCompensation.StartDate;
                         personnelCompensation.EndDate = personnelCompensation.EndDate;
                     }
-                    if (oldPersonPay.Status.ToStatusType() != PersonStatusType.Terminated)
-                    {
+                    //if (oldPersonPay.Status.ToStatusType() != PersonStatusType.Terminated)
+                    //{
                         
-                        serviceClient.SendCompensationChangeEmail(oldPersonPay, oldPersonPay.CurrentPay, pay, isRehire);
-                    }
+                    //    serviceClient.SendCompensationChangeEmail(oldPersonPay, oldPersonPay.CurrentPay, pay, isRehire);
+                    //}
                     return true;
 
                 }
