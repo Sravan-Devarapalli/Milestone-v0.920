@@ -194,6 +194,8 @@ namespace PracticeManagementService
         [OperationContract]
         int SaveProjectDetail(Project project, string userName);
 
+        [OperationContract]
+        void SaveInternalProject(string projectName, string projectNumberSeries);
         /// <summary>
         /// Provides an info for the month mini report.
         /// </summary>
