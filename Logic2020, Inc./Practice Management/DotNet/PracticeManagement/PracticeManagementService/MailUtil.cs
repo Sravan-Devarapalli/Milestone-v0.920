@@ -160,19 +160,19 @@ namespace PracticeManagementService
             Email(emailTemplate.Subject, body, true, emailTemplate.EmailTemplateTo, string.Empty, null);
         }
 
-        internal static void SendCompensationChangeEmail(string firstName,string lastName, string currentBasis, string newBasis, string effectiveDate)
-        {
-            var emailTempalte = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.CompensationChangeEmailTemplate);
-            var body = string.Format(emailTempalte.Body, firstName, lastName, currentBasis, newBasis, effectiveDate);
-            Email(emailTempalte.Subject, body, true, emailTempalte.EmailTemplateTo, string.Empty, null);
-        }
+        //internal static void SendCompensationChangeEmail(string firstName,string lastName, string currentBasis, string newBasis, string effectiveDate)
+        //{
+        //    var emailTempalte = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.CompensationChangeEmailTemplate);
+        //    var body = string.Format(emailTempalte.Body, firstName, lastName, currentBasis, newBasis, effectiveDate);
+        //    Email(emailTempalte.Subject, body, true, emailTempalte.EmailTemplateTo, string.Empty, null);
+        //}
 
-        internal static void SendCompensationChangeRehireEmail(string firstName, string lastName,string effectiveDate, string email, string title, string phoneNumber, bool offshore, string manager, string division, string currentBasis, string newBasis )
-        {
-            var emailTempalte = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.CompensationChange_rehire_TemplateName);
-            var body = string.Format(emailTempalte.Body, firstName, lastName, effectiveDate,email, title, phoneNumber, offshore?"Yes":"No", manager, division, currentBasis, newBasis);
-            Email(emailTempalte.Subject, body, true, emailTempalte.EmailTemplateTo, string.Empty, null);
-        }
+        //internal static void SendCompensationChangeRehireEmail(string firstName, string lastName,string effectiveDate, string email, string title, string phoneNumber, bool offshore, string manager, string division, string currentBasis, string newBasis )
+        //{
+        //    var emailTempalte = EmailTemplateDAL.EmailTemplateGetByName(Resources.Messages.CompensationChange_rehire_TemplateName);
+        //    var body = string.Format(emailTempalte.Body, firstName, lastName, effectiveDate,email, title, phoneNumber, offshore?"Yes":"No", manager, division, currentBasis, newBasis);
+        //    Email(emailTempalte.Subject, body, true, emailTempalte.EmailTemplateTo, string.Empty, null);
+        //}
 
         internal static void SendMSBadgeRequestEmail(Project project,int milestoneId)
         {
