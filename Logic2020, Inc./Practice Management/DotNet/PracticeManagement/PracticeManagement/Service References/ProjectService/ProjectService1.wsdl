@@ -2,18 +2,24 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProjectService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd8" />
-      <xsd:import schemaLocation="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd8" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.ContextObjects" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_GetProjectsListByProjectGroupId_InputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectsListByProjectGroupId" />
   </wsdl:message>
@@ -290,6 +296,12 @@
   <wsdl:message name="IProjectService_SaveProjectDetail_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveProjectDetailResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_SaveInternalProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveInternalProject" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_SaveInternalProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveInternalProjectResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_MonthMiniReport_InputMessage">
     <wsdl:part name="parameters" element="tns:MonthMiniReport" />
   </wsdl:message>
@@ -374,13 +386,11 @@
   <wsdl:message name="IProjectService_IsUserIsOwnerOfProject_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsUserIsOwnerOfProjectResponse" />
   </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_InputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwner" />
-  </wsdl:message>
-  <wsdl:message name="IProjectService_IsUserIsProjectOwner_OutputMessage">
-    <wsdl:part name="parameters" element="tns:IsUserIsProjectOwnerResponse" />
-  </wsdl:message>
   <wsdl:portType name="IProjectService">
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetProjectsListByProjectGroupId">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" message="tns:IProjectService_GetProjectsListByProjectGroupId_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupIdResponse" message="tns:IProjectService_GetProjectsListByProjectGroupId_OutputMessage" />
@@ -565,6 +575,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/SaveProjectDetail" message="tns:IProjectService_SaveProjectDetail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/SaveProjectDetailResponse" message="tns:IProjectService_SaveProjectDetail_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SaveInternalProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/SaveInternalProject" message="tns:IProjectService_SaveInternalProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/SaveInternalProjectResponse" message="tns:IProjectService_SaveInternalProject_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MonthMiniReport">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/MonthMiniReport" message="tns:IProjectService_MonthMiniReport_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/MonthMiniReportResponse" message="tns:IProjectService_MonthMiniReport_OutputMessage" />
@@ -621,13 +635,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProject" message="tns:IProjectService_IsUserIsOwnerOfProject_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsOwnerOfProjectResponse" message="tns:IProjectService_IsUserIsOwnerOfProject_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwner" message="tns:IProjectService_IsUserIsProjectOwner_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/IsUserIsProjectOwnerResponse" message="tns:IProjectService_IsUserIsProjectOwner_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IProjectService" type="tns:IProjectService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IsUserIsProjectOwner">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetProjectsListByProjectGroupId">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsListByProjectGroupId" style="document" />
       <wsdl:input>
@@ -1042,6 +1061,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SaveInternalProject">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/SaveInternalProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="MonthMiniReport">
       <soap:operation soapAction="http://tempuri.org/IProjectService/MonthMiniReport" style="document" />
       <wsdl:input>
@@ -1168,19 +1196,10 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="IsUserIsProjectOwner">
-      <soap:operation soapAction="http://tempuri.org/IProjectService/IsUserIsProjectOwner" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="ProjectService">
     <wsdl:port name="BasicHttpBinding_IProjectService" binding="tns:BasicHttpBinding_IProjectService">
-      <soap:address location="http://ggku3sys52.ggktech.local/PracticeManagementService/ProjectService.svc" />
+      <soap:address location="http://ggku3sys280.ggktech.local/PracticeManagementService/ProjectService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
