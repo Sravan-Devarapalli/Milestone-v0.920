@@ -428,14 +428,14 @@ namespace PracticeManagementService
                     SendHireDateChangedEmail(oldPerson, person, loginPageUrl);
                 }
             }
-            //if (isRehireDueToPay)
-            //{
-            //    //deactivate account and Activate account.
-            //    var terminationDate = person.EmploymentHistory.Last(p => p.HireDate.Date < person.HireDate.Date).TerminationDate;
-            //    if (terminationDate != null)
-            //        MailUtil.SendDeactivateAccountEmail(person.FirstName, person.LastName, terminationDate.Value.ToString(Constants.Formatting.EntryDateFormat));
-            //}
-            if (isPersonActive && !isRehireDueToPay)// adding person or rehiring normally
+            if (isRehireDueToPay)
+            {
+                //deactivate account and Activate account.
+                var terminationDate = person.EmploymentHistory.Last(p => p.HireDate.Date < person.HireDate.Date).TerminationDate;
+                if (terminationDate != null)
+                    MailUtil.SendDeactivateAccountEmail(person.FirstName, person.LastName, terminationDate.Value.ToString(Constants.Formatting.EntryDateFormat));
+            }
+            if (isPersonActive)//rehiring due to pay or adding person or rehiring normally
             {
                 SendActivateAccountEmail(person, oldPerson, loginPageUrl);
             }
@@ -445,21 +445,21 @@ namespace PracticeManagementService
             }
         }
 
-        public void SendCompensationChangeEmail(Person person, Pay oldPay, Pay newPay, bool isRehire)
-        {
-            if (person != null)
-            {
-                if (isRehire)
-                {
-                    MailUtil.SendCompensationChangeRehireEmail(person.FirstName, person.LastName, newPay.StartDate.Date.ToString(Constants.Formatting.EntryDateFormat), person.Alias, newPay.HtmlEncodedTitleName, person.TelephoneNumber, person.IsOffshore, person.Manager.FirstName+" "+person.Manager.LastName, newPay.HtmlEncodedDivisionName, Generic.GetDescription(oldPay.Timescale), Generic.GetDescription(newPay.Timescale));
-                }
-                else if ((oldPay.Timescale != newPay.Timescale))
-                {
-                    string effective = newPay.EndDate.HasValue && newPay.EndDate.Value.Date != Constants.Dates.FutureDate.Date ? newPay.StartDate.Date.ToString(Constants.Formatting.EntryDateFormat) + " to " + newPay.EndDate.Value.Date.AddDays(-1).ToString(Constants.Formatting.EntryDateFormat) : newPay.StartDate.Date.ToString(Constants.Formatting.EntryDateFormat);
-                    MailUtil.SendCompensationChangeEmail(person.FirstName, person.LastName, Generic.GetDescription(oldPay.Timescale), Generic.GetDescription(newPay.Timescale), effective);
-                }
-            }
-        }
+        //public void SendCompensationChangeEmail(Person person, Pay oldPay, Pay newPay, bool isRehire)
+        //{
+        //    if (person != null)
+        //    {
+        //        if (isRehire)
+        //        {
+        //            MailUtil.SendCompensationChangeRehireEmail(person.FirstName, person.LastName, newPay.StartDate.Date.ToString(Constants.Formatting.EntryDateFormat), person.Alias, newPay.HtmlEncodedTitleName, person.TelephoneNumber, person.IsOffshore, person.Manager.FirstName+" "+person.Manager.LastName, newPay.HtmlEncodedDivisionName, Generic.GetDescription(oldPay.Timescale), Generic.GetDescription(newPay.Timescale));
+        //        }
+        //        else if ((oldPay.Timescale != newPay.Timescale))
+        //        {
+        //            string effective = newPay.EndDate.HasValue && newPay.EndDate.Value.Date != Constants.Dates.FutureDate.Date ? newPay.StartDate.Date.ToString(Constants.Formatting.EntryDateFormat) + " to " + newPay.EndDate.Value.Date.AddDays(-1).ToString(Constants.Formatting.EntryDateFormat) : newPay.StartDate.Date.ToString(Constants.Formatting.EntryDateFormat);
+        //            MailUtil.SendCompensationChangeEmail(person.FirstName, person.LastName, Generic.GetDescription(oldPay.Timescale), Generic.GetDescription(newPay.Timescale), effective);
+        //        }
+        //    }
+        //}
 
         public static void SendReviewCancelationMail(int personId, string userLogin)
         {
