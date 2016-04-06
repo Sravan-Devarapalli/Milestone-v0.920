@@ -533,8 +533,8 @@ namespace PracticeManagementService
         [OperationContract]
         void DeleteReportFilterValues(int currentUserId, int previousUserId);
 
-        [OperationContract]
-        void SendCompensationChangeEmail(Person person, Pay oldPay, Pay newPay, bool isRehire);
+        //[OperationContract]
+        //void SendCompensationChangeEmail(Person person, Pay oldPay, Pay newPay, bool isRehire);
     }
 }
 
