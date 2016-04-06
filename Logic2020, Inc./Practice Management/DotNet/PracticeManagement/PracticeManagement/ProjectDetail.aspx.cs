@@ -472,6 +472,10 @@ namespace PraticeManagement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (ProjectId.HasValue)
+            {
+                tblProjectTypeViewSwitch.Visible=false;
+            }
             bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
             bool userIsOperations = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.OperationsRoleName);
             if (!IsPostBack)
@@ -809,6 +813,16 @@ namespace PraticeManagement
         {
             FromSaveButtonClick = true;
             ValidateSaveAndPopulate(true);
+        }
+
+        protected void btnSaveInternalProject_Click(object sender, EventArgs e)
+        {
+            Page.Validate(vsInternalProject.ValidationGroup);
+            if (Page.IsValid)
+            {
+                ServiceCallers.Custom.Project(p => p.SaveInternalProject(txtInternalProjectName.Text, ddlProjectNumberSeries.SelectedValue));
+                Response.Redirect("~/Projects.aspx");
+            }
         }
 
         private void ValidateSaveAndPopulate(bool showSuccessPopup)
@@ -1937,6 +1951,17 @@ namespace PraticeManagement
             {
                 ucCSAT.PopulateData(null);
             }
+        }
+
+        protected void btnProjectView_Command(object sender, CommandEventArgs e)
+        {
+            mvProjectType.ActiveViewIndex = int.Parse((string)e.CommandArgument);
+            foreach (TableCell cell in tblProjectTypeViewSwitch.Rows[0].Cells)
+            {
+                cell.CssClass = string.Empty;
+            }
+
+            ((WebControl)((Control)sender).Parent).CssClass = "SelectedSwitch";
         }
 
         private void SelectView(Control sender, int viewIndex)
