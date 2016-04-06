@@ -10,6 +10,8 @@ using DataTransferObjects.TimeEntry;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using PraticeManagement.ConfigurationService;
 using PraticeManagement.TimeTypeService;
+using System.IO;
+using System.IO.Compression;
 
 namespace PraticeManagement.Utils
 {
@@ -353,6 +355,33 @@ namespace PraticeManagement.Utils
                 HttpContext.Current.Cache[TitleTypes] = ServiceCallers.Custom.Title(t => t.GetTitleTypes()).ToArray();
             }
             return HttpContext.Current.Cache[TitleTypes] as TitleType[];
+        }
+
+        public static byte[] Compress(byte[] b)
+        {
+            MemoryStream ms = new MemoryStream();
+            GZipStream zs = new GZipStream(ms, CompressionMode.Compress, true);
+            zs.Write(b, 0, b.Length);
+            zs.Close();
+            return ms.ToArray();
+        }
+
+        public static byte[] Decompress(byte[] b)
+        {
+            MemoryStream ms = new MemoryStream();
+            GZipStream zs = new GZipStream(new MemoryStream(b),
+                                           CompressionMode.Decompress, true);
+            byte[] buffer = new byte[4096];
+            int size;
+            while (true)
+            {
+                size = zs.Read(buffer, 0, buffer.Length);
+                if (size > 0)
+                    ms.Write(buffer, 0, size);
+                else break;
+            }
+            zs.Close();
+            return ms.ToArray();
         }
     }
 }
