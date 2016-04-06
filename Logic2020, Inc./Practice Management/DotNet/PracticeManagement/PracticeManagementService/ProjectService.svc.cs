@@ -524,6 +524,11 @@ namespace PracticeManagementService
             return -1;
         }
 
+        public void SaveInternalProject(string projectName, string projectNumberSeries)
+        {
+            ProjectDAL.SaveInternalProject(projectName, projectNumberSeries);
+        }
+
         /// <summary>
         /// Provides an info for the month mini report.
         /// </summary>
