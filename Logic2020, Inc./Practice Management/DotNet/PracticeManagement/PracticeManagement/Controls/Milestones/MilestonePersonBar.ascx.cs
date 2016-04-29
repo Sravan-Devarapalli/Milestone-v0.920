@@ -552,7 +552,10 @@ namespace PraticeManagement.Controls.Milestones
         protected void btnInsertPerson_Click(object sender, EventArgs e)
         {
             var bar = btnInsert.NamingContainer.NamingContainer as RepeaterItem;
-            var result = InsertPerson(bar);
+            if (Page.IsValid)
+            {
+                var result = InsertPerson(bar);
+            }
             //if (!result)
             //{
             //    HostingPage.lblResultObject.ShowErrorMessage("Error occured while saving resources.");
@@ -563,8 +566,8 @@ namespace PraticeManagement.Controls.Milestones
         {
             HostingControl.vsumMileStonePersonsObject.ValidationGroup = milestonePersonEntryInsert + bar.ItemIndex.ToString();
 
-            bool result = true;
-            if (isValidating)
+            bool result=false;
+            if (isValidating && ValidateAndSave())
             {
                 Page.Validate(HostingControl.vsumMileStonePersonsObject.ValidationGroup);
                 result = Page.IsValid;
@@ -662,6 +665,21 @@ namespace PraticeManagement.Controls.Milestones
         internal bool SaveAll(RepeaterItem mpBar, bool isSaveCommit, bool iSDatBindRows)
         {
             return InsertPerson(mpBar, isSaveCommit, iSDatBindRows, false);
+        }
+
+        private bool ValidateAndSave()
+        {
+            reqPersonStart.Validate();
+            reqPersonEnd.Validate();
+            compPersonStartType.Validate();
+            compPersonEndType.Validate();
+            reqHourlyRevenue.Validate();
+            if (reqPersonStart.IsValid && reqPersonEnd.IsValid)
+            {
+                compPersonEndInsert.Validate();
+            }
+            return (reqPersonStart.IsValid && reqPersonEnd.IsValid && compPersonStartType.IsValid && compPersonEndType.IsValid && reqHourlyRevenue.IsValid && compPersonEndInsert.IsValid);
+        
         }
 
     }
