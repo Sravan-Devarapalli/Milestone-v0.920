@@ -118,16 +118,8 @@
                             <asp:ValidationSummary ID="valsumSearch" runat="server" ValidationGroup="ValSearch" />
                         </td>
                         <td align="right" >
-                            <%--<asp:DropDownList ID="ddlView" runat="server" OnSelectedIndexChanged="DdlView_SelectedIndexChanged"
-                                AutoPostBack="true">
-                                <asp:ListItem Text="View 25" Value="25"></asp:ListItem>
-                                <asp:ListItem Text="View 50" Value="50"></asp:ListItem>
-                                <asp:ListItem Text="View 100" Value="100"></asp:ListItem>
-                                <asp:ListItem Text="View All" Value="-1" Selected="True"></asp:ListItem>
-                            </asp:DropDownList>--%>
-                            <%--<asp:Button ID="btnExportToExcel"  runat="server" OnClick="btnExportToExcel_Click"
-                                Text="Export" />--%>
-                            <asp:Button ID="btnExportToExcel" runat="server" Text="Export" OnClick="btnExportToExcel_Click"
+                            
+                            <asp:Button ID="btnExportToExcel" runat="server" Text="Export" OnClick="btnExportToExcel_Click" Visible="false"
                                 Enabled="true" UseSubmitBehavior="false" ToolTip="Export To Excel" Width="100px"/>
                         </td>
                     </tr>
