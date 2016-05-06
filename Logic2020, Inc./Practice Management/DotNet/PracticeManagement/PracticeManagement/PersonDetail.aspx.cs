@@ -587,7 +587,7 @@ namespace PraticeManagement
         {
             // Security
             btnResetPassword.Visible =
-            chbLockedOut.Visible = UserIsAdministrator || UserIsHR;//#2817 UserisHR is added as per requirement.
+            chbLockedOut.Visible = UserIsAdministrator || UserIsHR|| UserIsOperations;//#2817 UserisHR is added as per requirement.
             txtEmployeeNumber.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
             lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
             ddlRecruiter.Enabled = cellPermissions.Visible = chblRoles.Visible = locRolesLabel.Visible = true;
