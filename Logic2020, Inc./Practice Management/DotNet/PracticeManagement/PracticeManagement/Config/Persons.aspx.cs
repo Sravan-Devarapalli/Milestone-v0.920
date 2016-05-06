@@ -316,10 +316,8 @@ namespace PraticeManagement.Config
                             cblRecruiters.Items.RemoveAt(i);
                         }
                     }
-
-                    btnExportToExcel.Visible = false;
                 }
-
+                btnExportToExcel.Visible = userIsAdministrator || userIsHR;
                 var cookie = SerializationHelper.DeserializeCookie(Constants.FilterKeys.PersonFilterCookie) as PersonFilter;
                 if (Request.QueryString[Constants.FilterKeys.ApplyFilterFromCookieKey] == "true" && cookie != null)
                 {
