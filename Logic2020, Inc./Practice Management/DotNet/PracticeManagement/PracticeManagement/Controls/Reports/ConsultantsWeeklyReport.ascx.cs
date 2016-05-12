@@ -564,10 +564,12 @@ namespace PraticeManagement.Controls.Reports
             if (NonInvestmentResources.Count > 0)
             {
                 chart.Visible = true;
+                nonInv.Style.Add("visibility", "hidden");
                 nonInv.Style.Add("display", "none");
             }
             else {
                 chart.Visible = false;
+                nonInv.Style.Add("visibility", "visible");
                 nonInv.Style.Add("display", "inline");
             }
         }
