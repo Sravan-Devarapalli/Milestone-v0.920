@@ -38,7 +38,8 @@ CREATE PROCEDURE [dbo].[PersonUpdate]
 	@LocationId			INT,
 	@IsMBO				BIT,
 	@IsInvestmentResource BIT,
-	@PracticeLeadershipId	INT
+	@PracticeLeadershipId	INT,
+	@TargetUtilization INT=NULL
 )
 AS
 SET NOCOUNT ON
@@ -195,7 +196,8 @@ BEGIN TRY
 			LocationId	= @LocationId,
 			IsMBO = @IsMBO,
 			IsInvestmentResource=@IsInvestmentResource,
-			PracticeLeadershipId = @PracticeLeadershipId
+			PracticeLeadershipId = @PracticeLeadershipId,
+			TargetUtilization=@TargetUtilization
 		WHERE PersonId = @PersonId
 
 		EXEC dbo.PersonStatusHistoryUpdate
