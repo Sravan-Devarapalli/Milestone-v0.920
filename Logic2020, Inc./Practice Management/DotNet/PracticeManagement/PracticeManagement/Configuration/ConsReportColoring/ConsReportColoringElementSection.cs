@@ -8,6 +8,7 @@ namespace PraticeManagement.Configuration.ConsReportColoring
         #region Constants
 
         private const string COLORS_PROPERTY = "colors";
+        private const string Investment_COLORS_PROPERTY = "investmentResourceColors";
         private const string COLORING_SECTION_NAME = "practiceManagement/consReportColoring";
         private const string DEFAULT_COLOR_PROPERTY = "defaultColorValue";
         private const string VACATION_COLOR_PROPERTY = "vacationColorValue";
@@ -35,6 +36,15 @@ namespace PraticeManagement.Configuration.ConsReportColoring
             get
             {
                 return this[COLORS_PROPERTY] as ConsReportColoringElementCollection;
+            }
+        }
+
+        [ConfigurationProperty(Investment_COLORS_PROPERTY, IsDefaultCollection = true)]
+        public ConsReportColoringElementCollection InvestmentResourceColors
+        {
+            get
+            {
+                return this[Investment_COLORS_PROPERTY] as ConsReportColoringElementCollection;
             }
         }
 
