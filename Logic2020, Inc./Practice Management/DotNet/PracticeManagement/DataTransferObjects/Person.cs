@@ -410,6 +410,9 @@ namespace DataTransferObjects
         public bool IsInvestmentResource { get; set; }
 
         [DataMember]
+        public int? TargetUtilization { get; set; }
+
+        [DataMember]
         public List<PersonIndustry> Industries
         {
             get;
