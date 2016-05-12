@@ -587,13 +587,15 @@ namespace PraticeManagement
         {
             // Security
             btnResetPassword.Visible =
-            chbLockedOut.Visible = UserIsAdministrator || UserIsHR|| UserIsOperations;//#2817 UserisHR is added as per requirement.
+            chbLockedOut.Visible = UserIsAdministrator || UserIsHR || UserIsOperations;//#2817 UserisHR is added as per requirement, UserIsOperations is added as per nick email.
             txtEmployeeNumber.ReadOnly = !UserIsAdministrator && !UserIsHR;//#2817 UserisHR is added as per requirement.
             lbPayChexID.Visible = txtPayCheckId.Visible = UserIsAdministrator;
             ddlRecruiter.Enabled = cellPermissions.Visible = chblRoles.Visible = locRolesLabel.Visible = true;
 
             //Disable TerminationDate, TerminationReason
             DisableTerminationDateAndReason();
+
+
 
             ddlPersonStatus.Visible = !(lblPersonStatus.Visible = btnChangeEmployeeStatus.Visible = PersonId.HasValue);
             btnAddCompensation.Enabled = !(PersonStatusId == PersonStatusType.Terminated);
@@ -610,6 +612,12 @@ namespace PraticeManagement
                     defaultManager.ManagerDdl.SelectedValue = "-1";
                 }
             }
+            showTargetUtil();
+        }
+
+        private void showTargetUtil()
+        {
+            ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "", "showTarget();", true);
         }
 
         protected override void OnPreRender(EventArgs e)
@@ -1857,7 +1865,7 @@ namespace PraticeManagement
             if (!IsWizards)
             {
                 var ownerFor = ServiceCallers.Custom.Person(p => p.CheckIfPersonStatusCanChangeFromActiveToContingent((int)PersonId));
-                if (ownerFor != null && (ownerFor.isAssignedToProjects||ownerFor.IsDivisionOwner))
+                if (ownerFor != null && (ownerFor.isAssignedToProjects || ownerFor.IsDivisionOwner))
                 {
                     args.IsValid = false;
                     cvIsOwnerOrAssignedToProject.ErrorMessage = cvIsOwnerOrAssignedToProject.ToolTip = string.Empty;
@@ -1867,7 +1875,7 @@ namespace PraticeManagement
                     }
                     if (ownerFor.IsDivisionOwner)
                     {
-                        cvIsOwnerOrAssignedToProject.ErrorMessage = cvIsOwnerOrAssignedToProject.ToolTip = cvIsOwnerOrAssignedToProject.ErrorMessage+"</br>" + DivisionOrPracticeAreaOwnerErrormessage;
+                        cvIsOwnerOrAssignedToProject.ErrorMessage = cvIsOwnerOrAssignedToProject.ToolTip = cvIsOwnerOrAssignedToProject.ErrorMessage + "</br>" + DivisionOrPracticeAreaOwnerErrormessage;
                     }
                 }
             }
@@ -2498,7 +2506,7 @@ namespace PraticeManagement
                     startDate = Convert.ToDateTime(imgUpdate.Attributes["StartDate"]);
                     index = PayHistory.FindIndex(p => p.StartDate.Date == startDate);
                     oldPay = PayHistory[index];
-                    
+
                     pay.OldStartDate = oldPay.StartDate;
                     pay.OldEndDate = oldPay.EndDate;
                 }
@@ -3114,6 +3122,7 @@ namespace PraticeManagement
         {
             int activeindex = mvPerson.ActiveViewIndex;
             int[] activeWizardsArray = ActiveWizardsArray[ActiveWizard];
+            rfvTxtTargetUtil.Enabled = rfvTxtTargetUtil.Enabled = chbInvestmentResouce.Checked;
             Page.Validate(valsPerson.ValidationGroup);
             personBadge.ValidateMSBadgeDetails();
             if (Page.IsValid)
@@ -3393,6 +3402,7 @@ namespace PraticeManagement
         {
             custTerminateDateTE.Enabled = false;
             int activeindex = mvPerson.ActiveViewIndex;
+            rfvTxtTargetUtil.Enabled = rfvTxtTargetUtil.Enabled = chbInvestmentResouce.Checked;
             for (int i = 0, j = mvPerson.ActiveViewIndex; i < mvPerson.Views.Count; i++, j++)
             {
                 if (j == mvPerson.Views.Count)
@@ -3564,8 +3574,8 @@ namespace PraticeManagement
             }
 
             DataHelper.FillPersonDivisionList(ddlDivision);
-           
-            
+
+
             if (!PersonId.HasValue)
             {
                 var status = new List<PersonStatus>();
@@ -3869,6 +3879,9 @@ namespace PraticeManagement
             }
             chbMBO.Checked = person.IsMBO;
             chbInvestmentResouce.Checked = person.IsInvestmentResource;
+
+            txtTargetUtilization.Text = person.TargetUtilization.ToString();
+
         }
 
         private void PopulatePracticeDropDown(Person person)
@@ -4046,6 +4059,14 @@ namespace PraticeManagement
             }
             person.IsMBO = chbMBO.Checked;
             person.IsInvestmentResource = chbInvestmentResouce.Checked;
+            if (person.IsInvestmentResource)
+            {
+                person.TargetUtilization = Convert.ToInt32(txtTargetUtilization.Text);
+            }
+            else
+            {
+                person.TargetUtilization = null;
+            }
         }
 
         private List<string> GetSelectedRoles()
