@@ -679,6 +679,42 @@ namespace PraticeManagement {
         protected global::System.Web.UI.WebControls.CheckBox chbLockedOut;
         
         /// <summary>
+        /// tblTargetUtil control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable tblTargetUtil;
+        
+        /// <summary>
+        /// txtTargetUtilization control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTargetUtilization;
+        
+        /// <summary>
+        /// rfvTxtTargetUtil control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTxtTargetUtil;
+        
+        /// <summary>
+        /// rvTxtTargetUtil control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator rvTxtTargetUtil;
+        
+        /// <summary>
         /// custPersonData control.
         /// </summary>
         /// <remarks>
