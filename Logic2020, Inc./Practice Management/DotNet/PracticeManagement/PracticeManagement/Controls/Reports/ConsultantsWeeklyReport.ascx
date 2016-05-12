@@ -102,7 +102,7 @@
             <asp:Chart ID="chart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
                 Width="1050px" Height="850px" OnClick="Chart_Click">
                 <Series>
-                    <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false"/>
+                    <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false" />
                 </Series>
                 <ChartAreas>
                     <asp:ChartArea Name="MainArea">
@@ -129,37 +129,73 @@
                     </asp:ChartArea>
                 </ChartAreas>
             </asp:Chart>
+            <div id="nonInv" runat="server" style="visibility:hidden">
+                No Resources for the selected filters.
+            </div>
+            <br />
+            <asp:Chart ID="investmentChart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
+                Width="1050px" Height="850px" OnClick="Chart_Click">
+                <Series>
+                    <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false" />
+                </Series>
+                <ChartAreas>
+                    <asp:ChartArea Name="MainArea">
+                        <AxisY IsLabelAutoFit="False" LineDashStyle="NotSet">
+                            <MajorGrid LineColor="DimGray" />
+                            <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
+                            <LabelStyle Format="MMM, d" />
+                        </AxisY>
+                        <AxisY2 IsLabelAutoFit="False" Enabled="True">
+                            <MajorGrid LineColor="DimGray" />
+                            <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
+                            <LabelStyle Format="MMM, d" />
+                        </AxisY2>
+                        <AxisX IsLabelAutoFit="true">
+                            <MajorGrid Interval="Auto" LineDashStyle="Dot" />
+                            <MajorTickMark Enabled="False" />
+                        </AxisX>
+                        <AxisX2 Enabled="True">
+                            <MajorGrid Interval="Auto" LineDashStyle="Dot" />
+                            <MajorTickMark Enabled="False" />
+                        </AxisX2>
+                        <Area3DStyle Inclination="5" IsClustered="True" IsRightAngleAxes="False" LightStyle="Realistic"
+                            Perspective="1" />
+                    </asp:ChartArea>
+                </ChartAreas>
+            </asp:Chart>
+            <br />
+            <div id="emptyInvestment" runat="server" visible="false">
+                No InvestmentResources
+            </div>
         </div>
         <asp:HiddenField ID="hdnExportOptions" Value="false" runat="server" />
         <AjaxControlToolkit:ModalPopupExtender ID="mpeExportOptions" runat="server" TargetControlID="hdnExportOptions"
             BehaviorID="mpeExportBehaviourId" BackgroundCssClass="modalBackground" PopupControlID="pnlExportOptions"
             CancelControlID="btnCancelExport" DropShadow="false" />
-        <asp:Panel ID="pnlExportOptions" runat="server" CssClass="popUp yScrollAuto minwidth350px" Style="display: none;">
+        <asp:Panel ID="pnlExportOptions" runat="server" CssClass="popUp yScrollAuto minwidth350px"
+            Style="display: none;">
             <table class="WholeWidth">
                 <tr class="PopUpHeader">
                     <th>
                         Please select one of the options below to export
                     </th>
-                </tr> 
+                </tr>
                 <tr>
                     <td class="ConsultPopup">
                         <asp:RadioButton ID="rbUtilization" runat="server" Checked="true" GroupName="ExportOptions" />
-                    &nbsp;&nbsp;
-                        Utilization only
+                        &nbsp;&nbsp; Utilization only
                     </td>
                 </tr>
                 <tr>
                     <td class="ConsultPopup">
                         <asp:RadioButton ID="rbProjectUtilization" runat="server" GroupName="ExportOptions" />
-                    &nbsp;&nbsp;
-                        Project and Utilization 
+                        &nbsp;&nbsp; Project and Utilization
                     </td>
                 </tr>
                 <tr>
                     <td class="ConsultPopup">
                         <asp:RadioButton ID="rbHoursUtilization" runat="server" GroupName="ExportOptions" />
-                    &nbsp;&nbsp;
-                        Hours
+                        &nbsp;&nbsp; Hours
                     </td>
                 </tr>
                 <tr>
@@ -263,7 +299,7 @@
 <asp:Chart ID="chartPdf" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
     Visible="false" Width="920px" Height="850px">
     <Series>
-        <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false"/>
+        <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false" />
     </Series>
     <ChartAreas>
         <asp:ChartArea Name="MainArea">
