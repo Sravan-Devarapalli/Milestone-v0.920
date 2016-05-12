@@ -58,7 +58,8 @@ BEGIN
 		   p.LocationName,
 		   p.PracticeLeadershipId,
 		   p.IsMBO,
-		   p.IsInvestmentResource
+		   p.IsInvestmentResource,
+		   p.TargetUtilization
 	  FROM dbo.v_Person AS p
 	 WHERE p.PersonId = @PersonId
 END
