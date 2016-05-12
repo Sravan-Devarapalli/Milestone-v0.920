@@ -15,7 +15,6 @@
 	,@SortId INT = 0
 	,@SortDirection NVARCHAR(15) = 'DESC'
 	,@IsSampleReport BIT = 0
-	,@ExcludeInvestmentResource BIT = 0
 	,@DivisionIds NVARCHAR(4000) = NULL
 AS
 BEGIN
@@ -41,7 +40,7 @@ BEGIN
 	END
 	ELSE IF (@SortId = 2) --Alphabetical  Pay Type
 	BEGIN
-		SET @OrderBy = @OrderBy + ' c.[TimeScaleName] DESC' + ', wutilAvg  ASC'
+		SET @OrderBy = @OrderBy + ' c.[TimeScaleName] ASC' + ', wutilAvg  ASC'
 	END
 	ELSE IF (@SortId = 3) --Alphabetical  Practice
 	BEGIN
@@ -79,7 +78,7 @@ BEGIN
 		INNER JOIN dbo.GetLatestPayWithInTheGivenRange(@StartDate,@EndDate) AS PCPT ON PCPT.PersonId = p.PersonId AND T.TimescaleId = PCPT.Timescale  
         LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
 		LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = P.TerminationReasonId
-        WHERE (p.IsStrawman = 0) AND (@ExcludeInvestmentResource = 1 AND p.IsInvestmentResource = 0 OR @ExcludeInvestmentResource = 0)
+        WHERE (p.IsStrawman = 0) 
 						AND (TR.TerminationReasonId IS NULL OR TR.IsPersonWorkedRule = 1)
                         AND ((@ActivePersons = 1 AND p.PersonStatusId IN (1,5)) OR (@ProjectedPersons = 1 AND p.PersonStatusId = 3))
 						AND (p.DefaultPractice IN (SELECT ResultId FROM dbo.ConvertStringListIntoTable(@PracticeIds)) AND (pr.IsCompanyInternal = 0 AND @ExcludeInternalPractices  = 1 OR @ExcludeInternalPractices = 0))
@@ -89,9 +88,11 @@ BEGIN
 	---------------------------------------------------------
 	SET @Query = @Query + 
 		'
-        SELECT  p.PersonId,p.EmployeeNumber,p.First AS FirstName,p.LastName,p.HireDate,p.TerminationDate,c.TimescaleId,c.TimeScaleName AS Timescale,st.PersonStatusId,st.Name,P.TitleId,p.Title,p.DefaultPractice PracticeId,p.PracticeName,CASE WHEN AvaHrs.AvaliableHours > 0 THEN  AvgUT.AvgUtilization ELSE 0 END AS wutilAvg,ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays,M.BadgeStartDate,M.BadgeEndDate,M.BreakStartDate,M.BreakEndDate,M.BlockStartDate,M.BlockEndDate
+        SELECT  p.PersonId,p.EmployeeNumber,p.First AS FirstName,p.LastName,p.HireDate,p.TerminationDate,c.TimescaleId,c.TimeScaleName AS Timescale,st.PersonStatusId,st.Name,P.TitleId,p.Title,p.DefaultPractice PracticeId,p.PracticeName,
+				CASE WHEN AvaHrs.AvaliableHours > 0 THEN  AvgUT.AvgUtilization ELSE 0 END AS wutilAvg,ISNULL(VactionDaysTable.VacationDays,0) AS PersonVactionDays,M.BadgeStartDate,M.BadgeEndDate,M.BreakStartDate,M.BreakEndDate,M.BlockStartDate,M.BlockEndDate,B.ManageServiceContract,p.IsInvestmentResource,p.TargetUtilization
 		        FROM v_person AS p INNER JOIN @CurrentConsultants AS c ON c.ConsId = p.PersonId
 				LEFT JOIN v_CurrentMSBadge M ON M.PersonId = p.PersonId INNER JOIN dbo.PersonStatus AS st ON p.PersonStatusId = st.PersonStatusId
+				LEFT JOIN MSBadge B ON B.Personid=p.personid 
 				LEFT JOIN dbo.GetNumberAvaliableHoursTable(@StartDate,@EndDate,@ActiveProjects,@ProjectedProjects,@ExperimentalProjects,@InternalProjects,@ProposedProjects,@CompletedProjects) AS AvaHrs ON AvaHrs.PersonId =  p.PersonId 
 		LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
                 LEFT JOIN dbo.GetPersonVacationDaysTable(@StartDate,@Enddate) VactionDaysTable ON VactionDaysTable.PersonId = c.ConsId
@@ -124,7 +125,6 @@ BEGIN
 								 @TimescaleIds			NVARCHAR(4000),
 								 @PracticeIds			NVARCHAR(4000),
 								 @ExcludeInternalPractices	BIT,
-								 @ExcludeInvestmentResource BIT,
 								 @DivisionIds			NVARCHAR(4000)'
 		,@StartDate = @StartDate
 		,@Step = @Step
@@ -140,7 +140,6 @@ BEGIN
 		,@TimescaleIds = @TimescaleIds
 		,@PracticeIds = @PracticeIds
 		,@ExcludeInternalPractices = @ExcludeInternalPractices
-		,@ExcludeInvestmentResource = @ExcludeInvestmentResource
 		,@DivisionIds = @DivisionIds
 
 	DECLARE @EndDateReport DATETIME
@@ -193,11 +192,7 @@ BEGIN
 	LEFT JOIN dbo.Practice AS pr ON p.DefaultPractice = pr.PracticeId
 	LEFT JOIN dbo.TerminationReasons TR ON TR.TerminationReasonId = P.TerminationReasonId
 	WHERE (p.IsStrawman = 0)
-		AND (
-			@ExcludeInvestmentResource = 1
-			AND p.IsInvestmentResource = 0
-			OR @ExcludeInvestmentResource = 0
-			)
+	
 		AND (
 			TR.TerminationReasonId IS NULL
 			OR TR.IsPersonWorkedRule = 1
