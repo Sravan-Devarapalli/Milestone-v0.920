@@ -27,6 +27,7 @@
             public const string ManageServiceContract = "ManageServiceContract";
             public const string RestartDate = "RestartDate";
             public const string IsInvestmentResource = "IsInvestmentResource";
+            public const string TargetUtilization = "TargetUtilization";
             public const string PracticeDirectorId = "PracticeDirectorId";
             public const string ExecutiveInChargeId = "ExecutiveInChargeId";
             public const string EngagementManagerId = "EngagementManagerId";
@@ -652,6 +653,7 @@
             public const string DivisionIds = "@DivisionIds";
             public const string ExcludeInvestmentResource = "@ExcludeInvestmentResource";
             public const string IsInvestmentResource = "@IsInvestmentResource";
+            public const string TargetUtilization = "@TargetUtilization";
             public const string ManageServiceContract = "@ManageServiceContract";
             public const string ChargeDate = "@ChargeDate";
             public const string PersonStatusIds = "@PersonStatusIds";
