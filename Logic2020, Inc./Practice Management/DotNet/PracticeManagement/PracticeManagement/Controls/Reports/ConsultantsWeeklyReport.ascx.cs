@@ -57,6 +57,8 @@ namespace PraticeManagement.Controls.Reports
         private const string COMPANYHOLIDAYS_KEY = "CompanyHolidays_Key";
         private const string TIMEOFFDATES_KEY = "TIMEOFFDATES_KEY";
         private const string CONSULTANTUTILIZATIONPERSON_KEY = "ConsultantUtilizationPerson_Key";
+        private const string INVESTMENTRESOURCE_KEY = "InvestmentResource_Key";
+        private const string NONINVESTMENTRESOURCE_KEY = "NonInvestmentResource_key";
         private const string PageCount = "Page {0} of {1}";
         private const int reportSize = 25;
         private const string ConsultantCapacityReport = "Consulting Capacity Report";
@@ -88,7 +90,7 @@ namespace PraticeManagement.Controls.Reports
                 RowStyles datarowStyle1 = new RowStyles(dataCellStylearray);
                 RowStyles datarowStyle2 = new RowStyles(dataCellStylearray);
                 datarowStyle1.Height = 350;
-                datarowStyle2.Height = 800;
+                datarowStyle2.Height = 1250;
 
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle2, datarowStyle1 };
 
@@ -169,13 +171,24 @@ namespace PraticeManagement.Controls.Reports
                 CellStyles dataCellStyle = new CellStyles();
 
                 CellStyles percentageCellStyle = new CellStyles();
-                percentageCellStyle.DataFormat = "0.00";
+                percentageCellStyle.DataFormat = "0%";
                 percentageCellStyle.WrapText = true;
-                CellStyles[] dataCellStylearray = { dataCellStyle, 
-                                                    dataCellStyle,
-                                                    dataCellStyle,
-                                                    percentageCellStyle
-                                                  };
+
+                CellStyles hoursCellStyle = new CellStyles();
+                hoursCellStyle.DataFormat = "0.00";
+                hoursCellStyle.WrapText = true;
+
+                List<CellStyles> datacells = new List<CellStyles>();
+                for (int i = 0; i < 3; i++)
+                {
+                    datacells.Add(dataCellStyle);
+                }
+                for (int i = 3; i < coloumnsCount; i++)
+                {
+                    datacells.Add(hoursCellStyle);
+                }
+                //datacells.Add(percentageCellStyle);
+                var dataCellStylearray = datacells.ToArray();
                 RowStyles datarowStyle = new RowStyles(dataCellStylearray);
                 RowStyles[] rowStylearray = { headerrowStyle, datarowStyle };
                 SheetStyles sheetStyle = new SheetStyles(rowStylearray);
@@ -199,7 +212,9 @@ namespace PraticeManagement.Controls.Reports
         #region Fields
 
         private int _personsCount;
+        private int _investmentPersonCount;
         private bool? _userIsAdministratorValue;
+        private int page;
         /// <summary>
         /// 	Report's 'step' in days
         /// </summary>
@@ -275,6 +290,12 @@ namespace PraticeManagement.Controls.Reports
         {
             get { return chartPdf.Series[WEEKS_SERIES_NAME]; }
         }
+
+        public Series WeeksSeriesInvestment
+        {
+            get { return investmentChart.Series[WEEKS_SERIES_NAME]; }
+        }
+
 
         /// <summary>
         /// 	Report's start date
@@ -360,6 +381,28 @@ namespace PraticeManagement.Controls.Reports
             set { ViewState[CONSULTANTUTILIZATIONPERSON_KEY] = value; }
         }
 
+        public List<ConsultantUtilizationPerson> InvestmentResources
+        {
+            get
+            {
+                if (ViewState[INVESTMENTRESOURCE_KEY] == null)
+                    ViewState[INVESTMENTRESOURCE_KEY] = new List<ConsultantUtilizationPerson>();
+                return ViewState[INVESTMENTRESOURCE_KEY] as List<ConsultantUtilizationPerson>;
+            }
+            set { ViewState[INVESTMENTRESOURCE_KEY] = value; }
+        }
+
+        public List<ConsultantUtilizationPerson> NonInvestmentResources
+        {
+            get
+            {
+                if (ViewState[NONINVESTMENTRESOURCE_KEY] == null)
+                    ViewState[NONINVESTMENTRESOURCE_KEY] = new List<ConsultantUtilizationPerson>();
+                return ViewState[NONINVESTMENTRESOURCE_KEY] as List<ConsultantUtilizationPerson>;
+            }
+            set { ViewState[NONINVESTMENTRESOURCE_KEY] = value; }
+        }
+
         protected bool UserIsAdministrator
         {
             get
@@ -378,10 +421,28 @@ namespace PraticeManagement.Controls.Reports
 
         public float ChartImageWidth { get; set; }
 
+        public bool ExculdeInvestmentResources
+        {
+            get
+            {
+                return utf.ExcludeInvestmentResources;
+            }
+        }
+
+        public bool isInvestmentPdfChart
+        {
+            get;
+            set;
+        }
+
         #endregion Fields
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            if (!ExculdeInvestmentResources)
+            {
+                investmentChart.Visible = false;
+            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -390,6 +451,7 @@ namespace PraticeManagement.Controls.Reports
             {
                 btnExportToExcel.Enabled = !IsCapacityMode;
             }
+
             if (IsSampleReport)
             {
                 utf.IsSampleReport = true;
@@ -453,15 +515,61 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0, utf.IncludeBadgeStatus, utf.ExcludeInvestmentResources, DivisionIdList);
+                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Asc" : "Desc") : SortDirection, utf.ExcludeInternalPractices, 0, utf.IncludeBadgeStatus, DivisionIdList);
             ConsultantUtilizationPerson = report;
-            foreach (var quadruple in report)
-                AddPerson(quadruple);
 
-            chart.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
+            InvestmentResources = report.Where(r => r.Person.IsInvestmentResource).ToList();
+            NonInvestmentResources = report.Where(r => !r.Person.IsInvestmentResource).ToList();
+
+            if (ExculdeInvestmentResources)
+            {
+                foreach (var quadruple in InvestmentResources)
+                {
+                    AddPerson(quadruple);
+                }
+                foreach (var quadruple in NonInvestmentResources)
+                {
+                    AddPerson(quadruple);
+                }
+                chart.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
+                           Resources.Controls.TimelineGeneralItemHeigth * NonInvestmentResources.Count +
+                           Resources.Controls.TimelineGeneralFooterHeigth;
+                investmentChart.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
+                           Resources.Controls.TimelineGeneralItemHeigth * InvestmentResources.Count +
+                           Resources.Controls.TimelineGeneralFooterHeigth + 1;
+
+            }
+            else
+            {
+                foreach (var quadruple in report)
+                    AddPerson(quadruple);
+                chart.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
                            Resources.Controls.TimelineGeneralItemHeigth * report.Count +
                            Resources.Controls.TimelineGeneralFooterHeigth;
-            SaveFilterValuesForSession();
+            }
+
+            if (!IsSampleReport)
+            {
+                SaveFilterValuesForSession();
+            }
+            if (InvestmentResources.Count > 0)
+            {
+                investmentChart.Visible = true;
+                emptyInvestment.Visible = false;
+            }
+            else {
+                investmentChart.Visible = false;
+                emptyInvestment.Visible = true;
+            }
+            if (NonInvestmentResources.Count > 0)
+            {
+                chart.Visible = true;
+                nonInv.Style.Add("display", "none");
+            }
+            else {
+                chart.Visible = false;
+                nonInv.Style.Add("display", "inline");
+            }
         }
 
         /// <summary>
@@ -472,9 +580,16 @@ namespace PraticeManagement.Controls.Reports
             if (isPdf)
             {
                 SetFont();
+                InitAxis(chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY);
+                InitAxis(chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2);
             }
-            InitAxis(isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY);
-            InitAxis(isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2 : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2);
+            if (ExculdeInvestmentResources)
+            {
+                InitAxis(investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY);
+                InitAxis(investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2);
+            }
+            InitAxis(chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY);
+            InitAxis(chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisY2);
             UpdateChartTitle(isPdf, pageNumber);
             InitLegends(isPdf);
         }
@@ -493,16 +608,18 @@ namespace PraticeManagement.Controls.Reports
         private void InitLegends(bool isPdf = false)
         {
             chart.Legends.Clear();
+            investmentChart.Legends.Clear();
             chartPdf.Legends.Clear();
-            var legendTop = new Legend("Top")
+            var legendTop = new Legend()
             {
                 DockedToChartArea = MAIN_CHART_AREA_NAME,
                 Docking = Docking.Top,
                 Alignment = StringAlignment.Center,
                 IsDockedInsideChartArea = false,
                 LegendStyle = LegendStyle.Table
+
             };
-            var legendBtm = new Legend("Bottom")
+            var legendBtm = new Legend()
             {
                 DockedToChartArea = MAIN_CHART_AREA_NAME,
                 Docking = Docking.Bottom,
@@ -510,20 +627,52 @@ namespace PraticeManagement.Controls.Reports
                 IsDockedInsideChartArea = false,
                 LegendStyle = LegendStyle.Table
             };
+
+            var InvestmentResourceLegend = new Legend("InvestmentResourcesLegend")
+            {
+                Alignment = StringAlignment.Center,
+                IsDockedInsideChartArea = false,
+                DockedToChartArea = MAIN_CHART_AREA_NAME,
+                Docking = ExculdeInvestmentResources ? Docking.Top : Docking.Bottom,
+                LegendStyle = LegendStyle.Table
+            };
+            if (isPdf)
+            {
+                chartPdf.Legends.Add(legendTop);
+                chartPdf.Legends.Add(ExculdeInvestmentResources ? legendBtm : InvestmentResourceLegend);
+
+            }
             chart.Legends.Add(legendTop);
-            chart.Legends.Add(legendBtm);
-            chartPdf.Legends.Add(legendTop);
-            chartPdf.Legends.Add(legendBtm);
+            if (!ExculdeInvestmentResources)
+            {
+                chart.Legends.Add(InvestmentResourceLegend);
+            }
+            else
+            {
+                investmentChart.Legends.Add(InvestmentResourceLegend);
+            }
+
             LegendCollection lcollection = isPdf ? chartPdf.Legends : chart.Legends;
             foreach (var legend in lcollection)
             {
                 if (IsCapacityMode)
                 {
-                    Coloring.CapacityColorLegends(legend);
+                    Coloring.CapacityColorLegends(legend, isInvestmentPdfChart);
                 }
                 else
                 {
-                    Coloring.ColorLegend(legend, utf.IncludeBadgeStatus);
+                    Coloring.ColorLegend(legend, utf.IncludeBadgeStatus,isPdf, isInvestmentPdfChart);
+                }
+            }
+            if (ExculdeInvestmentResources)
+            {
+                if (IsCapacityMode)
+                {
+                    Coloring.CapacityColorLegends(investmentChart.Legends[0], isInvestmentPdfChart);
+                }
+                else
+                {
+                    Coloring.ColorLegend(investmentChart.Legends[0], utf.IncludeBadgeStatus,isPdf, true);
                 }
             }
         }
@@ -747,7 +896,7 @@ namespace PraticeManagement.Controls.Reports
                     IsCapacityMode ? Capacity : Utilization,
                     BegPeriod.ToString("MM/dd/yyyy"),
                     EndPeriod.ToString("MM/dd/yyyy"),
-                    personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(), utf.DivisionsFilterText()));
+                    personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), isInvestmentPdfChart ? "Investment Resources" : "Non-Investment Resources", utf.DivisionsFilterText()));
                 title_top.Font = new System.Drawing.Font("Candara", 9f);
 
                 chartPdf.Titles.Add(title_top);
@@ -767,6 +916,10 @@ namespace PraticeManagement.Controls.Reports
                         BegPeriod.ToString("MM/dd/yyyy"),
                         EndPeriod.ToString("MM/dd/yyyy"),
                         personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(), utf.DivisionsFilterText()));
+            }
+            if (ExculdeInvestmentResources)
+            {
+                investmentChart.Titles.Add("Investment Resources");
             }
         }
 
@@ -799,7 +952,7 @@ namespace PraticeManagement.Controls.Reports
                     utf.ActivePersons, utf.ProjectedPersons,
                     utf.ActiveProjects, utf.ProjectedProjects,
                     utf.ExperimentalProjects,
-                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber, false, utf.ExcludeInvestmentResources, DivisionIdList);
+                    utf.InternalProjects, utf.ProposedProjects, utf.CompletedProjects, TimescaleIds, PracticeIdList, AvgUtil, SortId, (IsCapacityMode && SortId == 0) ? (SortDirection == "Desc" ? "Desc" : "Asc") : SortDirection, utf.ExcludeInternalPractices, optionNumber == 2 ? 0 : optionNumber, false, DivisionIdList);
             report.Reverse();
             string personsPlaceHolder = string.Empty, projectsPlaceHolder = string.Empty, practicesPlaceHolder = string.Empty;
             if (utf.ProjectedPersons && utf.ActivePersons)
@@ -900,8 +1053,43 @@ namespace PraticeManagement.Controls.Reports
                 header1.Rows.Add(row1.ToArray());
                 headerRowsCount = header1.Rows.Count + 3;
 
-                var data = PrepareDataTable(report, optionNumber);
-                coloumnsCount = data.Columns.Count;
+                DataTable headerForInvestment = new DataTable();
+                headerForInvestment.Columns.Add(string.Format("Period: {0}-{1}", BegPeriod.ToString("MM/dd/yyyy"), EndPeriod.ToString("MM/dd/yyyy")));
+                List<object> row2 = new List<object>();
+                row2.Add(string.Format(ConsultingHeader, personsPlaceHolder, projectsPlaceHolder, utf.PracticesFilterText(), utf.InvestmentResourceFilterText(), utf.DivisionsFilterText()));
+                headerForInvestment.Rows.Add(row2.ToArray());
+
+                DataTable NonInvData, InvData, data;
+
+                if (!ExculdeInvestmentResources)
+                {
+                    data = PrepareDataTable(report, optionNumber, true);
+                    coloumnsCount = data.Columns.Count;
+                    var dataset = new DataSet();
+                    dataset.DataSetName = "Consulting_Utilization";
+                    dataset.Tables.Add(header1);
+                    dataset.Tables.Add(data);
+                    dataSetList.Add(dataset);
+                }
+                else
+                {
+                    var nonInvResources = report.Where(p => p.Person.IsInvestmentResource == false).ToList();
+                    var InvResources = report.Where(p => p.Person.IsInvestmentResource == true).ToList();
+                    NonInvData = PrepareDataTable(nonInvResources, optionNumber);
+                    InvData = PrepareDataTable(InvResources, optionNumber, true);
+                    coloumnsCount = NonInvData.Columns.Count;
+                    var NonInvDataset = new DataSet();
+                    NonInvDataset.DataSetName = "Non-Investment Resources";
+                    NonInvDataset.Tables.Add(header1);
+                    NonInvDataset.Tables.Add(NonInvData);
+                    dataSetList.Add(NonInvDataset);
+                    var InvDataset = new DataSet();
+                    InvDataset.DataSetName = "Investment Resources";
+                    InvDataset.Tables.Add(headerForInvestment);
+                    InvDataset.Tables.Add(InvData);
+                    dataSetList.Add(InvDataset);
+                }
+
                 sheetStylesList.Add(HeaderSheetStyle);
                 if (optionNumber == 1)
                 {
@@ -927,10 +1115,32 @@ namespace PraticeManagement.Controls.Reports
                     for (int i = 0; i < report[0].ProjectUtilization.Count; i++)
                         dataStyle.ColoumnWidths.Add(20);
                     sheetStylesList.Add(dataStyle);
+                    if (ExculdeInvestmentResources)
+                    {
+                        coloumnsCount++;
+                        sheetStylesList.Add(HeaderSheetStyle);
+                        sheetStylesList.Add(dataStyle);
+                    }
                 }
                 if (optionNumber == 2)
                 {
                     sheetStylesList.Add(DataSheetStyleForHours);
+                    if (ExculdeInvestmentResources)
+                    {
+
+                        CellStyles percentageCellStyle = new CellStyles();
+                        percentageCellStyle.DataFormat = "0%";
+                        percentageCellStyle.WrapText = true;
+                        var datasheet = DataSheetStyleForHours;
+                        var row = datasheet.rowStyles.ToList();
+                        var cellStyle = row[1].cellStyles.ToList();
+                        cellStyle.Add(percentageCellStyle);
+                        RowStyles rowstyle = new RowStyles(cellStyle.ToArray());
+                        datasheet.rowStyles[1] = rowstyle;
+                        coloumnsCount++;
+                        sheetStylesList.Add(HeaderSheetStyle);
+                        sheetStylesList.Add(datasheet);
+                    }
                 }
                 else
                 {
@@ -950,12 +1160,14 @@ namespace PraticeManagement.Controls.Reports
                     rowStylesList.Add(datarowStyle);
                     dataStyle.rowStyles = rowStylesList.ToArray();
                     sheetStylesList.Add(dataStyle);
+                    if (ExculdeInvestmentResources)
+                    {
+                        coloumnsCount++;
+                        sheetStylesList.Add(HeaderSheetStyle);
+                        sheetStylesList.Add(dataStyle);
+                    }
                 }
-                var dataset = new DataSet();
-                dataset.DataSetName = "Consulting_Utilization";
-                dataset.Tables.Add(header1);
-                dataset.Tables.Add(data);
-                dataSetList.Add(dataset);
+
             }
             else
             {
@@ -969,17 +1181,18 @@ namespace PraticeManagement.Controls.Reports
                 dataSetList.Add(dataset);
             }
 
+
             NPOIExcel.Export(filename, dataSetList, sheetStylesList);
         }
 
-        public DataTable PrepareDataTable(List<ConsultantUtilizationPerson> report, int optionNumber)
+        public DataTable PrepareDataTable(List<ConsultantUtilizationPerson> report, int optionNumber, bool includeTargetUtil = false)
         {
             DataTable data = new DataTable();
             List<object> row;
             data.Columns.Add("Person Name");
             data.Columns.Add("Title");
             data.Columns.Add("Pay type");
-            if (optionNumber == 0 || optionNumber == 2)
+            if ((optionNumber == 0 || optionNumber == 2) && report.Count > 0)
             {
                 for (int i = 0; i < report[0].WeeklyUtilization.Count; i++)
                 {
@@ -1030,7 +1243,7 @@ namespace PraticeManagement.Controls.Reports
                     data.Columns.Add(pointStartDate.ToShortDateString());
                 }
             }
-            else if (optionNumber == 1)
+            else if (optionNumber == 1 && report.Count > 0)
             {
                 foreach (var item in report[0].ProjectUtilization)
                 {
@@ -1038,7 +1251,11 @@ namespace PraticeManagement.Controls.Reports
                 }
             }
             data.Columns.Add(optionNumber == 2 ? "Average Hours" : "Utilization %");
-            if (optionNumber == 0 || optionNumber == 2)
+            if (includeTargetUtil)
+            {
+                data.Columns.Add("Target Utilization %");
+            }
+            if ((optionNumber == 0 || optionNumber == 2) && report.Count > 0)
             {
                 foreach (var person in report)
                 {
@@ -1113,10 +1330,14 @@ namespace PraticeManagement.Controls.Reports
                         row.Add(person.PersonVacationDays > 0 ? person.AverageUtilization.ToString() + "%*" : ((double)person.AverageUtilization / 100).ToString());
                     else if (optionNumber == 2)
                         row.Add(Math.Round((decimal)person.ProjectedHoursList.Sum() / person.ProjectedHoursList.Count, 2));
+                    if (includeTargetUtil && person.Person.TargetUtilization != null)
+                    {
+                        row.Add(((double)person.Person.TargetUtilization / 100).ToString());
+                    }
                     data.Rows.Add(row.ToArray());
                 }
             }
-            else if (optionNumber == 1)
+            else if (optionNumber == 1 && report.Count > 0)
             {
                 Heights = new List<int>();
                 foreach (var person in report)
@@ -1146,6 +1367,10 @@ namespace PraticeManagement.Controls.Reports
                     }
                     Heights.Add(temp);
                     row.Add(person.PersonVacationDays > 0 ? person.AverageUtilization.ToString() + "%*" : ((double)person.AverageUtilization / 100).ToString()); //row.Add(person.AverageUtilization);
+                    if (includeTargetUtil && person.Person.TargetUtilization != null)
+                    {
+                        row.Add(((double)person.Person.TargetUtilization / 100).ToString());
+                    }
                     data.Rows.Add(row.ToArray());
                 }
             }
@@ -1154,7 +1379,7 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Chart_Click(object sender, ImageMapEventArgs e)
         {
-            UpdateReport();
+            //UpdateReport();
             var query = e.PostBackValue.Split(DELIMITER);
 
             // Exctract data from query
@@ -1300,7 +1525,7 @@ namespace PraticeManagement.Controls.Reports
         public void AddPerson(ConsultantUtilizationPerson quadruple, bool isPdf = false)
         {
             var partsCount = quadruple.WeeklyUtilization.Count;
-            var csv = FormCSV(quadruple.WeeklyUtilization.ToArray());
+            //var csv = FormCSV(quadruple.WeeklyUtilization.ToArray());
             for (var w = 0; w < partsCount; w++)
             {
                 TimescaleType payType = (TimescaleType)quadruple.WeeklyPayTypes[w];
@@ -1308,7 +1533,7 @@ namespace PraticeManagement.Controls.Reports
                 AddPersonRange(
                     quadruple.Person, //  Person
                      w, //  Range index
-                     IsCapacityMode ? 100 - quadruple.WeeklyUtilization[w] : quadruple.WeeklyUtilization[w], csv,
+                     IsCapacityMode ? 100 - quadruple.WeeklyUtilization[w] : quadruple.WeeklyUtilization[w],
                      payType == TimescaleType.Undefined ? "No Pay Type" : DataHelper.GetDescription(payType), quadruple.WeeklyVacationDays[w], quadruple.TimeOffDates, quadruple.CompanyHolidayDates, isPdf, quadruple.Person.Projects
                      ); //  U% or C% for the period
             }
@@ -1317,7 +1542,15 @@ namespace PraticeManagement.Controls.Reports
             AddLabel(quadruple.Person, IsCapacityMode ? 100 - quadruple.AverageUtilization : quadruple.AverageUtilization, quadruple.PersonVacationDays, isPdf);
 
             //  Increase persons counter
-            _personsCount++;
+
+            if (ExculdeInvestmentResources && quadruple.Person.IsInvestmentResource)
+            {
+                _investmentPersonCount++;
+            }
+            else
+            {
+                _personsCount++;
+            }
         }
 
         private string FormCSV(int[] avgUtils)
@@ -1339,41 +1572,110 @@ namespace PraticeManagement.Controls.Reports
         private void AddLabel(Person p, int avg, int vacationDays, bool isPdf)
         {
             //  Get labels collection
-            var labels =
-                isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
-            //  Create new label
-            var label =
-                labels.Add(
-                    _personsCount - 0.49, // From position
-                    _personsCount + 0.49, // To position
-                    FormatPersonName(p), // Formated person title
-                    0, // Index
-                    LabelMarkStyle.None); // Mark style: none
+            if (ExculdeInvestmentResources && !isPdf)
+            {
+                var NonInvestmentlabel1 = chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
+                var Investmentlabel1 = investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
+                var NonInvestmentlabel2 = chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels;
+                var Investmentlabel2 = investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels;
+                if (p.IsInvestmentResource)
+                {
 
+                    label(Investmentlabel1, Investmentlabel2, p, _investmentPersonCount, vacationDays, avg, true);
+                }
+                else
+                {
+                    label(NonInvestmentlabel1, NonInvestmentlabel2, p, _personsCount, vacationDays, avg);
+                }
+            }
+            else if (isPdf)
+            {
+                var labels = chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
+                var labels2 = chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels;
+                label(labels, labels2, p, isInvestmentPdfChart ? _investmentPersonCount : _personsCount, vacationDays, avg, isInvestmentPdfChart ? true : false, isPdf);
+            }
+            else
+            {
+
+                var chartLabel1 = chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels;
+                var chartLabel2 = chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels;
+                label(chartLabel1, chartLabel2, p, _personsCount, vacationDays, avg);
+            }
+        }
+
+        private void label(CustomLabelsCollection labelsX1, CustomLabelsCollection labelsX2, Person p, int count, int vacationDays, int avg, bool tag = false, bool isPdf = false)
+        {
+            var label = labelsX1.Add(
+                     count - 0.49, // From position
+                     count + 0.49, // To position
+                     FormatPersonName(p), // Formated person title
+                     0, // Index
+                     LabelMarkStyle.SideMark);
+
+            chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.LabelStyle.Font = new System.Drawing.Font(FontFamily.GenericSansSerif, 10, p.IsInvestmentResource ? FontStyle.Italic : FontStyle.Regular);
             if (!IsSampleReport)
             {
                 //  Url to person details page, return to report
                 label.Url = getPersonUrl(p);
             }
             //  Tooltip
-            label.ToolTip =
-                string.Format(
-                    DateTime.MinValue != p.HireDate ? PERSON_TOOLTIP_FORMAT : NOT_HIRED_PERSON_TOOLTIP_FORMAT,
-                     p.CurrentPay.TimescaleName, // Current Pay Type
-                    p.HireDate.ToString("MM/dd/yyyy") // Hire date
+            //label.LabelMark = LabelMarkStyle.Box;
+            label.ToolTip = string.Format(DateTime.MinValue != p.HireDate ? PERSON_TOOLTIP_FORMAT : NOT_HIRED_PERSON_TOOLTIP_FORMAT,
+                                            p.CurrentPay.TimescaleName, // Current Pay Type
+                                            p.HireDate.ToString("MM/dd/yyyy") // Hire date
                 //,avg // Average U%
                     );
+            string target = p.IsInvestmentResource && p.TargetUtilization != null ? (IsCapacityMode ? (100 - p.TargetUtilization).ToString() + "%" : p.TargetUtilization.ToString() + "%") : string.Empty;
 
-            //  Get labels collection
-            labels = isPdf ? chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels : chart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels;
-            //  Create new label
-            label =
-                labels.Add(
-                    _personsCount - 0.49, // From position
-                    _personsCount + 0.49, // To position
-                    FormatAvgPercentage(vacationDays, avg), // Formated person title
+
+            if (!ExculdeInvestmentResources && !isPdf)
+            {
+                if (count == ConsultantUtilizationPerson.Count - 1)
+                {
+                    labelsX2.Add(
+                               count + 1 - 0.49, // From position
+                               count + 1 + 0.49, // To position
+                               string.Empty.PadRight(12) + (IsCapacityMode ? "Target Capacity" : "Target Utilization"),
+                               0, // Index
+                               LabelMarkStyle.None);
+                }
+            }
+            else if (isPdf && !ExculdeInvestmentResources)
+            {
+                if (page == 0)
+                {
+                    labelsX2.Add(count + 25 - 0.49, // From position
+                                       count + 25 + 0.49, // To position
+                                       string.Empty.PadRight(12) + (IsCapacityMode ? "Target Capacity" : "Target Utilization"),
+                                       0, // Index
+                                       LabelMarkStyle.None);
+                }
+            }
+            else
+            {
+                if (count == InvestmentResources.Count - 1 && tag)
+                {
+                    labelsX2.Add(
+                               count + 1 - 0.49, // From position
+                               count + 1 + 0.49, // To position
+                               string.Empty.PadRight(12) + (IsCapacityMode ? "Target Capacity" : "Target Utilization"),
+                               0, // Index
+                               LabelMarkStyle.None);
+                }
+            }
+           
+            var labelx2 = labelsX2.Add(
+                    count - 0.49, // From position
+                    count + 0.49, // To position
+                    FormatAvgPercentage(vacationDays, avg) + target.PadLeft(10),
                     0, // Index
-                    LabelMarkStyle.None); // Mark style: none
+                    LabelMarkStyle.None);
+            if (!ExculdeInvestmentResources)
+            {
+                label.ForeColor = p.IsInvestmentResource ? Color.Blue : Color.Black;
+                labelx2.ForeColor = p.IsInvestmentResource ? Color.Blue : Color.Black;
+            }
+            //investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.TitleAlignment=StringAlignment.
         }
 
         private string getPersonUrl(Person p)
@@ -1388,7 +1690,7 @@ namespace PraticeManagement.Controls.Reports
             return Urls.GetSkillsProfileUrl(p);
         }
 
-        private void AddPersonRange(Person p, int w, int load, string csv, string payType, int vacationDays, Dictionary<DateTime, double> timeoffDates, Dictionary<DateTime, string> companyHolidayDates, bool isPdf, List<Project> projects)
+        private void AddPersonRange(Person p, int w, int load, string payType, int vacationDays, Dictionary<DateTime, double> timeoffDates, Dictionary<DateTime, string> companyHolidayDates, bool isPdf, List<Project> projects)
         {
             if (companyHolidayDates == null)
                 companyHolidayDates = new Dictionary<DateTime, string>();
@@ -1441,12 +1743,13 @@ namespace PraticeManagement.Controls.Reports
                 }
             }
 
-            var range = AddRange(pointStartDate, pointEndDate, _personsCount, isPdf);
+            var range = AddRange(pointStartDate, pointEndDate, _personsCount, isPdf, ExculdeInvestmentResources ? p.IsInvestmentResource : false);
             List<DataPoint> innerRangeList = new List<DataPoint>();
+            List<DataPoint> investmentInnerRangeList = new List<DataPoint>();
             bool isHiredIntheEmployeementRange = p.EmploymentHistory.Any(ph => ph.HireDate < pointEndDate && (!ph.TerminationDate.HasValue || ph.TerminationDate.Value >= pointStartDate));
             bool isRangeComapanyHolidays = IsRangeComapanyHolidays(pointStartDate, pointEndDate, companyHolidayDates, false) == 2;
             int rangeType = IsCapacityMode ? ((load > 100 && !isRangeComapanyHolidays) ? 1 : (load > 100 && isRangeComapanyHolidays) ? 2 : 0) : ((load < 0 && !isRangeComapanyHolidays) ? 1 : (load < 0 && isRangeComapanyHolidays) ? 2 : 0);
-            range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, rangeType, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, rangeType, isHiredIntheEmployeementRange);
+            range.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, rangeType, isHiredIntheEmployeementRange, isWeekEnd, p.IsInvestmentResource && p.TargetUtilization != null ? (int)p.TargetUtilization : -1) : Coloring.GetColorByUtilization(load, rangeType, isHiredIntheEmployeementRange, p.IsInvestmentResource && p.TargetUtilization != null ? (int)p.TargetUtilization : -1, p.CurrentPay.Timescale == TimescaleType.Hourly);
             if (!isHiredIntheEmployeementRange)
             {
                 DateTime? oldTerminationdate = p.EmploymentHistory.Any(ph => ph.TerminationDate.HasValue && ph.TerminationDate.Value < pointStartDate) ? p.EmploymentHistory.Last(ph => ph.TerminationDate.HasValue && ph.TerminationDate.Value < pointStartDate).TerminationDate : (DateTime?)null;
@@ -1524,12 +1827,20 @@ namespace PraticeManagement.Controls.Reports
 
                     foreach (var tripleR in weekDatesRange)
                     {
-                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
-                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third.DayType, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, tripleR.Third.DayType, isHiredIntheEmployeementRange);
+                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf, ExculdeInvestmentResources ? p.IsInvestmentResource : false);
+                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, tripleR.Third.DayType, isHiredIntheEmployeementRange, isWeekEnd, p.IsInvestmentResource && p.TargetUtilization != null ? (int)p.TargetUtilization : -1) : Coloring.GetColorByUtilization(load, tripleR.Third.DayType, isHiredIntheEmployeementRange, p.IsInvestmentResource && p.TargetUtilization != null ? (int)p.TargetUtilization : -1, p.CurrentPay.Timescale == TimescaleType.Hourly);
                         innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, payType, IsCapacityMode, tripleR.Fourth, GetProjectsHoverText(projects, tripleR.First, tripleR.Second));
                         innerRange.BackHatchStyle = GetAppropriateHatchStyle(tripleR.Third.BadgedType);
                         innerRange.BackSecondaryColor = Color.Black;
-                        innerRangeList.Add(innerRange);
+
+                        if (ExculdeInvestmentResources && p.IsInvestmentResource)
+                        {
+                            investmentInnerRangeList.Add(innerRange);
+                        }
+                        else
+                        {
+                            innerRangeList.Add(innerRange);
+                        }
                     }
                 }
 
@@ -1555,12 +1866,19 @@ namespace PraticeManagement.Controls.Reports
 
                     foreach (var tripleR in weekDatesRange)
                     {
-                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf);
-                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange);
+                        var innerRange = AddRange(tripleR.First, tripleR.Second.AddDays(1), _personsCount, isPdf, ExculdeInvestmentResources ? p.IsInvestmentResource : false);
+                        innerRange.Color = IsCapacityMode ? Coloring.GetColorByCapacity(load, 1, isHiredIntheEmployeementRange, isWeekEnd, p.IsInvestmentResource && p.TargetUtilization != null ? (int)p.TargetUtilization : -1) : Coloring.GetColorByUtilization(load, 1, isHiredIntheEmployeementRange, p.IsInvestmentResource && p.TargetUtilization != null ? (int)p.TargetUtilization : -1, p.CurrentPay.Timescale == TimescaleType.Hourly);
                         innerRange.ToolTip = FormatRangeTooltip(load, tripleR.First, tripleR.Second, tripleR.Third, null, false, tripleR.Fourth, GetProjectsHoverText(projects, tripleR.First, tripleR.Second));
                         innerRange.BackHatchStyle = GetAppropriateHatchStyle(tripleR.Third.BadgedType);
                         innerRange.BackSecondaryColor = Color.Black;
-                        innerRangeList.Add(innerRange);
+                        if (ExculdeInvestmentResources && p.IsInvestmentResource)
+                        {
+                            investmentInnerRangeList.Add(innerRange);
+                        }
+                        else
+                        {
+                            innerRangeList.Add(innerRange);
+                        }
                     }
                 }
 
@@ -1574,6 +1892,14 @@ namespace PraticeManagement.Controls.Reports
                     if (innerRangeList.Any())
                     {
                         foreach (var r in innerRangeList)
+                        {
+                            r.PostBackValue = range.PostBackValue;
+                            r.Url = range.Url;
+                        }
+                    }
+                    if (investmentInnerRangeList.Any())
+                    {
+                        foreach (var r in investmentInnerRangeList)
                         {
                             r.PostBackValue = range.PostBackValue;
                             r.Url = range.Url;
@@ -1617,6 +1943,8 @@ namespace PraticeManagement.Controls.Reports
                     break;
                 case 4: result = ChartHatchStyle.Divot;
                     break;
+                case 5: result = ChartHatchStyle.DiagonalBrick;
+                    break;
             }
             return result;
         }
@@ -1625,6 +1953,14 @@ namespace PraticeManagement.Controls.Reports
         {
             if (!utf.IncludeBadgeStatus || IsCapacityMode)
                 return 0;
+            if (person.Id ==3767)
+            { 
+            
+            }
+            if (person.Badge.IsMSManagedService)
+            {
+                return 5;
+            }
             if (person.BadgedProjects != null)
             {
                 foreach (var badgeProject in person.BadgedProjects)
@@ -1642,18 +1978,26 @@ namespace PraticeManagement.Controls.Reports
             return 0;
         }
 
-        private DataPoint AddRange(DateTime pointStartDate, DateTime pointEndDate, double yvalue, bool isPdf)
+        private DataPoint AddRange(DateTime pointStartDate, DateTime pointEndDate, double yvalue, bool isPdf, bool isInvestment = false)
         {
-            var ind = isPdf ? WeeksSeriesPdf.Points.AddXY(
-                yvalue,
-                pointStartDate,
-                pointEndDate) : WeeksSeries.Points.AddXY(
-                yvalue,
-                pointStartDate,
-                pointEndDate);
+            int ind;
 
-            var range = isPdf ? WeeksSeriesPdf.Points[ind] : WeeksSeries.Points[ind];
-            return range;
+            if (isInvestment && !isPdf)
+            {
+                ind = WeeksSeriesInvestment.Points.AddXY(_investmentPersonCount, pointStartDate, pointEndDate);
+                return WeeksSeriesInvestment.Points[ind];
+            }
+            else if (isPdf)
+            {
+                ind = WeeksSeriesPdf.Points.AddXY(isInvestment ? _investmentPersonCount : yvalue, pointStartDate, pointEndDate);
+                return WeeksSeriesPdf.Points[ind];
+            }
+            else
+            {
+                ind = WeeksSeries.Points.AddXY(yvalue, pointStartDate, pointEndDate);
+                return WeeksSeries.Points[ind];
+            }
+
         }
 
         private static int ParseInt(string val, int def)
@@ -1690,15 +2034,43 @@ namespace PraticeManagement.Controls.Reports
             PdfWriter writer = PdfWriter.GetInstance(document, file);
             document.Open();
             float topMargin = 0f;
-            ConsultantUtilizationPerson.Reverse();
-            var count = ConsultantUtilizationPerson.Count;
-            for (int i = 0; i < Math.Ceiling((double)count / reportSize); i++)
+            if (!ExculdeInvestmentResources)
             {
-                ChartForPdf(i);
-                document.SetMargins(document.LeftMargin, document.RightMargin, topMargin, topMargin);
-                document.NewPage();
-                document.Add(ConsultingImage(i));
+                ConsultantUtilizationPerson.Reverse();
+                int count = ConsultantUtilizationPerson.Count;
+                for (int i = 0; i < Math.Ceiling((double)count / reportSize); i++)
+                {
+                    ChartForPdf(i);
+                    document.SetMargins(document.LeftMargin, document.RightMargin, topMargin, topMargin);
+                    document.NewPage();
+                    document.Add(ConsultingImage(i));
+                }
             }
+            else
+            {
+                NonInvestmentResources.Reverse();
+                InvestmentResources.Reverse();
+                int count = NonInvestmentResources.Count;
+                for (int i = 0; i < Math.Ceiling((double)count / reportSize); i++)
+                {
+                    ChartForPdf(i);
+                    document.SetMargins(document.LeftMargin, document.RightMargin, topMargin, topMargin);
+                    document.NewPage();
+                    document.Add(ConsultingImage(i));
+                }
+                count = InvestmentResources.Count;
+                isInvestmentPdfChart = true;
+                for (int i = 0; i < Math.Ceiling((double)count / reportSize); i++)
+                {
+                    ChartForPdf(i);
+                    document.SetMargins(document.LeftMargin, document.RightMargin, topMargin, topMargin);
+                    document.NewPage();
+                    document.Add(ConsultingImage(i));
+                }
+            }
+
+
+
             document.Close();
             return file.ToArray();
         }
@@ -1746,20 +2118,40 @@ namespace PraticeManagement.Controls.Reports
 
         public void ChartForPdf(int i)
         {
+            page = 0;
             chartPdf.Titles.Clear();
             foreach (var series in chartPdf.Series)
                 series.Points.Clear();
             chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX.CustomLabels.Clear();
             chartPdf.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.CustomLabels.Clear();
             InitChart(true, i);
-            var report = ConsultantUtilizationPerson;
+            List<ConsultantUtilizationPerson> report = new List<ConsultantUtilizationPerson>();
+            if (ExculdeInvestmentResources)
+            {
+                if (!isInvestmentPdfChart)
+                {
+                    report = NonInvestmentResources;
+                }
+                else
+                {
+                    report = InvestmentResources;
+                }
+            }
+            else
+            {
+                report = ConsultantUtilizationPerson;
+            }
             report = report.Skip(i * reportSize).Take(reportSize).ToList();
             report.Reverse();
             foreach (var quadruple in report)
+            {
                 AddPerson(quadruple, true);
+                page = 10;
+            }
+
             chartPdf.Height = Resources.Controls.TimelineGeneralHeaderHeigth +
 
-                (report.Count == reportSize ? Resources.Controls.TimelineGeneralItemHeigth * report.Count : (report.Count <= 14) ? 70 + report.Count * 20 : 80 + report.Count * 22) +
+                (report.Count == reportSize ? Resources.Controls.TimelineGeneralItemHeigth * report.Count : (report.Count <= 14) ? 70 + report.Count * 30 : 80 + report.Count * 22) +
                               Resources.Controls.TimelineGeneralFooterHeigth;
         }
 
@@ -1805,6 +2197,8 @@ namespace PraticeManagement.Controls.Reports
 
         private static string FormatPersonName(Person p)
         {
+            string x = "abc";
+
             return string.Format(
                 NAME_FORMAT,
                 p.LastName,
