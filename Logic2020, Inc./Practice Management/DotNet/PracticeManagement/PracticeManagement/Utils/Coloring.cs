@@ -4,6 +4,7 @@ using System.Web.UI.DataVisualization.Charting;
 using PraticeManagement.Configuration.ConsReportColoring;
 using System.Web;
 using System.IO;
+using System.Collections.Generic;
 
 namespace PraticeManagement.Utils
 {
@@ -25,7 +26,7 @@ namespace PraticeManagement.Utils
         /// <param name="utilization">Utilization value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByUtilization(int utilization, int dayType, bool isHiredIntheEmployeementRange = true)
+        public static Color GetColorByUtilization(int utilization, int dayType, bool isHiredIntheEmployeementRange = true, int targetUtil = -1, bool isW2Hourly = false)
         {
             //if dayType == 1 =>it's timeoff if daytype == 2 =>it's companyholiday
             //  Get settings from web.config
@@ -42,11 +43,35 @@ namespace PraticeManagement.Utils
                 return coloring.CompanyHolidayColor;
 
             //  Iterate through all colors and check their min/max values
-            foreach (ConsReportColoringElement color in coloring.Colors)
+
+            //For non-investment Resources
+            if (targetUtil == -1)
             {
-                if (utilization >= color.MinValue &&
-                        utilization <= color.MaxValue)
-                    return color.ItemColor;
+                if (isW2Hourly && (utilization >= 0 && utilization <= 25))
+                {
+                    return Color.FromArgb(253, 253, 214);
+                }
+                foreach (ConsReportColoringElement color in coloring.Colors)
+                {
+                    if (utilization >= color.MinValue &&
+                            utilization <= color.MaxValue)
+                        return color.ItemColor;
+                }
+            }
+            else
+            {
+                if (utilization == 0)
+                {
+                    return Color.White;
+                }
+                foreach (ConsReportColoringElement color in coloring.InvestmentResourceColors)
+                {
+                    int resultant = utilization - targetUtil;
+                    if (resultant >= color.MinValue &&
+                            resultant <= color.MaxValue && color.MaxValue != 0)
+                        return color.ItemColor;
+                }
+
             }
 
             //  Return default color if nothing was foung in config
@@ -59,7 +84,7 @@ namespace PraticeManagement.Utils
         /// <param name="utilization">Capacity value in percents</param>
         /// <param name="isVac">Is that vacation period</param>
         /// <returns>Color based on config settings</returns>
-        public static Color GetColorByCapacity(int capacity, int dayType, bool isHiredIntheEmployeementRange, bool isWeekEnd)
+        public static Color GetColorByCapacity(int capacity, int dayType, bool isHiredIntheEmployeementRange, bool isWeekEnd, int targUtil = -1)
         {
             //if dayType == 1 =>it's timeoff if daytype == 2 =>it's companyholiday
             //  Get settings from web.config
@@ -78,45 +103,83 @@ namespace PraticeManagement.Utils
             if (isWeekEnd)
                 return Color.FromArgb(255, 255, 255);
 
-            if (capacity >= 50 && capacity <= 100)
+            if (targUtil != -1)
             {
-                return Color.FromArgb(255, 0, 0);//Red color.
+                int targCapacity = 100 - targUtil;
+                int threshold = capacity - targCapacity;
+                if (capacity == 100)
+                    return Color.White;
+                else if (threshold >= 1 && threshold <= 10)
+                    return Color.FromArgb(255, 255, 0);
+                else if (threshold >= 11)
+                    return Color.FromArgb(255, 0, 0);
+                else if (threshold >= -10 && threshold <= 0)
+                    return Color.FromArgb(82, 178, 0);
+                else if (threshold <= -11)
+                    return Color.FromArgb(51, 204, 255);
             }
-            else if (capacity >= 10 && capacity <= 49)
+            else
             {
-                return Color.FromArgb(255, 255, 0);//Yellow Color.
-            }
-            else if (capacity >= -5 && capacity <= 9)
-            {
-                return Color.FromArgb(82, 178, 0);//Green Color.
-            }
-            else if (capacity <= -6)
-            {
-                return Color.FromArgb(51, 204, 255);//sky blue Color.
+                if (capacity >= 75 && capacity <= 100)
+                {
+                    return Color.FromArgb(255, 255, 255);
+                }
+                else if (capacity >= 25 && capacity <= 74)
+                {
+                    return Color.FromArgb(255, 0, 0);
+                }
+                else if (capacity >= 10 && capacity <= 24)
+                {
+                    return Color.FromArgb(255, 255, 0);
+                }
+                else if (capacity >= 0 && capacity <= 9)
+                {
+                    return Color.FromArgb(82, 178, 0);
+                }
+                else if (capacity <= -1)
+                {
+                    return Color.FromArgb(51, 204, 255);
+                }
             }
 
             //  Return default color if nothing was foung in config
             return DEFAULT_COLOR;
         }
 
-        public static void CapacityColorLegends(Legend legend)
+        public static void CapacityColorLegends(Legend legend, bool isInvestment)
         {
             //  Clear legend items first
             LegendItemsCollection legendItems = legend.CustomItems;
             legendItems.Clear();
-
-            //  Iterate through all colors and put them on legend
-            legendItems.Add(Color.FromArgb(255, 0, 0), "Capacity = 100 - 50%");//Red
-            legendItems.Add(Color.FromArgb(255, 255, 0), "Capacity = 49 - 10%");//Yellow
-            legendItems.Add(Color.FromArgb(82, 178, 0), "Capacity = 9 - (-5)%");//Green
-            legendItems.Add(Color.FromArgb(51, 204, 255), "Capacity = (-6)+%");//Sky Blue.
-
             ConsReportColoringElementSection coloring =
-                ConsReportColoringElementSection.ColorSettings;
+               ConsReportColoringElementSection.ColorSettings;
+            //  Iterate through all colors and put them on legend
+            if (legend.Name == "InvestmentResourcesLegend" || isInvestment)
+            {
+                legendItems.Add(Color.FromArgb(255, 255, 255), "Capacity = 100%");
+                legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+                legendItems.Add(Color.FromArgb(255, 0, 0), "11 or more points above target");
+                legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+                legendItems.Add(Color.FromArgb(255, 255, 0), "1-10 point above target");
+                legendItems.Add(Color.FromArgb(82, 178, 0), "0-10 points below target");
+                legendItems.Add(Color.FromArgb(51, 204, 255), "11 or more points below target");
+            }
+            else
+            {
+                legendItems.Add(Color.FromArgb(255, 255, 255), "Capacity = 100 - 75%");
+                legendItems.Add(Color.FromArgb(255, 0, 0), "Capacity = 74 - 25%");
+                legendItems.Add(Color.FromArgb(255, 255, 0), "Capacity = 24 - 10%");
+                legendItems.Add(Color.FromArgb(82, 178, 0), "Capacity = 9 - 0%");
+                legendItems.Add(Color.FromArgb(51, 204, 255), "Capacity = (-1)+%");
+                legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+                legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+            }
+
+
             //  Add vacation item
-            legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+
             // Add company holiday item
-            legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+
         }
 
         public static Color GetColorByConsultingDemand(DataTransferObjects.ConsultantDemandItem item)
@@ -168,7 +231,7 @@ namespace PraticeManagement.Utils
         /// Adds color coding to legend
         /// </summary>
         /// <param name="legend">Legend to put colors to</param>
-        public static void ColorLegend(Legend legend, bool includeBadgeStatus)
+        public static void ColorLegend(Legend legend, bool includeBadgeStatus, bool ispdf, bool investmentLegend = false)
         {
             //  Clear legend items first
             LegendItemsCollection legendItems = legend.CustomItems;
@@ -176,18 +239,37 @@ namespace PraticeManagement.Utils
 
             //  Iterate through all colors and put them on legend
             ConsReportColoringElementSection coloring =
-                ConsReportColoringElementSection.ColorSettings;
-            foreach (ConsReportColoringElement color in coloring.Colors)
+                    ConsReportColoringElementSection.ColorSettings;
+            if (legend.Name == "InvestmentResourcesLegend" || investmentLegend)
             {
-                var legendItem = new LegendItem();
-                legendItem.Name = color.Title;
-                legendItem.Color = color.ItemColor;
-                legendItem.ImageStyle = LegendImageStyle.Rectangle;
-                legendItem.MarkerStyle = MarkerStyle.Square;
-                legendItem.MarkerSize = 50;
-                legendItem.MarkerColor = Color.Black;
-                legendItems.Add(legendItem);
+                foreach (ConsReportColoringElement color in coloring.InvestmentResourceColors)
+                {
+                    var legendItem = new LegendItem();
+                    legendItem.Name = color.Title;
+                    legendItem.Color = color.ItemColor;
+                    legendItem.ImageStyle = LegendImageStyle.Rectangle;
+                    legendItem.MarkerStyle = MarkerStyle.Square;
+                    legendItem.MarkerSize = 50;
+                    legendItem.MarkerColor = Color.Black;
+                    legendItems.Add(legendItem);
+                }
             }
+            else
+            {
+                foreach (ConsReportColoringElement color in coloring.Colors)
+                {
+                    var legendItem = new LegendItem();
+                    legendItem.Name = color.Title;
+                    legendItem.Color = color.ItemColor;
+                    legendItem.ImageStyle = LegendImageStyle.Rectangle;
+                    legendItem.MarkerStyle = MarkerStyle.Square;
+                    legendItem.MarkerSize = 50;
+                    legendItem.MarkerColor = Color.Black;
+                    legendItems.Add(legendItem);
+                }
+            }
+
+            //legend.LegendItemOrder=
 
             var vacationLgn = new LegendItem();
             vacationLgn.Name = coloring.VacationTitle;
@@ -248,7 +330,117 @@ namespace PraticeManagement.Utils
                 legItem1.MarkerSize = 50;
                 legItem1.MarkerColor = Color.Black;
                 legendItems.Add(legItem1);
+
+                //Managed Service
+                var legItem4 = new LegendItem();
+                legItem4.Color = Color.White;
+                legItem4.ImageStyle = LegendImageStyle.Rectangle;
+                legItem4.BackHatchStyle = ChartHatchStyle.DiagonalBrick;
+                legItem4.BackSecondaryColor = Color.Black;
+                legItem4.Name = "Managed Service";
+                legItem4.MarkerStyle = MarkerStyle.Square;
+                legItem4.MarkerSize = 50;
+                legItem4.MarkerColor = Color.Black;
+                legendItems.Add(legItem4);
             }
+            Order(legendItems, includeBadgeStatus, ispdf);
+        }
+
+        private static void Order(LegendItemsCollection legendcollection, bool includeBadge, bool ispdf)
+        {
+            LegendItemsCollection temp = legendcollection;
+            List<LegendItem> x = new List<LegendItem>();
+            for (int i = 0; i < temp.Count; i++)
+            {
+                x.Add(temp[i]);
+            }
+            legendcollection.Clear();
+            if (!ispdf)
+            {
+                if (!includeBadge)
+                {
+                    legendcollection.Add(x[0]);
+                    legendcollection.Add(x[6]);
+                    legendcollection.Add(x[1]);
+                    if (x.Count == 8)
+                    {
+                        legendcollection.Add(x[7]);
+                    }
+                    legendcollection.Add(x[2]);
+                    legendcollection.Add(x[3]);
+                    legendcollection.Add(x[4]);
+                    legendcollection.Add(x[5]);
+                    if (x.Count > 8)
+                    {
+                        for (int i = 8; i < x.Count; i++)
+                        {
+                            legendcollection.Add(x[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    legendcollection.Add(x[0]);
+                    legendcollection.Add(x[6]);
+                    legendcollection.Add(x[1]);
+                    legendcollection.Add(x[7]);
+                    legendcollection.Add(x[2]);
+                    legendcollection.Add(x[8]);
+
+                    legendcollection.Add(x[3]);
+                    legendcollection.Add(x[9]);
+                    legendcollection.Add(x[4]);
+                    legendcollection.Add(x[10]);
+                    legendcollection.Add(x[5]);
+                    if (x.Count == 12)
+                    {
+                        legendcollection.Add(x[11]);
+                    }
+                }
+            }
+            else
+            {
+                if (!includeBadge)
+                {
+                    legendcollection.Add(x[0]);
+                    legendcollection.Add(x[5]);
+                    legendcollection.Add(x[1]);
+                    legendcollection.Add(x[6]);
+                    legendcollection.Add(x[2]);
+                    if (x.Count == 8)
+                    {
+                        legendcollection.Add(x[7]);
+                    }
+                    legendcollection.Add(x[3]);
+                    legendcollection.Add(x[4]);
+                    if (x.Count > 8)
+                    {
+                        for (int i = 8; i < x.Count; i++)
+                        {
+                            legendcollection.Add(x[i]);
+                        }
+                    }
+                }
+                else
+                {
+                    legendcollection.Add(x[0]);
+                    legendcollection.Add(x[5]);
+                    legendcollection.Add(x[10]);
+                    legendcollection.Add(x[1]);
+                    legendcollection.Add(x[6]);
+                    if (x.Count == 12)
+                    {
+                        legendcollection.Add(x[11]);
+                    }
+                    legendcollection.Add(x[2]);
+                    legendcollection.Add(x[7]);
+                    legendcollection.Add(x[3]);
+                    legendcollection.Add(x[9]);
+                    legendcollection.Add(x[4]);
+                    legendcollection.Add(x[8]);
+                }
+            }
+
         }
 
         /// <summary>
@@ -279,3 +471,4 @@ namespace PraticeManagement.Utils
         }
     }
 }
+
