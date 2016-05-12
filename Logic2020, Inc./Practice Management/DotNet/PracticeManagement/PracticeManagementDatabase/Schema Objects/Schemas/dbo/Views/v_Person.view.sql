@@ -67,7 +67,8 @@ AS
 			PLeadrsh.EmployeeNumber as PracticeLeadershipEmployeeNumber,
 			PLeadrsh.PaychexID as PracticeLeadershipADPID,
 			PGCP.Timescale as PracticeLeadershipCurrentyPayType,
-			p.IsInvestmentResource
+			p.IsInvestmentResource,
+			p.TargetUtilization
 	  FROM dbo.Person AS p
 	       LEFT JOIN dbo.Practice AS r ON p.DefaultPractice = r.PracticeId
 		   INNER JOIN dbo.PersonStatus AS s ON p.PersonStatusId = s.PersonStatusId
