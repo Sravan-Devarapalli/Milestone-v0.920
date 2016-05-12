@@ -260,13 +260,13 @@ namespace PraticeManagement.Controls
             int avgUtil,
             int sortId,
             string sortDirection,
-            bool excludeInternalPractices, int utilizationType, bool includeBadgeStatus, bool excludeInvestmentResource, string divisionIds, bool isSampleReport = false)
+            bool excludeInternalPractices, int utilizationType, bool includeBadgeStatus, string divisionIds, bool isSampleReport = false)
         {
             var consultants =
                 ReportsHelper.GetConsultantsTimelineReport(
                     startDate, duration, step, activePersons, projectedPersons,
                     activeProjects, projectedProjects, experimentalProjects, internalProjects, proposedProjects, completedProjects,
-                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, utilizationType, includeBadgeStatus, isSampleReport, excludeInvestmentResource, divisionIds);
+                    timescaleIds, practiceIdList, sortId, sortDirection, excludeInternalPractices, utilizationType, includeBadgeStatus, isSampleReport,  divisionIds);
 
             return consultants.FindAll(Q => Q.AverageUtilization < avgUtil);
         }
