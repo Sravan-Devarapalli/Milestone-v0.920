@@ -30,6 +30,7 @@
     <script type="text/javascript" language="javascript">
      var currentSort = [[1, 0]];
                 $(document).ready(function () {
+                showTarget();
                     $("#tblPersonProjects").tablesorter({
                         headers: {
                             0: {
@@ -507,6 +508,19 @@
                 optionList[i].title = DecodeString(optionList[i].innerHTML);
             }
         }
+
+
+        function showTarget(){
+        var chbInvestmentResouce = document.getElementById('<%= chbInvestmentResouce.ClientID %>');
+        var tblTargetUtil= document.getElementById('<%= tblTargetUtil.ClientID %>');
+            if(!chbInvestmentResouce.checked)
+                {
+                 tblTargetUtil.style.display = 'none';
+                }
+            else{
+                tblTargetUtil.style.display = 'inline';
+                }
+        }
     </script>
     <uc:LoadingProgress ID="LoadingProgress1" runat="server" />
     <asp:UpdatePanel ID="upnlBody" runat="server" UpdateMode="Conditional">
@@ -549,9 +563,9 @@
                                         AutoPostBack="true" Visible="false">
                                     </asp:DropDownList>
                                     <asp:Label ID="lblPersonStatus" runat="server"></asp:Label>
-                                    <asp:CustomValidator ID="cvIsOwnerOrAssignedToProject" runat="server" 
-                                        ValidationGroup="ChangePersonStatusToContingent" Display="Dynamic"
-                                        Text="*" OnServerValidate="custIsOwnerOrAssignedToProject_OnServerValidate" Enabled="false"></asp:CustomValidator>
+                                    <asp:CustomValidator ID="cvIsOwnerOrAssignedToProject" runat="server" ValidationGroup="ChangePersonStatusToContingent"
+                                        Display="Dynamic" Text="*" OnServerValidate="custIsOwnerOrAssignedToProject_OnServerValidate"
+                                        Enabled="false"></asp:CustomValidator>
                                 </td>
                                 <td>
                                     <asp:Button ID="btnChangeEmployeeStatus" runat="server" Text="Change Employee Status"
@@ -877,7 +891,8 @@
                                                 &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
                                             </td>
                                             <td class="padRight0">
-                                                <asp:CheckBox ID="chbInvestmentResouce" runat="server" Style="padding-right: 0px" />
+                                                <asp:CheckBox ID="chbInvestmentResouce" runat="server" Style="padding-right: 0px"
+                                                    onclick="showTarget();" />
                                             </td>
                                             <td>
                                                 <label for="ctl00_body_chbInvestmentResouce">
@@ -906,6 +921,31 @@
                                             <td>
                                                 <label for="ctl00_body_chbLockedOut">
                                                     Locked-Out</label>
+                                            </td>
+                                            <td>
+                                                &ensp; &ensp;
+                                            </td>
+                                            <td>
+                                                <table id="tblTargetUtil" runat="server" enableviewstate="true">
+                                                    <tr>
+                                                        <td class="padRight0">
+                                                            
+                                                                Target Utilization&ensp;
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="txtTargetUtilization" runat="server" CssClass="Width40Px" MaxLength="3"></asp:TextBox>%
+                                                            <asp:RequiredFieldValidator ID="rfvTxtTargetUtil" runat="server" ErrorMessage="The Target Utilization for the person is required."
+                                                                ControlToValidate="txtTargetUtilization" ToolTip="The Target Utilization for the person is required."
+                                                                ValidationGroup="Person" Text="*" EnableClientScript="true" SetFocusOnError="true"
+                                                                Display="Dynamic"></asp:RequiredFieldValidator>
+                                                            <asp:RangeValidator ID="rvTxtTargetUtil" runat="server" Type="Integer" MinimumValue="1"
+                                                                MaximumValue="100" ControlToValidate="txtTargetUtilization" ErrorMessage="Target Utilization must be between 1% - 100%"
+                                                                ToolTip="Target Utilization must be between 1% - 100%" ValidationGroup="Person"
+                                                                Text="*" EnableClientScript="true" SetFocusOnError="true"> 
+                                                            </asp:RangeValidator>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
                                         </tr>
                                     </table>
