@@ -253,7 +253,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.SortDirection, context.SortDirection);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInternalPractices, context.ExcludeInternalPractices);
                     command.Parameters.AddWithValue(Constants.ParameterNames.IsSampleReport, context.IsSampleReport);
-                    command.Parameters.AddWithValue(Constants.ParameterNames.ExcludeInvestmentResource, context.ExcludeInvestmentResource);
+
                     command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIds, context.DivisionIdList);
 
                     connection.Open();
@@ -459,6 +459,9 @@ namespace DataAccess
                 int breakEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BreakEndDate);
                 int blockStartDateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockStartDate);
                 int blockEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.BlockEndDate);
+                int MSManageServiceIndex = reader.GetOrdinal("ManageServiceContract");
+                int isInvestmentResourceIndex = reader.GetOrdinal(Constants.ColumnNames.IsInvestmentResource);
+                int targetUtilizationIndex = reader.GetOrdinal(Constants.ColumnNames.TargetUtilization);
                 int practiceId = -1;
                 int practiceArea = -1;
                 try
@@ -503,8 +506,11 @@ namespace DataAccess
                                 BreakStartDate = reader.IsDBNull(breakStartDateIndex) ? null : (DateTime?)reader.GetDateTime(breakStartDateIndex),
                                 BreakEndDate = reader.IsDBNull(breakEndDateIndex) ? null : (DateTime?)reader.GetDateTime(breakEndDateIndex),
                                 BlockStartDate = reader.IsDBNull(blockStartDateIndex) ? null : (DateTime?)reader.GetDateTime(blockStartDateIndex),
-                                BlockEndDate = reader.IsDBNull(blockEndDateIndex) ? null : (DateTime?)reader.GetDateTime(blockEndDateIndex)
-                            }
+                                BlockEndDate = reader.IsDBNull(blockEndDateIndex) ? null : (DateTime?)reader.GetDateTime(blockEndDateIndex),
+                                IsMSManagedService=reader.IsDBNull(MSManageServiceIndex)?false :reader.GetBoolean(MSManageServiceIndex)
+                            },
+                            IsInvestmentResource = reader.GetBoolean(isInvestmentResourceIndex),
+                            TargetUtilization = reader.IsDBNull(targetUtilizationIndex) ? null : (int?)reader.GetInt32(targetUtilizationIndex)
                         };
 
                     if (practiceId > -1)
@@ -953,6 +959,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsMBO, person.IsMBO);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeLeadershipId, person.PracticeLeadership != null ? (object)person.PracticeLeadership.Id.Value : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInvestmentResource, person.IsInvestmentResource);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TargetUtilization, person.TargetUtilization != null ? (object)person.TargetUtilization : DBNull.Value);
                 if (person.Manager != null)
                     command.Parameters.AddWithValue(Constants.ParameterNames.ManagerId, person.Manager.Id.Value);
 
@@ -1070,6 +1077,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsMBO, person.IsMBO);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsInvestmentResource, person.IsInvestmentResource);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PracticeLeadershipId, person.PracticeLeadership != null ? (object)person.PracticeLeadership.Id.Value : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.TargetUtilization, person.TargetUtilization != null ? (object)person.TargetUtilization : DBNull.Value);
                 try
                 {
                     if (connection.State != ConnectionState.Open)
@@ -1970,12 +1978,18 @@ namespace DataAccess
                 int practiceLeadershipIdIndex = -1;
                 int isMbo = -1;
                 int isInvestmentResourceIndex = -1;
+                int targetUtilizationIndex = -1;
                 try
                 {
                     isInvestmentResourceIndex = reader.GetOrdinal(Constants.ColumnNames.IsInvestmentResource);
                 }
                 catch
                 { }
+                try
+                {
+                    targetUtilizationIndex = reader.GetOrdinal(Constants.ColumnNames.TargetUtilization);
+                }
+                catch { }
                 try
                 {
                     practiceLeadershipIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeLeadershipId);
@@ -2160,7 +2174,10 @@ namespace DataAccess
                     {
                         person.IsInvestmentResource = reader.GetBoolean(isInvestmentResourceIndex);
                     }
-
+                    if (targetUtilizationIndex > -1)
+                    {
+                        person.TargetUtilization = reader.IsDBNull(targetUtilizationIndex) ? null : (int?)reader.GetInt32(targetUtilizationIndex);
+                    }
                     if (isDefManagerIndex > -1)
                     {
                         person.IsDefaultManager = reader.GetBoolean(isDefManagerIndex);
@@ -5437,35 +5454,35 @@ namespace DataAccess
 
         public static Owner CheckIfPersonStatusCanChangeFromActiveToContingent(int personId)
         {
-              using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
-              using (var command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfPersonInProjectPracticeAreaAndDivision, connection))
-              {
-                  command.CommandTimeout = connection.ConnectionTimeout;
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Person.CheckIfPersonInProjectPracticeAreaAndDivision, connection))
+            {
+                command.CommandTimeout = connection.ConnectionTimeout;
 
-                  command.CommandType = CommandType.StoredProcedure;
-                  command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
-                  connection.Open();
-                  Owner result = new Owner();
-                  using (SqlDataReader reader = command.ExecuteReader())
-                  {
-                      if (!reader.HasRows)
-                      {
-                          result = null;
-                      }
-                      else
-                      {
-                          while (reader.Read())
-                          {
-                              int IsDivisionOrPracticeOwnerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDivisionOrPracticeOwner);
-                              int IsAssignedToProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsAssignedToProject);
-                              result.IsDivisionOwner = reader.GetBoolean(IsDivisionOrPracticeOwnerIndex);
-                              result.isAssignedToProjects = reader.GetBoolean(IsAssignedToProjectIndex);
-                          }
-                      }
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue(Constants.ParameterNames.PersonIdParam, personId);
+                connection.Open();
+                Owner result = new Owner();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.HasRows)
+                    {
+                        result = null;
+                    }
+                    else
+                    {
+                        while (reader.Read())
+                        {
+                            int IsDivisionOrPracticeOwnerIndex = reader.GetOrdinal(Constants.ColumnNames.IsDivisionOrPracticeOwner);
+                            int IsAssignedToProjectIndex = reader.GetOrdinal(Constants.ColumnNames.IsAssignedToProject);
+                            result.IsDivisionOwner = reader.GetBoolean(IsDivisionOrPracticeOwnerIndex);
+                            result.isAssignedToProjects = reader.GetBoolean(IsAssignedToProjectIndex);
+                        }
+                    }
 
-                  }
-                  return result;
-              }
+                }
+                return result;
+            }
 
         }
     }
