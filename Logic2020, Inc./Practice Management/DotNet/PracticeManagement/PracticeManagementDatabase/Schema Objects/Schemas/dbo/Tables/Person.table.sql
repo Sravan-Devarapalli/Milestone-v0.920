@@ -35,6 +35,7 @@
 	LocationId			INT						NULL,
 	IsMBO				BIT						NOT NULL CONSTRAINT DF_Person_IsMBO DEFAULT(0),
 	PracticeLeadershipId	INT					NULL,
-	IsInvestmentResource BIT NOT NULL CONSTRAINT DF_Person_IsInvestmentResource DEFAULT(0)
+	IsInvestmentResource BIT NOT NULL CONSTRAINT DF_Person_IsInvestmentResource DEFAULT(0),
+	TargetUtilization	INT						NULL
 );
 
