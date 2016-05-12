@@ -121,6 +121,33 @@ namespace PraticeManagement.Controls.Reports {
         protected global::System.Web.UI.DataVisualization.Charting.Chart chart;
         
         /// <summary>
+        /// nonInv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl nonInv;
+        
+        /// <summary>
+        /// investmentChart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.DataVisualization.Charting.Chart investmentChart;
+        
+        /// <summary>
+        /// emptyInvestment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl emptyInvestment;
+        
+        /// <summary>
         /// hdnExportOptions control.
         /// </summary>
         /// <remarks>
