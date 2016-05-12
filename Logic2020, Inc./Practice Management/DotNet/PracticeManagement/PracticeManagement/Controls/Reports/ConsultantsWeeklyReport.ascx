@@ -129,7 +129,7 @@
                     </asp:ChartArea>
                 </ChartAreas>
             </asp:Chart>
-            <div id="nonInv" runat="server" style="visibility:hidden">
+            <div id="nonInv" runat="server" >
                 No Resources for the selected filters.
             </div>
             <br />
