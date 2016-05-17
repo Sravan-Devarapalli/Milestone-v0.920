@@ -100,7 +100,7 @@
         </div>
         <div class="ConsultantsWeeklyReportAlignCenter" id="divConsultingUtil" runat="server">
             <asp:Chart ID="chart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
-                Width="1050px" Height="850px" OnClick="Chart_Click">
+                Width="1100px" Height="850px" OnClick="Chart_Click">
                 <Series>
                     <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false" />
                 </Series>
@@ -129,41 +129,41 @@
                     </asp:ChartArea>
                 </ChartAreas>
             </asp:Chart>
-            <div id="nonInv" runat="server" >
+            <div id="nonInv" runat="server" visible="false">
                 No Resources for the selected filters.
             </div>
             <br />
-            <asp:Chart ID="investmentChart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
-                Width="1050px" Height="850px" OnClick="Chart_Click">
-                <Series>
-                    <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false" />
-                </Series>
-                <ChartAreas>
-                    <asp:ChartArea Name="MainArea">
-                        <AxisY IsLabelAutoFit="False" LineDashStyle="NotSet">
-                            <MajorGrid LineColor="DimGray" />
-                            <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
-                            <LabelStyle Format="MMM, d" />
-                        </AxisY>
-                        <AxisY2 IsLabelAutoFit="False" Enabled="True">
-                            <MajorGrid LineColor="DimGray" />
-                            <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
-                            <LabelStyle Format="MMM, d" />
-                        </AxisY2>
-                        <AxisX IsLabelAutoFit="true">
-                            <MajorGrid Interval="Auto" LineDashStyle="Dot" />
-                            <MajorTickMark Enabled="False" />
-                        </AxisX>
-                        <AxisX2 Enabled="True">
-                            <MajorGrid Interval="Auto" LineDashStyle="Dot" />
-                            <MajorTickMark Enabled="False" />
-                        </AxisX2>
-                        <Area3DStyle Inclination="5" IsClustered="True" IsRightAngleAxes="False" LightStyle="Realistic"
-                            Perspective="1" />
-                    </asp:ChartArea>
-                </ChartAreas>
-            </asp:Chart>
-            <br />
+                <asp:Chart ID="investmentChart" CssClass="ConsultantsWeeklyReportAlignCenter" runat="server"
+                    Width="1100px" Height="850px" OnClick="Chart_Click">
+                    <Series>
+                        <asp:Series Name="Weeks" ChartType="RangeBar" IsVisibleInLegend="false" />
+                    </Series>
+                    <ChartAreas>
+                        <asp:ChartArea Name="MainArea">
+                            <AxisY IsLabelAutoFit="False" LineDashStyle="NotSet">
+                                <MajorGrid LineColor="DimGray" />
+                                <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
+                                <LabelStyle Format="MMM, d" />
+                            </AxisY>
+                            <AxisY2 IsLabelAutoFit="False" Enabled="True">
+                                <MajorGrid LineColor="DimGray" />
+                                <MinorGrid Enabled="True" LineColor="Silver" LineDashStyle="Dot" />
+                                <LabelStyle Format="MMM, d" />
+                            </AxisY2>
+                            <AxisX IsLabelAutoFit="true">
+                                <MajorGrid Interval="Auto" LineDashStyle="Dot" />
+                                <MajorTickMark Enabled="False" />
+                            </AxisX>
+                            <AxisX2 Enabled="True">
+                                <MajorGrid Interval="Auto" LineDashStyle="Dot" />
+                                <MajorTickMark Enabled="False" />
+                            </AxisX2>
+                            <Area3DStyle Inclination="5" IsClustered="True" IsRightAngleAxes="False" LightStyle="Realistic"
+                                Perspective="1" />
+                        </asp:ChartArea>
+                    </ChartAreas>
+                </asp:Chart>
+                <br />
             <div id="emptyInvestment" runat="server" visible="false">
                 No InvestmentResources
             </div>
