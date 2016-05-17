@@ -439,9 +439,30 @@ namespace PraticeManagement.Controls.Reports
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
+            
+            chart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.X = 35;
+            chart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Width = 50;
+            if (chart.Height.Value > 500)
+            {
+                chart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Y = 3;
+                chart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Height = 94;
+            }
+            else {
+                chart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Y = 20;
+                chart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Height = 60;
+            }
+            
             if (!ExculdeInvestmentResources)
             {
                 investmentChart.Visible = false;
+
+            }
+            else
+            {
+                investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.X = 35;
+                investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Width = 50;
+                investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Y = 20;
+                investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].InnerPlotPosition.Height = 60;
             }
         }
 
@@ -557,19 +578,21 @@ namespace PraticeManagement.Controls.Reports
                 investmentChart.Visible = true;
                 emptyInvestment.Visible = false;
             }
-            else {
+            else
+            {
                 investmentChart.Visible = false;
                 emptyInvestment.Visible = true;
             }
             if (NonInvestmentResources.Count > 0)
             {
                 chart.Visible = true;
-                nonInv.Style.Add("visibility", "hidden");
-                nonInv.Style.Add("display", "none");
+                nonInv.Visible = false;
+                //nonInv.Style.Add("display", "none");
             }
-            else {
+            else
+            {
                 chart.Visible = false;
-                nonInv.Style.Add("visibility", "visible");
+                nonInv.Visible = true;
                 nonInv.Style.Add("display", "inline");
             }
         }
@@ -663,7 +686,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 else
                 {
-                    Coloring.ColorLegend(legend, utf.IncludeBadgeStatus,isPdf, isInvestmentPdfChart);
+                    Coloring.ColorLegend(legend, utf.IncludeBadgeStatus, isPdf, isInvestmentPdfChart);
                 }
             }
             if (ExculdeInvestmentResources)
@@ -674,7 +697,7 @@ namespace PraticeManagement.Controls.Reports
                 }
                 else
                 {
-                    Coloring.ColorLegend(investmentChart.Legends[0], utf.IncludeBadgeStatus,isPdf, true);
+                    Coloring.ColorLegend(investmentChart.Legends[0], utf.IncludeBadgeStatus, isPdf, true);
                 }
             }
         }
@@ -1665,11 +1688,12 @@ namespace PraticeManagement.Controls.Reports
                                LabelMarkStyle.None);
                 }
             }
-           
+
+            string x = FormatAvgPercentage(vacationDays, avg);
             var labelx2 = labelsX2.Add(
                     count - 0.49, // From position
                     count + 0.49, // To position
-                    FormatAvgPercentage(vacationDays, avg) + target.PadLeft(10),
+                    FormatAvgPercentage(vacationDays, avg).PadRight(10 + 8 - x.Length) + target,
                     0, // Index
                     LabelMarkStyle.None);
             if (!ExculdeInvestmentResources)
@@ -1677,7 +1701,6 @@ namespace PraticeManagement.Controls.Reports
                 label.ForeColor = p.IsInvestmentResource ? Color.Blue : Color.Black;
                 labelx2.ForeColor = p.IsInvestmentResource ? Color.Blue : Color.Black;
             }
-            //investmentChart.ChartAreas[MAIN_CHART_AREA_NAME].AxisX2.TitleAlignment=StringAlignment.
         }
 
         private string getPersonUrl(Person p)
@@ -1955,9 +1978,9 @@ namespace PraticeManagement.Controls.Reports
         {
             if (!utf.IncludeBadgeStatus || IsCapacityMode)
                 return 0;
-            if (person.Id ==3767)
-            { 
-            
+            if (person.Id == 3767)
+            {
+
             }
             if (person.Badge.IsMSManagedService)
             {
