@@ -1416,6 +1416,7 @@
                                     <asp:ListItem Text="P93" Value="93"></asp:ListItem>
                                     <asp:ListItem Text="P94" Value="94"></asp:ListItem>
                                     <asp:ListItem Text="P95" Value="95"></asp:ListItem>
+                                    <asp:ListItem Text="P96" Value="96"></asp:ListItem>
                                     <asp:ListItem Text="P97" Value="97"></asp:ListItem>
                                 </asp:DropDownList>
                                 <asp:RequiredFieldValidator ID="rfvPrjectNumberSeries" runat="server" ControlToValidate="ddlProjectNumberSeries"
