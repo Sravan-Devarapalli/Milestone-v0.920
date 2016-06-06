@@ -120,13 +120,17 @@ namespace PraticeManagement.Utils
             }
             else
             {
-                if (capacity >= 75 && capacity <= 100)
+                if (capacity >= 100 && capacity <= 100)
                 {
                     return Color.FromArgb(255, 255, 255);
                 }
-                else if (capacity >= 25 && capacity <= 74)
+                else if (capacity >= 75 && capacity <= 99)
                 {
                     return Color.FromArgb(255, 0, 0);
+                }
+                else if (capacity >= 25 && capacity <= 74)
+                {
+                    return Color.FromArgb(255, 165, 0);
                 }
                 else if (capacity >= 10 && capacity <= 24)
                 {
@@ -159,19 +163,22 @@ namespace PraticeManagement.Utils
                 legendItems.Add(Color.FromArgb(255, 255, 255), "Capacity = 100%");
                 legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
                 legendItems.Add(Color.FromArgb(255, 0, 0), "11 or more points above target");
-                legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+
                 legendItems.Add(Color.FromArgb(255, 255, 0), "1-10 point above target");
                 legendItems.Add(Color.FromArgb(82, 178, 0), "0-10 points below target");
                 legendItems.Add(Color.FromArgb(51, 204, 255), "11 or more points below target");
+                legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
             }
             else
             {
-                legendItems.Add(Color.FromArgb(255, 255, 255), "Capacity = 100 - 75%");
-                legendItems.Add(Color.FromArgb(255, 0, 0), "Capacity = 74 - 25%");
+                legendItems.Add(Color.FromArgb(255, 255, 255), "Capacity = 100%");
+                legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+                legendItems.Add(Color.FromArgb(255, 0, 0), "Capacity = 99 - 75%");
+                legendItems.Add(Color.FromArgb(255, 165, 0), "Capacity = 74 - 25%");
                 legendItems.Add(Color.FromArgb(255, 255, 0), "Capacity = 24 - 10%");
                 legendItems.Add(Color.FromArgb(82, 178, 0), "Capacity = 9 - 0%");
                 legendItems.Add(Color.FromArgb(51, 204, 255), "Capacity = (-1)+%");
-                legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+
                 legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
             }
 
@@ -240,19 +247,37 @@ namespace PraticeManagement.Utils
             //  Iterate through all colors and put them on legend
             ConsReportColoringElementSection coloring =
                     ConsReportColoringElementSection.ColorSettings;
+
             if (legend.Name == "InvestmentResourcesLegend" || investmentLegend)
             {
-                foreach (ConsReportColoringElement color in coloring.InvestmentResourceColors)
+                investmentLegend = true;
+                if (includeBadgeStatus)
                 {
-                    var legendItem = new LegendItem();
-                    legendItem.Name = color.Title;
-                    legendItem.Color = color.ItemColor;
-                    legendItem.ImageStyle = LegendImageStyle.Rectangle;
-                    legendItem.MarkerStyle = MarkerStyle.Square;
-                    legendItem.MarkerSize = 50;
-                    legendItem.MarkerColor = Color.Black;
-                    legendItems.Add(legendItem);
+                    foreach (ConsReportColoringElement color in coloring.InvestmentResourceColors)
+                    {
+                        var legendItem = new LegendItem();
+                        legendItem.Name = color.Title;
+                        legendItem.Color = color.ItemColor;
+                        legendItem.ImageStyle = LegendImageStyle.Rectangle;
+                        legendItem.MarkerStyle = MarkerStyle.Square;
+                        legendItem.MarkerSize = 50;
+                        legendItem.MarkerColor = Color.Black;
+                        legendItems.Add(legendItem);
+                    }
+                    legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+                    legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
                 }
+                else
+                {
+                    legendItems.Add(Color.FromArgb(255, 255, 255), "Utilization = 0%");
+                    legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+                    legendItems.Add(Color.FromArgb(255, 0, 0), "11 or more points below target");
+                    legendItems.Add(Color.FromArgb(255, 255, 0), "1-10 point below target");
+                    legendItems.Add(Color.FromArgb(82, 178, 0), "0-10 points above target");
+                    legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+                    legendItems.Add(Color.FromArgb(51, 204, 255), "11 or more points above target");
+                }
+                
             }
             else
             {
@@ -267,30 +292,11 @@ namespace PraticeManagement.Utils
                     legendItem.MarkerColor = Color.Black;
                     legendItems.Add(legendItem);
                 }
+                legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
+                legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
             }
 
-            //legend.LegendItemOrder=
-
-            var vacationLgn = new LegendItem();
-            vacationLgn.Name = coloring.VacationTitle;
-            vacationLgn.Color = coloring.VacationColor;
-            vacationLgn.ImageStyle = LegendImageStyle.Rectangle;
-            vacationLgn.MarkerStyle = MarkerStyle.Square;
-            vacationLgn.MarkerSize = 50;
-            vacationLgn.MarkerColor = Color.Black;
-            legendItems.Add(vacationLgn);
-            //  Add vacation item
-            //legendItems.Add(coloring.VacationColor, coloring.VacationTitle);
-            // Add company holiday item
-            var companylgn = new LegendItem();
-            companylgn.Name = coloring.CompanyHolidaysTitle;
-            companylgn.Color = coloring.CompanyHolidayColor;
-            companylgn.ImageStyle = LegendImageStyle.Rectangle;
-            companylgn.MarkerStyle = MarkerStyle.Square;
-            companylgn.MarkerSize = 50;
-            companylgn.MarkerColor = Color.Black;
-            legendItems.Add(companylgn);
-            //legendItems.Add(coloring.CompanyHolidayColor, coloring.CompanyHolidaysTitle);
+           
 
             if (includeBadgeStatus)
             {
@@ -343,10 +349,12 @@ namespace PraticeManagement.Utils
                 legItem4.MarkerColor = Color.Black;
                 legendItems.Add(legItem4);
             }
-            Order(legendItems, includeBadgeStatus, ispdf);
+           
+            Order(legendItems, includeBadgeStatus, ispdf,investmentLegend);
+            
         }
 
-        private static void Order(LegendItemsCollection legendcollection, bool includeBadge, bool ispdf)
+        private static void Order(LegendItemsCollection legendcollection, bool includeBadge, bool ispdf, bool investment)
         {
             LegendItemsCollection temp = legendcollection;
             List<LegendItem> x = new List<LegendItem>();
@@ -360,19 +368,23 @@ namespace PraticeManagement.Utils
                 if (!includeBadge)
                 {
                     legendcollection.Add(x[0]);
-                    legendcollection.Add(x[6]);
-                    legendcollection.Add(x[1]);
-                    if (x.Count == 8)
+                    if (x.Count > 7)
                     {
                         legendcollection.Add(x[7]);
                     }
+                    legendcollection.Add(x[1]);
+                    if (x.Count == 9)
+                    {
+                        legendcollection.Add(x[8]);
+                    }
                     legendcollection.Add(x[2]);
+                    legendcollection.Add(x[6]);
                     legendcollection.Add(x[3]);
                     legendcollection.Add(x[4]);
                     legendcollection.Add(x[5]);
-                    if (x.Count > 8)
+                    if (x.Count > 9)
                     {
-                        for (int i = 8; i < x.Count; i++)
+                        for (int i = 9; i < x.Count; i++)
                         {
                             legendcollection.Add(x[i]);
                         }
@@ -382,62 +394,103 @@ namespace PraticeManagement.Utils
                 {
                     legendcollection.Add(x[0]);
                     legendcollection.Add(x[6]);
+                    if (x.Count == 13)
+                    {
+                        legendcollection.Add(x[12]);
+                    }
                     legendcollection.Add(x[1]);
                     legendcollection.Add(x[7]);
                     legendcollection.Add(x[2]);
                     legendcollection.Add(x[8]);
-
                     legendcollection.Add(x[3]);
                     legendcollection.Add(x[9]);
                     legendcollection.Add(x[4]);
                     legendcollection.Add(x[10]);
                     legendcollection.Add(x[5]);
-                    if (x.Count == 12)
+                    if (x.Count == 13)
                     {
                         legendcollection.Add(x[11]);
                     }
+
                 }
             }
-            else
+            else  //pdf
             {
-                if (!includeBadge)
+                if (!investment)
                 {
-                    legendcollection.Add(x[0]);
-                    legendcollection.Add(x[5]);
-                    legendcollection.Add(x[1]);
-                    legendcollection.Add(x[6]);
-                    legendcollection.Add(x[2]);
-                    if (x.Count == 8)
+                    if (!includeBadge)
                     {
-                        legendcollection.Add(x[7]);
-                    }
-                    legendcollection.Add(x[3]);
-                    legendcollection.Add(x[4]);
-                    if (x.Count > 8)
-                    {
-                        for (int i = 8; i < x.Count; i++)
+                        legendcollection.Add(x[0]);
+                        legendcollection.Add(x[5]);
+                        legendcollection.Add(x[1]);
+                        legendcollection.Add(x[6]);
+                        legendcollection.Add(x[2]);
+                        if (x.Count == 9)
                         {
-                            legendcollection.Add(x[i]);
+                            legendcollection.Add(x[8]);
+                        }
+                        legendcollection.Add(x[3]);
+                        if (x.Count > 7)
+                        {
+                            legendcollection.Add(x[7]);
+                        }
+                        legendcollection.Add(x[4]);
+                        if (x.Count > 9)
+                        {
+                            for (int i = 9; i < x.Count; i++)
+                            {
+                                legendcollection.Add(x[i]);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    legendcollection.Add(x[0]);
-                    legendcollection.Add(x[5]);
-                    legendcollection.Add(x[10]);
-                    legendcollection.Add(x[1]);
-                    legendcollection.Add(x[6]);
-                    if (x.Count == 12)
+                    else
                     {
-                        legendcollection.Add(x[11]);
+                        legendcollection.Add(x[0]);
+                        legendcollection.Add(x[5]);
+                        legendcollection.Add(x[10]);
+                        legendcollection.Add(x[1]);
+                        legendcollection.Add(x[6]);
+                        if (x.Count == 13)
+                        {
+                            legendcollection.Add(x[11]);
+                        }
+                        legendcollection.Add(x[2]);
+                        legendcollection.Add(x[7]);
+                        if (x.Count == 13)
+                        {
+                            legendcollection.Add(x[12]);
+                        }
+                        legendcollection.Add(x[3]);
+                        legendcollection.Add(x[8]);
+                        legendcollection.Add(x[4]);
+                        legendcollection.Add(x[9]);
                     }
-                    legendcollection.Add(x[2]);
-                    legendcollection.Add(x[7]);
-                    legendcollection.Add(x[3]);
-                    legendcollection.Add(x[9]);
-                    legendcollection.Add(x[4]);
-                    legendcollection.Add(x[8]);
+                }
+                else {
+                    if (!includeBadge)
+                    {
+                        legendcollection.Add(x[0]);
+                        legendcollection.Add(x[1]);
+                        legendcollection.Add(x[2]);
+                        legendcollection.Add(x[5]);
+                        legendcollection.Add(x[3]);
+                        legendcollection.Add(x[4]);
+                        legendcollection.Add(x[6]);
+                    }
+                    else {
+                        
+                        legendcollection.Add(x[0]);
+                        legendcollection.Add(x[3]);
+                        legendcollection.Add(x[8]);
+                        legendcollection.Add(x[1]);
+                        legendcollection.Add(x[5]);
+                        legendcollection.Add(x[10]);
+                        legendcollection.Add(x[2]);
+                        legendcollection.Add(x[6]);
+                        legendcollection.Add(x[7]);
+                        legendcollection.Add(x[4]);
+                        legendcollection.Add(x[9]);
+                    }
                 }
             }
 
