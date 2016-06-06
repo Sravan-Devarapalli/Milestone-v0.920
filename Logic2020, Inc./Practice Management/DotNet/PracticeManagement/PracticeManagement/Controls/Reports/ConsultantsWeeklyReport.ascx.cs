@@ -455,7 +455,6 @@ namespace PraticeManagement.Controls.Reports
             if (!ExculdeInvestmentResources)
             {
                 investmentChart.Visible = false;
-
             }
             else
             {
