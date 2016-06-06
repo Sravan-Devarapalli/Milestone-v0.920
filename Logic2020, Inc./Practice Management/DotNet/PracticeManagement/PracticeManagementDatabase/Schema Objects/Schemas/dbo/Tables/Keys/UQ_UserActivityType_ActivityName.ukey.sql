@@ -1,4 +1,0 @@
-﻿ALTER TABLE [dbo].[UserActivityType]
-    ADD CONSTRAINT [UQ_UserActivityType_ActivityName] UNIQUE NONCLUSTERED ([ActivityName] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF) ON [PRIMARY];
-
-

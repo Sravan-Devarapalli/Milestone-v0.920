@@ -1,4 +1,0 @@
-﻿ALTER TABLE [dbo].[Pay]
-    ADD CONSTRAINT [FK_Pay_Person] FOREIGN KEY ([Person]) REFERENCES [dbo].[Person] ([PersonId]) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
-

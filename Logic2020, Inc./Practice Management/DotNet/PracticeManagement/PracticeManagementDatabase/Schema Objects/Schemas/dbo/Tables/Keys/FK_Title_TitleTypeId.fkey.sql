@@ -1,5 +1,0 @@
-﻿ALTER TABLE [dbo].[Title]
-ADD CONSTRAINT [FK_Title_TitleTypeId] 
-FOREIGN KEY (TitleTypeId)
-REFERENCES dbo.[TitleType] (TitleTypeId)  ON DELETE NO ACTION ON UPDATE NO ACTION;
-

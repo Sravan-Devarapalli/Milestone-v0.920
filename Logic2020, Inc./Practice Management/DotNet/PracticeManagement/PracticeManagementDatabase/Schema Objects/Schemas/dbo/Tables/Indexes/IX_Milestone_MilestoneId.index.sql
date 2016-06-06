@@ -1,6 +1,0 @@
-﻿CREATE NONCLUSTERED INDEX [IX_Milestone_MilestoneId] ON [dbo].[Milestone] 
-(
-	[MilestoneId] ASC,
-	[ProjectId] ASC
-)
-WITH (SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF) ON [PRIMARY]

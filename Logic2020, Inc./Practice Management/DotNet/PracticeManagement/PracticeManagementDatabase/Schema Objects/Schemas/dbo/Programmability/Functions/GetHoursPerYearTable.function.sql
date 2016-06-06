@@ -1,7 +1,0 @@
-﻿CREATE FUNCTION [dbo].[GetHoursPerYearTable]
-(
-)
-RETURNS TABLE
-AS
-	RETURN SELECT CAST(2080 AS DECIMAL) AS HoursPerYear
-GO

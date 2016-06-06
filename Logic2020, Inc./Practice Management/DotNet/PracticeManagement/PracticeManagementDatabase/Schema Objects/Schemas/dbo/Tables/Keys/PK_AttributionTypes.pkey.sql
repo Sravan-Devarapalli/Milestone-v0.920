@@ -1,3 +1,0 @@
-﻿ALTER TABLE [dbo].[AttributionTypes]
-	ADD CONSTRAINT [PK_AttributionTypes]
-	PRIMARY KEY CLUSTERED ([AttributionTypeId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);

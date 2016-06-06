@@ -1,3 +1,0 @@
-﻿ALTER TABLE [dbo].[Division_CF]
-	ADD CONSTRAINT [FK_DivisionCF_ParentId] FOREIGN KEY (ParentId)	REFERENCES [dbo].[Division_CF] (DivisionId)	ON DELETE NO ACTION ON UPDATE NO ACTION;
-

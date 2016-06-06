@@ -1,6 +1,0 @@
-﻿ALTER TABLE [dbo].[Person]  WITH CHECK ADD  CONSTRAINT [FK_Person_TitleId] FOREIGN KEY([TitleId])
-REFERENCES [dbo].[Title] ([TitleId])
-ON UPDATE CASCADE
-GO
-ALTER TABLE [dbo].[Person] CHECK CONSTRAINT [FK_Person_TitleId]
-GO

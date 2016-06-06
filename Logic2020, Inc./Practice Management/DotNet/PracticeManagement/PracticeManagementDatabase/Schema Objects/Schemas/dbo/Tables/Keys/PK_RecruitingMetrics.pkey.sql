@@ -1,3 +1,0 @@
-﻿ALTER TABLE [dbo].[RecruitingMetrics]
-	ADD CONSTRAINT [PK_RecruitingMetrics]
-	PRIMARY KEY CLUSTERED ([RecruitingMetricsId] ASC) WITH (IGNORE_DUP_KEY = OFF, STATISTICS_NORECOMPUTE = OFF);

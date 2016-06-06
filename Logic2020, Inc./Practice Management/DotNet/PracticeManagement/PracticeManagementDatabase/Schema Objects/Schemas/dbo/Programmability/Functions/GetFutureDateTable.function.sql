@@ -1,7 +1,0 @@
-﻿CREATE FUNCTION [dbo].[GetFutureDateTable]
-(
-)
-RETURNS TABLE
-AS
-	RETURN SELECT '2029-12-31' AS FutureDate
-GO

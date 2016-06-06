@@ -1,4 +1,0 @@
-﻿ALTER TABLE [dbo].[ProjectCSAT]
-ADD CONSTRAINT [FK_ProjectCSAT_ReviewerId]
-FOREIGN KEY (ReviewerId)
-REFERENCES dbo.Person (PersonId)  ON DELETE NO ACTION ON UPDATE NO ACTION;
