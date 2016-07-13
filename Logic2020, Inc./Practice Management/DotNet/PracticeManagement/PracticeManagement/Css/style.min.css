@@ -1,0 +1,1626 @@
+﻿html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{border:0;outline:0;background:transparent;margin:0;padding:0}
+.grid-item-cell-padding{padding-left:10px;padding-right:3px}
+.LeftPadding10px{padding-left:10px!important}
+ul,li{list-style:none}
+table{border-collapse:collapse;border-spacing:0}
+input{font-family:Arial,Helvetica,sans-serif;font-size:12px}
+form#aspnetForm{height:100%}
+span.highlighted{background-color:#1A9E00;color:#FFF;font-weight:700}
+.clear{clear:both}
+.clear0{clear:both;font-size:0;line-height:0;height:0}
+.t-left{text-align:left!important}
+.PersonGridLeftPadding{padding-left:23px!important}
+.searchError{background-color:#E2EBFF;color:Red;padding:5px}
+.error-message{color:Red;padding:5px}
+.bg-light-frame{background-color:#e2ebff;padding:10px}
+.bgcolorE2EBFF{background-color:#E2EBFF}
+.bgcolorE2EBFFImp{background-color:#E2EBFF!important}
+.bgcolorwhite{background-color:White}
+.fl-left{float:left!important}
+.fl-right{float:right!important}
+.mrg0{margin:0!important}
+.Height115px{height:115px}
+html,body{width:100%;height:100%}
+html{background:#bacdf5 url(../images/body-bg2.png) repeat-y 50% 0}
+body{font-family:Arial;font-weight:400;font-size:12px;color:#333;min-height:100%}
+.wrapper{position:relative;min-height:100%;height:auto!important;min-width:940px;background-image:url(../images/wrapper-left-bg-wide.png);background-position:0 0;background-repeat:repeat-y;margin:0 20px 0 10px}
+.header{position:relative;height:100px;background:#bacdf5 url(../images/body-bg2.png) repeat-y 50% 0;padding:0}
+.holder{position:relative;margin:-10px 0 0 10px;padding:0 0 110px}
+.right-shadow{position:absolute;right:-20px;top:0;bottom:0;width:20px;background:url(../images/wrapper-right-bg-20.png) repeat-y 100% 0;margin-top:100px}
+.footer-wrap{min-width:970px;position:relative;height:110px;margin-top:-110px;background:#bacdf5 url(../images/body-bg2.png) repeat-y 50% 0}
+.footer{background:url(../images/footer-bg.png) repeat-x 0 0;margin:0 30px;padding:20px 0 0}
+.footer-left{height:20px;width:20px;float:left;background:url(../images/footer-bg-left.png) no-repeat 0 0;margin-left:10px}
+.footer-right{height:20px;width:20px;float:right;background:url(../images/footer-bg-right.png) no-repeat 0 0;margin-right:10px}
+a{color:#0898e6}
+a:hover{color:#069}
+select{border:1px solid #aaa}
+.serv-info{padding:35px 20px 0 0}
+.powered{float:right;width:90px;height:50px;margin-right:0}
+.powered a.icon{display:block;height:26px;width:90px;background:url(../images/logic2020_New.png) no-repeat 0 0;margin-top:5px}
+.top-menu{min-height:34px;background:url(../images/top-menu-bg.png) repeat-x 0 0;z-index:1000!important;position:relative;padding:10px 10px 0}
+ul.AspNet-Menu{height:34px}
+ul.AspNet-Menu li{float:left;padding-top:6px;height:28px!important}
+ul.AspNet-Menu li:hover{background:url(../images/top-menu-bg-h-25.png) repeat-x 0 0}
+ul.AspNet-Menu li a{color:#FFF;font-size:13px;font-weight:700;text-decoration:none}
+ul.AspNet-Menu li a span{padding:6px 20px 12px}
+ul.AspNet-Menu li:hover a span{color:#fff}
+ul.AspNet-Menu li.AspNet-Menu-Selected,ul.AspNet-Menu li.AspNet-Menu-Selected:hover{background:#FFF;height:28px!important}
+ul.main-sub-menu{position:relative;height:22px;margin-top:8px}
+ul.main-sub-menu li{float:left;padding-right:8px;height:15px;margin-bottom:8px}
+ul.main-sub-menu li a,.fontUnderline{text-decoration:underline}
+ul.main-sub-menu li a:hover{color:#ff6000}
+ul.main-sub-menu li.main-sub-menu-div{border-left:1px solid #ccc}
+ul.main-sub-menu li.main-sub-menu-Selected a{color:#000;cursor:default;font-weight:700;border-left:#000 1px solid;border-bottom:#000 1px solid;border-right:#000 1px solid;text-decoration:none!important;padding:0 1.5px 1.5px}
+.main-content{width:98%;padding:8px 4px}
+.main-contentZindex{z-index:-1000!important;margin-left:9px}
+a.add-btn{display:block;float:right;background-position:-432px -48px;background-repeat:no-repeat;height:24px;font:bold 12px Arial;background-image:url(../images/add-btn.png);padding-left:25px;text-decoration:none}
+a.add-btn span.btn-body{display:block;position:relative;height:18px;background-position:right 0;background-image:url(../images/add-btn.png);background-repeat:no-repeat;padding-right:10px;padding-top:6px}
+a.add-btn:hover{background-position:-432px -72px}
+a.add-btn:hover span.btn-body{background-position:right -24px}
+.btn-body .btn-text-shadow{color:#333}
+.btn-body .btn-text{position:absolute;left:-1px;top:4px;color:#fff}
+.version{font-size:75%;line-height:24px;padding:0 0 0 12px}
+.filer-header ul li{height:16px;float:left;position:relative;padding:8px 0 6px 10px}
+.CustomTabStyle .ajax__tab_tab{height:16px;float:left;position:relative;display:block;padding:8px 0 6px}
+a.control{display:block;width:11px;height:11px;background-repeat:no-repeat;background-position:0 0}
+.collapse{background-image:url(../images/collapse.png)}
+.CustomTabStyle .ajax__tab_body{background-color:#e2ebff;padding:5px}
+.Margin5Px,div.Notes-panel{margin:5px}
+.scroll-y{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:170px}
+.floatRight input{float:right;width:16px!important;margin-right:0!important}
+.floatRight label{padding-left:2px!important}
+.buttons-block input{float:right;width:110px;text-align:center;margin-right:10px}
+.bScroll{height:450px;overflow-y:scroll}
+.xScroll{overflow-x:auto;overflow-y:auto;height:450px}
+.xScrollAuto{overflow-x:auto}
+.cp{border:1px solid #c5c5c5}
+TABLE.CompPerfTable td .cell-pad{padding:4px 2px 4px 4px}
+TR.CompPerfHeader td .ie-bg,.CompPerfTable th .ie-bg{height:18px;vertical-align:middle;position:relative;white-space:nowrap;border-right:#c5c5c5 1px solid;padding:6px 3px 0 0}
+TD.CompPerfProjectState{min-width:20px}
+TD.CompPerfClient{min-width:100px}
+TD.CompPerfProject{min-width:150px}
+TD.CompPerfPeriod TABLE{margin:2px 0}
+TD.CompPerfPeriod TABLE TD{padding-right:2px}
+.PadRight20PImp{padding-right:20%!important}
+.bScroll TABLE TD.CompPerfTotalSummary{min-width:105px}
+TD.CompPerfMonthSummary{min-width:90px;text-align:center}
+TD.MonthSummary{min-width:80px;text-align:center}
+TD.CompPerfTotalSummary{min-width:120px;text-align:center}
+.summary TD.CompPerfTotalSummary .cell-pad{text-align:right;padding-right:2px}
+TD.CompPerfData{min-width:90px;padding:2px}
+TR.CompPerfData TD,TR.CompPerfData TH{min-width:90px;border:solid 1px gray;padding:2px}
+.SummaryMiniReport SPAN{font-weight:bold;font-variant:normal;font-style:normal;font-family:Arial;line-height:normal}
+.SummaryMiniReport{z-index:2000}
+DIV.MiniReport{width:0;height:0;position:absolute;background-color:#fff;overflow:hidden;vertical-align:top;border:0;border-color:#FF9F00!important;padding:0}
+DIV.MiniReport TABLE{width:100%}
+DIV.MiniReport TD{vertical-align:top;text-align:left;height:auto;border-bottom:0}
+.Loading{height:24px;background-image:url(../Images/loading.gif);background-repeat:no-repeat}
+DIV.MiniReport table th{background:url(../images/top-menu-bg.png) repeat-x scroll 0 0}
+.mini-report-close{width:13px;height:13px;background:url(../images/mini-close.png) no-repeat 50% 50%;border:0;font-size:0;line-height:0;color:#444;cursor:pointer;margin:4px 2px 6px;padding:0}
+.mini-report-close:hover{background-color:#FCD18E}
+.mini-report-closeNew{width:13px;height:13px;background:url(../images/mini-close.png) no-repeat 50% 50%;border:0;font-size:0;line-height:0;color:#444;cursor:pointer;margin-right:2px;float:right}
+.mini-report-closeNew :hover{background-color:#FCD18E}
+DIV.MiniReport table td table th{background:url(../images/cp-header-bg.png) repeat-x 0 100%;height:18px;padding:4px 0}
+DIV.MiniReport table td table td{height:auto;background:#FFF;padding:4px 6px}
+.Revenue{color:#1a9e00}
+.Cogs{color:Maroon}
+.Margin{color:#8000c2}
+.Bench{color:Red}
+TD .Revenue{color:#1a9e00;padding-right:2px}
+TD .Cogs{color:Maroon;padding-right:2px}
+TD .Margin{color:#8000c2;padding-right:2px}
+TD .Bench{color:Red;padding-right:2px}
+TD .spacing{padding-right:2px;padding-left:2px}
+.pr-indicator{display:block;height:10px;width:10px;background-position:0 0;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.pr-internal{display:block;height:10px;width:10px;background-position:0 -40px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.ActiveProjectWithoutSOW{display:block;height:10px;width:10px;background-position:0 -60px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.ProjectedProject{background-position:0 -30px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.InactiveProject{background-position:0 -70px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.ExperimentalProject{background-position:0 -50px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.CompletedProject{background-position:0 -10px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.ProposedProject{display:block;height:10px;width:10px;background-position:0 -20px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png);margin:0 0 0 5px}
+.AciveOpportunity{display:block;height:10px;width:10px;background-position:0 -80px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png)}
+.AciveOptyWithProjectAttached{display:block;height:10px;width:10px;background-position:0 0;background-repeat:no-repeat;background-image:url(../images/project-indicator.png)}
+.InactiveOpportunity{background-position:0 -70px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png)}
+.WonOpportunity{background-position:0 -20px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png)}
+.LostOpportunity{background-position:0 -10px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png)}
+.ExperimentalOpportunity{background-position:0 -50px;display:block;height:10px;width:10px;background-repeat:no-repeat;background-image:url(../images/project-indicator.png)}
+.hint{background:url(../images/hint.png) no-repeat 5px 3px;cursor:pointer;padding:0 7px}
+.arrow{background-image:url(../images/sort-arrow.png);background-repeat:no-repeat;background-position:100% -30px;padding:2px 10px 2px 2px}
+.sort-up{background-position:100% -15px;padding-left:2px}
+.sort-down{background-position:100% 6px;padding-left:2px}
+.rowSelected td{background-color:#e0e0e0}
+TD.CompPerfProject DIV.ToolTip{display:none;z-index:3;border:0!important}
+.ToolTip table td .bgColorTransparent{background-color:transparent}
+.bgColorTransparentImp{background-color:transparent!important}
+.tail{position:absolute;height:15px;width:12px;background-image:url(../Images/tt-tail.png);background-repeat:no-repeat;top:22px;left:-4px}
+.ToolTip table tr.top td.lt{height:18px;width:18px;background-image:url(../Images/tt-lt.png);background-repeat:no-repeat}
+.ToolTip table tr.top td.tbor{background-image:url(../Images/tt-tbor.png);background-repeat:repeat-x}
+.ToolTip table tr.top td.rt{width:18px;background-image:url(../Images/tt-rt.png);background-repeat:no-repeat}
+.ToolTip table tr.middle td.lbor{background-image:url(../Images/tt-lbor.png);background-repeat:repeat-y}
+.ToolTip table tr.middle td.content{background:#fefac9}
+.ToolTip table tr.middle td.rbor{background-image:url(../Images/tt-rbor.png);background-repeat:repeat-y}
+.ToolTip table tr.bottom td.lb{height:18px;background-image:url(../Images/tt-lb.png);background-repeat:no-repeat}
+.ToolTip table tr.bottom td.bbor{background-image:url(../Images/tt-bbor.png);background-repeat:repeat-x}
+.ToolTip table tr.bottom td.rb{background-image:url(../Images/tt-rb.png);background-repeat:no-repeat}
+.ToolTip table tr.middle td.content pre{font:normal 12px Arial!important;line-height:18px!important}
+.summary td{background-color:#e7fcc0;font-weight:700}
+table.sortable thead{background-color:#eee;color:#666;font-weight:700;cursor:default}
+.tem-person-time{margin-bottom:20px;width:100%}
+.tem-persons{float:left;width:350px}
+.tem-persons select{width:342px}
+.tem-week-of{float:right;width:auto}
+.please-wait-holder{height:0;text-align:center;z-index:10000001!important}
+.please-wait-holder table{width:300px;position:absolute;margin-left:-150px;z-index:10000001!important}
+.error-milestone-row{background-color:#FFE6E0}
+.time-entry-grid{vertical-align:top;width:97%}
+.time-entry-new-grid{vertical-align:top;width:100%}
+.time-entry-bg-light-frame{background-color:#e2ebff;width:97%;padding:10px 0}
+.time-entry-new-bg-light-frame{width:100%;padding:5px 0}
+.time-entry-bar-project-milestones{width:20%;text-align:left;padding-left:3px}
+.time-entry-bar .time-entry-bar-project-milestones{width:20%;padding-left:3px}
+.te-bar-header{background:#D3D3D3;font-weight:700}
+.time-entry-bar-time-types{width:16%;padding-left:0;text-align:left;border-right:5px;padding-right:0}
+.time-entry-total-hours{text-align:right;vertical-align:middle;padding-right:5px;width:5%}
+.time-entry-total-hours-by-day{text-align:right;vertical-align:middle;width:8%;text-decoration:none}
+.time-entry-bar-single-te input[type=text]{width:95%!important;border:1px solid #aaa;height:16px;margin:1px 0 0 2px}
+.tem-filter-title-cell{font-weight:700;white-space:nowrap}
+.tem-filter-space-cell{width:25px}
+.tem-filter-row{height:25px;vertical-align:middle}
+.tem-filter-table{border:0;border-collapse:separate}
+.ProjectDetailBlue{color:#1F4586;font-weight:700;font-size:150%}
+table.time-entry-person-projects th{border-bottom:1px solid gray;border-top:1px solid gray;padding-left:5px;padding-right:5px;padding-top:3px;padding-bottom:3px;vertical-align:middle;text-align:center;font-weight:700;white-space:nowrap}
+table.time-entry-person-projects td{vertical-align:middle;border-bottom:1px solid lightgray;border-top:1px solid lightgray;padding-left:5px;text-align:right;padding-right:5px;padding-top:3px;padding-bottom:3px;white-space:nowrap}
+table.time-entry-person-projects tr{border-bottom:1px solid lightgray;border-top:1px solid lightgray;padding:1px;vertical-align:middle}
+.alterrow{background-color:#F9FAFF}
+.bgcolorF9FAFFImp{background-color:#F9FAFF!important}
+.pnlTimeEntryCss{background:#444;box-shadow:5px 5px 15px #444;-webkit-box-shadow:5px 5px 15px #444;-moz-box-shadow:5px 5px 15px #444;padding:10px;width:375px}
+td.te-modal-header{color:#FFF;font-weight:700;padding-bottom:5px}
+.modal-close{display:block;float:right;width:7px;height:7px;background-repeat:no-repeat;background-position:0 0;background-image:url(../images/modal-close.png);margin-top:3px}
+.modal-close:hover{background-position:0 -7px}
+.pnlTimeEntryCss table td.comment{padding-bottom:0}
+.pnlTimeEntryCss table td.comment textarea{width:363px;height:60px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#444;border:1px solid gray;padding:5px;resize:none;overflow-y:auto}
+.te-modal-inner{padding-top:5px;background-color:gray}
+.te-modal-inner table{color:#FFF;width:100%}
+.te-modal-inner table td{padding-bottom:5px}
+.modalBackground{background-color:Gray;opacity:.7;filter:alpha(opacity=70)}
+.ajax__calendar_container{z-index:100001}
+#report-date-interval .ajax__calendar_day{cursor:pointer;height:10px;text-align:right;width:15px;padding:0}
+.calendarWrapper{background:#fff;margin-top:5px;z-index:1000001;box-shadow:3px 3px 3px 0 #444;-webkit-box-shadow:3px 3px 3px 0 #444;-moz-box-shadow:3px 3px 3px 0 #444;border:1px solid #EBEBEB;padding:10px}
+.calendarWrapper table td,.calendarWrapper table tr{border:1px solid #ebebeb!important}
+.calendarOtherMonth,.calendarWeekendDay,.calendarSelectedDay,.calendarNextPrev{padding:3px 5px}
+.calendarSelectedDay{background:#ff9b00!important}
+.calendarTitle{background:#ebebeb;font-weight:700;font-size:14px}
+.calendarDayHeader{background:#ebebeb;padding:3px}
+TABLE.CalendarTable{border-collapse:collapse}
+TABLE.CalendarTable A{color:#000}
+TR.HeadRow TD{font-weight:700;font-size:larger;border-top:solid 1px gray}
+TABLE.CalendarTable TD{vertical-align:top;text-align:center;padding:3px}
+DIV.DayOff{height:24px;width:24px;background-color:#FAF}
+DIV.CompanyDayOn,DIV.CompanyDayOnFloatingDay{height:24px;width:24px;background-color:#F60}
+TD.DayOff,TH.DayOff{background-color:#FAF}
+TD.CompanyDayOn,TH.CompanyDayOn,TD.CompanyDayOnFloatingDay,TH.CompanyDayOnFloatingDay{background-color:#F60}
+DIV.DayGrayed{height:24px;width:24px;background-color:ButtonFace;color:Gray}
+DIV.DayGrayed SPAN{color:Gray}
+tr.al-row{border-bottom:1px dotted #D3D3D3}
+.ste-label{background-color:#FFF;margin-left:5px}
+.page-hscroll-wrapper{height:45px;background:url(../images/p-scroll-bg.png) repeat-x 0 0;position:relative;margin-top:-10px}
+.page-hscroll-wrapper .side-l,.page-hscroll-wrapper .side-r{position:absolute;height:45px;width:10px;top:0;background:url(../images/p-scroll-bg.png) repeat-x 0 0}
+.page-hscroll-wrapper .side-r{right:-10px}
+.page-hscroll-wrapper .side-l{left:-10px}
+.page-hscroll-wrapper .scroll-left{float:left;height:45px}
+.page-hscroll-wrapper .scroll-right{float:right;height:45px;text-align:right}
+.page-hscroll-wrapper .scroll-left a,.page-hscroll-wrapper .scroll-left a span,.page-hscroll-wrapper .scroll-right a,.page-hscroll-wrapper .scroll-right a span{display:block;background-image:url(../images/page-scroll-arrows-bg.png);background-repeat:no-repeat}
+.page-hscroll-wrapper .scroll-left a{height:38px;float:left;background-position:-332px -38px;margin:4px 0 0;padding:0 0 0 15px}
+.page-hscroll-wrapper .scroll-left a span{height:28px;background-position:right 0;padding:10px 15px 0 5px}
+.page-hscroll-wrapper .scroll-right a{height:38px;float:right;background-position:-332px -114px;margin:4px 0 0;padding:0 0 0 15px}
+.page-hscroll-wrapper .scroll-right a span{height:28px;background-position:right -76px;padding:10px 20px 0 0}
+.page-hscroll-wrapper .scroll-left label{display:block;float:left;padding:14px 10px}
+.page-hscroll-wrapper .scroll-right label{display:block;float:right;padding:14px 10px}
+.wraptext{word-break:break-all}
+.watermarked{color:Gray}
+.MarginClass{margin-right:1px!important}
+.time-entry-bar-total-hours{width:5%;text-align:center}
+.NoHyperlink{color:#0898e6;cursor:default}
+.DefaultCursor{cursor:default}
+.DefaultCursorImp{cursor:default !important}
+.cssPager td a,.cssPager td span{padding-left:2px;padding-right:2px;text-decoration:none}
+.darkadd-btn-project{background-color:#FFF;cursor:default;filter:alpha(opacity=50);opacity:.5;-moz-opacity:.50;display:block;float:right;cssfloat:right}
+.add-btn-project{float:right;cssfloat:right}
+.Margin-Left{margin-left:122px}
+TR.CompPerfHeaderGroupBy td{border-bottom:1px solid #c5c5c5;height:35px!important;font:bold 11px Arial;background:url(../images/cp-header-bg_45.png) repeat-x 11px 0!important}
+TR.CompPerfHeaderGroupBy td .ie-bg{height:26px;vertical-align:middle;position:relative;white-space:nowrap;border-right:#c5c5c5 1px solid;padding:6px 3px 0 0}
+.HeaderSortStyle a,.HeaderSortStyle:hover a{text-decoration:none;color:#000}
+.waterMarkItalic{color:Gray;font-style:italic;font-size:11px}
+.waterMarkItalicSmtp{color:Gray;font-style:italic;width:100%}
+.cbfloatRight input{float:right}
+.watermarkedtext{color:gray;font-style:italic}
+.ConfirmBoxClass{min-width:450px;min-height:60px;max-width:700px}
+.DatePickerPadding td{padding:2px 0!important}
+.position_top{position:static}
+.PersonSummaryReport .InnerTableBorderNone{border-left:none !important;}
+.WordWrap{word-wrap:break-word!important;word-break:break-all;white-space:normal}
+.OpportunitySummaryWordWrap{word-wrap:break-word!important;word-break:break-all;white-space:normal!important}
+.ApplyStyleForDashBoardLists P{margin:8px 0 8px 8px}
+.ApplyStyleForDashBoardLists ol,.ApplyStyleForDashBoardLists ul{margin-right:0;padding:0 40px}
+.ApplyStyleForDashBoardLists ol li{list-style-type:decimal}
+.ApplyStyleForDashBoardLists ul li{list-style-type:disc}
+.ConfirmBoxErrorClass{min-height:60px;min-width:200px;max-width:600px;max-height:500px}
+.AttentionPopUpHeaderStyle{text-align:center;background-color:Gray;vertical-align:bottom;font-size:14px;padding-top:4px;font-weight:700}
+.time-entry-bar-time-typesNew{width:32%;text-align:left;padding-left:3px;border-right:5px;padding-right:0}
+.time-entry-bar-time-typesNew .FirstTd{width:10%;padding-left:4px}
+.time-entry-bar-time-typesNew .SecondTd{width:90%}
+.time-entry-bar-time-typesNewHeader{width:32%;text-align:center;border-right:5px;padding-right:0}
+.time-entry-bar-single-teNew input[type=text]{width:36px!important;border:1px solid #aaa;height:16px;text-align:right;margin:1px 0 0 2px}
+.time-entry-total-hoursNew-totalColoum{text-align:right;vertical-align:middle;width:6%;font-weight:700}
+.time-entry-total-hoursNew-totalColoum .TotalDiv{float:right;padding-right:10px}
+.time-entry-total-hoursNew{text-align:center;vertical-align:middle;padding-right:3px;width:6%;font-weight:700}
+.DeleteWidth{padding-left:0;width:3%;text-align:left}
+.DeleteFixedWidth{width:10%;text-align:right!important;padding:0!important}
+.DeleteFixedWidth div{width:30px;float:right;padding-right:5px}
+.time-entry-bar-total-hoursNew{width:6%;text-align:center}
+TABLE.Section td{padding:4px 0 0 4px}
+.TopCenterAlignWithoutPaddingTop{text-align:center;vertical-align:top;padding:0 5px 5px}
+.ProjectAccountName{font-weight:700;font-style:italic;font-size:14px}
+.TOTALHOURSTD{text-align:right;font-weight:700;padding:10px}
+.DayTotalHours{border-top:1px solid #000;border-bottom:1px solid #000}
+.DayTotalHoursBorderLeft{border-left:1px solid #000}
+.DayTotalHoursBorderRight{border-right:1px solid #000}
+.TOTALTD{width:70%;text-align:right;font-weight:700}
+.Padding0{padding:0}
+.Padding0Imp,.DatePickerTable td{padding:0!important}
+.Padding2,.Padding2Px{padding:2px}
+.Padding3PX{padding:3px}
+.Padding4Px,.TabPadding td,.TabPadding th{padding:4px}
+.Padding5{padding:5px}
+.Padding6{padding:6px}
+.Padding8{padding:8px}
+.Padding10,.Padding10Px{padding:10px}
+.Padding10PxImp{padding:10px!important}
+.Padding15Px{padding:15px}
+.PaddingTop2Px{padding-top:2px}
+.PaddingTop0PxImp{padding-top:0!important}
+.PaddingTop2PxImp{padding-top:2px!important}
+.PaddingTop3{padding-top:3px}
+.PaddingTop4,.PaddingTop4Px{padding-top:4px}
+.PaddingTop5{padding-top:5px}
+.PaddingTop5Imp{padding-top:5px!important}
+.PaddingTop6{padding-top:6px}
+.PaddingTop7{padding-top:7px}
+.PaddingTop8{padding-top:8px}
+.PaddingTop10,.PaddingTop10Px{padding-top:10px}
+.PaddingTop10Imp{padding-top:10px!important}
+.PaddingTop15{padding-top:15px}
+.PaddingTop20{padding-top:20px}
+.PaddingTop30{padding-top:30px}
+.PaddingTop30Imp{padding-top:30px!important}
+.PaddingTop75{padding-top:75px}
+.PaddingBottom0{padding-bottom:0!important}
+.PaddingBottom2{padding-bottom:2px}
+.PaddingBottom3{padding-bottom:3px}
+.PaddingBottom3Imp{padding-bottom:3px!important}
+.PaddingBottom5,.paddingBottom5px{padding-bottom:5px}
+.PaddingBottom5Imp,.paddingBottom5pxImp,.ReportHeaderBillAndNonBillTable .billingHours,.PersonDetailReportCustomTabStyle td,.ProjectSummaryReportPageCustomTabStyle td,.AccountSummaryReportCustomTabStyle td{padding-bottom:5px!important}
+.PaddingBottom6{padding-bottom:6px}
+.PaddingBottom8{padding-bottom:8px}
+.PaddingBottom10,.paddingBottom10px{padding-bottom:10px}
+.PaddingBottom10Imp{padding-bottom:10px!important}
+.PaddingBottom20Px{padding-bottom:20px}
+.PaddingBottom31{padding-bottom:31px}
+.padRight0,.PaddingRight0Px{padding-right:0!important}
+.padRight1{padding-right:1px}
+.padRight2,.PaddingRight2Px{padding-right:2px}
+.padRight3,.PaddingRight3Px{padding-right:3px}
+.padRight4{padding-right:4px}
+.padRight5,.wrap{padding-right:5px}
+.padRight5Imp{padding-right:5px!important}
+.padRight7Imp{padding-right:7px!important}
+.padRight8{padding-right:8px}
+.padRight10,.PaddingRight10Px{padding-right:10px}
+.padRight10Imp{padding-right:10px!important}
+.padRight15{padding-right:15px}
+.padRight25{padding-right:25px}
+.padRight35{padding-right:35px}
+.padRight35Imp{padding-right:35px!important}
+.padRight60Imp{padding-right:60px!important}
+.padRight110Imp{padding-right:110px!important}
+.padRight242{padding-right:242px}
+.padLeft0,.PaddingLeft0Px{padding-left:0!important}
+.padLeft2,.PaddingLeft2px{padding-left:2px}
+.PaddingLeft2pxImp{padding-left:2px!important}
+.padLeft3,.PaddingLeft3Px{padding-left:3px}
+.PaddingLeft3PxImp{padding-left:3px!important}
+.padLeft3Per{padding-left:3%}
+.padLeft4Per{padding-left: 4%}
+.padLeft4,.PaddingLeft4Px{padding-left:4px}
+.padLeft5{padding-left:5px}
+.padLeft5Imp{padding-left:5px!important}
+.padLeft6{padding-left:6px}
+.padLeft8{padding-left:8px}
+.padLeft10,.PaddingLeft10Px{padding-left:10px}
+.padLeft10Imp{padding-left:10px!important}
+.padLeft12{padding-left:12px}
+.padLeft15{padding-left:15px}
+.paddingLeft15Imp{padding-left:15px!important}
+.padLeft16{padding-left:16px}
+.padLeft18{padding-left:18px}
+.padLeft20{padding-left:20px}
+.padLeft20Imp{padding-left:20px!important}
+.padLeft23{padding-left:23px}
+.padLeft25{padding-left:25px}
+.padLeft30{padding-left:30px}
+.padLeft40{padding-left:40px}
+.padLeft40Imp{padding-left:40px!important}
+.padLeft40Percent{padding-left:40%}
+.padLeft180Imp{padding-left:180px!important}
+.padLeft60{padding-left:60px}
+.padLeft120{padding-left:120px}
+.padLeft3P{padding-left:3%}
+.padBottom15{padding-bottom:15px}
+.Width0Percent{width:0}
+.Width1Percent{width:1%}
+.Width2Percent{width:2%}
+.Width2PercentImp{width:2%!important}
+.Width3Percent,.Width3Per{width:3%}
+.Width4Percent{width:4%}
+.Width5Percent{width:5%}
+.Width5PercentImp{width:5%!important}
+.Width6Percent{width:6%}
+.Width6PercentImp{width:6%!important}
+.Width7Percent{width:7%}
+.Width7point5Percent{width:7.5%}
+.Width6point5Percent{width:6.5%}
+.Width8Percent,.Width8Per{width:8%}
+.Width9Percent,.Width9Per{width:9%}
+.Width10Percent,.Width10Per{width:10%}
+.Width10PerImp{width:10%!important}
+.Width11Percent{width:11%}
+.Width12Percent,.Width12Per{width:12%}
+.Width12PercentImp{width:12%!important}
+.Width13Percent{width:13%}
+.Width13Point5Percent{width:13.5%}
+.Width14Percent{width:14%}
+.Width14PercentImp{width:14%!important}
+.Width15Percent,.Width15Per{width:15%}
+.Width15PercentImp{width:15%!important}
+.Width15point3PercentImp{width:15.3%!important}
+.Width16Percent{width:16%}
+.Width16point5PercentImp{width:16.5%!important}
+.Width16point8PercentImp{width:16.8%!important}
+.Width17Percent,.Width17Per{width:17%}
+.Width18Percent{width:18%}
+.Width19Percent{width:19%}
+.Width20Percent{width:20%}
+.Width20PerImp{width:20%!important}
+.Width78Percent{width:78%}
+.Width21Percent{width:21%}
+.Width22Per{width:22%}
+.Width23Percent{width:23%}
+.Width23.5PerImp{width:23.5%!important}
+.Width24Percent{width:24%}
+.Width25Percent{width:25%}
+.Width26Percent,.Width26Per{width:26%}
+.Width27Percent{width:27%}
+.Width28Percent{width:28%}
+.Width29Percent{width:29%}
+.width30P{width:30%}
+.Width31Percent{width:31%}
+.Width34Percent{width:34%}
+.Width35Percent{width:35%}
+.Width37Percent{width:37%}
+.ParametersTable .FirstTd38{width:38%!important}
+.Width39Percent{width:39%}
+.Width40P{width:40%}
+.Width40PImp{width:40%!important}
+.Width40Percent{width:40%;padding:1px}
+.Width42Percent{width:42%}
+.Width43Percent{width:43%}
+.Width44Percent{width:44%}
+.Width44point5Percent{width:44.5%!important}
+.Width45Percent{width:45%}
+.Width47Percent{width:47%}
+.Width45PercentImp{width:45%!important}
+.Width48Percent{width:48%}
+.Width50Percent{width:50%}
+.Width50andhalfPercent{width:50.5%}
+.Width55Percent{width:55%}
+.Width58Percent{width:58%;padding:1px}
+.width60PImp{width:60%!important}
+.width60P{width:60%}
+.Width63Percent{width:63%}
+.Width65Percent{width:65%}
+.Width66Percent,.Width66Per{width:66%}
+.Width67PImp{width:67%!important}
+.Width70Per,.Width70Percent,.width70P{width:70%}
+.Width72Percent{width:72%}
+.Width75Percent{width:75%}
+.Width78Percent{width:78%}
+.width77P{width:77%}
+.width77PImp{width:77%!important}
+.Width80Percent{width:80%}
+.Width80PercentImp{width:80%!important}
+.Width85Percent{width:85%}
+.Width90Percent{width:90%}
+.Width92Per{width:92%}
+.Width91Per{width:91%}
+.Width925Per{width:92.5%}
+.Width93Per{width:93%}
+.Width94Per{width:94%}
+.Width945Per{width:94.5%}
+.Width95Percent,.Width95Per{width:95%}
+.Width96Per{width:96%}
+.Width97Percent,.Width97Per{width:97%}
+.Width98Percent{width:98%}
+.Width99Percent{width:99%}
+Width99PercentImp{width:99%!important}
+.Width5Px,.BenchCostCustomValidator{width:5px}
+.Width10Px{width:10px}
+.Width10PxImp{width:10px!important}
+.Width15Px{width:15px}
+.Width20Px{width:20px}
+.Width25Px{width:25px}
+.Width26Px{width:26px}
+.Width15PxImp{width:15px!important}
+.Width25Px,.BenchCostCollapsiblePanel{width:25px}
+.Width30Px,.emptyTd{width:30px}
+.Width40Px{width:40px}
+.Width45Px{width:45px}
+.width50Px,.Width50Px{width:50px}
+.Width50PxImp{width:50px!important}
+.width55Px{width:55px}
+.width58Px{width:58px}
+.Width60Px{width:60px}
+.Width60PxImp{width:60px!important}
+.Width60PerImp{width:60%!important}
+.Width50PerImp{width:50%!important}
+.Width67Px{width:67px}
+.Width70Px{width:70px}
+.Width70PxImp{width:70px!important}
+.Width75PxImp{width:75px!important}
+.Width80Px{width:80px}
+.Width83Px{width:83px}
+.Width90Px{width:90px}
+.Width90PxImp{width:90px!important}
+.Width98PxImp{width:98px!important}
+.Width95Px{width:95px}
+.Width100Px{width:100px}
+.Width100PxImp{width:100px!important}
+.Width109PxImp{width:109px!important}
+.Width110Px{width:110px}
+.Width110PxImp{width:110px!important}
+.Width115Px{width:115px}
+.Width115PxImp{width:115px!important}
+.Width120Px{width:120px}
+.Width120PxImp{width:120px!important}
+.Width125Px{width:125px}
+.Width130px{width:130px}
+.Width130pxImp{width:130px!important}
+.Width135px{width:135px}
+.Width140px{width:140px}
+.Width140pxImp{width:140px!important}
+.Width145px{width:145px}
+.Width150px{width:150px}
+.Width150pxImp{width:150px!important}
+.Width152px{width:152px}
+.Width155px{width:155px}
+.Width158px{width:158px}
+.Width160px{width:160px}
+.Width160PxImp{width:160px!important}
+.Width170Px{width:170px}
+.Width170PxImp{width:170px!important}
+.Width175Px{width:175px}
+.Width180Px{width:180px}
+.Width200Px,.lblOverheadsBenchCostTd{width:200px}
+.Width220Px{width:220px}
+.Width232PxImp{width:232px!important}
+.Width235Px{width:235px}
+.Width250Px{width:250px}
+.Width220PxImp{width:220px!important}
+.Width250Px,.btnsTable{width:250px}
+.Width256Px{width:256px}
+.Width260Px{width:260px}
+.Width295Px{width:295px}
+.Width295PxImp{width:295px!important}
+.Width300Px{width:300px}
+.Width320PxImp{width:320px!important}
+.Width323PxImp{width:323px!important}
+.Width304Px{width:304px}
+.Width320Px{width:320px}
+.Width325Px{width:325px}
+.Width330Px{width:330px}
+.Width350Px{width:350px}
+.Width355Px{width:355px}
+.Width356Px{width:356px}
+.Width360Px{width:360px}
+.Width375Px{width:375px}
+.Width395Px{width:395px}
+.Width400Px{width:400px}
+.Width400PxImp{width:400px!important}
+.Width415PxImp{width:415px!important}
+.Width430Px,.ProjectSearch{width:430px}
+.Width460Px{width:460px}
+.Width550PxImp{width:550px!important}
+.Width660PxImp{width:660px!important}
+.Width670Px{width:670px}
+.Width700Px{width:700px}
+.Width750PxImp{width:750px!important}
+.Width920Px{width:920px}
+.height1Px{height:1px}
+.height10P,.height10Px{height:10px}
+.height15Px{height:15px}
+.height19Px{height:19px}
+.height20P{height:20px}
+.Height25Px{height:25px}
+.Height27Px{height:27px}
+.Height40Px{height:40px}
+.Height30Px{height:30px}
+.Height35Px{height:35px}
+.Height40Px{height:40px}
+.Height80Px{height:80px}
+.Height80PxImp{height: 80px!important;}
+.Height125PxImp{height:125px!important}
+.Height160Px{height:160px}
+.Height160PxIMP{height:160px!important}
+.minheight250Px{min-height:250px}
+.minheight200Px{min-height:200px}
+.ModalPopUpSideHeading{width:30%;font-weight:700;text-align:right;padding-right:4px}
+.ModalPopUpDropDownPadding{padding-top:8px}
+.divMetrics{padding-top:20px;padding-left:10%}
+.TimeEntryAddPopUpTable{width:100%}
+.TimeEntryAddPopUpTable .FirstTrTd1{width:30%;font-weight:700;text-align:right;padding-right:4px}
+.TimeEntryAddPopUpTable .FirstTrTd2{width:70%}
+.TimeEntryAddPopUpTable .FirstTrTd2 select,.TimeEntryAddPopUpTable .SecondTrTd2 select{width:250px}
+.TimeEntryAddPopUpTable .SecondTrTd1{width:30%;font-weight:700;text-align:right;padding-right:4px;padding-top:8px}
+.TimeEntryAddPopUpTable .SecondTrTd2{width:70%;padding-top:8px}
+.TimeEntryAddPopUpButtonTable{height:45px}
+.TimeEntryAddPopUpButtonTable .FirstTd{padding-right:3px}
+.TimeEntryAddPopUpButtonTable .SecondTd{padding-left:3px}
+.DayTotalCSS{font-weight:700;text-align:right;margin:1px 7px 0 0;padding:2px 0 0 1px;display:inline-block;height:18px;width:36px}
+.calendarPopup tr td{padding-top:3px;padding-bottom:3px}
+.singleRowTableTd td{padding-top:0!important;padding-bottom:0!important}
+.vTop{vertical-align:top}
+.vTopImp{vertical-align:top!important}
+.vMiddle{vertical-align:middle}
+.vMiddleImp{vertical-align:middle!important}
+.vBottom{vertical-align:bottom}
+.vBottomImp{vertical-align:bottom!important}
+.textLeft{text-align:left!important}
+.White{background-color:#FFF;border-bottom:1px solid Gray}
+.TextBlack{color:#000!important}
+.f0f0f1{background-color:#f0f0f1;border-bottom:1px solid Gray}
+.font10PxImp{font-size:10px!important}
+.fontSize11px{font-size:11px}
+.font12Px{color:#000;font-size:12px}
+.font13Px{font-size:13px}
+.padLeft60{padding-left:60px}
+.font14Px{font-size:14px}
+.font14PxImp{font-size:14px!important}
+.FontSize15PX{font-size:15px}
+.font15PxImp{font-size:15px!important}
+.font16Px{font-size:16px}
+.font16PxImp{font-size:16px!important}
+.font25Px,.FontSize25PX{font-size:25px}
+.FontSize20PXImp{font-size:20px!important}
+.fontsize100P{font-size:100%}
+.ApprovedManagerDropdown{width:68%}
+.TimeEntry_New_Legend .buttons-block{background-color:#FFF!important}
+.TimeEntry_New_Legend .buttons-block .filters TD,.TimeEntry_New_Legend .buttons-block .filters div{font-size:11px!important;height:12px!important;vertical-align:middle!important}
+.WholeWidthWithHeight td{height:30px;padding-left:5px}
+.WidthWithHeightAndBorders{width:100%;border-bottom:1px solid Gray;border-top:1px solid Gray;border-left:1px solid Gray;border-right:1px solid Gray}
+.WidthWithHeightAndBorders th{font-size:12px}
+.ReportItemTemplate td,.ReportAlternateItemTemplate td{padding-top:4px;padding-bottom:4px}
+.ReportItemTemplateCSAT{background-color:White;border-left:1px solid #000;border-right:1px solid #000}
+.ReportItemTemplateCSAT td{white-space:normal;text-align:center;vertical-align:middle;padding:2px;height:24px;border-bottom:1px solid #000}
+TABLE.PaddingTenPx td{padding:0 5px}
+.PersonDetailReportHeader{width:100%;height:90px}
+.PersonDetailReportHeader TD.PersonDetails{font-size:18px;font-weight:bold;padding-bottom:10px}
+.PersonDetailReportHeader TD.PersonTotals,CSATHeader{text-align:right;width:600px}
+.TimePeriodSummaryReportHeader{width:100%;background-color:White;padding-bottom:5px!important;height:90px}
+.TimePeriodSummaryReportHeader .TimePeriodTotals{text-align:right;width:610px;padding-bottom:10px!important}
+.TimePeriodSummaryReportHeader .ByProject{width:530px!important}
+.TimePeriodSummaryReportHeader .AuditReportTotals{width:10%;vertical-align:middle;text-align:center}
+.ProjectSummaryReportHeader{width:100%;height:115px}
+.projectSummaryHeaderDetails .account{vertical-align:top!important;padding-top:0!important;padding-bottom:5px!important;color:Gray}
+.projectSummaryHeaderDetails td{vertical-align:bottom;padding-top:5px!important}
+.ProjectSummaryReportTotals{text-align:right;width:530px;padding-bottom:10px!important}
+.ReportHeaderTotals{table-layout:fixed;width:100%}
+.ReportHeaderTotalsTable{width:100%}
+.ReportHeaderTotalsTable .FirstTd{text-align:center;font-size:15px;padding-bottom:3px!important}
+.ReportHeaderTotalsTable .SecondTd{text-align:center;font-size:25px}
+.ReportHeaderBillAndNonBillTable{width:100%}
+.ReportHeaderBillAndNonBillTable td{text-align:center}
+.ReportHeaderBillAndNonBillTable .billingHours{padding-bottom:5px!important}
+.ReportHeaderBandNBGraph{vertical-align:bottom;width:8%;padding:0!important}
+.ReportHeaderBandNBGraph table,consultngDetailPanel table{width:100%}
+.ReportHeaderBandNBGraph td{padding:0!important;text-align:center}
+.ReportHeaderBandNBGraph .CompledStatusGraph{background-color:#5A5455;border:1px solid Gray}
+.ReportHeaderBandNBGraph .NotCompletedStatusGraph{background-color:#A09A9B;border:1px solid Gray}
+.ReportHeaderBandNBGraph .billingGraph{background-color:#7FD13B;border:1px solid Gray}
+.ReportHeaderBandNBGraph .nonBillingGraph{background-color:#BEBEBE;border:1px solid Gray}
+TABLE.PersonSummaryReport TD,TABLE.TerminationReport TD,.MSReportTD{border-bottom:1px solid #000;text-align:center;height:24px;vertical-align:middle;padding:2px}
+TABLE.PersonSummaryReport TH,TABLE.TerminationReport TH,CSATReportHeader,.MSReportTH{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
+.PersonSummaryReport .ResourceColum{text-align:left!important;width:210px!important}
+.PersonSummaryReport .ProjectColum{text-align:left!important;width:220px!important;background-color:White;padding-left:5px}
+.PersonSummaryReport .ResourceColum img{padding-left:2px}
+.ResourceColumTable td{padding-left:5px!important;text-align:left!important}
+.ResourceColumTable td a{text-decoration:none;color:Black!important}
+.UtlizationGraph{width:100%}
+.UtlizationGraph .GraphTd{text-align:right;width:70%}
+.UtlizationGraph .PersonSummaryGraphTd{width:65%!important}
+.UtlizationGraph .GraphTd table{border:1px solid black;width:100%;height:18px;padding-left:5px}
+.UtlizationGraph .GraphTd table .FirstTd{background-color:#7FD13B;height:18px}
+.UtlizationGraph .GraphTd table .SecondTd{background-color:White;height:18px}
+.UtlizationGraph .GraphTd table .ThirdTd{background-color:#BEBEBE;height:18px}
+.UtlizationGraph .GraphValueTd{width:20%;text-align:left;padding-left:10px}
+.UtlizationGraph .PersonSummaryGraphValueTd{width:15%;text-align:right;padding-left:10px}
+.EmptyMessagediv{text-align:center;font-size:15px}
+TABLE.TimePeriodByproject TD{border-bottom:1px solid #000;text-align:center;height:16px;vertical-align:middle;padding:2px}
+TABLE.TimePeriodByproject TH{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:16px;vertical-align:middle;padding:2px}
+.TimePeriodByproject .ProjectColoum{width:500px;height:20px;text-align:left}
+TABLE.TdLevelNoBorder TD{border:0 solid #000;padding:0}
+TABLE.TdLevelNoBorder TH{border:0 solid #000;padding:2px 0}
+TABLE.TimeEntruReportHeader TH{border:1px solid #000;height:30px;font-size:15px;vertical-align:middle;width:25%}
+TABLE.TimeEntruReportHeader a{color:Black;display:inline-block;height:100%;text-decoration:none;width:100%}
+.NoBorder{border-right-width:0!important;border-right-style:none!important}
+.Padding3PX{padding:3px}
+.ReportFilterLabels{text-align:right;font-weight:700}
+.FontSize10PX{font-size:10px}
+.FontSize15PX{font-size:15px}
+.CurrentPageDiv{height:20px;vertical-align:middle}
+.Padding4pxWithNoWrap{white-space:nowrap;font-weight:700;padding:4px}
+.navSection table{margin-top:10px;margin-right:40px;margin-left:auto}
+.navSection ul{display:inline-block;width:411px;margin:0;padding:0}
+.l1{float:left;width:130px;list-style:none outside none;color:#2a4753;z-index:10;margin:0;padding:0}
+.l1hover{padding-bottom:6px;background:url(../images/bg_corpnav_bottom.png) no-repeat bottom}
+li.l1 a{display:block;width:130px;height:34px;line-height:30px;text-align:center;cursor:pointer;white-space:normal;color:#FFF;font-weight:700;font-size:13px;text-decoration:none}
+.l2{display:none;position:relative;max-width:135px;height:auto;z-index:200;margin:0;padding:0}
+.liBG{background:url(../images/bg_corpnav_top.png) no-repeat center;color:#2a4753}
+.l2 dd{display:inline-block;width:128px;background:url(../images/bg_corpnav_mid.png) repeat-y;border-left:1px solid #aaa;border-right:1px solid #aaa;margin:0}
+.l2 dd a{float:left;display:block;background-image:none;width:105px;height:auto;text-align:left;font-size:12px;line-height:15px;color:#5a8293;text-decoration:none;margin:0;padding:5px 13px 5px 10px}
+.l2 dd a:hover{background-color:#e0e7eb;color:#2a4753}
+.ddBG{background-color:#e0e7eb}
+.l2 dd div.flyout{float:left;position:absolute;display:none;min-width:135px;width:auto;background:#e0e7eb;margin:0;padding:0 0 5px}
+.flyoutLeft{left:130px}
+.flyoutRight{right:130px}
+.l2 dd div.flyout a{color:#5a8293;display:block;white-space:normal;padding-bottom:3px;padding-left:5px;width:140px}
+#navItems{height:40px;display:inline-block}
+h1,h2,h3,h4,h5,h6,.container,.marginLineManager{margin-top:10px}
+.no-wrap,TABLE.CompPerfTable td .cell-pad table td,.tem-grid-date-cell,.WhiteSpaceNoWrap,.lblOverheadsBenchCost{white-space:nowrap}
+.WholeWidth,.WholeWidthForAllColumns td,.tem-person-timeNew,.calendarPopup,.width100P,.WholeWidthWithHeight,TABLE.TimeEntruReportHeader,.Width100Per,.consultngDetailPanel table{width:100%}
+.WholeWidthImp{width:100%!important}
+.hidden,.ie-only-visible,.displayNone,.tab-invisible{display:none}
+.bg-white,.ReportItemTemplate{background-color:#FFF}
+a.main-logo,img.main-logo{display:block;position:absolute;top:20px;left:10px}
+.serv-info .date,.serv-info .authent,.serv-info .changePassword,.alignRight,.textRight,.TextAlignRight,.AlignRight{text-align:right}
+.textRightImp{text-align:right!important}
+ul.AspNet-Menu li.AspNet-Menu-Selected a span,ul.main-sub-menu li.selected a{color:#000;cursor:default}
+.filer-header ul,.CustomTabStyle .ajax__tab_header,.height30P,.WidthWithHeightAndBorders td{height:30px}
+.filer-header ul li a,.CustomTabStyle .ajax__tab_tab a,.calendarNextPrev a{text-decoration:none}
+.filer-header ul li a span,.CustomTabStyle .ajax__tab_tab a span,.CustomTabStyle .ajax__tab_tab a{border-bottom:1px dashed #0898e6}
+.filer-header ul li a:hover span,.CustomTabStyle .ajax__tab_tab a:hover span{border-bottom:1px dashed #069}
+.filer-header ul li a.collapse,.CustomTabStyle .ajax__tab_tab a.collapse{display:none;position:absolute}
+.filer-header ul li.active a.collapse,.CustomTabStyle .ajax__tab_active a.collapse{display:block;right:5px;top:10px}
+.filer-header ul li span.bg,.CustomTabStyle .ajax__tab_tab span.bg{padding:8px 10px 7px}
+.filer-header ul li.active span.bg,.CustomTabStyle .ajax__tab_active span.bg{background-color:#e2ebff}
+table.opportunity-description td,.filter-body .scroll-y table td,.filter-body .custom-scroll-y table td,table.PaddingClass td{padding:2px}
+table.PaddingClass3px td{padding:3px}
+.filter-body table td{padding:5px}
+tr.tb-header td,TR.CompPerfHeader,TR.CompPerfHeaderGroupBy,.bold,.fontBold{font-weight:700}
+.buttons-block,.filter-section-color{background-color:#d4dff8;border-top:1px solid #fff;border-bottom:1px solid #eef2fc;padding:10px}
+.clientsPage{padding-left:5px!important;padding-right:5px!important}
+.clientsPage a{text-decoration:none}
+TR.CompPerfHeader td,.CompPerfTable th,.CompPerfTotalHeader{border-bottom:1px solid #c5c5c5;height:26px;font:bold 11px Arial;background:url(../images/cp-header-bg.png) repeat-x 0 0}
+.ie-bg-last-in-row,TD.CompPerfTotalSummary .ie-bg{background:none!important}
+.CompPerfHeader td a,.CompPerfHeader th a,.CompPerfHeaderGroupBy td a,.CompPerfHeaderGroupBy th a{color:#000;text-decoration:none}
+TD.CompPerfProjectNumber,TD.CompPerfPeriod{min-width:70px}
+.alignCenter,.textCenter,.TableTextCenter th,.TableTextCenter td,.TextAlignCenter{text-align:center}
+.TextAlignCenterImp{text-align:center!important}
+.rowEven td,.ReportAlternateItemTemplate{background-color:#f9faff}
+.time-entry-bar-single-te,.time-entry-bar-single-teNew{text-align:center;vertical-align:middle;width:8%}
+.time-entry-bar .time-entry-bar-single-te,.time-entry-bar .time-entry-bar-single-teNew{padding:5px 0}
+.time-entry-bar-single-te input[type=image],.time-entry-bar-single-teNew input[type=image]{margin-bottom:-3px}
+.tem-filter-control-cell,table.CellPaddingClass td,.padLeft10{padding-left:10px}
+.time-entry-bar-project-milestones-select-Normal,.time-entry-bar-time-types-select-Normal{width:98%!important}
+.time-entry-bar-project-milestones-select-Extended,.time-entry-bar-time-types-select-Extended{width:98%}
+DIV.DayOn,DIV.WeekEndDayOff{height:24px;width:24px;background-color:Transparent}
+DIV.WeekEndDayOn,DIV.CompanyDayOff{height:24px;width:24px;background-color:#C7FFD1}
+TD.DayOn,TH.DayOn,TD.WeekEndDayOff,TH.WeekEndDayOff{background-color:Transparent}
+TD.CompanyDayOff,TH.CompanyDayOff,TD.WeekEndDayOn,TH.WeekEndDayOn{background-color:#C7FFD1}
+.time-entry-bar-time-typesNew-select-Normal,.time-entry-bar-time-typesNew-select-Extended{width:85%!important}
+.DisplayBlock,.tab-visible,.displayBlock{display:block}
+TABLE.PersonSummaryReport,TABLE.TimePeriodByproject,TABLE.TerminationReport,.MSReportBorder{border-left:1px solid #000;border-right:1px solid #000}
+li.l1 a:hover,.l2 dd div.flyout a:hover{color:#2a4753}
+.BorderNone{border:0}
+.BorderNoneImp{border:none!important}
+.xScrollAuto{overflow-x:auto}
+.xScrollOnly{overflow-x:scroll}
+div.scrollextLabel{border:1px solid #aaa;background-color:#fff;display:inline-block;vertical-align:middle;height:18px;line-height:18px;font-family:Arial;font-size:13.3333px;color:#000}
+div.scrollextLabel Label{padding-left:4px}
+.DefaultDropDownFont{font-family:Arial;font-size:12px;color:#000}
+.ExportAndExportAll ul,.ExportAndExportAll li{margin:0;padding:0}
+.ExportAndExportAll ul.pmenu{position:absolute;margin:0;padding:1px;list-style:none;width:88px;border:1px solid #ccc;background:white;display:none;z-index:10}
+.ExportAndExportAll ul.pmenu li{position:relative}
+.ExportAndExportAll ul.pmenu li ul{position:absolute;left:100px;top:0;display:none;z-index:10}
+.ExportAndExportAll ul.pmenu li a{display:block;text-decoration:none;color:black;padding:2px 5px 2px 20px}
+.ExportAndExportAll ul.pmenu li a:hover{background:#335EA8;color:Black;font-weight:bold}
+* html .ExportAndExportAll ul.pmenu li{float:left;height:1%}
+* html .ExportAndExportAll ul.pmenu li a{height:1%}
+* html .ExportAndExportAll ul.pmenu li ul{left:100px}
+.ExportAndExportAll ul.pmenu li:hover ul,.ExportAndExportAll ul.pmenu li.over ul{display:block}
+.ExportAndExportAll ul.pmenu li ul{left:100px}
+.ProjectSummaryScrollingDropDown{height:240px;width:240px;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
+.ProjectDetailScrollingDropDown{height:240px;width:17%;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
+.ProjectDetailScrollingDropDown1{height:240px;width:23.5%;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
+.PersonPayTypeScrollingDropDown{height:100px;width:190px;overflow-y:auto;overflow-x:hidden;border:1px solid #000;background-color:#fff;padding:3;display:inline-block;z-index:20000}
+.PersonPayTypeScrollingDropDown Table{width:100%!important}
+.ProjectSummaryAdvancedFiltersHeader TH{border-bottom:1px solid black;width:190px;text-align:center}
+.bgcolorGray,.BackGroundColorGray{background-color:Gray}
+.floatright,.FloatRightCancel{float:right}
+.FloatLeft{float:left}
+.popUp{background-color:White;border-color:Black;border-style:solid;border-width:2px;min-height:60px;min-width:200px;max-width:600px;max-height:500px}
+.popUpAttrition{background-color:White;border-color:#375D89;border-style:solid;border-width:4px;min-height:60px;min-width:200px;max-height:500px;max-width:700px!important;padding:12px 12px 12px 12px!important}
+.PopUpHeader{background-color:Gray;height:28px}
+.PopUpHeader th{text-align:center;font-size:14px;padding-top:5px;padding-bottom:5px}
+.MilestoneDetailPopUpHR{padding-left:10px;padding-right:10px;border-color:Black}
+.MileStoneDetailBasicInfo{background-color:#E2EBFF;padding:5px;margin-bottom:10px;margin-top:10px}
+.bgColor_e0e0e0{background-color:#e0e0e0}
+.fontBold{font-weight:bold}
+.fontNormal{font-weight:normal!important}
+.fontStyleNormal{font-style:normal!important}
+.MileStoneDetailPageDetailTab{background-color:White;border-style:none;border-width:1px;border-collapse:collapse;width:100%}
+.MileStoneDetailPageExpensesTab{background-color:White;border-style:none;border-collapse:collapse;width:100%}
+.MileStoneDetailPageResourcesTab{background-color:White;border-style:none;border-collapse:collapse;width:100%}
+.MileStoneDetailPageResourcesTab tr{background-color:White;height:25px;}
+.MileStoneDetailPageResourcesTab th{height:20px;text-align:center}
+.MileStoneDetailPageResourcesTab td{height:20px;text-align:center}
+.WhiteSpaceNormal{white-space:normal}
+.WS-Normal{white-space:normal!important}
+.tab-pane{background-color:#e2ebff;padding:5px}
+.CommonCustomTabStyle tr{height:30px}
+.CommonCustomTabStyle td a{text-decoration:none}
+.CommonCustomTabStyle td span a{border-bottom:1px dashed #0898e6}
+.CommonCustomTabStyle td span a:hover{border-bottom:1px dashed #069}
+.CommonCustomTabStyle td a.collapse{display:none;position:absolute}
+.CommonCustomTabStyle .SelectedSwitch span.bg{background-color:#e2ebff}
+.CommonCustomTabStyle .SelectedSwitch a.collapse{display:block;right:5px;top:10px}
+.CommonCustomTabStyle td{background-color:White;float:left;padding:8px 0 6px 0;position:relative}
+.CommonCustomTabStyle td span.bg{padding:8px 20px 7px 10px}
+.ProjectSummaryReportPageCustomTabStyle td{padding-bottom:5px!important}
+.ProjectSummaryReportPageCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
+.ProjectSummaryReportPageCustomTabStyle td span.bg{padding-right:10px!important}
+.PersonDetailPage_CustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
+.PersonDetailPage_CustomTabStyle td{padding-bottom:15px!important}
+.PersonDetailPage_CustomTabStyle td span.bg{padding-right:10px!important;padding-bottom:31px!important}
+.PersonDetailPage_CustomTabStyle td span a{display:inline-block;text-align:center;vertical-align:top}
+.PopUpPersonDetailPage{min-width:180px!important;max-width:450px!important}
+.errorDivPersonDetailPage{max-height:200px;overflow-y:auto;color:Red}
+.Margin-Left8Px{margin-left:8px}
+.Margin-Left10Px{margin-left:10px}
+.Margin-Top5Px{margin-top:5px}
+.Margin-Bottom10Px{margin-bottom:10px}
+.colorGray{color:Gray}
+.CompensationHistory{background-color:White;border-collapse:collapse;border-style:none;border-width:0;width:100%}
+.CompensationHistory th{text-align:center}
+.CompensationHistory td{text-align:center;vertical-align:middle;height:20px;white-space:nowrap}
+.bgColorNone{background-color:none}
+.DivPermissionDiffenrece{width:350px;overflow-x:scroll;overflow-y:auto;height:350px;margin-top:10px;margin-bottom:10px}
+.PermissionDiffenrece{background-color:White;border-collapse:collapse;border-style:none;border-width:0;width:100%}
+.Border0{border-width:0}
+.DatePickerTable{border:medium none;display:inline}
+.DatePickerTable tr,.DatePickerTable th,.DatePickerTable td,.tblPersonProjects td{height:17px!important}
+.WhatIfControlIcon{background-color:#D8EFF3;border-color:#000;border-style:solid;border-width:1px}
+.WhatIfControlStyle{padding-right:242px;padding-bottom:3px;text-align:right}
+.WhatIfGrossMarginComputing{vertical-align:top;width:340px;padding-left:10px;padding-top:10px;background-color:#DBEEF3}
+.gvOverheadWhatIf{background-color:White;border-collapse:collapse;border-style:none}
+.gvOverheadWhatIf td{white-space:nowrap}
+.WordWrapActivityLog{word-wrap:break word!important;word-break:break-all!important;white-space:-moz-pre-wrap!important;white-space:normal}
+.wrapword{white-space:-moz-pre-wrap!important;white-space:-pre-wrap;white-space:-o-pre-wrap;white-space:pre-wrap;word-wrap:break-word;word-break:break-all;white-space:normal}
+.gvActivitiesActivityLog{background-color:White;border-collapse:collapse;border-style:none;width:100%}
+.gvActivitiesActivityLog td{padding-left:5px!important}
+.CustomDatesPopUp{background-color:White;border-style:solid;border-color:Black;border-width:2px;padding-top:20px}
+.gvProjects_PersonProjects{background-color:White;border-collapse:collapse;width:100%;border-style:none}
+.gvProjects_PersonProjects tr{white-space:nowrap}
+.fontColorBlack,.ColorBlack{color:Black}
+.pnlTimeOutAlert{background-color:White;border-style:solid;border-color:Black;border-width:2px;padding:15px}
+.OpportunitySearchBar{background:#E2EBFF;margin-bottom:10px;padding:5px}
+.OpportunityToolTip{position:absolute;z-index:2000}
+.bgColorWhite,.BackGroundColorWhite{background-color:White}
+.OpportunityPriority{text-align:center;color:Black;font-size:12px;padding:0;vertical-align:middle;font-weight:bold}
+.OpportunityPriorityDescription{display:inline-block;white-space:normal}
+.PersonDetailPermissionsScrollingDropDown{height:150px;width:180px;overflow-y:auto;overflow-x:hidden;border:1px solid #eee;background-color:#fff;padding:0;display:inline-block;z-index:20000}
+.border-collapse{border-collapse:collapse}
+.MarginTestLabel{padding-left:20px;padding-right:20px;text-align:right;font-weight:bold}
+.GrossMarginComputingTable{margin-left:8px}
+.GrossMarginComputingTable th{text-align:left;padding:5px 0 5px 0}
+.GrossMarginComputingTable td{white-space:nowrap}
+.PersonnelCompensationVerticalAlign tr td{padding-top:2px;padding-bottom:2px;padding-left:6px}
+.PersonnelCompensationPaddinLeftNone td{padding-left:0!important}
+.PersonnelCompensationVerticalAlign .Left5{padding-left:5px!important}
+.PersonnelCompensationVerticalAlign .Left12{padding-left:12px!important}
+.DefaultLineManagerSpan{background-color:White;border:1px solid black;padding:8px;display:block;width:430px}
+.gvStrawmen{background-color:White;border-collapse:collapse;padding-top:10px;text-align:center;width:100%;border-style:none}
+.gvStrawmen td{height:20px;white-space:nowrap;text-align:center}
+.gvStrawmen .Left{text-align:left!important}
+.gvStrawmen .Right{text-align:right!important}
+.EditStrawmenPopUp{min-height:140px!important;max-height:170px!important;width:300px!important}
+.ValidationPopUp{min-height:100px!important;max-height:400px!important;min-width:400px!important;max-width:550px!important}
+.StrawmenCompensationPopUp{max-height:400px!important;max-width:750px!important;min-height:100px!important;min-width:650px!important}
+.StrawmanName{font-weight:600;font-size:14px;padding:5px 10px!important}
+.strawmenPageTd{padding:2px 2px 10px 2px!important}
+.gvCompensationHistoryStrawmen{background-color:White;border-collapse:collapse;border-style:none;width:100%}
+.gvCompensationHistoryStrawmen th{width:17%;text-align:center}
+.gvCompensationHistoryStrawmen td{text-align:center;height:20px}
+.gvCompensationHistoryStrawmen .width5{width:5%!important}
+.gvCompensationHistoryStrawmen .width10{width:10%!important}
+.gvPractices{background-color:White;border-collapse:collapse;width:80%}
+.gvPractices td,.gvPractices th{text-align:center}
+.gvPractices .Left,.gvPractices .Left div td{text-align:left!important}
+.gvDivisions{background-color: White;border-collapse: collapse;width: 40%;}
+.gvDivisions td, .gvDivisions th{text-align: center; }
+.gvDivisions .Left{text-align: left !important; padding-left:10px;}
+.gvOpportunityPriorities{background-color:White;border-collapse:collapse;width:63%}
+.gvOpportunityPriorities td{height:20px;white-space:nowrap;text-align:center}
+.gvOpportunityPriorities .Left{text-align:left!important}
+.OpportunityPrioritiesPopUp{min-width:450px!important;min-height:60px!important;max-width:700px!important}
+.OpportunityPrioritiesPopUpTd{padding:6px 6px 2px 2px;text-align:center}
+.border1Px,.consultngDetailPanel{border:1px solid black}
+.borderRightImp{border-right:1px solid black!important}
+.borderLeft{border-left:1px solid black}
+.ClientAlphabeticAll{padding-left:10px;padding-top:10px;padding-bottom:10px;text-align:center}
+.ClientAlphabetic{padding-left:15px;padding-top:10px;padding-bottom:10px;text-align:center}
+.ClientAlphabetic a,ClientAlphabeticAll a{text-decoration:none}
+.NoUnderline{text-decoration:none}
+.gvClientsTd{width:45%;padding:12px 5px 5px 5px;vertical-align:top}
+.ClientsPageInfoTd{width:36%;padding:15px 5px 25px 5px;vertical-align:top}
+.ClientsPageInfoTd div{border:1px solid black;background-color:White;padding:5px}
+.gvClients{border-collapse:collapse;border-style:none}
+.gvClients td{text-align:center}
+.gvClients .Left{text-align:left!important;padding-left:5px}
+.color8F8F8F{color:#8F8F8F}
+.color0898E6{color:#0898E6!important}
+.HyperlinkByProjectReport{color:#0898E6!important;text-decoration:underline!important}
+.MinWidth{min-width:150px}
+.ShowBenchCosts{white-space:nowrap;width:118px;text-align:left}
+.chbIncludeOverHeadsCheckBox{width:10px!important}
+.custBtns{padding:10px 0 10px 0;text-align:center}
+.custBtns,.seperateInternalExternal{padding:10px 0 10px 0}
+.floatNone,.custBtns input{float:none!important}
+.projectType{width:250px;border-bottom:1px solid black}
+.BenchcostProjectTypeTd{width:250px;border-bottom:1px solid black;vertical-align:top}
+.BenchcostpracticeAreaTd{width:250px;border-bottom:1px solid black}
+.practiceArea{width:250px;border-bottom:1px solid black}
+.practicesTd{padding-top:5px;padding-left:3px}
+.ScrollingDropDown_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:220px;overflow-x:hidden;overflow-y:auto;width:290px;z-index:20000}
+.overflowAuto{overflow:auto}
+.upnlBodyPadding{padding-left:5px!important;padding-right:5px!important}
+.PersonsSearch{width:36%;padding-left:5px;padding-right:0}
+.SearchTextBox input{margin-right:0!important;text-align:left!important}
+.TdSpace{width:14%;padding-left:0}
+.ValSumSearch{width:90%;padding-left:3%;white-space:nowrap;padding-top:10px}
+.RecruiterTd{padding-right:5px;border-bottom:1px solid black}
+.FltrHeader{padding-right: 5px;border-bottom: 1px solid black;}
+.TdPersonFilter{padding-right:5px!important;border-bottom:1px solid black}
+.SddRecruiter{padding-bottom:8px;padding-left:3px}
+.FilterBtnsTd{padding:5px;padding-right:0;text-align:right}
+.PanelOppNameToolTipHolder{display:none;position:absolute;z-index:2000}
+.PanelOppNameToolTipHolder SPAN,.ProjectsToolTip SPAN{line-height:20px}
+.TableOpportunitiesCount{width:100%;margin-bottom:10px}
+.OverflowxAuto{overflow-x:auto}
+.lvOpportunityPriorities{max-height:180px;overflow-y:auto;overflow-x:hidden}
+.CompPerfHeader lvOpportunityPriorities td{border-bottom:0 none!important}
+.TdItemTemplate{width:100%;padding-left:2px!important}
+.LabelPriority{color:Black;font-size:12px!important;text-align:left!important;vertical-align:middle;padding:0;white-space:normal;border:0!important}
+.PaddingLeftRight0px{padding-left:0!important;padding-right:0!important}
+.PaddingLeftRight2px{padding-left:2px!important;padding-right:2px!important}
+.LabelRefreshMessage{display:none;font-style:italic}
+.Team{width:4%;white-space:normal}
+.CursorPointer{cursor:pointer}
+.BtnClose{font-size:14px;padding-top:2px}
+.TdRedirectToOppDetail{padding:6px 6px 15px 6px}
+.AttachOpportunity{font-size:14px;width:100%}
+.DdlProjects{padding:6px 6px 2px 2px}
+.DescriptionError{padding:8px;border-color:Black;border-width:1px;border-style:solid}
+.TeamResourcesPadding{padding-left:5px;padding-top:5px;padding-bottom:5px;padding-right:2px}
+.TextSearchBoxResources{padding-bottom:4px;margin-bottom:4px}
+.CblPotentialResources{height:250px;width:350px;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px!important;text-align:left!important}
+.BtnClearAll{text-align:right;width:356px;padding:8px 0 8px 0}
+.DivTeamResources{text-align:left;color:Red;width:356px;padding:8px 0 10px 0}
+.DivTeamStructure{height:250px;width:400px!important;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px;text-align:left!important;overflow-x:hidden}
+.TextNeedBy{width:80px!important;float:left!important}
+.DivClearAll{text-align:right;width:404px;padding:8px 0 10px 0}
+.TableSaveTeamStructure{padding-right:6px;padding-bottom:4px}
+.DivNeedbyError{text-align:left;color:Red;width:404px;padding:8px 0 10px 0}
+.ConfirmBoxClassErrorOpportunitySummery{min-height:60px;min-width:200px;max-width:600px;max-height:500px}
+.strawmanTeamStructure tr td{padding:4px 0 4px 0}
+.strawman tr td{padding:4px 0 4px 0}
+.LoadingProgressText,.SpanDivWait{color:Black;font-weight:bold}
+.TdResources{padding:0 0 4px 4px;width:100%;background-color:#e2ebff}
+.TdCblPotentialResources{padding-left:6px;padding-right:6px;padding-top:2px;width:44%}
+.DivCblPotentialResources{height:100px;width:100%;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px}
+.TdDivProposedResources{padding-left:6px;padding-right:6px;padding-top:2px;vertical-align:top;width:44%}
+.DivProposedResources{height:100px;width:100%;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px}
+.HiddenFieldOpportunityIdPersonId{width:100%;padding:1px 0 4px 0}
+.gvBenchCosts{background-color:White;border-collapse:collapse;border-style:none}
+.gvBenchCosts td a{display:inline-block;width:220px;padding-right:5px}
+.gvBenchCosts .PracticeArea{min-width:150px;width:220px}
+.gvBenchCosts .Footer{background-color:LightGrey;font-weight:bold;height:25px}
+.gvBenchCosts .Footer td{text-align:right;padding-right:10px!important}
+.gvBenchCosts .Footer .Left{text-align:left!important}
+.color888888{color:#888}
+.colorGreen{color:green}
+.colorRed{color:Red}
+.ReportTdSecond{height:30px;text-align:center;vertical-align:top}
+.ReportBorderBottom{border-bottom:3px solid black;width:100%;height:10px}
+.ReportBorderBottomByAccount{border-bottom:3px solid black}
+.ReportBorderBottomHeight15Px{border-bottom:3px solid black;width:100%;height:15px}
+.ReportParametersTable{width:100%;text-align:center;vertical-align:top}
+.ReportParametersTable .FirstTd20{width:18%;text-align:right;font-weight:bold;vertical-align:top;padding-top:2px}
+.ReportParametersTable .FirstTd70{width:70%;text-align:right;font-weight:bold;vertical-align:top;padding-top:2px}
+.ReportParametersTable .FirstTd{width:30%;text-align:right;font-weight:bold}
+.ReportParametersTable .FirstTd40{width:40%;text-align:right;font-weight:bold}
+.ReportParametersTable .SecondTd,.ReportParametersTable .SecondTd157,.ReportParametersTable .SecondTd150,.ReportParametersTable .SecondTdNewHire{text-align:left!important}
+.ReportParametersTable .SecondTd input,.ReportParametersTable .SecondTd select{width:160px}
+.ReportParametersTable .SecondTd157 input,.ReportParametersTable .SecondTd157 select{width:157px}
+.ReportParametersTable .SecondTd150 input{width:150px}
+.PersonSearch{min-height:100px!important;width:400px}
+.ProjectSearch td{padding:5px}
+.ProjectSearchResultsDiv{max-height:200px;overflow-y:auto}
+.ProjectSearchResultsTable{width:100%}
+.ProjectSearchResultsTable th,.PersonSearchResult th{text-align:center;background:url('../images/cp-header-bg.png') repeat-x scroll 0 0 transparent!important}
+.PersonSearch .searchTextboxTd{width:95%;padding:10px;padding-right:0}
+.PersonSearch .searchTextbox{text-align:left;margin-right:0!important;width:300px}
+.PersonSearch .searchButtonTd{width:5%;padding:0;padding-right:10px}
+.PersonSearchResultDiv{max-height:150px;min-height:50px;overflow-y:auto;width:100%}
+.PersonSearchResult{width:100%}
+.PersonSearchResult td,.PersonSearchResult th{text-align:center}
+.PersonSearchResult .PersonName{text-align:left!important}
+.PersonDetailReportCustomTabStyle .SelectedSwitch a.collapse{padding-right:2px!important}
+.PersonDetailReportCustomTabStyle td span.bg{padding-right:10px!important;padding-bottom:9px!important}
+.tableFixed{table-layout:fixed}
+.FilteredCheckBoxListScrollingDropDown{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:155px;overflow-x:hidden;overflow-y:auto;width:158px;z-index:20000;text-align:center}
+.FilteredCheckBoxListScrollingDropDown Table,.FilteredCheckBoxListScrollingDropDown Td{text-align:left!important}
+.FilteredCheckBoxListdivFilterPopUp{border:2px solid black;background-color:#d4dff8;width:170px}
+.PosAbsolute{position:absolute}
+.TimePeriodSummaryPersonDetailReportPopUp{background-color:#E2EBFF;border-color:Black;border-style:solid;border-width:2px;position:fixed;width:85%;z-index:100001}
+.ConsultantUtilReportPopup{position:fixed;z-index:100001;left:360.5px;top:316px;width:65%}
+.CloseButtonTable{width:100%;padding:5px}
+.CloseButtonTable tr,.bgGroupByProjectHeader{background-color:#f5faff}
+.CloseButtonTable td{width:100%;text-align:right;padding:3px}
+.GroupByProjectHeaderTable .FirstTd{width:90%;white-space:nowrap}
+.GroupByProjectHeaderTable .FirstTd span{font-weight:bold;font-size:16px!important}
+.GroupByProjectHeaderTable .SecondTd{width:10%;font-weight:bolder;font-size:16px;text-align:right;padding-right:20px}
+.GroupByProjectHeaderTable .SecondTd span{font-weight:bold}
+.GroupByProjectDiv{max-height:500px;overflow-y:auto;width:100%}
+.PersonDetailTotal{width:5%;font-weight:bolder;font-size:15px;text-align:right;padding-right:10px}
+.bgColorD4D0C9{background-color:#D4D0C9}
+.WorkTypeTable .FirstTr{text-align:left;background-color:White}
+.WorkTypeTable .FirstTrTd1_GroupByBusinessUnit{width:80%;padding-left:50px}
+.WorkTypeTable .FirstTrTd1{width:72%;padding-left:50px}
+.WorkTypeTable .FirstTrTd2{width:8%;color:#3BA153}
+.WorkTypeTable .FirstTrTd3{width:8%;color:Gray}
+.WorkTypeTable .FirstTrTd3_GroupByBusinessUnit{width:10%;color:Gray}
+.WorkTypeTable .FirstTrTd4{width:12%}
+.WorkTypeTable .SecondTr{text-align:left;background-color:White}
+.WorkTypeTable .SecondTrTd1{padding-left:55px}
+.WorkTypeTable .SecondTrTd2{width:8%;vertical-align:top}
+.WorkTypeTable .AlternativeFirstTr{background-color:#F0F0F1!important}
+.bgcolor_ECE9D9{background-color:#ECE9D9!important}
+.PeronSummaryReport .FirstTd{color:Gray;padding-bottom:3px;padding-left:2px;text-align:left}
+.PeronSummaryReport .SecondTd{font-weight:bold;padding-bottom:5px;padding-left:2px;text-align:left}
+.PeronSummaryReport .ThirdTd{padding-left:3px;vertical-align:middle}
+.PeronSummaryReport .SecondTd a{color:Black;text-decoration:none}
+HyplinkConsultantDetailReport{color:Black!important;text-decoration:none!important}
+.TimePeriodByProject_ProjectDetailReport{background-color:#E2EBFF;border-color:Black;border-style:solid;border-width:2px;position:fixed;width:85%;z-index:100001}
+.bgColor_F5FAFF{background-color:#F5FAFF}
+.TimePeriodByProject_ProjectName{width:90%;font-weight:bold;font-size:15px;padding:3px!important;padding-left:10px!important}
+.TimePeriodByProject_ProjectTotalHours{width:10%;font-weight:bold;text-align:right;font-size:15px;padding:3px}
+.TimePeriodByProject_ProjectDetailsDiv{max-height:500px;overflow-y:auto;width:100%}
+.TimePeriodByProjectVariance{text-align:right!important;padding-right:3px!important}
+.ByWorkTypeGraph{border:1px solid black;width:100%;height:18px;padding-left:5px}
+.ByWorkTypeGraph .FirstTd{background-color:#7FD13B;height:18px}
+.ByWorkTypeGraph .SecondTd{background-color:White;height:18px}
+.AuditHeaderTd1{width:90%;font-size:13px;padding:5px;font-weight:bold}
+.AuditHeaderTd2{width:10%;text-align:right;padding:5px;vertical-align:top}
+.AuditHeaderTd3{width:10%;text-align:center;vertical-align:middle}
+.AuditReportByPersonTd1{text-align:left!important;padding-left:5px}
+.AuditReportByPersonTd2{text-align:left!important;padding-left:10px}
+.AuditReportByPersonTd3{text-align:right!important;width:60%}
+.AuditReportByPersonHeaderTd1{font-style:italic;font-size:14px;width:85%;white-space:nowrap;padding-left:15px!important;font-weight:bold}
+.AuditReportByPersonHeaderTd2,.AuditReportByProjectHeaderTd2{width:15%;font-weight:bolder;font-size:15px;text-align:right;padding-right:15px}
+.AuditReportByProjectHeaderTd1{font-style:italic;width:85%;white-space:nowrap;padding-left:15px!important;font-size:15px;font-weight:700}
+.AccountSummaryReportCustomTabStyle .SelectedSwitch a.collapse{right:2px!important}
+.AccountSummaryReportCustomTabStyle td span.bg{padding-right:10px!important;padding-bottom:9px!important}
+.lineHeight30Px{line-height:30px}
+.AccountSummaryBusinessUnitsDiv{background-color:#FFF;border:1px solid #000;display:inline-block;height:160px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.AccountSummaryReportHeader{width:100%;background-color:White;padding-bottom:5px!important}
+.AccountSummaryReportHeader .FirstTrTd1{font-size:16px;font-weight:bold}
+.AccountSummaryReportHeader .FirstTrTd2{vertical-align:top;padding-bottom:2px;font-weight:bold}
+.AccountSummaryReportHeader .FirstTrTd3{vertical-align:top;padding-bottom:10px}
+.AccountSummaryReportHeader .FirstTrTd4{padding-top:10px;vertical-align:bottom;padding-bottom:5px;float:left}
+.AccountSummaryReportHeader .FirstTrTd5{text-align:right;width:750px;padding-bottom:10px}
+.FadingTooltip{border-right:darkgray 1px outset;border-top:darkgray 1px outset;font-size:10px;border-left:darkgray 1px outset;width:auto;color:black;border-bottom:darkgray 1px outset;height:auto;background-color:lemonchiffon;font-size:11px}
+.SetScrollRightButtonStyle{padding-left:10px;padding-right:8px;padding-top:4px;padding-bottom:4px;width:8px}
+.SetScrollLeftButtonStyle{padding-left:2px;padding-right:12px;padding-top:4px;padding-bottom:4px;width:8px}
+.FadingTooltipDefault{z-index:999;padding:5px;visibility:hidden;position:absolute}
+.ConsultingDemandchartDiv{overflow-x:auto;overflow-y:hidden;text-align:center}
+.hide{display:none}
+.show{display:inherit}
+.ConsultantsWeeklyReportAlignCenter{text-align:center!important;width:100%}
+.ConsultantsWeeklyReportupdPersonDetails{width:95%!important;text-align:center;padding-left:2%}
+.BorderBottom1px,.BorderBottom1pxTd .border{border-bottom:1px solid black}
+.UTilTimeLineFilterCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.UTilTimeLineFilterCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
+.PracticeAreasCblDivision{background-color: #FFF;text-align:left!important;border:1px solid #AAA;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000;}
+.bgColor_d4dff8{background-color:#d4dff8}
+.BenchCostFooter,.MSMeetingReportFooter{padding-left:15px!important}
+.BenchCostFooter td,.MSMeetingReportFooter td{padding-bottom:5px}
+.SupFont sup{font-size:11px}
+.TimeperiodSummaryReportTr th{width:100px}
+.FilterImg{position:absolute;padding-left:2px}
+.ProjectSummaryProjectTypeTd{border-bottom:1px solid black;text-align:center;width:200px}
+.ProjectSummaryGrandTotalTd{border-bottom:1px solid black;text-align:center;width:180px}
+.ProjectSummaryCheckboxTd{padding-left:10px;width:100px;padding-top:1px}
+.ProjectSummaryCalculateRangeTd{text-align:center;padding-top:5px;vertical-align:top}
+.ProjectSummaryCalculateRangeTd select{font-family:Arial!important;color:#333!important;font-size:12px!important;width:170px}
+.PadLeft10Td td{padding-left:10px}
+.padding5Right10{padding:5px 10px 5px 5px}
+.ProjectSummaryPageCountTd{font-weight:bold;width:100%;padding-top:5px;color:Black}
+.ProjectsToolTip{position:absolute;z-index:2000}
+.scroll_cblPractice{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
+.scroll_cblBDMs{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:270px;z-index:20000}
+.bgcolor_CCCCCC{background-color:#CCC}
+.grandTotalRowInnerHtmlTd{padding-left:3px;border-left:2px solid black;border-bottom:1px solid black;border-top:1px solid black;height:35px}
+.border_black{border:1px solid black}
+.borderTopBottom_black{border-bottom:1px solid black;border-top:1px solid black}
+.border_blackExceptLeft{border-right:1px solid black;border-bottom:1px solid black;border-top:1px solid black}
+.borderLeftRight_black{border-left:1px solid black;border-right:1px solid black}
+.border_blackExceptTop{border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black!important}
+.StrawmanCompersationValidation{padding:5px 10px 0 10px}
+.PaddingTB5PxLR10Px{padding:5px 10px!important}
+.TimeEntryPageTotalHours{font-size:14px;font-weight:bold;margin-left:16px}
+.PaddingTB10PxLR0Px{padding:10px 0}
+.WeekSelectorLable{font-size:xx-small;color:navy}
+.WeekSelectorDateSpan{color:Navy;font-size:large;font-weight:bold}
+.bgColorRed{background-color:Red}
+.bgColorWhite{background-color:white}
+.bgColorWhiteImp{background-color:white!important}
+.WeekSelectorHiddenTextBox{width:102px;margin-left:-40px;visibility:hidden}
+.TimeEntryAddPopUp{max-width:700px;min-height:60px;min-width:450px}
+.VisbleHidden{visibility:hidden}
+.pnlRecurringAllowedPopUp{width:480px!important}
+.pnlPersonInactiveAlert{width:380px!important}
+.personStats{width:100%}
+.personStats .FirstTd{padding-left:10px}
+.marginBT10Px{margin-bottom:10px;margin-top:10px}
+.EmailTemplateTd{overflow:auto}
+.EmailTemplateEmailBody{height:217px;width:450px;margin-bottom:0}
+.SMTPTable{width:100%}
+.SMTPTable td{white-space:nowrap}
+.SMTPTable div{padding-left:2px}
+.SMTPAddressDesc{border:1px solid black;background-color:White;padding:5px}
+.padRight0Table td{padding-right:0!important}
+.SMTPAddressDesc1{border:1px solid black;width:100%;height:63px;background-color:White;padding:5px}
+.gvCommissionsAndRates{background-color:White;border-collapse:collapse}
+.PaddingBottomTop15Px{padding-bottom:15px;padding-top:15px}
+.Width44Percent{width:44%}
+.MarginGoalsDescription{background-color:White;padding:10px}
+.TextAlignLeft{text-align:left}
+.TextAlignLeftImp{text-align:left!important}
+.Width194px{width:194px}
+.WidthHeight25{width:25%;height:25px}
+.Width8Height25{width:8%;height:25px}
+.Width42Height25{width:42%;height:25px}
+.Width16Percent{width:16%}
+.Width190pxHeight100px{width:190px!important;height:100px!important}
+.Width190px{width:190px!important}
+.Width240pxHeight250px{width:240px;height:250px}
+.Width29Percent{width:29%}
+.ConfirmBoxClassError{min-height:60px;min-width:200px;max-width:600px;max-height:500px}
+.Width353Height16{width:353px;height:16px}
+.Width356Px{width:356px}
+.Width404Px{width:404px}
+.HolidaysDescription{border:1px solid black;padding:5px;white-space:normal}
+.FontSizeXLarge{font-size:x-large}
+.PaddingTop45pxLeft2Per{padding-top:45px!important;padding-left:2%!important}
+.setCheckboxesLeft TD,.setCheckboxesLeft div{text-align:left!important}
+.setCheckboxesLeft input{vertical-align:middle;float:right}
+.setCheckboxesLeft Table{width:100%}
+.setColorToCalendar{background-color:#E9F0F9}
+.PanelHolidayDetails{padding-top:20px!important;padding-left:10px!important;padding-right:10px!important;min-width:250px;max-width:700px;min-height:60px}
+.TxtHolidayDescription{resize:none;width:300px;overflow:auto!important;margin-left:4px}
+.ResizeNone{resize:none}
+.Padding10px0px10px0px{padding:10px 0 10px 0!important}
+.ValignMiddleImp{vertical-align:middle!important}
+.BtnAddTimeOff{text-align:left!important;vertical-align:middle!important;width:30%}
+.PaddingTopBottom10PxImp{padding-top:10px!important;padding-bottom:10px!important}
+.PaddingTop45Left2{padding-top:45px!important;padding-left:2%!important}
+.Height175Width320Px{height:175px;width:320px}
+.RbEdit{padding-left:110px;text-align:left}
+.AddTimeOffStartDate{width:40%;text-align:right;font-weight:bold;padding-right:5px}
+.AddTimeOffDatePicker{width:40%;text-align:left;padding-left:5px}
+.PaddingBottomTop0PxImp{padding-bottom:0!important;padding-top:0!important}
+.AddTimeOffHours{padding-left:40px;text-align:left;padding-right:5px;vertical-align:middle}
+.ValSumTimeOff{text-align:left;padding-left:20px;padding-right:20px}
+.Padding10PxImp{padding:10px!important}
+.PnlHolidayAndSubStituteDayPadding{padding-top:20px;padding-left:10px;padding-right:10px}
+.HolidayLabel{width:40%;text-align:left;height:20px}
+.LabelHolidayDate{width:60%;text-align:left;padding-left:3px;height:20px}
+.DatepickerSubstituteDay{height:50px;text-align:center;vertical-align:middle}
+.Height5Px{height:5px}
+.LabelModifySubstituteDate{height:30px;text-align:right;vertical-align:middle;min-height:10px}
+.height120px{height:120px!important}
+.PnlDeleteSubstitutionDate{min-width:250px;max-width:700px;min-height:60px}
+.TdCompanyDayOn{margin-top:5px;padding-top:5px;padding-right:5px}
+.InnerTdCompanyDayOn{background-color:white;border:1px solid black}
+.DayDescription{margin-top:5px;padding-top:5px}
+.TdProjectName{width:65%;padding:3px 0 3px 0;padding-left:0}
+.LabelProject{font-size:15px;font-weight:bold}
+.TdProjectStatus{width:30%;padding-left:15px}
+.DdlProjectStatus{vertical-align:middle;line-height:1px;width:44%}
+.TdProjectDetailFeild{width:32%;padding:3px 0 3px 0}
+.TdValidators{width:10%;vertical-align:middle;padding-left:2px}
+.LableProjectManager{width:30%;vertical-align:top;line-height:20px}
+.TdProjectNotes{width:55%;height:120px}
+.Height102px{height:102px}
+.Height10P{height:10%}
+.Height50P{height:50%}
+.Height80P{height:80%}
+.Height100Percent{height:100%}
+.Height100PerImp{height:100%!important}
+.InnerTdProjectNotes{height:20px;font-size:15px;font-style:italic;vertical-align:bottom;padding-bottom:5px}
+.TextBoxProjectNotes{overflow-y:auto;resize:none;font-size:12px;font-family:Arial,Helvetica,sans-serif;width:98%;height:80px}
+.TdOpportunityLink{width:45%;padding-left:10px;height:120px}
+.LineHeight20Px{line-height:20px}
+.TdUTimeEntry{height:30px;font-size:15px;font-style:italic;vertical-align:bottom}
+.TdProjectNotesDescription{height:20px;padding-left:10px;vertical-align:bottom;padding-bottom:3px}
+.PaddingBottom35Px{padding-bottom:35px}
+.ListStyleNone{list-style:none}
+.ThEditProjectNameText{text-align:center;background-color:Gray;white-space:nowrap;font-weight:lighter;font-size:14px;padding:6px}
+.TdProjectNameText{text-align:right;width:20%;padding-bottom:5px;padding-right:5px}
+.paddingLeft5pxImp{padding-left:5px!important}
+.TdAddAttachmentText{white-space:nowrap;font-size:14px}
+.FileUploadAttachment{padding-left:10px;padding-right:20px}
+.ProjectDetailErrorPanel{max-height:400px;max-width:550px;min-height:100px;min-width:400px}
+.projectTimeTypes tr{height:20px!important}
+.projectTimeTypes td{float:none!important;padding:0!important;height:20px!important}
+.CustomTabStyleProjectDetail tr{height:30px}
+.CustomTabStyleProjectDetail td{float:left;padding:8px 0 6px 0;position:relative}
+.CustomTabStyleProjectDetail td a{text-decoration:none}
+.CustomTabStyleProjectDetail td span a{border-bottom:1px dashed #0898e6}
+.CustomTabStyleProjectDetail td span a:hover{border-bottom:1px dashed #069}
+.CustomTabStyleProjectDetail td a.collapse{display:none;position:absolute}
+.CustomTabStyleProjectDetail .SelectedSwitch a.collapse{display:block;right:5px;top:10px}
+.CustomTabStyleProjectDetail td span.bg{padding:8px 20px 7px 10px}
+.CustomTabStyleProjectDetail .SelectedSwitch span.bg{background-color:#e2ebff}
+table.ProjectDetail-ProjectInfo-Table td{padding-left:4px}
+.ProjectAttachmentNameWrap{display:inline-block;white-space:normal!important;word-wrap:break-word}
+.Width92PerImp{width:92%!important}
+.wrapMilestoneName{word-wrap:break-word!important;word-break:break-all;white-space:normal}
+.BtnAddTimeType{padding-top:5px!important;width:100%;text-align:right}
+.TdAssignedWorkTypesText{padding:2px 6px 5px 6px!important;text-align:center!important;width:44%!important}
+.HeightAuto{height:auto!important}
+.TdTimeTypesNotAssignedToProject{padding:0 6px 0 6px!important;width:44%;margin:auto;vertical-align:middle}
+.TbTimeTypesNotAssignedToProject{border:1px solid black;padding-left:1px!important;padding-right:1px!important;width:100%!important}
+.LineHeight19Px{line-height:19px}
+.DivTimeTypes{height:150px!important;margin:auto;width:100%!important;overflow-y:auto;border:1px solid black;background:white;padding:1px!important}
+.Height0pxImp{height:0!important}
+.TextDefault{padding-top:2px!important;padding-bottom:4px!important;font-weight:bold;font-style:italic}
+.PaddingBottom0pxImp{padding-bottom:0!important}
+.VisibilityHidden{visibility:hidden}
+.Height16Px{height:16px}
+.TdTimeTypesAssignedToProject{padding-left:6px!important;padding-right:6px!important;padding-top:0!important;width:44%!important;margin:auto}
+.TdTextAddWorkType{vertical-align:middle!important;text-align:center!important;color:Black;font-weight:bold;background-color:Gray}
+.Height5pxImp{height:5px!important}
+.TdTbNewTimeType{white-space:nowrap;height:25px!important;padding-left:10px!important}
+.Width90PercentImp{width:90%!important}
+.Padding5Imp{padding:5px!important}
+.Width15PercentImp{width:15%!important}
+.FontSize14px{font-size:14px}
+.Padding8{padding:8px!important}
+.TdLblAlertMessage{white-space:nowrap;padding-left:10px!important;padding-right:20px!important}
+.Width32Percent{width:32%}
+.FloatLeftImp{float:left!important}
+.TcPersons{padding-left:15px;padding-top:10px;padding-bottom:10px;text-align:center}
+.BackGroundColorWhite{background-color:White}
+.FontSizeMedium{font-size:medium}
+.TdProjectType{width:330px!important;border-bottom:1px solid black;vertical-align:top!important}
+.TdPracticeArea{width:256px!important;border-bottom:1px solid black}
+.Width110Px{width:110px}
+.Width115PxImp{width:115px!important}
+.yScrollAuto{overflow-y:auto}
+.Width170PxImp{width:170px!important}
+.Width180PxImp{width:180px!important}
+.Width100PxImp{width:100px!important}
+.Color888888{color:#888!important}
+.ShowRepCheckBox input{float:left;width:15px;text-align:left;margin-right:0}
+.CurrentMonthCell{padding-right:3px;border-left:1px solid black;border-right:1px solid black}
+.BorderBottom1Px{border-bottom:1px solid black}
+.BackGroundWhiteImp{background-color:White!important}
+.BorderLeft2Px{border-left:2px solid black}
+.MonthSummeryBorder{border-left:1px solid black;border-right:1px solid black;border-bottom:1px solid black}
+.AddLeftPadding{padding-left:4px}
+.DivProjectFilter{background:#E2EBFF;margin-bottom:10px;padding:5px}
+.MinHeight25Px{min-height:25px}
+.DivMileStoneNames{padding:2px 0 2px 0}
+.MinHeight20Px{min-height:20px}
+.padLeft15Imp{padding-left:15px!important}
+.PaddingRight4PxImp{padding-right:4px!important}
+.UcDatePickerPadding{padding-right:4px!important;padding-left:4px!important}
+.LblEndDate{padding-left:4px!important;padding-right:8px!important}
+.Width38Per{width:38%}
+.Width38PerImp{width:38%!important}
+.TdLblPriority{text-align:center!important;padding:0!important;color:Black;font-size:12px;vertical-align:middle}
+.LblDescription{white-space:normal;color:Black;font-size:12px;width:180px}
+.PaddingLeft1Px{padding-left:1px}
+.Width97PercentImp{width:97%!important}
+.Width98PercentImp{width:98%!important}
+.DivDescription{width:99%;padding-left:4px;padding-right:4px;overflow-y:auto}
+.TxtDescriptionPadding{padding:0 5px 0 4px}
+.DivActivityLogControl{width:99%;height:310px;padding-left:4px;padding-right:4px;overflow-y:auto}
+.PaddingLeft8Px{padding-left:8px}
+.Backgrounde2ebff{background:#e2ebff!important}
+.FontSize16Px{font-size:16px!important}
+.DivProposedPersons{height:175px;width:100%;overflow-y:auto;border:1px solid black;background:white;padding-left:3px;line-height:19px;padding-top:3px;padding-bottom:3px}
+.Width76Px{width:76px}
+.TdConvertToProject{padding:10px 0 0 4px!important;width:100%!important;text-align:center!important}
+.TdAttachToProject{padding:6px 0 0 0!important;width:100%!important;text-align:center!important}
+.Width64Per{width:64%}
+.Width36Per{width:36%}
+image:hover:after{content:attr(title)}
+.strawmanOpportunityDetails tr td{padding:4px 0 4px 0}
+.Padding0Imp{padding:0!important}
+.TextAlignJustifyImp{text-align:center!important}
+.Width500PxImp{width:500px!important}
+.PanelPerson{background-color:White;border:2px solid Black!important}
+.PanelCSAT{background-color:#E2EBFF;border:2px solid Black!important;width:700px}
+.PanelCSAT tr{padding-left:5px}
+.HolidayAndSubstituteDay{min-height:100px;width:280px;max-height:205px}
+.GroupBySddPractice{border:1px solid #AAA;background-color:white;height:250px!important;width:260px!important;z-index:20000;position:fixed;overflow-y:auto;overflow-x:hidden}
+.AdvancedTabUc{width:170px!important;height:100px!important;background-color:White!important;overflow-y:auto;overflow-x:hidden;border:1px solid #AAA!important}
+.Width480Px{width:480px!important}
+.Width465Px{width:465px!important}
+.Width700Px{width:700px!important}
+.Width380px{width:380px!important}
+.FileUpload{background-color:White;width:435px!important}
+.Height50pxImp{height:50px!important}
+.WidthHeight200pxImp{height:200px!important;width:200px!important}
+.LnkBtnAll{text-decoration:none;font-weight:bold}
+.PersonFilterSddAllTypes{background-color:White;border:1px solid #AAA!important;width:190px;height:100px;z-index:2000}
+.LnkBtnPrevious{color:#8F8F8F;text-decoration:none}
+.InnerTableCompanyDay{background-color:Black;border:1px;width:20px}
+.TableCompPer{padding-top:6px;background-color:white;border-collapse:collapse;width:80%!important;border:0}
+.TdNotesOptional{padding-left:6px;padding-right:6px;text-align:center!important;padding-top:2px;width:44%}
+.TdExemtNotes{padding-left:6px;padding-right:6px;padding-top:0;width:44%;margin:auto}
+.DivExemtNotes{height:150px;margin:auto;width:100%;overflow-y:hidden;border:1px solid black;background:white;line-height:19px;vertical-align:middle;padding-left:1px}
+.BtnSave{padding:4px;padding-right:0;height:35px;width:30%;text-align:right!important}
+.CBMultipleSelection{padding:0;width:10px;text-align:left;vertical-align:top}
+.MilestoneHeaderText a{color:#000333;text-decoration:none}
+.mso-number-format{mso-number-format:MM\/dd\/yy}
+.divPersonName{padding-bottom:5px;font-size:20px;font-weight:bold}
+.divTeTable{overflow-x:auto;overflow-y:display}
+.NotVisible{display:none;visibility:hidden}
+.TimeEntrySummary{font-style:italic;font-size:16px;font-weight:bold;padding-top:4px;padding-bottom:4px}
+.divProjects{overflow-x:auto;padding-top:10px}
+.TimeEntryDetail{font-style:italic;font-size:16px;font-weight:bold;padding-top:4px;padding-bottom:4px}
+.ClientAndProjectName{font-size:14px;font-weight:bold;padding-top:3px;padding-bottom:3px}
+.divHrClass{padding-top:10px;padding-bottom:5px;padding-left:5px;padding-right:5px}
+.ClientProjectTimeType{text-align:left!important;white-space:nowrap}
+.HeaderDiv{text-align:center;font-weight:bold}
+.TextAlignRight{text-align:right;padding-right:15px}
+.AlignCentre{text-align:center;padding-right:-1px}
+.CheckBoxFloatLeft INPUT{float:left;width:20px;margin-right:6px}
+.CheckBoxFloatLeft LABEL{line-height:20px;vertical-align:middle}
+.Padding3PxTd td{padding-top:3px}
+.Padding0PxTd td,.Padding0PxTd{padding-top:0!important}
+.TimeEntryByperson_cblPersons{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:360px;overflow-x:hidden;overflow-y:auto;width:350px;z-index:20000}
+.marTop-2px{margin-top:-2px}
+.TimeEntryByperson_cblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.TimeEntryByperson_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
+.color_3BA153{color:#3BA153}
+.TimeEntryByPerson_gvTimeEntries{width:100%;background-color:White;border-collapse:collapse}
+.gvOverhead_OverheadsPage{width:100%;border-collapse:collapse}
+.gvOverhead_OverheadsPage th{text-align:left}
+.gvOverhead_OverheadsPage td.left{padding-left:10px!important}
+.OverheadsPageHr{margin-left:5px;margin-right:5px;color:Black;text-align:center}
+.OverheadsHistoryPopup{min-width:450px!important;min-height:60px!important;max-width:700px!important}
+.OverheadsHistoryPopup .result{padding:6px 6px 2px 6px;overflow-y:auto;height:300px}
+.OverHeadsPage_gvMLFHistory{width:100%;border-collapse:collapse}
+.OverHeadsPage_gvMLFHistory td,.OverHeadsPage_gvMLFHistory th{text-align:center}
+.OverheadsHiddenTd{color:White;height:1px!important;max-height:1px!important}
+.BecomeUserDiv{border:1px solid black;background-color:White;padding:5px}
+.ExpenceCategories_gvCategories{background-color:White;border-collapse:collapse;width:400px}
+.ExpenceCategories_gvCategories td,.ExpenceCategories_gvCategories th{height:25px}
+.WholeWidthTable,.WholeWidthTable table{width:100%}
+.ExpenceCategories_EmptyDataTd{padding-left:30px;padding-top:10px;padding-bottom:10px}
+.RevenueGoals_grdDirectorBudgetEntries{border-collapse:collapse}
+.RevenueGoals_grdDirectorBudgetEntries td{height:30px}
+.RevenueGoals_grdDirectorBudgetEntries th{height:26px!important;width:82px}
+.RevenueGoals_grdDirectorBudgetEntries .FirstTd{width:202px!important;white-space:nowrap}
+.RevenueGoals_grdDirectorBudgetEntries .FirstTdData{padding-right:2px}
+.RevenueGoals_grdDirectorBudgetEntries input{width:60px}
+.RevenueGoals_saveGoalsDiv{width:100%;padding:0 2px 6px 0;text-align:right}
+.RevenueGoals_saveGoalsDiv1{width:100%;padding:6px 2px 2px 0;text-align:right}
+.MarginGoalsDiv{background-color:#d4dff8;border-top:1px solid #fff;border-bottom:1px solid #eef2fc;padding-left:10px}
+.MarginGoalsHeaderTable{width:99%}
+.PaddingBottom10Px{padding-bottom:10px}
+.MarginGoalsHeaderTable td{padding-bottom:15px;padding-top:15px}
+.MargingoalsTable{width:100%}
+.MargingoalsTable .FirstTd{width:50%;padding-bottom:10px;vertical-align:top}
+.MargingoalsTable .SecondTd{width:3%;padding-bottom:10px}
+.MargingoalsTable .ThirdTd{width:44%;padding-bottom:10px;vertical-align:top}
+.MargingoalsTable .ThirdTd div{background-color:White;padding:10px}
+.gvClientGoalDefaultThreshold{width:99%;border-collapse:collapse}
+.gvClientGoalDefaultThreshold td{height:25px;text-align:center}
+.DashboardPageHeaderTable{width:100%;height:600px;background-color:#dbeef3}
+.DashboardPageHeaderTable .FirstTd{width:70%;padding-left:5px;border:2px solid White;border-top-width:0;border-bottom-width:0;vertical-align:top}
+.DashboardPageHeaderTable .SecondTd{width:100%;height:28px;padding-right:20px}
+.DashboardPageHeaderTable .ThirdTd{width:2%;padding-top:0}
+.DashboardPageHeaderTable .FourthTd{width:98%;padding-top:0;vertical-align:top}
+.DashboardPageHeaderTable .FourthTd .FirstPanel{padding:5px;width:100%}
+.DashboardPageHeaderTable .FourthTd .SecondPanel{padding:5px;width:95%}
+.DashboardPageHeaderTable .FivthTd{width:50%;padding-top:5px;padding-right:5px}
+.DashboardPageHeaderTable .SixthTd{width:50%;padding-left:5px;padding-top:5px}
+.DashboardPageHeaderTable .ThirdPanel{border-bottom:2px solid White;padding:5px;padding-top:15px;padding-bottom:15px}
+.Border2px{border-top:2px solid White}
+.DashboardPageHeaderTable .SeventhTd{width:100%;padding:5px;height:50px}
+.repQuickLinks{width:100%}
+.repQuickLinks .FirstRepTd{width:90%;padding-left:0;height:20px}
+.repQuickLinks .SecondRepTd{width:10%;padding-right:0;height:20px}
+.DashBoardQuickLinksPopUp{background-color:#D4DFF8;border-color:Black;border-style:solid;border-width:1px;position:fixed;width:372px;z-index:100001}
+.DashBoardQuickLinksPopUp .FirstTd{padding:5px 2px 5px 5px}
+.DashBoardQuickLinksPopUpTextBox{width:353px;height:16px;padding-bottom:4px;margin-bottom:4px}
+.cblQuickLinksDiv{height:250px;width:350px;overflow-y:scroll;border:1px solid black;background:white;padding-left:3px;text-align:left!important}
+.cblQuickLinksClearButtonDiv{text-align:right;width:356px;padding:8px 0 8px 0}
+.PersonPage_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:280px;z-index:20000}
+.PersonPage_cblRecruiters{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:200px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
+.scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.PracticeAreasCblDivision table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table{width:100%!important}
+.DisplayInline{display:inline-block}
+.BorderBottomNone td{border-bottom:none!important}
+.BorderTopNone{ border-top: none !important;}
+input#ctl00_body_login_Password,input#ctl00_body_login_UserName{width:180px}
+table#ctl00_body_login td,tr{padding:3px}
+table#ctl00_body_login tr td label{float:left}
+.DivLogin{margin-left:auto;margin-right:auto;width:300px;padding:5px}
+.TableCofirm{width:385px;margin-bottom:8px}
+.SkillsBodyEntry{background-color:#d4dff8;padding:10px}
+.SkillsEntryDataBody{background-color:White;height:400px;overflow:auto}
+.PopupHeight{max-height:150px;overflow-y:auto}
+.fontSizeLarge{font-size:large!important}
+.DivLevel{max-height:160px;overflow-y:auto}
+.Width350pxImp{width:350px!important}
+.TdSkillLevel{background-color:White;font-weight:normal;font-size:small}
+.DivAlert{text-align:center;font-weight:bold;padding:3px;background-color:Gray}
+.DivAlertText{vertical-align:top;max-height:500px;overflow-y:auto;padding:10px;background-color:White}
+.PnlValidations{text-align:center;background-color:White;padding-bottom:10px;padding-top:5px}
+.space{height:15px}
+.space1{height:10px}
+.fontSkilltype{font-size:15px!important}
+.widthspace{width:15px}
+.SkillsProfileBody{background-color:#d4dff8;padding:10px;padding-top:25px!important;border-color:-moz-use-text-color #999 #999999;border:1px solid #999}
+.SkillsProfileDataBody{background-color:White;height:360px;overflow:auto;padding-left:2%;padding-top:1%;text-align:center;overflow:auto}
+.TableSkillsProfile td,.TableSkillsProfile th{text-align:left;line-height:20px;width:auto}
+.PaddingBottom30pxImp{padding-bottom:30px!important}
+.PaddingTop15Imp{padding-top:15px!important}
+.width77PImp{width:77%!important}
+.Width2PercentImp{width:2%!important}
+.Width40PImp{width:40%!important}
+.WidthInherit{width:inherit!important}
+.SkillsSearchBody{background-color:#d4dff8;padding:10px;padding-top:25px!important;border-color:-moz-use-text-color #999 #999999;border:1px solid #999}
+.SkillsSearchDataBody{background-color:White;min-height:430px;padding-left:2%;padding-right:2%;padding-top:1%;text-align:center}
+.SkillsSearchDataBody .ajax__tab_container{padding-bottom:1%;width:90%}
+.SkillsSearchDataBody .ajax__tab_header{text-align:left!important}
+.SkillsSearchDataBody .ajax__tab_tab{min-width:100Px}
+.SkillsSearchDataBody .ajax__tab_panel{max-height:165px;overflow-y:auto}
+.SkillsSearchDataBody select{height:20px}
+.searchResult{height:150px;overflow:auto;width:100%}
+.TextSkillSearch{border-right:1px solid black;width:55%;padding-bottom:20px;text-align:left!important;vertical-align:top!important}
+.MarginTop20Px{margin-top:20px!important}
+.Width965Per{width:96.5%!important}
+.OverFlowAutoImp{overflow:auto!important}
+.LblSeachCriteria{text-align:left!important;padding:20px 0 15px 20px!important}
+.height20PImp{height:20px!important}
+.CblPersons{height:99px!important;width:315px!important;overflow-y:auto;overflow-x:hidden;border:1px solid #AAA!important;background-color:#FFF!important;padding:3!important;display:inline-block;z-index:20000}
+.CblPersons Table{width:315px!important}
+#ctl00_body_tcSkillsEntry_body{border-bottom:#999 1px solid!important;margin-top:1px!important;padding:2px!important}
+.gvStrawmen .headerSortUp span{background-image:url(../images/asc.gif);background-position:right;background-repeat:no-repeat}
+.gvStrawmen .headerSortDown span{background-position:right;background-repeat:no-repeat;background-image:url(../images/desc.gif)}
+.backGroundNone{background-image:none!important}
+.NewHireReportCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:250px;z-index:20000}
+.NewHireReportCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:250px;z-index:20000}
+.W2SalaryGraph{background-color:#7F7F7F;border:1px solid Gray}
+.W2HourlyGraph{background-color:#BEBEBE;border:1px solid Gray}
+.ContractorsGraph{background-color:#D9D9D9;border:1px solid Gray}
+.NewHireGraphPopUpTable .FirstTd{width:80%;white-space:nowrap;text-align:left!important}
+.NewHireGraphPopUpTable .FirstTd span{font-weight:bold;font-size:16px!important}
+.NewHireGraphPopUpTable .SecondTd{width:20%;font-weight:bolder;font-size:16px;text-align:right;padding-right:20px}
+.NewHireGraphPopUpTable .SecondTd span{font-weight:bold;white-space:nowrap}
+.NewHireREportGraphDiv{overflow-y:auto;max-height:300px}
+.NewHireREportGraphDiv .minheight250Px{min-height:10px!important}
+.NewHireGraphEmptyDiv{padding-top:5px;padding-bottom:5px}
+.NewHireReportChartDiv{overflow-x:auto;text-align:center;padding-top:5px;padding-bottom:5px}
+.TerminationReport .ResourceColum{text-align:left!important;width:190px!important}
+.TerminationReport .ResourceColum img{padding-left:2px}
+.TimeperiodSummaryReportTr th{width:100px}
+.pnlAttritionCalculation{width:450px;border:4px solid #375D89;z-index:1000001!important;position:absolute;padding:6px!important;background-color:White!important}
+.pnlAttritionCalculation table{width:450px}
+.hrArrition{height:4px;background-color:Black}
+.hrArritionCalculation{height:3px;background-color:Black;width:80%}
+.TerminationReportHeaderTotals{width:750px!important;height:100%}
+.NewHireReportTotals{height:100%}
+.pnlNewHireHelp{z-index:2000;position:absolute;padding:12px 0 12px 12px;height:30px;width:500px;background-color:White;border-color:#375D89;border-style:solid;border-width:4px}
+.pnlCSATCalculation{z-index:2000;position:absolute;padding:12px;height:30px;width:500px;background-color:White;border-color:#375D89;border-style:solid;border-width:4px}
+.VendorDetail tr td{padding-bottom: 4px;padding-right: 4px;}
+.PersonInfo tr td{padding-bottom:4px;padding-right:4px}
+.PersonInfo td.PersonDefaultUser{padding-bottom:0!important}
+.dlPerson,.dlPerson table{width:100%!important}
+.dlPerson th div{white-space:nowrap}
+.dlPerson td{height:20px!important}
+.dlPerson .firstTd{width:30%;text-align:left!important}
+.dlPerson .secondTd{width:70%;text-align:left!important}
+.displayInline{display:inline-block}
+.repProfilesTable{width:100%}
+.repProfilesTable td,.repProfilesTable th{padding-top:1px;padding-bottom:1px;vertical-align:middle}
+.ProfilesPanel{min-width:500px!important;max-width:700px!important}
+.ProfilesPanel .ProfilesPanelTd{padding:10px 0 10px 8px}
+.PicturePanelTd{padding:10px;padding-left:30px}
+.PersonPictureDiv{width:100px;height:120px;border:1px solid Black}
+.SkillSerachTd{padding-top:5px;padding-bottom:10px}
+.Width740px{width:740px!important}
+.pnlTotal{border:2px solid #375D89;z-index:2000;position:absolute;padding:6px!important;background-color:White!important}
+.zindex2001Imp{z-index:2001!important}
+.pnlTotal tr td{padding-bottom:2px!important}
+.CursorText{cursor:text}
+.repCapabilities div{padding-top:3px;padding-bottom:3px}
+.repCapabilities .PracticeHeaderTd{border:1px solid black;font-size:14px;font-weight:bold;height:25px;width:70%;line-height:25px;vertical-align:middle}
+.repCapabilities .PracticeHeaderTd span{padding-left:10px}
+.repCapabilities .capabilityTd{padding-left:25px;width:30%;padding-top:6px!important;padding-bottom:6px!important;vertical-align:middle}
+.repCapabilities .capabilityTd input{vertical-align:middle}
+.repCapabilities .PlusTd{padding-left:25px;width:30%;padding-top:5px!important;padding-bottom:20px!important}
+.repCapabilities .capabilityTd span{vertical-align:middle;line-height:18px;padding-left:5px}
+.linkDisableStyle,.linkDisableStyle hover{color:#8F8F8F!important;cursor:text}
+.linkEnableStyle{color:#0898E6;cursor:pointer}
+.fileUploadQueueItem{font:11px Verdana,Geneva,sans-serif;background-color:#e2ebff;border:3px solid #E5E5E5;margin-top:5px;padding:10px}
+.fileUploadQueueItem .cancel,.errorFile .cancel{float:right}
+.fileUploadQueueItem .cancel,.WarningFile .cancel{float:right}
+.fileUploadProgress{background-color:#FFF;border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #C5C5C5;border-bottom:1px solid #C5C5C5;margin-top:10px;width:100%}
+.fileUploadProgressBar{background-color:lightgreen}
+.fileUploadQueue{max-height:480px;overflow-y:auto}
+.LineHeight25Px{line-height:25px}
+.errorFile{font:11px Verdana,Geneva,sans-serif;background-color:#FDE5DD;border:3px solid #FBCBBC;margin-top:5px;padding:10px}
+.WarningFile{font:11px Verdana,Geneva,sans-serif;background-color:#FFA;border:3px solid #FFFFD9;margin-top:5px;padding:10px}
+.uploadedFilesDiv{max-height:220px;overflow-y:auto}
+.DatePickerOuterTd .DatePickerTable input{width:227px}
+.gvTitles{background-color:White;border-collapse:collapse;width:70%}
+.gvTitles td{height:25px;white-space:nowrap;text-align:center}
+.buttons-blockCheckBox input{text-align:left!important;float:left!important;width:50px}
+.Width225Px{width:225px}
+.Width215Px{width:215px}
+.pnlBillableUtilizationCalculation{width:410px;border:4px solid #375D89;z-index:1000001!important;position:absolute;padding:6px!important;background-color:White!important}
+.pnlBillableUtilizationCalculation table{width:410px}
+.popUpBillableUtilization{background-color:White;border-color:#375D89;border-style:solid;border-width:4px;min-height:60px;min-width:200px;max-height:400px;max-width:600px!important;padding:12px 12px 12px 12px!important}
+.PaddingTop12{padding-top:12px}
+.width850PxImp{width:850px!important}
+.Width450PxImp{width:450px!important}
+.confirmBoxJavascript{width:460px;position:fixed;left:50%;top:50%;margin:-130px 0 0 -230px;border:1px solid rgba(33,33,33,0.6);z-index:10001}
+.ConsultingDemandDetails,.ConsultingDemandDetailsByMonth{width:100%}
+.ConsultingDemandDetails td,.ConsultingDemandDetailsByMonth td{height:30px}
+.ConsultingDemandDetails th,.ConsultingDemandDetailsByMonth th{height:19px;padding:2px}
+.ConsultingDemandDetails .FirstTD{padding-left:70px;text-align:left!important;width:16%}
+.ConsultingDemandDetails .FirstTDSalesStage{padding-left:40px;text-align:left!important;width:11%}
+.ConsultingDemandDetails .SecondTD{width:11%;text-align:center}
+.ConsultingDemandDetails .SecondTDSalesStage{width:16%;text-align:center}
+.ConsultingDemandDetails .ThirdTD{width:13%;text-align:center}
+.ConsultingDemandDetails .ForthTD{width:14%;text-align:center}
+.ConsultingDemandDetails .ForthTDSalesStage{width:12%;text-align:center}
+.ConsultingDemandDetails .FifthTD{width:17%;text-align:center}
+.ConsultingDemandDetails .SixthTD{width:5%;text-align:center}
+.ConsultingDemandDetails .SecondTDTotals{width:15%;text-align:left;padding-left:45px}
+.ConsultingDemandDetailsTotal{font-weight:bolder;font-size:15px;width:10%;text-align:center}
+.ConsultingDemandDetails .headerRow,.ConsultingDemandDetailsByMonth .headerRow{background-color:White;background-image:none;background-repeat:no-repeat;cursor:pointer;height:auto;position:static;border-bottom:1px solid #000;font-size:14px;padding:2px;text-align:center;vertical-align:middle}
+.ConsultingDemandDetailsByMonth .FirstTD{width:8%;text-align:center}
+.ConsultingDemandDetailsByMonth .SecondTD{width:16%;text-align:center}
+.ConsultingDemandDetailsByMonth .ThirdTD{width:11%;text-align:center}
+.ConsultingDemandDetailsByMonth .ThirdTDTotals{width:5%;text-align:left;padding-left:25px}
+.ConsultingDemandDetailsByMonth .ForthTD{width:13%;text-align:center}
+.ConsultingDemandDetailsByMonth .FifthTD{width:10%;text-align:center}
+.ConsultingDemandDetailsByMonth .SixthTD{width:14%;text-align:center}
+.trConsultngDetailPanelInnerItem{background-color:white;height:30px;white-space:nowrap;width:100%}
+.trConsultngDetailPanel th{background-color:white;font-size:14px;text-align:center;white-space:nowrap;width:11%;height:19px;padding:2px}
+.trConsultngDetailPanelInnerItem td{text-align:center;white-space:nowrap;width:11%}
+.trConsultngDetailPanelItem{background-color:#D4D0C9;height:30px;white-space:nowrap}
+.trConsultngDetailPanelItem th{font-size:14px;width:10%}
+.consultingReportTd{font-weight:bolder;width:14%;text-align:right}
+.trCSATSummaryHeader{white-space:nowrap;width:100%;border-left:1px solid #000;border-right:1px solid #000}
+.trCSATSummaryHeader th{border-bottom:1px solid #000;border-top:1px solid #000;background-color:#FFF;font-weight:700;font-size:14px;text-align:center;height:24px;vertical-align:middle;padding:2px}
+.trNetPromoterScorePanel b{font-size:14px;text-align:center!important}
+.tableNetPromoterScorePanel{width:100%}
+.tableNetPromoterScorePanel td{padding-top:5px;width:90%}
+.tblPanelNetCSATScore td{width:30%;white-space:normal;text-align:center}
+.tblCSATHeader{width:100%;table-layout:fixed;font-weight:bold}
+.tblCSATHeader td{width:25%;vertical-align:top;font-size:14px;text-align:center}
+.attributionHeader{font-size:16px;font-weight:bold;text-align:center}
+.attributionFirstTd{width:47%;border-left:1px solid black;border-right:1px solid black;border-top:1px solid black;text-align:right;padding-bottom:5px;padding-right:5px;padding-top:5px}
+.colorWhite{color:white}
+.bgColorE0DAECImp{background-color: #E0DAEC !important}
+.ConsultPopup{padding-top: 5px;padding-left: 20%;}
+.minwidth350px{min-width: 350px !important;}
+.MsBadgeTd1
+{
+    padding: 10px;
+    text-align: right;
+}
+
+.MsBadgeTd2
+{
+    width: 240px;
+    padding-left: 5px;
+}
+
+.MSBadgeEmptyDiv
+{
+    width: 60%; 
+    padding-top:10px;
+    font-size:13px;
+}
+.BadgeHistory
+{
+    min-height: 250px;
+    width: 60%;
+    padding: 10px;
+}
+.BackImageMilestoneDetail
+{
+     background: url(../images/cp-header-bg_new.png) repeat-x 0 0 !important;
+}
+.Height30PxImp
+{
+    height: 30px !important;
+}
+.BadgeHistorypopUp
+{
+    background-color: White;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    min-height: 60px;
+    min-width:500px;
+    max-width:900px;
+    overflow:auto;
+    max-height:500px;
+}
+.Width1300Px
+{
+    width: 1300px;
+}
+.Width600Px
+{
+    width: 600px;
+}
+.AllEmpClockCblTimeScales
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 110px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 220px;
+    z-index: 20000;
+}
+.DeactivateDateValidationpopUp
+{
+    background-color: White;
+    border-color: Black;
+    border-style: solid;
+    border-width: 2px;
+    width: 700px;
+    padding: 10px;
+}
+.Width200PxImp{width:200px !important;}.BorderRightC5C5C5{border-right:#c5c5c5 1px solid;} 
+.ManagementReportHeader{font-weight:bold; font-size:18px; text-align:center;}
+.ManagementReportDiv{overflow-x:auto; padding-top:10px; max-height:600px;min-height:250px;}
+.ManagementReportDateHeader{padding-left:4px;padding-right:4px;width:100px;white-space:nowrap;border-left:1px solid #000;}
+.ProjectsListExport{text-align: right; padding-right: 10px; font-size: 12x;}
+.ProjectHelp{text-decoration: none;color:Red;}
+
+
