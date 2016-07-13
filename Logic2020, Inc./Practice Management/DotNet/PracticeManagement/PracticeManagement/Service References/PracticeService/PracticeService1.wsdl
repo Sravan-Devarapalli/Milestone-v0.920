@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PracticeService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IPracticeService_GetPracticeList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeList" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_GetPracticeList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_GetPracticeListForDivision_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeListForDivision" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_GetPracticeListForDivision_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeListForDivisionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_PracticeListAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeListAll" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_PracticeListAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeListAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_PracticeListAllWithCapabilities_InputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeListAllWithCapabilities" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_PracticeListAllWithCapabilities_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeListAllWithCapabilitiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_PracticeGetById_InputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeGetById" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_PracticeGetById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PracticeGetByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_UpdatePractice_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePractice" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_UpdatePractice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePracticeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_InsertPractice_InputMessage">
+    <wsdl:part name="parameters" element="tns:InsertPractice" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_InsertPractice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InsertPracticeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_RemovePractice_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemovePractice" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_RemovePractice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemovePracticeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_GetPracticeCapabilities_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeCapabilities" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_GetPracticeCapabilities_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPracticeCapabilitiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_CapabilityDelete_InputMessage">
+    <wsdl:part name="parameters" element="tns:CapabilityDelete" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_CapabilityDelete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CapabilityDeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_CapabilityUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CapabilityUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_CapabilityUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CapabilityUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_CapabilityInsert_InputMessage">
+    <wsdl:part name="parameters" element="tns:CapabilityInsert" />
+  </wsdl:message>
+  <wsdl:message name="IPracticeService_CapabilityInsert_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CapabilityInsertResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IPracticeService">
+    <wsdl:operation name="GetPracticeList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/GetPracticeList" message="tns:IPracticeService_GetPracticeList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/GetPracticeListResponse" message="tns:IPracticeService_GetPracticeList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPracticeListForDivision">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/GetPracticeListForDivision" message="tns:IPracticeService_GetPracticeListForDivision_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/GetPracticeListForDivisionResponse" message="tns:IPracticeService_GetPracticeListForDivision_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PracticeListAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/PracticeListAll" message="tns:IPracticeService_PracticeListAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/PracticeListAllResponse" message="tns:IPracticeService_PracticeListAll_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PracticeListAllWithCapabilities">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/PracticeListAllWithCapabilities" message="tns:IPracticeService_PracticeListAllWithCapabilities_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/PracticeListAllWithCapabilitiesResponse" message="tns:IPracticeService_PracticeListAllWithCapabilities_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PracticeGetById">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/PracticeGetById" message="tns:IPracticeService_PracticeGetById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/PracticeGetByIdResponse" message="tns:IPracticeService_PracticeGetById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePractice">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/UpdatePractice" message="tns:IPracticeService_UpdatePractice_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/UpdatePracticeResponse" message="tns:IPracticeService_UpdatePractice_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InsertPractice">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/InsertPractice" message="tns:IPracticeService_InsertPractice_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/InsertPracticeResponse" message="tns:IPracticeService_InsertPractice_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemovePractice">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/RemovePractice" message="tns:IPracticeService_RemovePractice_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/RemovePracticeResponse" message="tns:IPracticeService_RemovePractice_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPracticeCapabilities">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/GetPracticeCapabilities" message="tns:IPracticeService_GetPracticeCapabilities_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/GetPracticeCapabilitiesResponse" message="tns:IPracticeService_GetPracticeCapabilities_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CapabilityDelete">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/CapabilityDelete" message="tns:IPracticeService_CapabilityDelete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/CapabilityDeleteResponse" message="tns:IPracticeService_CapabilityDelete_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CapabilityUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/CapabilityUpdate" message="tns:IPracticeService_CapabilityUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/CapabilityUpdateResponse" message="tns:IPracticeService_CapabilityUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CapabilityInsert">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPracticeService/CapabilityInsert" message="tns:IPracticeService_CapabilityInsert_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPracticeService/CapabilityInsertResponse" message="tns:IPracticeService_CapabilityInsert_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IPracticeService" type="tns:IPracticeService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetPracticeList">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/GetPracticeList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPracticeListForDivision">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/GetPracticeListForDivision" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PracticeListAll">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/PracticeListAll" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PracticeListAllWithCapabilities">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/PracticeListAllWithCapabilities" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PracticeGetById">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/PracticeGetById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdatePractice">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/UpdatePractice" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InsertPractice">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/InsertPractice" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemovePractice">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/RemovePractice" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPracticeCapabilities">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/GetPracticeCapabilities" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CapabilityDelete">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/CapabilityDelete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CapabilityUpdate">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/CapabilityUpdate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CapabilityInsert">
+      <soap:operation soapAction="http://tempuri.org/IPracticeService/CapabilityInsert" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PracticeService">
+    <wsdl:port name="BasicHttpBinding_IPracticeService" binding="tns:BasicHttpBinding_IPracticeService">
+      <soap:address location="http://ggku3sys280.ggktech.local/PracticeManagementService/PracticeService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
