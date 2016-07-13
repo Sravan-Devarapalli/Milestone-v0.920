@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ReportService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd11" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IReportService_ResourceAssignedOrUnassignedChargingExceptionReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResourceAssignedOrUnassignedChargingExceptionReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ResourceAssignedOrUnassignedChargingExceptionReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResourceAssignedOrUnassignedChargingExceptionReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_RecruitingMetricsReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:RecruitingMetricsReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_RecruitingMetricsReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RecruitingMetricsReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectFeedbackReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectFeedbackReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectFeedbackReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectFeedbackReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByCurrency_InputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByCurrency" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByCurrency_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByCurrencyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByHours_InputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByHours" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BillingReportByHours_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BillingReportByHoursResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_NonBillableReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:NonBillableReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_NonBillableReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NonBillableReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BadgedResourcesByTimeReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:BadgedResourcesByTimeReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_BadgedResourcesByTimeReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BadgedResourcesByTimeReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ListBadgeResourcesByType_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListBadgeResourcesByType" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ListBadgeResourcesByType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListBadgeResourcesByTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ResourcesByPracticeReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResourcesByPracticeReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ResourcesByPracticeReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResourcesByPracticeReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ResourcesByTitleReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResourcesByTitleReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ResourcesByTitleReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResourcesByTitleReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetBadgeRequestNotApprovedList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeRequestNotApprovedList" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetBadgeRequestNotApprovedList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBadgeRequestNotApprovedListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAllBadgeDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllBadgeDetails" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAllBadgeDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllBadgeDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_UtilizationReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:UtilizationReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_UtilizationReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UtilizationReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ManagedServiceReportByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:ManagedServiceReportByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ManagedServiceReportByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ManagedServiceReportByPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_SaveManagedParametersByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveManagedParametersByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_SaveManagedParametersByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveManagedParametersByPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetManagedParametersByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetManagedParametersByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetManagedParametersByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetManagedParametersByPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAveragePercentagesByTitles_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAveragePercentagesByTitles" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAveragePercentagesByTitles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAveragePercentagesByTitlesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectsListWithFilters_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectsListWithFilters" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectsListWithFilters_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectsListWithFiltersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetails" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_PersonTimeEntriesDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_PersonTimeEntriesSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesSummary" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_PersonTimeEntriesSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PersonTimeEntriesSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetPersonTimeEntriesTotalsByPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonTimeEntriesTotalsByPeriod" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetPersonTimeEntriesTotalsByPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPersonTimeEntriesTotalsByPeriodResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByResource" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByWorkType_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByWorkType" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryReportByWorkType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryReportByWorkTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByResource" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectDetailReportByResource_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectDetailReportByResource" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectDetailReportByResource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectDetailReportByResourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByWorkType_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByWorkType" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSummaryReportByWorkType_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSummaryReportByWorkTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetProjectsByClientId_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsByClientId" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetProjectsByClientId_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsByClientIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSearchByName_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSearchByName" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectSearchByName_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectSearchByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetMilestonesForProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonesForProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetMilestonesForProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMilestonesForProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryByResourcePayCheck_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryByResourcePayCheck" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimePeriodSummaryByResourcePayCheck_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimePeriodSummaryByResourcePayCheckResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimeEntryAuditReportByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimeEntryAuditReportByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimeEntryAuditReportByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimeEntryAuditReportByPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimeEntryAuditReportByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:TimeEntryAuditReportByProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TimeEntryAuditReportByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TimeEntryAuditReportByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByBusinessUnit_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByBusinessUnit" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByBusinessUnit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByBusinessUnitResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountSummaryReportByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountSummaryReportByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByBusinessUnit_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByBusinessUnit" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByBusinessUnit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByBusinessUnitResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByPerson_InputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByPerson" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AccountReportGroupByPerson_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AccountReportGroupByPersonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_NewHireReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:NewHireReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_NewHireReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NewHireReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TerminationReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:TerminationReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TerminationReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TerminationReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TerminationReportGraph_InputMessage">
+    <wsdl:part name="parameters" element="tns:TerminationReportGraph" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_TerminationReportGraph_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TerminationReportGraphResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandSummary" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByTitleSkill_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByTitleSkill" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByTitleSkill_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByTitleSkillResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsBySalesStage_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsBySalesStage" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsBySalesStage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsBySalesStageResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByMonth_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByMonth" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandDetailsByMonth_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandDetailsByMonthResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsByTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsByTitle" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsByTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsByTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsBySkills_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsBySkills" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGraphsBySkills_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGraphsBySkillsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportByTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportByTitle" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportByTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportByTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportBySkill_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportBySkill" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandTransactionReportBySkill_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandTransactionReportBySkillResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsByTitle_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsByTitle" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsByTitle_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsByTitleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsBySkill_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsBySkill" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ConsultingDemandGrphsGroupsBySkill_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConsultingDemandGrphsGroupsBySkillResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AttainmentBillableutlizationReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:AttainmentBillableutlizationReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_AttainmentBillableutlizationReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AttainmentBillableutlizationReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAttainmentProjectListMultiParameters_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttainmentProjectListMultiParameters" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetAttainmentProjectListMultiParameters_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAttainmentProjectListMultiParametersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectAttributionReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectAttributionReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ProjectAttributionReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ProjectAttributionReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ZeroHourlyRateExceptionReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ZeroHourlyRateExceptionReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ZeroHourlyRateExceptionReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ZeroHourlyRateExceptionReportResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IReportService">
+    <wsdl:operation name="ResourceAssignedOrUnassignedChargingExceptionReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ResourceAssignedOrUnassignedChargingExceptionReport" message="tns:IReportService_ResourceAssignedOrUnassignedChargingExceptionReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ResourceAssignedOrUnassignedChargingExceptionReportResponse" message="tns:IReportService_ResourceAssignedOrUnassignedChargingExceptionReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RecruitingMetricsReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/RecruitingMetricsReport" message="tns:IReportService_RecruitingMetricsReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/RecruitingMetricsReportResponse" message="tns:IReportService_RecruitingMetricsReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectFeedbackReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectFeedbackReport" message="tns:IReportService_ProjectFeedbackReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectFeedbackReportResponse" message="tns:IReportService_ProjectFeedbackReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BillingReportByCurrency">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/BillingReportByCurrency" message="tns:IReportService_BillingReportByCurrency_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/BillingReportByCurrencyResponse" message="tns:IReportService_BillingReportByCurrency_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BillingReportByHours">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/BillingReportByHours" message="tns:IReportService_BillingReportByHours_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/BillingReportByHoursResponse" message="tns:IReportService_BillingReportByHours_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NonBillableReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/NonBillableReport" message="tns:IReportService_NonBillableReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/NonBillableReportResponse" message="tns:IReportService_NonBillableReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BadgedResourcesByTimeReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/BadgedResourcesByTimeReport" message="tns:IReportService_BadgedResourcesByTimeReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/BadgedResourcesByTimeReportResponse" message="tns:IReportService_BadgedResourcesByTimeReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListBadgeResourcesByType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ListBadgeResourcesByType" message="tns:IReportService_ListBadgeResourcesByType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ListBadgeResourcesByTypeResponse" message="tns:IReportService_ListBadgeResourcesByType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResourcesByPracticeReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ResourcesByPracticeReport" message="tns:IReportService_ResourcesByPracticeReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ResourcesByPracticeReportResponse" message="tns:IReportService_ResourcesByPracticeReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResourcesByTitleReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ResourcesByTitleReport" message="tns:IReportService_ResourcesByTitleReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ResourcesByTitleReportResponse" message="tns:IReportService_ResourcesByTitleReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeRequestNotApprovedList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetBadgeRequestNotApprovedList" message="tns:IReportService_GetBadgeRequestNotApprovedList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetBadgeRequestNotApprovedListResponse" message="tns:IReportService_GetBadgeRequestNotApprovedList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllBadgeDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetAllBadgeDetails" message="tns:IReportService_GetAllBadgeDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetAllBadgeDetailsResponse" message="tns:IReportService_GetAllBadgeDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UtilizationReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/UtilizationReport" message="tns:IReportService_UtilizationReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/UtilizationReportResponse" message="tns:IReportService_UtilizationReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ManagedServiceReportByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ManagedServiceReportByPerson" message="tns:IReportService_ManagedServiceReportByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ManagedServiceReportByPersonResponse" message="tns:IReportService_ManagedServiceReportByPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveManagedParametersByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/SaveManagedParametersByPerson" message="tns:IReportService_SaveManagedParametersByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/SaveManagedParametersByPersonResponse" message="tns:IReportService_SaveManagedParametersByPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetManagedParametersByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetManagedParametersByPerson" message="tns:IReportService_GetManagedParametersByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetManagedParametersByPersonResponse" message="tns:IReportService_GetManagedParametersByPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAveragePercentagesByTitles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetAveragePercentagesByTitles" message="tns:IReportService_GetAveragePercentagesByTitles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetAveragePercentagesByTitlesResponse" message="tns:IReportService_GetAveragePercentagesByTitles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectsListWithFilters">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectsListWithFilters" message="tns:IReportService_ProjectsListWithFilters_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectsListWithFiltersResponse" message="tns:IReportService_ProjectsListWithFilters_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonTimeEntriesDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetailsResponse" message="tns:IReportService_PersonTimeEntriesDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PersonTimeEntriesSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesSummary" message="tns:IReportService_PersonTimeEntriesSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesSummaryResponse" message="tns:IReportService_PersonTimeEntriesSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonTimeEntriesTotalsByPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriod" message="tns:IReportService_GetPersonTimeEntriesTotalsByPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriodResponse" message="tns:IReportService_GetPersonTimeEntriesTotalsByPeriod_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource" message="tns:IReportService_TimePeriodSummaryReportByResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByResourceResponse" message="tns:IReportService_TimePeriodSummaryReportByResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByProject" message="tns:IReportService_TimePeriodSummaryReportByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByProjectResponse" message="tns:IReportService_TimePeriodSummaryReportByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByWorkType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkType" message="tns:IReportService_TimePeriodSummaryReportByWorkType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkTypeResponse" message="tns:IReportService_TimePeriodSummaryReportByWorkType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResource" message="tns:IReportService_ProjectSummaryReportByResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByResourceResponse" message="tns:IReportService_ProjectSummaryReportByResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectDetailReportByResource">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectDetailReportByResource" message="tns:IReportService_ProjectDetailReportByResource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectDetailReportByResourceResponse" message="tns:IReportService_ProjectDetailReportByResource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByWorkType">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType" message="tns:IReportService_ProjectSummaryReportByWorkType_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSummaryReportByWorkTypeResponse" message="tns:IReportService_ProjectSummaryReportByWorkType_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsByClientId">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetProjectsByClientId" message="tns:IReportService_GetProjectsByClientId_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetProjectsByClientIdResponse" message="tns:IReportService_GetProjectsByClientId_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSearchByName">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectSearchByName" message="tns:IReportService_ProjectSearchByName_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectSearchByNameResponse" message="tns:IReportService_ProjectSearchByName_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonesForProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetMilestonesForProject" message="tns:IReportService_GetMilestonesForProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetMilestonesForProjectResponse" message="tns:IReportService_GetMilestonesForProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryByResourcePayCheck">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheck" message="tns:IReportService_TimePeriodSummaryByResourcePayCheck_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheckResponse" message="tns:IReportService_TimePeriodSummaryByResourcePayCheck_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimeEntryAuditReportByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimeEntryAuditReportByPerson" message="tns:IReportService_TimeEntryAuditReportByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimeEntryAuditReportByPersonResponse" message="tns:IReportService_TimeEntryAuditReportByPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TimeEntryAuditReportByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TimeEntryAuditReportByProject" message="tns:IReportService_TimeEntryAuditReportByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TimeEntryAuditReportByProjectResponse" message="tns:IReportService_TimeEntryAuditReportByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByBusinessUnit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnit" message="tns:IReportService_AccountSummaryReportByBusinessUnit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnitResponse" message="tns:IReportService_AccountSummaryReportByBusinessUnit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByProject" message="tns:IReportService_AccountSummaryReportByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountSummaryReportByProjectResponse" message="tns:IReportService_AccountSummaryReportByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByBusinessUnit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnit" message="tns:IReportService_AccountReportGroupByBusinessUnit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnitResponse" message="tns:IReportService_AccountReportGroupByBusinessUnit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByPerson">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByPerson" message="tns:IReportService_AccountReportGroupByPerson_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AccountReportGroupByPersonResponse" message="tns:IReportService_AccountReportGroupByPerson_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="NewHireReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/NewHireReport" message="tns:IReportService_NewHireReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/NewHireReportResponse" message="tns:IReportService_NewHireReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TerminationReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TerminationReport" message="tns:IReportService_TerminationReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TerminationReportResponse" message="tns:IReportService_TerminationReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TerminationReportGraph">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/TerminationReportGraph" message="tns:IReportService_TerminationReportGraph_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/TerminationReportGraphResponse" message="tns:IReportService_TerminationReportGraph_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandSummary" message="tns:IReportService_ConsultingDemandSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandSummaryResponse" message="tns:IReportService_ConsultingDemandSummary_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByTitleSkill">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill" message="tns:IReportService_ConsultingDemandDetailsByTitleSkill_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkillResponse" message="tns:IReportService_ConsultingDemandDetailsByTitleSkill_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsBySalesStage">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsBySalesStage" message="tns:IReportService_ConsultingDemandDetailsBySalesStage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsBySalesStageResponse" message="tns:IReportService_ConsultingDemandDetailsBySalesStage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByMonth">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonth" message="tns:IReportService_ConsultingDemandDetailsByMonth_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonthResponse" message="tns:IReportService_ConsultingDemandDetailsByMonth_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsByTitle">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitle" message="tns:IReportService_ConsultingDemandGraphsByTitle_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitleResponse" message="tns:IReportService_ConsultingDemandGraphsByTitle_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsBySkills">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkills" message="tns:IReportService_ConsultingDemandGraphsBySkills_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkillsResponse" message="tns:IReportService_ConsultingDemandGraphsBySkills_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportByTitle">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitle" message="tns:IReportService_ConsultingDemandTransactionReportByTitle_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitleResponse" message="tns:IReportService_ConsultingDemandTransactionReportByTitle_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportBySkill">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkill" message="tns:IReportService_ConsultingDemandTransactionReportBySkill_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkillResponse" message="tns:IReportService_ConsultingDemandTransactionReportBySkill_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsByTitle">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitle" message="tns:IReportService_ConsultingDemandGrphsGroupsByTitle_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitleResponse" message="tns:IReportService_ConsultingDemandGrphsGroupsByTitle_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsBySkill">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkill" message="tns:IReportService_ConsultingDemandGrphsGroupsBySkill_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkillResponse" message="tns:IReportService_ConsultingDemandGrphsGroupsBySkill_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AttainmentBillableutlizationReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReport" message="tns:IReportService_AttainmentBillableutlizationReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/AttainmentBillableutlizationReportResponse" message="tns:IReportService_AttainmentBillableutlizationReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAttainmentProjectListMultiParameters">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParameters" message="tns:IReportService_GetAttainmentProjectListMultiParameters_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParametersResponse" message="tns:IReportService_GetAttainmentProjectListMultiParameters_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ProjectAttributionReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectAttributionReport" message="tns:IReportService_ProjectAttributionReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectAttributionReportResponse" message="tns:IReportService_ProjectAttributionReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ZeroHourlyRateExceptionReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ZeroHourlyRateExceptionReport" message="tns:IReportService_ZeroHourlyRateExceptionReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ZeroHourlyRateExceptionReportResponse" message="tns:IReportService_ZeroHourlyRateExceptionReport_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IReportService" type="tns:IReportService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ResourceAssignedOrUnassignedChargingExceptionReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ResourceAssignedOrUnassignedChargingExceptionReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecruitingMetricsReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/RecruitingMetricsReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectFeedbackReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectFeedbackReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BillingReportByCurrency">
+      <soap:operation soapAction="http://tempuri.org/IReportService/BillingReportByCurrency" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BillingReportByHours">
+      <soap:operation soapAction="http://tempuri.org/IReportService/BillingReportByHours" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NonBillableReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/NonBillableReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BadgedResourcesByTimeReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/BadgedResourcesByTimeReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListBadgeResourcesByType">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ListBadgeResourcesByType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResourcesByPracticeReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ResourcesByPracticeReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResourcesByTitleReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ResourcesByTitleReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBadgeRequestNotApprovedList">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetBadgeRequestNotApprovedList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllBadgeDetails">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetAllBadgeDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UtilizationReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/UtilizationReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ManagedServiceReportByPerson">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ManagedServiceReportByPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveManagedParametersByPerson">
+      <soap:operation soapAction="http://tempuri.org/IReportService/SaveManagedParametersByPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetManagedParametersByPerson">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetManagedParametersByPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAveragePercentagesByTitles">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetAveragePercentagesByTitles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectsListWithFilters">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectsListWithFilters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PersonTimeEntriesDetails">
+      <soap:operation soapAction="http://tempuri.org/IReportService/PersonTimeEntriesDetails" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PersonTimeEntriesSummary">
+      <soap:operation soapAction="http://tempuri.org/IReportService/PersonTimeEntriesSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPersonTimeEntriesTotalsByPeriod">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetPersonTimeEntriesTotalsByPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByResource">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryReportByWorkType">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryReportByWorkType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByResource">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSummaryReportByResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectDetailReportByResource">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectDetailReportByResource" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSummaryReportByWorkType">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSummaryReportByWorkType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsByClientId">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetProjectsByClientId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectSearchByName">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectSearchByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMilestonesForProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetMilestonesForProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimePeriodSummaryByResourcePayCheck">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimePeriodSummaryByResourcePayCheck" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimeEntryAuditReportByPerson">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimeEntryAuditReportByPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimeEntryAuditReportByProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TimeEntryAuditReportByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByBusinessUnit">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountSummaryReportByBusinessUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountSummaryReportByProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountSummaryReportByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByBusinessUnit">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountReportGroupByBusinessUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountReportGroupByPerson">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AccountReportGroupByPerson" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewHireReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/NewHireReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TerminationReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TerminationReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TerminationReportGraph">
+      <soap:operation soapAction="http://tempuri.org/IReportService/TerminationReportGraph" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandSummary">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByTitleSkill">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByTitleSkill" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsBySalesStage">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandDetailsBySalesStage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandDetailsByMonth">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandDetailsByMonth" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsByTitle">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGraphsByTitle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGraphsBySkills">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGraphsBySkills" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportByTitle">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandTransactionReportByTitle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandTransactionReportBySkill">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandTransactionReportBySkill" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsByTitle">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsByTitle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultingDemandGrphsGroupsBySkill">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ConsultingDemandGrphsGroupsBySkill" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AttainmentBillableutlizationReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/AttainmentBillableutlizationReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAttainmentProjectListMultiParameters">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetAttainmentProjectListMultiParameters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProjectAttributionReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ProjectAttributionReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ZeroHourlyRateExceptionReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ZeroHourlyRateExceptionReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ReportService">
+    <wsdl:port name="BasicHttpBinding_IReportService" binding="tns:BasicHttpBinding_IReportService">
+      <soap:address location="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
