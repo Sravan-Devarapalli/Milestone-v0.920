@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="53a3951b-4a15-4551-ad26-9513eb5f8cd3" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/VendorService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="VendorService.xsd" MetadataType="Schema" ID="600fcc33-22c0-4e50-95d8-71a92f5e58cd" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd3" />
+    <MetadataFile FileName="VendorService1.xsd" MetadataType="Schema" ID="bebd2a64-a9fc-4f49-abe0-e19af0f4d86d" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd2" />
+    <MetadataFile FileName="VendorService2.xsd" MetadataType="Schema" ID="14530100-91e4-4942-a68b-991fa3133b0f" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd1" />
+    <MetadataFile FileName="VendorService3.xsd" MetadataType="Schema" ID="dd3ffca4-7481-4d41-812e-a4f69affa978" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd0" />
+    <MetadataFile FileName="VendorService4.xsd" MetadataType="Schema" ID="33a9471f-5395-44cb-8773-e1f422e5f306" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd7" />
+    <MetadataFile FileName="VendorService5.xsd" MetadataType="Schema" ID="5f298ad3-7ee1-4758-ad7a-1b22bd29b8f1" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd6" />
+    <MetadataFile FileName="VendorService6.xsd" MetadataType="Schema" ID="d6dc5d8a-b49d-4f0f-a37c-119a3de64ba1" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd5" />
+    <MetadataFile FileName="VendorService7.xsd" MetadataType="Schema" ID="d3edfadc-f742-4e54-b73b-d37f5118295d" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?xsd=xsd4" />
+    <MetadataFile FileName="VendorService.disco" MetadataType="Disco" ID="d688e580-99f7-42af-9d14-7f25eeb153ca" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?disco" />
+    <MetadataFile FileName="VendorService.wsdl" MetadataType="Wsdl" ID="f2b7a065-e14a-4a46-82a1-9bf4636d11cc" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/VendorService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
