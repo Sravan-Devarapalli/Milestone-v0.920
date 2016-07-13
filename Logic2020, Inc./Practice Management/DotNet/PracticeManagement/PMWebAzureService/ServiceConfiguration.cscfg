@@ -36,6 +36,7 @@
       <Setting name="senioritySeparationRangeValue" value="19" />
       <Setting name="ShowWithoutDirector" value="true" />
       <Setting name="PopupTimebeforeFormsAuthTimeOutSec" value="60" />
+      <Setting name="VendorServiceClient" value="http://65.52.29.57:8080/VendorService.svc" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Practice.logic2020.com" thumbprint="8471715DB294859F5560995B6CA024B41547A1F2" thumbprintAlgorithm="sha1" />
