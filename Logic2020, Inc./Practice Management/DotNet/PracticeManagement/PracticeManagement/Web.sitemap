@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="" roles="*">
+    <siteMapNode url="~/Temp.aspx?from=toolbar"   title="Projects" description="Company Performance page" >
+      <siteMapNode url="~/ProjectDetail.aspx?from=sub_toolbar"  VirtualPath="~/ProjectDetail.aspx" QuickLinkTitle="Add Project" title="Add Project" roles="System Administrator, Salesperson, Practice Area Manager, Business Unit Manager, Client Director, Senior Leadership" description="Add Project" ShowURL="true"  />
+      <siteMapNode url="~/ProjectSearch.aspx" VirtualPath="~/ProjectSearch.aspx" QuickLinkTitle="Project Search" title="Search" description="Project Search" ShowURL="true" />
+      <siteMapNode url="~/Projects.aspx"  VirtualPath="~/Projects.aspx" QuickLinkTitle="Project Summary"  title="Summary" description="Project Summary" ShowURL="true" />
+      <siteMapNode url="~/GroupBy.aspx"  VirtualPath="~/GroupBy.aspx" QuickLinkTitle="Group By..."  title="Group By..."  description="Group By..." ShowURL="true"/>
+      <siteMapNode url="~/RevenueGoals.aspx"  VirtualPath="~/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals View"  title="Revenue Goals" description="Revenue Goals" ShowURL="true" />
+      <siteMapNode url="~/ProjectCalendar.aspx" VirtualPath="~/ProjectCalendar.aspx" QuickLinkTitle="Project Calendar"  title="Project Calendar" description="Project Calendar" ShowURL="true" />
+    </siteMapNode>
+    <siteMapNode url="~/DiscussionReview2.aspx?from=toolbar" title="Opportunities" description="Opportunity List page" >
+      <siteMapNode url="~/OpportunityDetail.aspx?from=sub_toolbar"  VirtualPath="~/OpportunityDetail.aspx" QuickLinkTitle="Add Opportunity" title="Add Opportunity" description="Add Opportunity" ShowURL="true" />
+      <siteMapNode url="~/OpportunitySearch.aspx" title="Search" VirtualPath="~/OpportunitySearch.aspx" QuickLinkTitle="Opportunity Search"  description="Opportunity Search" ShowURL="true" />
+      <siteMapNode url="~/DiscussionReview2.aspx" VirtualPath="~/DiscussionReview2.aspx" QuickLinkTitle="Opportunity Summary" title="Summary" description="Opportunity Summary" ShowURL="true" />
+    </siteMapNode>
+    <siteMapNode url="Temp.aspx?from=Reports" title="Reports" description="Reports">
+      <siteMapNode url="Temp.aspx?from=Reports_Financial" title="Financial">
+        <siteMapNode url="~/Reports/BenchCosts.aspx" VirtualPath="~/Reports/BenchCosts.aspx" QuickLinkTitle="Bench Costs"  title="Bench Costs" roles="System Administrator" description="Bench Costs" ShowURL="true" />
+        <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="System Administrator" />
+        <siteMapNode url="~/Reports/AttainmentReport.aspx" title="Attainment"  VirtualPath="~/Reports/AttainmentReport.aspx" QuickLinkTitle="Attainment"  description="Attainment"/>
+        <siteMapNode url="~/Reports/BillingReport.aspx" title="Billing"  VirtualPath="~/Reports/BillingReport.aspx" QuickLinkTitle="Billing Report"  description="Billing Report" ShowURL="true"/>
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
+        <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consulting Utilization"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consulting Utilization"  description="Consulting Utilization" ShowURL="true" />
+        <siteMapNode url="~/Reports/ConsultingCapacity.aspx" title="Consulting Capacity"  VirtualPath="~/Reports/ConsultingCapacity.aspx" QuickLinkTitle="Consulting Capacity"  description="Consulting Capacity" ShowURL="true" />
+        <siteMapNode url="~/Reports/ConsultingDemand_new.aspx" title="Consulting Demand"  VirtualPath="~/Reports/ConsultingDemand_new.aspx" QuickLinkTitle="Consulting Demand"  description="Consulting Demand" ShowURL="true" />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Time Entry" title="Time">
+        <siteMapNode url="~/Reports/TimeEntryReport_new.aspx" title="Reports"  VirtualPath="~/Reports/TimeEntryReport_new.aspx" QuickLinkTitle="Reports"  description="Reports" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Audit.aspx" title="Audit"  VirtualPath="~/Reports/Audit.aspx" QuickLinkTitle="Audit"  description="Audit" ShowURL="true"/>
+      </siteMapNode>
+      <siteMapNode url="~/Reports/AccountSummaryReport.aspx" title="Account"  VirtualPath="~/Reports/AccountSummaryReport.aspx" QuickLinkTitle="Account"  description="Account" ShowURL="true"/>
+      <siteMapNode url="~/Reports/HumanCapital.aspx" title="Human Capital"  VirtualPath="~/Reports/HumanCapital.aspx" QuickLinkTitle="Human Capital"  description="Human Capital" ShowURL="true"/>
+      <siteMapNode url="~/Reports/CSATReport.aspx" title="CSAT"  VirtualPath="~/Reports/CSATReport.aspx" QuickLinkTitle="CSAT"  description="CSAT Report" ShowURL="true"/>
+      <siteMapNode url="Temp.aspx?from=Performance Management" title="Performance Management">
+        <siteMapNode url="~/Reports/ProjectFeedbackReport.aspx" title="Project Feedback"  VirtualPath="~/Reports/ProjectFeedbackReport.aspx" QuickLinkTitle="Project Feedback"  description="Project Feedback" ShowURL="true"/>
+      </siteMapNode>
+      <siteMapNode url="~/Reports/Badge/MSReportsLandingPage.aspx" title="18-Month Management Reports"  VirtualPath="~/Reports/Badge/MSReportsLandingPage.aspx" QuickLinkTitle="18-Month Management Reports"  description="18-Month Management Reports" ShowURL="true"/>
+      <!--<siteMapNode url="Temp.aspx?from=MS Badge Reports" title="MS Badge Reports">
+        <siteMapNode url="~/Reports/Badge/BadgeResourceByTime.aspx" title="Badged Resources by Time"  VirtualPath="~/Reports/Badge/BadgeResourceByTime.aspx" QuickLinkTitle="Badged Resources by Time"  description="Badged Resources by Time" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/ResourceByPracticeReport.aspx" title="Available Resources by Practice"  VirtualPath="~/Reports/Badge/ResourceByPracticeReport.aspx" QuickLinkTitle="Available Resources by Practice"  description="Available Resources by Practice" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/ResourceByBusinessConsultants.aspx" title="Available Resources by Business Level"  VirtualPath="~/Reports/Badge/ResourceByBusinessConsultants.aspx" QuickLinkTitle="Available Resources by Business Level"  description="Available Resources by Business Level" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/ResourcesByTechnicalConsultants.aspx" title="Available Resources by Technical Level"  VirtualPath="~/Reports/Badge/ResourcesByTechnicalConsultants.aspx" QuickLinkTitle="Available Resources by Technical Level"  description="Available Resources by Technical Level" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/BadgedNotOnProjectReport.aspx" title="18mos Clock Active Resources Not on Project"  VirtualPath="~/Reports/Badge/BadgedNotOnProjectReport.aspx" QuickLinkTitle="18mos Clock Active Resources Not on Project"  description="18mos Clock Active Resources Not on Project" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/BadgedNotOnPersonBasedExceptionReport.aspx" title="18mos Clock Active Resources Not on Project: Person-Based Exceptions"  VirtualPath="~/Reports/Badge/BadgedNotOnPersonBasedExceptionReport.aspx" QuickLinkTitle="18mos Clock Active Resources Not on Project: Person-Based Exceptions"  description="18mos Clock Active Resources Not on Project: Person-Based Exceptions" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/BadgedOnProjectReport.aspx" title="Badged Resources on Project"  VirtualPath="~/Reports/Badge/BadgedOnProjectReport.aspx" QuickLinkTitle="Badged Resources on Project"  description="Badged Resources on Project" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/BadgedOnProjectBasedExceptionReport.aspx" title="Badged Resources on Project: Project-Based Exceptions"  VirtualPath="~/Reports/Badge/BadgedOnProjectBasedExceptionReport.aspx" QuickLinkTitle="Badged Resources on Project: Project-Based Exceptions"  description="Badged Resources on Project: Project-Based Exceptions" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/ClockNotStartedReport.aspx" title="Resources with 18-Month Clock Not Started"  VirtualPath="~/Reports/Badge/ClockNotStartedReport.aspx" QuickLinkTitle="Resources with 18-Month Clock Not Started"  description="Resources with 18-Month Clock Not Started" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/BadgeBlockedReport.aspx" title="Blocked Resources"  VirtualPath="~/Reports/Badge/BadgeBlockedReport.aspx" QuickLinkTitle="Blocked Resources"  description="Blocked Resources" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/BadgeBreakReport.aspx" title="Resources on 6-Month Break"  VirtualPath="~/Reports/Badge/BadgeBreakReport.aspx" QuickLinkTitle="Resources on 6-Month Break"  description="Resources on 6-Month Break" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/BadgeRequestNotApprovedReport.aspx" title="Badge Requests Not Yet Approved"  VirtualPath="~/Reports/Badge/BadgeRequestNotApprovedReport.aspx" QuickLinkTitle="Badge Requests Not Yet Approved"  description="Badge Requests Not Yet Approved" ShowURL="true"/>
+        <siteMapNode url="~/Reports/Badge/AllEmployees18MoClockReport.aspx" title="All Employees' 18-Month Clock Dates"  VirtualPath="~/Reports/Badge/AllEmployees18MoClockReport.aspx" QuickLinkTitle="All Employees' 18-Month Clock Dates"  description="All Employees' 18-Month Clock Dates" ShowURL="true"/>
+      </siteMapNode>-->
+      <siteMapNode url="Temp.aspx?from=Projects" title="Projects">
+        <siteMapNode url="~/Reports/ProjectsList.aspx" title="Projects List"  VirtualPath="~/Reports/ProjectsList.aspx" QuickLinkTitle="Projects List"  description="Projects List" ShowURL="true"/>
+      </siteMapNode>
+    </siteMapNode>
+    <siteMapNode url="~/TimeEntry_new.aspx?from=sub_toolbar" title="Time" description="Time Entry records">
+      <siteMapNode url="~/TimeEntry_new.aspx" VirtualPath="~/TimeEntry_new.aspx" QuickLinkTitle="Time Entry"  title="Time Entry" description="Time Entry" ShowURL="true" />
+      <siteMapNode url="~/Reports/UtilizationReport.aspx" title="Utilization"  VirtualPath="~/Reports/UtilizationReport.aspx" QuickLinkTitle="Utilization"  description="Utilization" ShowURL="true"/>
+      <siteMapNode url="~/Calendar.aspx"  VirtualPath="~/Calendar.aspx" QuickLinkTitle="Calendar"  title="Calendar" description="Calendar" ShowURL="true"  />
+    </siteMapNode>
+    <siteMapNode url="~/MarginTest.aspx" VirtualPath="~/MarginTest.aspx" QuickLinkTitle="Margin Test"  title="Margin Test" description="Margin Test" ShowURL="true"  />
+    <siteMapNode title="Skills"  url="Temp.aspx?from=Skills">
+      <siteMapNode url="~/SkillsEntry.aspx" VirtualPath="~/SkillsEntry.aspx" QuickLinkTitle="Skills Entry" title="Skills Entry" description="Skills Entry" ShowURL="true"/>
+      <siteMapNode url="~/SkillsSearch.aspx" VirtualPath="~/SkillsSearch.aspx" QuickLinkTitle="Skills Search" title="Skills Search" description="Skills Search" ShowURL="true"/>
+      <siteMapNode url="~/SkillsProfile.aspx" VirtualPath="~/SkillsProfile.aspx" QuickLinkTitle="Skills Profile" title="Skills Profile" description="Skills Profile" ShowURL="true"/>
+    </siteMapNode>
+    <siteMapNode url="Temp.aspx?from=Configuration" title="Configuration" description="System configuration"  >
+      <siteMapNode url="Temp.aspx?from=Company_Resources" title="Company Resources" description="Company Resources">
+        <siteMapNode url="~/Config/Branding.aspx" title="Branding/Logo"  VirtualPath="~/Config/Branding.aspx" QuickLinkTitle="Branding/Logo"  description="Branding/Logo"  />
+        <siteMapNode url="~/Config/Clients.aspx" title="Accounts"  VirtualPath="~/Config/Clients.aspx" QuickLinkTitle="Accounts" description="Account List"  />
+        <siteMapNode url="~/Config/Vendors.aspx" title="Vendors"  VirtualPath="~/Config/Vendors.aspx" QuickLinkTitle="Vendors" description="Vendor List"  />
+        <siteMapNode url="~/Config/DefaultLineManager.aspx" title="Default Career Manager"  VirtualPath="~/Config/DefaultLineManager.aspx" QuickLinkTitle="Default Career Manager" description="Default Career Manager"  />
+        <siteMapNode url="~/Config/OpportunityPriorities.aspx" title="Opportunity Sales Stages"  VirtualPath="~/Config/OpportunityPriorities.aspx" QuickLinkTitle="Opportunity Sales Stages" description="Opportunity Sales Stages"  />
+        <siteMapNode url="~/Config/Persons.aspx" title="Persons"  VirtualPath="~/Config/Persons.aspx" QuickLinkTitle="Persons" description="Person List"  />
+        <siteMapNode url="~/Config/Strawmen.aspx" title="Strawmen"  VirtualPath="~/Config/Strawmen.aspx" QuickLinkTitle="Strawmen" description="Strawmen List"  />
+        <siteMapNode url="~/Config/PracticeAreas.aspx" title="Practice Areas"  VirtualPath="~/Config/PracticeAreas.aspx" QuickLinkTitle="Practice Areas" description="Practice Areas"  />
+        <siteMapNode url="~/Config/Divisions.aspx" title="Divisions"  VirtualPath="~/Config/divisions.aspx" QuickLinkTitle="divisions" description="divisions"  />
+        <siteMapNode url="~/Config/PracticeCapabilities.aspx" title="Capabilities"  VirtualPath="~/Config/PracticeCapabilities.aspx" QuickLinkTitle="Capabilities" description="Capabilities"  />
+        <siteMapNode url="~/RecruitingMetrics.aspx" title="Recruting Metrics"  VirtualPath="~/RecruitingMetrics.aspx" QuickLinkTitle="Recruting Metrics" description="Recruting Metrics"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Email" title="E-Mail" description="E-Mail Templates page"  >
+        <siteMapNode url="~/Config/SMTPSetup.aspx" title="SMTP Setup"  VirtualPath="~/Config/SMTPSetup.aspx" QuickLinkTitle="SMTP Setup" description="SMTP Setup Settings"  />
+        <siteMapNode url="~/EmailTemplates.aspx" title="E-Mail Templates"  VirtualPath="~/EmailTemplates.aspx" QuickLinkTitle="E-Mail Templates" description="E-Mail Templates"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Financials" title="Financials"   description="Financials" >
+        <siteMapNode url="~/Config/Overheads.aspx" title="Overheads"  VirtualPath="~/Config/Overheads.aspx" QuickLinkTitle="Overheads"  description="Overhead List"  />
+        <siteMapNode url="~/Config/RevenueGoals.aspx" title="Revenue Goals"  VirtualPath="~/Config/RevenueGoals.aspx" QuickLinkTitle="Revenue Goals"  description="Revenue Goals"  />
+        <siteMapNode url="~/Config/MarginGoals.aspx" title="Contribution Margin Goals"  VirtualPath="~/Config/MarginGoals.aspx" QuickLinkTitle="Contribution Margin Goals"  description="Contribution Margin Goals"  />
+        <siteMapNode url="~/Config/Titles.aspx" title="Salary Bands and PTO Accrual"  VirtualPath="~/Config/Titles.aspx" QuickLinkTitle="Salary Bands and PTO Accrual"  description="Salary Bands and PTO Accrual"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=ConfigurationReports" title="Reports" description="Reports" >
+        <siteMapNode url="~/Config/ConsultantUtilTimelineReport.aspx" VirtualPath="~/Config/ConsultantUtilTimelineReport.aspx" QuickLinkTitle="Consulting Utilization Report"  title="Consulting Utilization Report" description="Consulting Utilization Report"  />
+        <siteMapNode url="~/Config/ProjectsReport.aspx" VirtualPath="~/Config/ProjectsReport.aspx" QuickLinkTitle="Project Summary Report"  title="Project Summary Report" description="Project Summary Report"  />
+        <siteMapNode url="~/Config/PersonReport.aspx" VirtualPath="~/Config/PersonReport.aspx" QuickLinkTitle="Person Summary Report"  title="Person Summary Report" description="Person Summary Report"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Security"  title="Security" description="Security Setting" >
+        <siteMapNode url="~/Config/General.aspx"  VirtualPath="~/Config/General.aspx" QuickLinkTitle="General"  title="General" description="General"  />
+        <siteMapNode url="~/Config/SecurityRoles.aspx"  VirtualPath="~/Config/SecurityRoles.aspx" QuickLinkTitle="Security Roles"  title="Security Roles" description="Security Roles"  />
+        <siteMapNode url="~/Config/SeniorityLevels.aspx"  VirtualPath="~/Config/SeniorityLevels.aspx" QuickLinkTitle="Seniority Levels"  title="Seniority Levels" description="Seniority Levels"  />
+        <siteMapNode url="~/Lockout.aspx"  VirtualPath="~/Lockout.aspx" QuickLinkTitle="Lock down"  title="Lock down" description="Lock down"  />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Time_Tracking" title="Time" description="Time">
+        <siteMapNode url="~/Config/CompanyHolidays.aspx"  VirtualPath="~/Config/CompanyHolidays.aspx" QuickLinkTitle="Company Holidays"  title="Company Holidays" description="Company Holidays"  />
+        <siteMapNode url="~/Config/Notes.aspx"  VirtualPath="~/Config/Notes.aspx" QuickLinkTitle="Notes"  title="Notes" description="Notes"  />
+        <siteMapNode url="~/Config/TimeTypes.aspx"  VirtualPath="~/Config/TimeTypes.aspx" QuickLinkTitle="Work Types"  title="Work Types" description="WorkTypes"  />
+        <siteMapNode url="~/Config/TimeZones.aspx"  VirtualPath="~/Config/TimeZones.aspx" QuickLinkTitle="Time Zone"  title="Time Zone" description="TimeZone" />
+      </siteMapNode>
+      <siteMapNode url="Temp.aspx?from=Troubleshooting" title="Troubleshooting" description="Troubleshooting">
+        <siteMapNode url="~/ActivityLog.aspx"  VirtualPath="~/ActivityLog.aspx" QuickLinkTitle="Activity Log"  title="Activity Log" description="Activity Log"  />
+        <siteMapNode url="~/Config/BecomeUser.aspx"  VirtualPath="~/Config/BecomeUser.aspx" QuickLinkTitle="Become User"  title="Become User" description="Become User"  />
+        <siteMapNode url="~/Config/Help.aspx"  VirtualPath="~/Config/Help.aspx" QuickLinkTitle="Help"  title="Help" description="Help"  />
+        <siteMapNode url="~/Config/SiteMap.aspx"  VirtualPath="~/Config/SiteMap.aspx" QuickLinkTitle="Site Map"  title="Site Map" description="Site Map"  />
+        <siteMapNode url="~/Config/SupportLink.aspx"  VirtualPath="~/Config/SupportLink.aspx" QuickLinkTitle="Support Link"  title="Support Link" description="Support Link"  />
+      </siteMapNode>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>
+
