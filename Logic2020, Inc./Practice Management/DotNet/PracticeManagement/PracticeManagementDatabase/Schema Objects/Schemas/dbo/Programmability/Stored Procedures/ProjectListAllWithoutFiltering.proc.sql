@@ -20,6 +20,7 @@ AS
 		   p.RevenueName,
 		   p.ChannelId,
 		   p.ChannelName,
+		   p.SubChannel,
 		   p.StartDate,
 		   p.EndDate,
 		   p.ClientName,
