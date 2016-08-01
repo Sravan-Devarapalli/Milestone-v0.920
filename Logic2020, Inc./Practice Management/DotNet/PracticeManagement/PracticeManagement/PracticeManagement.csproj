@@ -1134,7 +1134,6 @@
     <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\PracticeService\PracticeService1.disco" />
-    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <None Include="Service References\ReportService\ReportService1.disco" />
     <None Include="Service References\VendorService\VendorService.disco" />
     <None Include="Service References\VendorService\configuration91.svcinfo" />
@@ -1143,6 +1142,7 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\ProjectService\ProjectService1.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
