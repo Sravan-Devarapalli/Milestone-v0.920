@@ -13,6 +13,7 @@
         <xs:element minOccurs="0" name="reportId" type="xs:int" />
         <xs:element minOccurs="0" name="data" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="previousUserId" type="xs:int" />
+        <xs:element minOccurs="0" name="sessionId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -27,6 +28,7 @@
         <xs:element minOccurs="0" name="currentUserId" type="xs:int" />
         <xs:element minOccurs="0" name="reportId" type="xs:int" />
         <xs:element minOccurs="0" name="previousUserId" type="xs:int" />
+        <xs:element minOccurs="0" name="sessionId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -42,6 +44,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="currentUserId" type="xs:int" />
         <xs:element minOccurs="0" name="previousUserId" type="xs:int" />
+        <xs:element minOccurs="0" name="sessionId" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
