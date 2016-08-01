@@ -525,7 +525,7 @@ namespace PraticeManagement.Controls.Projects
             // Client side validator is not applicable here.
             reqSearchText.IsValid = true;
 
-            SaveFilterSettings();
+           
             lblCustomDateRange.Text = string.Format("({0}&nbsp;-&nbsp;{1})",
                     diRange.FromDate.Value.ToString(Constants.Formatting.EntryDateFormat),
                     diRange.ToDate.Value.ToString(Constants.Formatting.EntryDateFormat)
@@ -1209,7 +1209,7 @@ namespace PraticeManagement.Controls.Projects
                     break;
                 }
             }
-
+            SaveFilterSettings();
             // Main GridView
             lvProjects.DataSource = ProjectList;
             lvProjects.DataBind();
@@ -2373,3 +2373,4 @@ namespace PraticeManagement.Controls.Projects
         }
     }
 }
+
