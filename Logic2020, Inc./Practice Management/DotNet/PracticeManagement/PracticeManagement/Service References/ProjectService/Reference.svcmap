@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="19757189-3805-45fd-b1f2-7d55fbe7e206" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/PracticeManagementService/ProjectService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ProjectService1.xsd" MetadataType="Schema" ID="bc7244a7-e7bc-422b-9083-a022041a0178" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd7" />
+    <MetadataFile FileName="ProjectService1.disco" MetadataType="Disco" ID="351d84b5-a3bd-471d-ba44-8f5f3b067eb4" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?disco" />
+    <MetadataFile FileName="ProjectService14.xsd" MetadataType="Schema" ID="38c0d2d5-9d29-4286-aac3-0bdb77f1e60b" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd4" />
+    <MetadataFile FileName="ProjectService15.xsd" MetadataType="Schema" ID="ceab0497-f677-487d-b11a-56dd929442a9" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd5" />
+    <MetadataFile FileName="ProjectService1.wsdl" MetadataType="Wsdl" ID="012825f6-f371-4fd2-884d-c9c6d4dac740" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?wsdl" />
+    <MetadataFile FileName="ProjectService16.xsd" MetadataType="Schema" ID="36848935-aaf6-4c3f-bf27-40e7aea8f78f" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd8" />
+    <MetadataFile FileName="ProjectService17.xsd" MetadataType="Schema" ID="b105a6d2-6643-4381-a044-7e95fde9e0be" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd9" />
+    <MetadataFile FileName="ProjectService18.xsd" MetadataType="Schema" ID="cbefdbf5-e572-4c22-95c6-048f2a80a75b" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd2" />
+    <MetadataFile FileName="ProjectService20.xsd" MetadataType="Schema" ID="c702f3de-f22b-4e5b-b9ba-8c19572abac8" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd3" />
+    <MetadataFile FileName="ProjectService22.xsd" MetadataType="Schema" ID="d37a75bf-a8b4-4e36-a81a-207b5c0e5f42" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd0" />
+    <MetadataFile FileName="ProjectService23.xsd" MetadataType="Schema" ID="d4bd998e-def6-4e70-b651-d8d344feb060" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd1" />
+    <MetadataFile FileName="ProjectService26.xsd" MetadataType="Schema" ID="d6307bb4-6b9f-4ab1-ada2-7c77e2ca11fa" SourceId="1" SourceUrl="http://ggku3sys280.ggktech.local/PracticemanagementService/ProjectService.svc?xsd=xsd6" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
