@@ -5456,7 +5456,7 @@ namespace DataAccess
             }
         }
 
-        public static void SaveReportFilterValues(int currentUserId, int reportId, string reportFilters, int previousUserId)
+        public static void SaveReportFilterValues(int currentUserId, int reportId, string reportFilters, int previousUserId, string sessionId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.SaveReportFilterValues, connection))
@@ -5468,6 +5468,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ReportId, reportId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ReportFilters, reportFilters);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SessionId, sessionId);
                 connection.Open();
                 try
                 {
@@ -5480,7 +5481,7 @@ namespace DataAccess
             }
         }
 
-        public static string GetReportFilterValues(int currentUserId, int reportId, int previousUserId)
+        public static string GetReportFilterValues(int currentUserId, int reportId, int previousUserId, string sessionId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetReportFilterValues, connection))
@@ -5492,6 +5493,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.CurrentUserId, currentUserId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ReportId, reportId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SessionId, sessionId);
                 connection.Open();
                 string result = null;
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -5515,7 +5517,7 @@ namespace DataAccess
             }
         }
 
-        public static void DeleteReportFilterValues(int currentUserId, int previousUserId)
+        public static void DeleteReportFilterValues(int currentUserId, int previousUserId, string sessionId)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Person.DeleteReportFilterValues, connection))
@@ -5526,6 +5528,7 @@ namespace DataAccess
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.CurrentUserId, currentUserId);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PreviousUserId, previousUserId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SessionId, sessionId);
                 connection.Open();
                 try
                 {
