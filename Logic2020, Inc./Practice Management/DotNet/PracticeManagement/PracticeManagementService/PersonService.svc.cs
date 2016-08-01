@@ -1283,19 +1283,19 @@ namespace PracticeManagementService
             return PersonDAL.CheckIfPersonIsOwnerForDivisionAndOrPractice(personId);
         }
 
-        public void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId)
+        public void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId, string sessionId)
         {
-            PersonDAL.SaveReportFilterValues(currentUserId, reportId, data, previousUserId);
+            PersonDAL.SaveReportFilterValues(currentUserId, reportId, data, previousUserId, sessionId);
         }
 
-        public string GetReportFilterValues(int currentUserId, int reportId, int previousUserId)
+        public string GetReportFilterValues(int currentUserId, int reportId, int previousUserId, string sessionId)
         {
-            return PersonDAL.GetReportFilterValues(currentUserId, reportId, previousUserId);
+            return PersonDAL.GetReportFilterValues(currentUserId, reportId, previousUserId, sessionId);
         }
 
-        public void DeleteReportFilterValues(int currentUserId, int previousUserId)
+        public void DeleteReportFilterValues(int currentUserId, int previousUserId, string sessionId)
         {
-            PersonDAL.DeleteReportFilterValues(currentUserId, previousUserId);
+            PersonDAL.DeleteReportFilterValues(currentUserId, previousUserId, sessionId);
         }
 
         #endregion IPersonService Members
