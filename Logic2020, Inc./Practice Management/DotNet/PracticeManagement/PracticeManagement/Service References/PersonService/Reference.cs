@@ -16,13 +16,13 @@ namespace PraticeManagement.PersonService {
     public interface IPersonService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/SaveReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/SaveReportFilterValuesResponse")]
-        void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId);
+        void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId, string sessionId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/GetReportFilterValuesResponse")]
-        string GetReportFilterValues(int currentUserId, int reportId, int previousUserId);
+        string GetReportFilterValues(int currentUserId, int reportId, int previousUserId, string sessionId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse")]
-        void DeleteReportFilterValues(int currentUserId, int previousUserId);
+        void DeleteReportFilterValues(int currentUserId, int previousUserId, string sessionId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithRole", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse")]
         DataTransferObjects.Person[] GetPersonListWithRole(string rolename);
@@ -397,6 +397,7 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
+        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -413,16 +414,16 @@ namespace PraticeManagement.PersonService {
                 base(binding, remoteAddress) {
         }
         
-        public void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId) {
-            base.Channel.SaveReportFilterValues(currentUserId, reportId, data, previousUserId);
+        public void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId, string sessionId) {
+            base.Channel.SaveReportFilterValues(currentUserId, reportId, data, previousUserId, sessionId);
         }
         
-        public string GetReportFilterValues(int currentUserId, int reportId, int previousUserId) {
-            return base.Channel.GetReportFilterValues(currentUserId, reportId, previousUserId);
+        public string GetReportFilterValues(int currentUserId, int reportId, int previousUserId, string sessionId) {
+            return base.Channel.GetReportFilterValues(currentUserId, reportId, previousUserId, sessionId);
         }
         
-        public void DeleteReportFilterValues(int currentUserId, int previousUserId) {
-            base.Channel.DeleteReportFilterValues(currentUserId, previousUserId);
+        public void DeleteReportFilterValues(int currentUserId, int previousUserId, string sessionId) {
+            base.Channel.DeleteReportFilterValues(currentUserId, previousUserId, sessionId);
         }
         
         public DataTransferObjects.Person[] GetPersonListWithRole(string rolename) {
