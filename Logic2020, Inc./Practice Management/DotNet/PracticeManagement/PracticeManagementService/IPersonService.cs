@@ -542,13 +542,13 @@ namespace PracticeManagementService
         List<Owner> CheckIfPersonIsOwnerForDivisionAndOrPractice(int personId);
 
         [OperationContract]
-        void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId);
+        void SaveReportFilterValues(int currentUserId, int reportId, string data, int previousUserId, string sessionId);
 
         [OperationContract]
-        string GetReportFilterValues(int currentUserId, int reportId, int previousUserId);
+        string GetReportFilterValues(int currentUserId, int reportId, int previousUserId, string sessionId);
 
         [OperationContract]
-        void DeleteReportFilterValues(int currentUserId, int previousUserId);
+        void DeleteReportFilterValues(int currentUserId, int previousUserId, string sessionId);
 
         //[OperationContract]
         //void SendCompensationChangeEmail(Person person, Pay oldPay, Pay newPay, bool isRehire);
