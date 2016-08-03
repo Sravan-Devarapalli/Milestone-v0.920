@@ -255,9 +255,9 @@
                             ValidationGroup="Vendor" Text="*" EnableClientScript="false" SetFocusOnError="true"
                             Display="Dynamic" OnServerValidate="custVendorName_ServerValidate"></asp:CustomValidator>
                         <asp:RegularExpressionValidator ControlToValidate="txtVendorName" ValidationGroup="Vendor"
-                            ID="valRegName" runat="server" ErrorMessage="Vendor Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
-                            ToolTip="Vendor Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
-                            EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-\ ]{2,35}$" />
+                            ID="valRegName" runat="server" ErrorMessage="Vendor Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, Numerics or a single space."
+                            ToolTip="Vendor Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, Numerics or a single space."
+                            EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-\d ]{2,35}$" />
                     </td>
                 </tr>
                 <tr>
@@ -276,9 +276,9 @@
                             ValidationGroup="Vendor" Text="*" EnableClientScript="false" SetFocusOnError="true"
                             Display="Dynamic" OnServerValidate="custContactName_ServerValidate"></asp:CustomValidator>
                         <asp:RegularExpressionValidator ControlToValidate="txtContactName" ValidationGroup="Vendor"
-                            ID="valRegxContactName" runat="server" ErrorMessage="Vendor Contact Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
-                            ToolTip="Vendor Contact Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, or a single space."
-                            EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-\ ]{2,35}$" />
+                            ID="valRegxContactName" runat="server" ErrorMessage="Vendor Contact Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, Numerics or a single space."
+                            ToolTip="Vendor Contact Name should be limited to 2-35 characters in length containing only letters and/or an apostrophe, hyphen, Numerics or a single space."
+                            EnableClientScript="false" Text="*" ValidationExpression="^[a-zA-Z'\-\d\ ]{2,35}$" />
                     </td>
                 </tr>
                 <tr>
@@ -320,9 +320,9 @@
                                 ValidationGroup="Vendor" Text="*" EnableClientScript="false" SetFocusOnError="true"
                                 Display="Dynamic"></asp:RequiredFieldValidator>&nbsp;
                             <asp:RegularExpressionValidator ID="reqTelphoneNumber" runat="server" ControlToValidate="txtTelephoneNumber"
-                                Display="Dynamic" ErrorMessage="The Telephone number is not valid. " ValidationGroup="Vendor"
-                                ToolTip="The Telephone number is not valid." Text="*" EnableClientScript="False"
-                                ValidationExpression="^[01]?[- .]?(\([2-9]\d{2}\)|[2-9]\d{2})[- .]?\d{3}[- .]?\d{4}$"></asp:RegularExpressionValidator>&nbsp;
+                                Display="Dynamic" ErrorMessage="Phone numbers must be either 10 digits (US) or 12 digits (International) in length.  Please enter only numbers. "
+                                ValidationGroup="Vendor" ToolTip="Phone numbers must be either 10 digits (US) or 12 digits (International) in length.  Please enter only numbers."
+                                Text="*" EnableClientScript="False" ValidationExpression="^([+]?\d{2,3})?[- .]?(?:[- .()]*\d){10}[^\d\n]*$"></asp:RegularExpressionValidator>&nbsp;
                         </td>
                     </tr>
                     <tr>
