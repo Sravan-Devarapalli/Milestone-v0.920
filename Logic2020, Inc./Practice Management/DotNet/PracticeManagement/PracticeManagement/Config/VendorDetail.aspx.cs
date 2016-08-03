@@ -11,6 +11,7 @@ using PraticeManagement.VendorService;
 using Resources;
 using PraticeManagement.Utils;
 using PraticeManagement.Configuration;
+using System.Text.RegularExpressions;
 
 
 namespace PraticeManagement.Config
@@ -231,6 +232,9 @@ namespace PraticeManagement.Config
             }
         }
 
+
+
+
         private void PopulateData(Vendor vendor)
         {
             vendor.Id = VendorId;
@@ -238,8 +242,32 @@ namespace PraticeManagement.Config
             vendor.ContactName = txtContactName.Text;
             vendor.Status = ddlStatus.SelectedValue == "1" ? true : false;
             vendor.Email = Email;
-            vendor.TelephoneNumber = txtTelephoneNumber.Text;
+            vendor.TelephoneNumber = FormatTelePhoneNumber();
             vendor.VendorType = new VendorType { Id = int.Parse(ddlVendorType.SelectedValue) };
+        }
+
+        private string FormatTelePhoneNumber()
+        {
+            string resultString = null;
+
+            Regex regexObj = new Regex(@"[^\d]");
+            resultString = regexObj.Replace(txtTelephoneNumber.Text, "");
+
+            //International Number format XX-XXX-XXXXXXX
+            if (resultString.Length >= 12)
+            {
+                resultString = resultString.Insert(resultString.Length - 7, "-");
+                resultString = resultString.Insert(resultString.Length - 11, "-");
+            }
+            //US Number format (XXX) XXX-XXXX
+            if (resultString.Length == 10)
+            {
+                resultString = resultString.Insert(resultString.Length - 4, "-");
+                resultString = resultString.Insert(resultString.Length - 8, ") ");
+                resultString = resultString.Insert(0, "(");
+            }
+            return resultString;
+
         }
 
         private void PopulateControls(Vendor vendor)
@@ -471,3 +499,4 @@ namespace PraticeManagement.Config
 
     }
 }
+
