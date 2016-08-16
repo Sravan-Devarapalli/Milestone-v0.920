@@ -198,7 +198,25 @@ namespace PraticeManagement.ProjectService {
         DataTransferObjects.Project[] GetBenchListWithoutBenchTotalAndAdminCosts(DataTransferObjects.ContextObjects.BenchReportContext context);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/ProjectSearchText", ReplyAction="http://tempuri.org/IProjectService/ProjectSearchTextResponse")]
-        DataTransferObjects.Project[] ProjectSearchText(string looked, int personId);
+        DataTransferObjects.Project[] ProjectSearchText(
+                    string looked, 
+                    int personId, 
+                    string clientIdsList, 
+                    bool showProjected, 
+                    bool showCompleted, 
+                    bool showActive, 
+                    bool showInternal, 
+                    bool showExperimental, 
+                    bool showProposed, 
+                    bool showInactive, 
+                    string salespersonIdsList, 
+                    string projectManagerIdsList, 
+                    string practiceIdsList, 
+                    string divisionIdsList, 
+                    string channelIdsList, 
+                    string revenueTypeIdsList, 
+                    string offeringIdsList, 
+                    string projectGroupIdsList);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProjectService/GetProjectDetailWithoutMilestones", ReplyAction="http://tempuri.org/IProjectService/GetProjectDetailWithoutMilestonesResponse")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataTransferObjects.ProjectsGroupedByClient))]
@@ -266,6 +284,7 @@ namespace PraticeManagement.ProjectService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class ProjectServiceClient : System.ServiceModel.ClientBase<PraticeManagement.ProjectService.IProjectService>, PraticeManagement.ProjectService.IProjectService {
+        
         
         public ProjectServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
@@ -502,8 +521,26 @@ namespace PraticeManagement.ProjectService {
             return base.Channel.GetBenchListWithoutBenchTotalAndAdminCosts(context);
         }
         
-        public DataTransferObjects.Project[] ProjectSearchText(string looked, int personId) {
-            return base.Channel.ProjectSearchText(looked, personId);
+        public DataTransferObjects.Project[] ProjectSearchText(
+                    string looked, 
+                    int personId, 
+                    string clientIdsList, 
+                    bool showProjected, 
+                    bool showCompleted, 
+                    bool showActive, 
+                    bool showInternal, 
+                    bool showExperimental, 
+                    bool showProposed, 
+                    bool showInactive, 
+                    string salespersonIdsList, 
+                    string projectManagerIdsList, 
+                    string practiceIdsList, 
+                    string divisionIdsList, 
+                    string channelIdsList, 
+                    string revenueTypeIdsList, 
+                    string offeringIdsList, 
+                    string projectGroupIdsList) {
+            return base.Channel.ProjectSearchText(looked, personId, clientIdsList, showProjected, showCompleted, showActive, showInternal, showExperimental, showProposed, showInactive, salespersonIdsList, projectManagerIdsList, practiceIdsList, divisionIdsList, channelIdsList, revenueTypeIdsList, offeringIdsList, projectGroupIdsList);
         }
         
         public DataTransferObjects.Project GetProjectDetailWithoutMilestones(int projectId, string userName) {
