@@ -800,6 +800,22 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="looked" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="clientIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="showProjected" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showCompleted" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="salespersonIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectManagerIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="divisionIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="channelIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="revenueTypeIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="offeringIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectGroupIdsList" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
