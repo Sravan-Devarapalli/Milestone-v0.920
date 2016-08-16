@@ -178,7 +178,25 @@ namespace PracticeManagementService
         /// <param name="personId"></param>
         /// <returns>A list of the <see cref="Project"/> objects.</returns>
         [OperationContract]
-        List<Project> ProjectSearchText(string looked, int personId);
+        List<Project> ProjectSearchText(
+            string looked,
+            int personId,
+            string clientIdsList,
+            bool showProjected,
+            bool showCompleted,
+            bool showActive,
+            bool showInternal,
+            bool showExperimental,
+            bool showProposed,
+            bool showInactive,
+            string salespersonIdsList,
+            string projectManagerIdsList,
+            string practiceIdsList,
+            string divisionIdsList,
+            string channelIdsList,
+            string revenueTypeIdsList,
+            string offeringIdsList,
+            string projectGroupIdsList);
 
         /// <summary>
         /// Reatrives a project with a specified ID.
