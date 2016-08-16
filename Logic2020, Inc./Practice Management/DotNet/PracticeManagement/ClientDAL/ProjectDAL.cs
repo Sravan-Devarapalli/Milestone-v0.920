@@ -759,7 +759,25 @@ namespace DataAccess
         /// <param name="looked">A text to be looked for.</param>
         /// <param name="personId"></param>
         /// <returns>A list of the <see cref="Project"/> objects.</returns>
-        public static List<Project> ProjectSearchText(string looked, int personId)
+        public static List<Project> ProjectSearchText(
+            string looked,
+            int personId,
+            string clientIdsList,
+            bool showProjected,
+            bool showCompleted,
+            bool showActive,
+            bool showInternal,
+            bool showExperimental,
+            bool showProposed,
+            bool showInactive,
+            string salespersonIdsList,
+            string projectManagerIdsList,
+            string practiceIdsList,
+            string divisionIdsList,
+            string channelIdsList,
+            string revenueTypeIdsList,
+            string offeringIdsList,
+            string projectGroupIdsList)
         {
             using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
             using (var command = new SqlCommand(Constants.ProcedureNames.Project.ProjectSearchText, connection))
@@ -770,6 +788,22 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.LookedParam,
                     !string.IsNullOrEmpty(looked) ? (object)looked : DBNull.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.PersonId, personId);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowProjectedParam, showProjected);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowCompletedParam, showCompleted);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, showActive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowInternalParam, showInternal);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, showExperimental);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowProposedParam, showProposed);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, showInactive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.SalespersonIdsParam, salespersonIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectOwnerIdsParam, projectManagerIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIdsParam, divisionIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ChannelIdsParam, channelIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.RevenueTypeIdsParam, revenueTypeIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.OfferingIdsParam, offeringIdsList);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectGroupIdsParam, projectGroupIdsList);
 
                 connection.Open();
                 using (var reader = command.ExecuteReader())
@@ -2118,7 +2152,7 @@ namespace DataAccess
                         if (outsourceIdIndex >= 0)
                         {
                             project.OutsourceId = reader.GetInt32(outsourceIdIndex);
-                           
+
                         }
 
                         if (divisionIdIndex >= 0)
