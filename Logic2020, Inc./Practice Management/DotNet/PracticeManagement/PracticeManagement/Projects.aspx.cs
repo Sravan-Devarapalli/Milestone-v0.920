@@ -31,7 +31,11 @@ namespace PraticeManagement
 
         public override string SearchText
         {
-            get { return projectSummary.SearchText; }
+            get
+            {
+                Session["Filters"] = projectSummary.GetFilterSettings();
+                return projectSummary.SearchText;
+            }
         }
 
         [WebMethod]
@@ -39,6 +43,14 @@ namespace PraticeManagement
         public static string RenderMonthMiniReport(string contextKey)
         {
             return ProjectSummary.RenderMonthMiniReport(contextKey);
+        }
+
+        public CompanyPerformanceFilterSettings Filters
+        {
+            get
+            {
+                return projectSummary.GetFilterSettings();
+            }
         }
     }
 }
