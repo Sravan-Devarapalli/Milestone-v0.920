@@ -690,7 +690,7 @@ namespace PraticeManagement.Controls.Projects
         /// Gets a current filter settings.
         /// </summary>
         /// <returns>The <see cref="CompanyPerformanceFilterSettings"/> with a current filter.</returns>
-        private CompanyPerformanceFilterSettings GetFilterSettings()
+        public CompanyPerformanceFilterSettings GetFilterSettings()
         {
             var filter =
                  new CompanyPerformanceFilterSettings
