@@ -446,11 +446,47 @@ namespace PracticeManagementService
         /// <param name="looked">A text to be looked for.</param>
         /// <param name="personId"></param>
         /// <returns>A list of the <see cref="Project"/> objects.</returns>
-        public List<Project> ProjectSearchText(string looked, int personId)
+        public List<Project> ProjectSearchText(
+            string looked,
+            int personId,
+            string clientIdsList,
+            bool showProjected,
+            bool showCompleted,
+            bool showActive,
+            bool showInternal,
+            bool showExperimental,
+            bool showProposed,
+            bool showInactive,
+            string salespersonIdsList,
+            string projectManagerIdsList,
+            string practiceIdsList,
+            string divisionIdsList,
+            string channelIdsList,
+            string revenueTypeIdsList,
+            string offeringIdsList,
+            string projectGroupIdsList)
         {
             try
             {
-                return ProjectDAL.ProjectSearchText(looked, personId);
+                return ProjectDAL.ProjectSearchText(
+                    looked,
+                    personId,
+                    clientIdsList,
+                    showProjected,
+                    showCompleted,
+                    showActive,
+                    showInternal,
+                    showExperimental,
+                    showProposed,
+                    showInactive,
+                    salespersonIdsList,
+                    projectManagerIdsList,
+                    practiceIdsList,
+                    divisionIdsList,
+                    channelIdsList,
+                    revenueTypeIdsList,
+                    offeringIdsList,
+                    projectGroupIdsList);
             }
             catch (Exception e)
             {
