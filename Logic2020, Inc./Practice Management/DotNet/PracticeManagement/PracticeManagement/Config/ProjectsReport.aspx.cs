@@ -15,7 +15,7 @@ namespace PraticeManagement.Config
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         protected override void Display()
@@ -31,7 +31,11 @@ namespace PraticeManagement.Config
 
         public override string SearchText
         {
-            get { return projectSummary.SearchText; }
+            get
+            {
+                Session["Filters"] = projectSummary.GetFilterSettings();
+                return projectSummary.SearchText;
+            }
         }
 
         [WebMethod]
@@ -42,3 +46,4 @@ namespace PraticeManagement.Config
         }
     }
 }
+
