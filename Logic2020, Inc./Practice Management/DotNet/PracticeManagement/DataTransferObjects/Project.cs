@@ -537,6 +537,14 @@ namespace DataTransferObjects
             set;
         }
 
+        public bool HasMilestones
+        {
+            get
+            {
+                return Milestones != null && Milestones.Any();
+            }
+        }
+
         #endregion Properties
 
         #region Formatting
