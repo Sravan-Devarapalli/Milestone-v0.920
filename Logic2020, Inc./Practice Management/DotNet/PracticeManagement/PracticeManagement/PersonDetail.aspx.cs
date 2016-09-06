@@ -135,7 +135,7 @@ namespace PraticeManagement
             set { ViewState["PreviousBasis"] = value; }
         }
 
-       
+
         public List<DataTransferObjects.Lockout> Lockouts
         {
             get;
@@ -2228,7 +2228,7 @@ namespace PraticeManagement
             else if (pay.Timescale == TimescaleType.Hourly)
             {
                 ddlBasis.SelectedIndex = 1;
-                txtVacationDays.Enabled = false;
+                txtVacationDays.Enabled = true;
             }
             else if (pay.Timescale == TimescaleType._1099Ctc)
             {
@@ -2478,7 +2478,7 @@ namespace PraticeManagement
             var rfvVacationDays = gvRow.FindControl("rfvVacationDays") as RequiredFieldValidator;
             var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
             var cvIsDivisionOrPracticeOwner = gvRow.FindControl("cvIsDivisionOrPracticeOwner") as CustomValidator;
-            if (ddlBasis.SelectedIndex != 0)
+            if (ddlBasis.SelectedIndex != 0 || ddlBasis.SelectedIndex != 1)
             {
                 compVacationDays.Enabled = false;
                 rfvVacationDays.Enabled = false;
@@ -2571,7 +2571,7 @@ namespace PraticeManagement
                     pay.Amount = result;
                 }
 
-                pay.VacationDays = !string.IsNullOrEmpty(txtVacationDays.Text) && ddlBasis.SelectedIndex == 0 ?
+                pay.VacationDays = !string.IsNullOrEmpty(txtVacationDays.Text) && (ddlBasis.SelectedIndex == 0 || ddlBasis.SelectedIndex == 1) ?
                    (int?)int.Parse(txtVacationDays.Text) : null;
                 pay.TitleId = int.Parse(ddlTitle.SelectedValue);
                 pay.SLTApproval = ddlBasis.SelectedIndex == 0 && bool.Parse(hdSLTApproval.Value);
@@ -2802,7 +2802,7 @@ namespace PraticeManagement
                 var txtVacationDays = gvRow.FindControl("txtVacationDays") as TextBox;
                 var ddlVendor = gvRow.FindControl("ddlVendor") as DropDownList;
                 var reqddlVendor = gvRow.FindControl("reqddlVendor") as RequiredFieldValidator;
-                txtVacationDays.Enabled = ddlBasis.SelectedIndex == 0;//0 : W2-salary
+                txtVacationDays.Enabled = (ddlBasis.SelectedIndex == 0 || ddlBasis.SelectedIndex == 1);//0 : W2-salary
                 txtVacationDays.Text = txtVacationDays.Enabled ? txtVacationDays.Text : 0.ToString();
                 ddlVendor.Visible = reqddlVendor.Enabled = ddlBasis.SelectedIndex == 2 || ddlBasis.SelectedIndex == 3;
             }
