@@ -575,6 +575,9 @@ namespace PraticeManagement
                     {
                         personnelCompensation.IsDivisionOrPracticeOwner = serviceClient.CheckIfPersonIsOwnerForDivisionAndOrPractice(SelectedId.Value) == null;
                     }
+                    else {
+                        personnelCompensation.IsDivisionOrPracticeOwner = true;
+                    }
 
                     if (!Page.IsValid)
                     {
