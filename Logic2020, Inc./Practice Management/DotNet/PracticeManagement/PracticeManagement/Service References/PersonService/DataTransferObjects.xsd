@@ -15,12 +15,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Timescale" nillable="true" type="tns:Timescale" />
-  <xs:complexType name="ArrayOfPerson">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="Alias" nillable="true" type="xs:string" />
@@ -372,6 +366,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PracticeManagerHistory" nillable="true" type="tns:PracticeManagerHistory" />
+  <xs:complexType name="ArrayOfPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Person" nillable="true" type="tns:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPerson" nillable="true" type="tns:ArrayOfPerson" />
   <xs:complexType name="Project">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccessLevel" nillable="true" type="tns:Seniority" />
