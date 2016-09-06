@@ -598,7 +598,8 @@ namespace PraticeManagement.Controls
                 {
                     result.vendor = new Vendor { Id = Int32.Parse(ddlVendor.SelectedValue) };
                 }
-                else {
+                else
+                {
                     result.vendor = null;
                 }
                 return result;
@@ -690,7 +691,7 @@ namespace PraticeManagement.Controls
                 custLockOutDivision.ValidationGroup =
                 rfvPractice.ValidationGroup =
                 reqddlVendor.ValidationGroup =
-                rfvDivision.ValidationGroup=
+                rfvDivision.ValidationGroup =
                 cvIsDivisionOrPracticeOwner.ValidationGroup = value;
             }
         }
@@ -932,13 +933,13 @@ namespace PraticeManagement.Controls
 
         private void UpdateCompensationState()
         {
-            txtSalaryAnnual.Enabled = reqSalaryAnnual.Enabled = compSalaryAnnual.Enabled = compSalaryWageGreaterThanZero.Enabled = txtVacationDays.Enabled = rfvVacationDays.Enabled =
+            txtSalaryAnnual.Enabled = reqSalaryAnnual.Enabled = compSalaryAnnual.Enabled = compSalaryWageGreaterThanZero.Enabled =
                 rbtnSalaryAnnual.Checked;
             txtSalaryHourly.Enabled = reqSalaryHourly.Enabled = compSalaryHourly.Enabled = compHourlyWageGreaterThanZero.Enabled =
                 rbtnSalaryHourly.Checked;
             txt1099Ctc.Enabled = req1099Ctc.Enabled = comp1099Ctc.Enabled = compHourlyGreaterThanZero.Enabled = rbtn1099Ctc.Checked;
             txtPercRevenue.Enabled = reqPercRevenue.Enabled = compPercRevenue.Enabled = compPercRevenueGreaterThanZero.Enabled = rbtnPercentRevenue.Checked;
-            //txtVacationDays.Enabled = !(rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked);
+            txtVacationDays.Enabled = rfvVacationDays.Enabled = (rbtnSalaryHourly.Checked || rbtnSalaryAnnual.Checked);
             // Bonus and vacation are  available for the w2-salary employess.
 
             lblVendor.Visible = ddlVendor.Visible = reqddlVendor.Enabled = (rbtn1099Ctc.Checked || rbtnPercentRevenue.Checked) && !IsMarginTestPage && !IsStrawmanMode;
@@ -954,7 +955,7 @@ namespace PraticeManagement.Controls
         public void UpdatePTOHours()
         {
             int titleId = 0;
-            if (rbtnSalaryAnnual.Checked && ddlTitle.SelectedIndex > 0 && int.TryParse(ddlTitle.SelectedValue, out titleId))
+            if ((rbtnSalaryAnnual.Checked || rbtnSalaryHourly.Checked) && ddlTitle.SelectedIndex > 0 && int.TryParse(ddlTitle.SelectedValue, out titleId))
             {
                 Title title = ServiceCallers.Custom.Title(t => t.GetTitleById(titleId));
                 txtVacationDays.Text = title.PTOAccrual.ToString();
