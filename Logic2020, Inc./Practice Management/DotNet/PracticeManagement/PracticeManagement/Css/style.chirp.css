@@ -8438,6 +8438,22 @@ table#ctl00_body_login tr td label
     color: Red;
 }
 
+.chevron
+{
+    background: url("../Images/expand.jpg") no-repeat;
+    cursor: pointer;
+    padding-left: 10px;
+    display: inline;
+}
 
+.collapsePanel .chevron
+{
+    background-image: url("../Images/collapse.jpg");
+}
+
+.fltPanel .colPanel
+{
+    display: none;
+}
 
 
