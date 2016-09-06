@@ -5575,6 +5575,212 @@ namespace DataAccess
             }
 
         }
+
+        public static List<ConsultantPTOHours> GetConsultantPTOEntries(DateTime startDate, DateTime endDate, int step, bool includeActivePersons, bool includeContingentPersons, bool isW2Salary, bool isW2Hourly, string practiceIds, string divisionIds, string titleIds, int sortId, string sortDirection)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            {
+                List<ConsultantPTOHours> result = null;
+
+                using (var command = new SqlCommand(Constants.ProcedureNames.Person.GetConsultantPTOEntries, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandTimeout = connection.ConnectionTimeout;
+
+                    command.Parameters.AddWithValue(Constants.ParameterNames.StartDate, startDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.Period, step);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ActivePersons, includeActivePersons);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedPersons, includeContingentPersons);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.W2HourlyPersons, isW2Hourly);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.W2SalaryPersons, isW2Salary);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SortId, sortId);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.SortDirection, sortDirection);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.TitleIds, titleIds);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIds, divisionIds);
+
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        result = GetPersonsWithVactionDays(reader);
+                        reader.NextResult();
+                        ReadPTOPersonsEmploymentHistory(reader, result);
+                        reader.NextResult();
+                        ReadPersonPTOTimeOffDates(reader, result);
+                    }
+                }
+
+
+                return result;
+            }
+        }
+
+        private static List<ConsultantPTOHours> GetPersonsWithVactionDays(SqlDataReader reader)
+        {
+            if (reader.HasRows)
+            {
+                int personStatusIdIndex = reader.GetOrdinal(PersonStatusId);
+                int personStatusNameIndex = reader.GetOrdinal(NameColumn);
+                int firstNameIndex = reader.GetOrdinal(FirstNameColumn);
+                int lastNameIndex = reader.GetOrdinal(LastNameColumn);
+                int employeeNumberIndex = reader.GetOrdinal(EmployeeNumberColumn);
+                int timescaleNameIndex = reader.GetOrdinal(TimescaleColumn);
+                int timescaleIdIndex = reader.GetOrdinal(TimescaleIdColumn);
+                int hireDateIndex = reader.GetOrdinal(HireDateColumn);
+                int personVacationDaysIndex = reader.GetOrdinal(PersonVactionDaysColumn);
+                int titleIdIndex = reader.GetOrdinal(Constants.ColumnNames.TitleId);
+                int titleIndex = reader.GetOrdinal(Constants.ColumnNames.Title);
+                int practiceId = -1;
+                int practiceArea = -1;
+                try
+                {
+                    practiceId = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                    practiceArea = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                }
+                catch
+                {
+                }
+                var res = new List<ConsultantPTOHours>();
+                while (reader.Read())
+                {
+                    ConsultantPTOHours item = new ConsultantPTOHours();
+
+                    var person =
+                        new Person
+                        {
+                            Id = (int)reader[PersonIdColumn],
+                            FirstName = (string)reader[firstNameIndex],
+                            LastName = (string)reader[lastNameIndex],
+                            EmployeeNumber = (string)reader[employeeNumberIndex],
+                            Status = new PersonStatus
+                            {
+                                Id = (int)reader[personStatusIdIndex],
+                                Name = (string)reader[personStatusNameIndex]
+                            },
+                            CurrentPay = new Pay
+                            {
+                                TimescaleName = reader.GetString(timescaleNameIndex),
+                                Timescale = (TimescaleType)reader.GetInt32(timescaleIdIndex)
+                            },
+                            HireDate = (DateTime)reader[hireDateIndex],
+                            Title = new Title
+                            {
+                                TitleId = reader.GetInt32(titleIdIndex),
+                                TitleName = reader.GetString(titleIndex)
+                            },
+
+                        };
+
+                    if (practiceId > -1)
+                    {
+                        person.DefaultPractice = new Practice()
+                        {
+                            Id = reader.GetInt32(titleIdIndex),
+                            Name = reader.GetString(practiceArea)
+                        };
+                    }
+
+                    if (Convert.IsDBNull(reader[TerminationDateColumn]))
+                    {
+                        person.TerminationDate = null;
+                    }
+                    else
+                    {
+                        person.TerminationDate = (DateTime)reader[TerminationDateColumn];
+                    }
+
+                    item.TimeOffDates = new SortedList<DateTime, double>();
+                    item.Person = person;
+                    item.PersonVacationDays = reader.GetInt32(personVacationDaysIndex);
+                    res.Add(item);
+                }
+
+                return res;
+            }
+            return null;
+        }
+
+        private static void ReadPTOPersonsEmploymentHistory(SqlDataReader reader, List<ConsultantPTOHours> result)
+        {
+            if (result != null)
+            {
+                if (reader.HasRows)
+                {
+                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                    int hireDateIndex = reader.GetOrdinal(Constants.ColumnNames.HireDateColumn);
+                    int terminationDateIndex = reader.GetOrdinal(Constants.ColumnNames.TerminationDateColumn);
+
+                    while (reader.Read())
+                    {
+                        var employment = new Employment
+                        {
+                            PersonId = reader.GetInt32(personIdIndex),
+                            HireDate = reader.GetDateTime(hireDateIndex),
+                            TerminationDate =
+                                reader.IsDBNull(terminationDateIndex)
+                                    ? null
+                                    : (DateTime?)reader.GetDateTime(terminationDateIndex)
+                        };
+
+                        Person person = null;
+                        if (result.Any(p => p.Person.Id == employment.PersonId))
+                        {
+                            person = result.First(p => p.Person.Id == employment.PersonId).Person;
+                            if (person.EmploymentHistory == null)
+                            {
+                                person.EmploymentHistory = new List<Employment>();
+                            }
+                        }
+                        if (person != null)
+                        {
+                            person.EmploymentHistory.Add(employment);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        private static void ReadPersonPTOTimeOffDates(SqlDataReader reader, List<ConsultantPTOHours> result)
+        {
+            if (result != null)
+            {
+                if (reader.HasRows)
+                {
+                    int personIdIndex = reader.GetOrdinal(Constants.ColumnNames.PersonId);
+                    int timeOffDateIndex = reader.GetOrdinal(Constants.ColumnNames.DateColumn);
+                    int isTimeOffIndex = reader.GetOrdinal(Constants.ColumnNames.IsTimeOff);
+                    int PTODescriptionIndex = reader.GetOrdinal(Constants.ColumnNames.DescriptionColumn);
+                    int timeOffHoursIndex = reader.GetOrdinal(Constants.ColumnNames.TimeOffHours);
+
+                    while (reader.Read())
+                    {
+                        var personId = reader.GetInt32(personIdIndex);
+                        var timeOffDate = reader.GetDateTime(timeOffDateIndex);
+                        var isTimeOff = reader.GetInt32(isTimeOffIndex) == 1;
+                        var timeOffHours = reader.GetDouble(timeOffHoursIndex);
+                        string PTODescription = reader.IsDBNull(PTODescriptionIndex)
+                                        ? string.Empty
+                                        : reader.GetString(PTODescriptionIndex);
+                        if (result.Any(p => p.Person.Id == personId))
+                        {
+                            var record = result.First(p => p.Person.Id == personId);
+                            if (record.TimeOffDates == null) record.TimeOffDates = new SortedList<DateTime, double>();
+                            if (record.CompanyHolidayDates == null) record.CompanyHolidayDates = new Dictionary<DateTime, string>();
+                            if (isTimeOff)
+                            {
+                                record.TimeOffDates.Add(timeOffDate, timeOffHours);
+                            }
+                            else
+                            {
+                                record.CompanyHolidayDates.Add(timeOffDate, PTODescription);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
