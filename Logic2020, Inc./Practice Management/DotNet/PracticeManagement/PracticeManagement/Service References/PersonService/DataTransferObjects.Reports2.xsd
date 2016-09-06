@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:complexType name="ArrayOfConsultantPTOHours">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantPTOHours" nillable="true" type="tns:ConsultantPTOHours" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantPTOHours" nillable="true" type="tns:ArrayOfConsultantPTOHours" />
+  <xs:complexType name="ConsultantPTOHours">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CompanyHolidayDates" nillable="true" type="q1:ArrayOfKeyValueOfdateTimestring" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q2:Person" />
+      <xs:element minOccurs="0" name="PersonVacationDays" type="xs:int" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="TimeOffDates" nillable="true" type="q3:ArrayOfKeyValueOfdateTimedouble" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantPTOHours" nillable="true" type="tns:ConsultantPTOHours" />
+  <xs:complexType name="ArrayOfConsultantUtilizationPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantUtilizationPerson" nillable="true" type="tns:ConsultantUtilizationPerson" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantUtilizationPerson" nillable="true" type="tns:ArrayOfConsultantUtilizationPerson" />
+  <xs:complexType name="ConsultantUtilizationPerson">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AvailableHours" type="xs:decimal" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="CompanyHolidayDates" nillable="true" type="q4:ArrayOfKeyValueOfdateTimestring" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Person" nillable="true" type="q5:Person" />
+      <xs:element minOccurs="0" name="PersonVacationDays" type="xs:int" />
+      <xs:element minOccurs="0" name="ProjectUtilization" nillable="true" type="tns:ArrayOfConsultantUtilzationByProject" />
+      <xs:element minOccurs="0" name="ProjectedHours" type="xs:decimal" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ProjectedHoursList" nillable="true" type="q6:ArrayOfdecimal" />
+      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="TimeOffDates" nillable="true" type="q7:ArrayOfKeyValueOfdateTimedouble" />
+      <xs:element minOccurs="0" name="Utilization" type="xs:int" />
+      <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="WeeklyPayTypes" nillable="true" type="q8:ArrayOfint" />
+      <xs:element xmlns:q9="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="WeeklyUtilization" nillable="true" type="q9:ArrayOfint" />
+      <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="WeeklyVacationDays" nillable="true" type="q10:ArrayOfint" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantUtilizationPerson" nillable="true" type="tns:ConsultantUtilizationPerson" />
+  <xs:complexType name="ArrayOfConsultantUtilzationByProject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ConsultantUtilzationByProject" nillable="true" type="tns:ConsultantUtilzationByProject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfConsultantUtilzationByProject" nillable="true" type="tns:ArrayOfConsultantUtilzationByProject" />
+  <xs:complexType name="ConsultantUtilzationByProject">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AvailableHours" type="xs:decimal" />
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="UtilizationProject" nillable="true" type="tns:ArrayOfUtilizationByProject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultantUtilzationByProject" nillable="true" type="tns:ConsultantUtilzationByProject" />
+  <xs:complexType name="ArrayOfUtilizationByProject">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="UtilizationByProject" nillable="true" type="tns:UtilizationByProject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfUtilizationByProject" nillable="true" type="tns:ArrayOfUtilizationByProject" />
+  <xs:complexType name="UtilizationByProject">
+    <xs:sequence>
+      <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="Project" nillable="true" type="q11:Project" />
+      <xs:element minOccurs="0" name="ProjectedHours" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Utilization" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UtilizationByProject" nillable="true" type="tns:UtilizationByProject" />
+</xs:schema>
