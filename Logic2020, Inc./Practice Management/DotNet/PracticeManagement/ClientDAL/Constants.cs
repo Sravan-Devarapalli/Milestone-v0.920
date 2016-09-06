@@ -662,6 +662,8 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string W2SalaryPersons = "@W2SalaryPersons";
+            public const string W2HourlyPersons = "@W2HourlyPersons";
             public const string SessionId = "@SessionId";
             public const string OutsourceId = "@OutsourceId";
             public const string VendorId = "@VendorId";
@@ -1218,6 +1220,7 @@
 
             public class Person
             {
+                public const string GetConsultantPTOEntries = "dbo.GetConsultantPTOEntries";
                 public const string CheckIfDatesInDeactivationHistory = "dbo.CheckIfDatesInDeactivationHistory";
                 public const string CheckIfPersonInProjectPracticeAreaAndDivision = "dbo.CheckIfPersonInProjectPracticeAreaAndDivision";
                 public const string DeleteReportFilterValues = "dbo.DeleteReportFilterValues";
@@ -1452,6 +1455,7 @@
 
             public class Reports
             {
+
                 public const string ProjectsListWithFilters = "dbo.GetProjectsListWithFilters";
                 public const string GetAveragePercentagesByTitles = "dbo.GetAveragePercentagesByTitles";
                 public const string GetManagedParametersByPerson = "dbo.GetManagedParametersByPerson";
@@ -1701,6 +1705,7 @@
                 public const string Update = "dbo.ProjectExpenseUpdate";
                 public const string Insert = "dbo.ProjectExpenseInsert";
                 public const string Delete = "dbo.ProjectExpenseDelete";
+
             }
 
             #endregion Nested type: ProjectExpenses
