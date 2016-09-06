@@ -434,8 +434,10 @@ namespace DataTransferObjects
         ProjectSummaryReport,
 
         [EnumMember]
-        VendorSummary
+        VendorSummary,
 
+        [EnumMember]
+        PTOReport
     }
 
     [DataContract]
