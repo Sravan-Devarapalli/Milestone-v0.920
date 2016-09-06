@@ -54,7 +54,7 @@ namespace PraticeManagement.Reporting
             {
                 return Request.QueryString[PeriodSelectedkey];
             }
-        }   
+        }
         public DateTime? StartDate
         {
             get
@@ -351,6 +351,8 @@ namespace PraticeManagement.Reporting
             dlPersonDiv.Style.Add("display", "none");
             if (!IsPostBack)
             {
+                GetFilterValuesForSession();
+
                 bool userIsAdministrator = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.AdministratorRoleName);
                 bool userIsDirector = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.DirectorRoleName);
                 bool userIsBusinessUnitManager = Roles.IsUserInRole(DataTransferObjects.Constants.RoleNames.BusinessUnitManagerRoleName);
@@ -391,10 +393,7 @@ namespace PraticeManagement.Reporting
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                GetFilterValuesForSession();
-            }
+
             if (timeEntryReportHeader.Count == 2)
             {
                 tdFirst.Attributes["class"] = "Width50Percent";
@@ -683,7 +682,7 @@ namespace PraticeManagement.Reporting
             if (filters != null)
             {
                 ddlPerson.SelectedValue = filters.Person;
-                
+
                 ddlPeriod.SelectedValue = filters.ReportPeriod;
                 diRange.FromDate = filters.StartDate;
                 diRange.ToDate = filters.EndDate;
