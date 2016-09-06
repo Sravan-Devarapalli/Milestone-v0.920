@@ -2611,7 +2611,7 @@ namespace PraticeManagement.Controls
                     list.Add(firstItemText, String.Empty);
                     foreach (PersonDivisionType item in divisions)
                     {
-                        if ((int)item == 0)
+                        if ((int)item == 0 || (int)item == 2)
                             continue;
                         string key = GetDescription(item);
                         string value = ((int)item).ToString();
@@ -2669,8 +2669,6 @@ namespace PraticeManagement.Controls
                     {
                         FillListDefault(control, "-- Select Division --", projectDivisions, false);
                     }
-
-
                 }
 
                 catch (CommunicationException)
@@ -2705,7 +2703,6 @@ namespace PraticeManagement.Controls
                     throw;
                 }
             }
-
         }
 
         public static void FillAttachemntCategoryList(ListControl control)
