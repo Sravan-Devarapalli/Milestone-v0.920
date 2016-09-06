@@ -24,6 +24,9 @@ namespace PraticeManagement.PersonService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/DeleteReportFilterValues", ReplyAction="http://tempuri.org/IPersonService/DeleteReportFilterValuesResponse")]
         void DeleteReportFilterValues(int currentUserId, int previousUserId, string sessionId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetConsultantPTOEntries", ReplyAction="http://tempuri.org/IPersonService/GetConsultantPTOEntriesResponse")]
+        DataTransferObjects.Reports.ConsultantPTOHours[] GetConsultantPTOEntries(System.DateTime startDate, System.DateTime endDate, int step, bool includeActivePersons, bool includeContingentPersons, bool isW2Salary, bool isW2Hourly, string practiceIds, string divisionIds, string titleIds, int sortId, string sortDirection);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPersonService/GetPersonListWithRole", ReplyAction="http://tempuri.org/IPersonService/GetPersonListWithRoleResponse")]
         DataTransferObjects.Person[] GetPersonListWithRole(string rolename);
         
@@ -397,7 +400,6 @@ namespace PraticeManagement.PersonService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class PersonServiceClient : System.ServiceModel.ClientBase<PraticeManagement.PersonService.IPersonService>, PraticeManagement.PersonService.IPersonService {
         
-        
         public PersonServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
@@ -424,6 +426,10 @@ namespace PraticeManagement.PersonService {
         
         public void DeleteReportFilterValues(int currentUserId, int previousUserId, string sessionId) {
             base.Channel.DeleteReportFilterValues(currentUserId, previousUserId, sessionId);
+        }
+        
+        public DataTransferObjects.Reports.ConsultantPTOHours[] GetConsultantPTOEntries(System.DateTime startDate, System.DateTime endDate, int step, bool includeActivePersons, bool includeContingentPersons, bool isW2Salary, bool isW2Hourly, string practiceIds, string divisionIds, string titleIds, int sortId, string sortDirection) {
+            return base.Channel.GetConsultantPTOEntries(startDate, endDate, step, includeActivePersons, includeContingentPersons, isW2Salary, isW2Hourly, practiceIds, divisionIds, titleIds, sortId, sortDirection);
         }
         
         public DataTransferObjects.Person[] GetPersonListWithRole(string rolename) {
