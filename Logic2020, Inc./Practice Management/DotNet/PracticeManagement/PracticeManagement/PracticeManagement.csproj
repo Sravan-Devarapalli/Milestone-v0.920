@@ -592,6 +592,7 @@
     <Content Include="Reports\ProjectFeedbackReport.aspx" />
     <Content Include="Reports\ProjectsList.aspx" />
     <Content Include="Reports\ProjectSummaryReport.aspx" />
+    <Content Include="Reports\PTOReport.aspx" />
     <Content Include="Reports\TerminationReport.aspx" />
     <Content Include="Reports\TimeEntryReport_new.aspx" />
     <Content Include="Reports\TimePeriodSummaryReport.aspx" />
@@ -636,6 +637,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByAccount.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ByAccount.GroupByPerson.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultantDemand.ConsultantGroupBySalesStage.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultantPTOHours.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultantUtilizationPerson2.datasource">
       <SubType>Designer</SubType>
     </None>
@@ -2599,6 +2601,13 @@
     </Compile>
     <Compile Include="Reports\ProjectSummaryReport.aspx.designer.cs">
       <DependentUpon>ProjectSummaryReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PTOReport.aspx.cs">
+      <DependentUpon>PTOReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\PTOReport.aspx.designer.cs">
+      <DependentUpon>PTOReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\TerminationReport.aspx.cs">
       <DependentUpon>TerminationReport.aspx</DependentUpon>
