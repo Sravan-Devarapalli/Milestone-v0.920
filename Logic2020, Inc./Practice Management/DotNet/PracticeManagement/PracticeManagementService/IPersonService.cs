@@ -152,7 +152,7 @@ namespace PracticeManagementService
         /// <param name="alphabet">person starts with the letter</param>
         /// <returns></returns>
         [OperationContract]
-        int GetPersonCountByCommaSeperatedIdsList(string practiceIds,string divisionIdsSelected, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool terminationpending, char? alphabet);
+        int GetPersonCountByCommaSeperatedIdsList(string practiceIds, string divisionIdsSelected, bool active, string looked, string recruiterIds, string userName, string timeScaleIds, bool projected, bool terminated, bool terminationpending, char? alphabet);
 
         /// <summary>
         /// Calculates a number of <see cref="Person"/>s working days in period.
@@ -500,7 +500,7 @@ namespace PracticeManagementService
         void SaveBadgeDetailsByPersonId(MSBadge msBadge);
 
         [OperationContract]
-        void UpdateMSBadgeDetailsByPersonId(int personId,int updatedBy);
+        void UpdateMSBadgeDetailsByPersonId(int personId, int updatedBy);
 
         [OperationContract]
         List<bool> CheckIfDatesInDeactivationHistory(int personId, DateTime startDate, DateTime endDate);
@@ -552,6 +552,9 @@ namespace PracticeManagementService
 
         //[OperationContract]
         //void SendCompensationChangeEmail(Person person, Pay oldPay, Pay newPay, bool isRehire);
+
+        [OperationContract]
+        List<ConsultantPTOHours> GetConsultantPTOEntries(DateTime startDate, DateTime endDate, int step, bool includeActivePersons, bool includeContingentPersons,bool isW2Salary, bool isW2Hourly,string practiceIds, string divisionIds, string titleIds,int sortId,string sortDirection);
     }
 }
 
