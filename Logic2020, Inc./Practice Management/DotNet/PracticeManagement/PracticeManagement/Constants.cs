@@ -100,6 +100,7 @@ namespace PraticeManagement
         /// </summary>
         public static class ApplicationPages
         {
+            public const string PTOTimelineWithFilterQueryString = "~/Reports/PTOReport.aspx?ApplyFilterFromCookie=true";
             public const string Vendors = "~/Config/Vendors.aspx";
             public const string VendorDetail = "~/Config/VendorDetail.aspx";
             public const string AppRootUrl = "~/";
