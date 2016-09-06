@@ -311,23 +311,32 @@ namespace PraticeManagement
             if (PreviousPage != null)
             {
                 txtSearchText.Text = PreviousPage.SearchText;
-                CompanyPerformanceFilterSettings Filters = Session["Filters"] as CompanyPerformanceFilterSettings;
-                SelectedClientIds = Filters.ClientIdsList;
-                SelectedGroupIds = Filters.ProjectGroupIdsList;
-                SelectedSalespersonIds = Filters.SalespersonIdsList;
-                SelectedPracticeIds = Filters.PracticeIdsList;
-                SelectedDivisionIds = Filters.DivisionIdsList;
-                SelectedProjectOwnerIds = Filters.ProjectOwnerIdsList;
-                SelectedOfferingIds = Filters.OfferingIdsList;
-                SelectedRevenueTypeIds = Filters.RevenueTypeIdsList;
-                SelectedChannelIds = Filters.ChannelIdsList;
-                ShowActive = Filters.ShowActive;
-                ShowCompleted = Filters.ShowCompleted;
-                ShowExperimental = Filters.ShowExperimental;
-                ShowInactive = Filters.ShowInactive;
-                ShowInternal = Filters.ShowInternal;
-                ShowProjected = Filters.ShowProjected;
-                ShowProposed = Filters.ShowProposed;
+                CompanyPerformanceFilterSettings filters = Session["Filters"] as CompanyPerformanceFilterSettings;
+                if (filters == null)
+                {
+                    filters = new CompanyPerformanceFilterSettings();
+                    filters.ClientIdsList = filters.ProjectGroupIdsList = filters.SalespersonIdsList = filters.PracticeIdsList =
+                        filters.DivisionIdsList = filters.ProjectOwnerIdsList = filters.OfferingIdsList = filters.RevenueTypeIdsList =
+                        filters.ChannelIdsList = null;
+                    filters.ShowActive = filters.ShowCompleted = filters.ShowProjected = filters.ShowInternal = filters.ShowProposed = true;
+                    filters.ShowExperimental = filters.ShowInactive = false;
+                }
+                SelectedClientIds = filters.ClientIdsList;
+                SelectedGroupIds = filters.ProjectGroupIdsList;
+                SelectedSalespersonIds = filters.SalespersonIdsList;
+                SelectedPracticeIds = filters.PracticeIdsList;
+                SelectedDivisionIds = filters.DivisionIdsList;
+                SelectedProjectOwnerIds = filters.ProjectOwnerIdsList;
+                SelectedOfferingIds = filters.OfferingIdsList;
+                SelectedRevenueTypeIds = filters.RevenueTypeIdsList;
+                SelectedChannelIds = filters.ChannelIdsList;
+                ShowActive = filters.ShowActive;
+                ShowCompleted = filters.ShowCompleted;
+                ShowExperimental = filters.ShowExperimental;
+                ShowInactive = filters.ShowInactive;
+                ShowInternal = filters.ShowInternal;
+                ShowProjected = filters.ShowProjected;
+                ShowProposed = filters.ShowProposed;
                 DisplaySearch();
             }
         }
@@ -427,7 +436,7 @@ namespace PraticeManagement
             {
                 var panel = e.Item.FindControl("pnlMilestones");
                 var project = (e.Item as ListViewDataItem).DataItem as Project;
-              
+
 
                 if (project.Milestones != null && project.Milestones.Any())
                 {
@@ -442,14 +451,14 @@ namespace PraticeManagement
                             }
                             datalist.DataSource = project.Milestones;
                             datalist.DataBind();
-                          
+
                         }
                     }
                 }
                 else
                 {
                     var btnExpandCollapseMilestones = e.Item.FindControl("btnExpandCollapseMilestones") as Image;
-                 
+
                     var btnProjectName = e.Item.FindControl("btnProjectName") as LinkButton;
                     btnProjectName.Attributes["class"] = PaddingClassForProjectName;
                 }
