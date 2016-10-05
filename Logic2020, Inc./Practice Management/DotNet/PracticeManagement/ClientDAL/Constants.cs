@@ -9,6 +9,9 @@
         /// </summary>
         public class ColumnNames
         {
+            public const string ExpectedAmount = "ExpectedExpenseAmount";
+            public const string ExpenseTypeId = "ExpenseTypeId";
+            public const string ExpenseTypeName = "ExpenseTypeName";
             public const string VendorId = "VendorId";
             public const string VendorName = "VendorName";
             public const string OutsourceId = "OutsourceId";
@@ -53,6 +56,7 @@
             public const string PracticeDirectorId = "PracticeDirectorId";
             public const string ExecutiveInChargeId = "ExecutiveInChargeId";
             public const string EngagementManagerId = "EngagementManagerId";
+            public const string EngagementManagerName = "EngagementManagerName";
             public const string ExecutiveInChargeUserId = "ExecutiveInChargeUserId";
             public const string ProjectManagerUserId = "ProjectManagerUserId";
             public const string EngagementManagerUserId = "EngagementManagerUserId";
@@ -662,6 +666,9 @@
         /// </summary>
         public class ParameterNames
         {
+            public const string ExpenseTypes = "@ExpenseTypes";
+            public const string ExpectedAmount = ColumnNames.ExpectedAmount;
+            public const string ExpenseTypeId = ColumnNames.ExpenseTypeId;
             public const string W2SalaryPersons = "@W2SalaryPersons";
             public const string W2HourlyPersons = "@W2HourlyPersons";
             public const string SessionId = "@SessionId";
@@ -1455,7 +1462,10 @@
 
             public class Reports
             {
-
+                public const string ExpenseSummaryDetails = "dbo.ExpenseSummaryDetails";
+                public const string ExpenseDetailReport = "dbo.ExpenseDetailReport";
+                public const string ExpenseSummaryGroupedByType = "dbo.ExpenseSummaryGroupedByExpenseType";
+                public const string ExpenseSummaryGroupedByProject = "dbo.ExpenseSummaryGroupedByProject";
                 public const string ProjectsListWithFilters = "dbo.GetProjectsListWithFilters";
                 public const string GetAveragePercentagesByTitles = "dbo.GetAveragePercentagesByTitles";
                 public const string GetManagedParametersByPerson = "dbo.GetManagedParametersByPerson";
@@ -1583,6 +1593,7 @@
 
             public class Project
             {
+                public const string GetProjectsForClients = "dbo.GetProjectsForClients";
                 public const string GetProjectDivisions = "dbo.GetProjectDivisions";
                 public const string GetChannelById = "dbo.GetChannelById";
                 public const string GetChannelsList = "dbo.GetListOfChannels";
@@ -1705,7 +1716,7 @@
                 public const string Update = "dbo.ProjectExpenseUpdate";
                 public const string Insert = "dbo.ProjectExpenseInsert";
                 public const string Delete = "dbo.ProjectExpenseDelete";
-
+                public const string GetAllExpenseTypes = "dbo.GetAllExpenseTypes";
             }
 
             #endregion Nested type: ProjectExpenses
