@@ -5630,6 +5630,418 @@ namespace DataAccess
                 throw ex;
             }
         }
+
+
+        public static List<ExpenseSummary> GetExpenseSummaryGroupedByProject(DateTime startDate, DateTime endDate, string clientIds, string divisionIds, string practiceIds, string projectIds, bool active, bool projected, bool Completed, bool proposed, bool inActive, bool experimental)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ExpenseSummaryGroupedByProject, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIds, divisionIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIds, projectIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowProjectedParam, projected);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowCompletedParam, Completed);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, active);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, experimental);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowProposedParam, proposed);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, inActive);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<ExpenseSummary>();
+                    ReadProjectExpenseSummaryGroupedByProject(reader, result);
+                    reader.NextResult();
+                    ReadMonthlyExpenses(reader, result, true);
+                    return result;
+                }
+            }
+        }
+
+        public static List<ExpenseSummary> GetExpenseSummaryGroupedBytype(DateTime startDate, DateTime endDate, string expenseTypeIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ExpenseSummaryGroupedByType, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExpenseTypes, expenseTypeIds ?? (Object)DBNull.Value);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<ExpenseSummary>();
+                    ReadProjectExpenseSummaryGroupedByType(reader, result);
+                    reader.NextResult();
+                    ReadMonthlyExpenses(reader, result, false);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadProjectExpenseSummaryGroupedByProject(SqlDataReader reader, List<ExpenseSummary> resultList)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+                int projectIdIndex = -1;
+                int projectNameIndex = -1;
+                int clientIdIndex = -1;
+                int ClientNameIndex = -1;
+                int practiceIdIndex = -1;
+                int PracticeNameIndex = -1;
+                int divisionIdIndex = -1;
+                int divisionNameIndex = -1;
+                int projectManagerIdIndex = -1;
+                int projectManagerNameIndex = -1;
+                int executiveInchargeIdIndex = -1;
+                int executiveInchargeNameIndex = -1;
+                int projectStatusIdIndex = -1;
+                int projectStatusNameIndex = -1;
+                int ProjectNumberIndex = -1;
+                int groupIdIndex = -1;
+                int groupNameIndex = -1;
+
+                try
+                {
+                    projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectIdColumn);
+                    projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+                    clientIdIndex = reader.GetOrdinal(Constants.ColumnNames.ClientIdColumn);
+                    ClientNameIndex = reader.GetOrdinal(Constants.ColumnNames.ClientName);
+                    practiceIdIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeIdColumn);
+                    PracticeNameIndex = reader.GetOrdinal(Constants.ColumnNames.PracticeNameColumn);
+                    divisionIdIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionId);
+                    divisionNameIndex = reader.GetOrdinal(Constants.ColumnNames.DivisionName);
+                    projectManagerIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerId);
+                    projectManagerNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectManagerNameColumn);
+                    executiveInchargeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExecutiveInChargeId);
+                    executiveInchargeNameIndex = reader.GetOrdinal("ExecutiveInChargeName");
+                    projectStatusIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusIdColumn);
+                    projectStatusNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectStatusNameColumn);
+                    ProjectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                    groupIdIndex = reader.GetOrdinal(Constants.ColumnNames.GroupId);
+                    groupNameIndex = reader.GetOrdinal(Constants.ColumnNames.GroupName);
+                }
+                catch
+                {
+
+                }
+
+                while (reader.Read())
+                {
+                    var expense = new ExpenseSummary();
+
+                    if (projectIdIndex >= 0)
+                    {
+                        expense.Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(ProjectNumberIndex),
+                            Group = new ProjectGroup()
+                            {
+                                Id = reader.GetInt32(groupIdIndex),
+                                Name = reader.GetString(groupNameIndex)
+                            },
+                            Client = new Client()
+                            {
+                                Id = reader.GetInt32(clientIdIndex),
+                                Name = reader.GetString(ClientNameIndex)
+                            },
+
+                            Status = new ProjectStatus()
+                            {
+                                Id = reader.GetInt32(projectStatusIdIndex),
+                                Name = reader.GetString(projectStatusNameIndex)
+                            },
+                            Practice = new Practice()
+                            {
+                                Id = reader.GetInt32(practiceIdIndex),
+                                Name = reader.GetString(PracticeNameIndex)
+                            },
+
+                            Division = new ProjectDivision()
+                            {
+                                Id = reader.GetInt32(divisionIdIndex),
+                                Name = reader.GetString(divisionNameIndex)
+                            },
+
+                            ProjectManagerId = !reader.IsDBNull(projectManagerIdIndex) ? reader.GetInt32(projectManagerIdIndex) : -1,
+                            ProjectManagerNames = !reader.IsDBNull(projectManagerNameIndex) ? reader.GetString(projectManagerNameIndex) : string.Empty,
+                            ExecutiveInChargeId = !reader.IsDBNull(executiveInchargeIdIndex) ? reader.GetInt32(executiveInchargeIdIndex) : -1,
+                            ExecutiveInChargeName = !reader.IsDBNull(executiveInchargeNameIndex) ? reader.GetString(executiveInchargeNameIndex) : string.Empty,
+                        };
+                    }
+                    resultList.Add(expense);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static void ReadProjectExpenseSummaryGroupedByType(SqlDataReader reader, List<ExpenseSummary> resultList)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+
+                int expenseTypeIdIndex = -1;
+                int expenseTypeNameIndex = -1;
+
+                try
+                {
+                    expenseTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseTypeId);
+                    expenseTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseTypeName);
+                }
+                catch
+                {
+
+                }
+                while (reader.Read())
+                {
+                    var expense = new ExpenseSummary();
+                    if (expenseTypeIdIndex >= 0)
+                    {
+                        expense.Type = new ExpenseType()
+                        {
+                            Id = reader.GetInt32(expenseTypeIdIndex),
+                            Name = reader.GetString(expenseTypeNameIndex)
+                        };
+                    }
+                    resultList.Add(expense);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private static void ReadMonthlyExpenses(SqlDataReader reader, List<ExpenseSummary> resultList, bool isGroupByProject)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+
+                int expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
+                int reimbursementIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
+                int finacialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+                int monthEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.MonthEnd);
+                int expectedExpenseIdnex = reader.GetOrdinal(Constants.ColumnNames.ExpectedAmount);
+                int expenseTypeIdIndex = -1;
+                int projectIdIndex = -1;
+
+                if (isGroupByProject)
+                {
+                    try
+                    {
+                        projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                    }
+                    catch { }
+                }
+                else
+                {
+                    try
+                    {
+                        expenseTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseTypeId);
+                    }
+                    catch { }
+                }
+
+                while (reader.Read())
+                {
+                    ExpenseSummary expense = null;
+
+                    if (isGroupByProject)
+                    {
+                        int projectId = reader.GetInt32(projectIdIndex);
+                        if (resultList.Any(r => r.Project.Id == projectId))
+                        {
+                            expense = resultList.FirstOrDefault(r => r.Project.Id == projectId);
+                            if (expense.MonthlyExpenses == null)
+                            {
+                                expense.MonthlyExpenses = new Dictionary<DateTime, decimal>();
+                            }
+                            if (expense.MonthlyReimburseExpense == null)
+                            {
+                                expense.MonthlyReimburseExpense = new Dictionary<DateTime, decimal>();
+                            }
+                            if (expense.MonthlyExpectedExpenses == null)
+                            {
+                                expense.MonthlyExpectedExpenses = new Dictionary<DateTime, decimal>();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int expenseTypeId = reader.GetInt32(expenseTypeIdIndex);
+                        if (resultList.Any(r => r.Type.Id == expenseTypeId))
+                        {
+                            expense = resultList.FirstOrDefault(r => r.Type.Id == expenseTypeId);
+                            if (expense.MonthlyExpenses == null)
+                            {
+                                expense.MonthlyExpenses = new Dictionary<DateTime, decimal>();
+                            }
+                            if (expense.MonthlyReimburseExpense == null)
+                            {
+                                expense.MonthlyReimburseExpense = new Dictionary<DateTime, decimal>();
+                            }
+                            if (expense.MonthlyExpectedExpenses == null)
+                            {
+                                expense.MonthlyExpectedExpenses = new Dictionary<DateTime, decimal>();
+                            }
+                        }
+                    }
+
+                    if (expense != null)
+                    {
+                        var finacialDate = reader.GetDateTime(finacialDateIndex);
+                        var monthlyExpense = reader.GetDecimal(expenseIndex);
+                        var monthlyReimbursement = reader.GetDecimal(reimbursementIndex);
+                        var monthlyExpectedExpense = reader.GetDecimal(expectedExpenseIdnex);
+                        expense.MonthlyExpenses.Add(finacialDate, monthlyExpense);
+                        expense.MonthlyReimburseExpense.Add(finacialDate, monthlyReimbursement);
+                        expense.MonthlyExpectedExpenses.Add(finacialDate, monthlyExpectedExpense);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<ExpenseSummary> ExpenseDetailReport(DateTime startDate, DateTime endDate, int? projectId, int? expenseTypeId)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ExpenseDetailReport, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIdParam, projectId != null ? (object)projectId : DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExpenseTypeId, expenseTypeId != null ? (object)expenseTypeId : DBNull.Value);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<ExpenseSummary>();
+                    ReadExpenseDetails(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        public static List<ExpenseSummary> DetailedExpenseSummary(DateTime startDate, DateTime endDate, string clientIds, string divisionIds, string practiceIds, string projectIds, bool active, bool projected, bool Completed, bool proposed, bool inActive, bool experimental, string expenseTypeIds)
+        {
+            using (var connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (var command = new SqlCommand(Constants.ProcedureNames.Reports.ExpenseSummaryDetails, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+                command.Parameters.AddWithValue(Constants.ParameterNames.StartDateParam, startDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.EndDateParam, endDate);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.DivisionIds, divisionIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.PracticeIdsParam, practiceIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ProjectIds, projectIds ?? (Object)DBNull.Value);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowProjectedParam, projected);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowCompletedParam, Completed);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowActiveParam, active);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowExperimentalParam, experimental);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowProposedParam, proposed);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ShowInactiveParam, inActive);
+                command.Parameters.AddWithValue(Constants.ParameterNames.ExpenseTypes, expenseTypeIds ?? (Object)DBNull.Value);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    var result = new List<ExpenseSummary>();
+                    ReadExpenseDetails(reader, result);
+                    return result;
+                }
+            }
+        }
+
+        private static void ReadExpenseDetails(SqlDataReader reader, List<ExpenseSummary> resultList)
+        {
+            try
+            {
+                if (!reader.HasRows) return;
+
+                int expenseIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseId);
+                int expenseNameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                int expenseTypeIdIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseTypeId);
+                int expenseTypeNameIndex = reader.GetOrdinal(Constants.ColumnNames.ExpenseTypeName);
+                int startDateIndex = reader.GetOrdinal(Constants.ColumnNames.StartDate);
+                int endDateIndex = reader.GetOrdinal(Constants.ColumnNames.EndDate);
+                int milestoneIdIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneId);
+                int milestoneNameIndex = reader.GetOrdinal(Constants.ColumnNames.MilestoneName);
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int projectNumberIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectNumber);
+                int projectNameIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectName);
+
+                int expenseIndex = reader.GetOrdinal(Constants.ColumnNames.Expense);
+                int expectedExpenseIdnex = reader.GetOrdinal(Constants.ColumnNames.ExpectedAmount);
+                int reimbursementIndex = reader.GetOrdinal(Constants.ColumnNames.ReimbursedExpense);
+                int finacialDateIndex = reader.GetOrdinal(Constants.ColumnNames.FinancialDateColumn);
+                int monthEndDateIndex = reader.GetOrdinal(Constants.ColumnNames.MonthEnd);
+                int monthNumberIndex = reader.GetOrdinal("MonthNumber");
+
+                while (reader.Read())
+                {
+                    ExpenseSummary expense = new ExpenseSummary()
+                    {
+                        Project = new Project()
+                        {
+                            Id = reader.GetInt32(projectIdIndex),
+                            Name = reader.GetString(projectNameIndex),
+                            ProjectNumber = reader.GetString(projectNumberIndex)
+                        },
+
+                        Expense = new ProjectExpense()
+                        {
+                            Id = reader.GetInt32(expenseIdIndex),
+                            Name = reader.GetString(expenseNameIndex),
+                            Milestone = new Milestone()
+                            {
+                                Id = reader.GetInt32(milestoneIdIndex),
+                                Description = reader.GetString(milestoneNameIndex)
+                            },
+                            MilestoneName = reader.GetString(milestoneNameIndex),
+                            ProjectId = reader.GetInt32(projectIdIndex),
+                            StartDate = reader.GetDateTime(startDateIndex),
+                            EndDate = reader.GetDateTime(endDateIndex),
+                            Amount = reader.GetDecimal(expenseIndex),
+                            ExpectedAmount = reader.GetDecimal(expectedExpenseIdnex),
+                            Reimbursement = reader.GetDecimal(reimbursementIndex),
+                            Type = new ExpenseType()
+                            {
+                                Id = reader.GetInt32(expenseTypeIdIndex),
+                                Name = reader.GetString(expenseTypeNameIndex)
+                            }
+                        },
+                        MonthStartDate = reader.GetDateTime(finacialDateIndex),
+                        MonthEndDate = reader.GetDateTime(monthEndDateIndex)
+                    };
+                    resultList.Add(expense);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 
