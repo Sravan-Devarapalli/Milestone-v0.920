@@ -4559,6 +4559,44 @@ namespace DataAccess
                 }
             }
         }
+
+        public static List<Project> GetProjectsForClients(string clientIds)
+        {
+            List<Project> result = null;
+            using (SqlConnection connection = new SqlConnection(DataSourceHelper.DataConnection))
+            using (SqlCommand command = new SqlCommand(Constants.ProcedureNames.Project.GetProjectsForClients, connection))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandTimeout = connection.ConnectionTimeout;
+
+                command.Parameters.AddWithValue(Constants.ParameterNames.ClientIdsParam, clientIds ?? (Object)DBNull.Value);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    result = new List<Project>();
+                    ReadProjectsForClient(reader, result);
+                }
+            }
+            return result;
+
+        }
+
+        private static void ReadProjectsForClient(SqlDataReader reader, List<Project> result)
+        {
+            if (reader.HasRows)
+            {
+                int projectIdIndex = reader.GetOrdinal(Constants.ColumnNames.ProjectId);
+                int ProjectNameIndex = reader.GetOrdinal(Constants.ColumnNames.Name);
+                while (reader.Read())
+                {
+                    Project project = new Project();
+                    project.Id = reader.GetInt32(projectIdIndex);
+                    project.Name = reader.GetString(ProjectNameIndex);
+
+                    result.Add(project);
+                }
+            }
+        }
     }
 }
 
