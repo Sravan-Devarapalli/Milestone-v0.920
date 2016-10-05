@@ -419,6 +419,10 @@
     <Content Include="Controls\Reports\ConsultantDemand\ConsultingDemandTReportByTitle.ascx" />
     <Content Include="Controls\Reports\ConsultingDemand.ascx" />
     <Content Include="Controls\Reports\CSAT\CSATSummaryReport.ascx" />
+    <Content Include="Controls\Reports\ExpenseDetailsByMonth.ascx" />
+    <Content Include="Controls\Reports\ExpenseSummaryByProject.ascx" />
+    <Content Include="Controls\Reports\ExpenseSummaryByType.ascx" />
+    <Content Include="Controls\Reports\ExpenseSummaryDetails.ascx" />
     <Content Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx" />
     <Content Include="Controls\Reports\HumanCapital\NewHireReportGraphView.ascx" />
     <Content Include="Controls\Reports\HumanCapital\NewHireReportSummaryView.ascx" />
@@ -585,6 +589,7 @@
     <Content Include="Reports\ConsultingDemand.aspx" />
     <Content Include="Reports\ConsultingDemand_New.aspx" />
     <Content Include="Reports\CSATReport.aspx" />
+    <Content Include="Reports\ExpenseReport.aspx" />
     <Content Include="Reports\HumanCapital.aspx" />
     <Content Include="Reports\NewHireReport.aspx" />
     <Content Include="Reports\NonBillableReport.aspx" />
@@ -612,6 +617,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.CohortAssignment.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.CompositeObjects.PersonTimeEntries2.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Employment.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.ExpenseType.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Location3.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Lockout.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.MSBadge12.datasource" />
@@ -646,6 +652,7 @@
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbySkill.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitle.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.ConsultingDemand.ConsultantGroupbyTitleSkill.datasource" />
+    <None Include="Properties\DataSources\DataTransferObjects.Reports.ExpenseSummary.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.GroupByPractice.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.GroupbyTitle.datasource" />
     <None Include="Properties\DataSources\DataTransferObjects.Reports.HumanCapital.TerminationPersonsInRange.datasource" />
@@ -976,11 +983,17 @@
     <None Include="Service References\ProjectService\ProjectService26.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ReportService\ReportService.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\ReportService\ReportService1.wsdl" />
     <None Include="Service References\ReportService\ReportService11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService110.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService111.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ReportService\ReportService112.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService12.xsd">
@@ -1005,12 +1018,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\ReportService\ReportService19.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ReportService\ReportService20.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\ReportService\ReportService5.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\TimeEntryService\TimeEntryService36.xsd">
@@ -1133,10 +1140,8 @@
     <Content Include="Scripts\UploaderRemovedFolder1.js" />
     <Content Include="Scripts\uploaderRemovedFolder1.swf" />
     <None Include="Service References\ClientService\ClientService1.disco" />
-    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
     <None Include="Service References\ConfigurationService\ConfigurationService1.disco" />
     <None Include="Service References\PracticeService\PracticeService1.disco" />
-    <None Include="Service References\ReportService\ReportService1.disco" />
     <None Include="Service References\VendorService\VendorService.disco" />
     <None Include="Service References\VendorService\configuration91.svcinfo" />
     <None Include="Service References\VendorService\configuration.svcinfo" />
@@ -1145,6 +1150,8 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\ProjectService\ProjectService1.disco" />
+    <None Include="Service References\MilestoneService\MilestoneService2.disco" />
+    <None Include="Service References\ReportService\ReportService1.disco" />
     <Content Include="SourceRecruitingMetrics.aspx" />
     <Content Include="TargetedCompanyRecruitingMetrics.aspx" />
     <Content Include="Third Party Tools\NPOI Excel ReadWrite\Ionic.Zip.dll" />
@@ -1912,6 +1919,34 @@
     <Compile Include="Controls\Reports\CSAT\CSATSummaryReport.ascx.designer.cs">
       <DependentUpon>CSATSummaryReport.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Reports\ExpenseDetailsByMonth.ascx.cs">
+      <DependentUpon>ExpenseDetailsByMonth.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ExpenseDetailsByMonth.ascx.designer.cs">
+      <DependentUpon>ExpenseDetailsByMonth.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ExpenseSummaryByProject.ascx.cs">
+      <DependentUpon>ExpenseSummaryByProject.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ExpenseSummaryByProject.ascx.designer.cs">
+      <DependentUpon>ExpenseSummaryByProject.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ExpenseSummaryByType.ascx.cs">
+      <DependentUpon>ExpenseSummaryByType.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ExpenseSummaryByType.ascx.designer.cs">
+      <DependentUpon>ExpenseSummaryByType.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reports\ExpenseSummaryDetails.ascx.cs">
+      <DependentUpon>ExpenseSummaryDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\Reports\ExpenseSummaryDetails.ascx.designer.cs">
+      <DependentUpon>ExpenseSummaryDetails.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Reports\HumanCapital\HumanCapitalReportsHeader.ascx.cs">
       <DependentUpon>HumanCapitalReportsHeader.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2552,6 +2587,13 @@
     </Compile>
     <Compile Include="Reports\CSATReport.aspx.designer.cs">
       <DependentUpon>CSATReport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ExpenseReport.aspx.cs">
+      <DependentUpon>ExpenseReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ExpenseReport.aspx.designer.cs">
+      <DependentUpon>ExpenseReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\HumanCapital.aspx.cs">
       <DependentUpon>HumanCapital.aspx</DependentUpon>
