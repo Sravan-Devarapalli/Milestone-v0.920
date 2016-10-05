@@ -560,7 +560,7 @@
                                     Project Manager
                                 </th>
                                 <th class="DayTotalHoursBorderLeft Padding5Imp">
-                                    Excutive in charge
+                                    Executive in charge
                                 </th>
                             </tr>
                         </thead>
@@ -690,7 +690,7 @@
         </asp:Repeater>
     </div>
     <div id="divEmptyMessage" class="EmptyMessagediv" runat="server" visible="false">
-        There are no resources for the selected filters.
+        There are no Projects for the selected filters.
     </div>
     <uc3:LoadingProgress ID="LoadingProgress1" runat="server" DisplayText="Refreshing Data..." />
 </asp:Content>
