@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="5cN2KKW/FD2LdOyVFhyi0BubXIw=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="ssZ06Nd0WlGys/8ngMZW4nd2PIU=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_IReportService">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_IReportService" contract="ReportService.IReportService" bindingType="basicHttpBinding" address="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc" bindingConfiguration="BasicHttpBinding_IReportService">
+    <endpoint name="BasicHttpBinding_IReportService" contract="ReportService.IReportService" bindingType="basicHttpBinding" address="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc" bindingConfiguration="BasicHttpBinding_IReportService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc</serializedValue>
+          <serializedValue>http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
