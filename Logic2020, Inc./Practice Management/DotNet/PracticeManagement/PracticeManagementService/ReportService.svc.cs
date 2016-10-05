@@ -360,6 +360,27 @@ namespace PracticeManagementService
                  userLogin
                  );
         }
+
+
+        public List<ExpenseSummary> GetExpenseSummaryGroupedByProject(DateTime startDate, DateTime endDate, string clientIds, string divisionIds, string practiceIds, string projectIds, bool active, bool projected, bool completed, bool proposed, bool inActive, bool experimental)
+        {
+            return ReportDAL.GetExpenseSummaryGroupedByProject(startDate, endDate, clientIds, divisionIds, practiceIds, projectIds, active, projected, completed, proposed, inActive, experimental);
+        }
+
+        public List<ExpenseSummary> GetExpenseSummaryGroupedBytype(DateTime startDate, DateTime endDate, string expenseTypeIds)
+        {
+            return ReportDAL.GetExpenseSummaryGroupedBytype(startDate, endDate, expenseTypeIds);
+        }
+
+        public List<ExpenseSummary> ExpenseDetailReport(DateTime startDate, DateTime endDate, int? projectId, int? expenseTypeId)
+        {
+            return ReportDAL.ExpenseDetailReport(startDate, endDate, projectId, expenseTypeId);
+        }
+
+        public List<ExpenseSummary> DetailedExpenseSummary(DateTime startDate, DateTime endDate, string clientIds, string divisionIds, string practiceIds, string projectIds, bool active, bool projected, bool completed, bool proposed, bool inActive, bool experimental, string expenseTypeIds)
+        {
+            return ReportDAL.DetailedExpenseSummary(startDate, endDate, clientIds, divisionIds, practiceIds, projectIds, active, projected, completed, proposed, inActive, experimental,  expenseTypeIds);
+        }
     }
 }
 
