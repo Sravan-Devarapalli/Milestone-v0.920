@@ -20,6 +20,7 @@
         <siteMapNode url="~/Reports/CommissionsAndRates.aspx?from=Financial"  VirtualPath="~/Reports/CommissionsAndRates.aspx" QuickLinkTitle="Commissions and Rates"  title="Commissions and Rates" roles="System Administrator" />
         <siteMapNode url="~/Reports/AttainmentReport.aspx" title="Attainment"  VirtualPath="~/Reports/AttainmentReport.aspx" QuickLinkTitle="Attainment"  description="Attainment"/>
         <siteMapNode url="~/Reports/BillingReport.aspx" title="Billing"  VirtualPath="~/Reports/BillingReport.aspx" QuickLinkTitle="Billing Report"  description="Billing Report" ShowURL="true"/>
+        <siteMapNode url="~/Reports/ExpenseReport.aspx" title="Expense by Project"  VirtualPath="~/Reports/ExpenseReport.aspx" QuickLinkTitle="Expense by Project"  description="Expense by Project" ShowURL="true"/>
       </siteMapNode>
       <siteMapNode url="Temp.aspx?from=Resources" title="Resources" >
         <siteMapNode url="~/Reports/UtilizationTimeline.aspx" title="Consulting Utilization"  VirtualPath="~/Reports/UtilizationTimeline.aspx" QuickLinkTitle="Consulting Utilization"  description="Consulting Utilization" ShowURL="true" />
