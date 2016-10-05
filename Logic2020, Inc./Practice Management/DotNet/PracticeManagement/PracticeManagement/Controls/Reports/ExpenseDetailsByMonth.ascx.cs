@@ -149,7 +149,11 @@ namespace PraticeManagement.Controls.Reports
 
                 CellStyles dataStyle = new CellStyles();
 
-                List<CellStyles> dataCellStylearray = new List<CellStyles> { dataStyle, dataStyle, dataStyle, dataStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataStyle, dataNumberDateCellStyle };
+                List<CellStyles> dataCellStylearray = new List<CellStyles> { dataStyle, dataStyle, dataStyle, dataStyle, dataStartDateCellStyle, dataStartDateCellStyle, dataStyle };
+                if (HostingPage.ShowEstimatedExpense || HostingPage.ShowActualExpense)
+                {
+                    dataCellStylearray.AddRange(new List<CellStyles> { dataNumberDateCellStyle });
+                }
                 if (HostingPage.ShowEstimatedExpense && HostingPage.ShowActualExpense)
                 {
                     dataCellStylearray.AddRange(new List<CellStyles> { dataNumberDateCellStyle, dataNumberDateCellStyle, dataPercentCellStyle, dataNumberDateCellStyle });
@@ -467,6 +471,17 @@ namespace PraticeManagement.Controls.Reports
                        expense.MonthStartDate.ToString(Constants.Formatting.CompPerfMonthYearFormat), expense.Expense.ExpectedAmount.ToString(CurrencyDisplayFormat), expense.Expense.Amount.ToString(CurrencyDisplayFormat), expense.Expense.Difference.ToString(CurrencyDisplayFormat), expense.Expense.Reimbursement, expense.Expense.ReimbursementAmount.ToString(CurrencyDisplayFormat));
                     }
                 }
+                else
+                {
+                    reportDataInPdfString += string.Format("Project Number{0}Milestone{0}Expense Name{0}Expense Type{0}start date{0}End Date{0}month{0}Reimbursement %{0}Reimbursement Amount{1}", ColoumSpliter, RowSpliter);
+
+                    foreach (var expense in expenses)
+                    {
+                        reportDataInPdfString += String.Format("{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{1}", ColoumSpliter, RowSpliter, expense.Project.ProjectNumber, expense.Expense.MilestoneName, expense.Expense.HtmlEncodedName,
+                       expense.Expense.Type.Name, expense.Expense.StartDate.ToString(Constants.Formatting.EntryDateFormat), expense.Expense.EndDate.ToString(Constants.Formatting.EntryDateFormat),
+                       expense.MonthStartDate.ToString(Constants.Formatting.CompPerfMonthYearFormat), expense.Expense.Reimbursement, expense.Expense.ReimbursementAmount.ToString(CurrencyDisplayFormat));
+                    }
+                }
 
                 var table = builder.GetPdftable(reportDataInPdfString, PdfProjectListTableStyle, RowSpliter, ColoumSpliter);
 
@@ -529,6 +544,17 @@ namespace PraticeManagement.Controls.Reports
                         reportDataInPdfString += String.Format("{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{0}{11}{0}{12}{0}{13}{1}", ColoumSpliter, RowSpliter, expense.Project.ProjectNumber, expense.Expense.MilestoneName, expense.Expense.HtmlEncodedName,
                        expense.Expense.Type.Name, expense.Expense.StartDate.ToString(Constants.Formatting.EntryDateFormat), expense.Expense.EndDate.ToString(Constants.Formatting.EntryDateFormat),
                        expense.MonthStartDate.ToString(Constants.Formatting.CompPerfMonthYearFormat), expense.Expense.ExpectedAmount.ToString(CurrencyDisplayFormat), expense.Expense.Amount.ToString(CurrencyDisplayFormat), expense.Expense.Difference.ToString(CurrencyDisplayFormat), expense.Expense.Reimbursement, expense.Expense.ReimbursementAmount.ToString(CurrencyDisplayFormat));
+                    }
+                }
+                else
+                {
+                    reportDataInPdfString += string.Format("Project Number{0}Milestone{0}Expense Name{0}Expense Type{0}start date{0}End Date{0}month{0}Reimbursement %{0}Reimbursement Amount{1}", ColoumSpliter, RowSpliter);
+
+                    foreach (var expense in Expenses)
+                    {
+                        reportDataInPdfString += String.Format("{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}{10}{1}", ColoumSpliter, RowSpliter, expense.Project.ProjectNumber, expense.Expense.MilestoneName, expense.Expense.HtmlEncodedName,
+                       expense.Expense.Type.Name, expense.Expense.StartDate.ToString(Constants.Formatting.EntryDateFormat), expense.Expense.EndDate.ToString(Constants.Formatting.EntryDateFormat),
+                       expense.MonthStartDate.ToString(Constants.Formatting.CompPerfMonthYearFormat), expense.Expense.Reimbursement, expense.Expense.ReimbursementAmount.ToString(CurrencyDisplayFormat));
                     }
                 }
 
