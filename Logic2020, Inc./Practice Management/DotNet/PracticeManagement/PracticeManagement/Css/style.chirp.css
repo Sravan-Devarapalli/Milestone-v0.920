@@ -5509,6 +5509,19 @@ HyplinkConsultantDetailReport
 {
     border-bottom: 1px solid black;
 }
+
+.ExpenseCblProject
+{
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
+    display: inline-block;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-width: 260px;
+    z-index: 20000;
+}
+
 .UTilTimeLineFilterCblTimeScales
 {
     background-color: #FFFFFF;
@@ -6482,7 +6495,7 @@ table.ProjectDetail-ProjectInfo-Table td
 /*GroupBy*/
 .TdProjectType
 {
-    width: 330px !important;
+    width: 430px !important;
     border-bottom: 1px solid black;
     vertical-align: top !important;
 }
@@ -7329,7 +7342,7 @@ image:hover:after
     width: 200px;
     z-index: 20000;
 }
-.scroll_cblPractice table, .scroll_cblBDMs table, .UTilTimeLineFilterCblTimeScales table, .UTilTimeLineFilterCblPractices table, .PracticeAreasCblDivision table, .TimeEntryByperson_cblPersons table, .TimeEntryByperson_cblPractices table, .TimeEntryByperson_cblTimeScales table, .ScrollingDropDown_cblPractices TABLE, .AccountSummaryBusinessUnitsDiv table, .ProjectSummaryScrollingDropDown table, .ProjectSummaryScrollingDropDown table, .GroupBySddPractice table, .PersonPage_cblRecruiters table, .PersonPage_cblPractices table, .PersonFilterSddAllTypes table
+.scroll_cblPractice table, .scroll_cblBDMs table, .UTilTimeLineFilterCblTimeScales table, .UTilTimeLineFilterCblPractices table, .PracticeAreasCblDivision table, .TimeEntryByperson_cblPersons table, .TimeEntryByperson_cblPractices table, .TimeEntryByperson_cblTimeScales table, .ScrollingDropDown_cblPractices TABLE, .AccountSummaryBusinessUnitsDiv table, .ProjectSummaryScrollingDropDown table, .ProjectSummaryScrollingDropDown table, .GroupBySddPractice table, .PersonPage_cblRecruiters table, .PersonPage_cblPractices table, .PersonFilterSddAllTypes table, .ExpenseCblProject table
 {
     width: 100% !important;
 }
@@ -8444,6 +8457,7 @@ table#ctl00_body_login tr td label
     cursor: pointer;
     padding-left: 10px;
     display: inline;
+    border-radius: 3px;
 }
 
 .collapsePanel .chevron
@@ -8456,4 +8470,30 @@ table#ctl00_body_login tr td label
     display: none;
 }
 
+.Blink
+{
+    text-decoration: blink !important;
+}
+
+.ActualExpense
+{
+    color: #0000FF;
+    cursor: pointer;
+}
+
+.EstimatedExpense
+{
+    color: #696969;
+    cursor: pointer;
+}
+
+.Pad-Left1P
+{
+    padding-left: 1%;
+}
+
+img.chevronImage
+{
+    border-radius: 3px;
+}
 
