@@ -419,6 +419,10 @@ namespace PracticeManagementService
 
         [OperationContract]
         List<ProjectDivision> GetProjectDivisions();
+
+        [OperationContract]
+        List<Project> GetProjectsForClients(string clientIds);
+
     }
 }
 
