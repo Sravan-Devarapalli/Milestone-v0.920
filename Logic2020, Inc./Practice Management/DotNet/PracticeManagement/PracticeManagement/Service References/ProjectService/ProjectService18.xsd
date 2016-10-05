@@ -1157,6 +1157,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
       <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ExpectedAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Milestone" nillable="true" type="tns:Milestone" />
       <xs:element minOccurs="0" name="MilestoneName" nillable="true" type="xs:string" />
@@ -1164,9 +1165,17 @@
       <xs:element minOccurs="0" name="ProjectId" type="xs:int" />
       <xs:element minOccurs="0" name="Reimbursement" type="xs:decimal" />
       <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="tns:ExpenseType" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ProjectExpense" nillable="true" type="tns:ProjectExpense" />
+  <xs:complexType name="ExpenseType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExpenseType" nillable="true" type="tns:ExpenseType" />
   <xs:complexType name="ArrayOfProjectExpense">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ProjectExpense" nillable="true" type="tns:ProjectExpense" />
