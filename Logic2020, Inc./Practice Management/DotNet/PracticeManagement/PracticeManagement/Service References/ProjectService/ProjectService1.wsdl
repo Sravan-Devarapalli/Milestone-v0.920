@@ -200,6 +200,12 @@
   <wsdl:message name="IProjectService_GetProjectDivisions_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetProjectDivisionsResponse" />
   </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectsForClients_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsForClients" />
+  </wsdl:message>
+  <wsdl:message name="IProjectService_GetProjectsForClients_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProjectsForClientsResponse" />
+  </wsdl:message>
   <wsdl:message name="IProjectService_ProjectGetById_InputMessage">
     <wsdl:part name="parameters" element="tns:ProjectGetById" />
   </wsdl:message>
@@ -540,6 +546,10 @@
     <wsdl:operation name="GetProjectDivisions">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectDivisions" message="tns:IProjectService_GetProjectDivisions_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectDivisionsResponse" message="tns:IProjectService_GetProjectDivisions_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsForClients">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/GetProjectsForClients" message="tns:IProjectService_GetProjectsForClients_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProjectService/GetProjectsForClientsResponse" message="tns:IProjectService_GetProjectsForClients_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ProjectGetById">
       <wsdl:input wsaw:Action="http://tempuri.org/IProjectService/ProjectGetById" message="tns:IProjectService_ProjectGetById_InputMessage" />
@@ -960,6 +970,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetProjectDivisions">
       <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectDivisions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProjectsForClients">
+      <soap:operation soapAction="http://tempuri.org/IProjectService/GetProjectsForClients" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
