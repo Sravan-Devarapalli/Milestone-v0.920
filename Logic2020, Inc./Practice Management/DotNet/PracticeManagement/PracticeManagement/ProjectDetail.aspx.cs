@@ -39,6 +39,7 @@ namespace PraticeManagement
         public const string ViewStateLoggedInPerson = "ViewStateLoggedInPerson";
         private const string BadgeRequestMailBody = "<html><body>{0} is requesting a MS badge for {1} for the dates {2} to {3} for the milestone - <a href=\"{4}\">{5}</a> in {6}-{7}, please review & approve or decline.</body></html>";
         private const string BadgeRequestExceptionMailBody = "<html><body>{0} is requesting a MS badge exception for {1} for the dates {2} to {3} for the milestone - <a href=\"{4}\">{5}</a> in {6}-{7}, please review & approve or decline.</body></html>";
+        private const string ProjectNumberArgument = "ProjectNumber";
 
         #endregion Constants
 
@@ -83,6 +84,14 @@ namespace PraticeManagement
             }
         }
 
+        private string SelectedProjectNumber
+        {
+            get
+            {
+                return Request.QueryString[ProjectNumberArgument];
+            }
+        }
+
         public int? ProjectId
         {
             get
@@ -92,6 +101,17 @@ namespace PraticeManagement
                     hdnProjectId.Value = SelectedId.Value.ToString();
                     return SelectedId;
                 }
+
+                if (!string.IsNullOrEmpty(SelectedProjectNumber))
+                {
+                    int? id = ServiceCallers.Custom.Project(p => p.GetProjectId(SelectedProjectNumber));
+                    if (id.HasValue)
+                    {
+                        hdnProjectId.Value = id.Value.ToString();
+                        return id;
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(hdnProjectId.Value))
                 {
                     int projectid;
@@ -859,10 +879,6 @@ namespace PraticeManagement
 
                 Project = GetCurrentProject(ProjectId);
                 PopulateControls(Project);
-                //if (!SelectedId.HasValue)
-                //{
-                //    FillUnlinkedOpportunityList(Project.Client.Id);
-                //}
             }
             else
             {
@@ -1169,8 +1185,6 @@ namespace PraticeManagement
 
             PopulateDivisionAndPracticeDropdown(sender as ListControl);
         }
-
-
 
         protected void ddlCSATOwner_SelectedIndexChanged(object sender, EventArgs e)
         {
