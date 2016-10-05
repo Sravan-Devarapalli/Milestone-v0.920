@@ -144,6 +144,8 @@
     <Compile Include="EmailData.cs" />
     <Compile Include="EmailTemplate.cs" />
     <Compile Include="Employment.cs" />
+    <Compile Include="ExpenseSummary.cs" />
+    <Compile Include="ExpenseType.cs" />
     <Compile Include="Filters\AccountSummaryFilters.cs" />
     <Compile Include="Filters\ActivityLogFilters.cs" />
     <Compile Include="Filters\BenchCostReportFilters.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Filters\ConsultantsWeeklyReportFilters.cs" />
     <Compile Include="Filters\ConsultingUtilizationReportFilters.cs" />
     <Compile Include="Filters\CSATReportFilters.cs" />
+    <Compile Include="Filters\ExpenseReportFilters.cs" />
     <Compile Include="Filters\MsManagementMeetingReportFilters.cs" />
     <Compile Include="Filters\NewHireReportFilters.cs" />
     <Compile Include="Filters\PersonsByProjectFilters.cs" />
