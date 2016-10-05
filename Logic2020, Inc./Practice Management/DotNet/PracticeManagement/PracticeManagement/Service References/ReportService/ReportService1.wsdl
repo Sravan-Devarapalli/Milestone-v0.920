@@ -2,18 +2,18 @@
 <wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ReportService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
-      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc?xsd=xsd11" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Financials" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.CornerStone" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Skills" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd8" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.TimeEntry" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
+      <xsd:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd11" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IReportService_ResourceAssignedOrUnassignedChargingExceptionReport_InputMessage">
@@ -123,6 +123,30 @@
   </wsdl:message>
   <wsdl:message name="IReportService_ProjectsListWithFilters_OutputMessage">
     <wsdl:part name="parameters" element="tns:ProjectsListWithFiltersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetExpenseSummaryGroupedByProject_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseSummaryGroupedByProject" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetExpenseSummaryGroupedByProject_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseSummaryGroupedByProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetExpenseSummaryGroupedBytype_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseSummaryGroupedBytype" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_GetExpenseSummaryGroupedBytype_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExpenseSummaryGroupedBytypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ExpenseDetailReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExpenseDetailReport" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_ExpenseDetailReport_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExpenseDetailReportResponse" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_DetailedExpenseSummary_InputMessage">
+    <wsdl:part name="parameters" element="tns:DetailedExpenseSummary" />
+  </wsdl:message>
+  <wsdl:message name="IReportService_DetailedExpenseSummary_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DetailedExpenseSummaryResponse" />
   </wsdl:message>
   <wsdl:message name="IReportService_PersonTimeEntriesDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:PersonTimeEntriesDetails" />
@@ -412,6 +436,22 @@
     <wsdl:operation name="ProjectsListWithFilters">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ProjectsListWithFilters" message="tns:IReportService_ProjectsListWithFilters_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ProjectsListWithFiltersResponse" message="tns:IReportService_ProjectsListWithFilters_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExpenseSummaryGroupedByProject">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetExpenseSummaryGroupedByProject" message="tns:IReportService_GetExpenseSummaryGroupedByProject_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetExpenseSummaryGroupedByProjectResponse" message="tns:IReportService_GetExpenseSummaryGroupedByProject_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExpenseSummaryGroupedBytype">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/GetExpenseSummaryGroupedBytype" message="tns:IReportService_GetExpenseSummaryGroupedBytype_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/GetExpenseSummaryGroupedBytypeResponse" message="tns:IReportService_GetExpenseSummaryGroupedBytype_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExpenseDetailReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/ExpenseDetailReport" message="tns:IReportService_ExpenseDetailReport_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/ExpenseDetailReportResponse" message="tns:IReportService_ExpenseDetailReport_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DetailedExpenseSummary">
+      <wsdl:input wsaw:Action="http://tempuri.org/IReportService/DetailedExpenseSummary" message="tns:IReportService_DetailedExpenseSummary_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IReportService/DetailedExpenseSummaryResponse" message="tns:IReportService_DetailedExpenseSummary_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="PersonTimeEntriesDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IReportService/PersonTimeEntriesDetails" message="tns:IReportService_PersonTimeEntriesDetails_InputMessage" />
@@ -715,6 +755,42 @@
     </wsdl:operation>
     <wsdl:operation name="ProjectsListWithFilters">
       <soap:operation soapAction="http://tempuri.org/IReportService/ProjectsListWithFilters" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExpenseSummaryGroupedByProject">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetExpenseSummaryGroupedByProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExpenseSummaryGroupedBytype">
+      <soap:operation soapAction="http://tempuri.org/IReportService/GetExpenseSummaryGroupedBytype" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExpenseDetailReport">
+      <soap:operation soapAction="http://tempuri.org/IReportService/ExpenseDetailReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DetailedExpenseSummary">
+      <soap:operation soapAction="http://tempuri.org/IReportService/DetailedExpenseSummary" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1049,7 +1125,7 @@
   </wsdl:binding>
   <wsdl:service name="ReportService">
     <wsdl:port name="BasicHttpBinding_IReportService" binding="tns:BasicHttpBinding_IReportService">
-      <soap:address location="http://ggku3sys280.ggktech.local/PracticeManagementService/ReportService.svc" />
+      <soap:address location="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
