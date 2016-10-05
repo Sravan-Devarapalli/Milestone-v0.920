@@ -1048,6 +1048,7 @@ HyplinkConsultantDetailReport{color:Black!important;text-decoration:none!importa
 .ConsultantsWeeklyReportAlignCenter{text-align:center!important;width:100%}
 .ConsultantsWeeklyReportupdPersonDetails{width:95%!important;text-align:center;padding-left:2%}
 .BorderBottom1px,.BorderBottom1pxTd .border{border-bottom:1px solid black}
+.ExpenseCblProject{background-color: #FFFFFF;border: 1px solid #AAAAAA;display: inline-block; height: 250px; overflow-x: hidden; overflow-y: auto;  min-width:260px; z-index: 20000;}
 .UTilTimeLineFilterCblTimeScales{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:100px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
 .UTilTimeLineFilterCblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000}
 .PracticeAreasCblDivision{background-color: #FFF;text-align:left!important;border:1px solid #AAA;height:250px;overflow-x:hidden;overflow-y:auto;width:260px;z-index:20000;}
@@ -1223,7 +1224,7 @@ table.ProjectDetail-ProjectInfo-Table td{padding-left:4px}
 .TcPersons{padding-left:15px;padding-top:10px;padding-bottom:10px;text-align:center}
 .BackGroundColorWhite{background-color:White}
 .FontSizeMedium{font-size:medium}
-.TdProjectType{width:330px!important;border-bottom:1px solid black;vertical-align:top!important}
+.TdProjectType{width:430px!important;border-bottom:1px solid black;vertical-align:top!important}
 .TdPracticeArea{width:256px!important;border-bottom:1px solid black}
 .Width110Px{width:110px}
 .Width115PxImp{width:115px!important}
@@ -1373,7 +1374,7 @@ image:hover:after{content:attr(title)}
 .cblQuickLinksClearButtonDiv{text-align:right;width:356px;padding:8px 0 8px 0}
 .PersonPage_cblPractices{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:250px;overflow-x:hidden;overflow-y:auto;width:280px;z-index:20000}
 .PersonPage_cblRecruiters{background-color:#FFF;border:1px solid #AAA;display:inline-block;height:200px;overflow-x:hidden;overflow-y:auto;width:200px;z-index:20000}
-.scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.PracticeAreasCblDivision table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table{width:100%!important}
+.scroll_cblPractice table,.scroll_cblBDMs table,.UTilTimeLineFilterCblTimeScales table,.UTilTimeLineFilterCblPractices table,.PracticeAreasCblDivision table,.TimeEntryByperson_cblPersons table,.TimeEntryByperson_cblPractices table,.TimeEntryByperson_cblTimeScales table,.ScrollingDropDown_cblPractices TABLE,.AccountSummaryBusinessUnitsDiv table,.ProjectSummaryScrollingDropDown table,.ProjectSummaryScrollingDropDown table,.GroupBySddPractice table,.PersonPage_cblRecruiters table,.PersonPage_cblPractices table,.PersonFilterSddAllTypes table, .ExpenseCblProject table{width:100%!important}
 .DisplayInline{display:inline-block}
 .BorderBottomNone td{border-bottom:none!important}
 .BorderTopNone{ border-top: none !important;}
@@ -1622,7 +1623,18 @@ table#ctl00_body_login tr td label{float:left}
 .ManagementReportDateHeader{padding-left:4px;padding-right:4px;width:100px;white-space:nowrap;border-left:1px solid #000;}
 .ProjectsListExport{text-align: right; padding-right: 10px; font-size: 12x;}
 .ProjectHelp{text-decoration: none;color:Red;}
-.chevron{background: url("../Images/expand.jpg") no-repeat; cursor: pointer; padding-left: 10px; display: inline; }
+.chevron{background: url("../Images/expand.jpg") no-repeat; cursor: pointer; padding-left: 6px; display: inline;border-radius: 3px; }
 .collapsePanel .chevron {background-image: url("../Images/collapse.jpg"); }
 .fltPanel .colPanel {display: none; }
+.Blink{text-decoration: blink !important;}
+.ActualExpense{color: #0000FF;cursor: pointer;}
+.EstimatedExpense{ color: #696969;cursor: pointer;}
+.Pad-Left1P
+{
+    padding-left: 1%;
+}
+img.chevronImage
+{
+    border-radius: 3px;
+}
 
