@@ -1133,6 +1133,11 @@ namespace PracticeManagementService
             return ProjectDAL.GetProjectDivisions();
         }
 
+        public List<Project> GetProjectsForClients(string clientIds)
+        {
+            return ProjectDAL.GetProjectsForClients(clientIds);
+        }
+
         #endregion IProjectService Members
     }
 }
