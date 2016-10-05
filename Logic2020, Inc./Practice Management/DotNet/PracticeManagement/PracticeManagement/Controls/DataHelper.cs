@@ -2848,6 +2848,50 @@ namespace PraticeManagement.Controls
         {
             FillPersonList(control, firstItemText, DateTime.MinValue, DateTime.MinValue, statusIds, false, true);
         }
+
+        public static void FillExpenseTypeList(ListControl control, bool isAllitems = false)
+        {
+            using (var serviceClient = new MilestoneServiceClient())
+            {
+                try
+                {
+                    var expenseTypes = serviceClient.GetAllExpenseTypesList();
+                    if (isAllitems)
+                    {
+                        FillListDefault(control, "All Expense Types", expenseTypes, false);
+                    }
+                    else
+                    {
+                        FillListDefault(control, "-- Select Expense Type --", expenseTypes, false);
+                    }
+                }
+
+                catch (CommunicationException)
+                {
+                    serviceClient.Abort();
+                    throw;
+                }
+            }
+        }
+
+        public static string GetTextForHover(List<ExpenseSummary> list, bool isActual, bool isExpenseType = false)
+        {
+            string heading = isExpenseType ? "Project Number-Expense Name" : "Expense Name";
+            string htmlString = "<table><tr><td class=\"fontBold padRight10\">" + heading + "</ td><td class=\"fontBold\">Amount($)</ td></ tr>{0}</ tabel>";
+            string row = "<tr><td class=\"padRight10\">{0}</ td><td>{1}</ td></ tr>";
+            string abc = string.Empty;
+            foreach (var data in list)
+            {
+                abc += string.Format(row, isExpenseType ? data.Project.ProjectNumber + "-" + data.Expense.HtmlEncodedName : data.Expense.HtmlEncodedName, isActual ? data.Expense.Amount.ToString("###,###,###,###,###,##0.##") : data.Expense.ExpectedAmount.ToString("###,###,###,###,###,##0.##"));
+            }
+            return string.Format(htmlString, abc);
+        }
+
+        public static void FillProjectsForClients(ListControl control, string clientIds)
+        {
+            var projects = ServiceCallers.Custom.Project(p => p.GetProjectsForClients(clientIds));
+            FillListDefault(control, "All Projects", projects, false);
+        }
     }
 }
 
