@@ -211,7 +211,7 @@ namespace PraticeManagement.Controls.Reports
 
         public void PopulateData()
         {
-            ExpenseSummary[] report = ServiceCallers.Custom.Report(r => r.GetExpenseSummaryGroupedByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.AccountsSelected, HostingPage.DivisionsSelected, HostingPage.PracticesSelected, HostingPage.ProjectsSelected, HostingPage.showActive, HostingPage.showProjected, HostingPage.showCompleted, HostingPage.showProposed, HostingPage.showInActive, HostingPage.showExperimental));
+            ExpenseSummary[] report = ServiceCallers.Custom.Report(r => r.GetExpenseSummaryGroupedByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.AccountsSelected, HostingPage.DivisionsSelected, HostingPage.PracticesSelected, HostingPage.ProjectsSelected, HostingPage.showActive, HostingPage.showProjected, HostingPage.showCompleted, HostingPage.showProposed, HostingPage.showInActive, HostingPage.showExperimental, HostingPage.showAtRisk));
 
             BindProjectsData(report);
         }
@@ -387,7 +387,7 @@ namespace PraticeManagement.Controls.Reports
             List<SheetStyles> sheetStylesList = new List<SheetStyles>();
             var dataSetList = new List<DataSet>();
 
-            var report = ServiceCallers.Custom.Report(r => r.GetExpenseSummaryGroupedByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.AccountsSelected, HostingPage.DivisionsSelected, HostingPage.PracticesSelected, HostingPage.ProjectsSelected, HostingPage.showActive, HostingPage.showProjected, HostingPage.showCompleted, HostingPage.showProposed, HostingPage.showInActive, HostingPage.showExperimental)).ToList();
+            var report = ServiceCallers.Custom.Report(r => r.GetExpenseSummaryGroupedByProject(HostingPage.StartDate.Value, HostingPage.EndDate.Value, HostingPage.AccountsSelected, HostingPage.DivisionsSelected, HostingPage.PracticesSelected, HostingPage.ProjectsSelected, HostingPage.showActive, HostingPage.showProjected, HostingPage.showCompleted, HostingPage.showProposed, HostingPage.showInActive,HostingPage.showAtRisk, HostingPage.showExperimental)).ToList();
 
             var fileName = string.Format("ExpenseSummary_ByProject.xls");
 
@@ -560,3 +560,4 @@ namespace PraticeManagement.Controls.Reports
 
     }
 }
+
