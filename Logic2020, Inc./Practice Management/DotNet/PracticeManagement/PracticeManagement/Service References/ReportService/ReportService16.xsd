@@ -1,0 +1,1078 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" />
+  <xs:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects" />
+  <xs:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" />
+  <xs:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" />
+  <xs:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd11" namespace="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" />
+  <xs:import schemaLocation="http://ggku3sys280.ggktech.local/PracticemanagementService/ReportService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="ResourceAssignedOrUnassignedChargingExceptionReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="isUnassignedReport" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResourceAssignedOrUnassignedChargingExceptionReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ResourceAssignedOrUnassignedChargingExceptionReportResult" nillable="true" type="q1:ArrayOfResourceExceptionReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RecruitingMetricsReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RecruitingMetricsReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="RecruitingMetricsReportResult" nillable="true" type="q2:ArrayOfPerson" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectFeedbackReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="businessGroupIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="projectStatus" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="directorIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="reviewStartdateMonths" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="reviewEnddateMonths" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectmanagerIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="statusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isExport" type="xs:boolean" />
+        <xs:element minOccurs="0" name="payTypeIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectFeedbackReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectFeedbackReportResult" nillable="true" type="q3:ArrayOfProjectFeedback" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BillingReportByCurrency">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="directorIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesPersonIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectManagerIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="seniorManagerIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BillingReportByCurrencyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="BillingReportByCurrencyResult" nillable="true" type="q4:ArrayOfBillingReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BillingReportByHours">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="accountIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="directorIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesPersonIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectManagerIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="seniorManagerIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BillingReportByHoursResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="BillingReportByHoursResult" nillable="true" type="q5:ArrayOfBillingReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NonBillableReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="directorIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NonBillableReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="NonBillableReportResult" nillable="true" type="q6:ArrayOfProjectLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BadgedResourcesByTimeReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="payTypes" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="step" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BadgedResourcesByTimeReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="BadgedResourcesByTimeReportResult" nillable="true" type="q7:ArrayOfBadgedResourcesByTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListBadgeResourcesByType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="paytypes" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatuses" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="isNotBadged" type="xs:boolean" />
+        <xs:element minOccurs="0" name="isClockNotStart" type="xs:boolean" />
+        <xs:element minOccurs="0" name="isBlocked" type="xs:boolean" />
+        <xs:element minOccurs="0" name="isBreak" type="xs:boolean" />
+        <xs:element minOccurs="0" name="badgedOnProject" type="xs:boolean" />
+        <xs:element minOccurs="0" name="isBadgedException" type="xs:boolean" />
+        <xs:element minOccurs="0" name="isNotBadgedException" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ListBadgeResourcesByTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ListBadgeResourcesByTypeResult" nillable="true" type="q8:ArrayOfMSBadge" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResourcesByPracticeReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="paytypes" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="PersonStatuses" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practices" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="step" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResourcesByPracticeReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ResourcesByPracticeReportResult" nillable="true" type="q9:ArrayOfGroupByPractice" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResourcesByTitleReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="paytypes" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatuses" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="step" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResourcesByTitleReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ResourcesByTitleReportResult" nillable="true" type="q10:ArrayOfGroupbyTitle" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBadgeRequestNotApprovedList">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBadgeRequestNotApprovedListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetBadgeRequestNotApprovedListResult" nillable="true" type="q11:ArrayOfMSBadge" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllBadgeDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="payTypes" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatuses" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAllBadgeDetailsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAllBadgeDetailsResult" nillable="true" type="q12:ArrayOfMSBadge" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UtilizationReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UtilizationReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="UtilizationReportResult" nillable="true" type="q13:PersonTimeEntriesTotals" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ManagedServiceReportByPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="paytypes" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatuses" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ManagedServiceReportByPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ManagedServiceReportByPersonResult" nillable="true" type="q14:ArrayOfManagementMeetingReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveManagedParametersByPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="actualRevenuePerHour" type="xs:decimal" />
+        <xs:element minOccurs="0" name="targetRevenuePerHour" type="xs:decimal" />
+        <xs:element minOccurs="0" name="hoursUtilization" type="xs:decimal" />
+        <xs:element minOccurs="0" name="targetRevenuePerAnnum" type="xs:decimal" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveManagedParametersByPersonResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetManagedParametersByPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetManagedParametersByPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetManagedParametersByPersonResult" nillable="true" type="q15:RevenueReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAveragePercentagesByTitles">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="paytypes" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatuses" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAveragePercentagesByTitlesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetAveragePercentagesByTitlesResult" nillable="true" type="q16:ArrayOfGroupbyTitle" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectsListWithFilters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="showProjected" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showCompleted" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showAtRisk" type="xs:boolean" />
+        <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="salespersonIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ProjectOwnerIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectGroupIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="divisionIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="channelIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="revenueTypeIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="offeringIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectsListWithFiltersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectsListWithFiltersResult" nillable="true" type="q17:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetExpenseSummaryGroupedByProject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="clientIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="divisionIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="active" type="xs:boolean" />
+        <xs:element minOccurs="0" name="projected" type="xs:boolean" />
+        <xs:element minOccurs="0" name="completed" type="xs:boolean" />
+        <xs:element minOccurs="0" name="proposed" type="xs:boolean" />
+        <xs:element minOccurs="0" name="inActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="experimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="atRisk" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetExpenseSummaryGroupedByProjectResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetExpenseSummaryGroupedByProjectResult" nillable="true" type="q18:ArrayOfExpenseSummary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetExpenseSummaryGroupedBytype">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="expenseTypeIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetExpenseSummaryGroupedBytypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetExpenseSummaryGroupedBytypeResult" nillable="true" type="q19:ArrayOfExpenseSummary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExpenseDetailReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="projectId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="expenseTypeId" nillable="true" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExpenseDetailReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ExpenseDetailReportResult" nillable="true" type="q20:ArrayOfExpenseSummary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DetailedExpenseSummary">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="clientIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="divisionIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="active" type="xs:boolean" />
+        <xs:element minOccurs="0" name="projected" type="xs:boolean" />
+        <xs:element minOccurs="0" name="completed" type="xs:boolean" />
+        <xs:element minOccurs="0" name="proposed" type="xs:boolean" />
+        <xs:element minOccurs="0" name="inActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="experimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="atRisk" type="xs:boolean" />
+        <xs:element minOccurs="0" name="expenseTypeIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DetailedExpenseSummaryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="DetailedExpenseSummaryResult" nillable="true" type="q21:ArrayOfExpenseSummary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonTimeEntriesDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonTimeEntriesDetailsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonTimeEntriesDetailsResult" nillable="true" type="q22:ArrayOfTimeEntriesGroupByClientAndProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonTimeEntriesSummary">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PersonTimeEntriesSummaryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="PersonTimeEntriesSummaryResult" nillable="true" type="q23:ArrayOfTimeEntriesGroupByClientAndProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPersonTimeEntriesTotalsByPeriod">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="personId" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPersonTimeEntriesTotalsByPeriodResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="GetPersonTimeEntriesTotalsByPeriodResult" nillable="true" type="q24:PersonTimeEntriesTotals" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryReportByResource">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="includePersonsWithNoTimeEntries" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="timescaleNames" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personDivisionIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryReportByResourceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByResourceResult" nillable="true" type="q25:ArrayOfPersonLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryReportByProject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="clientIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryReportByProjectResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByProjectResult" nillable="true" type="q26:ArrayOfProjectLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryReportByWorkType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryReportByWorkTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryReportByWorkTypeResult" nillable="true" type="q27:ArrayOfWorkTypeLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSummaryReportByResource">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="personRoleNames" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSummaryReportByResourceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByResourceResult" nillable="true" type="q28:ArrayOfPersonLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectDetailReportByResource">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="personRoleNames" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isExport" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectDetailReportByResourceResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectDetailReportByResourceResult" nillable="true" type="q29:ArrayOfPersonLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSummaryReportByWorkType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="mileStoneId" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="startDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" nillable="true" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="categoryNames" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSummaryReportByWorkTypeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ProjectSummaryReportByWorkTypeResult" nillable="true" type="q30:ArrayOfWorkTypeLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectsByClientId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProjectsByClientIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetProjectsByClientIdResult" nillable="true" type="q31:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSearchByName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectSearchByNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectSearchByNameResult" nillable="true" type="q32:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMilestonesForProject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="projectNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetMilestonesForProjectResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetMilestonesForProjectResult" nillable="true" type="q33:ArrayOfMilestone" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryByResourcePayCheck">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="includePersonsWithNoTimeEntries" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="timescaleNames" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personDivisionIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimePeriodSummaryByResourcePayCheckResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimePeriodSummaryByResourcePayCheckResult" nillable="true" type="q34:ArrayOfPersonLevelPayCheck" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeEntryAuditReportByPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeEntryAuditReportByPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimeEntryAuditReportByPersonResult" nillable="true" type="q35:ArrayOfPersonLevelTimeEntriesHistory" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeEntryAuditReportByProject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TimeEntryAuditReportByProjectResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="TimeEntryAuditReportByProjectResult" nillable="true" type="q36:ArrayOfProjectLevelTimeEntriesHistory" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByBusinessUnit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByBusinessUnitResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByBusinessUnitResult" nillable="true" type="q37:GroupByAccount" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByProject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="projectStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectBillingTypes" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountSummaryReportByProjectResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountSummaryReportByProjectResult" nillable="true" type="q38:GroupByAccount" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByBusinessUnit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByBusinessUnitResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByBusinessUnitResult" nillable="true" type="q39:ArrayOfBusinessUnitLevelGroupedHours" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByPerson">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="accountId" type="xs:int" />
+        <xs:element minOccurs="0" name="businessUnitIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AccountReportGroupByPersonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ByAccount" minOccurs="0" name="AccountReportGroupByPersonResult" nillable="true" type="q40:ArrayOfGroupByPerson" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewHireReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="payTypeIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personDivisionIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="hireDates" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="recruiterIds" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewHireReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="NewHireReportResult" nillable="true" type="q41:ArrayOfPerson" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TerminationReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="payTypeIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="personStatusIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="titleIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="terminationReasonIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
+        <xs:element minOccurs="0" name="personDivisionIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="recruiterIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="hireDates" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="terminationDates" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TerminationReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" minOccurs="0" name="TerminationReportResult" nillable="true" type="q42:TerminationPersonsInRange" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TerminationReportGraph">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TerminationReportGraphResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.HumanCapital" minOccurs="0" name="TerminationReportGraphResult" nillable="true" type="q43:ArrayOfTerminationPersonsInRange" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandSummary">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandSummaryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandSummaryResult" nillable="true" type="q44:ArrayOfConsultantGroupbyTitleSkill" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandDetailsByTitleSkill">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandDetailsByTitleSkillResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByTitleSkillResult" nillable="true" type="q45:ArrayOfConsultantGroupbyTitleSkill" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandDetailsBySalesStage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandDetailsBySalesStageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsBySalesStageResult" nillable="true" type="q46:ArrayOfConsultantGroupBySalesStage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandDetailsByMonth">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="titles" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="skills" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isFromPipeLinePopUp" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandDetailsByMonthResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandDetailsByMonthResult" nillable="true" type="q47:ArrayOfConsultantGroupByMonth" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGraphsByTitle">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGraphsByTitleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q48="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsByTitleResult" nillable="true" type="q48:ArrayOfKeyValueOfstringint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGraphsBySkills">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGraphsBySkillsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q49="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGraphsBySkillsResult" nillable="true" type="q49:ArrayOfKeyValueOfstringint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandTransactionReportByTitle">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandTransactionReportByTitleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q50="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportByTitleResult" nillable="true" type="q50:ArrayOfConsultantGroupbyTitle" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandTransactionReportBySkill">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="Skill" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortColumns" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandTransactionReportBySkillResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q51="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports.ConsultingDemand" minOccurs="0" name="ConsultingDemandTransactionReportBySkillResult" nillable="true" type="q51:ArrayOfConsultantGroupbySkill" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGrphsGroupsByTitle">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGrphsGroupsByTitleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q52="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsByTitleResult" nillable="true" type="q52:ArrayOfKeyValueOfstringint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGrphsGroupsBySkill">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="salesStages" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConsultingDemandGrphsGroupsBySkillResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q53="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ConsultingDemandGrphsGroupsBySkillResult" nillable="true" type="q53:ArrayOfKeyValueOfstringint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AttainmentBillableutlizationReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AttainmentBillableutlizationReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q54="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="AttainmentBillableutlizationReportResult" nillable="true" type="q54:ArrayOfAttainmentBillableutlizationReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAttainmentProjectListMultiParameters">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="clientIds" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="showProjected" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showCompleted" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showActive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showInternal" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showExperimental" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showProposed" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showInactive" type="xs:boolean" />
+        <xs:element minOccurs="0" name="showAtRisk" type="xs:boolean" />
+        <xs:element minOccurs="0" name="periodStart" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="periodEnd" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="salespersonIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceManagerIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="practiceIdsList" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="projectGroupIdsList" nillable="true" type="xs:string" />
+        <xs:element xmlns:q55="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="includeCurentYearFinancials" type="q55:ProjectCalculateRangeType" />
+        <xs:element minOccurs="0" name="excludeInternalPractices" type="xs:boolean" />
+        <xs:element minOccurs="0" name="userLogin" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IsMonthsColoumnsShown" type="xs:boolean" />
+        <xs:element minOccurs="0" name="IsQuarterColoumnsShown" type="xs:boolean" />
+        <xs:element minOccurs="0" name="IsYearToDateColoumnsShown" type="xs:boolean" />
+        <xs:element minOccurs="0" name="getFinancialsFromCache" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetAttainmentProjectListMultiParametersResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q56="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="GetAttainmentProjectListMultiParametersResult" nillable="true" type="q56:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectAttributionReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ProjectAttributionReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q57="http://schemas.datacontract.org/2004/07/DataTransferObjects" minOccurs="0" name="ProjectAttributionReportResult" nillable="true" type="q57:ArrayOfProject" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ZeroHourlyRateExceptionReport">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="startDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ZeroHourlyRateExceptionReportResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/DataTransferObjects.Reports" minOccurs="0" name="ZeroHourlyRateExceptionReportResult" nillable="true" type="q58:ArrayOfResourceExceptionReport" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
