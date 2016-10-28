@@ -246,6 +246,7 @@ namespace DataAccess
                     command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
+                    command.Parameters.AddWithValue(Constants.ParameterNames.AtRiskProjects, context.AtRiskProjects);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Start, context.Start);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Granularity, context.Granularity);
                     command.Parameters.AddWithValue(Constants.ParameterNames.Period, context.Period);
@@ -305,6 +306,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsSampleReport, context.IsSampleReport);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IsBadgeIncluded, context.IncludeBadgeStatus);
                 command.Parameters.AddWithValue(Constants.ParameterNames.UtilizationType, context.UtilizationType);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AtRiskProjects, context.AtRiskProjects);
 
                 connection.Open();
 
@@ -359,6 +361,7 @@ namespace DataAccess
                 command.CommandTimeout = connection.ConnectionTimeout;
 
                 command.Parameters.AddWithValue(Constants.ParameterNames.ActiveProjects, context.ActiveProjects);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AtRiskProjects, context.AtRiskProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProjectedProjects, context.ProjectedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.InternalProjects, context.InternalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
@@ -1486,6 +1489,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue(Constants.ParameterNames.ExperimentalProjects, context.ExperimentalProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.ProposedProjects, context.ProposedProjects);
                 command.Parameters.AddWithValue(Constants.ParameterNames.CompletedProjects, context.CompletedProjects);
+                command.Parameters.AddWithValue(Constants.ParameterNames.AtRiskProjects, context.AtRiskProjects);
                 if (context.IncludeOverheads.HasValue)
                     command.Parameters.AddWithValue(Constants.ParameterNames.IncludeOverheads, context.IncludeOverheads.Value);
                 command.Parameters.AddWithValue(Constants.ParameterNames.IncludeZeroCostEmployees, context.IncludeZeroCostEmployees);
